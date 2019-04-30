@@ -7,6 +7,8 @@ const schema = new Schema(
   {
     moduleId: {type: Number, required: true},
     name: {type: String, required: true, trim: true},
+    oldName: String,
+    desc: {type: String, required: true},
     period: {type: String, required: true},
     driverName: {type: String, required: true},
     salesMatch: String,

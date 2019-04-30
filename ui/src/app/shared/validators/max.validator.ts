@@ -17,7 +17,6 @@ export class MaxValidator implements Validator {
   @Input() max: string;
 
   constructor() {
-    const i = 5;
   }
 
   validate(control: AbstractControl): { [key: string]: any } {

@@ -5,7 +5,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {UiUtil} from '../../../core/services/ui-util';
 import {ToastSeverity} from '../../../core/services/toast.service';
 import {DfaModule} from '../../_common/models/module';
-import {shUtil} from '../../../../../../shared/shared-util';
+import {shUtil} from '../../../../../../shared/misc/shared-util';
 import {OpenPeriodService} from '../../_common/services/open-period.service';
 import {FiscalMonth} from '../../_common/models/fiscalMonth';
 import * as _ from 'lodash';

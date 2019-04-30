@@ -17,7 +17,6 @@ export class MinValidator implements Validator {
   @Input() min: string;
 
   constructor() {
-    const i = 5;
   }
 
   validate(control: AbstractControl): { [key: string]: any } {

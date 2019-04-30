@@ -1,5 +1,5 @@
 import {svrUtil} from '../../../../lib/common/svr-util';
-import {shUtil} from '../../../../../shared/shared-util';
+import {shUtil} from '../../../../../shared/misc/shared-util';
 
 export default class ServiceTrainingUploadImport {
   fiscalYear: number;

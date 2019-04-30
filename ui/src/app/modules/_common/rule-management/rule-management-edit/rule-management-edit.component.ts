@@ -14,6 +14,10 @@ import {ValidationInputOptions} from '../../../../shared/components/validation-i
 import {map} from 'rxjs/operators';
 import {LookupService} from '../../services/lookup.service';
 import AnyObj from '../../../../../../../shared/models/any-obj';
+import {SelectExceptionMap} from '../../../../../../../shared/classes/select-exception-map';
+import {shUtil} from '../../../../../../../shared/misc/shared-util';
+import {ruleUtil} from '../../../../../../../shared/misc/rule-util';
+import {MatDialog} from '@angular/material';
 
 @Component({
   selector: 'fin-rule-management-create',
@@ -21,22 +25,8 @@ import AnyObj from '../../../../../../../shared/models/any-obj';
   styleUrls: ['./rule-management-edit.component.scss']
 })
 export class RuleManagementEditComponent extends RoutingComponentBase implements OnInit {
-  salesSL1CritCond: string;
-  salesSL2CritCond: string;
-  salesSL3CritCond: string;
-  prodPFCritCond: string;
-  prodBUCritCond: string;
-  prodTGCritCond: string;
-  scmsCritCond: string;
-  beCritCond: string;
-  salesSL1CritChoices: string[] = [];
-  salesSL2CritChoices: string[] = [];
-  salesSL3CritChoices: string[] = [];
-  prodPFCritChoices: string[] = [];
-  prodBUCritChoices: string[] = [];
-  prodTGCritChoices: string[] = [];
-  scmsCritChoices: string[] = [];
-  beCritChoices: string[] = [];
+  rules: AllocationRule[];
+  selectMap: SelectExceptionMap;
   ruleNames: string[] = [];
   salesSL2ChoiceOptions: ValidationInputOptions;
   salesSL3ChoiceOptions: ValidationInputOptions;
@@ -47,6 +37,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   addMode = false;
   viewMode = false;
   editMode = false;
+  editModeAI = false;
   copyMode = false;
   rule = new AllocationRule();
   orgRule: AllocationRule;
@@ -57,11 +48,12 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   salesMatches = [{match: 'SL1'}, {match: 'SL2'}, {match: 'SL3'}, {match: 'SL4'}, {match: 'SL5'}, {match: 'SL6'}];
   productMatches = [{match: 'BU'}, {match: 'PF'}, {match: 'TG'}]; // no PID
   scmsMatches = [{match: 'SCMS'}];
-  legalEntityMatches = [{match: 'Business Entity'}];
-  beMatches = [{match: 'BE'}, {match: 'Sub BE'}];
-  countryMatches = [{name: 'Sales Country Name', value: 'sales_country_name'}];
-  extTheaterMatches = [{name: 'External Theater Name', value: 'ext_theater_name'}];
-  glSegmentMatches = [{name: 'Account', value: 'ACCOUNT'}, {name: 'Sub Account', value: 'SUB ACCOUNT'}, {name: 'Company', value: 'COMPANY'}];
+  legalEntityMatches = [{match: 'Business Entity', abbrev: 'LE'}];
+  beMatches = [{match: 'BE'}, {match: 'Sub BE', abbrev: 'SubBE'}];
+  countryMatches = [{name: 'Sales Country Name', value: 'sales_country_name', abbrev: 'CNT'}];
+  extTheaterMatches = [{name: 'External Theater Name', value: 'ext_theater_name', abbrev: 'EXT'}];
+  glSegmentMatches = [{name: 'Account', value: 'ACCOUNT', abbrev: 'ACCT'}, {name: 'Sub Account', value: 'SUB ACCOUNT', abbrev: 'SUBACCT'},
+    {name: 'Company', value: 'COMPANY', abbrev: 'COMP'}];
   // SELECT options to be taken from Postgres
   salesSL1Choices: { name: string }[] = [];
   prodTgChoices: { name: string }[] = [];
@@ -75,7 +67,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     private pgLookupService: PgLookupService,
     private store: AppStore,
     public uiUtil: UiUtil,
-    private lookupService: LookupService
+    private lookupService: LookupService,
+    public dialog: MatDialog
   ) {
     super(store, route);
     if (!this.route.snapshot.params.mode) {
@@ -93,7 +86,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_products', 'technology_group_id').toPromise(),
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_coverage_code').toPromise(),
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_be_hierarchy', 'business_entity_descr').toPromise(),
-      this.ruleService.getDistinct('name', {moduleId: -1}).toPromise(),
+      this.ruleService.callMethod('getManyLatestGroupByNameActiveInactive').toPromise(),
       this.lookupService.getValues(['drivers', 'periods']).toPromise()
     ];
     if (this.viewMode || this.editMode || this.copyMode) {
@@ -107,12 +100,17 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         this.prodTgChoices = results[1].map(x => ({name: x}));
         this.scmsChoices = results[2].map(x => ({name: x}));
         this.internalBeChoices = results[3].map(x => ({name: x}));
-        this.ruleNames = results[4].map(x => x.toUpperCase());
+        // sort by oldName || name for comparison selectMap generaged by sandbox/rule-name-change.ts
+        // the original order by rule-name-change order by old name
+        // this.rules = _.sortBy(results[4], r => r.oldName || r.name);
+        this.rules = results[4];
+        this.ruleNames = this.rules.map(x => x.name);
         this.drivers = _.sortBy(results[5][0], 'name');
         this.periods = results[5][1];
 
         if (this.viewMode || this.editMode || this.copyMode) {
           this.rule = results[6];
+          this.editModeAI = this.editMode && _.includes(['A', 'I'], this.rule.status);
         }
         this.rule.period = this.rule.period || this.periods[0].period;
         if (this.copyMode) {
@@ -121,11 +119,14 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           delete this.rule.createdDate;
         }
         if (this.editMode) {
-          if (_.includes(['A', 'I'], this.rule.status)) {
+          if (this.editModeAI) {
             delete this.rule.createdBy;
             delete this.rule.createdDate;
+            // they can't edit approvedOnce rules other than to set active/inactive. The ruleNames are all status = active/inactive,
+            // not draft/pending which is what they'll be editing with, so complain if rulename already exists in A/I bunch. We have a catchall in
+            // approvalController.approve() that won't approve if name already exists, but we want them to see that here as well
+            this.ruleNames = _.without(this.ruleNames, this.rule.name); // if setting active/inactive, then allow name existence
           }
-          this.ruleNames = _.without(this.ruleNames, this.rule.name.toUpperCase());
         }
 
         this.salesSL2ChoiceOptions = {
@@ -158,16 +159,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           ]
         };
 
-        this.prodPFChoiceOptions = {
-          asyncValidations: [
-            {
-              name: 'prodPFChoices',
-              message: 'Some product PF select fields don\'t exist',
-              fcn: this.prodPFChoicesValidator()
-            }
-          ]
-        };
-
         this.prodBUChoiceOptions = {
           asyncValidations: [
             {
@@ -183,12 +174,16 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   init(initial?) {
-    this.createSelectArrays();
+    ruleUtil.createSelectArrays(this.rule);
     if (initial) {
       // we need these statements to be exactly how the ui would generate so they can be compared for changes
       // so update them right after creating the select arrays, "then" save to orgRule
       this.updateSelectStatements();
       this.orgRule = _.cloneDeep(this.rule);
+      this.rules.forEach(rule => ruleUtil.createSelectArrays(rule));
+      this.selectMap = new SelectExceptionMap();
+      this.selectMap.parseRules(this.rules);
+      this.checkIfRuleNameAlreadyExists();
     }
   }
 
@@ -227,39 +222,41 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   cleanUp() {
     // if match selected and cond selected and not choices, clear out cond
-    if (!this.salesSL1CritChoices.length) {
-      this.salesSL1CritCond = undefined;
+    if (!this.rule.salesSL1CritChoices.length) {
+      this.rule.salesSL1CritCond = undefined;
     }
-    if (!this.salesSL2CritChoices.length) {
-      this.salesSL2CritCond = undefined;
+    if (!this.rule.salesSL2CritChoices.length) {
+      this.rule.salesSL2CritCond = undefined;
     }
-    if (!this.salesSL3CritChoices.length) {
-      this.salesSL3CritCond = undefined;
+    if (!this.rule.salesSL3CritChoices.length) {
+      this.rule.salesSL3CritCond = undefined;
     }
-    if (!this.prodPFCritChoices.length) {
-      this.prodPFCritCond = undefined;
+    if (!this.rule.prodPFCritChoices.length) {
+      this.rule.prodPFCritCond = undefined;
     }
-    if (!this.prodBUCritChoices.length) {
-      this.prodBUCritCond = undefined;
+    if (!this.rule.prodBUCritChoices.length) {
+      this.rule.prodBUCritCond = undefined;
     }
-    if (!this.prodTGCritChoices.length) {
-      this.prodTGCritCond = undefined;
+    if (!this.rule.prodTGCritChoices.length) {
+      this.rule.prodTGCritCond = undefined;
     }
-    if (!this.scmsCritChoices.length) {
-      this.scmsCritCond = undefined;
+    if (!this.rule.scmsCritChoices.length) {
+      this.rule.scmsCritCond = undefined;
     }
-    if (!this.beCritChoices.length) {
-      this.beCritCond = undefined;
+    if (!this.rule.beCritChoices.length) {
+      this.rule.beCritCond = undefined;
     }
 
     this.updateSelectStatements();
   }
 
-  validateSaveToDraft() {
+  validate() {
     const errors = [];
+    // shouldn't happen
     if (!(this.rule.name && this.rule.name.trim())) {
       errors.push('You must define a name to save to draft.');
     }
+    // shouldn't happen
     if (_.includes(this.ruleNames, this.rule.name)) {
       errors.push('Rule name already exists.');
     }
@@ -267,23 +264,29 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   saveToDraft() {
-    const errors = this.validateSaveToDraft();
-    if (errors) {
-      this.uiUtil.validationErrorsDialog(errors);
-    } else {
-      this.cleanUp();
-      const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
-      this.ruleService.saveToDraft(this.rule, {saveMode})
-        .subscribe(rule => {
-          // once saved we need to update, not add, so move mode to edit (uiUtil.getApprovalSaveMode())
-          this.addMode = false;
-          this.copyMode = false;
-          this.editMode = true;
-          this.rule = rule;
-          this.orgRule = _.cloneDeep(rule);
-          this.uiUtil.toast('Rule saved to draft.');
-        });
-    }
+    UiUtil.triggerBlur('.fin-container form');
+    UiUtil.waitForAsyncValidations(this.form)
+      .then(() => {
+        if (this.form.valid) {
+          const errors = this.validate();
+          if (errors) {
+            this.uiUtil.validationErrorsDialog(errors);
+          } else {
+            const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
+            this.ruleService.saveToDraft(this.rule, {saveMode})
+              .subscribe(rule => {
+                // once saved we need to update, not add, so move mode to edit (uiUtil.getApprovalSaveMode())
+                this.addMode = false;
+                this.copyMode = false;
+                this.editMode = true;
+                this.rule = rule;
+                this.orgRule = _.cloneDeep(rule);
+                this.init();
+                this.uiUtil.toast('Rule saved to draft.');
+              });
+          }
+        }
+      });
   }
 
   reject() {
@@ -306,22 +309,24 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   approve() {
-    this.uiUtil.confirmApprove('rule')
-      .subscribe(resultConfirm => {
-        if (resultConfirm) {
-          this.uiUtil.promptDialog('Add approval comments', null, DialogInputType.textarea)
-            .subscribe(resultPrompt => {
-              if (resultPrompt !== 'DIALOG_CANCEL') {
-                this.rule.approveRejectMessage = resultPrompt;
-                this.cleanUp();
-                this.ruleService.approve(this.rule)
-                  .subscribe(() => {
-                    history.go(-1);
-                  });
-              }
-            });
-        }
-      });
+    if (!this.checkIfRuleNameAlreadyExists()) {
+      this.uiUtil.confirmApprove('rule')
+        .subscribe(resultConfirm => {
+          if (resultConfirm) {
+            this.uiUtil.promptDialog('Add approval comments', null, DialogInputType.textarea)
+              .subscribe(resultPrompt => {
+                if (resultPrompt !== 'DIALOG_CANCEL') {
+                  this.rule.approveRejectMessage = resultPrompt;
+                  this.cleanUp();
+                  this.ruleService.approve(this.rule)
+                    .subscribe(() => {
+                      history.go(-1);
+                    });
+                }
+              });
+          }
+        });
+    }
   }
 
   submitForApproval() {
@@ -329,17 +334,22 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     UiUtil.waitForAsyncValidations(this.form)
       .then(() => {
         if (this.form.valid) {
-          this.uiUtil.confirmSubmitForApproval()
-            .subscribe(result => {
-              if (result) {
-                this.cleanUp();
-                const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
-                this.ruleService.submitForApproval(this.rule, {saveMode})
-                  .subscribe(() => {
-                    history.go(-1);
-                  });
-              }
-            });
+          const errors = this.validate();
+          if (errors) {
+            this.uiUtil.validationErrorsDialog(errors);
+          } else {
+            this.uiUtil.confirmSubmitForApproval()
+              .subscribe(result => {
+                if (result) {
+                  this.cleanUp();
+                  const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
+                  this.ruleService.submitForApproval(this.rule, {saveMode})
+                    .subscribe(() => {
+                      history.go(-1);
+                    });
+                }
+              });
+          }
         }
       });
   }
@@ -354,8 +364,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           if (!results.exist) {
             return {salesSL2Choices: {value: control.value}};
           } else {
-            if (!_.isEqual(this.salesSL2CritChoices, results.values)) {
-              this.salesSL2CritChoices = results.values;
+            if (!_.isEqual(this.rule.salesSL2CritChoices, results.values)) {
+              this.rule.salesSL2CritChoices = results.values;
             }
             return null;
           }
@@ -373,8 +383,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           if (!results.exist) {
             return {salesSL3Choices: {value: control.value}};
           } else {
-            if (!_.isEqual(this.salesSL3CritChoices, results.values)) {
-              this.salesSL3CritChoices = results.values;
+            if (!_.isEqual(this.rule.salesSL3CritChoices, results.values)) {
+              this.rule.salesSL3CritChoices = results.values;
             }
             return null;
           }
@@ -392,8 +402,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           if (!results.exist) {
             return {prodPFChoices: {value: control.value}};
           } else {
-            if (!_.isEqual(this.prodPFCritChoices, results.values)) {
-              this.prodPFCritChoices = results.values;
+            if (!_.isEqual(this.rule.prodPFCritChoices, results.values)) {
+              this.rule.prodPFCritChoices = results.values;
             }
             return null;
           }
@@ -411,8 +421,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           if (!results.exist) {
             return {prodBUChoices: {value: control.value}};
           } else {
-            if (!_.isEqual(this.prodBUCritChoices, results.values)) {
-              this.prodBUCritChoices = results.values;
+            if (!_.isEqual(this.rule.prodBUCritChoices, results.values)) {
+              this.rule.prodBUCritChoices = results.values;
             }
             return null;
           }
@@ -421,114 +431,92 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   updateSelectStatements() {
-    if (this.salesSL1CritCond && this.salesSL1CritChoices.length) {
-      this.rule.sl1Select = this.createSelect(this.salesSL1CritCond, this.salesSL1CritChoices);
+    if (this.rule.salesSL1CritCond && this.rule.salesSL1CritChoices.length) {
+      this.rule.sl1Select = ruleUtil.createSelect(this.rule.salesSL1CritCond, this.rule.salesSL1CritChoices);
     } else {
       this.rule.sl1Select = undefined;
     }
 
-    if (this.salesSL2CritCond && this.salesSL2CritChoices.length) {
-      this.rule.sl2Select = this.createSelect(this.salesSL2CritCond, this.salesSL2CritChoices);
+    if (this.rule.salesSL2CritCond && this.rule.salesSL2CritChoices.length) {
+      this.rule.sl2Select = ruleUtil.createSelect(this.rule.salesSL2CritCond, this.rule.salesSL2CritChoices);
     } else {
       this.rule.sl2Select = undefined;
     }
 
-    if (this.salesSL3CritCond && this.salesSL3CritChoices.length) {
-      this.rule.sl3Select = this.createSelect(this.salesSL3CritCond, this.salesSL3CritChoices);
+    if (this.rule.salesSL3CritCond && this.rule.salesSL3CritChoices.length) {
+      this.rule.sl3Select = ruleUtil.createSelect(this.rule.salesSL3CritCond, this.rule.salesSL3CritChoices);
     } else {
       this.rule.sl3Select = undefined;
     }
 
-    if (this.prodPFCritCond && this.prodPFCritChoices.length) {
-      this.rule.prodPFSelect = this.createSelect(this.prodPFCritCond, this.prodPFCritChoices);
+    if (this.rule.prodPFCritCond && this.rule.prodPFCritChoices.length) {
+      this.rule.prodPFSelect = ruleUtil.createSelect(this.rule.prodPFCritCond, this.rule.prodPFCritChoices);
     } else {
       this.rule.prodPFSelect = undefined;
     }
-    if (this.prodBUCritCond && this.prodBUCritChoices.length) {
+    if (this.rule.prodBUCritCond && this.rule.prodBUCritChoices.length) {
       // validate BU choices and gen sql
-      this.rule.prodBUSelect = this.createSelect(this.prodBUCritCond, this.prodBUCritChoices);
+      this.rule.prodBUSelect = ruleUtil.createSelect(this.rule.prodBUCritCond, this.rule.prodBUCritChoices);
     } else {
       this.rule.prodBUSelect = undefined;
     }
-    if (this.prodTGCritCond && this.prodTGCritChoices.length) {
-      this.rule.prodTGSelect = this.createSelect(this.prodTGCritCond, this.prodTGCritChoices);
+    if (this.rule.prodTGCritCond && this.rule.prodTGCritChoices.length) {
+      this.rule.prodTGSelect = ruleUtil.createSelect(this.rule.prodTGCritCond, this.rule.prodTGCritChoices);
     } else {
       this.rule.prodTGSelect = undefined;
     }
 
-    if (this.scmsCritCond && this.scmsCritChoices.length) {
-      this.rule.scmsSelect = this.createSelect(this.scmsCritCond, this.scmsCritChoices);
+    if (this.rule.scmsCritCond && this.rule.scmsCritChoices.length) {
+      this.rule.scmsSelect = ruleUtil.createSelect(this.rule.scmsCritCond, this.rule.scmsCritChoices);
     } else {
       this.rule.scmsSelect = undefined;
     }
 
-    if (this.beCritCond && this.beCritChoices.length) {
-      this.rule.beSelect = this.createSelect(this.beCritCond, this.beCritChoices);
+    if (this.rule.beCritCond && this.rule.beCritChoices.length) {
+      this.rule.beSelect = ruleUtil.createSelect(this.rule.beCritCond, this.rule.beCritChoices);
     } else {
       this.rule.beSelect = undefined;
     }
 
   }
 
-  createSelect(cond, choices) {
-    let sql = ` ${cond} ( `;
-    choices.forEach((choice, idx) => {
-      sql += `'${choice.trim()}'`;
-      if (idx < choices.length - 1) {
-        sql += ', ';
-      }
-    });
-    sql += ` ) `;
-    return sql;
+  isApprovedOnce() {
+    return this.rule.approvedOnce === 'Y';
   }
 
-  createSelectArrays() {
-    let parse = this.parseSelect(this.rule.sl1Select);
-    this.salesSL1CritCond = parse.cond;
-    this.salesSL1CritChoices = parse.arr;
-
-    parse = this.parseSelect(this.rule.sl2Select);
-    this.salesSL2CritCond = parse.cond;
-    this.salesSL2CritChoices = parse.arr;
-
-    parse = this.parseSelect(this.rule.sl3Select);
-    this.salesSL3CritCond = parse.cond;
-    this.salesSL3CritChoices = parse.arr;
-
-    parse = this.parseSelect(this.rule.prodPFSelect);
-    this.prodPFCritCond = parse.cond;
-    this.prodPFCritChoices = parse.arr;
-
-    parse = this.parseSelect(this.rule.prodBUSelect);
-    this.prodBUCritCond = parse.cond;
-    this.prodBUCritChoices = parse.arr;
-
-    parse = this.parseSelect(this.rule.prodTGSelect);
-    this.prodTGCritCond = parse.cond;
-    this.prodTGCritChoices = parse.arr;
-
-    parse = this.parseSelect(this.rule.scmsSelect);
-    this.scmsCritCond = parse.cond;
-    this.scmsCritChoices = parse.arr;
-
-    parse = this.parseSelect(this.rule.beSelect);
-    this.beCritCond = parse.cond;
-    this.beCritChoices = parse.arr;
-  }
-
-  parseSelect(str) {
-    // we need to not only parse but also clear off if reset
-    if (!str || !str.trim().length) {
-      return {cond: undefined, arr: []};
+  valueChange() {
+    // code below would work, but this would be faster than waiting for asyncs
+    if (!(this.rule.driverName && this.rule.period)) {
+      delete this.rule.name;
+      delete this.rule.desc;
+      return;
     }
-    const rtn: AnyObj = {};
-    const idx = str.indexOf('(');
-    rtn.cond = str.substr(0, idx).trim();
-    rtn.arr = str.substr(idx).replace(/(\(|\)|'|")/g, '').trim().split(',');
-    rtn.arr = rtn.arr.map(x => x.trim());
-    return rtn;
+    UiUtil.waitForAsyncValidations(this.form)
+      .then(() => {
+        if (this.form.valid) {
+          // we need to clone the selectMap, otherwise they add to it then remove their entry, but addition is still there
+          // so we'll clone it every time we generate a new name
+          const smap = _.cloneDeep(this.selectMap);
+          ruleUtil.addRuleNameAndDescription(this.rule, smap, this.drivers, this.periods);
+          // console.log(smap.buMap);
+          this.checkIfRuleNameAlreadyExists();
+        } else {
+          delete this.rule.name;
+          delete this.rule.desc;
+        }
+      });
   }
 
-
+  checkIfRuleNameAlreadyExists() {
+    if (_.includes(this.ruleNames, this.rule.name)) {
+      // we call blur on all selects which all call this all at once and crashes with all the modal calls, so look for it and if there, don't put it up
+      if (!this.dialog.openDialogs.length) {
+        this.uiUtil.genericDialog(`A rule by this name already exists: ${this.rule.name}`);
+      }
+      return true;
+    } else {
+      return false;
+    }
+  }
 
 }

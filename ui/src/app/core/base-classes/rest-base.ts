@@ -4,7 +4,7 @@ import {environment} from '../../../environments/environment';
 import AnyObj from '../../../../../shared/models/any-obj';
 import {AppStore} from '../../app/app-store';
 import {UiUtil} from '../services/ui-util';
-import {shUtil} from '../../../../../shared/shared-util';
+import {shUtil} from '../../../../../shared/misc/shared-util';
 import {DfaModule} from '../../modules/_common/models/module';
 
 const apiUrl = environment.apiUrl;
@@ -61,6 +61,7 @@ export class RestBase<T extends AnyObj> {
     return this.getManyLatest('name', params);
   }
 
+  // this calls getManyLatestGroupByNameActiveInactive, then filters for active only
   getManyLatestGroupByNameActive(moduleId?) {
       const data = moduleId ? {moduleId: moduleId} : {};
     this.addModuleId(data);

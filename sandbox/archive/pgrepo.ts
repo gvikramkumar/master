@@ -1,5 +1,5 @@
-import {Orm, OrmMap, OrmTypes} from '../server/lib/base-classes/Orm';
-import {PgRepoBase} from '../server/lib/base-classes/pg-repo-base';
+import {Orm, OrmMap, OrmTypes} from '../../server/lib/base-classes/Orm';
+import {PgRepoBase} from '../../server/lib/base-classes/pg-repo-base';
 
 const ormMap: OrmMap[] = [
   {prop: 'idCol', field: 'id_col', type: OrmTypes.number, serial: true},

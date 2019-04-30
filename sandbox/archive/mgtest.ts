@@ -1,5 +1,5 @@
 
-import {mgc} from '../server/lib/database/mongoose-conn';
+import {mgc} from '../../server/lib/database/mongoose-conn';
 
 
 mgc.promise.then(({db, mongo}) => {

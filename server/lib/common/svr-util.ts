@@ -2,7 +2,7 @@ import {Duplex} from 'stream';
 import {Buffer} from 'buffer';
 import _ from 'lodash';
 import {ApiError} from './api-error';
-import {DfaModuleIds} from '../../../shared/enums';
+import {DfaModuleIds} from '../../../shared/misc/enums';
 
 export const svrUtil = {
   isLocalEnv,
@@ -34,7 +34,11 @@ function toFixed8(val) {
 
 // round off a number's decimal part to x decimal places, this works with or without numbers before the decimal
 function toFixed(val, places) {
-  return Number(Number(val).toFixed(places));
+  if (val === undefined || val === null) {
+    return val;
+  } else {
+    return Number(Number(val).toFixed(places));
+  }
 }
 
 // strings are bracketed by single quotes, so we have to escape single quotes within the string

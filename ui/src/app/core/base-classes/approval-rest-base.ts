@@ -3,7 +3,7 @@ import {environment} from '../../../environments/environment';
 import AnyObj from '../../../../../shared/models/any-obj';
 import {AppStore} from '../../app/app-store';
 import {RestBase} from './rest-base';
-import {shUtil} from '../../../../../shared/shared-util';
+import {shUtil} from '../../../../../shared/misc/shared-util';
 
 const apiUrl = environment.apiUrl;
 
@@ -55,11 +55,11 @@ export class ApprovalRestBase<T extends AnyObj> extends RestBase<T> {
     const moduleId = this.store.module.moduleId;
     const user = this.store.user;
     if (user.isModuleBusinessUser() || user.isModuleEndUser()) {
-      return this.callMethod('getManyLatestByNameActiveInactive');
+      return this.callMethod('getManyLatestGroupByNameActiveInactive');
     } else if (user.isModuleSuperUser()) {
-      return this.callMethod('getManyLatestByNameActiveInactiveConcatDraftPendingOfUser');
+      return this.callMethod('getManyLatestGroupByNameActiveInactiveConcatDraftPendingOfUser');
     } else if (user.isModuleAdminOrGreater()) {
-      return this.callMethod('getManyLatestByNameActiveInactiveConcatDraftPending');
+      return this.callMethod('getManyLatestGroupByNameActiveInactiveConcatDraftPending');
     }
   }
 

@@ -8,7 +8,7 @@ import {uiConst} from '../../../../core/models/ui-const';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 import {ActivatedRoute} from '@angular/router';
 import {AppComponent} from '../../../../app/app.component';
-import {shUtil} from '../../../../../../../shared/shared-util';
+import {shUtil} from '../../../../../../../shared/misc/shared-util';
 import AnyObj from '../../../../../../../shared/models/any-obj';
 import {LookupService} from '../../../../modules/_common/services/lookup.service';
 

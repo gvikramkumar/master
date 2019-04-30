@@ -8,7 +8,7 @@ import {AppStore} from '../../../app/app-store';
 import {RestBase} from '../../../core/base-classes/rest-base';
 import * as _ from 'lodash';
 import {UiUtil} from '../../../core/services/ui-util';
-import {shUtil} from '../../../../../../shared/shared-util';
+import {shUtil} from '../../../../../../shared/misc/shared-util';
 import AnyObj from '../../../../../../shared/models/any-obj';
 
 const apiUrl = environment.apiUrl;

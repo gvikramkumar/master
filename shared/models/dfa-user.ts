@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import {difference, flatten, includes, intersection} from 'lodash';
 import AnyObj from './any-obj';
 import {DfaModule} from '../../ui/src/app/modules/_common/models/module';
-import {shUtil} from '../shared-util';
+import {shUtil} from '../misc/shared-util';
 
 export default class DfaUser {
   moduleId?: number;

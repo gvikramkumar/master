@@ -1,6 +1,7 @@
 
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
+import AnyObj from '../models/any-obj';
 
 export const shUtil = {
   getUpdateTable,
@@ -20,12 +21,6 @@ export const shUtil = {
   convertToPSTTime
 };
 
-export interface ObjectDiffVal {
-  path: string;
-  oldVal: any;
-  newVal: any;
-}
-
 function fiscalYearFromFiscalMonth(fimo) {
   return Number(fimo.toString().substr(0, 4));
 }
@@ -38,6 +33,12 @@ function isDeptUpload(submeasure) {
 // std cogs adj and mfg overhead measures (2 & 4)
 function isDeptUploadMeasure(submeasure) {
   return (submeasure.measureId === 2 || submeasure.measureId === 4);
+}
+
+export interface ObjectDiffVal {
+  path: string;
+  oldVal: any;
+  newVal: any;
 }
 
 function getUpdateTable(updates: ObjectDiffVal[]): string {
@@ -74,7 +75,7 @@ function getUpdateTable(updates: ObjectDiffVal[]): string {
   return result;
 }
 
-function getObjectChanges(_obj1, _obj2, omitProperties: string[]): ObjectDiffVal[] {
+function getObjectChanges(_obj1, _obj2, omitProperties: string[] = []): ObjectDiffVal[] {
   let arr: ObjectDiffVal[] = [];
   const obj1 = _.omit(_.cloneDeep(_obj1), omitProperties);
   const obj2 = _.omit(_.cloneDeep(_obj2), omitProperties);

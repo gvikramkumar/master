@@ -8,6 +8,8 @@ fdescribe('svrUtil tests', () => {
       it('should do all this', () => {
 
         const results = [];
+        results.push(svrUtil.toFixed(undefined, 8));
+        results.push(svrUtil.toFixed(null, 8));
         results.push(svrUtil.toFixed('xx.123456789', 8));
         results.push(svrUtil.toFixed(12, 8));
         results.push(svrUtil.toFixed(12., 8));
@@ -27,6 +29,8 @@ fdescribe('svrUtil tests', () => {
         results.push(svrUtil.toFixed(0.00000009, 8));
 
         expect(results).toEqual([
+          undefined,
+          null,
           NaN,
           12,
           12,

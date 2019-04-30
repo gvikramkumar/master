@@ -2,16 +2,15 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource, PageEvent, Sort} from '@angular/material';
 import {RuleService} from '../../services/rule.service';
 import {FormControl} from '@angular/forms';
-import {Subject, Subscription} from 'rxjs';
 import {AllocationRule} from '../../../../../../../shared/models/allocation-rule';
 import * as moment from 'moment';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppStore} from '../../../../app/app-store';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 import * as _ from 'lodash';
-import {debounceTime} from 'rxjs/operators';
 import {UiUtil} from '../../../../core/services/ui-util';
-import {shUtil} from '../../../../../../../shared/shared-util';
+import {shUtil} from '../../../../../../../shared/misc/shared-util';
+import {DialogSize, DialogType} from '../../../../core/models/ui-enums';
 
 @Component({
   selector: 'fin-rule-management',
@@ -113,6 +112,17 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
 
   canEdit(sm) {
     return this.store.user.isModuleAdminOrGreater() || (this.store.user.isModuleSuperUser() && (sm.status === 'D' || sm.status === 'P'));
+  }
+
+  showDescription(rule) {
+    let html = `<table style='border:none'>`;
+    rule.desc.split('\n')
+      .forEach(x => {
+        const colonIdx = x.indexOf(':');
+        html += `<tr><td>${x.substring(0, colonIdx)}</td><td style="padding-left: 20px;">${x.substring(colonIdx + 1)}</td></tr>`;
+      });
+    html += `</table>`;
+    this.uiUtil.genericDialog(null, html, null, DialogType.ok, DialogSize.large, false);
   }
 
 }

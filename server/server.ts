@@ -63,6 +63,7 @@ Promise.all([mgc.promise, pgc.promise])
           }
           throw(err);
         }
+        console.log('BUILD_NUMBER:', process.env.BUILD_NUMBER);
         console.log(`${protocol} server listening on ${port}`);
       });
     }

@@ -1,6 +1,6 @@
 import {ApiError} from '../common/api-error';
 import config from '../../config/get-config';
-import {shUtil} from '../../../shared/shared-util';
+import {shUtil} from '../../../shared/misc/shared-util';
 
 export function timeoutHandler() {
   return function (req, res, next) {

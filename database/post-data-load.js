@@ -16,10 +16,14 @@ db.dfa_open_period.insertMany([
   {moduleId: NumberInt(11), fiscalMonth: NumberInt(201904), openFlag: "Y"},
 ]);
 
+// temp fix: ram's backend upload is not setting approvedOnce and setting glSegmentsMatch to an empty string
+db.getCollection('dfa_allocation_rule').updateMany({}, {$set: {approvedOnce: 'Y'}});
+db.getCollection('dfa_allocation_rule').updateMany({glSegmentsMatch: ''}, {$set: {glSegmentsMatch: []}});
+
 db.dfa_lookup.insertMany([
   {
     key: 'database-version',
-    value: 17
+    value: 18
   },
   {
     key: 'build-number',
@@ -48,95 +52,112 @@ db.dfa_lookup.insertMany([
   {
     key: 'drivers',
     value: [
-        {
-          "name" : "Software POS Revenue",
-          "value" : "POSREVSW"
-        },
-        {
-          "name" : "Svc Channel Revenue",
-          "value" : "MSCP"
-        },
-        {
-          "name" : "Shipped Revenue",
-          "value" : "SHIPREV"
-        },
-        {
-          "name" : "POS Revenue",
-          "value" : "REVPOS"
-        },
-        {
-          "name" : "Partner Dev Fund",
-          "value" : "PDF"
-        },
-        {
-          "name" : "Gross Revenue CMDM",
-          "value" : "GLREV"
-        },
-        {
-          "name" : "Legacy Driver",
-          "value" : "LEGACYDRVR"
-        },
-        {
-          "name" : "2T Subscription Revenue",
-          "value" : "2TSUBDIR"
-        },
-        {
-          "name" : "Net Revenue",
-          "value" : "GLREVMIX"
-        },
-        {
-          "name" : "Shipment",
-          "value" : "SHIPMENT"
-        },
-        {
-          "name" : "Remarketing Revenue",
-          "value" : "REMKTREV"
-        },
-        {
-          "name" : "VIP Rebate",
-          "value" : "VIP"
-        },
-        {
-          "name" : "POS Revenue Disty",
-          "value" : "REVPOSDIS"
-        },
-        {
-          "name" : "Svc Map",
-          "value" : "SERVMAP"
-        },
-        {
-          "name" : "Svc Sales Split PCT Map",
-          "value" : "SERVSLSMAP"
-        },
-        {
-          "name" : "Svc Training Split PCT Map",
-          "value" : "SERVTRNMAP"
-        },
-        {
-          "name" : "Svc Revenue",
-          "value" : "SVCREVT3"
-        },
-        {
-          "name" : "Def POS Revenue SW",
-          "value" : "DRPOSREVSW"
-        },
-        {
-          "name" : "Def Shipment",
-          "value" : "DRSHIPMENT"
-        },
-        {
-          "name" : "Def Ship Revenue SW",
-          "value" : "DRSHPREVSW"
-        },
-        {
-          "name" : "Default Driver DO NOT USE",
-          "value" : "DEFAULT"
-        },
-        {
-          "name" : "Shipped Revenue with POS Adj",
-          "value" : "SHREVPOS"
-        }
-      ]
+      {
+        "name" : "Software POS Revenue",
+        "value" : "POSREVSW"
+      },
+      {
+        "name" : "Svc Channel Revenue",
+        "value" : "MSCP"
+      },
+      {
+        "name" : "Shipped Revenue",
+        "value" : "SHIPREV"
+      },
+      {
+        "name" : "POS Revenue",
+        "value" : "REVPOS"
+      },
+      {
+        "name" : "Partner Dev Fund",
+        "value" : "PDF"
+      },
+      {
+        "name" : "Gross Revenue CMDM",
+        "value" : "GLREV"
+      },
+      {
+        "name" : "Legacy Driver",
+        "value" : "LEGACYDRVR"
+      },
+      {
+        "name" : "2T Subscription Revenue",
+        "value" : "2TSUBDIR"
+      },
+      {
+        "name" : "Net Revenue",
+        "value" : "GLREVMIX"
+      },
+      {
+        "name" : "Shipment",
+        "value" : "SHIPMENT"
+      },
+      {
+        "name" : "Remarketing Revenue",
+        "value" : "REMKTREV"
+      },
+      {
+        "name" : "VIP Rebate",
+        "value" : "VIP"
+      },
+      {
+        "name" : "POS Revenue Disty",
+        "value" : "REVPOSDIS"
+      },
+      {
+        "name" : "Svc Map",
+        "value" : "SERVMAP"
+      },
+      {
+        "name" : "Svc Sales Split PCT Map",
+        "value" : "SERVSLSMAP"
+      },
+      {
+        "name" : "Svc Training Split PCT Map",
+        "value" : "SERVTRNMAP"
+      },
+      {
+        "name" : "Svc Revenue",
+        "value" : "SVCREVT3"
+      },
+      {
+        "name" : "Def POS Revenue SW",
+        "value" : "DRPOSREVSW"
+      },
+      {
+        "name" : "Def Shipment",
+        "value" : "DRSHIPMENT"
+      },
+      {
+        "name" : "Def Ship Revenue SW",
+        "value" : "DRSHPREVSW"
+      },
+      {
+        "name" : "Default Driver DO NOT USE",
+        "value" : "DEFAULT"
+      },
+      {
+        "name" : "Shipped Revenue with POS Adj",
+        "value" : "SHREVPOS"
+      },
+      // new triangulation rules ram's supposed to add
+      {
+        "name" : "AMERICASMISC",
+        "value" : "AMERICASMISC"
+      },
+      {
+        "name" : "CORPADJ",
+        "value" : "CORPADJ"
+      },
+      {
+        "name" : "EMERGINGMKTSMISC",
+        "value" : "EMERGINGMKTSMISC"
+      },
+      {
+        "name" : "USCANMISC",
+        "value" : "USCANMISC"
+      },
+    ]
   },
   {
     "key" : "periods",
@@ -154,30 +175,29 @@ db.dfa_lookup.insertMany([
         "period" : "ROLL6"
       },
       {
-        "period" : "PRIOR ROLL3"
+        "period" : "PRIOR ROLL3",
+        "abbrev" : "PRIOR3"
       },
       {
-        "period" : "PRIOR ROLL6"
+        "period" : "PRIOR ROLL6",
+        "abbrev" : "PRIOR6"
       },
       {
-        "period" : "PERCENT"
+        "period" : "PERCENT",
+        "abbrev" : "PCT"
       }
     ]
   }
 ]);
 
-db.dfa_module_data_source.insertMany([
-  {moduleId: NumberInt(1), sources: [NumberInt(1),NumberInt(2), NumberInt(3),NumberInt(4)]}
-])
-
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
 const collectionsWithCreatedUpdated = [
-  'dfa_allocation_rule',
-  'dfa_data_source',
-  'dfa_measure',
-  'dfa_submeasure',
-  'dfa_module',
-  'dfa_module_data_source',
+  // 'dfa_allocation_rule',
+  // 'dfa_data_source',
+  // 'dfa_measure',
+  // 'dfa_submeasure',
+  // 'dfa_module',
+  // 'dfa_module_data_source',
   'dfa_open_period',
 ];
 

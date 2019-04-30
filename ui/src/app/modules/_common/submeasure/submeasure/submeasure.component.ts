@@ -13,7 +13,7 @@ import {SourceService} from '../../services/source.service';
 import {UiUtil} from '../../../../core/services/ui-util';
 import * as moment from 'moment';
 import AnyObj from '../../../../../../../shared/models/any-obj';
-import {shUtil} from '../../../../../../../shared/shared-util';
+import {shUtil} from '../../../../../../../shared/misc/shared-util';
 
 @Component({
   selector: 'fin-submeasure',

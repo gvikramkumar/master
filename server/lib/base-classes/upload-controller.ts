@@ -15,7 +15,7 @@ import {SyncMap} from '../../../shared/models/sync-map';
 import DatabaseController from '../../api/database/controller';
 import config from '../../config/get-config';
 import {injector} from '../common/inversify.config';
-import {shUtil} from '../../../shared/shared-util';
+import {shUtil} from '../../../shared/misc/shared-util';
 
 
 export default class UploadController {

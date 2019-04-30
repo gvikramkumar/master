@@ -1,10 +1,10 @@
 import RepoBase from './repo-base';
 import ControllerBase from './controller-base';
 import {ApiError} from '../common/api-error';
-import {ApprovalMode} from '../../../shared/enums';
+import {ApprovalMode} from '../../../shared/misc/enums';
 import * as _ from 'lodash';
 import {svrUtil} from '../common/svr-util';
-import {shUtil} from '../../../shared/shared-util';
+import {shUtil} from '../../../shared/misc/shared-util';
 import {sendHtmlMail} from '../common/mail';
 import AnyObj from '../../../shared/models/any-obj';
 
@@ -108,13 +108,13 @@ export default class ApprovalController extends ControllerBase {
       .catch(next);
   }
 
-  getManyLatestByNameActiveInactive(req, res, next) {
+  getManyLatestGroupByNameActiveInactive(req, res, next) {
     this.repo.getManyLatestGroupByNameActiveInactive(req.body.moduleId)
       .then(docs => res.send(docs))
       .catch(next);
   }
 
-  getManyLatestByNameActiveInactiveConcatDraftPendingOfUser(req, res, next) {
+  getManyLatestGroupByNameActiveInactiveConcatDraftPendingOfUser(req, res, next) {
     return Promise.all([
       this.repo.getManyLatestGroupByNameActiveInactive(req.body.moduleId),
       this.repo.getMany({
@@ -130,7 +130,7 @@ export default class ApprovalController extends ControllerBase {
       .catch(next);
   }
 
-  getManyLatestByNameActiveInactiveConcatDraftPending(req, res, next) {
+  getManyLatestGroupByNameActiveInactiveConcatDraftPending(req, res, next) {
     return Promise.all([
       this.repo.getManyLatestGroupByNameActiveInactive(req.body.moduleId),
       this.repo.getMany({
@@ -147,12 +147,12 @@ export default class ApprovalController extends ControllerBase {
 
   // this step can modify the data, as it's pre-save
   preApproveStep(data, req) {
-    return Promise.resolve(data);
+    return Promise.resolve();
   }
 
   // this "doesn't" modify data as it's already saved
   postApproveStep(data, req) {
-    return Promise.resolve(data);
+    return Promise.resolve();
   }
 
   // this step can modify the item, so any overrides are responsible for returning the passed item

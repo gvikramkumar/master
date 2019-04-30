@@ -18,12 +18,12 @@ import {
   Submeasure, SubmeasureIndicators,
   SubmeasureInputFilterLevel
 } from '../../../../../../../shared/models/submeasure';
-import {shUtil} from '../../../../../../../shared/shared-util';
+import {shUtil} from '../../../../../../../shared/misc/shared-util';
 import {PgLookupService} from '../../services/pg-lookup.service';
 import {ProductClassUploadService} from '../../../prof/services/product-class.service';
 import {environment} from '../../../../../environments/environment';
 import {FsFile} from '../../models/fsfile';
-import {BusinessUploadFileType, Directory} from '../../../../../../../shared/enums';
+import {BusinessUploadFileType, Directory} from '../../../../../../../shared/misc/enums';
 import {FsFileService} from '../../../../core/services/fsfile.service';
 import {BusinessUploadService} from '../../services/business-upload.service';
 
@@ -229,7 +229,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.measureService.getManyActive().toPromise(),
       this.ruleService.getManyLatestGroupByNameActive().toPromise(),
       this.sourceService.getMany().toPromise(),
-      this.submeasureService.getDistinct('name', {moduleId: -1}).toPromise(),
+      this.submeasureService.getDistinct('name', {moduleId: this.store.module.moduleId}).toPromise(),
       this.pgLookupService.callRepoMethod('getSubmeasurePNLNodes', null, {moduleId: this.store.module.moduleId}).toPromise(),
       this.fsFileService.getInfoMany({directory: Directory.profBusinessUpload, buFileType: BusinessUploadFileType.template, buUploadType: 'dept-upload'}).toPromise()
     ];
@@ -1015,6 +1015,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   isApprovedOnce() {
     return this.sm.approvedOnce === 'Y';
   }
+
   changeFile(fileInput) {
     this.deptUploadFilename = fileInput.files[0] && fileInput.files[0].name;
   }

@@ -2,7 +2,7 @@ import DfaUser from '../../../shared/models/dfa-user';
 import * as _ from 'lodash';
 import LookupRepo from '../../api/lookup/repo';
 import {ModuleRepo} from '../../api/common/module/repo';
-import {shUtil} from '../../../shared/shared-util';
+import {shUtil} from '../../../shared/misc/shared-util';
 import {ApiError} from '../common/api-error';
 import {svrUtil} from '../common/svr-util';
 import config from '../../config/get-config';

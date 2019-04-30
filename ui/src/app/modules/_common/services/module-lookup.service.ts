@@ -5,7 +5,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {LookupService} from './lookup.service';
 import {AppStore} from '../../../app/app-store';
 import {UiUtil} from '../../../core/services/ui-util';
-import {shUtil} from '../../../../../../shared/shared-util';
+import {shUtil} from '../../../../../../shared/misc/shared-util';
 
 const apiUrl = environment.apiUrl;
 

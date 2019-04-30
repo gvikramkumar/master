@@ -15,7 +15,6 @@ export class ForbiddenNameValidator implements Validator {
   @Input() forbiddenName: string;
 
   constructor() {
-    const i = 5;
   }
 
 
