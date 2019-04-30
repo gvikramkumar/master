@@ -4,7 +4,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 import { SearchCollaboratorService } from '@app/services/search-collaborator.service';
-import { ConfigurationService } from '@shared/services';
+import { ConfigurationService } from '@app/core/services';
 
 import * as _ from 'lodash';
 import { User } from '@app/models/user';

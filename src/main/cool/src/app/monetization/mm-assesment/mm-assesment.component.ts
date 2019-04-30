@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MonetizationModelService } from '../../services/monetization-model.service';
 import { OfferPhaseService } from '../../services/offer-phase.service';
-import { ConfigurationService } from '@shared/services';
+
 import { OfferDetailViewService } from '../../services/offer-detail-view.service';
 import { OffersolutioningService } from '../../services/offersolutioning.service';
 import { RightPanelService } from '../../services/right-panel.service';
@@ -14,6 +14,7 @@ import { StrategyReviewService } from '../../services/strategy-review.service';
 import { MMAttributes } from '@app/models/mmattributes';
 import * as _ from 'lodash';
 import { User } from '@app/models/user';
+import { ConfigurationService } from '../../core/services/configuration.service';
 
 @Component({
   selector: 'app-mm-assesment',
@@ -78,8 +79,8 @@ export class MmAssesmentComponent implements OnInit {
   ) {
 
     this.activatedRoute.params.subscribe(params => {
-      this.currentOfferId = params['id'];
-      this.caseId = params['id2'];
+      this.currentOfferId = params['offerId'];
+      this.caseId = params['caseId'];
     });
 
   }
@@ -1201,7 +1202,7 @@ export class MmAssesmentComponent implements OnInit {
 
     const selectedCharacteristics: any[] = [];
     const additionalCharacteristics: any[] = [];
-    
+
     groupData.forEach((group, index) => {
       for (const subGroup of Object.keys(group)) {
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MenuBarService } from '@app/services/menu-bar.service';
-import { UserService } from '@shared/services';
+import { UserService } from '@app/core/services';
 
 
 
@@ -29,9 +29,8 @@ export class MenuBarPopupComponent implements OnInit {
     private userService: UserService,
   ) {
     this.activatedRoute.params.subscribe(params => {
-      this.currentOfferId = params['id'];
-      this.caseId = params['id2'];
-
+      this.currentOfferId = params['offerId'];
+      this.caseId = params['caseId'];
     });
   }
 

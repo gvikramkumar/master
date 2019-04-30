@@ -1,12 +1,15 @@
 import { Component, Input, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
 import { Router} from '@angular/router';
 import { TurbotaxService } from '@shared/services';
+
+
 @Component({
     selector: 'app-turbotaxview',
     templateUrl: './turbotaxview.component.html',
     styleUrls: ['./turbotaxview.component.css']
 })
 export class TurbotaxviewComponent implements OnChanges {
+
     @Input() caseId: string;
     @Input() offerId: string;
 

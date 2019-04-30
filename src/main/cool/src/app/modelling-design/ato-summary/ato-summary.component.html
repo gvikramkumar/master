@@ -12,9 +12,25 @@
     <p-column field="status" header="STATUS" sortable="true">
       <ng-template let-col let-task="rowData" pTemplate="body">
         <div class="text-center">
-          <span class="{{task['taskStatus']|lowercase}}">
-            <i class="fa fa-circle" style="font-size:15px;margin:4px 4px 0 0;"></i>
-          </span>
+
+          <ng-container *ngIf="task['taskStatus']==='Completed'; else notRequired">
+            <span class="completed success">
+              <span class="icon-check"></span>
+            </span>
+          </ng-container>
+
+          <ng-template #notRequired>
+            <ng-container *ngIf="task['taskStatus']==='In Progress';else other">
+              <span class="in-progress">
+              </span>
+            </ng-container>
+          </ng-template>
+
+          <ng-template #other>
+            <span class="not-available">
+            </span>
+          </ng-template>
+
         </div>
       </ng-template>
     </p-column>

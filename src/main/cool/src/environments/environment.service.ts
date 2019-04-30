@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class EnvironmentService {
 
-
+    owbUrl: string;
     baseApiUrl: string;
     baseIdpUrl: string;
     redirectUrl: string;
@@ -30,7 +30,6 @@ export class EnvironmentService {
 
     //  OWB URLs
     REST_API_OWB_CONTROLLER_URL: string;
-    REST_API_RETRIEVE_ATO_LIST_URL: string;
 
     //  eGenie URLs
     REST_API_GET_PID_DETAILS_URL: string;
@@ -126,10 +125,13 @@ export class EnvironmentService {
     // DESIGN REVIEW URL's
     REST_API_DESIGN_REVIEW_GET_URL: string;
 
-    // OFFER SETUP URLs
-    REST_API_OFFER_SETUPMODULE_GET_URL: string;
-    REST_API_OFFER_MODULESTATUS_GET_URL: string;
+    // OFFER SETUP
+    REST_API_RETRIEVE_ATO_LIST_URL: string;
+    REST_API_OFFER_SETUP_MODULE_GET_URL: string;
+    REST_API_OFFER_MODULE_STATUS_GET_URL: string;
+
     // -------------------------------------------------------------------------------------------------
+
 
     constructor() {
         this.setEnvironmentVariables();
@@ -159,6 +161,7 @@ export class EnvironmentService {
                 this.baseIdpUrl = 'https://idp-stage-api.cisco.com';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
+                this.owbUrl = 'https://owb.cloudapps.cisco.com/owb/owb/home#/home';
                 break;
             case 'stage':
                 this.baseApiUrl = 'https://cool-srv-stg.cisco.com/coolsrv';
@@ -169,6 +172,7 @@ export class EnvironmentService {
                 this.baseIdpUrl = 'https://idp-stage-api.cisco.com';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
+                this.owbUrl = 'https://owb-stage.cloudapps.cisco.com/owb/owb/home#/home';
                 break;
             case 'qualityassurance':
                 this.baseApiUrl = 'https://cool-srv-qa.cisco.com/coolsrv';
@@ -179,6 +183,7 @@ export class EnvironmentService {
                 this.baseIdpUrl = 'https://idp-stage-api.cisco.com';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
+                this.owbUrl = 'https://owb-stage.cloudapps.cisco.com/owb/owb/home#/home';
                 break;
             case 'development':
                 this.baseApiUrl = 'https://cool-srv-dev.cisco.com/coolsrv';
@@ -189,6 +194,7 @@ export class EnvironmentService {
                 this.baseIdpUrl = 'https://idp-stage-api.cisco.com';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
+                this.owbUrl = 'https://owb-stage.cloudapps.cisco.com/owb/owb/home#/home';
                 break;
             default:
                 this.baseApiUrl = '/api';
@@ -199,6 +205,7 @@ export class EnvironmentService {
                 this.baseIdpUrl = '/idp';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
+                this.owbUrl = 'https://owb-stage.cloudapps.cisco.com/owb/owb/home#/home';
         }
 
         // ----------------------- AUTHENTICATION URLs -----------------------------------------------
@@ -223,7 +230,6 @@ export class EnvironmentService {
         // ------------------------ OWB URLs ------------------------------------------------------
 
         this.REST_API_OWB_CONTROLLER_URL = this.baseApiUrl + '/owb/create';
-        this.REST_API_RETRIEVE_ATO_LIST_URL = this.baseApiUrl + '/owb/getATOItemStatus';
 
         // ------------------------ eGenie URLs ------------------------------------------------------
 
@@ -333,10 +339,12 @@ export class EnvironmentService {
 
         this.REST_API_DESIGN_REVIEW_GET_URL = this.baseApiUrl + '/designReview/getInfo/';
 
-         
-        // --------------------------------- OFFER SETUP URLs  ------------------------------------------------
-        this.REST_API_OFFER_SETUPMODULE_GET_URL = this.baseApiUrl + '/offersetup/getOfferSetupPageLoad?mmval=';
-        this. REST_API_OFFER_MODULESTATUS_GET_URL = this.baseApiUrl + '/offersetup/getModuleStatus?moduleName=';
+        // ------------------------------------ OFFER SETUP -------------------------------------------------
+
+        this.REST_API_RETRIEVE_ATO_LIST_URL = this.baseApiUrl + 'offersetup/getOWBModelObject/';
+        this.REST_API_OFFER_SETUP_MODULE_GET_URL = this.baseApiUrl + '/offersetup/getOfferSetupPageLoad?mmval=';
+        this.REST_API_OFFER_MODULE_STATUS_GET_URL = this.baseApiUrl + '/offersetup/getModuleStatus?moduleName=';
+        // -------------------------------------------------------------------------------------------------
+
     }
 }
-

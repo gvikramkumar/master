@@ -6,7 +6,7 @@ import { EnvironmentService } from '../../environments/environment.service';
 import { CreateAction } from '../models/create-action';
 import { CreateActionComment } from '../models/create-action-comment';
 import { CreateActionApprove } from '../models/create-action-approve';
-import { UserService } from '@shared/services';
+import { UserService } from '@app/core/services';
 
 @Injectable()
 export class ActionsService {

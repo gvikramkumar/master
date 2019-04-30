@@ -4,11 +4,11 @@ import { OffersolutioningService } from '../../services/offersolutioning.service
 import { StakeholderfullService } from '../../services/stakeholderfull.service';
 import { OfferPhaseService } from '../../services/offer-phase.service';
 import { RightPanelService } from '../../services/right-panel.service';
-import { ConfigurationService } from '@shared/services';
+import { ConfigurationService } from '@app/core/services';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { FormGroup, FormArray, NgForm } from '@angular/forms';
-import { LoaderService } from '@shared/loader.service';
+import { LoaderService } from '@app/core/services/loader.service';
 
 export class OSForm {
   osGroup: OSGroup[];
@@ -70,8 +70,8 @@ export class OfferSolutioningComponent implements OnInit {
     private offersolutioningService: OffersolutioningService
   ) {
     this.activatedRoute.params.subscribe(params => {
-      this.offerId = params['id'];
-      this.caseId = params['id2'];
+      this.offerId = params['offerId'];
+      this.caseId = params['caseId'];
     });
   }
 
@@ -90,7 +90,6 @@ export class OfferSolutioningComponent implements OnInit {
         this.primaryBE = offerDetails['primaryBEList'][0];
       }
 
-      
       // TTM Info
       this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe(
         (leadTime) => {
@@ -508,7 +507,7 @@ export class OfferSolutioningComponent implements OnInit {
                     'solutioninQuestion': questions['question'],
                     'egenieAttributeName': attributeName ? attributeName : '',
                     'oSGroup': questions['oSgroup'],
-                    'solutioningAnswer': _.isEmpty(questions['answerToQuestion']) ? '' : questions['answerToQuestion'],
+                    'solutioningAnswer': questions['answerToQuestion'],
                     'mandatory': questions.rules.isMandatoryOptional === 'Mandatory' ? true : false,
                     'questionType': questions.questionType
                   };

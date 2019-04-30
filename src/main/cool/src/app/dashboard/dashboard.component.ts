@@ -8,7 +8,8 @@ import { OverlayPanel } from 'primeng/overlaypanel';
 import { MessageService } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
 import { lifeCycleStatusEnum } from '@shared/enums';
-import { UserService, DashboardService, CreateOfferService } from '@shared/services';
+import { DashboardService, CreateOfferService } from '@shared/services';
+import { UserService } from '@app/core/services';
 
 @Component({
   selector: 'app-dashboard',

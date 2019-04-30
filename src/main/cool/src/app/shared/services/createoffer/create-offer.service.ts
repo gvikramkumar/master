@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { EnvironmentService } from '@env/environment.service';
 import { CreateOffer } from '@app/create-offer-cool/create-offer';
-import { UserService } from '../user.service';
+import { UserService } from '@app/core/services/user.service';
 
 @Injectable()
 export class CreateOfferService {

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { AuthGuard } from '@app/core/guards';
 import { Routes, RouterModule } from '@angular/router';
 import { AccessManagementComponent } from './access-management.component';
-import { AuthGuard } from '@shared/guards';
+
 import { SharedModule } from '@shared/shared.module';
 
 const routes: Routes = [
@@ -16,7 +16,6 @@ const routes: Routes = [
 @NgModule({
   declarations: [AccessManagementComponent],
   imports: [
-    CommonModule,
     SharedModule,
     RouterModule.forChild(routes)
   ]

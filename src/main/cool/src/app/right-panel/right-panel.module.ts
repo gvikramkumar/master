@@ -1,14 +1,13 @@
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { CuiSearchModule, CuiTableModule, CuiPagerModule } from '@cisco-ngx/cui-components';
 import { DataTableModule, AccordionModule, DialogModule, PaginatorModule } from 'primeng/primeng';
-import { NgModule } from '@angular/core';
-
 
 import * as _ from 'lodash';
-import { RightPanelComponent } from '@app/right-panel/right-panel-main/right-panel.component';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { StakeholderAddComponent } from './stakeholder-add/stakeholder-add.component';
-import { CuiSearchModule, CuiTableModule, CuiPagerModule } from '@cisco-ngx/cui-components';
+import { RightPanelComponent } from '@app/right-panel/right-panel-main/right-panel.component';
 
 @NgModule({
     declarations: [

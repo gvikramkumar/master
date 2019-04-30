@@ -1,17 +1,18 @@
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { Routes, RouterModule } from '@angular/router';
-import { DataTableModule, SharedModule } from 'primeng/primeng';
 import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 
 import * as _ from 'lodash';
+import { SharedModule } from '@shared/shared.module';
 import { MenuBarModule } from '../menu/menu-bar.module';
+import { TaskBarModule } from '@app/taskbar/task-bar.module';
 import { RightPanelModule } from '../right-panel/right-panel.module';
+import { OfferDetailModule } from '../offer-detail/offer-detail.module';
+
 import { OfferSolutioningComponent } from './offer-solutioning/offer-solutioning.component';
 import { OffersolutioningCardOneComponent } from './offer-solutioning-card-one/offer-solutioning-card-one.component';
 import { OfferSolutionQuestionComponent } from './offer-solution-question/offer-solution-question.component';
-import { TaskBarModule } from '@app/taskbar/task-bar.module';
-import { OfferDetailModule } from '../offer-detail/offer-detail.module';
+
+
 
 
 const routes: Routes = [
@@ -28,8 +29,7 @@ const routes: Routes = [
         OffersolutioningCardOneComponent
     ],
     imports: [
-        FormsModule,
-        CommonModule,
+        SharedModule,
         TaskBarModule,
         MenuBarModule,
         RightPanelModule,

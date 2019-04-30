@@ -5,6 +5,9 @@ import { StakeholderfullService } from '../../services/stakeholderfull.service';
 import { ModellingDesign } from '../model/modelling-design';
 import { Ato } from '../model/ato';
 import { Subscription } from 'rxjs';
+import { EnvironmentService } from '../../../environments/environment.service';
+import { ConfigurationService } from '@app/core/services/configuration.service';
+import { LoaderService } from '@app/core/services/loader.service';
 
 @Component({
   selector: 'app-ato-main',
@@ -16,6 +19,8 @@ export class AtoMainComponent implements OnInit, OnDestroy {
   atoTask: Ato;
   atoList: Array<Ato>;
   modellingDesign: ModellingDesign;
+
+  paramsSubscription: Subscription;
   modellingDesignSubscription: Subscription;
 
   selectedAto: any;
@@ -32,21 +37,28 @@ export class AtoMainComponent implements OnInit, OnDestroy {
   stakeholders: any;
   stakeHolderData: any;
 
-  constructor(private router: Router,
+  constructor(
+    private router: Router,
+    private loaderService: LoaderService,
     private activatedRoute: ActivatedRoute,
+    private environmentService: EnvironmentService,
+    private configurationService: ConfigurationService,
     private modellingDesignService: ModellingDesignService,
     private stakeholderfullService: StakeholderfullService) {
 
-    this.activatedRoute.params.subscribe(params => {
-      this.offerId = params['id'];
-      this.caseId = params['id2'];
+    this.paramsSubscription = this.activatedRoute.params.subscribe(params => {
+      this.caseId = params['caseId'];
+      this.offerId = params['offerId'];
+      this.selectedAto = params['selectedAto'];
     });
+
+    this.loaderService.startLoading();
 
   }
 
   ngOnInit() {
 
-    this.offerId = 'COOL_123';
+    this.offerId = 'COOL_6845';
     this.selectedAto = 'Overall Offer';
     this.atoNames.push(this.selectedAto);
 
@@ -54,25 +66,28 @@ export class AtoMainComponent implements OnInit, OnDestroy {
       .subscribe((modellingDesignResponse: ModellingDesign) => {
 
         this.modellingDesign = modellingDesignResponse;
-        this.atoList = this.modellingDesign['tasks'];
+        this.atoList = this.modellingDesign['data'];
 
         this.atoList.map(dropDownValue => {
           this.atoNames.push(dropDownValue.itemName);
         });
 
+        this.loaderService.stopLoading();
+
       });
 
     // Retrieve Offer Details
-    // this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
-    //   this.offerName = offerDetails['offerName'];
-    //   this.stakeHolderData = offerDetails['stakeholders'];
-    //   this.processStakeHolderInfo();
-    // });
+    this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
+      this.offerName = offerDetails['offerName'];
+      this.stakeHolderData = offerDetails['stakeholders'];
+      this.processStakeHolderInfo();
+    });
 
 
   }
 
   ngOnDestroy(): void {
+    this.paramsSubscription.unsubscribe();
     this.modellingDesignSubscription.unsubscribe();
   }
 
@@ -80,16 +95,17 @@ export class AtoMainComponent implements OnInit, OnDestroy {
 
   goToDesignCanvas() {
 
-    const urlToOpen = 'www.google.com';
+    const urlToOpen = this.environmentService.owbUrl;
+    const functionalRole: Array<String> = this.configurationService.startupData.functionalRole;
 
-    let url: string = '';
-    if (!/^http[s]?:\/\//.test(urlToOpen)) {
-      url += 'http://';
+    if (functionalRole.includes('BUPM')) {
+      window.open(urlToOpen, '_blank');
     }
 
-    url += urlToOpen;
-    window.open(url, '_blank');
+  }
 
+  goToPirateShip() {
+    this.router.navigate(['/offerSetup', this.offerId, this.caseId, this.selectedAto, ]);
   }
 
   // -------------------------------------------------------------------------------------------------------------------

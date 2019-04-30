@@ -4,7 +4,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { SearchCollaboratorService } from '@app/services/search-collaborator.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 import { OfferPhaseService } from '@app/services/offer-phase.service';
-import { ConfigurationService, UserService } from '@shared/services';
+import { ConfigurationService, UserService } from '@app/core/services';
 
 @Component({
   selector: 'app-stakeholder-full',
@@ -47,8 +47,8 @@ export class StakeholderFullComponent implements OnInit {
     private userService: UserService) {
 
     this.activatedRoute.params.subscribe(params => {
-      this.currentOfferId = params['id'];
-      this.caseId = params['id2'];
+      this.currentOfferId = params['offerId'];
+      this.caseId = params['caseId'];
     });
 
   }
