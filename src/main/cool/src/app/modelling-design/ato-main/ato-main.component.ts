@@ -58,8 +58,6 @@ export class AtoMainComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.offerId = 'COOL_6845';
-    this.selectedAto = 'Overall Offer';
     this.atoNames.push(this.selectedAto);
 
     this.modellingDesignSubscription = this.modellingDesignService.retrieveAtoList(this.offerId)
@@ -98,14 +96,15 @@ export class AtoMainComponent implements OnInit, OnDestroy {
     const urlToOpen = this.environmentService.owbUrl;
     const functionalRole: Array<String> = this.configurationService.startupData.functionalRole;
 
-    if (functionalRole.includes('BUPM')) {
+    if ((functionalRole.includes('BUPM') || functionalRole.includes('PDT'))
+      && this.selectedAto !== 'Overall Offer') {
       window.open(urlToOpen, '_blank');
     }
 
   }
 
   goToPirateShip() {
-    this.router.navigate(['/offerSetup', this.offerId, this.caseId, this.selectedAto, ]);
+    this.router.navigate(['/offerSetup', this.offerId, this.caseId, this.selectedAto,]);
   }
 
   // -------------------------------------------------------------------------------------------------------------------
