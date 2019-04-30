@@ -1,6 +1,4 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 
 import { SharedModule } from '@shared/shared.module';
@@ -25,13 +23,11 @@ const routes: Routes = [
     OfferSetupComponent,
     ViewOfferComponent],
   imports: [
-    FormsModule,
-    CommonModule,
+    SharedModule,
     MenuBarModule,
     TaskBarModule,
     RightPanelModule,
     OfferDetailModule,
-    SharedModule,
     RouterModule.forChild(routes)
   ],
   exports: [

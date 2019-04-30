@@ -8,6 +8,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { AutoCompleteModule } from 'primeng/primeng';
 
 import * as _ from 'lodash';
+import { SharedModule } from '@shared/shared.module';
 import { MenuBarModule } from '@app/menu/menu-bar.module';
 import { TaskBarModule } from '@app/taskbar/task-bar.module';
 
@@ -25,12 +26,10 @@ const routes: Routes = [
         StakeholderFullComponent,
     ],
     imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        CommonModule,
+        TableModule,
+        SharedModule,
         TaskBarModule,
         MenuBarModule,
-        TableModule,
         CheckboxModule,
         AutoCompleteModule,
         RouterModule.forChild(routes)
