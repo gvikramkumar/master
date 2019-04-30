@@ -1,8 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/shared.module';
-import { DataTableModule, AccordionModule } from 'primeng/primeng';
 
 import { AvatarComponent } from './avatar/avatar.component';
 import { OfferDetailViewComponent } from './offer-detail-view/offer-detail-view.component';
@@ -19,18 +16,11 @@ import { StakeholderIdentificationComponent } from './stakeholder-identification
         NotificationOfferDetailPopupComponent
     ],
     imports: [
-        FormsModule,
-        CommonModule, 
-        AccordionModule,
-        SharedModule,
-        DataTableModule,
+        SharedModule
     ],
     exports: [
-        AvatarComponent,
         OfferDetailViewComponent,
-        OfferCreateDetailComponent,
-        StakeholderIdentificationComponent,
-        NotificationOfferDetailPopupComponent
+        OfferCreateDetailComponent
     ]
 })
 export class OfferDetailModule { }

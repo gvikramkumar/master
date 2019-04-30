@@ -1,15 +1,13 @@
 
 
 import {
-    DialogModule, AccordionModule, AutoCompleteModule, MultiSelectModule, TreeTableModule,
-    TooltipModule, OverlayPanelModule, DataTableModule, DragDropModule
+    DialogModule, AutoCompleteModule, MultiSelectModule, TreeTableModule,
+    TooltipModule, DragDropModule
 } from 'primeng/primeng';
 
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import {SharedModule} from '@shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
 import { Routes, RouterModule } from '@angular/router';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 import * as _ from 'lodash';
@@ -41,22 +39,16 @@ const routes: Routes = [
         OfferconstructCanvasComponent,
     ],
     imports: [
-        FormsModule,
-        CommonModule,
-        ReactiveFormsModule,
-        TooltipModule,
-        AccordionModule,
-        OverlayPanelModule,
         TableModule,
         DialogModule,
         DragDropModule,
-        DataTableModule,
-        SharedModule,
-        TaskBarModule,
+        TooltipModule,
         TreeTableModule,
         MultiSelectModule,
         AutoCompleteModule,
+        SharedModule,
         MenuBarModule,
+        TaskBarModule,
         RightPanelModule,
         OfferDetailModule,
         RouterModule.forChild(routes)
