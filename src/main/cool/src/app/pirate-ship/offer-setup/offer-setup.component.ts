@@ -164,7 +164,7 @@ export class OfferSetupComponent implements OnInit {
         stakeholderDefaults: this.stakeHolderData[i]['stakeholderDefaults']
       });
     }
-debugger;
+    
   }
 
   updateMessage(message) {
