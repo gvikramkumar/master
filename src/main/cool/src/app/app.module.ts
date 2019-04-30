@@ -40,7 +40,7 @@ import { ExitCriteriaValidationService } from './services/exit-criteria-validati
 
 
 import { EnvironmentService } from 'src/environments/environment.service';
-import { ConfigurationService, HttpInterceptorService } from '@app/core/services';
+import { ConfigurationService, HttpInterceptorService } from '@core/services';
 
 
 import { MessageService } from './services/message.service';
@@ -49,7 +49,7 @@ import { UserIdleModule } from 'angular-user-idle';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
-import { CoreModule } from './core/core.module';
+import { CoreModule } from '@core/core.module';
 import { SharedModule } from '@shared/shared.module';
 import { MenuBarModule } from './menu/menu-bar.module';
 import { TaskBarModule } from './taskbar/task-bar.module';
