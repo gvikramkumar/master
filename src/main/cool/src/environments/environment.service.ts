@@ -130,6 +130,10 @@ export class EnvironmentService {
     REST_API_OFFER_SETUP_MODULE_GET_URL: string;
     REST_API_OFFER_MODULE_STATUS_GET_URL: string;
 
+    // ITEM CREATION URLs
+    REST_API_GET_ITEM_DETAILS: string;
+    REST_API_GET_OFFER_DROPDOWN: string;
+    REST_API_REMOVE_ITEM_DETAILS: string;
     // -------------------------------------------------------------------------------------------------
 
 
@@ -344,6 +348,12 @@ export class EnvironmentService {
         this.REST_API_RETRIEVE_ATO_LIST_URL = this.baseApiUrl + 'offersetup/getOWBModelObject/';
         this.REST_API_OFFER_SETUP_MODULE_GET_URL = this.baseApiUrl + '/offersetup/getOfferSetupPageLoad?mmval=';
         this.REST_API_OFFER_MODULE_STATUS_GET_URL = this.baseApiUrl + '/offersetup/getModuleStatus?moduleName=';
+        
+        // --------------------------------------- ITEM CREATION --------------------------------------------
+        
+        this.REST_API_GET_ITEM_DETAILS = this.baseApiUrl + '/itemcreation/getDetails';
+        this.REST_API_GET_OFFER_DROPDOWN = this.baseApiUrl + '/itemcreation/getATOs';
+        //this.REST_API_REMOVE_ITEM_DETAILS =     
         // -------------------------------------------------------------------------------------------------
 
     }
