@@ -9,16 +9,21 @@ import { ConfigurationService } from './services/configuration.service';
 import { HttpInterceptorService } from './services/http-interceptor/http-interceptor.service';
 import { UserService } from './services';
 import { AccordionModule, OverlayPanelModule } from 'primeng/primeng';
+import { LoaderComponent } from './components';
+import { AppRoutingModule } from '@app/app-routing.module';
 
 @NgModule({
   declarations: [
+    LoaderComponent,
     FooterComponent,
     HeaderComponent,
   ],
   imports: [
     CommonModule,
     AccordionModule,
+    AppRoutingModule,
     OverlayPanelModule,
+
   ],
   providers: [
     BupmGuard,
@@ -30,8 +35,10 @@ import { AccordionModule, OverlayPanelModule } from 'primeng/primeng';
     HttpInterceptorService,
   ],
   exports: [
+    LoaderComponent,
     FooterComponent,
     HeaderComponent,
+    AppRoutingModule
   ]
 })
 export class CoreModule { }

@@ -1,86 +1,107 @@
 <header class="header header--compressed">
   <div class="header-bar container">
+
     <a href="javascript:;" class="header-bar__logo">
       <span class="icon-cisco"></span>
     </a>
+
     <div class="header-bar__main">
+
       <div class="header-heading">
-        <div class="logo-cool-full"><h1 class="page-title">Cisco Orchestrated Offer Lifecycle</h1></div>
-        <div class="logo-cool"><h1 class="page-title">COOL</h1></div>
+        <div class="logo-cool-full">
+          <h1 class="page-title">Cisco Orchestrated Offer Lifecycle</h1>
+        </div>
+        <div class="logo-cool">
+          <h1 class="page-title">COOL</h1>
+        </div>
       </div>
+
       <div class="header-menus">
         <ul class="nav nav-tabs">
           <li routerLinkActive="active">
-            <a routerLink="/dashboard"><div class="tab__heading" title="Dashboard">Dashboard</div></a>
+            <a routerLink="/dashboard">
+              <div class="tab__heading" title="Dashboard">Dashboard</div>
+            </a>
           </li>
           <li routerLinkActive="active">
-            <a routerLink="/coolOffer"><div class="tab__heading" title="Offers" *ngIf="isBupmUser">Offers</div></a>
+            <a routerLink="/coolOffer">
+              <div class="tab__heading" title="Offers" *ngIf="isBupmUser">Offers</div>
+            </a>
           </li>
           <!-- <li routerLinkActive="active">
             <a><div class="tab__heading" title="Analytics">Analytics</div></a>
           </li> -->
           <li routerLinkActive="active">
-
-              <a routerLink="/action"><div class="tab__heading" title="Actions">Actions</div></a>
-            </li>
+            <a routerLink="/action">
+              <div class="tab__heading" title="Actions">Actions</div>
+            </a>
+          </li>
           <li routerLinkActive="active">
-              <a routerLink="/accessManagement"><div class="tab__heading" title="Access Management" *ngIf="hasAdminAccess">Access Management</div></a>
+            <a routerLink="/accessManagement">
+              <div class="tab__heading" title="Access Management" *ngIf="hasAdminAccess">Access Management</div>
+            </a>
           </li>
 
         </ul>
       </div>
     </div>
+
     <div class="header-toolbar">
 
-        <a href="javascript:;" class="avatar">{{userName}}<span class="icon-chevron-down"></span><span class="role userIdSpacing">{{functionalRole}}</span></a>
-        <a href="javascript:;" class="btn btn--icon">
-            <span class="icon-search"></span>
-        </a>
-        <a href="javascript:;" class="btn btn--icon">
-            <span class="icon-alert"></span>
-        </a>
-        <a href="javascript:;" class="btn btn--icon" >
-           <span class="icon-email" (click)="op1.toggle($event)">
-             </span>
-        </a>
-        <a href="javascript:;" class="btn btn--icon">
-            <span class="icon-cog"></span>
-        </a>
+      <a href="javascript:;" class="avatar">{{userName}}<span class="icon-chevron-down"></span><span
+          class="role userIdSpacing">{{functionalRole}}</span></a>
+      <a href="javascript:;" class="btn btn--icon">
+        <span class="icon-search"></span>
+      </a>
+      <a href="javascript:;" class="btn btn--icon">
+        <span class="icon-alert"></span>
+      </a>
+      <a href="javascript:;" class="btn btn--icon">
+        <span class="icon-email" (click)="op1.toggle($event)">
+        </span>
+      </a>
+      <a href="javascript:;" class="btn btn--icon">
+        <span class="icon-cog"></span>
+      </a>
 
-        <p-overlayPanel [style]="{'width':'300px'}" #op1 (onHide)="onClickedOutside()">
-          <p-accordion>
-            <p-accordionTab [selected]="true">
-                <p-header>
-                    Email Preferences
-                </p-header>
-                  <li *ngFor="let option of emailPrefOptions ; let i = index">
-                      <div class="form-group">
-                          <label class="checkbox">
-                              <input type="checkbox" [disabled]="emailPrefOptions[i].value" (change)="emailCheckBoxClicked(option.name)" >
-                              <span class="checkbox__input"></span>
-                              <span class="checkbox__label hidden-xs">{{option.name}}</span>
-                          </label>
-                      </div>
+      <p-overlayPanel [style]="{'width':'300px'}" #op1 (onHide)="onClickedOutside()">
+        <p-accordion>
+          <p-accordionTab [selected]="true">
+            <p-header>
+              Email Preferences
+            </p-header>
+            <li *ngFor="let option of emailPrefOptions ; let i = index">
+              <div class="form-group">
+                <label class="checkbox">
+                  <input type="checkbox" [disabled]="emailPrefOptions[i].value"
+                    (change)="emailCheckBoxClicked(option.name)">
+                  <span class="checkbox__input"></span>
+                  <span class="checkbox__label hidden-xs">{{option.name}}</span>
+                </label>
+              </div>
 
-                  </li>
-            </p-accordionTab>
-            <p-accordionTab>
-                <p-header>
-                    Notification Preferences
-                </p-header>
-                <li *ngFor="let option of notificationPrefOptions ; let i = index">
-                    <div class="form-group">
-                        <label class="checkbox">
-                            <input type="checkbox" [disabled]="notificationPrefOptions[i].value" (change)="notificationCheckBoxClicked(option.name)" >
-                            <span class="checkbox__input"></span>
-                            <span class="checkbox__label hidden-xs">{{option.name}}</span>
-                        </label>
-                    </div>
+            </li>
+          </p-accordionTab>
+          <p-accordionTab>
+            <p-header>
+              Notification Preferences
+            </p-header>
+            <li *ngFor="let option of notificationPrefOptions ; let i = index">
+              <div class="form-group">
+                <label class="checkbox">
+                  <input type="checkbox" [disabled]="notificationPrefOptions[i].value"
+                    (change)="notificationCheckBoxClicked(option.name)">
+                  <span class="checkbox__input"></span>
+                  <span class="checkbox__label hidden-xs">{{option.name}}</span>
+                </label>
+              </div>
 
-                </li>
-            </p-accordionTab>
+            </li>
+          </p-accordionTab>
         </p-accordion>
       </p-overlayPanel>
+
     </div>
+
   </div>
 </header>
