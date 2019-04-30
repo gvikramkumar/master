@@ -7,7 +7,7 @@ import {shUtil} from '../misc/shared-util';
 export default class DfaUser {
   moduleId?: number;
   store?: AnyObj;
-  genericRoles = ['itadmin', 'bizadmin', 'super-user', 'end-user'];
+  genericRoles = ['itadmin', 'biz-admin', 'super-user', 'biz-user', 'end-user'];
 
   // have to pass in either moduleId (api) or store (ui). This value can change in ui but is same for each request in api
   constructor(
@@ -37,12 +37,16 @@ export default class DfaUser {
     return role.toLowerCase().indexOf('super user') !== -1;
   }
 
+  isBusinessUserRoleType(role) {
+    return role.toLowerCase().indexOf('business user') !== -1;
+  }
+
   isEndUserRoleType(role) {
     return role.toLowerCase().indexOf('end user') !== -1;
   }
 
   isUserRoleType(role: string) {
-    return this.isSuperUserRoleType(role) || this.isEndUserRoleType(role) ;
+    return this.isSuperUserRoleType(role) || this.isBusinessUserRoleType(role) || this.isEndUserRoleType(role);
   }
 
   // for protecting api admin endpoints
@@ -78,12 +82,21 @@ export default class DfaUser {
     return this.isModuleSuperUser() || this.isModuleAdminOrGreater();
   }
 
+  isModuleBusinessUser() {
+    return _.includes(this.roles, this.getModuleBusinessUserRole()) && !this.isModuleSuperUserOrGreater();
+  }
+
+
+  isModuleBusinessUserOrGreater() {
+    return this.isModuleBusinessUser() || this.isModuleSuperUserOrGreater();
+  }
+
   isModuleEndUser() {
-    return _.includes(this.roles, this.getModuleEndUserRole()) && !this.isModuleSuperUserOrGreater();
+    return _.includes(this.roles, this.getModuleEndUserRole()) && !this.isModuleBusinessUserOrGreater();
   }
 
   isModuleEndUserOrGreater() {
-    return this.isModuleEndUser() || this.isModuleSuperUserOrGreater();
+    return this.isModuleEndUser() || this.isModuleBusinessUserOrGreater();
   }
 
   // Only allow the given roles, not roles above. This is for singling out lower roles, say finAuthDisabled
@@ -99,7 +112,7 @@ export default class DfaUser {
   }
 
   // for generic roles, only need minimum role required as it will add roles above so if
-  // finAuth="super-user" then applies to bizadmin and itadmin users as well.
+  // finAuth="super-user" then applies to biz-admin and itadmin users as well.
   isAuthorized(_allowedRoles: string) {
     if (!_allowedRoles || _allowedRoles.trim().length === 0) {
       throw new Error('isAuthorized: no roles sent in.');
@@ -141,11 +154,14 @@ export default class DfaUser {
         case 'itadmin':
           rtn.push(this.getItadminRole());
           break;
-        case 'bizadmin':
+        case 'biz-admin':
           rtn.push(this.getModuleAdminRole());
           break;
         case 'super-user':
           rtn.push(this.getModuleSuperUserRole());
+          break;
+        case 'biz-user':
+          rtn.push(this.getModuleBusinessUserRole());
           break;
         case 'end-user':
           rtn.push(this.getModuleEndUserRole());
@@ -177,16 +193,22 @@ export default class DfaUser {
         case 'itadmin':
           rtn.push(this.getItadminRole());
           break;
-        case 'bizadmin':
+        case 'biz-admin':
           rtn.push(this.getModuleAdminRole());
           break;
         case 'super-user':
           rtn.push(this.getModuleAdminRole());
           rtn.push(this.getModuleSuperUserRole());
           break;
+        case 'biz-user':
+          rtn.push(this.getModuleAdminRole());
+          rtn.push(this.getModuleSuperUserRole());
+          rtn.push(this.getModuleBusinessUserRole());
+          break;
         case 'end-user':
           rtn.push(this.getModuleAdminRole());
           rtn.push(this.getModuleSuperUserRole());
+          rtn.push(this.getModuleBusinessUserRole());
           rtn.push(this.getModuleEndUserRole());
           break;
         default:
@@ -212,6 +234,14 @@ export default class DfaUser {
     const roles = this.getModuleRoles().filter(this.isSuperUserRoleType.bind(this));
     if (roles.length !== 1) {
       throw new Error(`getModuleSuperUserRole: no super user role for moduleId: ${this.getModuleId()}`);
+    }
+    return roles[0];
+  }
+
+  getModuleBusinessUserRole() {
+    const roles = this.getModuleRoles().filter(this.isBusinessUserRoleType.bind(this));
+    if (roles.length !== 1) {
+      throw new Error(`getModuleEndUserRole: no business user role for moduleId: ${this.getModuleId()}`);
     }
     return roles[0];
   }

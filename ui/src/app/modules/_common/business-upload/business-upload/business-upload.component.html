@@ -26,19 +26,16 @@
         <div class="selected-value"> {{uploadType?.text}}</div>
         <div>
           <br>
-
-          <div finAuth="super-user">
+          <div>
+            <button cuiButton color="primary" (click)="fileInput.click()" [disabled]="!uploadType">Choose a File</button>
+            <input #fileInput type="file" placeholder="Upload file" accept=".xlsx"
+                   (change)="changeFile(fileInput)" class="ng-hide"><br>
+          </div>
+          <div [fxShow]="fileInput.files.length">
+            <div class="file-list text-darkgreen">{{selectedFileName}}</div>
+            <br>
             <div>
-              <button cuiButton color="primary" (click)="fileInput.click()" [disabled]="!uploadType">Choose a File</button>
-              <input #fileInput type="file" placeholder="Upload file" accept=".xlsx"
-                     (change)="changeFile(fileInput)" class="ng-hide"><br>
-            </div>
-            <div [fxShow]="fileInput.files.length">
-              <div class="file-list text-darkgreen">{{selectedFileName}}</div>
-              <br>
-              <div>
-                <button cuiButton color="primary" (click)="uploadFile(fileInput)">Upload File</button>
-              </div>
+              <button cuiButton color="primary" (click)="uploadFile(fileInput)">Upload File</button>
             </div>
           </div>
           <br><br>

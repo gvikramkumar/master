@@ -71,14 +71,15 @@ export default class MappingUploadUploadController extends InputFilterLevelUploa
     const obj = {};
     this.imports.forEach(val => {
       if (obj[val.submeasureName]) {
-        obj[val.submeasureName] += val.percentage;
+        obj[val.submeasureName] = obj[val.submeasureName] + val.percentage;
       } else {
         obj[val.submeasureName] = val.percentage;
       }
     });
+
     _.forEach(obj, (val, key) => {
-      if (svrUtil.roundDecimal8(val) !== 1.0) {
-        this.addError(key, val); // resuse (prop, error) error list for (submeasureName, total)
+      if (svrUtil.toFixed8(val) !== 1.0) {
+        this.addError(key, svrUtil.toFixed8(val)); // resuse (prop, error) error list for (submeasureName, total)
       }
     });
 

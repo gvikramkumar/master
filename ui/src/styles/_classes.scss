@@ -173,6 +173,10 @@ i {
   cursor: pointer;
 }
 
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+
 .text-ellipsis {
   @include text-ellipsis;
 }

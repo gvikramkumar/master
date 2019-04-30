@@ -3,50 +3,33 @@ import AnyObj from '../shared/models/any-obj';
 import {shUtil} from '../shared/misc/shared-util';
 import {svrUtil} from '../server/lib/common/svr-util';
 import * as Q from 'q';
+
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
 
+console.log(toFixed('xx.123456789', 8));
+console.log(toFixed(12, 8));
+console.log(toFixed(12., 8));
+console.log(toFixed(12.0, 8));
+console.log(toFixed(12.1, 8));
+console.log(toFixed(0.123456789, 8));
+console.log(toFixed(1.123456789, 8));
+console.log(toFixed(12.123456789, 8));
+console.log(toFixed(123.123456789, 8));
+console.log(toFixed(0.0000000001, 8));
+console.log(toFixed(1.000000000009, 8));
+console.log(toFixed(.999999999679, 8));
+console.log(toFixed(0.0000041, 8));
+console.log(toFixed(0.00000412, 8));
+console.log(toFixed(0.000004123, 8));
+console.log(toFixed(0.00000001, 8));
+console.log(toFixed(0.00000009, 8));
 
-console.log(/^\/api\/[a-z]{4}\/upload$/.test('/api/prof/upload'));
-
-
-/*
-console.log(roundDecimal('xx.123456789', 8));
-console.log(roundDecimal(12, 8));
-console.log(roundDecimal(12., 8));
-console.log(roundDecimal(12.0, 8));
-console.log(roundDecimal(12.1, 8));
-console.log(roundDecimal(0.123456789, 8));
-console.log(roundDecimal(1.123456789, 8));
-console.log(roundDecimal(12.123456789, 8));
-console.log(roundDecimal(123.123456789, 8));
-
-
-function roundDecimal(val, places) {
-  if (val === undefined || typeof val !== 'number' || val.toString().indexOf('.') === -1) {
-    return val;
-  }
-  const str = val.toString();
-  const dot = str.indexOf('.');
-  let beforeDecimal;
-  if (dot === 1 && str[0] === '0') {
-    beforeDecimal = 0;
-  } else {
-    beforeDecimal = dot;
-  }
-  return Number(val.toPrecision(beforeDecimal + places));
+function toFixed(val, places) {
+  return Number(Number(val).toFixed(places));
 }
 
-function truncateDecimal(val, places) {
-  if (val === undefined || typeof val !== 'number' || val.toString().indexOf('.') === -1) {
-    return val;
-  }
-  const str = val.toString();
-  const dot = str.indexOf('.');
-  return Number(str.substring(0, dot) + str.substr(dot, places + 1));
-}
-*/
 
 
 /*

@@ -23,9 +23,10 @@ export class HomeComponent extends RoutingComponentBase implements OnInit {
   adminModule: DfaModule;
   roles = [
     {generic: 'itadmin', actual: 'it administrator'},
-    {generic: 'bizadmin', actual: 'profitability allocations:business admin'},
+    {generic: 'biz-admin', actual: 'profitability allocations:business admin'},
     {generic: 'super-user', actual: 'profitability allocations:super user'},
-    {generic: 'end-user', actual: 'profitability allocations:end user'},
+    {generic: 'biz-user', actual: 'profitability allocations:business user'},
+    {generic: 'end-user', actual: 'profitability allocations:end user'}
     ];
   selectedRole: string;
 

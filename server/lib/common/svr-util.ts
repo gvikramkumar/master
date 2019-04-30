@@ -24,42 +24,21 @@ export const svrUtil = {
   base64ToAscii,
   docToObject,
   postgresReplaceQuotes,
-  truncateDecimal8,
-  roundDecimal8
+  toFixed8,
+  toFixed
 };
 
-function roundDecimal8(val) {
-  return roundDecimal(val, 8);
-}
-
-function truncateDecimal8(val) {
-  return truncateDecimal(val, 8);
+function toFixed8(val) {
+  return toFixed(val, 8);
 }
 
 // round off a number's decimal part to x decimal places, this works with or without numbers before the decimal
-function roundDecimal(val, places) {
-  if (val === undefined || typeof val !== 'number' || val.toString().indexOf('.') === -1) {
+function toFixed(val, places) {
+  if (val === undefined || val === null) {
     return val;
-  }
-  const str = val.toString();
-  const dot = str.indexOf('.');
-  let beforeDecimal;
-  if (dot === 1 && str[0] === '0') {
-    beforeDecimal = 0;
   } else {
-    beforeDecimal = dot;
+    return Number(Number(val).toFixed(places));
   }
-  return Number(val.toPrecision(beforeDecimal + places));
-}
-
-// truncate a number's decimal part to x decimal places, this works with or without numbers before the decimal
-function truncateDecimal(val, places) {
-  if (val === undefined || typeof val !== 'number' || val.toString().indexOf('.') === -1) {
-    return val;
-  }
-  const str = val.toString();
-  const dot = str.indexOf('.');
-  return Number(str.substring(0, dot) + str.substr(dot, places + 1));
 }
 
 // strings are bracketed by single quotes, so we have to escape single quotes within the string
@@ -220,6 +199,7 @@ function checkParams(obj, arrProps, next) {
   }
   return false;
 }
+
 
 // Old function for getting object changes/updates:
 /*

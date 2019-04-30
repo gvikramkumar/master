@@ -86,7 +86,7 @@ const routes: Routes = [
             path: '', component: SubmeasureComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:end user',
+              authorization: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:business user, profitability allocations:end user',
               hero: {
                 title: 'Sub-Measures',
                 desc: 'Create and update sub-measures'
@@ -110,7 +110,7 @@ const routes: Routes = [
             path: 'edit/:id', component: SubmeasureEditComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:end user',
+              authorization: 'profitability allocations:business admin, profitability allocations:super user',
               hero: {
                 title: 'Update Sub-Measure',
                 desc: 'Update the selected sub-measure'
@@ -122,7 +122,7 @@ const routes: Routes = [
             path: 'view/:id', component: SubmeasureEditComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:end user',
+              authorization: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:business user, profitability allocations:end user',
               hero: {
                 title: 'View Sub-Measure',
                 desc: 'View the selected sub-measure'
@@ -139,7 +139,7 @@ const routes: Routes = [
             path: '', component: RuleManagementComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:end user',
+              authorization: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:business user, profitability allocations:end user',
               hero: {
                 title: 'Rule Management',
                 desc: 'Create and update rules'
@@ -164,7 +164,7 @@ const routes: Routes = [
             path: 'edit/:id', component: RuleManagementEditComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:end user',
+              authorization: 'profitability allocations:business admin, profitability allocations:super user',
               hero: {
                 title: 'Update Rule',
                 desc: 'Update the selected rule'
@@ -177,7 +177,7 @@ const routes: Routes = [
             path: 'view/:id', component: RuleManagementEditComponent,
             canActivate: [AuthorizationGuard],
             data: {
-              authorization: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:end user',
+              authorization: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:business user, profitability allocations:end user',
               hero: {
                 title: 'View Rule',
                 desc: 'View the selected rule'
@@ -192,7 +192,7 @@ const routes: Routes = [
         path: 'business-upload', component: BusinessUploadComponent,
         canActivate: [AuthorizationGuard],
         data: {
-          authorization: 'profitability allocations:business admin, profitability allocations:super user',
+          authorization: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:business user',
           hero: {
             title: 'Business Uploads',
             desc: 'Perform bulk uploads'
@@ -204,7 +204,7 @@ const routes: Routes = [
         path: 'reports', component: ReportsComponent,
         canActivate: [AuthorizationGuard],
         data: {
-          authorization: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:end user',
+          authorization: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:business user, profitability allocations:end user',
           hero: {
             title: 'Reports',
             desc: 'Allow users to download a report'
