@@ -12,24 +12,26 @@ import { UserService } from '@app/core/services/user.service';
   styleUrls: ['./offer-setup.component.scss']
 })
 export class OfferSetupComponent implements OnInit {
-  stake;
   offerId;
   caseId;
   setFlag;
   message;
   offerName;
   offerData;
-  stakeData;
+
   derivedMM;
   moduleStatus;
+  functionalRole;
+
   stakeHolderData;
+  stakeholders: any;
+
   groupData = {};
   primaryBE: string;
   stakeHolderInfo: any;
   offerBuilderdata = {};
   displayLeadTime = false;
   noOfWeeksDifference: string;
-  functionalRole: any;
   backbuttonStatusValid = true;
   proceedButtonStatusValid = true;
   proceedToreadinessreview = true;
@@ -46,8 +48,8 @@ export class OfferSetupComponent implements OnInit {
     private rightPanelService:RightPanelService,
     private stakeholderfullService:StakeholderfullService ) {
     this.activatedRoute.params.subscribe(params => {
-      this.offerId = params['id'];
-      this.caseId = params['id2'];
+      this.offerId = params['offerId'];
+      this.caseId = params['caseId'];
     });
    }
 
@@ -57,7 +59,7 @@ export class OfferSetupComponent implements OnInit {
   this.functionalRole = this.userService.getFunctionalRole();
    // Get Offer Details
    this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
-
+debugger;
     this.offerBuilderdata = offerDetails;
     this.offerBuilderdata['BEList'] = [];
     this.offerBuilderdata['BUList'] = [];
@@ -146,14 +148,13 @@ export class OfferSetupComponent implements OnInit {
 
   private processStakeHolderInfo() {
 
-    const stakeHolderBasedOnOfferRole = {};
-    const stakeHolderBasedOnFunctionalRole = {};
+    this.stakeholders = {};
 
     for (let i = 0; i <= this.stakeHolderData.length - 1; i++) {
-      if (stakeHolderBasedOnOfferRole[this.stakeHolderData[i]['offerRole']] == null) {
-        stakeHolderBasedOnOfferRole[this.stakeHolderData[i]['offerRole']] = [];
+      if (this.stakeholders[this.stakeHolderData[i]['offerRole']] == null) {
+        this.stakeholders[this.stakeHolderData[i]['offerRole']] = [];
       }
-      stakeHolderBasedOnOfferRole[this.stakeHolderData[i]['offerRole']].push({
+      this.stakeholders[this.stakeHolderData[i]['offerRole']].push({
         userName: this.stakeHolderData[i]['name'],
         emailId: this.stakeHolderData[i]['_id'] + '@cisco.com',
         _id: this.stakeHolderData[i]['_id'],
@@ -163,25 +164,7 @@ export class OfferSetupComponent implements OnInit {
         stakeholderDefaults: this.stakeHolderData[i]['stakeholderDefaults']
       });
     }
-
-    for (let i = 0; i <= this.stakeHolderData.length - 1; i++) {
-      if (stakeHolderBasedOnFunctionalRole[this.stakeHolderData[i]['functionalRole']] == null) {
-        stakeHolderBasedOnFunctionalRole[this.stakeHolderData[i]['functionalRole']] = [];
-      }
-      stakeHolderBasedOnFunctionalRole[this.stakeHolderData[i]['functionalRole']].push({
-        userName: this.stakeHolderData[i]['name'],
-        emailId: this.stakeHolderData[i]['_id'] + '@cisco.com',
-        _id: this.stakeHolderData[i]['_id'],
-        businessEntity: this.stakeHolderData[i]['businessEntity'],
-        functionalRole: this.stakeHolderData[i]['functionalRole'],
-        offerRole: this.stakeHolderData[i]['offerRole'],
-        stakeholderDefaults: this.stakeHolderData[i]['stakeholderDefaults']
-      });
-    }
-
-    this.stakeData = stakeHolderBasedOnOfferRole;
-    this.stake = stakeHolderBasedOnFunctionalRole;
-
+debugger;
   }
 
   updateMessage(message) {

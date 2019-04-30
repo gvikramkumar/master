@@ -236,6 +236,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
   // --------------------------------------------------------------------------------------------------------------------------------
 
   offerSetupView() {
+ 
     this.router.navigate(['/offerSetup', this.currentOfferId, this.caseId]);
   }
 
