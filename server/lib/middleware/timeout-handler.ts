@@ -9,7 +9,7 @@ export function timeoutHandler() {
         if (/^\/api\/[a-z]{4}\/upload/.test(req.originalUrl)) {
           next(new ApiError('Your upload request has timed out, but is still being processed. Please check email for success/fail status'));
         } else if (/^\/api\/report\/.*/.test(req.originalUrl)) {
-          next(new ApiError(shUtil.getHtmlForLargeSingleMessage('Your request has timed out')));
+          res.status(504).send(shUtil.getHtmlForLargeSingleMessage('Your request has timed out'));
         } else {
           next(new ApiError('Your request has timed out'));
         }
