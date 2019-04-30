@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MessageService } from '@app/services/message.service';
-import { UserService } from '../../shared/services/user.service';
 import { OfferSetupService } from '../../services/offer-setup.service';
 import { RightPanelService } from '@app/services/right-panel.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
-import { ConfigurationService } from '@shared/services';
+import { UserService } from '@app/core/services/user.service';
 
 @Component({
   selector: 'app-offer-setup',
@@ -13,24 +12,26 @@ import { ConfigurationService } from '@shared/services';
   styleUrls: ['./offer-setup.component.scss']
 })
 export class OfferSetupComponent implements OnInit {
-  stake;
   offerId;
   caseId;
   setFlag;
   message;
   offerName;
   offerData;
-  stakeData;
+
   derivedMM;
   moduleStatus;
+  functionalRole;
+
   stakeHolderData;
+  stakeholders: any;
+
   groupData = {};
   primaryBE: string;
   stakeHolderInfo: any;
   offerBuilderdata = {};
   displayLeadTime = false;
   noOfWeeksDifference: string;
-  functionalRole: any;
   backbuttonStatusValid = true;
   proceedButtonStatusValid = true;
   proceedToreadinessreview = true;
@@ -41,15 +42,14 @@ export class OfferSetupComponent implements OnInit {
 
   constructor(private router: Router,
     private userService: UserService,
-    private configurationService: ConfigurationService,
     private activatedRoute: ActivatedRoute,
     private messageService: MessageService,
     private offerSetupService: OfferSetupService,
     private rightPanelService:RightPanelService,
     private stakeholderfullService:StakeholderfullService ) {
     this.activatedRoute.params.subscribe(params => {
-      this.offerId = params['id'];
-      this.caseId = params['id2'];
+      this.offerId = params['offerId'];
+      this.caseId = params['caseId'];
     });
    }
 
@@ -59,7 +59,7 @@ export class OfferSetupComponent implements OnInit {
   this.functionalRole = this.userService.getFunctionalRole();
    // Get Offer Details
    this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
-
+debugger;
     this.offerBuilderdata = offerDetails;
     this.offerBuilderdata['BEList'] = [];
     this.offerBuilderdata['BUList'] = [];
@@ -115,7 +115,7 @@ export class OfferSetupComponent implements OnInit {
         } else {
           this.groupData[groupName]['right'].push(group);
         }
-       
+        
       });
       this.sortGroupData();
     });
@@ -148,14 +148,13 @@ export class OfferSetupComponent implements OnInit {
 
   private processStakeHolderInfo() {
 
-    const stakeHolderBasedOnOfferRole = {};
-    const stakeHolderBasedOnFunctionalRole = {};
+    this.stakeholders = {};
 
     for (let i = 0; i <= this.stakeHolderData.length - 1; i++) {
-      if (stakeHolderBasedOnOfferRole[this.stakeHolderData[i]['offerRole']] == null) {
-        stakeHolderBasedOnOfferRole[this.stakeHolderData[i]['offerRole']] = [];
+      if (this.stakeholders[this.stakeHolderData[i]['offerRole']] == null) {
+        this.stakeholders[this.stakeHolderData[i]['offerRole']] = [];
       }
-      stakeHolderBasedOnOfferRole[this.stakeHolderData[i]['offerRole']].push({
+      this.stakeholders[this.stakeHolderData[i]['offerRole']].push({
         userName: this.stakeHolderData[i]['name'],
         emailId: this.stakeHolderData[i]['_id'] + '@cisco.com',
         _id: this.stakeHolderData[i]['_id'],
@@ -165,10 +164,7 @@ export class OfferSetupComponent implements OnInit {
         stakeholderDefaults: this.stakeHolderData[i]['stakeholderDefaults']
       });
     }
-
-
-    this.stakeData = stakeHolderBasedOnOfferRole;
-
+debugger;
   }
 
   updateMessage(message) {
@@ -186,6 +182,13 @@ export class OfferSetupComponent implements OnInit {
   }
 
   onProceedToNext(){}
+
+  getElementDetails(element) {
+    console.log('cuurent elemenrt', element);
+    element.moduleName = element.moduleName.replace(/\s/g, "");
+    this.router.navigate(['/' + element.moduleName]);
+    // this.router.navigate(['/' + element.moduleName, this.offerId]);
+  }
 
 
 }
