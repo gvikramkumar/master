@@ -8,7 +8,6 @@ import {
   DialogModule
 } from 'primeng/primeng';
 import { TableModule } from 'primeng/table';
-import { NavigateComponent } from './components/navigate/navigate.component';
 import { ViewcommentComponent, TurbotaxviewComponent } from './components';
 import { DashboardService, CreateOfferService, ViewcommentService, TurbotaxService } from './services';
 
@@ -17,7 +16,6 @@ import { DashboardService, CreateOfferService, ViewcommentService, TurbotaxServi
   declarations: [
     ViewcommentComponent,
     TurbotaxviewComponent,
-    NavigateComponent
   ],
   imports: [
     FormsModule,
@@ -40,7 +38,6 @@ import { DashboardService, CreateOfferService, ViewcommentService, TurbotaxServi
     TurbotaxService
   ],
   exports: [
-    NavigateComponent,
     ViewcommentComponent,
     TurbotaxviewComponent,
     FormsModule,
