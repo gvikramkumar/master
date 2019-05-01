@@ -80,11 +80,6 @@ const routes: Routes = [
     resolve: { offerData: OfferOverViewResolver }
   },
   {
-    path: 'itemcreation',
-    component: ItemCreationComponent,
-    resolve: { offerData: OfferOverViewResolver }
-  },
-  {
     path: 'offerSetup/:offerId/:caseId',
     loadChildren: './pirate-ship/pirate-ship.module#PirateShipModule',
     resolve: { offerData: OfferOverViewResolver }
