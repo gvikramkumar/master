@@ -77,15 +77,18 @@ export class AtoMainComponent implements OnInit, OnDestroy {
         });
 
         this.atoTask = {} as Ato;
-        this.getLeadTimeCalculation();
 
       });
 
     // Retrieve Offer Details
     this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
+
+      this.derivedMM = offerDetails['derivedMM'];
       this.offerName = offerDetails['offerName'];
+      this.primaryBE = offerDetails['primaryBEList'][0];
       this.stakeHolderData = offerDetails['stakeholders'];
       this.processStakeHolderInfo();
+      this.getLeadTimeCalculation();
     });
 
 
