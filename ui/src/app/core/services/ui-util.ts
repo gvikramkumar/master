@@ -164,6 +164,13 @@ export class UiUtil {
 
   // instance methods (must be after static methods)
 
+  canAdminApprove(id) {
+    if (this.store.user.isItAdmin()) {
+      return true;
+    }
+    return this.store.user.isModuleAdmin() ? id !== this.store.user.id : false;
+  }
+
   toast(message, action = '', duration?) {
 
     const options: MatSnackBarConfig = {
