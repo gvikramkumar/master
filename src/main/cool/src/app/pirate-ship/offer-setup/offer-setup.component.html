@@ -33,7 +33,7 @@
               <div class="form-group dropdown label--inline">
               <div class="form-group__text select">
                 <label for="select-size-default">Viewing</label>
-                  <select [(ngModel)]="selectedOffer" (change)="selectedValue($event)">
+                  <select [(ngModel)]="selectedAto" (change)="selectedValue($event)">
                     <option id="select-size-default" value="Overall Offer">Overall Offer</option>
                     <option id="select-size-default" *ngFor="let item of Options" value={{item}}>
                         {{item}}
