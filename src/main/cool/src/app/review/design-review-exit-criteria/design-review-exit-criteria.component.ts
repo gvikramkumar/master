@@ -35,8 +35,8 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
     private monetizationModelService: MonetizationModelService
   ) {
     this.activatedRoute.params.subscribe(params => {
-      this.currentOfferId = params['id'];
-      this.currentCaseId = params['id2'];
+      this.currentOfferId = params['offerId'];
+      this.currentCaseId = params['caseId'];
     });
   }
 
