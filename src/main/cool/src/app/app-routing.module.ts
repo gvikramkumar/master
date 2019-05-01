@@ -5,12 +5,13 @@ import { OfferOverViewResolver } from './services/offer-overview-resolver.servic
 import { DesignReviewComponent } from '@app/review/design-review/design-review.component';
 import { StrategyReviewComponent } from '@app/review/strategy-review/strategy-review.component';
 import { OfferDetailViewComponent } from './offer-detail/offer-detail-view/offer-detail-view.component';
+import { ItemCreationComponent } from './item-creation/item-creation.component';
 
 
 const routes: Routes = [
   {
     path: 'access_token',
-    redirectTo: '/dashboard',
+    redirectTo: '/itemcreation',
     pathMatch: 'full'
   },
   {
@@ -80,6 +81,11 @@ const routes: Routes = [
   {
     path: 'designReview/:offerId/:caseId',
     component: DesignReviewComponent,
+    resolve: { offerData: OfferOverViewResolver }
+  },
+  {
+    path: 'itemcreation',
+    component: ItemCreationComponent,
     resolve: { offerData: OfferOverViewResolver }
   },
   {
