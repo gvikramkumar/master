@@ -26,8 +26,8 @@
           </ul>
 
           <!-- Control Bar -->
-          <!-- <app-view-offer [offerId]="offerId"></app-view-offer> -->
-          <div class="row base-margin-top">
+          <app-view-offer [selectedOffer]="selectedOffer" [offerId]="offerId" (updateModuleData)="updateModuleData($event)"></app-view-offer>
+          <!-- <div class="row base-margin-top">
 
               <div class="col-md-4">Currently Viewing the <strong>Overall Offer</strong>.</div>
               <div class="form-group dropdown label--inline">
@@ -448,19 +448,19 @@
                   <div class="col-sm-6">
                     <li class="half-margin-bottom">
                       <button class="btn btn--icon btn--small legend-completed">
-                        <span class="icon-tools"></span>
+                        <span class="icon-check"></span>
                       </button>
                       Completed
                     </li>
                     <li class="half-margin-bottom">
                       <button class="btn btn--icon btn--small legend-inprog">
-                        <span class="icon-tools"></span>
+                        <span class="icon-inprogress"></span>
                       </button>
                       In-Progess
                     </li>
                     <li>
                       <button class="btn btn--icon btn--small legend-milestone">
-                        <span class="icon-tools"></span>
+                        <span class="icon-milestone"></span>
                       </button>
                       Milestone
                     </li>
