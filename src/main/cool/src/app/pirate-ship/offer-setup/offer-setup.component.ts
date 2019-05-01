@@ -60,7 +60,6 @@ export class OfferSetupComponent implements OnInit {
   ngOnInit() {
 
   //  =======================================================================================
-  debugger;
   this.functionalRole = this.userService.getFunctionalRole();
    // Get Offer Details
    this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
@@ -148,7 +147,6 @@ export class OfferSetupComponent implements OnInit {
   
 // Get Status For Each Module
   getModuleStatus(group) {
-    debugger;
  this.offerSetupService.getModuleStatus(group['moduleName'],this.selectedOffer,this.offerId,this.functionalRole,this.derivedMM).subscribe(data => {
   group['status'] = data['message'];
 
