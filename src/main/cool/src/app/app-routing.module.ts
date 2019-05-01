@@ -102,6 +102,11 @@ const routes: Routes = [
     path: 'modelling-design/:offerId/:caseId/:selectedAto',
     loadChildren: './modelling-design/modelling-design.module#ModellingDesignModule',
     resolve: { offerData: OfferOverViewResolver }
+  },
+  {
+    path: 'ItemCreation/:offerId/:caseId/:selectedAto',
+    component: ItemCreationComponent,
+    resolve: { offerData: OfferOverViewResolver }
   }
 
 
