@@ -10,7 +10,9 @@ import { OfferDetailModule } from '@app/offer-detail/offer-detail.module';
 
 import { AtoListComponent } from './ato-list/ato-list.component';
 import { AtoMainComponent } from './ato-main/ato-main.component';
+import { AtoStatusComponent } from './ato-status/ato-status.component';
 import { AtoSummaryComponent } from './ato-summary/ato-summary.component';
+
 
 const routes: Routes = [
   {
@@ -23,7 +25,8 @@ const routes: Routes = [
   declarations: [
     AtoListComponent,
     AtoMainComponent,
-    AtoSummaryComponent
+    AtoStatusComponent,
+    AtoSummaryComponent,
   ],
   imports: [
     SharedModule,
