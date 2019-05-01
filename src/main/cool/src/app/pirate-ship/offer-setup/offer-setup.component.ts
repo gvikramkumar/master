@@ -59,7 +59,7 @@ export class OfferSetupComponent implements OnInit {
   this.functionalRole = this.userService.getFunctionalRole();
    // Get Offer Details
    this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
-debugger;
+     
     this.offerBuilderdata = offerDetails;
     this.offerBuilderdata['BEList'] = [];
     this.offerBuilderdata['BUList'] = [];
