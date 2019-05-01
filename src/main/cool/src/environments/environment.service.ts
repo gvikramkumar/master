@@ -353,7 +353,8 @@ export class EnvironmentService {
 
         this.REST_API_GET_OFFER_DROPDOWN = this.baseApiUrl + '/itemcreation/getATOs';
         this.REST_API_GET_ITEM_DETAILS = this.baseApiUrl + '/itemcreation/getDetails';
-
+        this.REST_API_REMOVE_ITEM_DETAILS = this.baseApiUrl + '/itemcreation/removeATOs';  
+        
         // -------------------------------------------------------------------------------------------------
 
     }
