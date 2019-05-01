@@ -119,7 +119,6 @@ export class OfferSetupComponent implements OnInit {
    getAllModuleData() {this.offerSetupService.getModuleData(this.derivedMM,this.offerId,this.functionalRole).subscribe(data => {
      this.groupData = {};
     this.Options =data['listATOs'];
-    debugger;
     data['listSetupDetails'].forEach(group => {
 
       // this.getModuleStatus(group);
