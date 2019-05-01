@@ -30,6 +30,7 @@ export class AtoMainComponent implements OnInit, OnDestroy {
   atoNames: string[] = [];
 
   caseId: string;
+  planId: string;
   offerId: string;
   offerName: string;
   offerOwner: string;
@@ -41,6 +42,9 @@ export class AtoMainComponent implements OnInit, OnDestroy {
 
   stakeholders: any;
   stakeHolderData: any;
+
+  showDesignCanvasButton: boolean;
+  disableDesignCanvasButton: boolean;
 
   constructor(
     private router: Router,
@@ -65,6 +69,7 @@ export class AtoMainComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.atoNames.push(this.selectedAto);
+    this.showDesignCanvasButton = this.selectedAto === 'Overall Offer' ? false : true;
 
     this.modellingDesignSubscription = this.modellingDesignService.retrieveAtoList(this.offerId)
       .subscribe((modellingDesignResponse: ModellingDesign) => {
@@ -83,15 +88,21 @@ export class AtoMainComponent implements OnInit, OnDestroy {
     // Retrieve Offer Details
     this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
 
+      this.planId = offerDetails['planId'];
       this.derivedMM = offerDetails['derivedMM'];
       this.offerName = offerDetails['offerName'];
       this.primaryBE = offerDetails['primaryBEList'][0];
       this.stakeHolderData = offerDetails['stakeholders'];
+
       this.processStakeHolderInfo();
       this.getLeadTimeCalculation();
+
     });
 
 
+    const functionalRole: Array<String> = this.configurationService.startupData.functionalRole;
+    this.disableDesignCanvasButton = ((functionalRole.includes('BUPM') || functionalRole.includes('PDT'))
+      && (this.atoTask['itemStatus'] === 'Completed')) ? false : true;
 
   }
 
@@ -104,18 +115,16 @@ export class AtoMainComponent implements OnInit, OnDestroy {
 
   goToDesignCanvas() {
 
-    const urlToOpen = this.environmentService.owbUrl;
-    const functionalRole: Array<String> = this.configurationService.startupData.functionalRole;
+    const userId = this.configurationService.startupData.userId;
+    let urlToOpen = this.environmentService.owbUrl + '/manage/offer/owbOfferDefinition?';
+    urlToOpen += 'selectedAto=' + this.selectedAto + '&planId=' + this.planId + '&userId=' + userId;
 
-    if ((functionalRole.includes('BUPM') || functionalRole.includes('PDT'))
-      && this.selectedAto !== 'Overall Offer') {
-      window.open(urlToOpen, '_blank');
-    }
+    window.open(urlToOpen, '_blank');
 
   }
 
   goToPirateShip() {
-    this.router.navigate(['/offerSetup', this.offerId, this.caseId, this.selectedAto,]);
+    this.router.navigate(['/offerSetup', this.offerId, this.caseId, this.selectedAto]);
   }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -125,8 +134,10 @@ export class AtoMainComponent implements OnInit, OnDestroy {
 
     if (dropDownValue === 'Overall Offer') {
       this.selectedAto = dropDownValue;
+      this.showDesignCanvasButton = false;
     } else {
       this.selectedAto = dropDownValue;
+      this.showDesignCanvasButton = true;
       this.atoTask = this.atoList.find(ato => ato.itemName === dropDownValue);
     }
   }
@@ -157,10 +168,13 @@ export class AtoMainComponent implements OnInit, OnDestroy {
   // -------------------------------------------------------------------------------------------------------------------
 
   private getLeadTimeCalculation() {
+
     this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe((leadTime) => {
+
       this.noOfWeeksDifference = Number(leadTime['averageOverall']).toFixed(1);
       this.loaderService.stopLoading();
       this.displayLeadTime = true;
+
     }, () => {
       this.noOfWeeksDifference = 'N/A';
       this.loaderService.stopLoading();
