@@ -120,7 +120,7 @@ export class OfferSetupComponent implements OnInit {
     this.Options =data['listATOs'];
     data['listSetupDetails'].forEach(group => {
 
-      this.getModuleStatus(group);
+      // this.getModuleStatus(group);
       let groupName = group['groupName']
       if (this.groupData[groupName] == null) {
         this.groupData[groupName] = {'left': [], 'right': []};
