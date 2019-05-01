@@ -12,37 +12,23 @@
     <div class="panel-wrapper mt-15">
     <!-- taskbar -->
       <app-taskbar
-      [isValidToProceed]="proceedToreadinessreview" (onProceedToNext)="onProceedToNext()"></app-taskbar>
-    <!-- left Panel -->
+      [isValidToProceed]="proceedToreadinessreview" (onProceedToNext)="onProceedToNext()"></app-taskbar>   
       <div class="row">
+         <!-- left Panel -->
       <div class="leftContent col-sm-12 col-md-9">
         <app-offer-create-detail></app-offer-create-detail>
         <!-- Message bar -->
         <ul class="list base-margin-top">
             <li>
               <div class="panel panel--bordered"><span class="text-success"><span class="icon-check-outline icon-medium"></span>
-                  {{derivedMM}} Aligned</span></div>
+                  {{derivedMM}} Aligned</span>
+              </div>
             </li>
-          </ul>
+        </ul>
 
-          <!-- Control Bar -->
+          <!-- Drop Down -->
           <app-view-offer [selectedOffer]="selectedOffer" [offerId]="offerId" (updateModuleData)="updateModuleData($event)"></app-view-offer>
-          <!-- <div class="row base-margin-top">
-
-              <div class="col-md-4">Currently Viewing the <strong>Overall Offer</strong>.</div>
-              <div class="form-group dropdown label--inline">
-              <div class="form-group__text select">
-                <label for="select-size-default">Viewing</label>
-                  <select [(ngModel)]="selectedAto" (change)="selectedValue($event)">
-                    <option id="select-size-default" value="Overall Offer">Overall Offer</option>
-                    <option id="select-size-default" *ngFor="let item of Options" value={{item}}>
-                        {{item}}
-                    </option>
-                </select>
-            </div>
-          </div>
-
-          </div>
+         
           <!-- Pirate Ship -->
           <div class="row base-margin-top">
             <div class="col-sm-12">
@@ -51,19 +37,52 @@
                   <div class="col-sm-3 half-margin-left">
                     <!-- Group 0 -->
                     <div *ngIf="groupData !== null && groupData['Group0'] !== null" >
-                    <li class="base-margin-bottom"
-                    *ngFor="let element of groupData['Group0']['left']">
-                      <button
-                        class="btn btn--small btn--success"
-                        placement="top"
-                      >
-                        <span class="icon-check pull-left"></span>&nbsp;{{element["moduleName"]}} 
-                      </button>
-                    </li>
+                      <li *ngFor="let element of groupData['Group0']['left']">
+                        <!-- different status showing -->
+                        <!-- Completed -->
+                       <button *ngIf="element['status']=='Completed'"
+                       class="btn btn--small btn--success"
+                       placement="top"
+                       (click)="getElementDetails(element)">
+                      {{element["moduleName"]}} 
+                     </button>
+                      <!-- In Progress-->
+                    <button *ngIf="element['status']=='In Progress'"
+                    class="btn btn--small  btn--warning"
+                    placement="top"
+                  >
+                   {{element["moduleName"]}} 
+                  </button>
+                  <!-- Available -->
+                  <button *ngIf="element['status']=='Available'"
+                  class="btn btn--small btn--primary"
+                  placement="top"
+                  (click)="getElementDetails(element)"
+                >
+                 {{element["moduleName"]}} 
+                </button>
+                     <!-- Not Yet Available -->
+                     <button *ngIf="element['status']=='Not Yet Available'"
+                       class="btn btn--small btn--gray-ghost"
+                       placement="top"
+                     >
+                      {{element["moduleName"]}} 
+                     </button>
+                     <!-- Not Required -->
+                     <button *ngIf="element['status']=='Not Required'"
+                     class="btn btn--small btn--default"
+                     placement="top"
+                   >
+                     {{element["moduleName"]}} 
+                   </button>
+  
+  
+                      </li>
                     </div>
+
                     <!-- Group 1 -->
-                    <div *ngIf="groupData !== null && groupData['Group0'] !== null" >
-                    <li *ngFor="let element of groupData['Group1']['left']">
+                    <div *ngIf="groupData !== null && groupData['Group1'] !== null" >
+                       <li *ngFor="let element of groupData['Group1']['left']">
                       <!-- different status showing -->
                      <!-- Completed -->
                      <button *ngIf="element['status']=='Completed'"
@@ -104,7 +123,7 @@
                  </button>
 
 
-                    </li>
+                       </li>
                     </div>
                   </div>
                 </div>
@@ -114,8 +133,8 @@
                   <div class="col-sm-6">
                     <div class="panel panel--bordered">
                       <div class="row">
+                        <!-- Group 2 left-->
                         <div class="col-sm-12 col-md-6">
-                          <!-- Group 2 left-->
                           <li class="base-padding-bottom" *ngFor="let element of groupData['Group2']['left']" (click)="getElementDetails(element)">
                             <!-- Completed -->
                             <button *ngIf="element['status']=='Completed'"
@@ -153,10 +172,9 @@
                             {{element["moduleName"]}} 
                           </button>
                           </li>
-
                         </div>
+                         <!-- Group 2 right -->
                         <div class="col-sm-12 col-md-6">
-                          <!-- Group 2 right -->
                           <li class="base-padding-bottom" *ngFor="let element of groupData['Group2']['right']">
                              <!-- Completed -->
                              <button *ngIf="element['status']=='Completed'"
@@ -202,8 +220,8 @@
                   <div class="col-sm-6">
                     <div class="panel panel--bordered">
                       <div class="row">
-                        <div class="col-sm-12 col-md-6">
-                          <!-- Group 3 left -->
+                         <!-- Group 3 left -->
+                        <div class="col-sm-12 col-md-6">                      
                           <li class="base-padding-bottom" *ngFor="let element of groupData['Group3']['left']">
                              <!-- Completed -->
                              <button *ngIf="element['status']=='Completed'"
@@ -242,9 +260,8 @@
                          </button>
                           </li>
                         </div>
-
-                        <div class="col-sm-12 col-md-6">
                           <!-- Group 3 right -->
+                        <div class="col-sm-12 col-md-6">
                           <li class="base-padding-bottom"  *ngFor="let element of groupData['Group3']['right']" >
                              <!-- Completed -->
                              <button *ngIf="element['status']=='Completed'"
@@ -286,13 +303,13 @@
                       </div>
                     </div>
                   </div>
+
                 </div>
                 <!-- bottom modules -->
-                <div class="row base-margin-top">
-
+                <div class="row base-margin-top"></div>>
+                <!-- Group 4 -->
                   <div class="col-sm-3 half-margin-left">
-                    <!-- Group 4 -->
-                    <div *ngIf="groupData !== null && groupData['Group0'] !== null" >
+                    <div *ngIf="groupData !== null && groupData['Group4'] !== null" >
                     <li class="base-padding-bottom" *ngFor="let element of groupData['Group4']['left']">
                        <!-- Completed -->
                        <button *ngIf="element['status']=='Completed'"
@@ -332,11 +349,11 @@
                     </li>
                     </div>
                   </div>
-                  <div class="col-sm-3 half-margin-left"></div>
+                  <div class="col-sm-3 half-margin-left">
 
                   <div class="col-sm-3 last">
                     <!-- Group 5 -->
-                    <div *ngIf="groupData !== null && groupData['Group0'] !== null" >
+                    <div *ngIf="groupData !== null && groupData['Group5'] !== null" >
                     <li class="base-padding-bottom" *ngFor="let element of groupData['Group5']['left']">
                       <!-- Completed -->
                       <button *ngIf="element['status']=='Completed'"
@@ -376,7 +393,7 @@
                     </li>
                     </div>
                       <!-- Group 6 -->
-                    <div *ngIf="groupData !== null && groupData['Group0'] !== null" >
+                    <div *ngIf="groupData !== null && groupData['Group6'] !== null" >
                     <li *ngFor="let element of groupData['Group6']['left']">
                       <!-- Completed -->
                       <button *ngIf="element['status']=='Completed'"
@@ -416,10 +433,13 @@
                     </li>
                     </div>
                   </div>
+
                 </div>
+
               </ul>
             </div>
           </div>
+
           <!-- Legend -->
           <div class="row base-margin-top">
             <div class="col-sm-12 col-md-5">
@@ -471,14 +491,15 @@
           </div>
 
 
-        <div class="col-sm-12 col-md-3"></div>
+         <div class="col-sm-12 col-md-3"></div>
       </div>
       <!-- right panel -->
       <div class="rightContent  col-sm-12 col-md-3">
         <app-right-panel [stakeData]="stakeholders" [offerName]="offerName" [derivedMM]="derivedMM"
         [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference"></app-right-panel>
-        </div>
+      </div>
     </div>
+
     </div>
   </div>
 </div>
