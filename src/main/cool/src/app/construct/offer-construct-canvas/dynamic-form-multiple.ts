@@ -1,4 +1,4 @@
-import { LoaderService } from '../../shared/loader.service';
+import { LoaderService } from '@app/core/services/loader.service';
 import { Component, OnInit, Input, Output, ViewChild, ElementRef, Renderer, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';

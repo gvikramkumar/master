@@ -6,7 +6,6 @@ import { Location } from '@angular/common';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 import { StrategyReviewService } from '@app/services/strategy-review.service';
 import { NgForm } from '@angular/forms';
-import { UserService, HeaderService, DashboardService, CreateOfferService } from '@shared/services';
 import { Subscription, forkJoin } from 'rxjs';
 import { ActionsService } from '@app/services/actions.service';
 import { SharedService } from '@app/shared-service.service';
@@ -15,6 +14,8 @@ import { RightPanelService } from '@app/services/right-panel.service';
 import { AccessManagementService } from '@app/services/access-management.service';
 import { CreateActionComment } from '../../models/create-action-comment';
 import { CreateActionApprove } from '../../models/create-action-approve';
+import { UserService, HeaderService } from '@app/core/services';
+import { DashboardService, CreateOfferService } from '@shared/services';
 
 
 @Component({
@@ -100,7 +101,6 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     private strategyReviewService: StrategyReviewService,
     private actionsService: ActionsService,
     private userService: UserService,
-    private _location: Location,
     private sharedService: SharedService,
     private messageService: MessageService,
     private headerService: HeaderService,
@@ -109,8 +109,8 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     private dashboardService: DashboardService,
     private createOfferService: CreateOfferService) {
     this.activatedRoute.params.subscribe(params => {
-      this.currentOfferId = params['id'];
-      this.caseId = params['id2'];
+      this.currentOfferId = params['offerId'];
+      this.caseId = params['caseId'];
     });
   }
 

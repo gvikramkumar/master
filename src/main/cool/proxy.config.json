@@ -1,6 +1,7 @@
 {
     "/api": {
-        "target": "https://cool-srv-dev.cisco.com/coolsrv",
+        
+       "target": "https://cool-srv-dev.cisco.com/coolsrv",
         "secure": false,
         "changeOrigin": true,
         "logLevel": "debug",

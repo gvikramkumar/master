@@ -9,11 +9,12 @@ import { RightPanelService } from '@app/services/right-panel.service';
 import { MessageService } from '@app/services/message.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { NgForm } from '@angular/forms';
-import { UserService, CreateOfferService, DashboardService, HeaderService } from '@shared/services';
+import { UserService, HeaderService } from '@app/core/services';
 import { CreateActionComment } from '@app/models/create-action-comment';
 import { CreateActionApprove } from '@app/models/create-action-approve';
 import { AccessManagementService } from '@app/services/access-management.service';
 import { ExitCriteriaValidationService } from '@app/services/exit-criteria-validation.service';
+import { DashboardService, CreateOfferService } from '@shared/services';
 
 @Component({
   selector: 'app-designreview',
@@ -72,7 +73,6 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
   milestoneList;
   designReviewList;
   milestoneValue: string;
-  proceedToOfferSetup: Boolean = true;
   showButtonSection = false;
   doNotApproveSection = false;
   showConditionalApprovalSection = false;
@@ -93,6 +93,8 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
   currentFunctionalRole;
   loadExitCriteria = false;
 
+  proceedToOfferSetup: Boolean = true;
+
   constructor(private router: Router,
     private stakeholderfullService: StakeholderfullService,
     private monetizationModelService: MonetizationModelService,
@@ -108,8 +110,8 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
     private exitCriteriaValidationService: ExitCriteriaValidationService,
     private createOfferService: CreateOfferService) {
     this.activatedRoute.params.subscribe(params => {
-      this.currentOfferId = params['id'];
-      this.caseId = params['id2'];
+      this.currentOfferId = params['offerId'];
+      this.caseId = params['caseId'];
     });
   }
 
@@ -233,7 +235,10 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
 
   // --------------------------------------------------------------------------------------------------------------------------------
 
-  offerDetailOverView() { }
+  offerSetupView() {
+ 
+    this.router.navigate(['/offerSetup', this.currentOfferId, this.caseId]);
+  }
 
   private getMilestones(milestones) {
     const result = milestones.plan;

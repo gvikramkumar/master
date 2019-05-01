@@ -4,7 +4,7 @@ import { NgForm } from '@angular/forms';
 import { NewUser } from '../models/newuser';
 import { UserMapping } from '../models/usermapping';
 import { forkJoin, Observable, of, from } from 'rxjs';
-import { ConfigurationService } from '@shared/services';
+import { ConfigurationService } from '@app/core/services';
 @Component({
   selector: 'app-access-management',
   templateUrl: './access-management.component.html',

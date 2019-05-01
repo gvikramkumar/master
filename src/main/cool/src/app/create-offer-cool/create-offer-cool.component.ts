@@ -10,10 +10,11 @@ import { OfferDetailViewService } from '../services/offer-detail-view.service';
 import * as moment from 'moment';
 import { StakeholderfullService } from '../services/stakeholderfull.service';
 import { RightPanelService } from '../services/right-panel.service';
-import { HeaderService, UserService, CreateOfferService, ConfigurationService } from '@shared/services';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { HeaderService, UserService, ConfigurationService } from '@app/core/services';
+import { debounceTime } from 'rxjs/operators';
 import { Subject } from 'rxjs/internal/Subject';
-import { LoaderService } from '@shared/loader.service';
+import { LoaderService } from '@app/core/services/loader.service';
+import { CreateOfferService } from '@shared/services';
 
 
 @Component({
@@ -89,7 +90,8 @@ export class CreateOfferCoolComponent implements OnInit {
   subject: Subject<any> = new Subject();
   validFlag: boolean = true;
 
-  constructor(private createOfferService: CreateOfferService,
+  constructor(
+    private createOfferService: CreateOfferService,
     private configurationService: ConfigurationService,
     private offerDetailViewService: OfferDetailViewService,
     private router: Router,
@@ -101,9 +103,11 @@ export class CreateOfferCoolComponent implements OnInit {
     private _location: Location) {
     this.disablePrimaryBEList = createOfferService.disablePrBEList;
     this.activatedRoute.params.subscribe(params => {
-      this.offerId = params['id'];
+
+      this.offerId = params['offerId'];
+
       if (this.offerId) {
-        this.loaderService.startLoading(); 
+        this.loaderService.startLoading();
         this.offerDetailViewService.retrieveOfferDetails(this.offerId).subscribe(offerDetailRes => {
           this.offerDetailRes = offerDetailRes;
           this.caseId = offerDetailRes.caseId;
@@ -225,7 +229,7 @@ export class CreateOfferCoolComponent implements OnInit {
   }
 
   getSecondaryBusinessEntityPromise(event) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.createOfferService.getSecondaryBusinessEntity(event)
         .subscribe(data => {
           this.secondaryBusinessEntityList = <any>data;
@@ -282,7 +286,7 @@ export class CreateOfferCoolComponent implements OnInit {
         this.primaryBusinessUnits = this.removeDuplicates(secondaryBuArry, 'label');
       });
     } else {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         this.createOfferService.getPrimaryBuBasedOnBe(event.toString())
           .subscribe(data => {
             const primaryBuArry = [];
@@ -318,7 +322,7 @@ export class CreateOfferCoolComponent implements OnInit {
    */
   getSecondaryBusinessUnitPromise(event) {
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.createOfferService.getPrimaryBuBasedOnBe(event.toString())
         .subscribe(data => {
           const primaryBuArry = [];
@@ -347,7 +351,7 @@ export class CreateOfferCoolComponent implements OnInit {
 
   getPrimaryBusinessEntityPromise(event) {
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.createOfferService.getPrimaryBusinessEntity(event.toString())
         .subscribe(data => {
           const primaryBeArry = [{ label: 'All', value: 'All' }];
@@ -443,7 +447,7 @@ export class CreateOfferCoolComponent implements OnInit {
   goBack() {
     this._location.back();
   }
-  proceedCheckBu(e) {
+  proceedCheckBu() {
     if (this.offerCreateForm.valid == true && this.idpvalue !== "") {
       this.enableOfferbuild = false;
     }
@@ -551,7 +555,7 @@ export class CreateOfferCoolComponent implements OnInit {
 
 
   getidptoken(event) {
-    if(event.target.value.length === 9) {
+    if (event.target.value.length === 9) {
       this.validFlag = false;
     } else {
       this.validFlag = true;
@@ -567,7 +571,7 @@ export class CreateOfferCoolComponent implements OnInit {
   }
 
   getValidData() {
-    this.createOfferService.validateIdpid(this.iDPId).subscribe(data => {
+    this.createOfferService.validateIdpid(this.iDPId).subscribe(() => {
       this.isIdpIdValid = true;
       if (this.offerCreateForm.valid == true && this.isIdpIdValid == true) {
         this.enableOfferbuild = false;
@@ -575,7 +579,7 @@ export class CreateOfferCoolComponent implements OnInit {
       this.idpidValid = true;
       this.idpidInvalid = false;
     },
-      error => {
+      () => {
         this.idpidValid = false;
         this.idpidInvalid = true;
         this.enableOfferbuild = true;
@@ -607,8 +611,8 @@ export class CreateOfferCoolComponent implements OnInit {
       launchDate: this.expectedLaunchDateValue,
       readinessReviewDate: this.readinessReviewDateValue,
     };
-    this.createOfferService.updateOffer(updateoffer).subscribe((data) => {
-      this.rightPanelService.updatePhaseTargetDate(payLoad).subscribe((data) => {
+    this.createOfferService.updateOffer(updateoffer).subscribe(() => {
+      this.rightPanelService.updatePhaseTargetDate(payLoad).subscribe(() => {
         this.router.navigate(['/mmassesment', this.offerId, this.caseId]);
       })
     },

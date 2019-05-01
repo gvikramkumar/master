@@ -1,0 +1,16 @@
+<div class="row base-margin-top">
+
+    <div class="col-md-4">Currently Viewing the <strong>Overall Offer</strong>.</div>
+    <div class="form-group dropdown label--inline">
+    <div class="form-group__text select">
+      <label for="select-size-default">Viewing</label>
+        <select  [(ngModel)]="selectedOffer" (ngModelOnChange)="selectedValue($event)">
+          <option id="select-size-default" value="0">Overall Offer</option>
+          <option id="select-size-default" *ngFor="let item of Options" value={{item}}>
+              {{item}}
+          </option>
+      </select>
+  </div>
+</div>
+
+</div>

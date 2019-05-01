@@ -3,7 +3,7 @@ import { MenuItem } from 'primeng/api';
 import { MenuBarService } from '@app/services/menu-bar.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EnvironmentService } from '@env/environment.service';
-import { UserService } from '@shared/services';
+import { UserService } from '@app/core/services';
 
 @Component({
     selector: 'app-menu-bar',
@@ -38,8 +38,8 @@ export class MenuBarComponent implements OnInit {
         this.showPopup = false;
 
         this.activatedRoute.params.subscribe(params => {
-            this.currentOfferId = params['id'];
-            this.caseId = params['id2'];
+            this.currentOfferId = params['offerId'];
+            this.caseId = params['caseId'];
         });
 
         this.menuBarService.getRubboTaxMenu(this.caseId).subscribe(data => {
