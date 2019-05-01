@@ -38,7 +38,7 @@ export class OfferSetupComponent implements OnInit {
   proceedButtonStatusValid = true;
   proceedToreadinessreview = true;
   Options: any[] = [];
-  selectedOffer:any = 0;
+  selectedOffer:any = 'Overall Offer';
   selectedAto:string = 'Overall Offer';
 
   
@@ -119,7 +119,7 @@ export class OfferSetupComponent implements OnInit {
     this.Options =data['listATOs'];
     data['listSetupDetails'].forEach(group => {
 
-      this.getModuleStatus(group);
+      // this.getModuleStatus(group);
       let groupName = group['groupName']
       if (this.groupData[groupName] == null) {
         this.groupData[groupName] = {'left': [], 'right': []};
