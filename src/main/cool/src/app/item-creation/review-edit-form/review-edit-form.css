@@ -1,0 +1,393 @@
+.canvas {
+  height: 480px;
+  border-top: solid thin #f7f7f7;
+  overflow: auto;
+}
+
+.section-tr-label {
+  color: #ffffff;
+  background-color: #017CAD !important;
+}
+
+.search-icon .icon-search {
+  position: absolute;
+  top: 13px;
+  left: 20px;
+}
+
+.link-style {
+  color: #58585b !important;
+}
+
+.auto-complete-attribute {
+  position: relative;
+}
+
+.display-none {
+  display: none
+}
+
+.search-fa-icon::after {
+  content: '\f0da';
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  margin: 0px 0px 0px 10px;
+  text-decoration: none;
+}
+
+.alnright {
+  text-align: right;
+}
+
+input.text-input-box {
+  background: white;
+  border: none;
+  line-height: 20px;
+  padding: 5px;
+}
+
+.add-items {
+  font-size: 19px;
+  font-weight: bold;
+}
+
+.panel.panel--bordered.title {
+  background: #c8c8c8;
+  color: black !important;
+}
+
+.left-panel {
+  background: #f4f4f4;
+}
+
+.panel.panel--bordered {
+  background: transparent;
+  color: #005073;
+  border-left: none;
+  border-right: none;
+}
+
+ul.list.list--highlight {
+  background: #FBFBFB;
+  padding: 0 15px;
+  height: auto;
+}
+
+ul.list.list--highlight li {
+  text-transform: uppercase;
+}
+
+.panel-category-list ul.list.list--highlight li:first-child .panel,
+.panel-category-list ul.list.list--highlight li:last-child .panel {
+  border: none;
+}
+
+.list-item:active {
+  background: #E6F3FA;
+  cursor: url("https://www.google.com/intl/en_ALL/mapfiles/openhand.cur"), all-scroll;
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+  cursor: -o-grab;
+  cursor: -ms-grab;
+  cursor: grab;
+}
+
+.drop-items-title {
+  font-weight: bold;
+  padding-top: 20px;
+}
+
+::ng-deep .fa-caret-right::before {
+  content: "\F067";
+}
+
+::ng-deep .fa-caret-down::before {
+  content: "\F068";
+}
+
+/* custom */
+.pane--container-empty {
+  text-align: center;
+  position: relative;
+  height: 100%;
+  border-bottom: solid thin #f7f7f7;
+}
+
+.pane--container-empty p {
+  margin: 0 1em;
+}
+
+span.icon-cart {
+  font-size: 8em;
+  display: block;
+  line-height: 1;
+  color: #e0e0e0;
+  margin-bottom: 20px;
+}
+
+.pane--message-group {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%);
+  width: 100%;
+}
+
+.panel-category-list span[class*="icon-"] {
+  margin-right: 5px;
+}
+
+.panel-category-list .heading {
+  font-size: 16px;
+}
+
+.panel-category-list .subheading {
+  font-size: 12px;
+}
+
+.offer-construct-container .btn {
+  border-radius: 6px;
+}
+
+.offer-construct-container .task--bar {
+  text-align: right;
+}
+
+/* treetable */
+.offer-construct-container .treetable--product-name {
+  text-transform: uppercase;
+}
+
+.offer-construct-container .vertical-divider {
+  display: inline-block;
+  margin: 0 10px;
+  color: #D9D9D9;
+}
+
+.topnav {
+  overflow: hidden;
+}
+
+.flex-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  border-bottom: 3px solid transparent;
+}
+
+.topnav a.active {
+  border-bottom: 3px solid #005073;
+}
+
+.line-items-nav .active.tab__heading {
+  border-bottom: 4px solid #007493;
+  padding: 15px;
+  height: 45px;
+}
+
+.line-items-nav .tab__heading {
+  padding: 15px !important;
+}
+
+.header-dialog {
+  background: #f2f2f2;
+  line-height: 40px;
+  font-weight: bold;
+  font-size: 1.2em;
+  padding: 0;
+  margin: 5px 0 0 0;
+}
+
+.add-all-details .cui .form-group .form-group__text.select:after {
+  top: 0;
+}
+
+.view-item-details tr {
+  height: 42px !important;
+}
+.cool.cui .add-details-dialog .ui-dialog.ui-widget .ui-dialog-content {
+  overflow: scroll;
+}
+
+@media only screen and (min-width: 768px) {
+  ul.list.list--highlight {
+    height: 520px;
+    overflow: auto;
+  }
+}
+
+.bold-row {
+  font-weight: bold;
+}
+
+
+.ml0  {
+  margin-left: 0px !important;
+}
+
+.bBtm {
+  border-bottom: 4px solid #007493 !important;
+}
+
+
+/* custom css for ToolTip validation*/
+
+
+/* tooltip */
+
+
+.tool-tip{
+	color: #fff;
+	background-color: #005073;
+	text-shadow: none;
+	font-size: .8em;
+	visibility: hidden;
+	-webkit-border-radius: 7px;
+	-moz-border-radius: 7px;
+	-o-border-radius: 7px;
+	border-radius: 7px;
+	opacity: 0;
+	z-index: 999;
+	padding: 3px 8px;
+	position: absolute;
+	cursor: default;
+	-webkit-transition: all 240ms ease-in-out;
+	-moz-transition: all 240ms ease-in-out;
+	-ms-transition: all 240ms ease-in-out;
+	-o-transition: all 240ms ease-in-out;
+	transition: all 240ms ease-in-out;
+}
+
+.tool-tip,
+.tool-tip.top{
+	top: auto;
+	bottom: 114%;
+	left: 50%;
+}
+
+.tool-tip.top:after,
+.tool-tip:after{
+	position: absolute;
+	bottom: -12px;
+	left: 50%;
+	margin-left: -7px;
+	content: ' ';
+	height: 0px;
+	width: 0px;
+	border: 6px solid transparent;
+  border-top-color: #005073;
+}
+
+/* default heights, width and margin w/o Javscript */
+
+.tool-tip ul {
+  margin: 0;
+  padding: 5px 5px 5px 20px;
+}
+.tool-tip ul li {
+  list-style: disc;
+  white-space: normal;
+}
+.tool-tip,
+.tool-tip.top{
+	min-width: 80px;
+  max-width: 240px;
+  min-height: 22px;
+  transform: translateX(-50%);
+  width: 240px;
+
+}
+
+/* tool tip position right */
+
+.tool-tip.right{
+	top: 50%;
+	right: auto;
+	left: 106%;
+	margin-top: -15px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.tool-tip.right:after{
+	left: -5px;
+	top: 50%;
+	margin-top: -6px;
+	bottom: auto;
+	border-top-color: transparent;
+  border-right-color: #005073;
+}
+
+
+
+
+
+
+/* on hover of element containing tooltip default*/
+
+*:not(.on-focus):hover > .tool-tip,
+.on-focus input:focus + .tool-tip,
+.on-focus select:focus + .tool-tip
+
+{
+	visibility: visible;
+  opacity: 1;
+  text-align: left;
+	-webkit-transition: all 240ms ease-in-out;
+	-moz-transition: all 240ms ease-in-out;
+	-ms-transition: all 240ms ease-in-out;
+	-o-transition: all 240ms ease-in-out;
+	transition: all 240ms ease-in-out;
+}
+
+
+/* tool tip slide out */
+
+*:not(.on-focus) > .tool-tip.slideIn,
+.on-focus > .tool-tip{
+	display: block;
+}
+
+.on-focus > .tool-tip.slideIn{
+	z-index: -1;
+}
+
+.on-focus > input:focus + .tool-tip.slideIn,
+.on-focus > select:focus + .tool-tip.slideIn
+
+{
+	z-index: 1;
+}
+
+
+
+/* top slideIn */
+
+*:not(.on-focus) > .tool-tip.slideIn,
+*:not(.on-focus) > .tool-tip.slideIn.top,
+.on-focus > .tool-tip.slideIn,
+.on-focus > .tool-tip.slideIn.top{
+	bottom: 50%;
+}
+
+*:not(.on-focus):hover > .tool-tip.slideIn,
+*:not(.on-focus):hover > .tool-tip.slideIn.top,
+.on-focus > input:focus + .tool-tip.slideIn,
+.on-focus > input:focus + .tool-tip.slideIn.top,
+.on-focus > select:focus + .tool-tip.slideIn,
+.on-focus > select:focus + .tool-tip.slideIn.top
+
+{
+	bottom: 110%;
+}
+

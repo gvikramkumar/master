@@ -14,7 +14,7 @@
     </div>
     <div class="row col-md-12 base-margin-top">
       <div class="col-md-9">
-        <button class="btn btn--cool btn--primary">
+        <button (click)='showReviewEdit()' class="btn btn--cool btn--primary">
           <span class="icon-pencil icon-small"></span> Review/Edit Items
         </button>
       </div>
@@ -85,4 +85,8 @@
       </button>
     </div>
   </div>
+</div>
+
+<div *ngIf='display'>
+  <review-edit-form (valueChange)='replacetabularFormQuestion($event)' [indexVal]="ind"></review-edit-form>
 </div>

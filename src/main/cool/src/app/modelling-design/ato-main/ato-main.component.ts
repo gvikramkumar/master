@@ -10,6 +10,7 @@ import { ConfigurationService } from '@app/core/services/configuration.service';
 import { LoaderService } from '@app/core/services/loader.service';
 
 import * as _ from 'lodash';
+import { RightPanelService } from '../../services/right-panel.service';
 
 @Component({
   selector: 'app-ato-main',
@@ -35,6 +36,8 @@ export class AtoMainComponent implements OnInit, OnDestroy {
 
   primaryBE: string;
   derivedMM: string;
+  displayLeadTime = false;
+  noOfWeeksDifference: string;
 
   stakeholders: any;
   stakeHolderData: any;
@@ -43,6 +46,7 @@ export class AtoMainComponent implements OnInit, OnDestroy {
     private router: Router,
     private loaderService: LoaderService,
     private activatedRoute: ActivatedRoute,
+    private rightPanelService: RightPanelService,
     private environmentService: EnvironmentService,
     private configurationService: ConfigurationService,
     private modellingDesignService: ModellingDesignService,
@@ -73,16 +77,20 @@ export class AtoMainComponent implements OnInit, OnDestroy {
         });
 
         this.atoTask = {} as Ato;
-        this.loaderService.stopLoading();
 
       });
 
     // Retrieve Offer Details
     this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
+
+      this.derivedMM = offerDetails['derivedMM'];
       this.offerName = offerDetails['offerName'];
+      this.primaryBE = offerDetails['primaryBEList'][0];
       this.stakeHolderData = offerDetails['stakeholders'];
       this.processStakeHolderInfo();
+      this.getLeadTimeCalculation();
     });
+
 
 
   }
@@ -144,6 +152,19 @@ export class AtoMainComponent implements OnInit, OnDestroy {
       });
     }
 
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+
+  private getLeadTimeCalculation() {
+    this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe((leadTime) => {
+      this.noOfWeeksDifference = Number(leadTime['averageOverall']).toFixed(1);
+      this.loaderService.stopLoading();
+      this.displayLeadTime = true;
+    }, () => {
+      this.noOfWeeksDifference = 'N/A';
+      this.loaderService.stopLoading();
+    });
   }
 
   // -------------------------------------------------------------------------------------------------------------------

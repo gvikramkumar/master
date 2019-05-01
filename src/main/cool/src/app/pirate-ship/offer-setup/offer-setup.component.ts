@@ -190,12 +190,16 @@ export class OfferSetupComponent implements OnInit {
 
 
   onProceedToNext(){}
-
+  selectedValue(event) {
+    // console.log('evemnt', event);
+    // console.log('selectedAto', this.selectedAto);
+  }
   getElementDetails(element) {
-    console.log('cuurent elemenrt', element);
-    element.moduleName = element.moduleName.replace(/\s/g, "");
-    this.router.navigate(['/' + element.moduleName]);
+    let moduleName = element.moduleName.replace(/\s/g, "");
+    // this.router.navigate(['/' + element.moduleName]);
     // this.router.navigate(['/' + element.moduleName, this.offerId]);
+    // this.router.navigate(['/', + moduleName]);
+    this.router.navigate(['/ItemCreation', this.offerId, this.caseId, this.selectedAto]);
   }
 
   updateModuleData(message) {
