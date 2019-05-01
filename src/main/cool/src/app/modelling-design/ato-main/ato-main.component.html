@@ -1,7 +1,7 @@
 <div class="content">
   <div class="container">
 
-    <app-menu-bar [caseId]="caseId" [offerId]="offerId" [offerName]="offerName">
+    <app-menu-bar [caseId]="caseId" [offerId]="currentOfferId" [offerName]="offerName" [currentMMModel]="derivedMM">
     </app-menu-bar>
 
     <div class="panel-wrapper mt-15">
@@ -66,7 +66,8 @@
 
         <div class="rightContent col-sm-12 col-md-3">
           <app-right-panel [stakeData]="stakeholders" [offerName]="offerName" [derivedMM]="derivedMM"
-            [primaryBE]="primaryBE"></app-right-panel>
+            [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference">
+          </app-right-panel>
         </div>
 
       </div>
