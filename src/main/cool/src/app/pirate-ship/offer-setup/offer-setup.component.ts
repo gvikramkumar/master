@@ -104,6 +104,8 @@ export class OfferSetupComponent implements OnInit {
     this.processStakeHolderInfo();
   });
 
+  // for refresh
+
   this.getAllModuleData();
  interval(9000000).subscribe(x =>
   this.getAllModuleData()

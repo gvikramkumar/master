@@ -25,24 +25,23 @@
               </li>
             </ul>
   
-            <!-- Control Bar -->
-            <app-view-offer [selectedOffer]="selectedOffer" [offerId]="offerId" (updateModuleData)="updateModuleData($event)"></app-view-offer>
-            <!-- <div class="row base-margin-top">
-  
-                <div class="col-md-4">Currently Viewing the <strong>Overall Offer</strong>.</div>
-                <div class="form-group dropdown label--inline">
-                <div class="form-group__text select">
-                  <label for="select-size-default">Viewing</label>
-                    <select>
-                      <option id="select-size-default" value="0">Overall Offer</option>
-                      <option id="select-size-default" *ngFor="let item of Options" value={{item}}>
-                          {{item}}
-                      </option>
-                  </select>
-              </div>
+               <!-- Control Bar -->
+          <div class="row base-margin-top">
+
+              <div class="col-md-4">Currently Viewing the <strong>Overall Offer</strong>.</div>
+              <div class="form-group dropdown label--inline">
+              <div class="form-group__text select">
+                <label for="select-size-default">Viewing</label>
+                  <select [(ngModel)]="selectedAto" (change)="selectedValue($event)">
+                    <option id="select-size-default" value="Overall Offer">Overall Offer</option>
+                    <option id="select-size-default" *ngFor="let item of Options" value={{item}}>
+                        {{item}}
+                    </option>
+                </select>
             </div>
-  
-            </div> -->
+          </div>
+
+          </div>
             <!-- Pirate Ship -->
             <div class="row base-margin-top">
               <div class="col-sm-12">
@@ -503,13 +502,13 @@
                       </li>
                       <li class="half-margin-bottom">
                         <button class="btn btn--icon btn--small legend-inprog">
-                          <span class="icon-inprogress"></span>
+                          <span class="in-progress"></span>
                         </button>
                         In-Progess
                       </li>
                       <li>
                         <button class="btn btn--icon btn--small legend-milestone">
-                          <span class="icon-milestone"></span>
+                          <span class="milestone"></span>
                         </button>
                         Milestone
                       </li>
