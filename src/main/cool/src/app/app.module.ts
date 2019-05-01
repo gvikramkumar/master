@@ -58,7 +58,8 @@ import { OfferDetailModule } from './offer-detail/offer-detail.module';
 
 import { CustomMinValidatorDirective } from './validators/custom-min-validator.directive';
 import { CustomRangeValidatorDirective } from './validators/custom-range-validator.directive';
-
+import { ItemCreationComponent } from './item-creation/item-creation.component';
+import { TreeTableModule } from 'primeng/primeng';
 
 
 export function app_init(configService: ConfigurationService) {
@@ -77,7 +78,7 @@ export function app_init(configService: ConfigurationService) {
     DesignReviewExitCriteriaComponent,
     CustomMinValidatorDirective,
     CustomRangeValidatorDirective,
-
+    ItemCreationComponent
   ],
   imports: [
     NgbModule,
@@ -99,7 +100,8 @@ export function app_init(configService: ConfigurationService) {
     OfferDetailModule,
     CoreModule,
     SharedModule,
-    AppRoutingModule
+    AppRoutingModule,
+    TreeTableModule
   ],
   providers:
     [
