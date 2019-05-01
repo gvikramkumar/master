@@ -39,6 +39,7 @@ export class OfferSetupComponent implements OnInit {
   proceedToreadinessreview = true;
   Options: any[] = [];
   selectedOffer:any = 0;
+  selectedAto:string = 'Overall Offer';
 
   
 
