@@ -26,15 +26,15 @@
           </ul>
 
           <!-- Control Bar -->
-          <app-view-offer [offerId]="offerId"></app-view-offer>
-          <!-- <div class="row base-margin-top">
+          <!-- <app-view-offer [offerId]="offerId"></app-view-offer> -->
+          <div class="row base-margin-top">
 
               <div class="col-md-4">Currently Viewing the <strong>Overall Offer</strong>.</div>
               <div class="form-group dropdown label--inline">
               <div class="form-group__text select">
                 <label for="select-size-default">Viewing</label>
-                  <select>
-                    <option id="select-size-default" value="0">Overall Offer</option>
+                  <select [(ngModel)]="selectedAto" (change)="selectedValue($event)">
+                    <option id="select-size-default" value="Overall Offer">Overall Offer</option>
                     <option id="select-size-default" *ngFor="let item of Options" value={{item}}>
                         {{item}}
                     </option>
@@ -42,7 +42,7 @@
             </div>
           </div>
 
-          </div> -->
+          </div>
           <!-- Pirate Ship -->
           <div class="row base-margin-top">
             <div class="col-sm-12">
@@ -69,6 +69,7 @@
                      <button *ngIf="element['status']=='Completed'"
                      class="btn btn--small btn--success"
                      placement="top"
+                     (click)="getElementDetails(element)"
                    >
                     {{element["moduleName"]}} 
                    </button>
@@ -83,6 +84,7 @@
                 <button *ngIf="element['status']=='Available'"
                 class="btn btn--small btn--primary"
                 placement="top"
+                (click)="getElementDetails(element)"
               >
                {{element["moduleName"]}} 
               </button>
