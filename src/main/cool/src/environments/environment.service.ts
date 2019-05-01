@@ -165,7 +165,7 @@ export class EnvironmentService {
                 this.baseIdpUrl = 'https://idp-stage-api.cisco.com';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
-                this.owbUrl = 'https://owb.cloudapps.cisco.com/owb/owb/home#/home';
+                this.owbUrl = 'https://owb.cloudapps.cisco.com/owb';
                 break;
             case 'stage':
                 this.baseApiUrl = 'https://cool-srv-stg.cisco.com/coolsrv';
@@ -176,7 +176,7 @@ export class EnvironmentService {
                 this.baseIdpUrl = 'https://idp-stage-api.cisco.com';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
-                this.owbUrl = 'https://owb-stage.cloudapps.cisco.com/owb/owb/home#/home';
+                this.owbUrl = 'https://owb-stage.cloudapps.cisco.com/owb';
                 break;
             case 'qualityassurance':
                 this.baseApiUrl = 'https://cool-srv-qa.cisco.com/coolsrv';
@@ -187,7 +187,7 @@ export class EnvironmentService {
                 this.baseIdpUrl = 'https://idp-stage-api.cisco.com';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
-                this.owbUrl = 'https://owb-stage.cloudapps.cisco.com/owb/owb/home#/home';
+                this.owbUrl = 'https://owb-stage.cloudapps.cisco.com/owb';
                 break;
             case 'development':
                 this.baseApiUrl = 'https://cool-srv-dev.cisco.com/coolsrv';
@@ -198,7 +198,7 @@ export class EnvironmentService {
                 this.baseIdpUrl = 'https://idp-stage-api.cisco.com';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
-                this.owbUrl = 'https://owb-stage.cloudapps.cisco.com/owb/owb/home#/home';
+                this.owbUrl = 'https://owb-stage.cloudapps.cisco.com/owb';
                 break;
             default:
                 this.baseApiUrl = '/api';
@@ -209,7 +209,7 @@ export class EnvironmentService {
                 this.baseIdpUrl = '/idp';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
-                this.owbUrl = 'https://owb-stage.cloudapps.cisco.com/owb/owb/home#/home';
+                this.owbUrl = 'https://owb-stage.cloudapps.cisco.com/owb';
         }
 
         // ----------------------- AUTHENTICATION URLs -----------------------------------------------
