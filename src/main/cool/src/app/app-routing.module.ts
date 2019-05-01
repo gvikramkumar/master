@@ -11,7 +11,7 @@ import { ItemCreationComponent } from './item-creation/item-creation.component';
 const routes: Routes = [
 
   {
-    path: '',
+    path: 'access_token',
     redirectTo: '/dashboard',
     pathMatch: 'full'
   },
