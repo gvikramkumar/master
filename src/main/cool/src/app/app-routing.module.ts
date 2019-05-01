@@ -5,6 +5,7 @@ import { OfferOverViewResolver } from './services/offer-overview-resolver.servic
 import { DesignReviewComponent } from '@app/review/design-review/design-review.component';
 import { StrategyReviewComponent } from '@app/review/strategy-review/strategy-review.component';
 import { OfferDetailViewComponent } from './offer-detail/offer-detail-view/offer-detail-view.component';
+import { ItemCreationComponent } from './item-creation/item-creation.component';
 
 
 const routes: Routes = [
@@ -95,6 +96,11 @@ const routes: Routes = [
   {
     path: 'modelling-design/:offerId/:caseId/:selectedAto',
     loadChildren: './modelling-design/modelling-design.module#ModellingDesignModule',
+    resolve: { offerData: OfferOverViewResolver }
+  },
+  {
+    path: 'ItemCreation/:offerId/:caseId/:selectedAto',
+    component: ItemCreationComponent,
     resolve: { offerData: OfferOverViewResolver }
   }
 

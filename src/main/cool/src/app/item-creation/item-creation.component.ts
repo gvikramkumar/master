@@ -37,19 +37,19 @@ export class ItemCreationComponent implements OnInit {
     ]
 
     //this.offerId, this.offerType
-    this.itemCreationService.getItemDetails('COOL_7047', 'ALL').subscribe(response => {
+    this.itemCreationService.getItemDetails(this.offerId, 'ALL').subscribe(response => {
       console.log('data contains '+JSON.stringify(this.offerId));
       this.productDetails = response.data; 
     })
 
-    this.itemCreationService.getOfferDropdownValues('COOL_7047').subscribe(data => {
+    this.itemCreationService.getOfferDropdownValues(this.offerId).subscribe(data => {
        this.offerDropdownValues = data;  
     });
   }
 
   displaySelectedOffer(dropdownValue: string) {
     this.selectedOffer = dropdownValue;
-    this.itemCreationService.getItemDetails('COOL_7047', dropdownValue).subscribe(response => {
+    this.itemCreationService.getItemDetails(this.offerId, dropdownValue).subscribe(response => {
       console.log('data contains '+JSON.stringify(this.offerId));
       this.productDetails = response.data;
     })

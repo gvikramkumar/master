@@ -36,6 +36,7 @@ export class OfferSetupComponent implements OnInit {
   proceedButtonStatusValid = true;
   proceedToreadinessreview = true;
   Options: any[] = [];
+  selectedOffer:string = 'Overall Offer';
 
   
 
@@ -182,12 +183,18 @@ export class OfferSetupComponent implements OnInit {
   }
 
   onProceedToNext(){}
-
+  selectedValue(event) {
+    console.log('evemnt', event);
+    console.log('selectedOffer', this.selectedOffer);
+  }
   getElementDetails(element) {
     console.log('cuurent elemenrt', element);
-    element.moduleName = element.moduleName.replace(/\s/g, "");
-    this.router.navigate(['/' + element.moduleName]);
+    let moduleName = element.moduleName.replace(/\s/g, "");
+    // this.router.navigate(['/' + element.moduleName]);
     // this.router.navigate(['/' + element.moduleName, this.offerId]);
+    console.log('roytename', moduleName);
+    // this.router.navigate(['/', + moduleName]);
+    this.router.navigate(['/ItemCreation', this.offerId, this.caseId, this.selectedOffer]);
   }
 
 
