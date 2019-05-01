@@ -19,4 +19,9 @@ export class ItemCreationService {
     const url = `${this.environmentService.REST_API_GET_OFFER_DROPDOWN}/${offerId}`;
     return this._http.get(url, { withCredentials: true });
   }
+
+  removeItemDetails(offerId, productList): Observable<any> {
+    const url = `${this.environmentService.REST_API_REMOVE_ITEM_DETAILS}/${offerId}?ATOs=${productList}`;
+    return this._http.post(url, { withCredentials: true });
+  }
 }
