@@ -1,7 +1,7 @@
 import {FinDfaCookie} from './fin-dfa.cookie';
 import {ApiError} from '../../lib/common/api-error';
 import {shUtil} from '../../../shared/misc/shared-util';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 export class CookieController {
 

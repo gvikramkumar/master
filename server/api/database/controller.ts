@@ -17,7 +17,7 @@ import SubmeasureRepo from '../common/submeasure/repo';
 import AlternateSl2UploadController from '../prof/alternate-sl2-upload/controller';
 import CorpAdjustmentsUploadController from '../prof/corp-adjustments-upload/controller';
 import {ApiDfaData} from '../../lib/middleware/add-global-data';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import AnyObj from '../../../shared/models/any-obj';
 import DistiDirectUploadController from '../prof/disti-direct-upload/controller';
 import config from '../../config/get-config';

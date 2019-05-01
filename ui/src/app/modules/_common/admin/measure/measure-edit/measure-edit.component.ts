@@ -5,7 +5,7 @@ import {MeasureService} from '../../../services/measure.service';
 import {Observable, of} from 'rxjs';
 import {RoutingComponentBase} from '../../../../../core/base-classes/routing-component-base';
 import {AppStore} from '../../../../../app/app-store';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {DialogType} from '../../../../../core/models/ui-enums';
 import {UiUtil} from '../../../../../core/services/ui-util';
 import {Source} from '../../../../../../../../shared/models/source';

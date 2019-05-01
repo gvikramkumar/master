@@ -2,7 +2,7 @@ import { Component, OnInit, OnChanges, OnDestroy, Input,
   Output, EventEmitter, forwardRef, Renderer2 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 import { Guid } from '@cisco-ngx/cui-utils';
 

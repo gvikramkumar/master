@@ -1,6 +1,6 @@
 /*tslint:disable max-line-length  */
 import {injectable} from 'inversify';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import DollarUploadController from '../../prof/dollar-upload/controller';
 import MappingUploadController from '../../prof/mapping-upload/controller';
 import DeptUploadController from '../../prof/dept-upload/controller';

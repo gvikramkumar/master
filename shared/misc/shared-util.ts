@@ -1,5 +1,5 @@
 
-import * as _ from 'lodash';
+import _ from 'lodash';
 import moment from 'moment-timezone';
 import AnyObj from '../models/any-obj';
 

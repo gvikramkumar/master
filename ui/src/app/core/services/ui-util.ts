@@ -1,6 +1,6 @@
 import {Injectable, ViewContainerRef} from '@angular/core';
 import {HttpParams} from '@angular/common/http';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {DialogInputType, DialogSize, DialogType} from '../models/ui-enums';
 import {AppStore} from '../../app/app-store';
 import {GenericDialogComponent} from '../../shared/dialogs/generic-dialog/generic-dialog.component';

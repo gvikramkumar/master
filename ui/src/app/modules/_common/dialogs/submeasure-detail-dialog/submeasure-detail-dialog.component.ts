@@ -7,7 +7,7 @@ import {SubmeasureService} from '../../services/submeasure.service';
 import {RuleService} from '../../services/rule.service';
 import {AppStore} from '../../../../app/app-store';
 import {AllocationRule} from '../../../../../../../shared/models/allocation-rule';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {shUtil} from '../../../../../../../shared/misc/shared-util';
 import {UiUtil} from '../../../../core/services/ui-util';
 

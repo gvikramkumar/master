@@ -3,7 +3,7 @@ import UploadController from '../../../../lib/base-classes/upload-controller';
 import SalesSplitUploadRepo from '../../sales-split-upload/repo';
 import PgLookupRepo from '../../../pg-lookup/repo';
 import SalesSplitUploadTemplate from './template';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import SalesSplitUploadImport from './import';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';

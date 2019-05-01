@@ -4,7 +4,7 @@ import {ActivatedRoute} from '@angular/router';
 import {AppStore} from '../../../../app/app-store';
 import {FsFile} from '../../models/fsfile';
 import {FsFileService} from '../../../../core/services/fsfile.service';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {environment} from '../../../../../environments/environment';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {BusinessUploadFileType, Directory} from '../../../../../../../shared/misc/enums';

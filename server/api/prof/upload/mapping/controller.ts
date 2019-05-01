@@ -7,7 +7,7 @@ import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
 import AnyObj from '../../../../../shared/models/any-obj';
 import {NamedApiError} from '../../../../lib/common/named-api-error';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {svrUtil} from '../../../../lib/common/svr-util';
 
 @injectable()

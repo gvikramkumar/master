@@ -2,7 +2,7 @@ import {AfterViewInit, ApplicationRef, Component, ElementRef, OnInit, ViewChild}
 import {FormControl} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {AppStore} from '../../../../app/app-store';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {DfaModule} from '../../../../modules/_common/models/module';
 import {uiConst} from '../../../../core/models/ui-const';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';

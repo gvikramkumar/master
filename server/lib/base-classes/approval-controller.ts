@@ -2,7 +2,7 @@ import RepoBase from './repo-base';
 import ControllerBase from './controller-base';
 import {ApiError} from '../common/api-error';
 import {ApprovalMode} from '../../../shared/misc/enums';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {svrUtil} from '../common/svr-util';
 import {shUtil} from '../../../shared/misc/shared-util';
 import {sendHtmlMail} from '../common/mail';

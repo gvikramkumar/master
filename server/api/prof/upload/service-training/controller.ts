@@ -2,7 +2,7 @@ import {injectable} from 'inversify';
 import UploadController from '../../../../lib/base-classes/upload-controller';
 import PgLookupRepo from '../../../pg-lookup/repo';
 import ServiceTrainingUploadTemplate from './template';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import ServiceTrainingUploadImport from './import';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';

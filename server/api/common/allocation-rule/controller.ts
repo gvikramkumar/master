@@ -8,7 +8,7 @@ import {sendHtmlMail} from '../../../lib/common/mail';
 import LookupRepo from '../../lookup/repo';
 import {svrUtil} from '../../../lib/common/svr-util';
 import {shUtil} from '../../../../shared/misc/shared-util';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import AnyObj from '../../../../shared/models/any-obj';
 import {ruleUtil} from '../../../../shared/misc/rule-util';
 

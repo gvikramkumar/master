@@ -1,5 +1,5 @@
 import {BehaviorSubject, Observable} from 'rxjs';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 export class StoreBase {
 

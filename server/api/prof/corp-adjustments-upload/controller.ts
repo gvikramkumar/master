@@ -3,7 +3,7 @@ import ControllerBase from '../../../lib/base-classes/controller-base';
 import CorpAdjustmentsUploadRepo from './repo';
 import SubmeasureRepo from '../../common/submeasure/repo';
 import {CorpAdjustmentsUploadPgRepo} from './pgrepo';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {svrUtil} from '../../../lib/common/svr-util';
 
 @injectable()

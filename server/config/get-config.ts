@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import _ from 'lodash';
 import commonConfig from './common';
 import devConfig from './dev';
 import ldevConfig from './ldev';

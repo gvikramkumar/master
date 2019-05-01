@@ -1,5 +1,5 @@
 import {injectable} from 'inversify';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import UploadController from '../../../../lib/base-classes/upload-controller';
 import AlternateSl2UploadRepo from '../../alternate-sl2-upload/repo';
 import AlternateSl2UploadTemplate from './template';

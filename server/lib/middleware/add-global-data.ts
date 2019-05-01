@@ -1,6 +1,6 @@
 import LookupRepo from '../../api/lookup/repo';
 import {ModuleRepo} from '../../api/common/module/repo';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import AnyObj from '../../../shared/models/any-obj';
 import {DfaModule} from '../../../ui/src/app/modules/_common/models/module';
 import DfaUser from '../../../shared/models/dfa-user';
