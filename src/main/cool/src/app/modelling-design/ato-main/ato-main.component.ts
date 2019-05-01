@@ -9,6 +9,8 @@ import { EnvironmentService } from '../../../environments/environment.service';
 import { ConfigurationService } from '@app/core/services/configuration.service';
 import { LoaderService } from '@app/core/services/loader.service';
 
+import * as _ from 'lodash';
+
 @Component({
   selector: 'app-ato-main',
   templateUrl: './ato-main.component.html',
@@ -72,6 +74,7 @@ export class AtoMainComponent implements OnInit, OnDestroy {
           this.atoNames.push(dropDownValue.itemName);
         });
 
+        this.atoTask = {} as Ato;
         this.loaderService.stopLoading();
 
       });
