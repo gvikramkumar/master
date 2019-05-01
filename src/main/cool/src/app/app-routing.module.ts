@@ -11,7 +11,7 @@ import { ItemCreationComponent } from './item-creation/item-creation.component';
 const routes: Routes = [
   {
     path: 'access_token',
-    redirectTo: '/dashboard',
+    redirectTo: '/itemcreation',
     pathMatch: 'full'
   },
   {
@@ -81,6 +81,11 @@ const routes: Routes = [
   {
     path: 'designReview/:offerId/:caseId',
     component: DesignReviewComponent,
+    resolve: { offerData: OfferOverViewResolver }
+  },
+  {
+    path: 'itemcreation',
+    component: ItemCreationComponent,
     resolve: { offerData: OfferOverViewResolver }
   },
   {
