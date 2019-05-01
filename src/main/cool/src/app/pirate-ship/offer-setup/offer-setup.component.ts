@@ -5,6 +5,8 @@ import { OfferSetupService } from '../../services/offer-setup.service';
 import { RightPanelService } from '@app/services/right-panel.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 import { UserService } from '@app/core/services/user.service';
+import { Observable } from 'rxjs';
+import { interval } from 'rxjs';
 
 @Component({
   selector: 'app-offer-setup',
@@ -36,6 +38,7 @@ export class OfferSetupComponent implements OnInit {
   proceedButtonStatusValid = true;
   proceedToreadinessreview = true;
   Options: any[] = [];
+  selectedOffer:any = 0;
 
   
 
@@ -100,35 +103,38 @@ export class OfferSetupComponent implements OnInit {
     this.processStakeHolderInfo();
   });
 
-  // Get All the ModuleName and place in order
-    this.offerSetupService.getModuleData(this.derivedMM,this.offerId,this.functionalRole).subscribe(data => {
-      this.Options =data['listATOs'];
-      data['listSetupDetails'].forEach(group => {
-
-        this.getModuleStatus(group);
-        let groupName = group['groupName']
-        if (this.groupData[groupName] == null) {
-          this.groupData[groupName] = {'left': [], 'right': []};
-        }
-        if (group['colNum'] == 1) {
-          this.groupData[groupName]['left'].push(group);
-        } else {
-          this.groupData[groupName]['right'].push(group);
-        }
-        
-      });
-      this.sortGroupData();
-    });
-
-   
-
-   
-
-   
+  this.getAllModuleData();
+ interval(9000000).subscribe(x =>
+  this.getAllModuleData()
+ ) 
 
 
   }
 
+
+   // Get All the ModuleName and place in order
+   getAllModuleData() {this.offerSetupService.getModuleData(this.derivedMM,this.offerId,this.functionalRole).subscribe(data => {
+     this.groupData = {};
+    this.Options =data['listATOs'];
+    data['listSetupDetails'].forEach(group => {
+
+      this.getModuleStatus(group);
+      let groupName = group['groupName']
+      if (this.groupData[groupName] == null) {
+        this.groupData[groupName] = {'left': [], 'right': []};
+      }
+      if (group['colNum'] == 1) {
+        this.groupData[groupName]['left'].push(group);
+      } else {
+        this.groupData[groupName]['right'].push(group);
+      }
+      
+    });
+    this.sortGroupData();
+  }
+  );
+}
+// sort the module location
   sortGroupData() {
     this.groupData['Group3']['left'].sort(
       (a,b) => (a.rowNum > b.rowNum) ? 1 : ((b.rowNum > a.rowNum) ? -1 : 0)
@@ -140,12 +146,13 @@ export class OfferSetupComponent implements OnInit {
   
 // Get Status For Each Module
   getModuleStatus(group) {
- this.offerSetupService.getModuleStatus(group['moduleName'],this.offerId,this.functionalRole,this.derivedMM).subscribe(data => {
+ this.offerSetupService.getModuleStatus(group['moduleName'],this.selectedOffer,this.offerId,this.functionalRole,this.derivedMM).subscribe(data => {
   group['status'] = data['message'];
 
 });
   }
 
+  // get stakeHolder information
   private processStakeHolderInfo() {
 
     this.stakeholders = {};
@@ -166,7 +173,7 @@ export class OfferSetupComponent implements OnInit {
     }
 debugger;
   }
-
+// update message for humburger
   updateMessage(message) {
     if (message != null && message !== '') {
       if (message === 'hold') {
@@ -181,6 +188,8 @@ debugger;
     }
   }
 
+
+
   onProceedToNext(){}
 
   getElementDetails(element) {
@@ -190,5 +199,7 @@ debugger;
     // this.router.navigate(['/' + element.moduleName, this.offerId]);
   }
 
-
+  updateModuleData(message) {
+    this.getAllModuleData();
+  }
 }

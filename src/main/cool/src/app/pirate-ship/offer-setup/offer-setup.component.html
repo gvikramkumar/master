@@ -26,7 +26,7 @@
           </ul>
 
           <!-- Control Bar -->
-          <app-view-offer [offerId]="offerId"></app-view-offer>
+          <app-view-offer [selectedOffer]="selectedOffer" [offerId]="offerId" (updateModuleData)="updateModuleData($event)"></app-view-offer>
           <!-- <div class="row base-margin-top">
 
               <div class="col-md-4">Currently Viewing the <strong>Overall Offer</strong>.</div>

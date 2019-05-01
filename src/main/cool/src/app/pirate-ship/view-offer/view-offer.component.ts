@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { OfferSetupService } from '../../services/offer-setup.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 import { UserService } from '@app/core/services/user.service';
@@ -10,10 +10,11 @@ import { UserService } from '@app/core/services/user.service';
   styleUrls: ['./view-offer.component.scss']
 })
 export class ViewOfferComponent implements OnInit {
-  selectedOffer:any = 0;
   derivedMM: any;
   Options: any[] = [];
   @Input() offerId = "ss";
+  @Input() selectedOffer = 0;
+  @Output() updateModuleData = new EventEmitter<string>();
   functionalRole: any;
 
   constructor(private userService: UserService, private offerSetupService: OfferSetupService, private stakeholderfullService:StakeholderfullService) { }
@@ -34,7 +35,7 @@ export class ViewOfferComponent implements OnInit {
   }
 
   selectedValue(event) {
-    console.log('event', event);
+    this.updateModuleData.emit('');
   }
 
 }
