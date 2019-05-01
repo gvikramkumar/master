@@ -345,15 +345,15 @@ export class EnvironmentService {
 
         // ------------------------------------ OFFER SETUP -------------------------------------------------
 
-        this.REST_API_RETRIEVE_ATO_LIST_URL = this.baseApiUrl + 'offersetup/getOWBModelObject/';
+        this.REST_API_RETRIEVE_ATO_LIST_URL = this.baseApiUrl + '/offersetup/getOWBModelObject/';
         this.REST_API_OFFER_SETUP_MODULE_GET_URL = this.baseApiUrl + '/offersetup/getOfferSetupPageLoad?mmval=';
         this.REST_API_OFFER_MODULE_STATUS_GET_URL = this.baseApiUrl + '/offersetup/getModuleStatus?moduleName=';
-        
+
         // --------------------------------------- ITEM CREATION --------------------------------------------
-        
-        this.REST_API_GET_ITEM_DETAILS = this.baseApiUrl + '/itemcreation/getDetails';
+
         this.REST_API_GET_OFFER_DROPDOWN = this.baseApiUrl + '/itemcreation/getATOs';
-        //this.REST_API_REMOVE_ITEM_DETAILS =     
+        this.REST_API_GET_ITEM_DETAILS = this.baseApiUrl + '/itemcreation/getDetails';
+
         // -------------------------------------------------------------------------------------------------
 
     }
