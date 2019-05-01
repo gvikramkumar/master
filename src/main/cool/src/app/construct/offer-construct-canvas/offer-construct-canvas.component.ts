@@ -1483,14 +1483,17 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.loaderService.startLoading();
     this.offerConstructCanvasService.getPidDetails(this.selectedPids.PID).subscribe((results) => {
       this.loaderService.stopLoading();
-      if (results.body['major/minor'] === 'Minor Line') {
-        // Call to add minor line item.
-        this.addMinorItem(results.body);
-      } else if (results.body['major/minor'] === 'Major Line') {
-        // Call to add major line item
-        this.addMajorItem(results.body);
-      } else {
-        // Some problem in the response
+      
+         // Raviraj US290268
+      if (results.body) {
+        if (results.body['major/minor'] === 'Minor Line') {
+          if (results.body['WorkFlow Status'] === 'APPROVED' &&
+            ((results.body['WorkFlow Status Requested By'] === 'BUC') || (
+              results.body['WorkFlow Status Requested By'] === 'PDT'))) {
+            // Call to add minor line item.
+            this.addMinorItem(results.body);
+          }
+        }
       }
     },
       () => {
