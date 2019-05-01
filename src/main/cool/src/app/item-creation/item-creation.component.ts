@@ -39,7 +39,7 @@ export class ItemCreationComponent implements OnInit {
     //this.offerId, this.offerType
     this.itemCreationService.getItemDetails('COOL_7047', 'ALL').subscribe(response => {
       console.log('data contains '+JSON.stringify(this.offerId));
-      this.productDetails = response.data;
+      this.productDetails = response.data; 
     })
 
     this.itemCreationService.getOfferDropdownValues('COOL_7047').subscribe(data => {
@@ -57,5 +57,9 @@ export class ItemCreationComponent implements OnInit {
 
   offerSetupOverView() {
     this.router.navigate(['/offer-setup', this.offerId, this.caseId, this.selectedOffer]);
+  }
+
+  goBack(){
+    
   }
 }
