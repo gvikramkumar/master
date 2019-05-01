@@ -24,7 +24,7 @@
 
             <div class="col-sm-9" *ngIf="showDesignCanvasButton">
               <button class="btn btn--primary btn--cool btn--small tooltip" placement="top" (click)="goToDesignCanvas()"
-                [disabled]="disableDesignCanvasButton">
+                [disabled]="!disableDesignCanvasButton">
                 Go To Design Canvas <i class="icon-popout"></i>
               </button>
             </div>
