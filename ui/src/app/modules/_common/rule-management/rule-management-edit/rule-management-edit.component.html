@@ -10,8 +10,7 @@
 
     <div class="row" style="margin-top:5px; margin-bottom:23px;">
       <div class="col-lg-6">
-        <fin-input name="name" type="text" [(ngModel)]="rule.name" label="Rule Name" [notInList]="ruleNames"
-                   notInListMessage="Rule name already exists" [disabled]="true"
+        <fin-input name="name" type="text" [(ngModel)]="rule.name" label="Rule Name" [disabled]="true"
                    [matTooltip]="rule.name" [matTooltipDisabled]="!rule.name || rule.name.length<50" matTooltipPosition="above"></fin-input>
       </div>
       <div class="col-lg-6">

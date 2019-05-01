@@ -36,8 +36,10 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   UiUtil = UiUtil;
   addMode = false;
   viewMode = false;
+  viewModeDPAndNotApprovedOnce = false;
   editMode = false;
   editModeAI = false;
+  editModeDPAndNotApprovedOnce = false;
   copyMode = false;
   rule = new AllocationRule();
   orgRule: AllocationRule;
@@ -111,6 +113,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         if (this.viewMode || this.editMode || this.copyMode) {
           this.rule = results[6];
           this.editModeAI = this.editMode && _.includes(['A', 'I'], this.rule.status);
+          this.editModeDPAndNotApprovedOnce = this.editMode && _.includes(['D', 'P'], this.rule.status && this.rule.approvedOnce !== 'Y');
+          this.viewModeDPAndNotApprovedOnce = this.viewMode && _.includes(['D', 'P'], this.rule.status) && this.rule.approvedOnce !== 'Y';
         }
         this.rule.period = this.rule.period || this.periods[0].period;
         if (this.copyMode) {
@@ -183,7 +187,13 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       this.rules.forEach(rule => ruleUtil.createSelectArrays(rule));
       this.selectMap = new SelectExceptionMap();
       this.selectMap.parseRules(this.rules);
-      this.checkIfRuleNameAlreadyExists();
+      // The "special case" here is:
+      // mary makes ONE, john makes ONE, both are pending so allows both to coexist, then someone approves mary's ONE. If someone approves
+      // johns one, they get an error on approval. If someone views or edit's johns now... he should get a message as one already exists, BUT...
+      // what if john is just editing active flag? So we put up the message on edit or view "only if not approvedOnce"
+      if (this.editModeDPAndNotApprovedOnce || this.viewModeDPAndNotApprovedOnce) {
+        this.checkIfRuleNameAlreadyExists();
+      }
     }
   }
 
