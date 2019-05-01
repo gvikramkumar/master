@@ -171,7 +171,6 @@ export class OfferSetupComponent implements OnInit {
         stakeholderDefaults: this.stakeHolderData[i]['stakeholderDefaults']
       });
     }
-debugger;
   }
 // update message for humburger
   updateMessage(message) {
