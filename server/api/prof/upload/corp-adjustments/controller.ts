@@ -83,8 +83,7 @@ export default class CorpAdjustmentsUploadUploadController extends UploadControl
   }
 
   removeDuplicatesFromDatabase(imports: CorpAdjustmentsUploadImport[]) {
-    const list = _.map(imports, 'salesCountryName');
-    return this.repo.removeMany({salesCountryName: {$in: list}});
+    return this.repo.removeMany({});
   }
 
   validateCountryName() {
