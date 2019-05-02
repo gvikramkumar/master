@@ -212,6 +212,10 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       // this.getQuestionOnDragDrop(groupsName);  //set listOfOfferquestion to itemDeatils of objects
       this.offerConstructService.addDetails(groupsName).subscribe((data) => {
         this.listOfferQuestions = data.groups[0].listOfferQuestions;
+        this.offerConstructItems.push(this.itemToTreeNode(obj));
+        this.offerConstructItems = [...this.offerConstructItems];
+        this.countableItems.push(this.uniqueId);
+        this.updateChildCount();
       }, (err) => {
         console.log('error' + err);
         this.loaderService.stopLoading();
@@ -220,10 +224,6 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           obj['itemDetails'] = this.listOfferQuestions;
           this.getQuestionList(obj);
         });
-      this.offerConstructItems.push(this.itemToTreeNode(obj));
-      this.offerConstructItems = [...this.offerConstructItems];
-      this.countableItems.push(this.uniqueId);
-      this.updateChildCount();
     }
   }
 
@@ -333,7 +333,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           itemsData = items.body;
           // this.questionForm.patchValue(itemsData);
           this.cd.detectChanges();
-        }, () => {
+        }, (err) => {
           this.loaderService.stopLoading();
           this.showLoader = false;
         }, () => {
@@ -396,9 +396,6 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 
   showDialog() {
-
-    console.log('this.offerConstructService.singleMultipleFormInfo', this.offerConstructService.singleMultipleFormInfo);
-
     this.ind--;
     const offerInfo = this.offerConstructService.singleMultipleFormInfo;
     const majorOfferInfo = offerInfo.major;
@@ -590,9 +587,6 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
         }
       });
     });
-
-    console.log(this.offerConstructService.singleMultipleFormInfo);
-
   }
 
   /**
@@ -660,6 +654,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
                   }
                   obj1['itemDetails'] = element1.data['itemDetails'];
                   element.children.push(this.itemToTreeNode(obj1));
+                  // Dragging Billing SOA from major to major
+                  this.setSameAsMajorLine(rowNode, this.draggedItem.data['itemDetails']);
                   this.offerConstructItems = [...this.offerConstructItems];
                 }
               });
@@ -695,6 +691,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
             obj['itemDetails'] = this.draggedItem.data['itemDetails'];
             obj['uniqueNodeId'] = this.draggedItem.uniqueNodeId;
             rowNode.node.children.push(this.itemToTreeNode(obj));
+            // Dragging Billing SOA from major to major
+            this.setSameAsMajorLine(rowNode, this.draggedItem.data['itemDetails']);
             this.delteFromParentObject();
             this.loaderService.stopLoading();
           }
@@ -730,22 +728,21 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           const groupsName = { groups: test };
           // obj['itemDetails'] = this.getQuestionOnDragDrop(groupsName);
           this.offerConstructService.addDetails(groupsName).subscribe((data) => {
-
             this.listOfferQuestions = data.groups[0].listOfferQuestions;
           }, (err) => {
             console.log('error' + err);
             this.loaderService.stopLoading();
-          },
-            () => {
-              // if (obj.productName !== 'Billing SOA' || obj.productName !== 'Billing') {
-              if (obj.productName !== 'Billing SOA') {
-                obj['itemDetails'] = this.listOfferQuestions;
-              } else {
-                const listOfferQuestions = this.billingSOADefaultValue();
-                obj['itemDetails'] = listOfferQuestions;
-              }
-              this.getQuestionList(obj);
-            });
+          }, () => {
+            if (obj.productName !== 'Billing SOA') {
+              obj['itemDetails'] = this.listOfferQuestions;
+            } else {
+              const listOfferQuestions = this.billingSOADefaultValue();
+              obj['itemDetails'] = listOfferQuestions;
+              //set value for same as major line item
+              this.setSameAsMajorLine(rowNode, this.listOfferQuestions);
+            }
+            this.getQuestionList(obj);
+          });
 
           rowNode.node.children.push(this.itemToTreeNode(obj));
         }
@@ -784,72 +781,119 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.isDisabledView = false;  // for enable button
   }
 
-  // set billing SOA default value according offer soluting
-
+  // set billing SOA default value according offer soluting 
   billingSOADefaultValue() {
+
+    let usageType = 'Usage';
+    let recurringType = 'Recurring';
+
     this.listOfferQuestions.forEach(element => {
       if (element.rules.defaultSel != '') {
         element.currentValue = element.rules.defaultSel;
         element.previousValue = element.rules.defaultSel;
       }
+
       if (element.question == 'Base Price') {
-        if (this.chargeTypeValue == 'Usage') {
+        if (this.chargeTypeValue == usageType) {
           element.currentValue = 0;
           element.previousValue = 0;
         }
       }
+
       if (element.question == 'Discount Restricted Product') {
-        if (this.chargeTypeValue == 'Recurring') {
+        if (this.chargeTypeValue == recurringType) {
           element.currentValue = 0;
           element.previousValue = 0;
         }
       }
-      if (element.question === 'Proration Flag For Purchase') {
-        if (this.chargeTypeValue == 'Recurring') {
+
+      if (element.question === "Proration Flag For Purchase") {
+        if (this.chargeTypeValue == recurringType) {
           element.currentValue = 'Yes';
           element.previousValue = 'Yes';
         }
-        if (this.chargeTypeValue == 'Usage') {
+        if (this.chargeTypeValue == usageType) {
           element.currentValue = 'No';
           element.previousValue = 'No';
         }
       }
-      if (element.question === 'Proration Flag For Cancel') {
-        if (this.chargeTypeValue == 'Recurring') {
+
+      if (element.question === "Proration Flag For Cancel") {
+        if (this.chargeTypeValue == recurringType) {
           element.currentValue = 'Yes';
           element.previousValue = 'Yes';
         }
-        if (this.chargeTypeValue == 'Usage') {
+        if (this.chargeTypeValue == usageType) {
           element.currentValue = 'No';
           element.previousValue = 'No';
         }
       }
-      if (element.question == 'Usage Type') {
-        if (this.chargeTypeValue == 'Usage') {
+
+      if (element.question == "Usage Type") {
+        if (this.chargeTypeValue == usageType) {
           element.currentValue = 'Support';
           element.previousValue = 'Support';
         }
       }
+
       if (element.question == 'RATING MODEL') {
-        if (this.chargeTypeValue == 'Usage') {
+        if (this.chargeTypeValue == usageType) {
           element.currentValue = 'EVENT';
           element.previousValue = 'EVENT';
         }
       }
+
       if (element.question == 'Discount Restricted Product') {
-        if (this.chargeTypeValue == 'Usage') {
+        if (this.chargeTypeValue == usageType) {
           element.currentValue = 'Yes';
           element.previousValue = 'Yes';
         }
       }
+
       if (element.question == 'Subscription Offset') {
-        if (this.chargeTypeValue == 'Recurring') {
+        if (this.chargeTypeValue == recurringType) {
           element.currentValue = '30';
           element.previousValue = '30';
         }
       }
     });
     return this.listOfferQuestions;
+  }
+
+  //same as major line item
+  setSameAsMajorLine(rowNode, listOfQuestions) {
+    let priceListAvailability = [];
+    let gplPublication = [];
+    let typeOfQuantity = [];
+
+    if (rowNode.node.data) {
+      rowNode.node.data.itemDetails.forEach(element => {
+        if (element.question === 'Price List Availability') {
+          priceListAvailability = element.listCurrentValue;
+        }
+        if (element.question === 'GPL Publication') {
+          gplPublication = element.listCurrentValue;
+        }
+        if (element.question === 'Type Of Quantity') {
+          typeOfQuantity = element.listCurrentValue;
+        }
+      });
+      listOfQuestions.forEach(billingSoa => {
+        if (billingSoa.question === 'Price List Availability') {
+          billingSoa.listCurrentValue = priceListAvailability;
+          billingSoa.listPreviousValue = priceListAvailability;
+        }
+        if (billingSoa.question === 'GPL Publication') {
+          billingSoa.listCurrentValue = gplPublication;
+          billingSoa.listPreviousValue = gplPublication;
+        }
+        if (billingSoa.question === 'Type Of Quantity') {
+          billingSoa.listCurrentValue = typeOfQuantity;
+          billingSoa.listPreviousValue = typeOfQuantity;
+        }
+      });
+    }
+
   }
 
   /**
@@ -923,7 +967,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.saveOfferConstructChanges();
       },
-        () => { this.loaderService.stopLoading(); },
+        (err) => { this.loaderService.stopLoading(); },
         () => { });
 
     this.eGinieSearchForm = new FormGroup({
@@ -953,7 +997,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
         () => { });
 
       this.offerConstructItems = [...this.offerConstructItems];
-    }, () => {
+    }, (err) => {
       this.loaderService.stopLoading();
     }, () => {
 
