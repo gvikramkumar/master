@@ -60,7 +60,7 @@ import { CustomMinValidatorDirective } from './validators/custom-min-validator.d
 import { CustomRangeValidatorDirective } from './validators/custom-range-validator.directive';
 import { ItemCreationComponent } from './item-creation/item-creation.component';
 import { ReviewEditForm } from './item-creation/review-edit-form/review-edit-form';
-import { TreeTableModule } from 'primeng/primeng';
+import { TreeTableModule, AutoCompleteModule } from 'primeng/primeng';
 
 
 export function app_init(configService: ConfigurationService) {
@@ -103,7 +103,8 @@ export function app_init(configService: ConfigurationService) {
     CoreModule,
     SharedModule,
     AppRoutingModule,
-    TreeTableModule
+    TreeTableModule,
+    AutoCompleteModule
   ],
   providers:
     [

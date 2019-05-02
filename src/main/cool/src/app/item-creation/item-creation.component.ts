@@ -498,12 +498,12 @@ export class ItemCreationComponent implements OnInit {
     });
 
     console.log('cds', cds);
-    this.offerConstructCanvasService.saveOfferConstructChanges(cds).subscribe(() => {
+    /* this.offerConstructCanvasService.saveOfferConstructChanges(cds).subscribe(() => {
       this.loaderService.stopLoading();
     },
       () => {
         this.loaderService.stopLoading();
-      });
+      }); */
   }
 
 
@@ -550,6 +550,70 @@ export class ItemCreationComponent implements OnInit {
 
   goBackToOfferSetup() {
     this.router.navigate(['/offerSetup', this.offerId, this.caseId, this.selectedOffer]);
+  }
+  replacetabularFormQuestion() {
+    // replace tabular form  question with offerConstructItems itemsDeatails
+    // for major group
+    let groupName;
+    let title;
+    this.offerConstructService.singleMultipleFormInfo['major'].forEach((list, index) => {
+      groupName = Object.keys(list);
+      this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach(element => {
+        title = Object.keys(element);
+        // if (Object.keys(element) == title) {
+        this.changeItemDetails(true, element[title]);
+        // }
+      });
+
+    });
+
+    // minor section
+    this.offerConstructService.singleMultipleFormInfo['minor'].forEach((list, index) => {
+      groupName = Object.keys(list);
+      this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach(element => {
+        title = Object.keys(element);
+        this.changeItemDetails(false, element[title]);
+        // }
+      });
+    });
+    this.saveOfferConstructChanges();
+  }
+
+  changeItemDetails(isManjor, info) {
+    // Construct all group Nodes.
+    this.offerConstructItems.forEach((node) => {
+      // check if this item is major item
+      if (isManjor) {
+        if (node.parent === null) {
+          if ((node.data.uniqueKey == info.uniqueKey) && (!node.data.eginieItem)) {
+            node.data.itemDetails = info.listOfferQuestions;
+          }
+        }
+      } else {
+        // Construct all minor items
+        if (node.children !== undefined && node.children !== null) {
+          node.children.forEach((child) => {
+            if (!child.data.isGroupNode) {
+              // check their unique key and replace with itemDeatils with productInfo
+              if (_.isEmpty(child.data.itemDetails)) {
+                if ((child.data.uniqueKey == info.uniqueKey) && (!child.data.eginieItem)) {
+                  child.data.itemDetails = info.listOfferQuestions;
+                }
+              } else {
+                if ((child.data.uniqueKey == info.uniqueKey) && (!child.data.eginieItem)) {
+                  child.data.itemDetails = info.listOfferQuestions;
+                }
+              }
+            } else {
+              // Store Group Information
+              // Store children under group node.
+            }
+          });
+        }
+      }
+    });
+    console.log(this.offerConstructItems);
+    
   }
   showReviewEdit() {
     this.ind--;
