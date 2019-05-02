@@ -166,7 +166,8 @@ export function getArtRoles(userId) {
     .then(result => _.get(result, 'body.resources.resourceFQN') || [])
     .then(roles => roles.map(x => x.toLowerCase()))
     .catch(err => {
-      throw new ApiError('art request failure', err);
+      console.error('ART request failure', err);
+      return []; // failover to database when ART is down
     });
 
 }
