@@ -68,6 +68,7 @@ export class AtoMainComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    this.atoTask = {} as Ato;
     this.atoNames.push(this.selectedAto);
     this.showDesignCanvasButton = this.selectedAto === 'Overall Offer' ? false : true;
 
@@ -75,13 +76,11 @@ export class AtoMainComponent implements OnInit, OnDestroy {
       .subscribe((modellingDesignResponse: ModellingDesign) => {
 
         this.modellingDesign = modellingDesignResponse;
-        this.atoList = this.modellingDesign['data'];
+        this.atoList = this.modellingDesign['data'] ? this.modellingDesign['data'] : [];
 
         this.atoList.map(dropDownValue => {
           this.atoNames.push(dropDownValue.itemName);
         });
-
-        this.atoTask = {} as Ato;
 
       });
 
