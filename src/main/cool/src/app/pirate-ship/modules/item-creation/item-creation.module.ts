@@ -5,11 +5,11 @@ import { Routes, RouterModule } from '@angular/router';
 import { MenuBarModule } from '@app/menu/menu-bar.module';
 import { RightPanelModule } from '@app/right-panel/right-panel.module';
 
-import { ItemCreationComponent } from './item-creation.component';
-import { ReviewEditForm } from './review-edit-form/review-edit-form';
-
 import * as _ from 'lodash';
 import { TreeTableModule, AutoCompleteModule } from 'primeng/primeng';
+
+import { ItemCreationComponent } from './item-creation.component';
+import { ReviewEditForm } from './components/review-edit-form/review-edit-form';
 
 const routes: Routes = [
     {

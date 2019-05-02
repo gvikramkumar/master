@@ -3,13 +3,13 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { SharedModule } from '@shared/shared.module';
 import { MenuBarModule } from '@app/menu/menu-bar.module';
-import { TaskBarModule } from '../taskbar/task-bar.module';
+import { TaskBarModule } from '@app/taskbar/task-bar.module';
 import { RightPanelModule } from '@app/right-panel/right-panel.module';
 import { OfferDetailModule } from '@app/offer-detail/offer-detail.module';
 
-import { StatusComponent } from './components/status/status.component';
+import { StatusComponent } from '@app/pirate-ship/components/status/status.component';
 import { ModellingDesignComponent } from './modelling-design.component';
-import { AtoListComponent } from './components/ato-list/ato-list.component';
+import { AtoListComponent } from '@app/pirate-ship/components/ato-list/ato-list.component';
 import { TaskSummaryComponent } from './components/task-summary/task-summary.component';
 
 import * as _ from 'lodash';
