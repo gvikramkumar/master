@@ -308,6 +308,46 @@
             <p-accordionTab header="Execute">
               <div class="responsive-table">
                 <table class="table table--hover table--compressed table--nostripes">
+                  <thead>
+                    <tr>
+                      <th>Execute - <span class="text-success"> {{executeCompletedCount}} of
+                          {{executeCount}} <span class="icon-check-outline icon-medium"></span></span></th>
+                      <th>STATUS</th>
+                      <th>TARGET DATE</th>
+                      <th>COMPLETION DATE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let executeData of offerPhaseDetailsList.execute">
+                      <td>
+                        <div *ngIf="!executeData.enable; else enableOfferPhase">
+                          <span class="text-muted" pTooltip="Dependent activities are not yet satisfied"
+                            tooltipPosition="top">{{executeData.subMilestone}}</span>
+                        </div>
+                        <ng-template #enableOfferPhase>
+                          <a><span (click)="navigate(executeData.subMilestone)">{{executeData.subMilestone}}</span></a>
+                        </ng-template>
+                      </td>
+
+                      <td
+                        [ngClass]="(executeData.status == 'Completed' || executeData.status == 'Not Applicable')?'text-success':'text-warning'">
+                        {{executeData.status}}</td>
+                      <td>
+                        <span *ngIf="!editPlanTargetDate">
+                          {{executeData.targetDate | date: "dd-MMM-y"}}
+                        </span>
+                        <span *ngIf="editPlanTargetDate && executeData.subMilestone === 'Readiness Review'">
+                          <input type="text" class="form-control" #dp="bsDatepicker" bsDatepicker [minDate]="minDate"
+                            [bsConfig]="dpConfig" (bsValueChange)="onValueChange('execute',$event)"
+                            [value]='executeData.targetDate | date: "dd-MMM-y"' placement="top">
+                        </span>
+                        <span *ngIf="executeData.subMilestone === 'Readiness Review'">
+                          <a (click)="editDate('plan')"><span class="icon-pencil"></span>Edit</a>
+                        </span>
+                      </td>
+                      <td>{{executeData.completionDate | date: "dd-MMM-y"}}</td>
+                    </tr>
+                  </tbody>
                 </table>
               </div>
             </p-accordionTab>
