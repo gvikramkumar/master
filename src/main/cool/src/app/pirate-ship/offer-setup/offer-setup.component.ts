@@ -38,10 +38,10 @@ export class OfferSetupComponent implements OnInit {
   proceedButtonStatusValid = true;
   proceedToreadinessreview = true;
   Options: any[] = [];
-  selectedOffer:any = 'Overall Offer';
-  selectedAto:string = 'Overall Offer';
+  selectedOffer: any = 'Overall Offer';
+  selectedAto: string = 'Overall Offer';
 
-  
+
 
 
   constructor(private router: Router,
@@ -49,67 +49,67 @@ export class OfferSetupComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private messageService: MessageService,
     private offerSetupService: OfferSetupService,
-    private rightPanelService:RightPanelService,
-    private stakeholderfullService:StakeholderfullService ) {
+    private rightPanelService: RightPanelService,
+    private stakeholderfullService: StakeholderfullService) {
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['offerId'];
       this.caseId = params['caseId'];
     });
-   }
+  }
 
   ngOnInit() {
 
-  //  =======================================================================================
-  this.functionalRole = this.userService.getFunctionalRole();
-   // Get Offer Details
-   this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
-     
-    this.offerBuilderdata = offerDetails;
-    this.offerBuilderdata['BEList'] = [];
-    this.offerBuilderdata['BUList'] = [];
-    if (this.offerBuilderdata['primaryBEList'] != null) {
-      this.offerBuilderdata['BEList'] = this.offerBuilderdata['BEList'].concat(this.offerBuilderdata['primaryBEList']);
-    }
-    if (this.offerBuilderdata['secondaryBEList'] != null) {
-      this.offerBuilderdata['BEList'] = this.offerBuilderdata['BEList'].concat(this.offerBuilderdata['secondaryBEList']);
-    }
-    if (this.offerBuilderdata['primaryBUList'] != null) {
-      this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['primaryBUList']);
-    }
-    if (this.offerBuilderdata['secondaryBUList'] != null) {
-      this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['secondaryBUList']);
-    }
+    //  =======================================================================================
+    this.functionalRole = this.userService.getFunctionalRole();
+    // Get Offer Details
+    this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
 
-    this.derivedMM = offerDetails['derivedMM'];
-    this.offerName = offerDetails['offerName'];
-    this.stakeHolderData = offerDetails['stakeholders'];
-
-    if (Array.isArray(offerDetails['primaryBEList']) && offerDetails['primaryBEList'].length) {
-      this.primaryBE = offerDetails['primaryBEList'][0];
-    }
-
-    
-    // TTM Info
-    this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe(
-      (leadTime) => {
-        this.noOfWeeksDifference = Number(leadTime['averageOverall']).toFixed(1);
-        this.displayLeadTime = true;
-      },
-      () => {
-        this.noOfWeeksDifference = 'N/A';
+      this.offerBuilderdata = offerDetails;
+      this.offerBuilderdata['BEList'] = [];
+      this.offerBuilderdata['BUList'] = [];
+      if (this.offerBuilderdata['primaryBEList'] != null) {
+        this.offerBuilderdata['BEList'] = this.offerBuilderdata['BEList'].concat(this.offerBuilderdata['primaryBEList']);
       }
-    );
+      if (this.offerBuilderdata['secondaryBEList'] != null) {
+        this.offerBuilderdata['BEList'] = this.offerBuilderdata['BEList'].concat(this.offerBuilderdata['secondaryBEList']);
+      }
+      if (this.offerBuilderdata['primaryBUList'] != null) {
+        this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['primaryBUList']);
+      }
+      if (this.offerBuilderdata['secondaryBUList'] != null) {
+        this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['secondaryBUList']);
+      }
 
-    // Populate Stake Holder Info
-    this.processStakeHolderInfo();
-  });
+      this.derivedMM = offerDetails['derivedMM'];
+      this.offerName = offerDetails['offerName'];
+      this.stakeHolderData = offerDetails['stakeholders'];
 
-  // for refresh
+      if (Array.isArray(offerDetails['primaryBEList']) && offerDetails['primaryBEList'].length) {
+        this.primaryBE = offerDetails['primaryBEList'][0];
+      }
 
-  this.getAllModuleData();
- interval(9000000).subscribe(x =>
-  this.getAllModuleData()
- ) 
+
+      // TTM Info
+      this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe(
+        (leadTime) => {
+          this.noOfWeeksDifference = Number(leadTime['averageOverall']).toFixed(1);
+          this.displayLeadTime = true;
+        },
+        () => {
+          this.noOfWeeksDifference = 'N/A';
+        }
+      );
+
+      // Populate Stake Holder Info
+      this.processStakeHolderInfo();
+    });
+
+    // for refresh
+
+    this.getAllModuleData();
+    interval(9000000).subscribe(x =>
+      this.getAllModuleData()
+    )
 
 
   }
@@ -121,38 +121,27 @@ export class OfferSetupComponent implements OnInit {
     this.Options =data['listATOs'];
     data['listSetupDetails'].forEach(group => {
 
-      // this.getModuleStatus(group);
-      let groupName = group['groupName']
-      if (this.groupData[groupName] == null) {
-        this.groupData[groupName] = {'left': [], 'right': []};
-      }
-      if (group['colNum'] == 1) {
-        this.groupData[groupName]['left'].push(group);
-      } else {
-        this.groupData[groupName]['right'].push(group);
-      }
-      
-    });
-    this.sortGroupData();
+      });
+      this.sortGroupData();
+    }
+    );
   }
-  );
-}
-// sort the module location
+  // sort the module location
   sortGroupData() {
     this.groupData['Group3']['left'].sort(
-      (a,b) => (a.rowNum > b.rowNum) ? 1 : ((b.rowNum > a.rowNum) ? -1 : 0)
-      );
+      (a, b) => (a.rowNum > b.rowNum) ? 1 : ((b.rowNum > a.rowNum) ? -1 : 0)
+    );
     this.groupData['Group3']['right'].sort(
-        (a,b) => (a.rowNum > b.rowNum) ? 1 : ((b.rowNum > a.rowNum) ? -1 : 0)
-      );
+      (a, b) => (a.rowNum > b.rowNum) ? 1 : ((b.rowNum > a.rowNum) ? -1 : 0)
+    );
   }
-  
-// Get Status For Each Module
-  getModuleStatus(group) {
- this.offerSetupService.getModuleStatus(group['moduleName'],this.selectedOffer,this.offerId,this.functionalRole,this.derivedMM).subscribe(data => {
-  group['status'] = data['message'];
 
-});
+  // Get Status For Each Module
+  getModuleStatus(group) {
+    this.offerSetupService.getModuleStatus(group['moduleName'], this.selectedOffer, this.offerId, this.functionalRole, this.derivedMM).subscribe(data => {
+      group['status'] = data['message'];
+
+    });
   }
 
   // get stakeHolder information
@@ -175,7 +164,7 @@ export class OfferSetupComponent implements OnInit {
       });
     }
   }
-// update message for humburger
+  // update message for humburger
   updateMessage(message) {
     if (message != null && message !== '') {
       if (message === 'hold') {
@@ -192,14 +181,13 @@ export class OfferSetupComponent implements OnInit {
 
 
 
-  onProceedToNext(){}
- 
   getElementDetails(element) {
-    let moduleName = element.moduleName.replace(/\s/g, "");
-    // this.router.navigate(['/' + element.moduleName]);
-    // this.router.navigate(['/' + element.moduleName, this.offerId]);
-    // this.router.navigate(['/', + moduleName]);
-    this.router.navigate(['/ItemCreation', this.offerId, this.caseId, this.selectedAto]);
+    if (element.moduleName === 'Item Creation') {
+      this.router.navigate(['/item-creation', this.offerId, this.caseId, this.selectedAto]);
+    } else if (element.moduleName === 'Modeling & Design') {
+      this.router.navigate(['/modelling-design', this.offerId, this.caseId, this.selectedAto]);
+    }
+
   }
 
   updateModuleData(message) {

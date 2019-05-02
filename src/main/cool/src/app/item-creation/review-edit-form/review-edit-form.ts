@@ -1,10 +1,10 @@
-import { LoaderService } from '@app/core/services/loader.service';
-import { Component, OnInit, Input, Output, ViewChild, ElementRef, Renderer, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+
+import { FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { LoaderService } from '@app/core/services/loader.service';
 import { OfferConstructService } from '@app/services/offer-construct.service';
-import * as moment from 'moment';
 import { OfferconstructCanvasService } from '@app/construct/offer-construct-canvas/service/offerconstruct-canvas.service';
 
 
@@ -38,13 +38,19 @@ export class ReviewEditForm implements OnInit {
     offerForm: FormGroup;
     onLoad: boolean = false;
     public showLoader: boolean = false;
+    public currentOfferId;
+    private caseId;
 
     @Input() indexVal;
 
     constructor(public offerConstructService: OfferConstructService,
         private offerConstructCanvasService: OfferconstructCanvasService,
-        private loaderService: LoaderService,
+        private loaderService: LoaderService, private activatedRoute: ActivatedRoute,
         private datePipe: DatePipe) {
+        this.activatedRoute.params.subscribe(params => {
+            this.currentOfferId = params['offerId'];
+            this.caseId = params['caseId'];
+        });
     }
 
     ngOnInit() {
@@ -62,7 +68,7 @@ export class ReviewEditForm implements OnInit {
         //create object with blank value for search operation
         let major = {};
         let minor = {};
-        this.majorOfferInfo.forEach((element, index) => {
+        this.majorOfferInfo.forEach((element) => {
             let name: any = Object.keys(element);
             major[name] = '';
         });
@@ -94,17 +100,13 @@ export class ReviewEditForm implements OnInit {
         this.closeDialog();
     }
 
-    onHideViewDetailsModal() {
-        console.log("test");
-
-        //this.closeDailog(false);  //reset form info
-    }
+    onHideViewDetailsModal() { }
 
     saveForm() {
         let isUdate: boolean = true;
         this.majorOfferInfo.forEach((list, index) => {
             let groupName: any = Object.keys(list);
-            this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element, index) => {
+            this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element) => {
                 let title: any = Object.keys(element);
                 this.replaceOrUpdatevalue(element[title], isUdate)
             });
@@ -112,7 +114,7 @@ export class ReviewEditForm implements OnInit {
 
         this.minorOfferInfo.forEach((list, index) => {
             let groupName: any = Object.keys(list);
-            this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach((element, index) => {
+            this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach((element) => {
                 let title: any = Object.keys(element);
                 this.replaceOrUpdatevalue(element[title], isUdate)
             });
@@ -124,11 +126,10 @@ export class ReviewEditForm implements OnInit {
     }
 
     closeDialog() {
-        let isUdate: boolean = true;
         this.majorSection();
         this.majorOfferInfo.forEach((list, index) => {
             let groupName: any = Object.keys(list);
-            this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element, index) => {
+            this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element) => {
                 let title: any = Object.keys(element);
                 if (!element[title].eGenieFlag || element[title].eGenieFlag === false) {
                     element[title].listOfferQuestions.forEach(majorProduct => {
@@ -143,7 +144,7 @@ export class ReviewEditForm implements OnInit {
         });
         this.minorOfferInfo.forEach((list, index) => {
             let groupName: any = Object.keys(list);
-            this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach((element, index) => {
+            this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach((element) => {
                 let title: any = Object.keys(element);
                 if (!element[title].eGenieFlag || element[title].eGenieFlag === false) {
                     element[title].listOfferQuestions.forEach(minorProduct => {
@@ -183,7 +184,7 @@ export class ReviewEditForm implements OnInit {
 
     //search copy and paste in multiple form
 
-    onTabOpen(e, headerName) {
+    onTabOpen(headerName) {
         this.currenntHeaderName = headerName;
         // this.itemsList[headerName] = {};
 
@@ -195,7 +196,7 @@ export class ReviewEditForm implements OnInit {
             this.showLoader = true;
             this.copyAttributeResults = [...results];
         },
-            (error) => {
+            () => {
                 this.results = [];
             }
         );
@@ -216,9 +217,7 @@ export class ReviewEditForm implements OnInit {
             }
         } else {
             if (this.selectedProduct.length > 0) {
-                console.log('-- Before remove--- ', this.selectedProduct);
                 this.selectedProduct = this.removeFromArray(this.selectedProduct, records.uniqueKey)
-                console.log('-- After remove--- ', this.selectedProduct);
             }
         }
     }
@@ -263,7 +262,7 @@ export class ReviewEditForm implements OnInit {
                     } else {
                         console.log("network error");
                     }
-                }, (err) => {
+                }, () => {
                     this.showLoader = false;
                     this.loaderService.stopLoading();
 
@@ -274,12 +273,12 @@ export class ReviewEditForm implements OnInit {
             }
         }
     }
-    dateFormat(val){
-        if(val!==''){
+    dateFormat(val) {
+        if (val !== '') {
             return this.datePipe.transform(new Date(val), 'MM/dd/yyyy');
         }
     }
-    updateDate(e){
+    updateDate(e) {
         return this.datePipe.transform(new Date(e), 'MM/dd/yyyy');
     }
     patchToALL(groupName) {
@@ -290,10 +289,10 @@ export class ReviewEditForm implements OnInit {
             if (groupName === itemsData['Item Category']) {
                 //copy in major section or minor section
                 if (this.ismajorSection) {
-                    this.majorOfferInfo.forEach((element, index) => {
+                    this.majorOfferInfo.forEach((element) => {
                         let gname: any = Object.keys(element);
                         if (gname == groupName) {
-                            element[gname].productInfo.forEach((questionset, index) => {
+                            element[gname].productInfo.forEach((questionset) => {
                                 let setname: any = Object.keys(questionset);
                                 if (!questionset[setname].eGenieFlag) {
                                     this.copySearchItemToAllSection(questionset[setname].listOfferQuestions);
@@ -302,10 +301,10 @@ export class ReviewEditForm implements OnInit {
                         }
                     });
                 } else {
-                    this.minorOfferInfo.forEach((element, index) => {
+                    this.minorOfferInfo.forEach((element) => {
                         let gname: any = Object.keys(element);
                         if (gname == groupName) {
-                            element[gname].productInfo.forEach((questionset, index) => {
+                            element[gname].productInfo.forEach((questionset) => {
                                 let setname: any = Object.keys(questionset);
                                 if (!questionset[setname].eGenieFlag) {
                                     this.copySearchItemToAllSection(questionset[setname].listOfferQuestions);
@@ -352,68 +351,84 @@ export class ReviewEditForm implements OnInit {
     }
 
 
-addAllDetailsValidationsonChange(e,question){
+    addAllDetailsValidationsonChange(question) {
 
-    var validatorPattern = '';
-    if (question.egineAttribue !== "Item Name (PID)") {
-        if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "numeric") {
-            // validatorPattern = "^[0-9]*$";
-            if(!(/^[0-9]*$/.test(question.currentValue))){
-                question.rules.validationMessage = question.egineAttribue+" should be in "+question.rules.textcase;
-                question.rules.isvalid = false ;
+        if (question.egineAttribue !== "Item Name (PID)") {
+            if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "numeric") {
+                // validatorPattern = "^[0-9]*$";
+                if (!(/^[0-9]*$/.test(question.currentValue))) {
+                    question.rules.validationMessage = question.egineAttribue + " should be in " + question.rules.textcase;
+                    question.rules.isvalid = false;
+                }
+                else {
+                    question.rules.validationMessage = "";
+                    question.rules.isvalid = true;
+                }
             }
-            else{
-                question.rules.validationMessage = "";
-                question.rules.isvalid = true;
-            }
-        }
-        if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "camel") {
-            if(!(/^(([0-9])|([A-Z0-9][a-z0-9]+))*([A-Z])?$/.test(question.currentValue))){
-                question.rules.validationMessage = question.egineAttribue+" should be in "+question.rules.textcase;
-                question.rules.isvalid = false ;
-            }
-            else{
-                question.rules.validationMessage = "";
-                question.rules.isvalid = true;
-            }
+            if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "camel") {
+                if (!(/^(([0-9])|([A-Z0-9][a-z0-9]+))*([A-Z])?$/.test(question.currentValue))) {
+                    question.rules.validationMessage = question.egineAttribue + " should be in " + question.rules.textcase;
+                    question.rules.isvalid = false;
+                }
+                else {
+                    question.rules.validationMessage = "";
+                    question.rules.isvalid = true;
+                }
 
 
+            }
+            if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "2 decimal number") {
+                if (!(/^[0-9]*\.[0-9][0-9]$/.test(question.currentValue))) {
+                    question.rules.validationMessage = question.egineAttribue + " should be in " + question.rules.textcase;
+                    question.rules.isvalid = false;
+                }
+                else {
+                    question.rules.validationMessage = "";
+                    question.rules.isvalid = true;
+                }
+            }
+            if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "comma seperate numeric with no space") {
+                if (!(/^[0-9]+(,[0-9]+)*$/.test(question.currentValue))) {
+                    question.rules.validationMessage = question.egineAttribue + " should be in " + question.rules.textcase;
+                    question.rules.isvalid = false;
+                }
+                else {
+                    question.rules.validationMessage = "";
+                    question.rules.isvalid = true;
+                }
+            }
+            if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "First letter Caps, No special characters allowed and max of 60 characters") {
+                // validatorPattern = "^[A-Z][A-Za-z0-9\\s]*$";
+                if (!(/^[A-Z][A-Za-z0-9\\s]*$/.test(question.currentValue))) {
+                    question.rules.validationMessage = question.egineAttribue + " should be in " + question.rules.textcase;
+                    question.rules.isvalid = false;
+                }
+                else {
+                    question.rules.validationMessage = "";
+                    question.rules.isvalid = true;
+                }
+            }
         }
-        if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "2 decimal number") {
-            if(!(/^[0-9]*\.[0-9][0-9]$/.test(question.currentValue))){
-                question.rules.validationMessage = question.egineAttribue+" should be in "+question.rules.textcase;
-                question.rules.isvalid = false ;
-            }
-            else{
-                question.rules.validationMessage = "";
-                question.rules.isvalid = true;
-            }
-        }
-        if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "comma seperate numeric with no space") {
-            if(!(/^[0-9]+(,[0-9]+)*$/.test(question.currentValue))){
-                question.rules.validationMessage = question.egineAttribue + " should be in " + question.rules.textcase;
-                question.rules.isvalid = false ;
-            }
-            else{
-                question.rules.validationMessage = "";
-                question.rules.isvalid = true;
-            }
-        }
-        if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "First letter Caps, No special characters allowed and max of 60 characters") {
-            // validatorPattern = "^[A-Z][A-Za-z0-9\\s]*$";
-            if(!(/^[A-Z][A-Za-z0-9\\s]*$/.test(question.currentValue))){
-                question.rules.validationMessage = question.egineAttribue + " should be in " + question.rules.textcase;
-                question.rules.isvalid = false ;
-            }
-            else{
-                question.rules.validationMessage = "";
-                question.rules.isvalid = true;
-            }
-        }
+
     }
 
-}
-
+    // donwnload Zip file
+    downloadZip() {
+        this.offerConstructCanvasService.downloadZip(this.currentOfferId).subscribe((res) => {
+            const nameOfFileToDownload = 'offer-construct';
+            const blob = new Blob([res], { type: 'application/zip' });
+            if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
+            } else {
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = nameOfFileToDownload;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+        });
+    }
 
 }
 

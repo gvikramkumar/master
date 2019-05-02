@@ -156,7 +156,7 @@
                                   <a [id]='rowData["uniqueKey"]' (click)='disableButtons()'
                                     *ngIf='buttonId == rowData["uniqueKey"] && showButtons && !readOnly'>&nbsp;&nbsp;Cancel&nbsp;&nbsp;</a>
                                 </span>
-          
+
                                 <a *ngIf="rowData['eginieItem']" class="pull-right"
                                   (click)="showViewDetailsDailog(rowNode)" [class.disabled]="isDisabledView"><span
                                     class="half-margin-right icon-add-contain"></span> View
@@ -267,7 +267,8 @@
         <div class="col-md-6" *ngFor="let question of questionsList[uniqueNodeId];">
           <div [ngSwitch]="question.itemType">
             <div *ngSwitchCase="'Unique Item'">
-              <app-dynamic-form-question [question]="question" [headerName]="popHeadName" [questionForm]="questionForm">
+              <app-dynamic-form-question [question]="question" [headerName]="popHeadName" [questionForm]="questionForm"
+                [questionList]="questionsList[uniqueNodeId]">
               </app-dynamic-form-question>
             </div>
           </div>
@@ -282,10 +283,9 @@
         <div class="col-md-6 search-buffer">
           <div class="form-group input--icon half-margin-bottom">
             <div class="form-group__text search-icon">
-              <p-autoComplete (click)='addItms()' [ngModelOptions]="{standalone: true}"
-                [(ngModel)]="itemsList" [suggestions]="copyAttributeResults"
-                (completeMethod)="searchCopyAttributes($event)" field="PID" class="auto-complete-attribute"
-                placeholder="Copy Attributes" [size]="100" [minLength]="9">
+              <p-autoComplete (click)='addItms()' [ngModelOptions]="{standalone: true}" [(ngModel)]="itemsList"
+                [suggestions]="copyAttributeResults" (completeMethod)="searchCopyAttributes($event)" field="PID"
+                class="auto-complete-attribute" placeholder="Copy Attributes" [size]="100" [minLength]="9">
               </p-autoComplete>
               <button [disabled]="readOnly" type="button" class="link">
                 <span class="icon-search"></span>
@@ -301,7 +301,8 @@
           <div class="col-md-6" *ngFor="let question of questionsList[uniqueNodeId]">
             <div [ngSwitch]="question.itemType">
               <div *ngSwitchCase="'Item'">
-                <app-dynamic-form-question [question]="question" [questionForm]="questionForm">
+                <app-dynamic-form-question [question]="question" [questionForm]="questionForm"
+                  [questionList]="questionsList[uniqueNodeId]">
                 </app-dynamic-form-question>
               </div>
             </div>
@@ -311,8 +312,8 @@
       </div>
       <p-footer>
         <div class="btns-right pull-right flex-center-vertical">
-        <button class="btn btn--primary" type="submit" [disabled]="readOnly">Add Details</button>
-        <button class="btn btn--secondary" type="button" (click)="closeDailog()" [disabled]="readOnly">Cancel</button>
+          <button class="btn btn--primary" type="submit" [disabled]="readOnly">Add Details</button>
+          <button class="btn btn--secondary" type="button" (click)="closeDailog()" [disabled]="readOnly">Cancel</button>
         </div>
       </p-footer>
     </form>
