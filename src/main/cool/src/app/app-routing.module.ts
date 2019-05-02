@@ -95,8 +95,8 @@ const routes: Routes = [
     resolve: { offerData: OfferOverViewResolver }
   },
   {
-    path: 'itemCreation/:offerId/:caseId/:selectedAto',
-    component: ItemCreationComponent,
+    path: 'item-creation/:offerId/:caseId/:selectedAto',
+    loadChildren: './item-creation/item-creation.module#ItemCreationModule',
     resolve: { offerData: OfferOverViewResolver }
   }
 
