@@ -100,11 +100,7 @@ export class ReviewEditForm implements OnInit {
         this.closeDialog();
     }
 
-    onHideViewDetailsModal() {
-        console.log("test");
-
-        //this.closeDailog(false);  //reset form info
-    }
+    onHideViewDetailsModal() { }
 
     saveForm() {
         let isUdate: boolean = true;
@@ -221,9 +217,7 @@ export class ReviewEditForm implements OnInit {
             }
         } else {
             if (this.selectedProduct.length > 0) {
-                console.log('-- Before remove--- ', this.selectedProduct);
                 this.selectedProduct = this.removeFromArray(this.selectedProduct, records.uniqueKey)
-                console.log('-- After remove--- ', this.selectedProduct);
             }
         }
     }
