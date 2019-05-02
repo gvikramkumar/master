@@ -100,7 +100,7 @@ const routes: Routes = [
     resolve: { offerData: OfferOverViewResolver }
   },
   {
-    path: 'ItemCreation/:offerId/:caseId/:selectedAto',
+    path: 'itemCreation/:offerId/:caseId/:selectedAto',
     component: ItemCreationComponent,
     resolve: { offerData: OfferOverViewResolver }
   }

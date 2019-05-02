@@ -198,11 +198,17 @@ export class OfferSetupComponent implements OnInit {
     // console.log('selectedAto', this.selectedAto);
   }
   getElementDetails(element) {
-    let moduleName = element.moduleName.replace(/\s/g, "");
+    // let moduleName = element.moduleName.replace(/\s/g, "");
     // this.router.navigate(['/' + element.moduleName]);
     // this.router.navigate(['/' + element.moduleName, this.offerId]);
     // this.router.navigate(['/', + moduleName]);
-    this.router.navigate(['/ItemCreation', this.offerId, this.caseId, this.selectedAto]);
+    if(element.moduleName === 'Item Creation') {
+      debugger;
+      this.router.navigate(['/itemCreation', this.offerId, this.caseId, this.selectedAto]);
+      } else if(element.moduleName === 'Modeling & Design') {
+      this.router.navigate(['/modelling-design', this.offerId, this.caseId, this.selectedAto]);
+      }
+
   }
 
   updateModuleData(message) {
