@@ -26,11 +26,11 @@ export class ViewOfferComponent implements OnInit {
       this.derivedMM = offerDetails['derivedMM'];
 
     });
-    this.offerSetupService.getModuleData(this.derivedMM,this.offerId, this.functionalRole).subscribe(data => {
-      this.Options =data['listATOs'];
-      console.log('this.options', this.Options);
-      console.log('original data', data);
-    })
+    // this.offerSetupService.getModuleData(this.derivedMM,this.offerId, this.functionalRole).subscribe(data => {
+    //   this.Options =data['listATOs'];
+    //   console.log('this.options', this.Options);
+    //   console.log('original data', data);
+    // })
 
   }
 

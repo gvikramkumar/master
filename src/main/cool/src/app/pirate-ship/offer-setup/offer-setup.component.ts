@@ -116,7 +116,7 @@ export class OfferSetupComponent implements OnInit {
 
 
    // Get All the ModuleName and place in order
-   getAllModuleData() {this.offerSetupService.getModuleData(this.derivedMM,this.offerId,this.functionalRole).subscribe(data => {
+   getAllModuleData() {this.offerSetupService.getModuleData(this.derivedMM,this.offerId,this.functionalRole,this.selectedAto).subscribe(data => {
      this.groupData = {};
     this.Options =data['listATOs'];
     data['listSetupDetails'].forEach(group => {
@@ -193,10 +193,7 @@ export class OfferSetupComponent implements OnInit {
 
 
   onProceedToNext(){}
-  selectedValue(event) {
-    // console.log('evemnt', event);
-    // console.log('selectedAto', this.selectedAto);
-  }
+ 
   getElementDetails(element) {
     let moduleName = element.moduleName.replace(/\s/g, "");
     // this.router.navigate(['/' + element.moduleName]);
@@ -206,6 +203,9 @@ export class OfferSetupComponent implements OnInit {
   }
 
   updateModuleData(message) {
+    this.getAllModuleData();
+  }
+  selectedValue(event) {
     this.getAllModuleData();
   }
 }
