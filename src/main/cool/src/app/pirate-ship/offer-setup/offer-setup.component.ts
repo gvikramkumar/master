@@ -118,6 +118,7 @@ export class OfferSetupComponent implements OnInit {
    // Get All the ModuleName and place in order
    getAllModuleData() {this.offerSetupService.getModuleData(this.derivedMM,this.offerId,this.functionalRole).subscribe(data => {
      this.groupData = {};
+     console.log(this.groupData);
     this.Options =data['listATOs'];
     data['listSetupDetails'].forEach(group => {
 
@@ -203,7 +204,6 @@ export class OfferSetupComponent implements OnInit {
     // this.router.navigate(['/' + element.moduleName, this.offerId]);
     // this.router.navigate(['/', + moduleName]);
     if(element.moduleName === 'Item Creation') {
-      debugger;
       this.router.navigate(['/itemCreation', this.offerId, this.caseId, this.selectedAto]);
       } else if(element.moduleName === 'Modeling & Design') {
       this.router.navigate(['/modelling-design', this.offerId, this.caseId, this.selectedAto]);
