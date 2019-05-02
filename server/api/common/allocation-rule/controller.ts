@@ -121,11 +121,11 @@ export default class AllocationRuleController extends ApprovalController {
     return this.sendApprovalEmailBase(req, mode, item, 'rule', 'rule-management', omitProperties);
   }
 
-  preApproveStep(data, req) {
+  preApproveStep(data, firstTimeApprove, req) {
     // we only check for duplicate names in active/inactive, NOT pending, someone could get theirs approved before yours, if so, you get an error
     return this.repo.getManyLatestGroupByNameActiveInactive(req.dfa.module.moduleId)
       .then(rules => {
-        if (_.find(rules, {name: data.name})) {
+        if (firstTimeApprove && _.find(rules, {name: data.name})) {
           throw new ApiError(`Rule name already exists: ${data.name}`);
         }
       });

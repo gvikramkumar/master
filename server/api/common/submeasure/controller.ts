@@ -190,7 +190,7 @@ export default class SubmeasureController extends ApprovalController {
     return this.sendApprovalEmailBase(req, mode, item, 'submeasure', 'submeasure', omitProperties);
   }
 
-  preApproveStep(sm, req) {
+  preApproveStep(sm, firstTimeApprove, req) {
     const promises = [];
     // remove product class uploads for this submeasure and add new ones
     if (shUtil.isManualMix(sm)) {

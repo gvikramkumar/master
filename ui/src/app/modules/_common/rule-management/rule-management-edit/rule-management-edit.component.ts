@@ -36,10 +36,11 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   UiUtil = UiUtil;
   addMode = false;
   viewMode = false;
-  viewModeDPAndNotApprovedOnce = false;
+  viewModeDPNotApprovedOnce = false;
   editMode = false;
   editModeAI = false;
-  editModeDPAndNotApprovedOnce = false;
+  editModeDPApprovedOnce = false;
+  editModeDPNotApprovedOnce = false;
   copyMode = false;
   rule = new AllocationRule();
   orgRule: AllocationRule;
@@ -113,8 +114,9 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         if (this.viewMode || this.editMode || this.copyMode) {
           this.rule = results[6];
           this.editModeAI = this.editMode && _.includes(['A', 'I'], this.rule.status);
-          this.editModeDPAndNotApprovedOnce = this.editMode && _.includes(['D', 'P'], this.rule.status && this.rule.approvedOnce !== 'Y');
-          this.viewModeDPAndNotApprovedOnce = this.viewMode && _.includes(['D', 'P'], this.rule.status) && this.rule.approvedOnce !== 'Y';
+          this.editModeDPApprovedOnce = this.editMode && _.includes(['D', 'P'], this.rule.status) && this.rule.approvedOnce === 'Y';
+          this.editModeDPNotApprovedOnce = this.editMode && _.includes(['D', 'P'], this.rule.status) && this.rule.approvedOnce !== 'Y';
+          this.viewModeDPNotApprovedOnce = this.viewMode && _.includes(['D', 'P'], this.rule.status) && this.rule.approvedOnce !== 'Y';
         }
         this.rule.period = this.rule.period || this.periods[0].period;
         if (this.copyMode) {
@@ -126,6 +128,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           if (this.editModeAI) {
             delete this.rule.createdBy;
             delete this.rule.createdDate;
+          }
+          if (this.editModeAI || this.editModeDPApprovedOnce) {
             // they can't edit approvedOnce rules other than to set active/inactive. The ruleNames are all status = active/inactive,
             // not draft/pending which is what they'll be editing with, so complain if rulename already exists in A/I bunch. We have a catchall in
             // approvalController.approve() that won't approve if name already exists, but we want them to see that here as well
@@ -191,7 +195,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       // mary makes ONE, john makes ONE, both are pending so allows both to coexist, then someone approves mary's ONE. If someone approves
       // johns one, they get an error on approval. If someone views or edit's johns now... he should get a message as one already exists, BUT...
       // what if john is just editing active flag? So we put up the message on edit or view "only if not approvedOnce"
-      if (this.editModeDPAndNotApprovedOnce || this.viewModeDPAndNotApprovedOnce) {
+      if (this.editModeDPNotApprovedOnce || this.viewModeDPNotApprovedOnce) {
         this.checkIfRuleNameAlreadyExists();
       }
     }
@@ -319,24 +323,25 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   approve() {
-    if (!this.checkIfRuleNameAlreadyExists()) {
-      this.uiUtil.confirmApprove('rule')
-        .subscribe(resultConfirm => {
-          if (resultConfirm) {
-            this.uiUtil.promptDialog('Add approval comments', null, DialogInputType.textarea)
-              .subscribe(resultPrompt => {
-                if (resultPrompt !== 'DIALOG_CANCEL') {
-                  this.rule.approveRejectMessage = resultPrompt;
-                  this.cleanUp();
-                  this.ruleService.approve(this.rule)
-                    .subscribe(() => {
-                      history.go(-1);
-                    });
-                }
-              });
-          }
-        });
+    if (this.viewModeDPNotApprovedOnce && this.checkIfRuleNameAlreadyExists()) {
+      return;
     }
+    this.uiUtil.confirmApprove('rule')
+      .subscribe(resultConfirm => {
+        if (resultConfirm) {
+          this.uiUtil.promptDialog('Add approval comments', null, DialogInputType.textarea)
+            .subscribe(resultPrompt => {
+              if (resultPrompt !== 'DIALOG_CANCEL') {
+                this.rule.approveRejectMessage = resultPrompt;
+                this.cleanUp();
+                this.ruleService.approve(this.rule)
+                  .subscribe(() => {
+                    history.go(-1);
+                  });
+              }
+            });
+        }
+      });
   }
 
   submitForApproval() {
