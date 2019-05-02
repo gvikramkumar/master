@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Ato } from '../model/ato';
+
+import { Ato } from '../../model/ato';
 
 @Component({
   selector: 'app-ato-list',
