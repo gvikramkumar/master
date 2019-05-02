@@ -132,16 +132,16 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   //
   onValidateChars(event) {
     event.target.value = event.target.value.replace(event.target.value, event.target.value.toUpperCase());
-          if ((event.target.value.charAt(0) == '!' || event.target.value.charAt(0) == '+' || event.target.value.charAt(0) == '=' || event.target.value.charAt(0) == '>'
-          || event.target.value.charAt(0) == '<' || event.target.value.charAt(0) == '#' || event.target.value.charAt(0) == '/' || event.target.value.charAt(0) == '.' 
-          || event.target.value.charAt(0) == '-' || event.target.value.charAt(0) == '[' || event.target.value.charAt(0) == ']' 
-          ) || event.target.value.charAt(0) === " ") {
-       event.target.value = event.target.value.replace(event.target.value.charAt(0),'');
-        }
-        event.target.value = event.target.value.replace(/[&\\\#,$%!@^':;'*?|<>{}=]/g, '');
-        event.target.value = event.target.value.replace(/\[.*?\]/g, "");
+    if ((event.target.value.charAt(0) == '!' || event.target.value.charAt(0) == '+' || event.target.value.charAt(0) == '=' || event.target.value.charAt(0) == '>'
+      || event.target.value.charAt(0) == '<' || event.target.value.charAt(0) == '#' || event.target.value.charAt(0) == '/' || event.target.value.charAt(0) == '.'
+      || event.target.value.charAt(0) == '-' || event.target.value.charAt(0) == '[' || event.target.value.charAt(0) == ']'
+    ) || event.target.value.charAt(0) === " ") {
+      event.target.value = event.target.value.replace(event.target.value.charAt(0), '');
+    }
+    event.target.value = event.target.value.replace(/[&\\\#,$%!@^':;'*?|<>{}=]/g, '');
+    event.target.value = event.target.value.replace(/\[.*?\]/g, "");
 
-      }
+  }
 
 
   // create a json skelaton for major and minor group
@@ -784,9 +784,9 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.isDisabledView = false;  // for enable button
   }
 
-   // set billing SOA default value according offer soluting
+  // set billing SOA default value according offer soluting
 
-   billingSOADefaultValue() {
+  billingSOADefaultValue() {
     this.listOfferQuestions.forEach(element => {
       if (element.rules.defaultSel != '') {
         element.currentValue = element.rules.defaultSel;
@@ -1483,8 +1483,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.loaderService.startLoading();
     this.offerConstructCanvasService.getPidDetails(this.selectedPids.PID).subscribe((results) => {
       this.loaderService.stopLoading();
-      
-         // Raviraj US290268
+
+      // Raviraj US290268
       if (results.body) {
         if (results.body['major/minor'] === 'Minor Line') {
           if (results.body['WorkFlow Status'] === 'APPROVED' &&
