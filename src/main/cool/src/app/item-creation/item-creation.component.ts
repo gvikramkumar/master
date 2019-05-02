@@ -91,11 +91,6 @@ export class ItemCreationComponent implements OnInit {
       { field: 'moduleStatus', header: 'ATO LEVEL STATUS' }
     ]
 
-    // this.itemCreationService.getItemDetails(this.offerId, 'ALL').subscribe(response => {
-    //   console.log('data contains '+JSON.stringify(this.offerId));
-    //   this.productDetails = response.data; 
-    // })
-
     this.itemCreationService.getOfferDropdownValues(this.offerId).subscribe(data => {
       this.offerDropdownValues = data;
     });
@@ -241,9 +236,6 @@ export class ItemCreationComponent implements OnInit {
         });
       }
     });
-    console.log('--------------------offerDetailRes.constructDetails', offerDetailRes.constructDetails);
-    console.log('--------------------offerDetailRes.constructDetails', this.offerConstructItems);
-
   }
 
   /**
@@ -565,7 +557,6 @@ export class ItemCreationComponent implements OnInit {
       }
     });
 
-    console.log('cds', cds);
     this.offerConstructCanvasService.saveOfferConstructChanges(cds).subscribe(() => {
       this.loaderService.stopLoading();
     },
@@ -701,7 +692,7 @@ export class ItemCreationComponent implements OnInit {
         }
       }
     });
-    console.log(this.offerConstructItems);
+    //console.log(this.offerConstructItems);
 
   }
   showReviewEdit() {
