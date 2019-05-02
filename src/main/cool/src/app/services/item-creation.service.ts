@@ -22,6 +22,6 @@ export class ItemCreationService {
 
   removeItemDetails(offerId, productList): Observable<any> {
     const url = `${this.environmentService.REST_API_REMOVE_ITEM_DETAILS}/${offerId}?ATOs=${productList}`;
-    return this._http.post(url, { withCredentials: true });
+    return this._http.delete(url, { withCredentials: true });
   }
 }
