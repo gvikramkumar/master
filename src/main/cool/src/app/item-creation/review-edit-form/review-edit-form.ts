@@ -2,7 +2,7 @@
 import { FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-
+import { ActivatedRoute } from '@angular/router';
 import { LoaderService } from '@app/core/services/loader.service';
 import { OfferConstructService } from '@app/services/offer-construct.service';
 import { OfferconstructCanvasService } from '@app/construct/offer-construct-canvas/service/offerconstruct-canvas.service';
@@ -38,13 +38,19 @@ export class ReviewEditForm implements OnInit {
     offerForm: FormGroup;
     onLoad: boolean = false;
     public showLoader: boolean = false;
+    public currentOfferId;
+    private caseId;
 
     @Input() indexVal;
 
     constructor(public offerConstructService: OfferConstructService,
         private offerConstructCanvasService: OfferconstructCanvasService,
-        private loaderService: LoaderService,
+        private loaderService: LoaderService, private activatedRoute: ActivatedRoute,
         private datePipe: DatePipe) {
+        this.activatedRoute.params.subscribe(params => {
+            this.currentOfferId = params['offerId'];
+            this.caseId = params['caseId'];
+        });
     }
 
     ngOnInit() {
@@ -412,6 +418,23 @@ export class ReviewEditForm implements OnInit {
 
     }
 
+    // donwnload Zip file
+    downloadZip() {
+        this.offerConstructCanvasService.downloadZip(this.currentOfferId).subscribe((res) => {
+            const nameOfFileToDownload = 'offer-construct';
+            const blob = new Blob([res], { type: 'application/zip' });
+            if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
+            } else {
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = nameOfFileToDownload;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+        });
+    }
 
 }
 
