@@ -57,6 +57,13 @@ export class MenuBarComponent implements OnInit {
                             }
                         });
                     }
+                    if (data['execute'] != null) {
+                        data['execute'].forEach(element => {
+                            if (element['enable'] === true) {
+                                this.itemShow[element['subMilestone']] = true;
+                            }
+                        });
+                    }
                 }
             }
 
@@ -69,7 +76,7 @@ export class MenuBarComponent implements OnInit {
         this.navigateHash['Offer Solutioning'] = ['/offerSolutioning', this.currentOfferId, this.caseId];
         this.navigateHash['Offer Components'] = ['/offerConstruct', this.currentOfferId, this.caseId];
         this.navigateHash['Design Review'] = ['/designReview', this.currentOfferId, this.caseId];
-
+        this.navigateHash['Modular Workflow Completion'] = ['/offerSetup', this.currentOfferId, this.caseId];
     }
 
     ngOnInit() {

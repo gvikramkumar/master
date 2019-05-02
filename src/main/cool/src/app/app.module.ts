@@ -58,8 +58,8 @@ import { OfferDetailModule } from './offer-detail/offer-detail.module';
 
 import { CustomMinValidatorDirective } from './validators/custom-min-validator.directive';
 import { CustomRangeValidatorDirective } from './validators/custom-range-validator.directive';
-import { ItemCreationComponent } from './item-creation/item-creation.component';
-import { ReviewEditForm } from './item-creation/review-edit-form/review-edit-form';
+import { ItemCreationComponent } from '@app/pirate-ship/modules/item-creation/item-creation.component';
+import { ReviewEditForm } from '@app/pirate-ship/modules/item-creation/components/review-edit-form/review-edit-form';
 import { TreeTableModule, AutoCompleteModule } from 'primeng/primeng';
 
 

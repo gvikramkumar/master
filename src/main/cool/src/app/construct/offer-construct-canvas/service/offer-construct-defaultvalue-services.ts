@@ -147,9 +147,15 @@ export class OfferConstructDefaultValue{
 
        setTermsPaymentsRequiredN(questionList) {
            questionList.forEach(question => {
+<<<<<<< HEAD
                if (question.question == "Initial Term" || question.question == "NON STD INITIAL TERM" ||
                question.question == "STD AUTO RENEWAL TERM" || question.question == "NON STD AUTO RENEWAL TERM" ||
                question.question == "Req Start Date Window" || question.question == "Grace Window For Renewal") {
+=======
+               if (question.question == "INITIAL TERM" || question.question == "NONSTD INITIAL TERM" || 
+               question.question == "STD AUTO RENEWAL TERM" || question.question == "NONSTD AUTO RENEWAL TERM" || 
+               question.question == "REQ START DATE WINDOW" || question.question == "GRACE WINDOW FOR RENEWAL") {
+>>>>>>> parent of cbb12663... validations for item creation
                    question.currentValue = "";
                    question.rules.isMandatoryOptional = "Optional";
                }

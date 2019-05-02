@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+
+import { UserService } from '@app/core/services/user.service';
 import { MessageService } from '@app/services/message.service';
-import { OfferSetupService } from '../../services/offer-setup.service';
+import { OfferSetupService } from '../services/offer-setup.service';
 import { RightPanelService } from '@app/services/right-panel.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
-import { UserService } from '@app/core/services/user.service';
-import { Observable } from 'rxjs';
+
 import { interval } from 'rxjs';
 
 @Component({
@@ -196,9 +197,9 @@ export class OfferSetupComponent implements OnInit {
 
   getElementDetails(element) {
     if (element.moduleName === 'Item Creation') {
-      this.router.navigate(['/item-creation', this.offerId, this.caseId, this.selectedAto]);
+      this.router.navigate(['item-creation', this.offerId, this.caseId, this.selectedAto]);
     } else if (element.moduleName === 'Modeling & Design') {
-      this.router.navigate(['/modelling-design', this.offerId, this.caseId, this.selectedAto]);
+      this.router.navigate(['modelling-design', this.offerId, this.caseId, this.selectedAto]);
     }
 
   }
