@@ -165,10 +165,7 @@ export class UiUtil {
   // instance methods (must be after static methods)
 
   canAdminApprove(id) {
-    if (this.store.user.isItAdmin()) {
-      return true;
-    }
-    return this.store.user.isModuleAdmin() ? id !== this.store.user.id : false;
+    return this.store.user.isItAdmin() ? true : this.store.user.isModuleAdmin() && id !== this.store.user.id;
   }
 
   toast(message, action = '', duration?) {
