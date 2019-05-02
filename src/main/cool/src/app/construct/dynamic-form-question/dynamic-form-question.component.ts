@@ -28,7 +28,7 @@ export class DynamicFormQuestionComponent implements OnInit {
       try{
         return moment(val).format('DD-MMM-YYYY');
       }catch(err){}
-    }
+   }
   }
   updateDate(e){
     if(e!==''){
@@ -37,5 +37,5 @@ export class DynamicFormQuestionComponent implements OnInit {
       }catch(err){}
     }
   }
-
+//Tamal
 }
