@@ -11,7 +11,6 @@ import { LoaderService } from '@app/core/services/loader.service';
 
 import * as _ from 'lodash';
 import { RightPanelService } from '../../services/right-panel.service';
-import { isEmpty } from 'rxjs/operators';
 
 @Component({
   selector: 'app-ato-main',
