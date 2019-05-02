@@ -8,7 +8,7 @@ import {
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import {ErrorModalComponent} from '../../shared/dialogs/error-modal/error-modal.component';
 import {Router} from '@angular/router';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {environment} from '../../../environments/environment';
 import {AppStore} from '../../app/app-store';
 import {DialogSize, DialogType} from '../models/ui-enums';

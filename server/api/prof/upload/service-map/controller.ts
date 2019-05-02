@@ -2,7 +2,7 @@ import {injectable} from 'inversify';
 import UploadController from '../../../../lib/base-classes/upload-controller';
 import PgLookupRepo from '../../../pg-lookup/repo';
 import ServiceMapUploadTemplate from './template';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import ServiceMapUploadImport from './import';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
@@ -92,28 +92,25 @@ imports: ServiceMapUploadImport[];
   }
 
   validate() {
-    // sort by submeasureName, add up splitPercentage, error if not 1.0
+    // partition by legal entity, must add up to 1
     this.imports = this.rows1.map(row => new ServiceMapUploadImport(row, this.fiscalMonth));
     const obj = {};
     this.imports.forEach(val => {
-      const salesTerritoryCode = val.salesTerritoryCode.toUpperCase();
       const businessEntity = val.businessEntity.toUpperCase();
-      if (obj[salesTerritoryCode] && obj[salesTerritoryCode][businessEntity] !== undefined) {
-        obj[salesTerritoryCode][businessEntity] += val.splitPercentage;
+      if (obj[businessEntity] !== undefined) {
+        obj[businessEntity] += val.splitPercentage;
       } else {
-        obj[salesTerritoryCode] = {[businessEntity]: val.splitPercentage};
+        obj[businessEntity] = val.splitPercentage;
       }
     });
-    _.forEach(obj, (obj1, salesTerr) => {
-      _.forEach(obj1, (val, busEntity) => {
-        if (svrUtil.toFixed8(val) !== 1.0) {
-          this.addError(`${salesTerr} / ${busEntity}`, val);
-        }
-      });
+    _.forEach(obj, (val, busEntity) => {
+      if (svrUtil.toFixed8(val) !== 1.0) {
+        this.addError(`${busEntity}`, val);
+      }
     });
 
     if (this.errors.length) {
-      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Sales Territory Code / Legal Entity  percentage values not 100%', this.errors));
+      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Legal Entity percentage values not 100%', this.errors));
     }
     return Promise.resolve();
   }

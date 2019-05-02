@@ -7,7 +7,7 @@ import {ModuleService} from '../../_common/services/module.service';
 import {DfaModule} from '../../_common/models/module';
 import {Observable} from 'rxjs/index';
 import {UiUtil} from '../../../core/services/ui-util';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {NgForm} from '@angular/forms';
 
 @Component({

@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {difference, flatten, includes, intersection} from 'lodash';
 import AnyObj from './any-obj';
 import {DfaModule} from '../../ui/src/app/modules/_common/models/module';

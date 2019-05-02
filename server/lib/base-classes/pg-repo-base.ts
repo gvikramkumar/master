@@ -2,7 +2,7 @@ import AnyObj from '../../../shared/models/any-obj';
 import {Orm, OrmMap} from './Orm';
 import {pgc} from '../database/postgres-conn';
 import {ApiError} from '../common/api-error';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 // date assumption: assumes all dates are iso date strings, can't pass in objects with Date types
 // passed in filter objects use object properties, not table fields

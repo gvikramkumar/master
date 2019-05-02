@@ -1,7 +1,7 @@
 import {AppStore} from './app-store';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {TestBed} from '@angular/core/testing';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 class MediaChange {
   constructor(public mqAlias: string) {}

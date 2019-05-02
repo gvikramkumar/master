@@ -1,5 +1,5 @@
 import {injectable} from 'inversify';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import UploadController from '../../../../lib/base-classes/upload-controller';
 import ProductClassUploadRepo from '../../product-class-upload/repo';
 import ProductClassUploadTemplate from './template';

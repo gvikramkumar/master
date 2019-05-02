@@ -3,7 +3,7 @@ import ControllerBase from '../../../lib/base-classes/controller-base';
 import DeptUploadRepo from './repo';
 import {DeptUploadPgRepo} from './pgrepo';
 import SubmeasureRepo from '../../common/submeasure/repo';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {ApiError} from '../../../lib/common/api-error';
 import {DfaModuleIds} from '../../../../shared/misc/enums';
 

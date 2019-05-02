@@ -7,7 +7,7 @@ import {DfaModule} from '../../../modules/_common/models/module';
 import {SourceService} from '../../_common/services/source.service';
 import {ToastSeverity} from '../../../core/services/toast.service';
 import {Source} from '../../../../../../shared/models/source';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {ModuleSource} from '../../_common/models/module_source';
 import {ModuleSourceService} from '../../_common/services/module-source.service';
 import {OpenPeriod} from '../../_common/models/open-period';

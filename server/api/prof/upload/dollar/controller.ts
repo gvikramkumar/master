@@ -1,6 +1,6 @@
 import {injectable} from 'inversify';
 import DollarUploadRepo from '../../dollar-upload/repo';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import InputFilterLevelUploadController from '../../../../lib/base-classes/input-filter-level-upload-controller';
 import DollarUploadTemplate from './template';
 import DollarUploadImport from './import';

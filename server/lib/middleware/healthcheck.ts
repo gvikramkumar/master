@@ -6,9 +6,9 @@ import {finRequest} from '../common/fin-request';
 import AnyObj from '../../../shared/models/any-obj';
 import {ApiError} from '../common/api-error';
 import {NamedApiError} from '../common/named-api-error';
-import * as Q from 'q';
+import Q from 'q';
 import {handleQAllSettled} from '../common/q-allSettled';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 const lookupRepo = new LookupRepo();
 const pgLookupRepo = new PgLookupRepo();

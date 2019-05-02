@@ -1,6 +1,6 @@
 /*
 import AnyObj from '../shared/models/any-obj';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {pgc} from '../server/lib/database/postgres-conn';
 import {PgRepo} from './pgrepo';
 

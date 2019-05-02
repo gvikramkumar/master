@@ -6,7 +6,7 @@ import {DfaModule} from '../models/module';
 import {environment} from '../../../../environments/environment';
 import {AppStore} from '../../../app/app-store';
 import {RestBase} from '../../../core/base-classes/rest-base';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 const apiUrl = environment.apiUrl;
 

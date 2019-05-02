@@ -16,7 +16,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 import { Guid } from '@cisco-ngx/cui-utils';
 

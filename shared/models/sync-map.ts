@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import _ from 'lodash';
 import AnyObj from './any-obj';
 
 export class SyncMap {

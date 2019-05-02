@@ -2,7 +2,7 @@ import RepoBase from './repo-base';
 import ControllerBase from './controller-base';
 import {ApiError} from '../common/api-error';
 import {ApprovalMode} from '../../../shared/misc/enums';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {svrUtil} from '../common/svr-util';
 import {shUtil} from '../../../shared/misc/shared-util';
 import {sendHtmlMail} from '../common/mail';
@@ -53,18 +53,20 @@ export default class ApprovalController extends ControllerBase {
   approve(req, res, next) {
     const data = req.body;
     this.repo.validate(data);
+    let firstTimeApprove = false;
     if (data.approvedOnce === 'Y') {
       data.status = data.activeStatus;
       data.approvedBy = req.user.id;
       data.approvedDate = new Date();
     } else if (data.approvedOnce === 'N' && data.status === 'P') {
+      firstTimeApprove = true;
       data.status = 'A';
       data.activeStatus = 'A';
       data.approvedOnce = 'Y';
       data.approvedBy = req.user.id;
       data.approvedDate = new Date();
     }
-    this.preApproveStep(data, req)
+    this.preApproveStep(data, firstTimeApprove, req)
       .then(() => {
       this.repo.update(data, req.user.id, true, true, false)
         .then(item => {
@@ -146,7 +148,7 @@ export default class ApprovalController extends ControllerBase {
   }
 
   // this step can modify the data, as it's pre-save
-  preApproveStep(data, req) {
+  preApproveStep(data, firstTimeApprove, req) {
     return Promise.resolve();
   }
 

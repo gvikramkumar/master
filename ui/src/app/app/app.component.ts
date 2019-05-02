@@ -4,7 +4,7 @@ import {NavigationEnd, NavigationStart, Router} from '@angular/router';
 import {CuiHeaderOptions, CuiToastComponent} from '@cisco-ngx/cui-components';
 import {Title} from '@angular/platform-browser';
 import {AppStore} from './app-store';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {UiUtil} from '../core/services/ui-util';
 import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 

@@ -7,11 +7,11 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {AppStore} from '../../../../app/app-store';
 import {Measure} from '../../models/measure';
 import {MeasureService} from '../../services/measure.service';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Source} from '../../../../../../../shared/models/source';
 import {SourceService} from '../../services/source.service';
 import {UiUtil} from '../../../../core/services/ui-util';
-import * as moment from 'moment';
+import moment from 'moment';
 import AnyObj from '../../../../../../../shared/models/any-obj';
 import {shUtil} from '../../../../../../../shared/misc/shared-util';
 

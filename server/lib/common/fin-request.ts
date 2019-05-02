@@ -1,5 +1,5 @@
 import {ApiError} from './api-error';
-import * as _request from 'request';
+import _request from 'request';
 
 export function finRequest(options) {
   const request = _request.default;

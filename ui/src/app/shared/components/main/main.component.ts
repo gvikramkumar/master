@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {CuiHeaderOptions} from '@cisco-ngx/cui-components';
 import {AppStore} from '../../../app/app-store';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 @Component({
   selector: 'fin-main',

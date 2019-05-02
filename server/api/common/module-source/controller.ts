@@ -4,7 +4,7 @@ import ControllerBase from '../../../lib/base-classes/controller-base';
 import {ApiError} from '../../../lib/common/api-error';
 import SourceRepo from '../source/repo';
 import AnyObj from '../../../../shared/models/any-obj';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {ModuleSourcePgRepo} from './pgrepo';
 
 interface ModuleSourceMapping {

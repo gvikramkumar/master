@@ -1,6 +1,6 @@
 import {injectable} from 'inversify';
 import {model, Model, Schema} from 'mongoose';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {ApiError} from '../../lib/common/api-error';
 
 const schema = new Schema(

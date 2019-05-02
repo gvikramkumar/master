@@ -6,7 +6,7 @@ import {ApiError} from '../../../lib/common/api-error';
 import {addFilterLevelColumnsForPgSync} from '../dollar-upload/controller';
 import SubmeasureRepo from '../../common/submeasure/repo';
 import {MappingUploadPg, MappingUploadPgRepo} from './pgrepo';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 @injectable()
 export default class MappingUploadController extends ControllerBase {

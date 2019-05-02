@@ -1,7 +1,7 @@
 import {injectable} from 'inversify';
 import {mgc} from '../../lib/database/mongoose-conn';
 import Q from 'q';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {svrUtil} from '../../lib/common/svr-util';
 import {ApiError} from '../../lib/common/api-error';
 import FileRepo from './repo';

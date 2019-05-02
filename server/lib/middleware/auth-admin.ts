@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import _ from 'lodash';
 import LookupRepo from '../../api/lookup/repo';
 import {ApiError} from '../common/api-error';
 import AnyObj from '../../../shared/models/any-obj';

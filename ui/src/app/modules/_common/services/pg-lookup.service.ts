@@ -6,7 +6,7 @@ import {DfaModule} from '../models/module';
 import {environment} from '../../../../environments/environment';
 import {AppStore} from '../../../app/app-store';
 import {RestBase} from '../../../core/base-classes/rest-base';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {UiUtil} from '../../../core/services/ui-util';
 import {shUtil} from '../../../../../../shared/misc/shared-util';
 import AnyObj from '../../../../../../shared/models/any-obj';

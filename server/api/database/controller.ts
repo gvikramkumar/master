@@ -17,7 +17,7 @@ import SubmeasureRepo from '../common/submeasure/repo';
 import AlternateSl2UploadController from '../prof/alternate-sl2-upload/controller';
 import CorpAdjustmentsUploadController from '../prof/corp-adjustments-upload/controller';
 import {ApiDfaData} from '../../lib/middleware/add-global-data';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import AnyObj from '../../../shared/models/any-obj';
 import DistiDirectUploadController from '../prof/disti-direct-upload/controller';
 import config from '../../config/get-config';
@@ -108,7 +108,7 @@ export default class DatabaseController {
         }
         if (syncMap.dfa_prof_scms_triang_corpadj_map_upld) {
           promises.push(this.corpAdjustmentsUploadCtrl.mongoToPgSync('dfa_prof_scms_triang_corpadj_map_upld', userId, log, elog,
-            {fiscalMonth: dfa.fiscalMonths.prof}, undefined, dfa));
+            {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}));
         }
         if (syncMap.dfa_prof_swalloc_manualmix_upld) {
           promises.push(this.productClassUploadCtrl.mongoToPgSync('dfa_prof_swalloc_manualmix_upld', userId, log, elog,
@@ -116,20 +116,20 @@ export default class DatabaseController {
         }
         if (syncMap.dfa_prof_sales_split_pctmap_upld) {
           promises.push(this.salesSplitUploadCtrl.mongoToPgSync('dfa_prof_sales_split_pctmap_upld', userId, log, elog,
-            {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}));
+            {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}, dfa));
         }
         if (syncMap.dfa_prof_disti_to_direct_map_upld) {
           promises.push(this.distiDirectUploadController.mongoToPgSync('dfa_prof_disti_to_direct_map_upld', userId, log, elog,
-            {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}, dfa));
+            {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}));
         }
         if (syncMap.dfa_prof_service_map_upld) {
           promises.push(this.serviceMapUploadController.mongoToPgSync('dfa_prof_service_map_upld', userId, log, elog,
-            {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}, dfa));
+            {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}));
         }
         if (syncMap.dfa_prof_service_trngsplit_pctmap_upld) {
           const fiscalYear = shUtil.fiscalYearFromFiscalMonth( dfa.fiscalMonths.prof);
           promises.push(this.serviceTrainingUploadController.mongoToPgSync('dfa_prof_service_trngsplit_pctmap_upld', userId, log, elog,
-            {fiscalYear}, {fiscalYear}, dfa));
+            {fiscalYear}, {fiscalYear}));
         }
       })
       .then(() => {

@@ -1,5 +1,5 @@
 import AnyObj from '../models/any-obj';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 
 export const ruleUtil = {

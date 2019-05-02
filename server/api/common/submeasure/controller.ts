@@ -3,7 +3,7 @@ import SubmeasureRepo from './repo';
 import {ApiError} from '../../../lib/common/api-error';
 import SubmeasurePgRepo from './pgrepo';
 import InputLevelPgRepo, {SubmeasureInputLvl} from './input-level-pgrepo';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {filterLevelMap} from '../../../../shared/models/filter-level-map';
 import ApprovalController from '../../../lib/base-classes/approval-controller';
 import {ApprovalMode, BusinessUploadFileType, Directory} from '../../../../shared/misc/enums';
@@ -190,7 +190,7 @@ export default class SubmeasureController extends ApprovalController {
     return this.sendApprovalEmailBase(req, mode, item, 'submeasure', 'submeasure', omitProperties);
   }
 
-  preApproveStep(sm, req) {
+  preApproveStep(sm, firstTimeApprove, req) {
     const promises = [];
     // remove product class uploads for this submeasure and add new ones
     if (shUtil.isManualMix(sm)) {

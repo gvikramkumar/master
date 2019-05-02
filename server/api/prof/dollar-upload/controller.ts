@@ -5,7 +5,7 @@ import {DfaModuleIds} from '../../../../shared/misc/enums';
 import {ApiError} from '../../../lib/common/api-error';
 import SubmeasureRepo from '../../common/submeasure/repo';
 import {DollarUploadPg, DollarUploadPgRepo} from './pgrepo';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {filterLevelMap} from '../../../../shared/models/filter-level-map';
 
 @injectable()

@@ -8,7 +8,7 @@ import {Source} from '../../../../../../shared/models/source';
 import {CuiInputComponent} from '@cisco-ngx/cui-components';
 import {Observable} from 'rxjs/index';
 import {UiUtil} from '../../../core/services/ui-util';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {DfaModule} from '../../_common/models/module';
 import {ValidationInputComponent} from '../../../shared/components/validation-input/validation-input.component';
 import {NgForm} from '@angular/forms';

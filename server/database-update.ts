@@ -1,6 +1,6 @@
 import _config from './config/get-config';
-import * as fs from 'fs';
-import * as _ from 'lodash';
+import fs from 'fs';
+import _ from 'lodash';
 import LookupRepo from './api/lookup/repo';
 import {ApiError} from './lib/common/api-error';
 import {exec} from 'child_process';
