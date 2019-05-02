@@ -26,7 +26,8 @@ export class RightPanelComponent implements OnInit {
   ideateCount: any = 0;
   planCompletedCount = 0;
   ideateCompletedCount = 0;
-
+  executeCount = 0;
+  executeCompletedCount = 0;
   navigateHash: Object = {};
   phaseProcessingCompleted = false;
 
@@ -137,10 +138,11 @@ export class RightPanelComponent implements OnInit {
     this.navigateHash['Offer Solutioning'] = ['/offerSolutioning', this.currentOfferId, this.caseId];
     this.navigateHash['Offer Components'] = ['/offerConstruct', this.currentOfferId, this.caseId];
     this.navigateHash['Design Review'] = ['/designReview', this.currentOfferId, this.caseId];
-
+    this.navigateHash['Modular Workflow Completion'] = ['/offerSetup', this.currentOfferId, this.caseId];
+   
     this.ideateCount = this.offerPhaseDetailsList['ideate'].length;
     this.planCount = this.offerPhaseDetailsList['plan'].length;
-
+    this.executeCount = this.offerPhaseDetailsList['execute'].length;
     this.offerPhaseDetailsList.ideate.forEach(element => {
       if (element.status === 'Completed') {
         this.ideateCompletedCount = this.ideateCompletedCount + 1;
@@ -150,6 +152,12 @@ export class RightPanelComponent implements OnInit {
     this.offerPhaseDetailsList.plan.forEach(element => {
       if (element.status === 'Completed') {
         this.planCompletedCount = this.ideateCompletedCount + 1;
+      }
+    });
+
+    this.offerPhaseDetailsList.execute.forEach(element => {
+      if (element.status === 'Completed') {
+        this.executeCompletedCount = this.executeCompletedCount + 1;
       }
     });
 
@@ -239,7 +247,7 @@ export class RightPanelComponent implements OnInit {
     const designReviewDate = this.offerPhaseDetailsList['plan'][4].targetDate;
 
     // execute review date
-    // const executereviewdate = this.offerPhaseDetailsList['execute'][3].targetDate;
+     const readinessReviewDate = this.offerPhaseDetailsList['execute'][3].targetDate;
 
     // readiness review date
     // const launchreviewdate = this.offerPhaseDetailsList['launch'][3].targetDate;
@@ -275,12 +283,18 @@ export class RightPanelComponent implements OnInit {
       }
       case 'execute': {
         this.editExecuteTargetDate = false;
-        payLoad['launchDate'] = value.toISOString();
+        payLoad['readinessReviewDate'] = value.toISOString();
+        if (!this.validateTargetDates(readinessReviewDate, value, null, null)) {
+          updateDate = false;
+          this.showAlert = true;
+        } else {
+          this.showAlert = false;
+        }
         break;
       }
       case 'launch': {
         this.editLanchTargetDate = false;
-        payLoad['readinessReviewDate'] = value.toISOString();
+        payLoad['launchDate'] = value.toISOString();
         break;
       }
       default: {
@@ -297,7 +311,7 @@ export class RightPanelComponent implements OnInit {
       case 'ideate': {
         this.editIdeateTargetDate = false;
         updateDBpayLoad['strategyReviewDate'] = value.toISOString();
-        if (!this.validateTargetDates(value, designReviewDate, null, null)) {
+        if (!this.validateTargetDates(value, designReviewDate, readinessReviewDate, null)) {
           updateDate = false;
           this.showAlert = true;
         } else {
@@ -308,7 +322,7 @@ export class RightPanelComponent implements OnInit {
       case 'plan': {
         this.editPlanTargetDate = false;
         updateDBpayLoad['designReviewDate'] = value.toISOString();
-        if (!this.validateTargetDates(stratReviewDate, value, null, null)) {
+        if (!this.validateTargetDates(stratReviewDate, value, readinessReviewDate, null)) {
           updateDate = false;
           this.showAlert = true;
         } else {
@@ -318,12 +332,18 @@ export class RightPanelComponent implements OnInit {
       }
       case 'execute': {
         this.editExecuteTargetDate = false;
-        updateDBpayLoad['launchDate'] = value.toISOString();
+        updateDBpayLoad['readinessReviewDate'] = value.toISOString();
+        if (!this.validateTargetDates(stratReviewDate, designReviewDate, value, null)) {
+          updateDate = false;
+          this.showAlert = true;
+        } else {
+          this.showAlert = false;
+        }
         break;
       }
       case 'launch': {
         this.editLanchTargetDate = false;
-        updateDBpayLoad['readinessReviewDate'] = value.toISOString();
+        updateDBpayLoad['launchDate'] = value.toISOString();
         break;
       }
       default: {
@@ -355,10 +375,13 @@ export class RightPanelComponent implements OnInit {
 
     const srDate = moment(stratReviewDate).format('MM-DD-YYYY');
     const drDate = moment(designReviewDate).format('MM-DD-YYYY');
-    // const erDate = moment(executeReviewDate).format('MM-DD-YYYY');
+    const erDate = moment(executeReviewDate).format('MM-DD-YYYY');
     // const lrDate = moment(launchReviewDate).format('MM-DD-YYYY');
 
     if (srDate < drDate) {
+      return true;
+    }
+    if(drDate < erDate){
       return true;
     }
   }

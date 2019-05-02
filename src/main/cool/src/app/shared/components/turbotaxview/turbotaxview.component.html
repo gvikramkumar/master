@@ -149,6 +149,41 @@
                             </div>
                         </td>
                     </tr>
+                    <tr>
+                        <td class="panel--ltgray">
+                            <span class="head text-large text-indigo">Execute<br>
+                                <span class="text-small text-dkgray-1"> {{planCompletedCount}} of {{planCount}}
+                                    Completed
+                                </span>
+                            </span>
+                        </td>
+                        <td *ngIf="executeCount > 1" colspan="3">
+                            <div class="responsive-table">
+                                <table #data class="table table--hover table--compressed table--nostripes">
+                                    <tbody>
+                                        <tr [class.innerrow]="executeCount -1  > i  " class="innerrow"
+                                            *ngFor="let ideateData of offerPhaseDetailsList.execute; let i = index">
+                                            <td class="one-third-width">
+                                                <div *ngIf="!ideateData.enable; else enableOfferPhase">
+                                                    <span class="text-muted"
+                                                        pTooltip="Dependent activities are not yet satisfied"
+                                                        tooltipPosition="top">{{ideateData.subMilestone}}</span>
+                                                </div>
+                                                <ng-template #enableOfferPhase>
+                                                    <a><span style="color: #005073;"
+                                                            (click)="gotobackTomilestone(ideateData.subMilestone)">{{ideateData.subMilestone}}</span></a>
+                                                </ng-template>
+                                            </td>
+                                            <td class="one-third-width"
+                                                [ngClass]="(ideateData.status == 'Completed' || ideateData.status == 'Not Applicable')?'text-success':'text-warning'">
+                                                {{ideateData.status}}</td>
+                                            <td class="one-third-width">{{ideateData.completionDate | date:'dd-MMM-yyyy'}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
