@@ -235,7 +235,7 @@
                                   <div class="on-focus clearfix">
                                     <select [name]="ques.value['title']+'_'+ques.value['uniqueKey']+pInfo.egineAttribue+parentIndex+'_'+childIndex" [id]="ques.value['title']+'_'+ques.value['uniqueKey']+pInfo.egineAttribue+parentIndex+'_'+childIndex" 
                                     [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false" 
-                                    [(ngModel)]="pInfo.currentValue" (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo)" #radioButton="ngModel" class="form-control" placement="top" [disabled]="ques.value['eGenieFlag']" >
+                                    [(ngModel)]="pInfo.currentValue" (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'])" #radioButton="ngModel" class="form-control" placement="top" [disabled]="ques.value['eGenieFlag']" >
                                       <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
                                     </select>
                                 
@@ -270,7 +270,7 @@
                                 <div class="form-group__text select" [class.has-error]="qaRadioButton.invalid" [class.has-success]="qaRadioButton.valid">
                                   <div class="on-focus clearfix">
                                     <select [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control"
-                                      [(ngModel)]="pInfo.currentValue" (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo)" [disabled]="ques.value['eGenieFlag']" maxlength="{{pInfo['rules']['maxCharacterLen']}}" 
+                                      [(ngModel)]="pInfo.currentValue" (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'])" [disabled]="ques.value['eGenieFlag']" maxlength="{{pInfo['rules']['maxCharacterLen']}}" 
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false" 
                                       #qaRadioButton="ngModel" class="form-control" placement="top" (mouseenter) ="showError = true; "  (mouseleave) ="showError = false;">
                                       <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
@@ -307,7 +307,7 @@
                                 <div class="form-group__text select" [class.has-error]="dropDown.invalid" [class.has-success]="dropDown.valid">
                                   <div class="on-focus clearfix">
                                     <select [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control"
-                                      [(ngModel)]="pInfo.currentValue" (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo)" [disabled]="ques.value['eGenieFlag']"  maxlength="{{pInfo['rules']['maxCharacterLen']}}" 
+                                      [(ngModel)]="pInfo.currentValue" (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'])" [disabled]="ques.value['eGenieFlag']"  maxlength="{{pInfo['rules']['maxCharacterLen']}}" 
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false" 
                                       #dropDown="ngModel" class="form-control" placement="top" (mouseenter) ="showError = true; "  (mouseleave) ="showError = false;">
                                       <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
@@ -459,7 +459,7 @@
                                 <div class="form-group__text select" [class.has-error]="radioButton.invalid" [class.has-success]="radioButton.valid">
                                   <div class="on-focus clearfix">
                                     <select [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control"
-                                      [(ngModel)]="pInfo.currentValue" (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo)" [disabled]="ques.value['eGenieFlag']" maxlength="{{pInfo['rules']['maxCharacterLen']}}" 
+                                      [(ngModel)]="pInfo.currentValue" (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'])" [disabled]="ques.value['eGenieFlag']" maxlength="{{pInfo['rules']['maxCharacterLen']}}" 
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false" 
                                       #radioButton="ngModel" class="form-control" placement="top" (mouseenter) ="showError = true; "  (mouseleave) ="showError = false;">
                                       <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
@@ -495,7 +495,7 @@
                                 <div class="form-group__text select" [class.has-error]="qaRadioButton.invalid" [class.has-success]="qaRadioButton.valid">
                                   <div class="on-focus clearfix">
                                     <select [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control"
-                                      [(ngModel)]="pInfo.currentValue" (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo)" [disabled]="ques.value['eGenieFlag']" maxlength="{{pInfo['rules']['maxCharacterLen']}}" 
+                                      [(ngModel)]="pInfo.currentValue" (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'])" [disabled]="ques.value['eGenieFlag']" maxlength="{{pInfo['rules']['maxCharacterLen']}}" 
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false" 
                                       #qaRadioButton="ngModel" class="form-control" placement="top" (mouseenter) ="showError = true; "  (mouseleave) ="showError = false;">
                                       <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
@@ -532,7 +532,7 @@
                                 <div class="form-group__text select" [class.has-error]="dropDown.invalid" [class.has-success]="dropDown.valid">
                                   <div class="on-focus clearfix">
                                     <select [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control"
-                                      [(ngModel)]="pInfo.currentValue" (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo)" [disabled]="ques.value['eGenieFlag']" maxlength="{{pInfo['rules']['maxCharacterLen']}}" 
+                                      [(ngModel)]="pInfo.currentValue" (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'])" [disabled]="ques.value['eGenieFlag']" maxlength="{{pInfo['rules']['maxCharacterLen']}}" 
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false" 
                                       #dropDown="ngModel" class="form-control" placement="top" (mouseenter) ="showError = true; "  (mouseleave) ="showError = false;">
                                       <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
