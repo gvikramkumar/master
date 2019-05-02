@@ -1,8 +1,7 @@
 import {ApiError} from './api-error';
-import _request from 'request';
+import request from 'request';
 
 export function finRequest(options) {
-  const request = _request.default;
 
   return new Promise((resolve, reject) => {
 
