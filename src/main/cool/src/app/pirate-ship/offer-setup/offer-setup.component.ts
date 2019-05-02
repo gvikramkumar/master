@@ -115,11 +115,24 @@ export class OfferSetupComponent implements OnInit {
   }
 
 
-   // Get All the ModuleName and place in order
-   getAllModuleData() {this.offerSetupService.getModuleData(this.derivedMM,this.offerId,this.functionalRole,this.selectedAto).subscribe(data => {
-     this.groupData = {};
-    this.Options =data['listATOs'];
-    data['listSetupDetails'].forEach(group => {
+  // Get All the ModuleName and place in order
+  getAllModuleData() {
+    this.offerSetupService.getModuleData(this.derivedMM, this.offerId, this.functionalRole,this.selectedAto).subscribe(data => {
+      this.groupData = {};
+      console.log(this.groupData);
+      this.Options = data['listATOs'];
+      data['listSetupDetails'].forEach(group => {
+
+        // this.getModuleStatus(group);
+        let groupName = group['groupName']
+        if (this.groupData[groupName] == null) {
+          this.groupData[groupName] = { 'left': [], 'right': [] };
+        }
+        if (group['colNum'] == 1) {
+          this.groupData[groupName]['left'].push(group);
+        } else {
+          this.groupData[groupName]['right'].push(group);
+        }
 
       });
       this.sortGroupData();
@@ -190,10 +203,13 @@ export class OfferSetupComponent implements OnInit {
 
   }
 
-  updateModuleData(message) {
-    this.getAllModuleData();
+  
+
+  onProceedToNext() {
   }
+
   selectedValue(event) {
     this.getAllModuleData();
   }
+
 }
