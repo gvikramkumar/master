@@ -5,12 +5,12 @@ import { Ato } from './model/ato';
 import { ModellingDesign } from './model/modelling-design';
 
 import { LoaderService } from '@app/core/services/loader.service';
-import { EnvironmentService } from '../../environments/environment.service';
+import { EnvironmentService } from '@env/environment.service';
 import { ConfigurationService } from '@app/core/services/configuration.service';
 
-import { RightPanelService } from '../services/right-panel.service';
-import { StakeholderfullService } from '../services/stakeholderfull.service';
-import { ModellingDesignService } from '../services/modelling-design.service';
+import { RightPanelService } from '@app/services/right-panel.service';
+import { StakeholderfullService } from '@app/services/stakeholderfull.service';
+import { ModellingDesignService } from '@app/services/modelling-design.service';
 
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
