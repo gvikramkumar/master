@@ -88,6 +88,8 @@ export class AtoMainComponent implements OnInit, OnDestroy {
         this.disableDesignCanvasButton = ((this.functionalRole.includes('BUPM') || this.functionalRole.includes('PDT'))
           && (this.atoTask['itemStatus'] === 'Completed')) ? false : true;
 
+      }, () => {
+        this.disableDesignCanvasButton = true;
       });
 
     // Retrieve Offer Details
