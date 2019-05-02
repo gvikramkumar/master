@@ -12,7 +12,7 @@
     <p-column field="status" header="STATUS" sortable="true">
       <ng-template let-col let-ato="rowData" pTemplate="body">
         <div class="text-center">
-          <app-ato-status [status]="ato['itemStatus']"></app-ato-status>
+          <app-status [status]="ato['itemStatus']"></app-status>
         </div>
       </ng-template>
     </p-column>
