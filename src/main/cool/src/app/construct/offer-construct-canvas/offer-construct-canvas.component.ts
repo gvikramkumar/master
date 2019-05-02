@@ -109,6 +109,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   listOfferQuestions: any;
   public isShow = false;
   public showLoader = false;
+  private buttonId;
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -938,7 +939,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.updateChildCount();
   }
 
-  showButton() {
+  showButton(event, id) {
+    this.buttonId = event.target.id;
     this.autoFocus = true;
     this.cd.detectChanges();
   }
