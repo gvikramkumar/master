@@ -21,9 +21,9 @@ export class OfferSetupComponent implements OnInit {
   offerName;
   offerData;
 
-  derivedMM;
+  derivedMM:any ='MM4';
   moduleStatus;
-  functionalRole;
+  functionalRole:any ='BUPM';
 
   stakeHolderData;
   stakeholders: any;
@@ -60,7 +60,7 @@ export class OfferSetupComponent implements OnInit {
   ngOnInit() {
 
     //  =======================================================================================
-    this.functionalRole = this.userService.getFunctionalRole();
+    // this.functionalRole = this.userService.getFunctionalRole();
     // Get Offer Details
     this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
 
