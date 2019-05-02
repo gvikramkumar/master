@@ -22,15 +22,15 @@
         <div class="leftContent col-sm-12 col-md-9">
           <div class="row flex-center-vertical">
 
-            <div class="col-sm-9">
-              <button class="btn btn--primary btn--cool btn--small tooltip" placement="top"
-                (click)="goToDesignCanvas()">
+            <div class="col-sm-9" *ngIf="showDesignCanvasButton">
+              <button class="btn btn--primary btn--cool btn--small tooltip" placement="top" (click)="goToDesignCanvas()"
+                [disabled]="!disableDesignCanvasButton">
                 Go To Design Canvas <i class="icon-popout"></i>
               </button>
             </div>
 
-            <div class="col-sm-3">
-              <div class="form-group dropdown label--inline">
+            <div class="pull-right col-sm-3">
+              <div class="form-group dropdown label--inline ">
                 <div class="form-group__text select">
                   <label>Viewing</label>
                   <select #dropDown="ngModel" [(ngModel)]="selectedAto" (change)="showSelectedAtoView(dropDown.value)">
@@ -53,11 +53,11 @@
 
             <br><br>
             <h3>Modelling</h3><br><br>
-            <app-ato-summary [tasks]="atoTask['modelTasks']">/</app-ato-summary>
+            <app-task-summary [tasks]="atoTask['modelTasks']">/</app-task-summary>
 
             <br><br>
             <h3>Provisioning & Mediation</h3><br><br>
-            <app-ato-summary [tasks]="atoTask['provisionTasks']">/</app-ato-summary>
+            <app-task-summary [tasks]="atoTask['provisionTasks']">/</app-task-summary>
 
           </ng-template>
 

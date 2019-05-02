@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { OfferconstructCanvasService } from './service/offerconstruct-canvas.service';
 import { OfferConstructService } from '@app/services/offer-construct.service';
 import * as moment from 'moment';
+import {OfferConstructDefaultValue} from '@app/construct/offer-construct-canvas/service/offer-construct-defaultValue-services';
 
 
 @Component({
@@ -44,7 +45,8 @@ export class DynamicFormMultipleComponent implements OnInit {
     constructor(public offerConstructService: OfferConstructService,
         private offerConstructCanvasService: OfferconstructCanvasService,
         private loaderService: LoaderService,
-        private datePipe: DatePipe) {
+        private datePipe: DatePipe,
+        private defaultValueServices: OfferConstructDefaultValue) {
     }
 
     ngOnInit() {
@@ -352,12 +354,68 @@ export class DynamicFormMultipleComponent implements OnInit {
     }
 
 
-addAllDetailsValidationsonChange(e,question){
+addAllDetailsValidationsonChange(e,question, questionList?){
+    
+    // set base price value according to billing_soa SOA Pricing selection type
+    if (questionList !== undefined) {
+        if (question.question == "SOA Pricing") {
+            if (question.currentValue == "Flat") {
+                this.defaultValueServices.setBasePriceInBillingSOADForFlat(questionList);
+            }
 
+            if (question.currentValue == "% of Product List") {
+                this.defaultValueServices.setBasePriceInBillingSOAForProduct(questionList);
+            }
+        }
+        
+        if (question.question == "Smart Licensing Enabled") {
+            if (question.currentValue == "Yes") {
+                this.defaultValueServices.setSmartAccountSOAForProduct(questionList);
+            }
+            if (question.currentValue == "No") {
+                this.defaultValueServices.setSmartAccountForSmartLicensingEnabledNo(questionList);
+            }
+    
+        }
+        
+        if (question.question == "Terms & Payments Required") {
+            if (question.currentValue == "Yes") {
+                this.defaultValueServices.setTermsPaymentsRequired(questionList);
+            }
+            if (question.currentValue == "No") {
+                this.defaultValueServices.setTermsPaymentsRequiredN(questionList);
+            }
+    
+        }
+        
+        if (question.question == "Pricing Approval Required") {
+            if (question.currentValue == "Yes") {
+                this.defaultValueServices.setPricingApprovalRequired(questionList);
+            }
+            if (question.currentValue == "No") {
+                this.defaultValueServices.setPricingApprovalRequiredN(questionList);
+            }
+    
+        }
+        if (question.question == "Refurbished Item?") {
+            if (question.currentValue == "Yes") {
+                this.defaultValueServices.setRefurbishedItemRequired(questionList);
+            }
+            if (question.currentValue == "No") {
+                this.defaultValueServices.setRefurbishedItemRequiredN(questionList);
+            }
+    
+        }
+        // if (question.question == "Terms & Payments Required") {
+        //     question.currentValue == "Yes"
+        // 
+        // 
+        // }
+        
+    }
     var validatorPattern = '';
     if (question.egineAttribue !== "Item Name (PID)") {
         if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "numeric") {
-            // validatorPattern = "^[0-9]*$";
             if(!(/^[0-9]*$/.test(question.currentValue))){
                 question.rules.validationMessage = question.egineAttribue+" should be in "+question.rules.textcase;
                 question.rules.isvalid = false ;
@@ -403,6 +461,66 @@ addAllDetailsValidationsonChange(e,question){
             // validatorPattern = "^[A-Z][A-Za-z0-9\\s]*$";
             if(!(/^[A-Z][A-Za-z0-9\\s]*$/.test(question.currentValue))){
                 question.rules.validationMessage = question.egineAttribue + " should be in " + question.rules.textcase;
+                question.rules.isvalid = false ;
+            }
+            else{
+                question.rules.validationMessage = "";
+                question.rules.isvalid = true;
+            }
+        }
+        if (question.egineAttribue == 'Non Standard True Up Term') {
+            if(!(/^0*([2-6])$/.test(question.currentValue))){
+                question.rules.validationMessage = "Value should be a numeric range (ex. 2-6)" ;
+                question.rules.isvalid = false ;
+            }
+            else{
+                question.rules.validationMessage = "";
+                question.rules.isvalid = true;
+            }
+        }
+        if (question.egineAttribue == 'Initial Term') {
+           if(!(/^(0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120))(,(0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120)))*$/.test(question.currentValue))){
+               question.rules.validationMessage = "Comma separated numeric range with no spaces (example: 1,12) where 1 is min and 120 is max";
+               question.rules.isvalid = false ;
+           }
+           else{
+               question.rules.validationMessage = "";
+               question.rules.isvalid = true;
+           }
+       }
+       if (question.egineAttribue == 'NON STD INITIAL TERM') {
+           if(!(/^0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120)$/.test(question.currentValue))){
+               question.rules.validationMessage = "Value should be a numeric range where 1 is min and 120 is max (example: 1-12)";
+               question.rules.isvalid = false ;
+           }
+           else{
+               question.rules.validationMessage = "";
+               question.rules.isvalid = true;
+           }
+       }
+       if (question.egineAttribue == 'STD AUTO RENEWAL TERM') {
+           if(!(/^0*([1-9]|[1-5][0-9]|60)$/.test(question.currentValue))){
+               question.rules.validationMessage = "Mandatory entry of 1 numeric  value where 1 is min and 60 is max" ;
+               question.rules.isvalid = false ;
+           }
+           else{
+               question.rules.validationMessage = "";
+               question.rules.isvalid = true;
+           }
+       }
+        if (question.egineAttribue == 'NON STD AUTO RENEWAL TERM') {
+            if(!(/^0*([1-9]|1[0-2])$/.test(question.currentValue))){
+                question.rules.validationMessage = question.egineAttribue + "Value should be a numeric range where 1 is min and 12 is max" ;
+                question.rules.isvalid = false ;
+            }
+            else{
+                question.rules.validationMessage = "";
+                question.rules.isvalid = true;
+            }
+        }
+        if (question.egineAttribue == 'Subscription Offset(In Days)') {
+            if(!(/^0*([1-9]|[1-5][0-9]|60)$/.test(question.currentValue))){
+                question.rules.validationMessage = "Mandatory entry of 1 numeric value between 1 and 60" ;
                 question.rules.isvalid = false ;
             }
             else{

@@ -1,23 +1,26 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModellingDesignService } from '../../services/modelling-design.service';
-import { StakeholderfullService } from '../../services/stakeholderfull.service';
-import { ModellingDesign } from '../model/modelling-design';
-import { Ato } from '../model/ato';
-import { Subscription } from 'rxjs';
-import { EnvironmentService } from '../../../environments/environment.service';
-import { ConfigurationService } from '@app/core/services/configuration.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+
+import { Ato } from './model/ato';
+import { ModellingDesign } from './model/modelling-design';
+
 import { LoaderService } from '@app/core/services/loader.service';
+import { EnvironmentService } from '../../environments/environment.service';
+import { ConfigurationService } from '@app/core/services/configuration.service';
+
+import { RightPanelService } from '../services/right-panel.service';
+import { StakeholderfullService } from '../services/stakeholderfull.service';
+import { ModellingDesignService } from '../services/modelling-design.service';
 
 import * as _ from 'lodash';
-import { RightPanelService } from '../../services/right-panel.service';
+import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-ato-main',
-  templateUrl: './ato-main.component.html',
-  styleUrls: ['./ato-main.component.scss']
+  selector: 'app-modelling-design',
+  templateUrl: './modelling-design.component.html',
+  styleUrls: ['./modelling-design.component.scss']
 })
-export class AtoMainComponent implements OnInit, OnDestroy {
+export class ModellingDesignComponent implements OnInit, OnDestroy {
 
   atoTask: Ato;
   atoList: Array<Ato>;
@@ -30,9 +33,11 @@ export class AtoMainComponent implements OnInit, OnDestroy {
   atoNames: string[] = [];
 
   caseId: string;
+  planId: string;
   offerId: string;
   offerName: string;
   offerOwner: string;
+  functionalRole: Array<String>;
 
   primaryBE: string;
   derivedMM: string;
@@ -41,6 +46,9 @@ export class AtoMainComponent implements OnInit, OnDestroy {
 
   stakeholders: any;
   stakeHolderData: any;
+
+  showDesignCanvasButton: boolean;
+  disableDesignCanvasButton: boolean;
 
   constructor(
     private router: Router,
@@ -64,33 +72,41 @@ export class AtoMainComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    this.atoTask = {} as Ato;
     this.atoNames.push(this.selectedAto);
+    this.functionalRole = this.configurationService.startupData.functionalRole;
+    this.showDesignCanvasButton = this.selectedAto === 'Overall Offer' ? false : true;
 
     this.modellingDesignSubscription = this.modellingDesignService.retrieveAtoList(this.offerId)
       .subscribe((modellingDesignResponse: ModellingDesign) => {
 
         this.modellingDesign = modellingDesignResponse;
-        this.atoList = this.modellingDesign['data'];
+        this.atoList = this.modellingDesign['data'] ? this.modellingDesign['data'] : [];
 
         this.atoList.map(dropDownValue => {
           this.atoNames.push(dropDownValue.itemName);
         });
 
-        this.atoTask = {} as Ato;
+        this.disableDesignCanvasButton = ((this.functionalRole.includes('BUPM') || this.functionalRole.includes('PDT'))
+          && (this.atoTask['itemStatus'] === 'Completed')) ? false : true;
 
+      }, () => {
+        this.disableDesignCanvasButton = true;
       });
 
     // Retrieve Offer Details
     this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
 
+      this.planId = offerDetails['planId'];
       this.derivedMM = offerDetails['derivedMM'];
       this.offerName = offerDetails['offerName'];
       this.primaryBE = offerDetails['primaryBEList'][0];
       this.stakeHolderData = offerDetails['stakeholders'];
+
       this.processStakeHolderInfo();
       this.getLeadTimeCalculation();
-    });
 
+    });
 
 
   }
@@ -104,30 +120,36 @@ export class AtoMainComponent implements OnInit, OnDestroy {
 
   goToDesignCanvas() {
 
-    const urlToOpen = this.environmentService.owbUrl;
-    const functionalRole: Array<String> = this.configurationService.startupData.functionalRole;
+    const userId = this.configurationService.startupData.userId;
+    let urlToOpen = this.environmentService.owbUrl + '/manage/offer/owbOfferDefinition?';
+    urlToOpen += 'selectedAto=' + this.selectedAto + '&planId=' + this.planId + '&userId=' + userId;
 
-    if ((functionalRole.includes('BUPM') || functionalRole.includes('PDT'))
-      && this.selectedAto !== 'Overall Offer') {
-      window.open(urlToOpen, '_blank');
-    }
+    window.open(urlToOpen, '_blank');
 
   }
 
   goToPirateShip() {
-    this.router.navigate(['/offerSetup', this.offerId, this.caseId, this.selectedAto,]);
+    this.router.navigate(['/offerSetup', this.offerId, this.caseId, this.selectedAto]);
   }
 
-  // -------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------n------------------------------------------------------------
 
 
   showSelectedAtoView(dropDownValue: string) {
 
     if (dropDownValue === 'Overall Offer') {
+
       this.selectedAto = dropDownValue;
+      this.showDesignCanvasButton = false;
+
     } else {
+
       this.selectedAto = dropDownValue;
+      this.showDesignCanvasButton = true;
       this.atoTask = this.atoList.find(ato => ato.itemName === dropDownValue);
+      this.disableDesignCanvasButton = ((this.functionalRole.includes('BUPM') || this.functionalRole.includes('PDT'))
+        && (this.atoTask['itemStatus'] === 'Completed')) ? false : true;
+
     }
   }
 
@@ -157,10 +179,13 @@ export class AtoMainComponent implements OnInit, OnDestroy {
   // -------------------------------------------------------------------------------------------------------------------
 
   private getLeadTimeCalculation() {
+
     this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe((leadTime) => {
+
       this.noOfWeeksDifference = Number(leadTime['averageOverall']).toFixed(1);
       this.loaderService.stopLoading();
       this.displayLeadTime = true;
+
     }, () => {
       this.noOfWeeksDifference = 'N/A';
       this.loaderService.stopLoading();
@@ -168,5 +193,6 @@ export class AtoMainComponent implements OnInit, OnDestroy {
   }
 
   // -------------------------------------------------------------------------------------------------------------------
+
 
 }

@@ -1,0 +1,16 @@
+<ng-container *ngIf="status==='Completed'; else notRequired">
+  <span class="completed success">
+    <span class="icon-check"></span>
+  </span>
+</ng-container>
+
+<ng-template #notRequired>
+  <ng-container *ngIf="status==='In Progress';else other">
+    <span class="in-progress">
+    </span>
+  </ng-container>
+</ng-template>
+
+<ng-template #other>
+  --
+</ng-template>

@@ -80,11 +80,6 @@ const routes: Routes = [
     resolve: { offerData: OfferOverViewResolver }
   },
   {
-    path: 'itemcreation',
-    component: ItemCreationComponent,
-    resolve: { offerData: OfferOverViewResolver }
-  },
-  {
     path: 'offerSetup/:offerId/:caseId',
     loadChildren: './pirate-ship/pirate-ship.module#PirateShipModule',
     resolve: { offerData: OfferOverViewResolver }
@@ -100,8 +95,8 @@ const routes: Routes = [
     resolve: { offerData: OfferOverViewResolver }
   },
   {
-    path: 'ItemCreation/:offerId/:caseId/:selectedAto',
-    component: ItemCreationComponent,
+    path: 'item-creation/:offerId/:caseId/:selectedAto',
+    loadChildren: './item-creation/item-creation.module#ItemCreationModule',
     resolve: { offerData: OfferOverViewResolver }
   }
 

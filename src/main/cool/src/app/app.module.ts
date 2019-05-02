@@ -79,8 +79,6 @@ export function app_init(configService: ConfigurationService) {
     DesignReviewExitCriteriaComponent,
     CustomMinValidatorDirective,
     CustomRangeValidatorDirective,
-    ItemCreationComponent,
-    ReviewEditForm
   ],
   imports: [
     NgbModule,
