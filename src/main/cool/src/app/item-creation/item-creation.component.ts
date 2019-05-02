@@ -31,12 +31,13 @@ export class ItemCreationComponent implements OnInit {
   selectedCars: any[];
   selectedProductNodes: TreeNode[]; //selectedNodes3
   selectedProductNames: string;
+  selectedProductList: [];
   offerDropdownValues: any;
   offerId: string;
   caseId: string;
   selectedOffer: string;
   display: Boolean = false;
-  
+  removeList: any;
   offerName: string;
   offerOwner: string;
 
@@ -64,12 +65,12 @@ export class ItemCreationComponent implements OnInit {
   ind = 0;
 
   constructor(private router: Router, private itemCreationService: ItemCreationService,
-    private activatedRoute: ActivatedRoute, private offerConstructService: OfferConstructService, 
+    private activatedRoute: ActivatedRoute, private offerConstructService: OfferConstructService,
     private stakeholderfullService: StakeholderfullService, private rightPanelService: RightPanelService,
     private loaderService: LoaderService,
     private offerDetailViewService: OfferDetailViewService,
     private offerConstructCanvasService: OfferconstructCanvasService,
-    ) {
+  ) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['offerId'];
       this.offerId = params['offerId'];
@@ -538,14 +539,35 @@ export class ItemCreationComponent implements OnInit {
   }
 
   removeProductDetails() {
-    // this.selectedProductNodes.forEach(nodeList => {
-    //   if (nodeList.data.product !== undefined) {
-    //     this.selectedProductNames += nodeList.data.product + ',';
-    //   }
-    // });
-    // this.itemCreationService.removeItemDetails(this.offerId, this.selectedProductNames).subscribe(response => {
-    // });
-    this.productDetails = [];
+    this.removeList = [];
+    if (this.selectedProductNodes.length) {
+      this.selectedProductNodes.forEach((selectedItem) => {
+        if (selectedItem.parent == null) {
+          this.productDetails.forEach((element, index) => {
+            if (element.data.product == selectedItem.data.product) {
+              this.removeList.push(element.data.product);
+              this.productDetails.splice(index, 1);
+            }
+          });
+        } else {
+          this.productDetails.forEach((element) => {
+            if (element.data.product == selectedItem.parent.data.product) {
+              element.children.forEach((childElement, childIndex) => {
+                if (childElement.data.product == selectedItem.data.product) {
+                  this.removeList.push(childElement.data.product);
+                  element.children.splice(childIndex, 1);
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+    
+    this.productDetails = [...this.productDetails];
+    this.itemCreationService.removeItemDetails(this.offerId, this.removeList).subscribe(response => {
+
+    });
   }
 
   goBackToOfferSetup() {
