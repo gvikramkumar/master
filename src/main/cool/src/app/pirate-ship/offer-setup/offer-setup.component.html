@@ -69,7 +69,7 @@
                         <!-- Available -->
                         <button *ngIf="element['status']=='Available'"
                         class="btn btn--small btn--primary"
-                        placement="top"
+                        placement="top" (click)="getElementDetails(element)"
                       >
                        {{element["moduleName"]}} 
                       </button>
@@ -83,7 +83,7 @@
                            <!-- Not Required -->
                            <button *ngIf="element['status']=='Not Required'"
                            class="btn btn--small btn--default"
-                           placement="top"
+                           placement="top" (click)="getElementDetails(element)"
                          >
                            {{element["moduleName"]}} 
                          </button>
@@ -98,35 +98,35 @@
                        <!-- Completed -->
                        <button *ngIf="element['status']=='Completed'"
                        class="btn btn--small btn--success"
-                       placement="top"
+                       placement="top" (click)="getElementDetails(element)"
                      >
                       {{element["moduleName"]}} 
                      </button>
                       <!-- In Progress-->
                     <button *ngIf="element['status']=='In Progress'"
                     class="btn btn--small  btn--warning"
-                    placement="top"
+                    placement="top" (click)="getElementDetails(element)"
                   >
                    {{element["moduleName"]}} 
                   </button>
                   <!-- Available -->
                   <button *ngIf="element['status']=='Available'"
                   class="btn btn--small btn--primary"
-                  placement="top"
+                  placement="top" (click)="getElementDetails(element)"
                 >
                  {{element["moduleName"]}} 
                 </button>
                      <!-- Not Yet Available -->
                      <button *ngIf="element['status']=='Not Yet Available'"
                        class="btn btn--small btn--gray-ghost"
-                       placement="top"
+                       placement="top" (click)="getElementDetails(element)"
                      >
                       {{element["moduleName"]}} 
                      </button>
                      <!-- Not Required -->
                      <button *ngIf="element['status']=='Not Required'"
                      class="btn btn--small btn--default"
-                     placement="top"
+                     placement="top" (click)="getElementDetails(element)"
                    >
                      {{element["moduleName"]}} 
                    </button>
@@ -150,35 +150,35 @@
                                  <!-- Completed -->
                                  <button *ngIf="element['status']=='Completed'"
                                  class="btn btn--small btn--success"
-                                 placement="top"
+                                 placement="top" (click)="getElementDetails(element)"
                                >
                                 {{element["moduleName"]}} 
                                </button>
                                 <!-- In Progress-->
                               <button *ngIf="element['status']=='In Progress'"
                               class="btn btn--small  btn--warning"
-                              placement="top"
+                              placement="top" (click)="getElementDetails(element)"
                             >
                              {{element["moduleName"]}} 
                             </button>
                             <!-- Available -->
                             <button *ngIf="element['status']=='Available'"
                             class="btn btn--small btn--primary"
-                            placement="top"
+                            placement="top" (click)="getElementDetails(element)"
                           >
                            {{element["moduleName"]}} 
                           </button>
                                <!-- Not Yet Available -->
                                <button *ngIf="element['status']=='Not Yet Available'"
                                  class="btn btn--small btn--gray-ghost"
-                                 placement="top"
+                                 placement="top" (click)="getElementDetails(element)"
                                >
                                 {{element["moduleName"]}} 
                                </button>
                                <!-- Not Required -->
                                <button *ngIf="element['status']=='Not Required'"
                                class="btn btn--small btn--default"
-                               placement="top"
+                               placement="top" (click)="getElementDetails(element)"
                              >
                                {{element["moduleName"]}} 
                              </button>
@@ -196,35 +196,35 @@
                                  <!-- Completed -->
                                  <button *ngIf="element['status']=='Completed'"
                                  class="btn btn--small btn--success"
-                                 placement="top"
+                                 placement="top" (click)="getElementDetails(element)"
                                >
                                 {{element["moduleName"]}} 
                                </button>
                                 <!-- In Progress-->
                               <button *ngIf="element['status']=='In Progress'"
                               class="btn btn--small  btn--warning"
-                              placement="top"
+                              placement="top" (click)="getElementDetails(element)"
                             >
                              {{element["moduleName"]}} 
                             </button>
                             <!-- Available -->
                             <button *ngIf="element['status']=='Available'"
                             class="btn btn--small btn--primary"
-                            placement="top"
+                            placement="top" (click)="getElementDetails(element)"
                           >
                            {{element["moduleName"]}} 
                           </button>
                                <!-- Not Yet Available -->
                                <button *ngIf="element['status']=='Not Yet Available'"
                                  class="btn btn--small btn--gray-ghost"
-                                 placement="top"
+                                 placement="top" (click)="getElementDetails(element)"
                                >
                                 {{element["moduleName"]}} 
                                </button>
                                <!-- Not Required -->
                                <button *ngIf="element['status']=='Not Required'"
                                class="btn btn--small btn--default"
-                               placement="top"
+                               placement="top" (click)="getElementDetails(element)"
                              >
                                {{element["moduleName"]}} 
                              </button>
