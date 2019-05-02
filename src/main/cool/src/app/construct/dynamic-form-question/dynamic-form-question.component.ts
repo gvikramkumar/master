@@ -13,13 +13,52 @@ export class DynamicFormQuestionComponent implements OnInit {
   @Input() questionForm: FormGroup;
   @Input() offerForm: FormGroup;
   @Input() headerName: FormGroup;
+  @Input() questionList: FormGroup;
   minDate: Date;
 
   constructor(public offerConstructService: OfferConstructService) {
   }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.minDate = new Date();
+  }
+
+  addAllDetailsValidationsonChange(e, question) {
+    if (this.questionList !== undefined) {
+      if (question.question == "SOA Pricing") {
+        if (question.currentValue == "Flat") {
+          this.setBasePriceInBillingSOADForFlat(this.questionList);
+        }
+
+        if (question.currentValue == "% of Product List") {
+          this.setBasePriceInBillingSOAForProduct(this.questionList);
+        }
+      }
+    }
+  }
+
+  //set basePrice value according to pricing type
+  setBasePriceInBillingSOADForFlat(questionList) {
+    let monthlyAmountValue;
+    questionList.forEach(question => {
+      if (question.question == "Monthly Amount") {
+        monthlyAmountValue = question.currentValue;
+      }
+    });
+
+    questionList.forEach(question => {
+      if (question.question == "Base Price") {
+        question.currentValue = monthlyAmountValue;
+      }
+    });
+  }
+
+  setBasePriceInBillingSOAForProduct(questionList) {
+    questionList.forEach(question => {
+      if (question.question == "Base Price") {
+        question.currentValue = 1;
+      }
+    });
   }
 
 
