@@ -1,11 +1,10 @@
+
+import { FormGroup } from '@angular/forms';
+import { DatePipe } from '@angular/common';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoaderService } from '@app/core/services/loader.service';
-import { Component, OnInit, Input, Output, ViewChild, ElementRef, Renderer, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { DatePipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { OfferConstructService } from '@app/services/offer-construct.service';
-import * as moment from 'moment';
 import { OfferconstructCanvasService } from '@app/construct/offer-construct-canvas/service/offerconstruct-canvas.service';
 
 
@@ -69,7 +68,7 @@ export class ReviewEditForm implements OnInit {
         //create object with blank value for search operation
         let major = {};
         let minor = {};
-        this.majorOfferInfo.forEach((element, index) => {
+        this.majorOfferInfo.forEach((element) => {
             let name: any = Object.keys(element);
             major[name] = '';
         });
@@ -111,7 +110,7 @@ export class ReviewEditForm implements OnInit {
         let isUdate: boolean = true;
         this.majorOfferInfo.forEach((list, index) => {
             let groupName: any = Object.keys(list);
-            this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element, index) => {
+            this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element) => {
                 let title: any = Object.keys(element);
                 this.replaceOrUpdatevalue(element[title], isUdate)
             });
@@ -119,7 +118,7 @@ export class ReviewEditForm implements OnInit {
 
         this.minorOfferInfo.forEach((list, index) => {
             let groupName: any = Object.keys(list);
-            this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach((element, index) => {
+            this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach((element) => {
                 let title: any = Object.keys(element);
                 this.replaceOrUpdatevalue(element[title], isUdate)
             });
@@ -131,11 +130,10 @@ export class ReviewEditForm implements OnInit {
     }
 
     closeDialog() {
-        let isUdate: boolean = true;
         this.majorSection();
         this.majorOfferInfo.forEach((list, index) => {
             let groupName: any = Object.keys(list);
-            this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element, index) => {
+            this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element) => {
                 let title: any = Object.keys(element);
                 if (!element[title].eGenieFlag || element[title].eGenieFlag === false) {
                     element[title].listOfferQuestions.forEach(majorProduct => {
@@ -150,7 +148,7 @@ export class ReviewEditForm implements OnInit {
         });
         this.minorOfferInfo.forEach((list, index) => {
             let groupName: any = Object.keys(list);
-            this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach((element, index) => {
+            this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach((element) => {
                 let title: any = Object.keys(element);
                 if (!element[title].eGenieFlag || element[title].eGenieFlag === false) {
                     element[title].listOfferQuestions.forEach(minorProduct => {
@@ -190,7 +188,7 @@ export class ReviewEditForm implements OnInit {
 
     //search copy and paste in multiple form
 
-    onTabOpen(e, headerName) {
+    onTabOpen(headerName) {
         this.currenntHeaderName = headerName;
         // this.itemsList[headerName] = {};
 
@@ -202,7 +200,7 @@ export class ReviewEditForm implements OnInit {
             this.showLoader = true;
             this.copyAttributeResults = [...results];
         },
-            (error) => {
+            () => {
                 this.results = [];
             }
         );
@@ -270,7 +268,7 @@ export class ReviewEditForm implements OnInit {
                     } else {
                         console.log("network error");
                     }
-                }, (err) => {
+                }, () => {
                     this.showLoader = false;
                     this.loaderService.stopLoading();
 
@@ -297,10 +295,10 @@ export class ReviewEditForm implements OnInit {
             if (groupName === itemsData['Item Category']) {
                 //copy in major section or minor section
                 if (this.ismajorSection) {
-                    this.majorOfferInfo.forEach((element, index) => {
+                    this.majorOfferInfo.forEach((element) => {
                         let gname: any = Object.keys(element);
                         if (gname == groupName) {
-                            element[gname].productInfo.forEach((questionset, index) => {
+                            element[gname].productInfo.forEach((questionset) => {
                                 let setname: any = Object.keys(questionset);
                                 if (!questionset[setname].eGenieFlag) {
                                     this.copySearchItemToAllSection(questionset[setname].listOfferQuestions);
@@ -309,10 +307,10 @@ export class ReviewEditForm implements OnInit {
                         }
                     });
                 } else {
-                    this.minorOfferInfo.forEach((element, index) => {
+                    this.minorOfferInfo.forEach((element) => {
                         let gname: any = Object.keys(element);
                         if (gname == groupName) {
-                            element[gname].productInfo.forEach((questionset, index) => {
+                            element[gname].productInfo.forEach((questionset) => {
                                 let setname: any = Object.keys(questionset);
                                 if (!questionset[setname].eGenieFlag) {
                                     this.copySearchItemToAllSection(questionset[setname].listOfferQuestions);
@@ -359,9 +357,8 @@ export class ReviewEditForm implements OnInit {
     }
 
 
-    addAllDetailsValidationsonChange(e, question) {
+    addAllDetailsValidationsonChange(question) {
 
-        var validatorPattern = '';
         if (question.egineAttribue !== "Item Name (PID)") {
             if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "numeric") {
                 // validatorPattern = "^[0-9]*$";

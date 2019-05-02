@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AtoMainComponent } from './ato-main.component';
+import { ModellingDesignComponent } from './modelling-design.component';
 
-describe('AtoMainComponent', () => {
-  let component: AtoMainComponent;
-  let fixture: ComponentFixture<AtoMainComponent>;
+describe('ModellingDesignComponent', () => {
+  let component: ModellingDesignComponent;
+  let fixture: ComponentFixture<ModellingDesignComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AtoMainComponent ]
+      declarations: [ ModellingDesignComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AtoMainComponent);
+    fixture = TestBed.createComponent(ModellingDesignComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
