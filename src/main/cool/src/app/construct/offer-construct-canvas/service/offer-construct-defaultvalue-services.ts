@@ -18,57 +18,57 @@ export class OfferConstructDefaultValue{
          element.previousValue = element.rules.defaultSel;
        }
        if (element.question == 'Base Price') {
-         if (chargeTypeValue == 'Usage') {
+         if (chargeTypeValue == usageType) {
            element.currentValue = 0;
            element.previousValue = 0;
          }
        }
        if (element.question == 'Discount Restricted Product') {
-         if (chargeTypeValue == 'Recurring') {
+         if (chargeTypeValue == recurringType) {
            element.currentValue = 0;
            element.previousValue = 0;
          }
        }
        if (element.question === "Proration Flag For Purchase") {
-         if (chargeTypeValue == 'Recurring') {
+         if (chargeTypeValue == recurringType) {
            element.currentValue = 'Yes';
            element.previousValue = 'Yes';
          }
-         if (chargeTypeValue == 'Usage') {
+         if (chargeTypeValue == usageType) {
            element.currentValue = 'No';
            element.previousValue = 'No';
          }
        }
        if (element.question === "Proration Flag For Cancel") {
-         if (chargeTypeValue == 'Recurring') {
+         if (chargeTypeValue == recurringType) {
            element.currentValue = 'Yes';
            element.previousValue = 'Yes';
          }
-         if (chargeTypeValue == 'Usage') {
+         if (chargeTypeValue == usageType) {
            element.currentValue = 'No';
            element.previousValue = 'No';
          }
        }
        if (element.question == "Usage Type") {
-         if (chargeTypeValue == 'Usage') {
+         if (chargeTypeValue == usageType) {
            element.currentValue = 'Support';
            element.previousValue = 'Support';
          }
        }
        if (element.question == 'RATING MODEL') {
-         if (chargeTypeValue == 'Usage') {
+         if (chargeTypeValue == usageType) {
            element.currentValue = 'EVENT';
            element.previousValue = 'EVENT';
          }
        }
        if (element.question == 'Discount Restricted Product') {
-         if (chargeTypeValue == 'Usage') {
+         if (chargeTypeValue == usageType) {
            element.currentValue = 'Yes';
            element.previousValue = 'Yes';
          }
        }
        if (element.question == 'Subscription Offset') {
-         if (chargeTypeValue == 'Recurring') {
+         if (chargeTypeValue == recurringType) {
            element.currentValue = '30';
            element.previousValue = '30';
          }
