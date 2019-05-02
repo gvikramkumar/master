@@ -34,6 +34,7 @@ export class AtoMainComponent implements OnInit, OnDestroy {
   offerId: string;
   offerName: string;
   offerOwner: string;
+  functionalRole: Array<String>;
 
   primaryBE: string;
   derivedMM: string;
@@ -70,6 +71,7 @@ export class AtoMainComponent implements OnInit, OnDestroy {
 
     this.atoTask = {} as Ato;
     this.atoNames.push(this.selectedAto);
+    this.functionalRole = this.configurationService.startupData.functionalRole;
     this.showDesignCanvasButton = this.selectedAto === 'Overall Offer' ? false : true;
 
     this.modellingDesignSubscription = this.modellingDesignService.retrieveAtoList(this.offerId)
@@ -82,6 +84,11 @@ export class AtoMainComponent implements OnInit, OnDestroy {
           this.atoNames.push(dropDownValue.itemName);
         });
 
+        this.disableDesignCanvasButton = ((this.functionalRole.includes('BUPM') || this.functionalRole.includes('PDT'))
+          && (this.atoTask['itemStatus'] === 'Completed')) ? false : true;
+
+      }, () => {
+        this.disableDesignCanvasButton = true;
       });
 
     // Retrieve Offer Details
@@ -98,10 +105,6 @@ export class AtoMainComponent implements OnInit, OnDestroy {
 
     });
 
-
-    const functionalRole: Array<String> = this.configurationService.startupData.functionalRole;
-    this.disableDesignCanvasButton = ((functionalRole.includes('BUPM') || functionalRole.includes('PDT'))
-      && (this.atoTask['itemStatus'] === 'Completed')) ? false : true;
 
   }
 
@@ -132,12 +135,18 @@ export class AtoMainComponent implements OnInit, OnDestroy {
   showSelectedAtoView(dropDownValue: string) {
 
     if (dropDownValue === 'Overall Offer') {
+
       this.selectedAto = dropDownValue;
       this.showDesignCanvasButton = false;
+
     } else {
+
       this.selectedAto = dropDownValue;
       this.showDesignCanvasButton = true;
       this.atoTask = this.atoList.find(ato => ato.itemName === dropDownValue);
+      this.disableDesignCanvasButton = ((this.functionalRole.includes('BUPM') || this.functionalRole.includes('PDT'))
+        && (this.atoTask['itemStatus'] === 'Completed')) ? false : true;
+
     }
   }
 
