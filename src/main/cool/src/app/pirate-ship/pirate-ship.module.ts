@@ -8,9 +8,9 @@ import { RightPanelModule } from '@app/right-panel/right-panel.module';
 import { OfferDetailModule } from '../offer-detail/offer-detail.module';
 
 import { ViewOfferComponent } from './view-offer/view-offer.component';
-import { OfferSetupComponent } from './offer-setup/offer-setup.component';
-import { ATOSummaryComponent } from './atosummary/atosummary.component';
 import {pirateshipComponent} from '@app/pirate-ship/pirate-ship.component';
+import {ATOSummaryComponent} from '@app/pirate-ship/components/atosummary/atosummary.component';
+import {OfferSetupComponent} from '@app/pirate-ship/offer-setup.component';
 
 
 const routes: Routes = [
