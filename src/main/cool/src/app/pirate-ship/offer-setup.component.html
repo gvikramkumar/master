@@ -23,7 +23,8 @@
           <!-- Control Bar -->
           <div class="row base-margin-top">
 
-            <div class="col-md-4">Currently Viewing the <strong>Overall Offer</strong>.</div>
+            <div class="col-md-8"></div>
+            <div class="col-md-4 text-right">
             <div class="form-group dropdown label--inline">
               <div class="form-group__text select">
                 <label for="select-size-default">Viewing</label>
@@ -34,7 +35,7 @@
                   </option>
                 </select>
               </div>
-            </div>
+            </div></div>
 
           </div>
           <!-- Pirate Ship -->
@@ -385,34 +386,41 @@
                       <button class="btn btn--icon btn--small legend-available"></button>
                       Available
                     </li>
+                    
                     <li class="half-margin-bottom">
-                      <button class="btn btn--icon btn--small legend-notavail"></button>
-                      Not Yet Available
-                    </li>
-                    <li>
-                      <button class="btn btn--icon btn--small legend-notreq"></button>
-                      Not Required
-                    </li>
+                        <button class="btn btn--icon btn--small legend-completed">
+                          <span class="icon-check"></span>
+                        </button>
+                        Completed
+                      </li>
+
+                      <li>
+                          <button class="btn btn--icon btn--small legend-milestone">
+                            <span class="milestone"></span>
+                          </button>
+                          Milestone
+                        </li>
+
                   </div>
                   <div class="col-sm-6">
                     <li class="half-margin-bottom">
-                      <button class="btn btn--icon btn--small legend-completed">
-                        <span class="icon-check"></span>
-                      </button>
-                      Completed
-                    </li>
+                        <button class="btn btn--icon btn--small legend-notavail"></button>
+                        Not Yet Available
+                      </li>
+
                     <li class="half-margin-bottom">
                       <button class="btn btn--icon btn--small legend-inprog">
                         <span class="in-progress"></span>
                       </button>
                       In-Progess
                     </li>
+
+                   
                     <li>
-                      <button class="btn btn--icon btn--small legend-milestone">
-                        <span class="milestone"></span>
-                      </button>
-                      Milestone
-                    </li>
+                        <button class="btn btn--icon btn--small legend-notreq"></button>
+                        Not Required
+                      </li>
+
                   </div>
                 </div>
               </ul>
