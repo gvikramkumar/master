@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
-import {SharedModule} from '@shared/shared.module';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { SharedModule } from '@shared/shared.module';
 
 import * as _ from 'lodash';
 import { TaskBarModule } from '../taskbar/task-bar.module';
@@ -11,13 +11,8 @@ import { MmInfoBarComponent } from './mm-info-bar/mm-info-bar.component';
 import { MmAssesmentComponent } from './mm-assesment/mm-assesment.component';
 import { MmMessageBarComponent } from './mm-message-bar/mm-message-bar.component';
 
+import { MONETIZATION_ROUTES } from './monetization.routes';
 
-const routes: Routes = [
-    {
-        path: '',
-        component: MmAssesmentComponent
-    },
-];
 
 @NgModule({
     declarations: [
@@ -31,7 +26,7 @@ const routes: Routes = [
         MenuBarModule,
         RightPanelModule,
         OfferDetailModule,
-        RouterModule.forChild(routes)
+        RouterModule.forChild(MONETIZATION_ROUTES)
     ]
 })
 export class MonetizationModule { }

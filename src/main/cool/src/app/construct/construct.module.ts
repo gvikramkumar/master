@@ -7,7 +7,7 @@ import {
 
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 
 import * as _ from 'lodash';
@@ -22,13 +22,8 @@ import { OfferDetailModule } from '@app/offer-detail/offer-detail.module';
 import { DynamicFormQuestionComponent } from './dynamic-form-question/dynamic-form-question.component';
 import { TableModule } from 'primeng/table';
 
+import { CONSTRUCT_ROUTES } from './construct.routes';
 
-const routes: Routes = [
-    {
-        path: '',
-        component: OfferConstructComponent
-    },
-];
 
 @NgModule({
     declarations: [
@@ -51,7 +46,7 @@ const routes: Routes = [
         TaskBarModule,
         RightPanelModule,
         OfferDetailModule,
-        RouterModule.forChild(routes)
+        RouterModule.forChild(CONSTRUCT_ROUTES)
     ]
 })
 export class ConstructModule { }

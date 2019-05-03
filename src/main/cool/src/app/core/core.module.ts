@@ -13,7 +13,7 @@ import { LoaderService } from './services/loader.service';
 import { ConfigurationService } from './services/configuration.service';
 import { HttpInterceptorService } from './services/http-interceptor/http-interceptor.service';
 
-import { AppRoutingModule } from '@app/app-routing.module';
+import { AppRoutingModule } from '../app-routing.module';
 
 @NgModule({
   declarations: [
@@ -25,7 +25,7 @@ import { AppRoutingModule } from '@app/app-routing.module';
     CommonModule,
     AccordionModule,
     AppRoutingModule,
-    OverlayPanelModule,
+    OverlayPanelModule
   ],
   providers: [
     BupmGuard,
@@ -39,8 +39,7 @@ import { AppRoutingModule } from '@app/app-routing.module';
   exports: [
     LoaderComponent,
     FooterComponent,
-    HeaderComponent,
-    AppRoutingModule
+    HeaderComponent
   ]
 })
 export class CoreModule { }

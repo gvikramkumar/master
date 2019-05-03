@@ -7,7 +7,11 @@ import { OfferSetupService } from '../services/offer-setup.service';
 import { RightPanelService } from '@app/services/right-panel.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 
+import { appRoutesNames } from '../app.routes.names';
+import { pirateShipRoutesNames } from './pirate-ship.routes.names';
+
 import { interval } from 'rxjs';
+
 
 @Component({
   selector: 'app-offer-setup',
@@ -22,7 +26,7 @@ export class OfferSetupComponent implements OnInit {
   offerName;
   offerData;
 
-  showMM:boolean = false;
+  showMM: boolean = false;
   derivedMM;
   moduleStatus;
   functionalRole;
@@ -49,7 +53,6 @@ export class OfferSetupComponent implements OnInit {
   constructor(private router: Router,
     private userService: UserService,
     private activatedRoute: ActivatedRoute,
-    private messageService: MessageService,
     private offerSetupService: OfferSetupService,
     private rightPanelService: RightPanelService,
     private stakeholderfullService: StakeholderfullService) {
@@ -64,11 +67,11 @@ export class OfferSetupComponent implements OnInit {
     //  =======================================================================================
     this.functionalRole = this.userService.getFunctionalRole();
     // Get Offer Details
-     this.getOfferDetails();
+    this.getOfferDetails();
 
     // Get Module Name and Status
     this.getAllModuleData();
-    
+
     // for refresh
     interval(9000000).subscribe(x =>
       this.getAllModuleData()
@@ -78,8 +81,8 @@ export class OfferSetupComponent implements OnInit {
   }
 
   // Get offer Details
-  
-  getOfferDetails(){
+
+  getOfferDetails() {
     this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
 
       this.offerBuilderdata = offerDetails;
@@ -97,20 +100,20 @@ export class OfferSetupComponent implements OnInit {
       if (this.offerBuilderdata['secondaryBUList'] != null) {
         this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['secondaryBUList']);
       }
-  
+
       this.derivedMM = offerDetails['derivedMM'];
       this.offerName = offerDetails['offerName'];
       this.stakeHolderData = offerDetails['stakeholders'];
-  
-      if ( this.derivedMM !=='Not Aligned')  {
+
+      if (this.derivedMM !== 'Not Aligned') {
         this.showMM = true;
       }
-  
+
       if (Array.isArray(offerDetails['primaryBEList']) && offerDetails['primaryBEList'].length) {
         this.primaryBE = offerDetails['primaryBEList'][0];
       }
-  
-  
+
+
       // TTM Info
       this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe(
         (leadTime) => {
@@ -121,15 +124,15 @@ export class OfferSetupComponent implements OnInit {
           this.noOfWeeksDifference = 'N/A';
         }
       );
-  
+
       // Populate Stake Holder Info
       this.processStakeHolderInfo();
     });
   }
- 
+
   // Get All the ModuleName and place in order
   getAllModuleData() {
-    this.offerSetupService.getModuleData(this.derivedMM, this.offerId, this.functionalRole,this.selectedAto).subscribe(data => {
+    this.offerSetupService.getModuleData(this.derivedMM, this.offerId, this.functionalRole, this.selectedAto).subscribe(data => {
       this.groupData = {};
 
       this.Options = data['listATOs'];
@@ -150,7 +153,7 @@ export class OfferSetupComponent implements OnInit {
     }
     );
   }
-  
+
   // sort the module location
   sortGroupData() {
     this.groupData['Group3']['left'].sort(
@@ -161,7 +164,7 @@ export class OfferSetupComponent implements OnInit {
     );
   }
 
- 
+
 
   // get stakeHolder information
   private processStakeHolderInfo() {
@@ -202,14 +205,14 @@ export class OfferSetupComponent implements OnInit {
 
   getElementDetails(element) {
     if (element.moduleName === 'Item Creation') {
-      this.router.navigate(['item-creation', this.offerId, this.caseId, this.selectedAto]);
+      this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.ITEM_CREATION, this.selectedAto]);
     } else if (element.moduleName === 'Modeling & Design') {
-      this.router.navigate(['modelling-design', this.offerId, this.caseId, this.selectedAto]);
+      this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.MODELLING_DESIGN, this.selectedAto]);
     }
 
   }
 
-  
+
 
   onProceedToNext() {
   }
