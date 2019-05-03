@@ -346,7 +346,7 @@ export class EnvironmentService {
         // ------------------------------------ OFFER SETUP -------------------------------------------------
 
         this.REST_API_RETRIEVE_ATO_LIST_URL = this.baseApiUrl + '/offersetup/getOWBModelObject/';
-        this.REST_API_OFFER_SETUP_MODULE_GET_URL = this.baseApiUrl + '/offersetup/getOfferSetupPageLoad?mmval=';
+        this.REST_API_OFFER_SETUP_MODULE_GET_URL = this.baseApiUrl + '/offersetup/getAllModuleStatus?mmval=';
         this.REST_API_OFFER_MODULE_STATUS_GET_URL = this.baseApiUrl + '/offersetup/getModuleStatus?moduleName=';
 
         // --------------------------------------- ITEM CREATION --------------------------------------------
