@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AtoStatusComponent } from './ato-status.component';
+import { TaskSummaryComponent } from './task-summary.component';
 
-describe('AtoStatusComponent', () => {
-  let component: AtoStatusComponent;
-  let fixture: ComponentFixture<AtoStatusComponent>;
+describe('TaskSummaryComponent', () => {
+  let component: TaskSummaryComponent;
+  let fixture: ComponentFixture<TaskSummaryComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AtoStatusComponent ]
+      declarations: [ TaskSummaryComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AtoStatusComponent);
+    fixture = TestBed.createComponent(TaskSummaryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

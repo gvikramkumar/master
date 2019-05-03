@@ -7,15 +7,15 @@ import { TaskBarModule } from '@app/taskbar/task-bar.module';
 import { RightPanelModule } from '@app/right-panel/right-panel.module';
 import { OfferDetailModule } from '../offer-detail/offer-detail.module';
 
-import { ViewOfferComponent } from './view-offer/view-offer.component';
-import { OfferSetupComponent } from './offer-setup/offer-setup.component';
+import { OfferSetupComponent } from './offer-setup.component';
+import { ViewOfferComponent } from './components/view-offer/view-offer.component';
 
 
 const routes: Routes = [
   {
     path: '',
     component: OfferSetupComponent
-  },
+  }
 ];
 
 @NgModule({

@@ -13,8 +13,8 @@ export class OfferSetupService {
     private environmentService: EnvironmentService
   ) { }
 
-  getModuleData(derivedMM,offerId,functionalRole) {
-    const url = this.environmentService.REST_API_OFFER_SETUP_MODULE_GET_URL + derivedMM +'&offerId=' + offerId +'&functionalRole=' + functionalRole;
+  getModuleData(derivedMM,offerId,functionalRole,offerLevel) {
+    const url = this.environmentService.REST_API_OFFER_SETUP_MODULE_GET_URL + derivedMM +'&offerId=' + offerId +'&functionalRole=' + functionalRole + '&offerATOLevel='+ offerLevel;
     return this.http.get(url, { withCredentials: true });
   }
 

@@ -76,16 +76,7 @@ export class OfferConstructDefaultValue{
      });
      return listOfferQuestions;
    }
-   
-   getChargeTypeValidationValues(listOfferQuestions, chargeTypeValue) {
-      let usageType = 'Usage';
-      let recurringType = 'Recurring';
-      listOfferQuestions.forEach(question => {
-          if (question.question == "Monthly Amount") {
-          }
-      });
-      return listOfferQuestions;
-    }
+
 
    
    setBasePriceInBillingSOADForFlat(questionList) {
@@ -137,19 +128,14 @@ export class OfferConstructDefaultValue{
                if (question.question == "Initial Term" || question.question == "NON STD INITIAL TERM" || 
                question.question == "STD AUTO RENEWAL TERM" || question.question == "NON STD AUTO RENEWAL TERM") {
                    question.rules.isMandatoryOptional = "Mandatory";
-                   console.log("question.rules.isMandatoryOptional", question.rules.isMandatoryOptional)
                }
                if (question.question == "Req Start Date Window") {
                    question.rules.isMandatoryOptional = "Mandatory";
                    question.currentValue = 90;
-                   console.log("question.rules.isMandatoryOptional", question.rules.isMandatoryOptional)
-                   console.log("question.currentValue", question.currentValue)
                }
                if (question.question == "Grace Window For Renewal") {
                    question.rules.isMandatoryOptional = "Mandatory";
                    question.currentValue = 60;
-                   console.log("question.rules.isMandatoryOptional", question.rules.isMandatoryOptional)
-                   console.log("question.currentValue", question.currentValue)
                }
            });
 
@@ -246,17 +232,10 @@ export class OfferConstructDefaultValue{
            return questionList;
        }
        
-       
-       
-       
-       
-       
-       
-       
        setEntitlementTerm(questionList){ 
            questionList.forEach(question => {
             if (question.question == "Entitlement Term") {
-                question.value.eGenieFlag = "true";
+                question.rules.isDisabled = false;
             }
         });
         return questionList;
@@ -265,7 +244,26 @@ export class OfferConstructDefaultValue{
        setEntitlementTermN(questionList){
            questionList.forEach(question => {
                if (question.question == "Entitlement Term") {
-                   question.value.eGenieFlag = "false";
+                   question.rules.isDisabled = true;
+               }
+           });
+           return questionList;
+       }
+       
+       setSubscriptionOffset(questionList){ 
+           questionList.forEach(question => {
+            if (question.question == "Subscription Offset(In Days)") {
+                question.rules.isDisabled = false;
+            }
+        });
+        return questionList;
+       }
+       
+       setSubscriptionOffsetN(questionList){
+           questionList.forEach(question => {
+               if (question.question == "Subscription Offset(In Days)") {
+                   question.rules.isDisabled = true;
+                   question.rules.isMandatoryOptional = "Optional";
                }
            });
            return questionList;
@@ -274,8 +272,7 @@ export class OfferConstructDefaultValue{
        ImageSigningForXaas(questionList) {
            questionList.forEach(question => {
                if (question.question == "Image Signing") {
-                   question.currentValue = "0- No, Image signing (Digital Software Signatures) is not supported";
-                   console.log("question.currentValue imge",question.currentValue)
+                   question.currentValue = "No Image signing (Digital Software Signatures) is not supported";
                }
            });
               return questionList;
@@ -284,8 +281,7 @@ export class OfferConstructDefaultValue{
        ImageSigningForHardware(questionList) {
            questionList.forEach(question => {
                if (question.question == "Image Signing") {
-                   question.currentValue = "1-Yes, Image signing (Digital Software Signatures) is supported";
-                    console.log("question.currentValue imge",question.currentValue)
+                   question.currentValue = "Yes Image signing (Digital Software Signatures) is supported";
                }
            });
              return questionList;
@@ -294,7 +290,6 @@ export class OfferConstructDefaultValue{
            questionList.forEach(question => {
                if (question.question == "Image Signing") {
                    question.currentValue = "";
-                    console.log("question.currentValue imge",question.currentValue)
                }
            });
             return questionList;
@@ -304,10 +299,12 @@ export class OfferConstructDefaultValue{
        setTermsNPayments(questionList) {
            questionList.forEach(question => {
                if (question.question == "Terms & Payments Required") {
-                   question.currentValue = "N0";
+                   question.currentValue = "No";
                }
            });
+           return questionList;
        }
+       
        
        setTermsNPaymentsN(questionList) {
            questionList.forEach(question => {
@@ -315,16 +312,14 @@ export class OfferConstructDefaultValue{
                   question.currentValue = "";
                }
            });
- 
+            return questionList;
        }
        
        setEnablePartySWKey(questionList) {
            questionList.forEach(question => {
                if (question.question == "Enable 3rd Party SW Key") {
                    question.rules.isMandatoryOptional = "Mandatory";
-                   question.currentValue = 'N';
-                   console.log("question.rules.isMandatoryOptional", question.rules.isMandatoryOptional)
-                   console.log("question.currentValue", question.currentValue)
+                   question.currentValue = 'No';
                }
            });
        }
@@ -337,5 +332,77 @@ export class OfferConstructDefaultValue{
                }
            });
        }
+       
+       
+       getChargeTypeValidationValues(questionList, chargeTypeValue) {
+          let usageType = 'Usage';
+          let recurringType = 'Recurring';
+          let trueUp = 'True Up';
+          questionList.forEach(question => {
+              if (question.question == "Pricing Type") {
+                  if (chargeTypeValue == usageType) {
+                    question.currentValue = 'Fixed Amount';
+                  }
+                  else{
+                      question.currentValue = 'Scaled Amount';
+                  }
+                  
+              }
+              
+              if (question.question == "Pricing Term") {
+                  if (chargeTypeValue == recurringType) {
+                    question.rules.isDisabled = false;
+                  }
+                  else{
+                     question.rules.isDisabled = true;
+                     question.rules.isMandatoryOptional = "Optional";
+                  }
+              }
+              
+              if (question.question == "True Up Term") {
+                  if (chargeTypeValue == trueUp) {
+                    question.rules.isDisabled = false;
+                  }
+                  else{
+                     question.rules.isDisabled = true;
+                     question.rules.isMandatoryOptional = "Optional";
+                  }
+                  
+              }
+              
+              if (question.question == "Usage Type") {
+                  if (chargeTypeValue == usageType) {
+                    question.rules.isDisabled = false;
+                  }
+                  else{
+                     question.rules.isDisabled = true;
+                     question.rules.isMandatoryOptional = "Optional";
+                  }
+                  
+              }
+              
+              if (question.question == "Usage Reporting Type") {
+                  if (chargeTypeValue == usageType) {
+                    question.rules.isDisabled = false;
+                  }
+                  else{
+                     question.rules.isDisabled = true;
+                     question.rules.isMandatoryOptional = "Optional";
+                  }
+                  
+              }
+              
+              if (question.question == "Print Usage Details on Invoice") {
+                  if (chargeTypeValue == usageType) {
+                    question.rules.isDisabled = false;
+                  }
+                  else{
+                     question.rules.isDisabled = true;
+                     question.rules.isMandatoryOptional = "Optional";
+                  }
+                  
+              }
+          });
+          return questionList;
+        }
 }
-
