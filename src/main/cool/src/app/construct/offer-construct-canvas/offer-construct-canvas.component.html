@@ -267,8 +267,7 @@
         <div class="col-md-6" *ngFor="let question of questionsList[uniqueNodeId];">
           <div [ngSwitch]="question.itemType">
             <div *ngSwitchCase="'Unique Item'">
-              <app-dynamic-form-question [question]="question" [headerName]="popHeadName" [questionForm]="questionForm"
-                [questionList]="questionsList[uniqueNodeId]">
+              <app-dynamic-form-question [question]="question" [headerName]="popHeadName" [questionForm]="questionForm">
               </app-dynamic-form-question>
             </div>
           </div>
@@ -301,8 +300,7 @@
           <div class="col-md-6" *ngFor="let question of questionsList[uniqueNodeId]">
             <div [ngSwitch]="question.itemType">
               <div *ngSwitchCase="'Item'">
-                <app-dynamic-form-question [question]="question" [questionForm]="questionForm"
-                  [questionList]="questionsList[uniqueNodeId]">
+                <app-dynamic-form-question [question]="question" [questionForm]="questionForm">
                 </app-dynamic-form-question>
               </div>
             </div>

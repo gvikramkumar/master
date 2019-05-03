@@ -14,16 +14,28 @@
           <!-- Message bar -->
           <ul class="list base-margin-top">
             <li>
-              <div class="panel panel--bordered"><span class="text-success"><span
-                    class="icon-check-outline icon-medium"></span>
-                  {{derivedMM}} Aligned</span></div>
+              <div *ngIf="showMM" class="panel panel--bordered">
+                <span class="text-success">
+                <span class="icon-check-outline icon-medium"></span>
+                  {{derivedMM}} Aligned
+                </span>
+                <span class="col-md-4 text-right">Tab View</span>
+              </div>
+              <div *ngIf="!showMM" class="panel panel--bordered">
+                  <span class="text-success">
+                  <span class="icon-check-outline icon-medium"></span>
+                    {{derivedMM}} 
+                  </span>
+              </div>
+                    
             </li>
           </ul>
 
           <!-- Control Bar -->
           <div class="row base-margin-top">
 
-            <div class="col-md-4">Currently Viewing the <strong>Overall Offer</strong>.</div>
+            <div class="col-md-8"></div>
+            <div class="col-md-4 text-right">
             <div class="form-group dropdown label--inline">
               <div class="form-group__text select">
                 <label for="select-size-default">Viewing</label>
@@ -34,7 +46,7 @@
                   </option>
                 </select>
               </div>
-            </div>
+            </div></div>
 
           </div>
           <!-- Pirate Ship -->
@@ -48,27 +60,27 @@
                       <li *ngFor="let element of groupData['Group0']['left']">
                         <!-- different status showing -->
                         <!-- Completed -->
-                        <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success"
-                          placement="top">
+                        <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success base-margin-bottom" 
+                          placement="top" (click)="getElementDetails(element)">
                           {{element["moduleName"]}}
                         </button>
                         <!-- In Progress-->
-                        <button *ngIf="element['status']=='In Progress'" class="btn btn--small  btn--warning"
-                          placement="top">
+                        <button *ngIf="element['status']=='In Progress'" class="btn btn--small  btn--warning base-margin-bottom"
+                          placement="top" (click)="getElementDetails(element)">
                           {{element["moduleName"]}}
                         </button>
                         <!-- Available -->
-                        <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary"
+                        <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary base-margin-bottom"
                           placement="top" (click)="getElementDetails(element)">
                           {{element["moduleName"]}}
                         </button>
                         <!-- Not Yet Available -->
-                        <button *ngIf="element['status']=='Not Yet Available'" class="btn btn--small btn--gray-ghost"
+                        <button *ngIf="element['status']=='Not Yet Available'" class="btn btn--small btn--gray-ghost base-margin-bottom"
                           placement="top">
                           {{element["moduleName"]}}
                         </button>
                         <!-- Not Required -->
-                        <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default"
+                        <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default base-margin-bottom"
                           placement="top" (click)="getElementDetails(element)">
                           {{element["moduleName"]}}
                         </button>
@@ -81,28 +93,28 @@
                       <li *ngFor="let element of groupData['Group1']['left']">
                         <!-- different status showing -->
                         <!-- Completed -->
-                        <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success"
+                        <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success base-margin-bottom"
                           placement="top" (click)="getElementDetails(element)">
                           {{element["moduleName"]}}
                         </button>
                         <!-- In Progress-->
-                        <button *ngIf="element['status']=='In Progress'" class="btn btn--small  btn--warning"
+                        <button *ngIf="element['status']=='In Progress'" class="btn btn--small btn--warning base-margin-bottom"
                           placement="top" (click)="getElementDetails(element)">
                           {{element["moduleName"]}}
                         </button>
                         <!-- Available -->
-                        <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary"
+                        <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary base-margin-bottom"
                           placement="top" (click)="getElementDetails(element)">
                           {{element["moduleName"]}}
                         </button>
                         <!-- Not Yet Available -->
-                        <button *ngIf="element['status']=='Not Yet Available'" class="btn btn--small btn--gray-ghost"
-                          placement="top" (click)="getElementDetails(element)">
+                        <button *ngIf="element['status']=='Not Yet Available'" class="btn btn--small btn--gray-ghost base-margin-bottom"
+                          placement="top">
                           {{element["moduleName"]}}
                         </button>
                         <!-- Not Required -->
-                        <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default"
-                          placement="top" (click)="getElementDetails(element)">
+                        <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default base-margin-bottom"
+                          placement="top">
                           {{element["moduleName"]}}
                         </button>
 
@@ -123,29 +135,28 @@
                             <li *ngFor="let element of groupData['Group2']['left']">
                               <!-- different status showing -->
                               <!-- Completed -->
-                              <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success"
+                              <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success base-margin-bottom"
                                 placement="top" (click)="getElementDetails(element)">
                                 {{element["moduleName"]}}
                               </button>
                               <!-- In Progress-->
-                              <button *ngIf="element['status']=='In Progress'" class="btn btn--small  btn--warning"
+                              <button *ngIf="element['status']=='In Progress'" class="btn btn--small  btn--warning base-margin-bottom"
                                 placement="top" (click)="getElementDetails(element)">
                                 {{element["moduleName"]}}
                               </button>
                               <!-- Available -->
-                              <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary"
+                              <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary base-margin-bottom"
                                 placement="top" (click)="getElementDetails(element)">
                                 {{element["moduleName"]}}
                               </button>
                               <!-- Not Yet Available -->
                               <button *ngIf="element['status']=='Not Yet Available'"
-                                class="btn btn--small btn--gray-ghost" placement="top"
-                                (click)="getElementDetails(element)">
+                                class="btn btn--small btn--gray-ghost base-margin-bottom" placement="top">
                                 {{element["moduleName"]}}
                               </button>
                               <!-- Not Required -->
-                              <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default"
-                                placement="top" (click)="getElementDetails(element)">
+                              <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default base-margin-bottom"
+                                placement="top">
                                 {{element["moduleName"]}}
                               </button>
 
@@ -160,29 +171,28 @@
                             <li *ngFor="let element of groupData['Group2']['right']">
                               <!-- different status showing -->
                               <!-- Completed -->
-                              <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success"
+                              <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success base-margin-bottom"
                                 placement="top" (click)="getElementDetails(element)">
                                 {{element["moduleName"]}}
                               </button>
                               <!-- In Progress-->
-                              <button *ngIf="element['status']=='In Progress'" class="btn btn--small  btn--warning"
+                              <button *ngIf="element['status']=='In Progress'" class="btn btn--small  btn--warning base-margin-bottom"
                                 placement="top" (click)="getElementDetails(element)">
                                 {{element["moduleName"]}}
                               </button>
                               <!-- Available -->
-                              <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary"
+                              <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary base-margin-bottom"
                                 placement="top" (click)="getElementDetails(element)">
                                 {{element["moduleName"]}}
                               </button>
                               <!-- Not Yet Available -->
                               <button *ngIf="element['status']=='Not Yet Available'"
-                                class="btn btn--small btn--gray-ghost" placement="top"
-                                (click)="getElementDetails(element)">
+                                class="btn btn--small btn--gray-ghost base-margin-bottom" placement="top">
                                 {{element["moduleName"]}}
                               </button>
                               <!-- Not Required -->
-                              <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default"
-                                placement="top" (click)="getElementDetails(element)">
+                              <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default base-margin-bottom"
+                                placement="top">
                                 {{element["moduleName"]}}
                               </button>
 
@@ -203,27 +213,27 @@
                             <li *ngFor="let element of groupData['Group3']['left']">
                               <!-- different status showing -->
                               <!-- Completed -->
-                              <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success"
-                                placement="top">
+                              <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success base-margin-bottom"
+                                placement="top" (click)="getElementDetails(element)">
                                 {{element["moduleName"]}}
                               </button>
                               <!-- In Progress-->
-                              <button *ngIf="element['status']=='In Progress'" class="btn btn--small  btn--warning"
-                                placement="top">
+                              <button *ngIf="element['status']=='In Progress'" class="btn btn--small  btn--warning base-margin-bottom"
+                                placement="top" (click)="getElementDetails(element)">
                                 {{element["moduleName"]}}
                               </button>
                               <!-- Available -->
-                              <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary"
-                                placement="top">
+                              <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary base-margin-bottom"
+                                placement="top" (click)="getElementDetails(element)">
                                 {{element["moduleName"]}}
                               </button>
                               <!-- Not Yet Available -->
                               <button *ngIf="element['status']=='Not Yet Available'"
-                                class="btn btn--small btn--gray-ghost" placement="top">
+                                class="btn btn--small btn--gray-ghost base-margin-bottom" placement="top">
                                 {{element["moduleName"]}}
                               </button>
                               <!-- Not Required -->
-                              <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default"
+                              <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default base-margin-bottom"
                                 placement="top">
                                 {{element["moduleName"]}}
                               </button>
@@ -239,27 +249,27 @@
                             <li *ngFor="let element of groupData['Group3']['right']">
                               <!-- different status showing -->
                               <!-- Completed -->
-                              <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success"
-                                placement="top">
+                              <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success base-margin-bottom"
+                                placement="top" (click)="getElementDetails(element)">
                                 {{element["moduleName"]}}
                               </button>
                               <!-- In Progress-->
-                              <button *ngIf="element['status']=='In Progress'" class="btn btn--small  btn--warning"
-                                placement="top">
+                              <button *ngIf="element['status']=='In Progress'" class="btn btn--small  btn--warning base-margin-bottom"
+                                placement="top" (click)="getElementDetails(element)">
                                 {{element["moduleName"]}}
                               </button>
                               <!-- Available -->
-                              <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary"
-                                placement="top">
+                              <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary base-margin-bottom"
+                                placement="top" (click)="getElementDetails(element)">
                                 {{element["moduleName"]}}
                               </button>
                               <!-- Not Yet Available -->
                               <button *ngIf="element['status']=='Not Yet Available'"
-                                class="btn btn--small btn--gray-ghost" placement="top">
+                                class="btn btn--small btn--gray-ghost base-margin-bottom" placement="top">
                                 {{element["moduleName"]}}
                               </button>
                               <!-- Not Required -->
-                              <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default"
+                              <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default base-margin-bottom"
                                 placement="top">
                                 {{element["moduleName"]}}
                               </button>
@@ -280,27 +290,27 @@
                     <div *ngIf="groupData !== null && groupData['Group4'] !== null">
                       <li class="base-padding-bottom" *ngFor="let element of groupData['Group4']['left']">
                         <!-- Completed -->
-                        <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success"
-                          placement="top">
+                        <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success base-margin-bottom"
+                          placement="top" (click)="getElementDetails(element)">
                           {{element["moduleName"]}}
                         </button>
                         <!-- In Progress-->
-                        <button *ngIf="element['status']=='In Progress'" class="btn btn--small btn--warning"
-                          placement="top">
+                        <button *ngIf="element['status']=='In Progress'" class="btn btn--small btn--warning base-margin-bottom"
+                          placement="top" (click)="getElementDetails(element)">
                           {{element["moduleName"]}}
                         </button>
                         <!-- Available -->
-                        <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary"
-                          placement="top">
+                        <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary base-margin-bottom"
+                          placement="top" (click)="getElementDetails(element)">
                           {{element["moduleName"]}}
                         </button>
                         <!-- Not Yet Available -->
-                        <button *ngIf="element['status']=='Not Yet Available'" class="btn btn--small btn--gray-ghost"
+                        <button *ngIf="element['status']=='Not Yet Available'" class="btn btn--small btn--gray-ghost base-margin-bottom"
                           placement="top">
                           {{element["moduleName"]}}
                         </button>
                         <!-- Not Required -->
-                        <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default"
+                        <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default base-margin-bottom"
                           placement="top">
                           {{element["moduleName"]}}
                         </button>
@@ -314,27 +324,27 @@
                     <div *ngIf="groupData !== null && groupData['Group5'] !== null">
                       <li class="base-padding-bottom" *ngFor="let element of groupData['Group5']['left']">
                         <!-- Completed -->
-                        <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success"
-                          placement="top">
+                        <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success base-margin-bottom"
+                          placement="top" (click)="getElementDetails(element)">
                           {{element["moduleName"]}}
                         </button>
                         <!-- In Progress-->
-                        <button *ngIf="element['status']=='In Progress'" class="btn btn--small btn--warning"
-                          placement="top">
+                        <button *ngIf="element['status']=='In Progress'" class="btn btn--small btn--warning base-margin-bottom"
+                          placement="top" (click)="getElementDetails(element)">
                           {{element["moduleName"]}}
                         </button>
                         <!-- Available -->
-                        <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary"
-                          placement="top">
+                        <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary base-margin-bottom"
+                          placement="top" (click)="getElementDetails(element)">
                           {{element["moduleName"]}}
                         </button>
                         <!-- Not Yet Available -->
-                        <button *ngIf="element['status']=='Not Yet Available'" class="btn btn--small btn--gray-ghost"
+                        <button *ngIf="element['status']=='Not Yet Available'" class="btn btn--small btn--gray-ghost base-margin-bottom"
                           placement="top">
                           {{element["moduleName"]}}
                         </button>
                         <!-- Not Required -->
-                        <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default"
+                        <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default base-margin-bottom"
                           placement="top">
                           {{element["moduleName"]}}
                         </button>
@@ -344,27 +354,27 @@
                     <div *ngIf="groupData !== null && groupData['Group6'] !== null">
                       <li *ngFor="let element of groupData['Group6']['left']">
                         <!-- Completed -->
-                        <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success"
-                          placement="top">
+                        <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success base-margin-bottom"
+                          placement="top" (click)="getElementDetails(element)">
                           {{element["moduleName"]}}
                         </button>
                         <!-- In Progress-->
-                        <button *ngIf="element['status']=='In Progress'" class="btn btn--small btn--warning"
-                          placement="top">
+                        <button *ngIf="element['status']=='In Progress'" class="btn btn--small btn--warning base-margin-bottom"
+                          placement="top" (click)="getElementDetails(element)">
                           {{element["moduleName"]}}
                         </button>
                         <!-- Available -->
-                        <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary"
-                          placement="top">
+                        <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary base-margin-bottom"
+                          placement="top" (click)="getElementDetails(element)">
                           {{element["moduleName"]}}
                         </button>
                         <!-- Not Yet Available -->
-                        <button *ngIf="element['status']=='Not Yet Available'" class="btn btn--small btn--gray-ghost"
+                        <button *ngIf="element['status']=='Not Yet Available'" class="btn btn--small btn--gray-ghost base-margin-bottom"
                           placement="top">
                           {{element["moduleName"]}}
                         </button>
                         <!-- Not Required -->
-                        <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default"
+                        <button *ngIf="element['status']=='Not Required'" class="btn btn--small btn--default base-margin-bottom"
                           placement="top">
                           {{element["moduleName"]}}
                         </button>
@@ -385,34 +395,41 @@
                       <button class="btn btn--icon btn--small legend-available"></button>
                       Available
                     </li>
+                    
                     <li class="half-margin-bottom">
-                      <button class="btn btn--icon btn--small legend-notavail"></button>
-                      Not Yet Available
-                    </li>
-                    <li>
-                      <button class="btn btn--icon btn--small legend-notreq"></button>
-                      Not Required
-                    </li>
+                        <button class="btn btn--icon btn--small legend-completed">
+                          <span class="icon-check"></span>
+                        </button>
+                        Completed
+                      </li>
+
+                      <li>
+                          <button class="btn btn--icon btn--small legend-milestone">
+                            <span class="milestone"></span>
+                          </button>
+                          Milestone
+                        </li>
+
                   </div>
                   <div class="col-sm-6">
                     <li class="half-margin-bottom">
-                      <button class="btn btn--icon btn--small legend-completed">
-                        <span class="icon-check"></span>
-                      </button>
-                      Completed
-                    </li>
+                        <button class="btn btn--icon btn--small legend-notavail"></button>
+                        Not Yet Available
+                      </li>
+
                     <li class="half-margin-bottom">
                       <button class="btn btn--icon btn--small legend-inprog">
                         <span class="in-progress"></span>
                       </button>
                       In-Progess
                     </li>
+
+                   
                     <li>
-                      <button class="btn btn--icon btn--small legend-milestone">
-                        <span class="milestone"></span>
-                      </button>
-                      Milestone
-                    </li>
+                        <button class="btn btn--icon btn--small legend-notreq"></button>
+                        Not Required
+                      </li>
+
                   </div>
                 </div>
               </ul>

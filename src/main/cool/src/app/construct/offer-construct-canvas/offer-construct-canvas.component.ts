@@ -227,40 +227,61 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
         () => {
             if (obj.productName !== 'Billing SOA') {
                 if (obj.productName == 'License') {
-                    let listOfferQuestions = this.defaultValueServices.LicenseDefault(this.listOfferQuestions);
-                    obj['itemDetails'] = listOfferQuestions;
-                }
-                else{
-                    let listOfferQuestions = this.defaultValueServices.LicenseDefaultOptional(this.listOfferQuestions);
-                    obj['itemDetails'] = listOfferQuestions;
-                }
-                if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS' || obj.productName == 'Billing') {
-                    let listOfferQuestions = this.defaultValueServices.getLicenseDeliveryTypeDefaultValues(this.listOfferQuestions, this.licenseDelivery);
-                    console.log(" listOfferQuestions", listOfferQuestions)
-                    obj['itemDetails'] = listOfferQuestions;
-                }
-                else{
-                    let listOfferQuestions = this.defaultValueServices.getLicenseDeliveryTypeDefaultValuesN(this.listOfferQuestions, this.licenseDelivery);
-                    obj['itemDetails'] = listOfferQuestions;
-                }
-                if (obj.productName == 'XaaS') {
-                    let listOfferQuestions = this.defaultValueServices.ImageSigningForXaas(this.listOfferQuestions);
-                    obj['itemDetails'] = listOfferQuestions;
-                }
-                else if(obj.productName == 'Hardware'){
-                    let listOfferQuestions = this.defaultValueServices.ImageSigningForHardware(this.listOfferQuestions);
-                    obj['itemDetails'] = listOfferQuestions;
-                }
-                else{
-                    let listOfferQuestions = this.defaultValueServices.ImageSigningForHardwareDefault(this.listOfferQuestions);
-                    obj['itemDetails'] = listOfferQuestions;
-                }
-
-              obj['itemDetails'] = this.listOfferQuestions;
-            } else {
-              let listOfferQuestions = this.defaultValueServices.billingSOADefaultValue(this.listOfferQuestions, this.chargeTypeValue);
-              obj['itemDetails'] = listOfferQuestions;
-            }
+                       let listOfferQuestions = this.defaultValueServices.LicenseDefault(this.listOfferQuestions);
+                       obj['itemDetails'] = listOfferQuestions;
+                   } 
+                   else{
+                       let listOfferQuestions = this.defaultValueServices.LicenseDefaultOptional(this.listOfferQuestions);
+                       obj['itemDetails'] = listOfferQuestions;
+                   }
+                   if (obj.productName == 'Billing') {
+                       let listOfferQuestions = this.defaultValueServices.setTermsNPayments(this.listOfferQuestions);
+                       obj['itemDetails'] = listOfferQuestions;
+                   } 
+                   else{
+                       let listOfferQuestions = this.defaultValueServices.setTermsNPaymentsN(this.listOfferQuestions);
+                       obj['itemDetails'] = listOfferQuestions;
+                   }
+                   if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS' || obj.productName == 'Billing') {
+                       let listOfferQuestions = this.defaultValueServices.getLicenseDeliveryTypeDefaultValues(this.listOfferQuestions, this.licenseDelivery);
+                       obj['itemDetails'] = listOfferQuestions;
+                   } 
+                   else{
+                       let listOfferQuestions = this.defaultValueServices.getLicenseDeliveryTypeDefaultValuesN(this.listOfferQuestions, this.licenseDelivery);
+                       obj['itemDetails'] = listOfferQuestions;
+                   }
+                   
+                   if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS' || obj.productName == 'Billing') {
+                       let listOfferQuestions = this.defaultValueServices.getChargeTypeValidationValues(this.listOfferQuestions, this.chargeTypeValue);
+                       obj['itemDetails'] = listOfferQuestions;
+                   } 
+                   
+                   if (obj.productName == 'License') {
+                       let listOfferQuestions = this.defaultValueServices.setEntitlementTerm(this.listOfferQuestions);
+                       obj['itemDetails'] = listOfferQuestions;
+                   }else{
+                       let listOfferQuestions = this.defaultValueServices.setEntitlementTermN(this.listOfferQuestions);
+                       obj['itemDetails'] = listOfferQuestions;
+                   } 
+                   
+                   if (obj.productName == 'XaaS') {
+                       let listOfferQuestions = this.defaultValueServices.ImageSigningForXaas(this.listOfferQuestions);
+                       obj['itemDetails'] = listOfferQuestions;
+                   } 
+                   else if(obj.productName == 'Hardware'){
+                       let listOfferQuestions = this.defaultValueServices.ImageSigningForHardware(this.listOfferQuestions);
+                       obj['itemDetails'] = listOfferQuestions;
+                   }
+                   else{
+                       let listOfferQuestions = this.defaultValueServices.ImageSigningForHardwareDefault(this.listOfferQuestions);
+                       obj['itemDetails'] = listOfferQuestions;
+                   }
+               
+                 obj['itemDetails'] = this.listOfferQuestions;
+               } else {
+                 let listOfferQuestions = this.defaultValueServices.billingSOADefaultValue(this.listOfferQuestions, this.chargeTypeValue);
+                 obj['itemDetails'] = listOfferQuestions;
+               }
           this.getQuestionList(obj);
         });
     }
@@ -775,40 +796,62 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
             () => {
               // if (obj.productName !== 'Billing SOA' || obj.productName !== 'Billing') {
               if (obj.productName !== 'Billing SOA') {
-               if (obj.productName == 'License') {
-                   let listOfferQuestions = this.defaultValueServices.LicenseDefault(this.listOfferQuestions);
-                   obj['itemDetails'] = listOfferQuestions;
-               }
-               else{
-                   let listOfferQuestions = this.defaultValueServices.LicenseDefaultOptional(this.listOfferQuestions);
-                   obj['itemDetails'] = listOfferQuestions;
-               }
-               if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS' || obj.productName == 'Billing') {
-                   let listOfferQuestions = this.defaultValueServices.getLicenseDeliveryTypeDefaultValues(this.listOfferQuestions, this.licenseDelivery);
-                   obj['itemDetails'] = listOfferQuestions;
-               }
-               else{
-                   let listOfferQuestions = this.defaultValueServices.getLicenseDeliveryTypeDefaultValuesN(this.listOfferQuestions, this.licenseDelivery);
-                   obj['itemDetails'] = listOfferQuestions;
-               }
-               if (obj.productName == 'XaaS') {
-                   let listOfferQuestions = this.defaultValueServices.ImageSigningForXaas(this.listOfferQuestions);
-                   obj['itemDetails'] = listOfferQuestions;
-               }
-               else if(obj.productName == 'Hardware'){
-                   let listOfferQuestions = this.defaultValueServices.ImageSigningForHardware(this.listOfferQuestions);
-                   obj['itemDetails'] = listOfferQuestions;
-               }
-               else{
-                   let listOfferQuestions = this.defaultValueServices.ImageSigningForHardwareDefault(this.listOfferQuestions);
-                   obj['itemDetails'] = listOfferQuestions;
-               }
-
-             obj['itemDetails'] = this.listOfferQuestions;
-           } else {
-             let listOfferQuestions = this.defaultValueServices.billingSOADefaultValue(this.listOfferQuestions, this.chargeTypeValue);
-             obj['itemDetails'] = listOfferQuestions;
-           }
+              if (obj.productName == 'License') {
+                     let listOfferQuestions = this.defaultValueServices.LicenseDefault(this.listOfferQuestions);
+                     obj['itemDetails'] = listOfferQuestions;
+                 } 
+                 else{
+                     let listOfferQuestions = this.defaultValueServices.LicenseDefaultOptional(this.listOfferQuestions);
+                     obj['itemDetails'] = listOfferQuestions;
+                 }
+                 if (obj.productName == 'Billing') {
+                     let listOfferQuestions = this.defaultValueServices.setTermsNPayments(this.listOfferQuestions);
+                     obj['itemDetails'] = listOfferQuestions;
+                 } 
+                 else{
+                     let listOfferQuestions = this.defaultValueServices.setTermsNPaymentsN(this.listOfferQuestions);
+                     obj['itemDetails'] = listOfferQuestions;
+                 }
+                 if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS' || obj.productName == 'Billing') {
+                     let listOfferQuestions = this.defaultValueServices.getLicenseDeliveryTypeDefaultValues(this.listOfferQuestions, this.licenseDelivery);
+                     obj['itemDetails'] = listOfferQuestions;
+                 } 
+                 else{
+                     let listOfferQuestions = this.defaultValueServices.getLicenseDeliveryTypeDefaultValuesN(this.listOfferQuestions, this.licenseDelivery);
+                     obj['itemDetails'] = listOfferQuestions;
+                 }
+                 
+                 if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS' || obj.productName == 'Billing') {
+                     let listOfferQuestions = this.defaultValueServices.getChargeTypeValidationValues(this.listOfferQuestions, this.chargeTypeValue);
+                     obj['itemDetails'] = listOfferQuestions;
+                 } 
+                 
+                 if (obj.productName == 'License') {
+                     let listOfferQuestions = this.defaultValueServices.setEntitlementTerm(this.listOfferQuestions);
+                     obj['itemDetails'] = listOfferQuestions;
+                 }else{
+                     let listOfferQuestions = this.defaultValueServices.setEntitlementTermN(this.listOfferQuestions);
+                     obj['itemDetails'] = listOfferQuestions;
+                 } 
+                 
+                 if (obj.productName == 'XaaS') {
+                     let listOfferQuestions = this.defaultValueServices.ImageSigningForXaas(this.listOfferQuestions);
+                     obj['itemDetails'] = listOfferQuestions;
+                 } 
+                 else if(obj.productName == 'Hardware'){
+                     let listOfferQuestions = this.defaultValueServices.ImageSigningForHardware(this.listOfferQuestions);
+                     obj['itemDetails'] = listOfferQuestions;
+                 }
+                 else{
+                     let listOfferQuestions = this.defaultValueServices.ImageSigningForHardwareDefault(this.listOfferQuestions);
+                     obj['itemDetails'] = listOfferQuestions;
+                 }
+             
+               obj['itemDetails'] = this.listOfferQuestions;
+             } else {
+               let listOfferQuestions = this.defaultValueServices.billingSOADefaultValue(this.listOfferQuestions, this.chargeTypeValue);
+               obj['itemDetails'] = listOfferQuestions;
+             }
               this.getQuestionList(obj);
             });
 
