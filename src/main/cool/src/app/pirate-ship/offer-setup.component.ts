@@ -204,7 +204,6 @@ export class OfferSetupComponent implements OnInit {
 
 
   getElementDetails(element) {
-    debugger;
     if (element.moduleName === 'Item Creation') {
       this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.ITEM_CREATION, this.selectedAto]);
     } else if (element.moduleName === 'Modeling & Design') {
