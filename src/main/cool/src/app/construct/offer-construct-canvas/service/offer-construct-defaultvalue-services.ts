@@ -6,10 +6,11 @@ import { Observable, Subject, BehaviorSubject } from 'rxjs';
 })
 
 export class OfferConstructDefaultValue{
-    
+
     constructor() { }
-    
+
     billingSOADefaultValue(listOfferQuestions, chargeTypeValue) {
+      debugger;
        let usageType = 'Usage';
        let recurringType = 'Recurring';
        listOfferQuestions.forEach(element => {
@@ -24,9 +25,9 @@ export class OfferConstructDefaultValue{
          }
        }
        if (element.question == 'Discount Restricted Product') {
-         if (chargeTypeValue == recurringType) {
-           element.currentValue = 0;
-           element.previousValue = 0;
+         if (chargeTypeValue == usageType) {
+           element.currentValue = 'Yes';
+           element.previousValue = 'Yes';
          }
        }
        if (element.question === "Proration Flag For Purchase") {
@@ -76,7 +77,7 @@ export class OfferConstructDefaultValue{
      });
      return listOfferQuestions;
    }
-   
+
    setBasePriceInBillingSOADForFlat(questionList) {
            let monthlyAmountValue;
            questionList.forEach(question => {
@@ -100,7 +101,7 @@ export class OfferConstructDefaultValue{
            });
 
        }
-       
+
        setSmartAccountSOAForProduct(questionList) {
            questionList.forEach(question => {
                if (question.question == "Smart Account") {
@@ -109,7 +110,7 @@ export class OfferConstructDefaultValue{
            });
 
        }
-       
+
        setSmartAccountForSmartLicensingEnabledNo(questionList) {
            questionList.forEach(question => {
                if (question.question == "Smart Account") {
@@ -118,12 +119,12 @@ export class OfferConstructDefaultValue{
            });
 
        }
-       
-    
-       
+
+
+
        setTermsPaymentsRequired(questionList) {
            questionList.forEach(question => {
-               if (question.question == "Initial Term" || question.question == "NON STD INITIAL TERM" || 
+               if (question.question == "Initial Term" || question.question == "NON STD INITIAL TERM" ||
                question.question == "STD AUTO RENEWAL TERM" || question.question == "NON STD AUTO RENEWAL TERM") {
                    question.rules.isMandatoryOptional = "Mandatory";
                    console.log("question.rules.isMandatoryOptional", question.rules.isMandatoryOptional)
@@ -143,20 +144,20 @@ export class OfferConstructDefaultValue{
            });
 
        }
-       
+
        setTermsPaymentsRequiredN(questionList) {
            questionList.forEach(question => {
-               if (question.question == "Initial Term" || question.question == "NON STD INITIAL TERM" || 
-               question.question == "STD AUTO RENEWAL TERM" || question.question == "NON STD AUTO RENEWAL TERM" || 
+               if (question.question == "Initial Term" || question.question == "NON STD INITIAL TERM" ||
+               question.question == "STD AUTO RENEWAL TERM" || question.question == "NON STD AUTO RENEWAL TERM" ||
                question.question == "Req Start Date Window" || question.question == "Grace Window For Renewal") {
-                   question.currentValue = "";
-                   question.rules.isMandatoryOptional = "Optional";
+               question.currentValue = "";
+               question.rules.isMandatoryOptional = "Optional";
                }
            });
 
        }
-       
-       
+
+
        setPricingApprovalRequired(questionList) {
            questionList.forEach(question => {
                if (question.question == "Assign to Request ID") {
@@ -165,7 +166,7 @@ export class OfferConstructDefaultValue{
            });
 
        }
-       
+
        setPricingApprovalRequiredN(questionList) {
            questionList.forEach(question => {
                if (question.question == "Assign to Request ID") {
@@ -174,7 +175,7 @@ export class OfferConstructDefaultValue{
            });
 
        }
-       
+
        setRefurbishedItemRequired(questionList) {
            questionList.forEach(question => {
                if (question.question == "Refurbished-Original Item") {
@@ -183,7 +184,7 @@ export class OfferConstructDefaultValue{
            });
 
        }
-       
+
        setRefurbishedItemRequiredN(questionList) {
            questionList.forEach(question => {
                if (question.question == "Refurbished-Original Item") {
@@ -192,25 +193,25 @@ export class OfferConstructDefaultValue{
            });
 
        }
-      
+
        LicenseDefault(questionList) {
            questionList.forEach(question => {
                if (question.question == "License Type") {
                    question.rules.isMandatoryOptional = "Mandatory";
                }
            });
- 
+
        }
-       
+
        LicenseDefaultOptional(questionList) {
            questionList.forEach(question => {
                if (question.question == "License Type") {
                    question.rules.isMandatoryOptional = "Optional";
                }
            });
- 
+
        }
-       
+
        getLicenseDeliveryTypeDefaultValues(questionList, licenseDelivery){
            if(licenseDelivery = "Smart Licenses"){
            questionList.forEach(question => {
@@ -221,7 +222,7 @@ export class OfferConstructDefaultValue{
            }
            return questionList;
        }
-       
+
        getLicenseDeliveryTypeDefaultValuesN(questionList, licenseDelivery){
            if(licenseDelivery = "Smart Licenses"){
            questionList.forEach(question => {
@@ -232,7 +233,7 @@ export class OfferConstructDefaultValue{
            }
            return questionList;
        }
-       
+
        ImageSigningForXaas(questionList) {
            questionList.forEach(question => {
                if (question.question == "Image Signing") {
@@ -241,7 +242,7 @@ export class OfferConstructDefaultValue{
            });
               return questionList;
        }
-       
+
        ImageSigningForHardware(questionList) {
            questionList.forEach(question => {
                if (question.question == "Image Signing") {

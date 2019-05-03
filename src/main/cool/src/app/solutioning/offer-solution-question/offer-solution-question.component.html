@@ -82,7 +82,7 @@
 
         <span class="help-block" *ngIf="percentageText.invalid && (percentageText.dirty || percentageText.touched)">
           <span *ngIf="percentageText.errors.required">Valid input is required</span>
-          <span *ngIf="percentageText.errors.pattern">3 digit number is required (XXX.XX)</span>
+          <span *ngIf="percentageText.errors.pattern">Input should be in range: 1-100 (XXX.XX)</span>
         </span>
 
       </div>

@@ -37,6 +37,7 @@ export class ItemCreationComponent implements OnInit {
   caseId: string;
   selectedOffer: string;
   display: Boolean = false;
+
   removeList: any;
   offerName: string;
   offerOwner: string;
@@ -89,11 +90,6 @@ export class ItemCreationComponent implements OnInit {
       { field: 'newItemStatus', header: 'NEW ITEM STATUS' },
       { field: 'moduleStatus', header: 'ATO LEVEL STATUS' }
     ]
-
-    // this.itemCreationService.getItemDetails(this.offerId, 'ALL').subscribe(response => {
-    //   console.log('data contains '+JSON.stringify(this.offerId));
-    //   this.productDetails = response.data; 
-    // })
 
     this.itemCreationService.getOfferDropdownValues(this.offerId).subscribe(data => {
       this.offerDropdownValues = data;
@@ -240,8 +236,6 @@ export class ItemCreationComponent implements OnInit {
         });
       }
     });
-    console.log('--------------------offerDetailRes.constructDetails', offerDetailRes.constructDetails);
-
   }
 
   /**
@@ -283,7 +277,7 @@ export class ItemCreationComponent implements OnInit {
       obj['uniqueNodeId'] = node.constructType + '_' + obj['uniqueKey'];
       this.getQuestionList(obj, true);
     } else {
-
+      this.getSetQuestionAccordingToPID(obj['itemDetails'], node.constructType, obj, true, true);
     }
 
     return tempNode;
@@ -319,6 +313,7 @@ export class ItemCreationComponent implements OnInit {
       obj['uniqueNodeId'] = childNode.constructType + '_' + obj['uniqueKey'];
       this.getQuestionList(obj, true);
     } else {
+      this.getSetQuestionAccordingToPID(obj['itemDetails'], obj['productName'], obj, true, false);
     }
     return tempNode;
   }
@@ -377,28 +372,92 @@ export class ItemCreationComponent implements OnInit {
     this.offerInfo = this.offerConstructService.singleMultipleFormInfo;
     this.majorOfferInfo = this.offerInfo.major;
     this.minorOfferInfo = this.offerInfo.minor;
-
-    console.log("--------------offerConstructService.singleMultipleFormInfo---------", this.offerConstructService.singleMultipleFormInfo);
-
-
     this.loaderService.stopLoading();
   }
 
-  saveOfferConstructChanges() {
+  // getAndSetQUestionAccordingToPID this is for seach item pid and according to that 
+  //we have to set question and answer for golbal vaiable
+  getSetQuestionAccordingToPID(searchResult, productName, obj, isFromDB, isMajorOrMinor) {
 
+    const groupName = productName;
+    const majorItem = {
+      groupName: groupName
+    };
+    const info = [];
+    info.push(majorItem);
+    const groupsName = { groups: info };
+    let questionsList: any;
+    if (!isFromDB) {  // form search PID
+      this.offerConstructService.addDetails(groupsName).subscribe((data) => {
+        questionsList = data.groups[0].listOfferQuestions;
+        for (const element in searchResult) {
+          questionsList.forEach(ques => {
+            if (element == ques.question) {
+              ques.currentValue = searchResult[element];
+            }
+            if (ques.egineAttribue == 'Item Name (PID)') {
+              ques.currentValue = obj.title;
+              ques.previousValue = obj.title;
+            }
+          });
+        }
+        const groupinfo = {
+          uniqueKey: obj.uniqueKey,
+          title: obj.title,
+          uniqueNodeId: obj.uniqueNodeId,
+          childCount: obj.childCount,
+          isMajor: obj.isMajorLineItem,
+          isGroupNode: obj.isGroupNode,
+          groupName: obj.productName,
+          eGenieFlag: true,
+          listOfferQuestions: questionsList
+        };
+        const setinfo = { [groupName]: groupinfo };
+        this.setProductInfo(groupName, isMajorOrMinor, setinfo, data.groups[0].listOfferQuestions);
+      }, () => { },
+        () => {
+        });
+    } else {
+      this.offerConstructService.addDetails(groupsName).subscribe((data) => {
+        questionsList = data.groups[0].listOfferQuestions;
+        searchResult.forEach(element => {
+          questionsList.forEach(ques => {
+            if (element.egineAttribue == ques.question) {
+              ques.currentValue = element.values;
+            }
+          });
+        });
+        const groupinfo = {
+          uniqueKey: obj.uniqueKey,
+          title: obj.title,
+          uniqueNodeId: obj.uniqueNodeId,
+          childCount: obj.childCount,
+          isMajor: obj.isMajorLineItem,
+          isGroupNode: obj.isGroupNode,
+          groupName: obj.productName,
+          eGenieFlag: true,
+          listOfferQuestions: questionsList
+        };
+        const setinfo = { [groupName]: groupinfo };
+        this.setProductInfo(groupName, isMajorOrMinor, setinfo, data.groups[0].listOfferQuestions);
+      }, () => { },
+        () => {
+        });
+    }
+  }
+
+  saveOfferConstructChanges() {
     // save  loader
     this.loaderService.startLoading();
     this.offerConstructItems = [... this.offerConstructItems];
-
     const cds: ConstructDetails = new ConstructDetails(this.currentOfferId, []);
-
     // Construct all group Nodes.
     this.offerConstructItems.forEach((node) => {
 
       let cd: ConstructDetail;
 
       // check if this item is major item
-      if (node.parent === null) {
+      if (node.data.isMajorLineItem === true) {
 
         cd = new ConstructDetail();
         cd.constructItem = 'Major';
@@ -498,7 +557,6 @@ export class ItemCreationComponent implements OnInit {
       }
     });
 
-    console.log('cds', cds);
     this.offerConstructCanvasService.saveOfferConstructChanges(cds).subscribe(() => {
       this.loaderService.stopLoading();
     },
@@ -572,6 +630,70 @@ export class ItemCreationComponent implements OnInit {
 
   goBackToOfferSetup() {
     this.router.navigate(['/offerSetup', this.offerId, this.caseId, this.selectedOffer]);
+  }
+  replacetabularFormQuestion() {
+    // replace tabular form  question with offerConstructItems itemsDeatails
+    // for major group
+    let groupName;
+    let title;
+    this.offerConstructService.singleMultipleFormInfo['major'].forEach((list, index) => {
+      groupName = Object.keys(list);
+      this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach(element => {
+        title = Object.keys(element);
+        // if (Object.keys(element) == title) {
+        this.changeItemDetails(true, element[title]);
+        // }
+      });
+
+    });
+
+    // minor section
+    this.offerConstructService.singleMultipleFormInfo['minor'].forEach((list, index) => {
+      groupName = Object.keys(list);
+      this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach(element => {
+        title = Object.keys(element);
+        this.changeItemDetails(false, element[title]);
+        // }
+      });
+    });
+    this.saveOfferConstructChanges();
+  }
+
+  changeItemDetails(isManjor, info) {
+    // Construct all group Nodes.
+    this.offerConstructItems.forEach((node) => {
+      // check if this item is major item
+      if (isManjor) {
+        if (node.parent === null) {
+          if ((node.data.uniqueKey == info.uniqueKey) && (!node.data.eginieItem)) {
+            node.data.itemDetails = info.listOfferQuestions;
+          }
+        }
+      } else {
+        // Construct all minor items
+        if (node.children !== undefined && node.children !== null) {
+          node.children.forEach((child) => {
+            if (!child.data.isGroupNode) {
+              // check their unique key and replace with itemDeatils with productInfo
+              if (_.isEmpty(child.data.itemDetails)) {
+                if ((child.data.uniqueKey == info.uniqueKey) && (!child.data.eginieItem)) {
+                  child.data.itemDetails = info.listOfferQuestions;
+                }
+              } else {
+                if ((child.data.uniqueKey == info.uniqueKey) && (!child.data.eginieItem)) {
+                  child.data.itemDetails = info.listOfferQuestions;
+                }
+              }
+            } else {
+              // Store Group Information
+              // Store children under group node.
+            }
+          });
+        }
+      }
+    });
+    //console.log(this.offerConstructItems);
+
   }
   showReviewEdit() {
     this.ind--;
