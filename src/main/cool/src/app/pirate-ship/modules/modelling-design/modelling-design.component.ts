@@ -132,7 +132,7 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
     this.router.navigate(['/offerSetup', this.offerId, this.caseId, this.selectedAto]);
   }
 
-  // -------------------------------------------------------n------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
 
 
   showSelectedAtoView(dropDownValue: string) {
