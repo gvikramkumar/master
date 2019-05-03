@@ -98,5 +98,5 @@
 </div>
 
 <div *ngIf='display'>
-  <review-edit-form (valueChange)='replacetabularFormQuestion($event)' [indexVal]="ind"></review-edit-form>
+  <dynamic-form-multiple (clkDownloadZip)='downloadZip()' (valueChange)='replacetabularFormQuestion($event)' [isItemCreation]="true" [indexVal]="ind"></dynamic-form-multiple>
 </div>

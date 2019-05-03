@@ -10,13 +10,10 @@ import { TreeTableModule, AutoCompleteModule } from 'primeng/primeng';
 
 import { ITEM_CREATION_ROUTES } from './item-creation.routes';
 import { ItemCreationComponent } from './item-creation.component';
-import { ReviewEditForm } from './components/review-edit-form/review-edit-form';
-
 
 @NgModule({
     declarations: [
-        ReviewEditForm,
-        ItemCreationComponent,
+        ItemCreationComponent
     ],
     imports: [
         SharedModule,

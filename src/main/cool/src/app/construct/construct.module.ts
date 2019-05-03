@@ -13,7 +13,6 @@ import { RouterModule } from '@angular/router';
 import * as _ from 'lodash';
 import { OfferConstructComponent } from './offer-construct/offer-construct.component';
 import { OfferconstructChildComponent } from './child_component/offerconstruct-child/offerconstruct-child.component';
-import { DynamicFormMultipleComponent } from './offer-construct-canvas/dynamic-form-multiple';
 import { OfferconstructCanvasComponent } from './offer-construct-canvas/offer-construct-canvas.component';
 import { RightPanelModule } from '@app/right-panel/right-panel.module';
 import { TaskBarModule } from '@app/taskbar/task-bar.module';
@@ -29,9 +28,8 @@ import { CONSTRUCT_ROUTES } from './construct.routes';
     declarations: [
         OfferConstructComponent,
         OfferconstructChildComponent,
-        DynamicFormMultipleComponent,
         DynamicFormQuestionComponent,
-        OfferconstructCanvasComponent,
+        OfferconstructCanvasComponent
     ],
     imports: [
         TableModule,

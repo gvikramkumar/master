@@ -3,10 +3,10 @@ import { Component, OnInit, Input, Output, ViewChild, ElementRef, Renderer, Even
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { OfferconstructCanvasService } from './service/offerconstruct-canvas.service';
 import { OfferConstructService } from '@app/services/offer-construct.service';
 import * as moment from 'moment';
 import { OfferConstructDefaultValue } from '@app/construct/offer-construct-canvas/service/offer-construct-defaultValue-services';
+import { OfferconstructCanvasService } from './../../../construct/offer-construct-canvas/service/offerconstruct-canvas.service';
 
 
 @Component({
@@ -33,6 +33,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     public lengthList: any;
     public currenntHeaderName: any;
     @Output() valueChange = new EventEmitter();
+    @Output() clkDownloadZip = new EventEmitter();
     public viewDetails: Boolean = false;
     public detailArray: any[] = [];
     public headerName: any = '';
@@ -41,6 +42,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     public showLoader: boolean = false;
 
     @Input() indexVal;
+    @Input() isItemCreation:boolean;
 
     constructor(public offerConstructService: OfferConstructService,
         private offerConstructCanvasService: OfferconstructCanvasService,
@@ -546,6 +548,7 @@ export class DynamicFormMultipleComponent implements OnInit {
         }
 
     }
-
-
+    downloadZip(){
+        this.clkDownloadZip.emit()
+    }
 }
