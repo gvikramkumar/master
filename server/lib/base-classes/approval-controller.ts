@@ -172,7 +172,9 @@ export default class ApprovalController extends ControllerBase {
     const url = `${req.headers.origin}/prof/${endpoint}/edit/${item.id};mode=view`;
     const link = `<a href="${url}">${url}</a>`;
     let body;
-    const adminEmail = svrUtil.getItadminEmail(req.dfa);
+    const itadminEmail = svrUtil.getItadminEmail(req.dfa);
+    const dfaAdminEmail = svrUtil.getDfaAdminEmail(req.dfa);
+    const bizAdminEmail = svrUtil.getBizAdminEmail(req.dfa);
     const ppmtEmail = svrUtil.getPpmtEmail(req.dfa);
     const promises = [];
     if (mode === ApprovalMode.submit && data.approvedOnce === 'Y') {
@@ -195,21 +197,21 @@ export default class ApprovalController extends ControllerBase {
             } else {
               body = `A new DFA ${type} has been submitted by ${req.user.fullName} for approval: <br><br>${link}`;
             }
-            return sendHtmlMail(req.user.email, ppmtEmail, adminEmail,
+            return sendHtmlMail(dfaAdminEmail, bizAdminEmail, `${itadminEmail},${ppmtEmail},${req.user.email}`,
               `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Submitted for Approval`, body);
           case ApprovalMode.approve:
             body = `The DFA ${type} submitted by ${item.updatedBy} for approval has been approved:<br><br>${link}`;
             if (data.approveRejectMessage) {
               body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
-            return sendHtmlMail(ppmtEmail, `${item.createdBy}@cisco.com`, `${ppmtEmail},${adminEmail}`,
+            return sendHtmlMail(bizAdminEmail, `${item.updatedBy}@cisco.com`, `${itadminEmail},${ppmtEmail}`,
               `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Approved`, body);
           case ApprovalMode.reject:
             body = `The DFA ${type} submitted by ${item.updatedBy} for approval has been rejected:<br><br>${link}`;
             if (data.approveRejectMessage) {
               body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
-            return sendHtmlMail(ppmtEmail, `${item.createdBy}@cisco.com`, `${ppmtEmail},${adminEmail}`,
+            return sendHtmlMail(bizAdminEmail, `${item.updatedBy}@cisco.com`, `${itadminEmail},${ppmtEmail}`,
               `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Not Approved`, body);
         }
       });

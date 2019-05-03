@@ -7,6 +7,8 @@ import {DfaModuleIds} from '../../../shared/misc/enums';
 export const svrUtil = {
   isLocalEnv,
   getItadminEmail,
+  getDfaAdminEmail,
+  getBizAdminEmail,
   getPpmtEmail,
   trimStringProperties,
   getMemoryUsage,
@@ -70,6 +72,20 @@ function getItadminEmail(dfa) {
     return dfa.user.email;
   }
   return dfa.itadminEmail;
+}
+
+function getDfaAdminEmail(dfa) {
+  if (isLocalEnv()) {
+    return dfa.user.email;
+  }
+  return dfa.dfaAdminEmail;
+}
+
+function getBizAdminEmail(dfa) {
+  if (isLocalEnv()) {
+    return dfa.user.email;
+  }
+  return dfa.bizAdminEmail;
 }
 
 function getPpmtEmail(dfa) {
