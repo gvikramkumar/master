@@ -10,7 +10,6 @@ export class OfferConstructDefaultValue {
     constructor() { }
 
     billingSOADefaultValue(listOfferQuestions, chargeTypeValue) {
-        debugger;
         let usageType = 'Usage';
         let recurringType = 'Recurring';
         listOfferQuestions.forEach(element => {
