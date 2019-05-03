@@ -22,9 +22,9 @@ export class OfferSetupComponent implements OnInit {
   offerName;
   offerData;
 
-  derivedMM;
+  derivedMM:any ='MM4';
   moduleStatus;
-  functionalRole;
+  functionalRole:any ='BUPM';
 
   stakeHolderData;
   stakeholders: any;
@@ -61,7 +61,7 @@ export class OfferSetupComponent implements OnInit {
   ngOnInit() {
 
     //  =======================================================================================
-    this.functionalRole = this.userService.getFunctionalRole();
+    // this.functionalRole = this.userService.getFunctionalRole();
     // Get Offer Details
     this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
 
@@ -118,7 +118,7 @@ export class OfferSetupComponent implements OnInit {
 
   // Get All the ModuleName and place in order
   getAllModuleData() {
-    this.offerSetupService.getModuleData(this.derivedMM, this.offerId, this.functionalRole).subscribe(data => {
+    this.offerSetupService.getModuleData(this.derivedMM, this.offerId, this.functionalRole,this.selectedAto).subscribe(data => {
       this.groupData = {};
       console.log(this.groupData);
       this.Options = data['listATOs'];
@@ -204,14 +204,13 @@ export class OfferSetupComponent implements OnInit {
 
   }
 
-  updateModuleData(message) {
-    this.getAllModuleData();
-  }
+  
 
   onProceedToNext() {
   }
 
   selectedValue(event) {
+    this.getAllModuleData();
   }
 
 }
