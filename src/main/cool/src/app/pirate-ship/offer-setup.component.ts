@@ -7,7 +7,11 @@ import { OfferSetupService } from '../services/offer-setup.service';
 import { RightPanelService } from '@app/services/right-panel.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 
+import { appRoutesNames } from '../app.routes.names';
+import { pirateShipRoutesNames } from './pirate-ship.routes.names';
+
 import { interval } from 'rxjs';
+
 
 @Component({
   selector: 'app-offer-setup',
@@ -197,9 +201,9 @@ export class OfferSetupComponent implements OnInit {
 
   getElementDetails(element) {
     if (element.moduleName === 'Item Creation') {
-      this.router.navigate(['item-creation', this.offerId, this.caseId, this.selectedAto]);
+      this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.ITEM_CREATION, this.selectedAto]);
     } else if (element.moduleName === 'Modeling & Design') {
-      this.router.navigate(['modelling-design', this.offerId, this.caseId, this.selectedAto]);
+      this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.MODELLING_DESIGN, this.selectedAto]);
     }
 
   }

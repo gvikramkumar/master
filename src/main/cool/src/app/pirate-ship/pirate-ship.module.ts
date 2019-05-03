@@ -10,28 +10,25 @@ import { OfferDetailModule } from '../offer-detail/offer-detail.module';
 import { OfferSetupComponent } from './offer-setup.component';
 import { ViewOfferComponent } from './components/view-offer/view-offer.component';
 
+import { PIRATE_SHIP_ROUTES } from './pirate-ship.routes';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: OfferSetupComponent
-  }
-];
+
 
 @NgModule({
   declarations: [
-    OfferSetupComponent,
-    ViewOfferComponent],
+    ViewOfferComponent,
+    OfferSetupComponent
+  ],
   imports: [
     SharedModule,
     MenuBarModule,
     TaskBarModule,
     RightPanelModule,
     OfferDetailModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(PIRATE_SHIP_ROUTES),
   ],
   exports: [
-    ViewOfferComponent
+    RouterModule
   ]
 })
 export class PirateShipModule { }

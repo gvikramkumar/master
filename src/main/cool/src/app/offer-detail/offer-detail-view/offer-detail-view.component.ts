@@ -193,7 +193,7 @@ export class OfferDetailViewComponent implements OnInit {
 
 
         if (Array.isArray(this.offerViewData.constructDetails) && this.offerViewData.constructDetails.length) {
-          this.offerComponentCharacterestics = this.offerViewData.constructDetails;
+          this.offerComponentCharacterestics = this.offerViewData.constructDetails ? this.offerViewData.constructDetails : {};
         }
 
         if (Array.isArray(this.offerViewData.additionalCharacteristics) && this.offerViewData.additionalCharacteristics.length) {
