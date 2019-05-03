@@ -14,9 +14,21 @@
           <!-- Message bar -->
           <ul class="list base-margin-top">
             <li>
-              <div class="panel panel--bordered"><span class="text-success"><span
-                    class="icon-check-outline icon-medium"></span>
-                  {{derivedMM}} Aligned</span></div>
+              <div *ngIf="showMM" class="panel panel--bordered">
+                <span class="text-success">
+                <span class="icon-check-outline icon-medium"></span>
+                  {{derivedMM}} Aligned
+                </span>
+                <span class="col-md-4 text-right">Tab View</span>
+              </div>
+              <div *ngIf="!showMM" class="panel panel--bordered">
+                  <span class="text-success">
+                  <span class="icon-check-outline icon-medium"></span>
+                    {{derivedMM}} 
+                  </span>
+                  <span class=" col-md-4 text-right">Tab View</span>
+              </div>
+                    
             </li>
           </ul>
 
