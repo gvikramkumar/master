@@ -7,21 +7,40 @@ import { TaskBarModule } from '@app/taskbar/task-bar.module';
 import { RightPanelModule } from '@app/right-panel/right-panel.module';
 import { OfferDetailModule } from '../offer-detail/offer-detail.module';
 
-import { OfferSetupComponent } from './offer-setup.component';
-import { ViewOfferComponent } from './components/view-offer/view-offer.component';
+import { ViewOfferComponent } from './view-offer/view-offer.component';
+import { OfferSetupComponent } from './offer-setup/offer-setup.component';
+import { ATOSummaryComponent } from './atosummary/atosummary.component';
+import {pirateshipComponent} from '@app/pirate-ship/pirate-ship.component';
 
 
 const routes: Routes = [
   {
     path: '',
-    component: OfferSetupComponent
+    component: pirateshipComponent,
+    pathMatch:'prefix',
+    children: [
+      {
+        path: '',
+        pathMatch:'full',
+        redirectTo:'offerset'
+      },
+      {
+        path:'offerset',
+        component: OfferSetupComponent
+      },
+
+      {path: 'atosummary/:offerId/:selectedAto',
+        component: ATOSummaryComponent}
+    ]
   }
 ];
 
 @NgModule({
   declarations: [
+    pirateshipComponent,
     OfferSetupComponent,
-    ViewOfferComponent],
+    ViewOfferComponent,
+    ATOSummaryComponent],
   imports: [
     SharedModule,
     MenuBarModule,

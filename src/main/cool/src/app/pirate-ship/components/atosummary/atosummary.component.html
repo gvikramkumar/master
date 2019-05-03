@@ -1,0 +1,121 @@
+
+
+
+
+   <div class="container">
+
+     <div class=" row panel panel--indigo panel--compressed task--bar ng-star-inserted">
+       <h4><button class="btn--back btn btn--icon btn--white" (click)="back()"><span class="icon-back"></span></button>Service Annuity % Pricing</h4>
+     </div>
+
+     <div class="row" style="margin-top: 20px">
+       <div class="col-3">
+         <button class="btn btn--primary">Submit Setup</button>
+       </div>
+       <div class="col-6"></div>
+       <div class="col-3">
+        <app-view-offer [offerId]="offerId" [selectedOffer]="selectedoffer" (updateModuleData)="updateATo($event)" ></app-view-offer>
+       </div>
+     </div>
+     <div class="row">
+       <div class="col-12" style="margin-top: 25px;"><i>View Only</i><i class="fas fa-lock" style="font-size: 15px; margin-left: 5px"></i></div>
+     </div>
+     <div class="row">
+       <div class="col-12" style="border: 1px solid gray;">
+         <h4 style="color: #1ba0d7"> {{selectedoffer}} </h4>
+         <table class="table table--bordered">
+           <thead>
+           <tr>
+             <th>SKU</th>
+             <th>Ranking</th>
+             <th>% OF PLP</th>
+             <th>MONTHLY THRESHOLD</th>
+             <th>% BASED SUPPORT ITEM</th>
+             <th>NPI/OWB COMPLETION STATUS </th>
+           </tr>
+           </thead>
+           <tbody>
+           <tr>
+             <td>SOA_SKU_1</td>
+             <td>1</td>
+             <td>15%</td>
+             <td>$0</td>
+             <td><input type="checkbox" checked/></td>
+
+           </tr>
+           <tr>
+             <td>SOA_SKU_1</td>
+             <td>1</td>
+             <td>15%</td>
+             <td>$0</td>
+             <td><input type="checkbox" checked/></td>
+             <td style="border: 0;background-color: #fff;"></td>
+           </tr>
+           <tr>
+             <td>SOA_SKU_1</td>
+             <td>1</td>
+             <td>15%</td>
+             <td>$0</td>
+             <td><input type="checkbox" checked/></td>
+           </tr>
+           </tbody>
+         </table>
+       </div>
+     </div>
+     <div class="row" style="margin-top: 30px">
+       <div class="col-12">
+         <ul class="osw-ps-legend">
+           <div class="row">
+             <div class="col-sm-6">
+               <li class="half-margin-bottom">
+                 <button
+                   class="btn btn--icon btn--small legend-available"
+                 ></button>
+                 Available
+               </li>
+               <li class="half-margin-bottom">
+                 <button
+                   class="btn btn--icon btn--small legend-notavail"
+                 ></button>
+                 Not Yet Available
+               </li>
+               <li>
+                 <button
+                   class="btn btn--icon btn--small legend-notreq"
+                 ></button>
+                 Not Required
+               </li>
+             </div>
+             <div class="col-sm-6">
+               <li class="half-margin-bottom">
+                 <button class="btn btn--icon btn--small legend-completed">
+                   <span class="icon-check"></span>
+                 </button>
+                 Completed
+               </li>
+               <li class="half-margin-bottom">
+                 <button class="btn btn--icon btn--small legend-inprog">
+                   <span class="in-progress"></span>
+                 </button>
+                 In-Progess
+               </li>
+               <li>
+                 <button class="btn btn--icon btn--small legend-milestone">
+                   <span class="milestone"></span>
+                 </button>
+                 Milestone
+               </li>
+             </div>
+           </div>
+         </ul>
+       </div>
+
+     </div>
+   </div>
+
+
+
+
+
+
+
