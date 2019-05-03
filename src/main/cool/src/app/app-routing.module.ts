@@ -11,8 +11,6 @@ import { APP_ROUTES } from './app.routes';
         [
             RouterModule.forRoot(APP_ROUTES, {
                 useHash: true,
-                preloadingStrategy: PreloadAllModules,
-                enableTracing: true,
             })
         ]
     ],
