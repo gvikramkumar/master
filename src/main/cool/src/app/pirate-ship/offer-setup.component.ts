@@ -25,7 +25,7 @@ export class OfferSetupComponent implements OnInit {
   showMM:boolean = false;
   derivedMM;
   moduleStatus;
-  functionalRole;
+  functionalRole:any = 'BUPM';
 
   stakeHolderData;
   stakeholders: any;
