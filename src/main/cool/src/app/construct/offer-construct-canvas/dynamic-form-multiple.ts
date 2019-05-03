@@ -406,11 +406,26 @@ export class DynamicFormMultipleComponent implements OnInit {
                 }
 
             }
-            // if (question.question == "Terms & Payments Required") {
-            //     question.currentValue == "Yes"
-            // 
-            // 
-            // }
+            
+            if (question.question == "Delivery Option") {
+               if (question.currentValue == "ELECTRONIC") {
+                   this.defaultValueServices.setEnablePartySWKey(questionList);
+               }
+               else{
+                   this.defaultValueServices.setEnablePartySWKeyN(questionList);
+               }
+   
+           }
+       
+           if (question.question == "Terms & Payments Required") {
+               if (question.currentValue == "Yes") {
+                   this.defaultValueServices.setSubscriptionOffset(questionList);
+               }
+               else{
+                   this.defaultValueServices.setSubscriptionOffsetN(questionList);
+               }
+       
+           }
 
         }
         var validatorPattern = '';
