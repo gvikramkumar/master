@@ -1,27 +1,19 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '@shared/shared.module';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
+import { SharedModule } from '@shared/shared.module';
 import { MenuBarModule } from '@app/menu/menu-bar.module';
 import { RightPanelModule } from '@app/right-panel/right-panel.module';
 
 import * as _ from 'lodash';
 import { TreeTableModule, AutoCompleteModule } from 'primeng/primeng';
 
+import { ITEM_CREATION_ROUTES } from './item-creation.routes';
 import { ItemCreationComponent } from './item-creation.component';
-import { ReviewEditForm } from './components/review-edit-form/review-edit-form';
-
-const routes: Routes = [
-    {
-        path: '',
-        component: ItemCreationComponent
-    },
-];
 
 @NgModule({
     declarations: [
-        ReviewEditForm,
-        ItemCreationComponent,
+        ItemCreationComponent
     ],
     imports: [
         SharedModule,
@@ -29,7 +21,10 @@ const routes: Routes = [
         TreeTableModule,
         RightPanelModule,
         AutoCompleteModule,
-        RouterModule.forChild(routes)
+        RouterModule.forChild(ITEM_CREATION_ROUTES)
+    ],
+    exports: [
+        RouterModule
     ]
 })
 export class ItemCreationModule { }

@@ -346,6 +346,14 @@ th.ui-sortable-column.ng-star-inserted {
   padding-top: 10px;
 }
 
+/* Tree Table */
+.cool.cui .item-creation .ui-treetable .ui-treetable-tbody>tr>td:first-child div.text-center {
+  text-align: left!important;
+}
+.cool.cui .item-creation .ui-treetable .ui-treetable-thead th {
+  font-weight: normal;
+}
+
 
 /* Custom 3-segment Progress Bar */
 .cui .td--progress-fitted .row.no-gutters {
@@ -654,7 +662,6 @@ th.ui-sortable-column.ng-star-inserted {
   font-family: "cui-font";
   font-style: normal;
   font-weight: normal;
-  speak: none;
   text-decoration: inherit;
   text-transform: none;
   text-rendering: optimizeLegibility;

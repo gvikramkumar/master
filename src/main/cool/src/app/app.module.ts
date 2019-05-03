@@ -15,7 +15,6 @@ import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AuthErrorComponent } from './auth-error/auth-error.component';
 
-import { AppRoutingModule } from './app-routing.module';
 import { DesignReviewComponent } from '@app/review/design-review/design-review.component';
 import { ViewStrategyComponent } from '@app/review/view-strategy/view-strategy.component';
 import { StrategyReviewComponent } from '@app/review/strategy-review/strategy-review.component';
@@ -51,16 +50,15 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { CoreModule } from '@core/core.module';
 import { SharedModule } from '@shared/shared.module';
+import { AppRoutingModule } from './app-routing.module';
+
 import { MenuBarModule } from './menu/menu-bar.module';
 import { TaskBarModule } from './taskbar/task-bar.module';
 import { RightPanelModule } from './right-panel/right-panel.module';
-import { OfferDetailModule } from './offer-detail/offer-detail.module';
 
 import { CustomMinValidatorDirective } from './validators/custom-min-validator.directive';
 import { CustomRangeValidatorDirective } from './validators/custom-range-validator.directive';
-import { ItemCreationComponent } from '@app/pirate-ship/modules/item-creation/item-creation.component';
-import { ReviewEditForm } from '@app/pirate-ship/modules/item-creation/components/review-edit-form/review-edit-form';
-import { TreeTableModule, AutoCompleteModule } from 'primeng/primeng';
+import { OfferDetailModule } from './offer-detail/offer-detail.module';
 
 
 export function app_init(configService: ConfigurationService) {
@@ -94,15 +92,13 @@ export function app_init(configService: ConfigurationService) {
     FlexLayoutModule,
     NgxWebstorageModule.forRoot(),
     UserIdleModule.forRoot({ idle: 10, timeout: 600, ping: 0 }),
+    CoreModule,
+    SharedModule,
     MenuBarModule,
     TaskBarModule,
     RightPanelModule,
     OfferDetailModule,
-    CoreModule,
-    SharedModule,
-    AppRoutingModule,
-    TreeTableModule,
-    AutoCompleteModule
+    AppRoutingModule
   ],
   providers:
     [

@@ -5,17 +5,20 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { RouterModule } from '@angular/router';
 import {
   DataTableModule, MultiSelectModule, AccordionModule, TooltipModule, OverlayPanelModule,
-  DialogModule
+  DialogModule,
+  AutoCompleteModule
 } from 'primeng/primeng';
 import { TableModule } from 'primeng/table';
 import { ViewcommentComponent, TurbotaxviewComponent } from './components';
 import { DashboardService, CreateOfferService, ViewcommentService, TurbotaxService } from './services';
+import { DynamicFormMultipleComponent } from './components/dynamic-form-multiple/dynamic-form-multiple';
 
 
 @NgModule({
   declarations: [
     ViewcommentComponent,
     TurbotaxviewComponent,
+    DynamicFormMultipleComponent,
   ],
   imports: [
     FormsModule,
@@ -29,6 +32,7 @@ import { DashboardService, CreateOfferService, ViewcommentService, TurbotaxServi
     DialogModule,
     DataTableModule,
     MultiSelectModule,
+    AutoCompleteModule,
     BsDatepickerModule.forRoot()
   ],
   providers: [
@@ -40,6 +44,7 @@ import { DashboardService, CreateOfferService, ViewcommentService, TurbotaxServi
   exports: [
     ViewcommentComponent,
     TurbotaxviewComponent,
+    DynamicFormMultipleComponent,
     FormsModule,
     CommonModule,
     RouterModule,
@@ -51,7 +56,8 @@ import { DashboardService, CreateOfferService, ViewcommentService, TurbotaxServi
     DialogModule,
     DataTableModule,
     MultiSelectModule,
-    BsDatepickerModule
+    BsDatepickerModule,
+    AutoCompleteModule
   ]
 })
 export class SharedModule { }
