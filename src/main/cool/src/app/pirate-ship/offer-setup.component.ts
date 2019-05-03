@@ -206,7 +206,6 @@ export class OfferSetupComponent implements OnInit {
     // console.log('selectedAto', this.selectedAto);
   }
   getElementDetails(element) {
-    debugger;
     console.log('this is the element'+ element.moduleName);
     // let moduleName = element.moduleName.replace(/\s/g, "");
     // this.router.navigate(['/' + element.moduleName]);
@@ -227,9 +226,9 @@ export class OfferSetupComponent implements OnInit {
         this.router.navigate(['/modelling-design', this.offerId, this.caseId, this.selectedAto]);
         break;
       case 'Service Annuity  % Pricing':
-        console.log(this.selectedAto);
+        //  console.log(this.selectedAto);
         if(this.selectedAto === 'Overall Offer') {
-          //this.router.navigate(['']);
+          // this.router.navigate(['']);
         } else {
           this.router.navigate(['../atosummary', this.offerId, this.selectedAto],{ relativeTo: this.route});
         }
