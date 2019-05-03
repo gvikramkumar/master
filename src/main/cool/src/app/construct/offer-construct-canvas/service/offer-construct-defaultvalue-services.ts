@@ -77,6 +77,17 @@ export class OfferConstructDefaultValue{
      return listOfferQuestions;
    }
    
+   getChargeTypeValidationValues(listOfferQuestions, chargeTypeValue) {
+      let usageType = 'Usage';
+      let recurringType = 'Recurring';
+      listOfferQuestions.forEach(question => {
+          if (question.question == "Monthly Amount") {
+          }
+      });
+      return listOfferQuestions;
+    }
+
+   
    setBasePriceInBillingSOADForFlat(questionList) {
            let monthlyAmountValue;
            questionList.forEach(question => {
@@ -130,13 +141,13 @@ export class OfferConstructDefaultValue{
                }
                if (question.question == "Req Start Date Window") {
                    question.rules.isMandatoryOptional = "Mandatory";
-                   question.currentValue = 60;
+                   question.currentValue = 90;
                    console.log("question.rules.isMandatoryOptional", question.rules.isMandatoryOptional)
                    console.log("question.currentValue", question.currentValue)
                }
                if (question.question == "Grace Window For Renewal") {
                    question.rules.isMandatoryOptional = "Mandatory";
-                   question.currentValue = 90;
+                   question.currentValue = 60;
                    console.log("question.rules.isMandatoryOptional", question.rules.isMandatoryOptional)
                    console.log("question.currentValue", question.currentValue)
                }
@@ -192,6 +203,7 @@ export class OfferConstructDefaultValue{
            });
 
        }
+       
       
        LicenseDefault(questionList) {
            questionList.forEach(question => {
@@ -210,6 +222,7 @@ export class OfferConstructDefaultValue{
            });
  
        }
+       
        
        getLicenseDeliveryTypeDefaultValues(questionList, licenseDelivery){
            if(licenseDelivery = "Smart Licenses"){
@@ -233,10 +246,36 @@ export class OfferConstructDefaultValue{
            return questionList;
        }
        
+       
+       
+       
+       
+       
+       
+       
+       setEntitlementTerm(questionList){ 
+           questionList.forEach(question => {
+            if (question.question == "Entitlement Term") {
+                question.value.eGenieFlag = "true";
+            }
+        });
+        return questionList;
+       }
+       
+       setEntitlementTermN(questionList){
+           questionList.forEach(question => {
+               if (question.question == "Entitlement Term") {
+                   question.value.eGenieFlag = "false";
+               }
+           });
+           return questionList;
+       }
+       
        ImageSigningForXaas(questionList) {
            questionList.forEach(question => {
                if (question.question == "Image Signing") {
                    question.currentValue = "0- No, Image signing (Digital Software Signatures) is not supported";
+                   console.log("question.currentValue imge",question.currentValue)
                }
            });
               return questionList;
@@ -246,6 +285,7 @@ export class OfferConstructDefaultValue{
            questionList.forEach(question => {
                if (question.question == "Image Signing") {
                    question.currentValue = "1-Yes, Image signing (Digital Software Signatures) is supported";
+                    console.log("question.currentValue imge",question.currentValue)
                }
            });
              return questionList;
@@ -254,10 +294,48 @@ export class OfferConstructDefaultValue{
            questionList.forEach(question => {
                if (question.question == "Image Signing") {
                    question.currentValue = "";
+                    console.log("question.currentValue imge",question.currentValue)
                }
            });
             return questionList;
        }
 
+       
+       setTermsNPayments(questionList) {
+           questionList.forEach(question => {
+               if (question.question == "Terms & Payments Required") {
+                   question.currentValue = "N0";
+               }
+           });
+       }
+       
+       setTermsNPaymentsN(questionList) {
+           questionList.forEach(question => {
+               if (question.question == "Terms & Payments Required") {
+                  question.currentValue = "";
+               }
+           });
+ 
+       }
+       
+       setEnablePartySWKey(questionList) {
+           questionList.forEach(question => {
+               if (question.question == "Enable 3rd Party SW Key") {
+                   question.rules.isMandatoryOptional = "Mandatory";
+                   question.currentValue = 'N';
+                   console.log("question.rules.isMandatoryOptional", question.rules.isMandatoryOptional)
+                   console.log("question.currentValue", question.currentValue)
+               }
+           });
+       }
+       
+       setEnablePartySWKeyN(questionList) {
+           questionList.forEach(question => {
+               if (question.question == "Enable 3rd Party SW Key") {
+                   question.rules.isMandatoryOptional = "Optional";
+                   question.currentValue = '';
+               }
+           });
+       }
 }
 

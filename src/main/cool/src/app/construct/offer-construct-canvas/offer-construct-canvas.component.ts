@@ -229,6 +229,14 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
                     let listOfferQuestions = this.defaultValueServices.LicenseDefaultOptional(this.listOfferQuestions);
                     obj['itemDetails'] = listOfferQuestions;
                 }
+                if (obj.productName == 'Billing') {
+                    let listOfferQuestions = this.defaultValueServices.setTermsNPayments(this.listOfferQuestions);
+                    obj['itemDetails'] = listOfferQuestions;
+                } 
+                else{
+                    let listOfferQuestions = this.defaultValueServices.setTermsNPaymentsN(this.listOfferQuestions);
+                    obj['itemDetails'] = listOfferQuestions;
+                }
                 if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS' || obj.productName == 'Billing') {
                     let listOfferQuestions = this.defaultValueServices.getLicenseDeliveryTypeDefaultValues(this.listOfferQuestions, this.licenseDelivery);
                     console.log(" listOfferQuestions", listOfferQuestions)
@@ -238,6 +246,21 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
                     let listOfferQuestions = this.defaultValueServices.getLicenseDeliveryTypeDefaultValuesN(this.listOfferQuestions, this.licenseDelivery);
                     obj['itemDetails'] = listOfferQuestions;
                 }
+                
+                if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS' || obj.productName == 'Billing') {
+                    let listOfferQuestions = this.defaultValueServices.getChargeTypeValidationValues(this.listOfferQuestions, this.chargeTypeValue);
+                    console.log(" listOfferQuestions", listOfferQuestions)
+                    obj['itemDetails'] = listOfferQuestions;
+                } 
+                
+                if (obj.productName == 'License') {
+                    let listOfferQuestions = this.defaultValueServices.setEntitlementTerm(this.listOfferQuestions);
+                    obj['itemDetails'] = listOfferQuestions;
+                }else{
+                    let listOfferQuestions = this.defaultValueServices.setEntitlementTermN(this.listOfferQuestions);
+                    obj['itemDetails'] = listOfferQuestions;
+                } 
+                
                 if (obj.productName == 'XaaS') {
                     let listOfferQuestions = this.defaultValueServices.ImageSigningForXaas(this.listOfferQuestions);
                     obj['itemDetails'] = listOfferQuestions;
@@ -256,9 +279,12 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
               let listOfferQuestions = this.defaultValueServices.billingSOADefaultValue(this.listOfferQuestions, this.chargeTypeValue);
               obj['itemDetails'] = listOfferQuestions;
             }
+         console.log("obj",obj);
           this.getQuestionList(obj);
         });
+        console.log("obj1",obj);
       this.offerConstructItems.push(this.itemToTreeNode(obj));
+      console.log("this.offerConstructItems",this.offerConstructItems)
       this.offerConstructItems = [...this.offerConstructItems];
       this.countableItems.push(this.uniqueId);
       this.updateChildCount();
@@ -777,6 +803,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
             () => {
               // if (obj.productName !== 'Billing SOA' || obj.productName !== 'Billing') {
               if (obj.productName !== 'Billing SOA') {
+              
                if (obj.productName == 'License') {
                    let listOfferQuestions = this.defaultValueServices.LicenseDefault(this.listOfferQuestions);
                    obj['itemDetails'] = listOfferQuestions;
@@ -785,6 +812,24 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
                    let listOfferQuestions = this.defaultValueServices.LicenseDefaultOptional(this.listOfferQuestions);
                    obj['itemDetails'] = listOfferQuestions;
                }
+               
+               if (obj.productName == 'Billing') {
+                   let listOfferQuestions = this.defaultValueServices.setTermsNPayments(this.listOfferQuestions);
+                   obj['itemDetails'] = listOfferQuestions;
+               } 
+               else{
+                   let listOfferQuestions = this.defaultValueServices.setTermsNPaymentsN(this.listOfferQuestions);
+                   obj['itemDetails'] = listOfferQuestions;
+               }
+               
+               if (obj.productName == 'License') {
+                   let listOfferQuestions = this.defaultValueServices.setEntitlementTerm(this.listOfferQuestions);
+                   obj['itemDetails'] = listOfferQuestions;
+               }else{
+                   let listOfferQuestions = this.defaultValueServices.setEntitlementTermN(this.listOfferQuestions);
+                   obj['itemDetails'] = listOfferQuestions;
+               } 
+               
                if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS' || obj.productName == 'Billing') {
                    let listOfferQuestions = this.defaultValueServices.getLicenseDeliveryTypeDefaultValues(this.listOfferQuestions, this.licenseDelivery);
                    obj['itemDetails'] = listOfferQuestions;
@@ -851,73 +896,6 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.isDisabledView = false;  // for enable button
   }
 
-   // set billing SOA default value according offer soluting
-
-  //  billingSOADefaultValue() {
-  //   this.listOfferQuestions.forEach(element => {
-  //     if (element.rules.defaultSel != '') {
-  //       element.currentValue = element.rules.defaultSel;
-  //       element.previousValue = element.rules.defaultSel;
-  //     }
-  //     if (element.question == 'Base Price') {
-  //       if (this.chargeTypeValue == 'Usage') {
-  //         element.currentValue = 0;
-  //         element.previousValue = 0;
-  //       }
-  //     }
-  //     if (element.question == 'Discount Restricted Product') {
-  //       if (this.chargeTypeValue == 'Recurring') {
-  //         element.currentValue = 0;
-  //         element.previousValue = 0;
-  //       }
-  //     }
-  //     if (element.question === 'Proration Flag For Purchase') {
-  //       if (this.chargeTypeValue == 'Recurring') {
-  //         element.currentValue = 'Yes';
-  //         element.previousValue = 'Yes';
-  //       }
-  //       if (this.chargeTypeValue == 'Usage') {
-  //         element.currentValue = 'No';
-  //         element.previousValue = 'No';
-  //       }
-  //     }
-  //     if (element.question === 'Proration Flag For Cancel') {
-  //       if (this.chargeTypeValue == 'Recurring') {
-  //         element.currentValue = 'Yes';
-  //         element.previousValue = 'Yes';
-  //       }
-  //       if (this.chargeTypeValue == 'Usage') {
-  //         element.currentValue = 'No';
-  //         element.previousValue = 'No';
-  //       }
-  //     }
-  //     if (element.question == 'Usage Type') {
-  //       if (this.chargeTypeValue == 'Usage') {
-  //         element.currentValue = 'Support';
-  //         element.previousValue = 'Support';
-  //       }
-  //     }
-  //     if (element.question == 'RATING MODEL') {
-  //       if (this.chargeTypeValue == 'Usage') {
-  //         element.currentValue = 'EVENT';
-  //         element.previousValue = 'EVENT';
-  //       }
-  //     }
-  //     if (element.question == 'Discount Restricted Product') {
-  //       if (this.chargeTypeValue == 'Usage') {
-  //         element.currentValue = 'Yes';
-  //         element.previousValue = 'Yes';
-  //       }
-  //     }
-  //     if (element.question == 'Subscription Offset') {
-  //       if (this.chargeTypeValue == 'Recurring') {
-  //         element.currentValue = '30';
-  //         element.previousValue = '30';
-  //       }
-  //     }
-  //   });
-  //   return this.listOfferQuestions;
-  // }
 
   /**
    * Delete child object when moving from one row to another
