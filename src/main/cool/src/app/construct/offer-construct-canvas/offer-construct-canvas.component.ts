@@ -19,7 +19,7 @@ import * as _ from 'lodash';
 import { MessageService } from '@app/services/message.service';
 import { ConfigurationService } from '@app/core/services';
 import { LoaderService } from '@app/core/services/loader.service';
-import {OfferConstructDefaultValue} from '@app/construct/offer-construct-canvas/service/offer-construct-defaultValue-services';
+import { OfferConstructDefaultValue } from './service/offer-construct-defaultvalue-services';
 
 @Component({
   selector: 'app-offerconstruct-canvas',
