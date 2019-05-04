@@ -66,6 +66,7 @@
     <div class="col-md-12">
         <div>
             <table class="table table--compressed table--nostripes phase-popover half-margin-top">
+
                 <thead>
                     <tr>
                         <th class="one-qtr-width"></th>
@@ -74,7 +75,9 @@
                         <th class="one-qtr-width">COMPLETION DATE</th>
                     </tr>
                 </thead>
+
                 <tbody *ngIf="offerPhaseDetailsList">
+
                     <tr>
                         <td class="panel--ltgray">
                             <span class="head text-large text-indigo">
@@ -96,7 +99,8 @@
                                                 <div *ngIf="!ideateData.enable; else enableOfferPhase">
                                                     <span class="text-muted"
                                                         pTooltip="Dependent activities are not yet satisfied"
-                                                        tooltipPosition="top" tooltipStyleClass="hoverToolTip">{{ideateData.subMilestone}}</span>
+                                                        tooltipPosition="top"
+                                                        tooltipStyleClass="hoverToolTip">{{ideateData.subMilestone}}</span>
                                                 </div>
                                                 <ng-template #enableOfferPhase>
                                                     <a><span style="color: #005073;"
@@ -107,13 +111,15 @@
                                             <td class="one-third-width"
                                                 [ngClass]="(ideateData.status == 'Completed')?'text-success':'text-warning'">
                                                 {{ideateData.status}}</td>
-                                            <td class="one-third-width">{{ideateData.completionDate | date:'dd-MMM-yyyy'}}</td>
+                                            <td class="one-third-width">
+                                                {{ideateData.completionDate | date:'dd-MMM-yyyy'}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </td>
                     </tr>
+                    
                     <tr>
                         <td class="panel--ltgray">
                             <span class="head text-large text-indigo">Plan<br>
@@ -142,13 +148,15 @@
                                             <td class="one-third-width"
                                                 [ngClass]="(ideateData.status == 'Completed' || ideateData.status == 'Not Applicable')?'text-success':'text-warning'">
                                                 {{ideateData.status}}</td>
-                                            <td class="one-third-width">{{ideateData.completionDate | date:'dd-MMM-yyyy'}}</td>
+                                            <td class="one-third-width">
+                                                {{ideateData.completionDate | date:'dd-MMM-yyyy'}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </td>
                     </tr>
+
                     <tr>
                         <td class="panel--ltgray">
                             <span class="head text-large text-indigo">Execute<br>
@@ -177,13 +185,15 @@
                                             <td class="one-third-width"
                                                 [ngClass]="(ideateData.status == 'Completed' || ideateData.status == 'Not Applicable')?'text-success':'text-warning'">
                                                 {{ideateData.status}}</td>
-                                            <td class="one-third-width">{{ideateData.completionDate | date:'dd-MMM-yyyy'}}</td>
+                                            <td class="one-third-width">
+                                                {{ideateData.completionDate | date:'dd-MMM-yyyy'}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </td>
                     </tr>
+
                 </tbody>
             </table>
         </div>
