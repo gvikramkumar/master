@@ -17,6 +17,7 @@ export class OfferConstructDefaultValue{
          element.currentValue = element.rules.defaultSel;
          element.previousValue = element.rules.defaultSel;
        }
+       
        if (element.question == 'Base Price') {
          if (chargeTypeValue == usageType) {
            element.currentValue = 0;
