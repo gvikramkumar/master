@@ -136,7 +136,7 @@
                             milestone summary.
                             This is the design review milestone and the content is ... </p>
                           <button class="btn btn--secondary" [disabled]="strategyReviewData.flag=='Not Escalate'"
-                            (click)="onEscalate(strategyReviewData.function, $event.target)">Escalate</button>
+                            (click)="onEscalate($event.target, strategyReviewData)">Escalate</button>
                         </div>
                       </ng-template>
 

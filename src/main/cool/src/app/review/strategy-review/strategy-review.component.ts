@@ -492,15 +492,14 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
 
   // --------------------------------------------------------------------------------------------------------------------------------
 
-  async onEscalate(functionName: string, element) {
-    element.disabled = true; //Immediately disable the button on click
+  async onEscalate(strategyReviewData, element) {
+    element.disabled = true; 
     // Initialize Variables
     const mailList = [];
-    const functionNameMap = this.stakeData[functionName];
-
+    const functionNameMap = this.stakeData[strategyReviewData["function"]];
+    const payload = {};
     // Iterate - Function Names
     for (const employee of Array.from(functionNameMap.values())) {
-
       // Compute Manager List
       const userId = employee['_id'];
       const managerDetailsList = await this.accessManagementService.getUserDetails(userId.toString()).toPromise();
@@ -509,20 +508,25 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
       for (const manager of Array.from(managerDetailsList.values())) {
         mailList.push(manager['manager']);
       }
-
     }
-
+    payload['escalatedBy'] = this.stakeData['Owner'][0]._id;
+    payload['escalatedOn'] = strategyReviewData.assignees;
+    payload['escalatedTo'] = mailList;
+    payload['taskId'] = strategyReviewData.taskId;
+    payload['caseId'] = this.caseId;
+    payload['offerId'] = this.currentOfferId;
     // Initialize Email Variables
     const emailPayload = {};
     emailPayload['toMailLists'] = mailList;
     emailPayload['subject'] = 'Immediate Attention needed! ' + this.currentOfferId + ' + ' + this.offerName + ' Approval pending';
     emailPayload['emailBody'] = 'Hello You are receiving this message because the below offer has a pending approval that requires review from a member of your team. Offer ID: ' + this.currentOfferId + ' Offer Name: ' + this.offerName + ' Your immediate attention is highly appreciated. Thanks';
-
+    //Update Escalation Details
+    this.actionsService.updateEscalationDetails(payload).subscribe(data =>{
+    });
     // Send EMail
     this.actionsService.escalateNotification(emailPayload).subscribe(data => {
       this.getStrategyReviewInfo();
     });
-
   }
 
   // --------------------------------------------------------------------------------------------------------------------------------

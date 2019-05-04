@@ -10,7 +10,7 @@
 
      <div class="row" style="margin-top: 20px">
        <div class="col-3">
-         <button class="btn btn--primary">Submit Setup</button>
+         <button class="btn btn--primary" (click)="updatecasestatus()">Submit Setup</button>
        </div>
        <div class="col-6"></div>
        <div class="col-3">
@@ -35,32 +35,53 @@
            </tr>
            </thead>
            <tbody>
-           <tr>
-             <td>SOA_SKU_1</td>
-             <td>1</td>
-             <td>15%</td>
-             <td>$0</td>
-             <td style="border-right: 1px solid #dfdfdf;"><i class="fas fa-check-square" style="font-size: 17px"></i></td>
-           </tr>
-           <tr>
-             <td>SOA_SKU_1</td>
-             <td>1</td>
-             <td>15%</td>
-             <td>$0</td>
-             <td style="border-right: 1px solid #dfdfdf;"><input type="checkbox" checked/></td>
-             <td style="border: 0;background-color: #fff;">
-               <button class="btn btn--icon btn--small legend-completed">
-                 <span class="icon-check"></span>
-               </button>
-               Completed
+           <tr *ngFor="let item of Atosummary_be_sub.listSKUs; let i = index;">
+             <td>{{item.sku}}</td>
+             <td>{{item.ranking}}</td>
+             <td>{{item.plpPercentage}}</td>
+             <td>${{item.monthlyThreshold}}</td>
+             <td style="border-right: 1px solid #dfdfdf;">
+               <i *ngIf="Atosummary_af_sub.listSKUs[i].basedSupportItem" class="fas fa-check-square" style="font-size: 17px"></i></td>
+
+             <td style="border: 0;background-color: #fff;" *ngIf="middlenumber === i">
+
+               <div *ngIf="Atosummary_af_sub.status">
+                 <div [ngSwitch]="Atosummary_af_sub.status">
+                   <div *ngSwitchCase="'Available'">
+                     <button
+                       class="btn btn--icon btn--small legend-available"
+                     ></button>
+                    <span>NPI-WS {{Atosummary_af_sub.caseID}}</span>
+                   </div>
+                   <div *ngSwitchCase="'In Progress'">
+                     <button class="btn btn--icon btn--small legend-inprog">
+                       <span class="in-progress"></span>
+                     </button><span>NPI-WS {{Atosummary_af_sub.caseID}}</span>
+                   </div>
+                   <div *ngSwitchCase="'Not Yet Available'">
+                     <button
+                       class="btn btn--icon btn--small legend-notavail"
+                     ></button><span>NPI-WS {{Atosummary_af_sub.caseID}}</span>
+                   </div>
+                   <div *ngSwitchCase="'Milestone'">
+                     <button class="btn btn--icon btn--small legend-milestone">
+                       <span class="milestone"></span>
+                     </button><span>NPI-WS {{Atosummary_af_sub.caseID}}</span>
+                   </div>
+                   <div *ngSwitchCase="'Not Required'">
+                     <<button
+                     class="btn btn--icon btn--small legend-notreq"
+                   ></button><span>NPI-WS {{Atosummary_af_sub.caseID}}</span>
+                   </div>
+                   <div *ngSwitchDefault>
+                     <button class="btn btn--icon btn--small legend-completed">
+                       <span class="icon-check"></span>
+                     </button><span>NPI-WS {{Atosummary_af_sub.caseID}}</span>
+                   </div>
+                 </div>
+               </div>
+
              </td>
-           </tr>
-           <tr>
-             <td>SOA_SKU_1</td>
-             <td>1</td>
-             <td>15%</td>
-             <td>$0</td>
-             <td style="border-right: 1px solid #dfdfdf;"><input type="checkbox" checked/></td>
            </tr>
            </tbody>
          </table>
