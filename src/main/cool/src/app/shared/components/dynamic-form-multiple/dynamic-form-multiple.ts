@@ -5,8 +5,8 @@ import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { OfferConstructService } from '@app/services/offer-construct.service';
 import * as moment from 'moment';
-import { OfferConstructDefaultValue } from '@app/construct/offer-construct-canvas/service/offer-construct-defaultValue-services';
 import { OfferconstructCanvasService } from './../../../construct/offer-construct-canvas/service/offerconstruct-canvas.service';
+import { OfferConstructDefaultValue } from './../../../construct/offer-construct-canvas/service/offer-construct-defaultvalue-services';
 
 
 @Component({
