@@ -35,6 +35,9 @@
       "@actions/*": [
         "src/app/actions/*"
       ],
+      "@pirateShip/*": [
+        "src/app/pirate-ship/*"
+      ]
     }
   }
 }

@@ -754,4 +754,21 @@ export class ItemCreationComponent implements OnInit {
       this.loaderService.stopLoading();
     });
   }
+  // donwnload Zip file
+  downloadZip() {
+    this.offerConstructCanvasService.downloadZip(this.currentOfferId).subscribe((res) => {
+        const nameOfFileToDownload = 'offer-construct';
+        const blob = new Blob([res], { type: 'application/zip' });
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
+        } else {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = nameOfFileToDownload;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    });
+  }
 }

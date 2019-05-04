@@ -17,6 +17,7 @@ export class OfferConstructDefaultValue{
          element.currentValue = element.rules.defaultSel;
          element.previousValue = element.rules.defaultSel;
        }
+       
        if (element.question == 'Base Price') {
          if (chargeTypeValue == usageType) {
            element.currentValue = 0;
@@ -232,24 +233,6 @@ export class OfferConstructDefaultValue{
            return questionList;
        }
        
-       setEntitlementTerm(questionList){ 
-           questionList.forEach(question => {
-            if (question.question == "Entitlement Term") {
-                question.rules.isDisabled = false;
-            }
-        });
-        return questionList;
-       }
-       
-       setEntitlementTermN(questionList){
-           questionList.forEach(question => {
-               if (question.question == "Entitlement Term") {
-                   question.rules.isDisabled = true;
-               }
-           });
-           return questionList;
-       }
-       
        setSubscriptionOffset(questionList){ 
            questionList.forEach(question => {
             if (question.question == "Subscription Offset(In Days)") {
@@ -405,5 +388,41 @@ export class OfferConstructDefaultValue{
           });
           return questionList;
         }
-}
+        
+        setSoftwareLicense(questionList) {
+            questionList.forEach(question => {
+                if (question.question == "Software License" || question.question == "Entitlement Term") {
+                    question.rules.isDisabled = true;
+                }
+            });
+              return questionList;
+        }
+        setSoftwareLicenseDefault(questionList) {
+            questionList.forEach(question => {
+                if (question.question == "Software License" || question.question == "Entitlement Term") {
+                    question.rules.isDisabled = false;
+                }
+            });
+             return questionList;
+        }
+        
+        // setSoftwareLicenseNSKU(questionList) {
+        //     questionList.forEach(question => {
+        //         if (question.question == "UPG Family"  || question.question == "UPG Group" || question.question == "UPG Type" ) {
+        //             question.rules.isDisabled = false;
+        //         }
+        //     });
+        //       return questionList;
+        // }
+        // setSoftwareLicenseNSKUDefault(questionList) {
+        //     questionList.forEach(question => {
+        //         if (question.question == "UPG Family"  || question.question == "UPG Group" || question.question == "UPG Type" ) {
+        //             question.rules.isDisabled = true;
+        //         }
+        //     });
+        //      return questionList;
+        // }
+        
+        
 
+}

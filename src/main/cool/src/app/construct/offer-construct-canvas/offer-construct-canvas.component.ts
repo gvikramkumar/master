@@ -19,7 +19,7 @@ import * as _ from 'lodash';
 import { MessageService } from '@app/services/message.service';
 import { ConfigurationService } from '@app/core/services';
 import { LoaderService } from '@app/core/services/loader.service';
-import {OfferConstructDefaultValue} from '@app/construct/offer-construct-canvas/service/offer-construct-defaultValue-services';
+import { OfferConstructDefaultValue } from './service/offer-construct-defaultvalue-services';
 
 @Component({
   selector: 'app-offerconstruct-canvas',
@@ -256,14 +256,6 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
                        obj['itemDetails'] = listOfferQuestions;
                    } 
                    
-                   if (obj.productName == 'License') {
-                       let listOfferQuestions = this.defaultValueServices.setEntitlementTerm(this.listOfferQuestions);
-                       obj['itemDetails'] = listOfferQuestions;
-                   }else{
-                       let listOfferQuestions = this.defaultValueServices.setEntitlementTermN(this.listOfferQuestions);
-                       obj['itemDetails'] = listOfferQuestions;
-                   } 
-                   
                    if (obj.productName == 'XaaS') {
                        let listOfferQuestions = this.defaultValueServices.ImageSigningForXaas(this.listOfferQuestions);
                        obj['itemDetails'] = listOfferQuestions;
@@ -276,7 +268,25 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
                        let listOfferQuestions = this.defaultValueServices.ImageSigningForHardwareDefault(this.listOfferQuestions);
                        obj['itemDetails'] = listOfferQuestions;
                    }
-               
+                   
+                   if (obj.productName == 'License') {
+                       let listOfferQuestions = this.defaultValueServices.setSoftwareLicense(this.listOfferQuestions);
+                       obj['itemDetails'] = listOfferQuestions;
+                   } 
+                   else{
+                       let listOfferQuestions = this.defaultValueServices.setSoftwareLicenseDefault(this.listOfferQuestions);
+                       obj['itemDetails'] = listOfferQuestions;
+                   }
+                   
+                   // if (obj.productName == 'License') {
+                   //     let listOfferQuestions = this.defaultValueServices.setSoftwareLicenseNSKU(this.listOfferQuestions);
+                   //     obj['itemDetails'] = listOfferQuestions;
+                   // } 
+                   // else{
+                   //     let listOfferQuestions = this.defaultValueServices.setSoftwareLicenseNSKUDefault(this.listOfferQuestions);
+                   //     obj['itemDetails'] = listOfferQuestions;
+                   // }
+                   
                  obj['itemDetails'] = this.listOfferQuestions;
                } else {
                  let listOfferQuestions = this.defaultValueServices.billingSOADefaultValue(this.listOfferQuestions, this.chargeTypeValue);
@@ -825,14 +835,14 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
                      let listOfferQuestions = this.defaultValueServices.getChargeTypeValidationValues(this.listOfferQuestions, this.chargeTypeValue);
                      obj['itemDetails'] = listOfferQuestions;
                  } 
-                 
-                 if (obj.productName == 'License') {
-                     let listOfferQuestions = this.defaultValueServices.setEntitlementTerm(this.listOfferQuestions);
-                     obj['itemDetails'] = listOfferQuestions;
-                 }else{
-                     let listOfferQuestions = this.defaultValueServices.setEntitlementTermN(this.listOfferQuestions);
-                     obj['itemDetails'] = listOfferQuestions;
-                 } 
+                 // 
+                 // if (obj.productName == 'License') {
+                 //     let listOfferQuestions = this.defaultValueServices.setEntitlementTerm(this.listOfferQuestions);
+                 //     obj['itemDetails'] = listOfferQuestions;
+                 // }else{
+                 //     let listOfferQuestions = this.defaultValueServices.setEntitlementTermN(this.listOfferQuestions);
+                 //     obj['itemDetails'] = listOfferQuestions;
+                 // } 
                  
                  if (obj.productName == 'XaaS') {
                      let listOfferQuestions = this.defaultValueServices.ImageSigningForXaas(this.listOfferQuestions);
