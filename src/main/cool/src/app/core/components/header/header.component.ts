@@ -4,6 +4,7 @@ import { SharedService } from '@app/shared-service.service';
 
 import { CreateOfferService } from '@shared/services';
 import { HeaderService } from '../../services/header.service';
+import { UserService } from '../../services/user.service';
 import { ConfigurationService } from '../../services/configuration.service';
 
 
@@ -59,6 +60,7 @@ export class HeaderComponent implements OnInit {
   }
 
   constructor(private headerService: HeaderService, private router: Router,
+    private userService: UserService,
     private createOfferService: CreateOfferService,
     private startupService: ConfigurationService, private sharedService: SharedService) {
 
@@ -74,6 +76,7 @@ export class HeaderComponent implements OnInit {
 
     this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
       this.functionalRole = data.userMappings[0].functionalRole;
+      this.userService.setFunctionalRole( this.functionalRole);
       if (this.functionalRole === 'BUPM' || this.functionalRole === 'CXPM') {
         this.isBupmUser = true;
         this.sharedService.userEventEmit.next(true);
