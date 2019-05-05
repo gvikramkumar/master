@@ -2,18 +2,17 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MonetizationModelService } from '@app/services/monetization-model.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { Location } from '@angular/common';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 import { StrategyReviewService } from '@app/services/strategy-review.service';
 import { NgForm } from '@angular/forms';
 import { Subscription, forkJoin } from 'rxjs';
 import { ActionsService } from '@app/services/actions.service';
-import { SharedService } from '@app/shared-service.service';
+import { SharedService } from '@shared/services/shared/shared-service.service';
 import { MessageService } from '@app/services/message.service';
 import { RightPanelService } from '@app/services/right-panel.service';
 import { AccessManagementService } from '@app/services/access-management.service';
-import { CreateActionComment } from '../../models/create-action-comment';
-import { CreateActionApprove } from '../../models/create-action-approve';
+import { CreateActionComment } from '@app/models/create-action-comment';
+import { CreateActionApprove } from '@app/models/create-action-approve';
 import { UserService, HeaderService } from '@app/core/services';
 import { DashboardService, CreateOfferService } from '@shared/services';
 
@@ -21,7 +20,8 @@ import { DashboardService, CreateOfferService } from '@shared/services';
 @Component({
   selector: 'app-strategy-review',
   templateUrl: './strategy-review.component.html',
-  styleUrls: ['./strategy-review.component.css']
+  styleUrls: ['./strategy-review.component.css'],
+  providers: [SharedService]
 })
 export class StrategyReviewComponent implements OnInit, OnDestroy {
 
@@ -136,18 +136,18 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
       });
 
     forkJoin([this.strategyReviewService.getStrategyReview(this.caseId), this.actionsService.getMilestones(this.caseId)])
-    .subscribe(data => {
-      const [strategyReviewData, milstones] = data;
-      this.getStrategyReview(strategyReviewData);
-      this.getMilestones(milstones);
-      this.completeStrategyReview();
-    });
+      .subscribe(data => {
+        const [strategyReviewData, milstones] = data;
+        this.getStrategyReview(strategyReviewData);
+        this.getMilestones(milstones);
+        this.completeStrategyReview();
+      });
 
     const canApproveUsers = [];
     const canEscalateUsers = [];
 
     this.subscription = this.messageService.getMessage()
-      .subscribe(message => {
+      .subscribe(() => {
         this.getStrategyReviewInfo();
       });
 
@@ -327,9 +327,9 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
         'action': '',
         'comment': ''
       };
-      this.sharedService.proceedToNextPhase(proceedPayload).subscribe(result => {
+      this.sharedService.proceedToNextPhase(proceedPayload).subscribe(() => {
         this.loadExitCriteria = true;
-      }, (error) => {
+      }, () => {
       });
     } else {
       this.loadExitCriteria = true;
@@ -451,7 +451,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     const assignee = [this.assigneeValue];
     const actionDescription = this.descriptionValue;
 
-    this.actionsService.createConditionalApprovalAction(createActionPayload).subscribe(response => {
+    this.actionsService.createConditionalApprovalAction(createActionPayload).subscribe(() => {
       this.actionComment(createActionComment, assignee, offerId, actionTitle, actionDescription);
     }, (error) => {
       console.log(error);
@@ -461,11 +461,11 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
   }
 
   actionComment(createActionComment, assignee, offerId, actionTitle, actionDescription) {
-      this.actionsService.createNotAndConditional(createActionComment).subscribe((data) => {
-        this.closeForm();
-        this.getStrategyReviewInfo();
-        this.actionsService.sendNotification(assignee, offerId, actionTitle, actionDescription).subscribe(res => { });
-      });
+    this.actionsService.createNotAndConditional(createActionComment).subscribe(() => {
+      this.closeForm();
+      this.getStrategyReviewInfo();
+      this.actionsService.sendNotification(assignee, offerId, actionTitle, actionDescription).subscribe(() => { });
+    });
   }
 
   createActionApprove() {
@@ -483,7 +483,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
       false,
       status
     );
-    this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
+    this.actionsService.createActionApprove(createActionApprove).subscribe(() => {
       this.closeForm();
       this.getStrategyReviewInfo();
     });
@@ -519,7 +519,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
     emailPayload['emailBody'] = 'Hello You are receiving this message because the below offer has a pending approval that requires review from a member of your team. Offer ID: ' + this.currentOfferId + ' Offer Name: ' + this.offerName + ' Your immediate attention is highly appreciated. Thanks';
 
     // Send EMail
-    this.actionsService.escalateNotification(emailPayload).subscribe(data => {
+    this.actionsService.escalateNotification(emailPayload).subscribe(() => {
       this.getStrategyReviewInfo();
     });
 
