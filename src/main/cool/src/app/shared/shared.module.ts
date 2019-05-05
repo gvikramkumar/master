@@ -1,15 +1,18 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { TableModule } from 'primeng/table';
 import {
   DataTableModule, MultiSelectModule, AccordionModule, TooltipModule, OverlayPanelModule,
   DialogModule,
   AutoCompleteModule
 } from 'primeng/primeng';
-import { TableModule } from 'primeng/table';
-import { DashboardService, CreateOfferService, ViewcommentService, TurbotaxService } from './services';
+
+import { DashboardService, CreateOfferService, SharedService, TurbotaxService, ViewcommentService } from './services';
+
 
 import {
   StatusComponent,
@@ -17,8 +20,12 @@ import {
   ViewOfferComponent,
   ViewcommentComponent,
   TurbotaxviewComponent,
+  ViewStrategyComponent,
   DynamicFormMultipleComponent
 } from './components';
+
+import { CustomMinValidatorDirective } from './validators/custom-min-validator.directive';
+import { CustomRangeValidatorDirective } from './validators/custom-range-validator.directive';
 
 
 @NgModule({
@@ -27,8 +34,12 @@ import {
     AtoListComponent,
     ViewOfferComponent,
     ViewcommentComponent,
+    ViewStrategyComponent,
     TurbotaxviewComponent,
     DynamicFormMultipleComponent,
+    CustomMinValidatorDirective,
+    CustomRangeValidatorDirective
+
   ],
   imports: [
     FormsModule,
@@ -46,10 +57,11 @@ import {
     BsDatepickerModule.forRoot()
   ],
   providers: [
+    SharedService,
+    TurbotaxService,
     DashboardService,
     CreateOfferService,
     ViewcommentService,
-    TurbotaxService
   ],
   exports: [
     FormsModule,
@@ -69,6 +81,7 @@ import {
     AtoListComponent,
     ViewOfferComponent,
     ViewcommentComponent,
+    ViewStrategyComponent,
     TurbotaxviewComponent,
     DynamicFormMultipleComponent,
   ]

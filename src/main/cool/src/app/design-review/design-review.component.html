@@ -2,7 +2,7 @@
   <div class="container">
 
     <app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId" [offerName]="offerName"
-      [stakeData]="stakeData" (updateMessage)="updateMessage($event)">
+      [stakeData]="stakeData">
     </app-menu-bar>
 
     <div class="panel-wrapper mt-15">
@@ -476,8 +476,7 @@
 
         <div class="rightContent">
           <app-right-panel [offerName]="offerName" [stakeData]="stakeData" [primaryBE]="primaryBE"
-            [portfolioFlag]="setFlag" [derivedMM]="derivedMM" [displayLeadTime]="displayLeadTime"
-            [noOfWeeksDifference]="noOfWeeksDifference">
+            [derivedMM]="derivedMM" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference">
           </app-right-panel>
         </div>
 

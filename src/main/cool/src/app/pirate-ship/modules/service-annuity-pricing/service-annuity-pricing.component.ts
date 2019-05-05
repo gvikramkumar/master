@@ -31,8 +31,11 @@ export class ServiceAnnuityPricingComponent implements OnInit, OnDestroy {
   stakeholders: any;
   stakeHolderData: any;
 
+  pirateShipModuleName: string;
+  isPirateShipSubModule: boolean;
 
   selectedAto: any;
+  atoNames: string[] = [];
 
   paramsSubscription: Subscription;
 
@@ -51,6 +54,10 @@ export class ServiceAnnuityPricingComponent implements OnInit, OnDestroy {
     });
 
     this.loaderService.startLoading();
+
+    // Initialize TaskBar Params
+    this.isPirateShipSubModule = true;
+    this.pirateShipModuleName = ' Service Annuity % Pricing';
 
   }
 
@@ -81,8 +88,17 @@ export class ServiceAnnuityPricingComponent implements OnInit, OnDestroy {
 
   // -------------------------------------------------------------------------------------------------------------------
 
-  goToPirateShip() {
-    this.router.navigate(['/offerSetup', this.offerId, this.caseId, this.selectedAto]);
+  showSelectedAtoView(dropDownValue: string) {
+
+    if (dropDownValue === 'Overall Offer') {
+
+      this.selectedAto = dropDownValue;
+
+    } else {
+
+      this.selectedAto = dropDownValue;
+
+    }
   }
 
   // -------------------------------------------------------------------------------------------------------------------

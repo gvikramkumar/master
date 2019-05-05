@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MonetizationModelService } from '@app/services/monetization-model.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 import { ActionsService } from '@app/services/actions.service';
-import { SharedService } from '@app/shared-service.service';
+import { SharedService } from '@shared/services/shared/shared-service.service';
 import { Subscription, forkJoin } from 'rxjs';
 import { RightPanelService } from '@app/services/right-panel.service';
 import { MessageService } from '@app/services/message.service';
@@ -19,7 +19,8 @@ import { DashboardService, CreateOfferService } from '@shared/services';
 @Component({
   selector: 'app-designreview',
   templateUrl: './design-review.component.html',
-  styleUrls: ['./design-review.component.css']
+  styleUrls: ['./design-review.component.css'],
+  providers: [SharedService]
 })
 export class DesignReviewComponent implements OnInit, OnDestroy {
 
@@ -204,7 +205,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
             offerRole: this.data[i]['offerRole'],
             stakeholderDefaults: this.data[i]['stakeholderDefaults']
           });
-          
+
       }
       this.stakeData = this.stakeHolderInfo;
 
@@ -236,7 +237,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
   // --------------------------------------------------------------------------------------------------------------------------------
 
   offerSetupView() {
- 
+
     this.router.navigate(['/offerSetup', this.currentOfferId, this.caseId]);
   }
 

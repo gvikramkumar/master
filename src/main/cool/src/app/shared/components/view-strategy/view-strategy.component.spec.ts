@@ -1,6 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ViewStrategyComponent } from '@app/review/view-strategy/view-strategy.component';
+import { ViewStrategyComponent } from './view-strategy.component';
 
 describe('ViewStrategyComponent', () => {
   let component: ViewStrategyComponent;

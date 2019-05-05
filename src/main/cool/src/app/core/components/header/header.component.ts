@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SharedService } from '@app/shared-service.service';
+import { SharedService } from '@shared/services/common/shared-service.service';
 
 import { CreateOfferService } from '@shared/services';
 import { HeaderService } from '../../services/header.service';
