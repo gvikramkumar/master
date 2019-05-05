@@ -12,14 +12,11 @@ import { TaskSummaryComponent } from './components/task-summary/task-summary.com
 
 import * as _ from 'lodash';
 import { MODELLING_DESIGN_ROUTES } from './modelling-design.routes';
-import { StatusComponent } from '@app/pirate-ship/components/status/status.component';
-import { AtoListComponent } from '@app/pirate-ship/components/ato-list/ato-list.component';
+
 
 @NgModule({
 
   declarations: [
-    StatusComponent,
-    AtoListComponent,
     TaskSummaryComponent,
     ModellingDesignComponent,
   ],
@@ -32,9 +29,7 @@ import { AtoListComponent } from '@app/pirate-ship/components/ato-list/ato-list.
     RouterModule.forChild(MODELLING_DESIGN_ROUTES)
   ],
   exports: [
-    RouterModule,
-    StatusComponent,
-    AtoListComponent,
+    RouterModule
   ]
 
 })
