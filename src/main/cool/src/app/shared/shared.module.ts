@@ -9,13 +9,23 @@ import {
   AutoCompleteModule
 } from 'primeng/primeng';
 import { TableModule } from 'primeng/table';
-import { ViewcommentComponent, TurbotaxviewComponent } from './components';
 import { DashboardService, CreateOfferService, ViewcommentService, TurbotaxService } from './services';
-import { DynamicFormMultipleComponent } from './components/dynamic-form-multiple/dynamic-form-multiple';
+
+import {
+  StatusComponent,
+  AtoListComponent,
+  ViewOfferComponent,
+  ViewcommentComponent,
+  TurbotaxviewComponent,
+  DynamicFormMultipleComponent
+} from './components';
 
 
 @NgModule({
   declarations: [
+    StatusComponent,
+    AtoListComponent,
+    ViewOfferComponent,
     ViewcommentComponent,
     TurbotaxviewComponent,
     DynamicFormMultipleComponent,
@@ -42,22 +52,25 @@ import { DynamicFormMultipleComponent } from './components/dynamic-form-multiple
     TurbotaxService
   ],
   exports: [
-    ViewcommentComponent,
-    TurbotaxviewComponent,
-    DynamicFormMultipleComponent,
     FormsModule,
     CommonModule,
-    RouterModule,
-    ReactiveFormsModule,
-    TooltipModule,
-    AccordionModule,
-    OverlayPanelModule,
     TableModule,
     DialogModule,
+    RouterModule,
+    TooltipModule,
+    AccordionModule,
     DataTableModule,
     MultiSelectModule,
     BsDatepickerModule,
-    AutoCompleteModule
+    OverlayPanelModule,
+    AutoCompleteModule,
+    ReactiveFormsModule,
+    StatusComponent,
+    AtoListComponent,
+    ViewOfferComponent,
+    ViewcommentComponent,
+    TurbotaxviewComponent,
+    DynamicFormMultipleComponent,
   ]
 })
 export class SharedModule { }

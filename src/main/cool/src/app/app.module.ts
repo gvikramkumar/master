@@ -1,11 +1,8 @@
 
 import { DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { ModalModule } from 'ngx-bootstrap/modal';
-import { ClickOutsideModule } from 'ng-click-outside';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserModule } from '@angular/platform-browser';
-import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -41,11 +38,8 @@ import { ExitCriteriaValidationService } from './services/exit-criteria-validati
 import { EnvironmentService } from 'src/environments/environment.service';
 import { ConfigurationService, HttpInterceptorService } from '@core/services';
 
-
 import { MessageService } from './services/message.service';
-import { NgxWebstorageModule } from 'ngx-webstorage';
 import { UserIdleModule } from 'angular-user-idle';
-import { NgCircleProgressModule } from 'ng-circle-progress';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { CoreModule } from '@core/core.module';
@@ -59,7 +53,6 @@ import { RightPanelModule } from './right-panel/right-panel.module';
 import { CustomMinValidatorDirective } from './validators/custom-min-validator.directive';
 import { CustomRangeValidatorDirective } from './validators/custom-range-validator.directive';
 import { OfferDetailModule } from './offer-detail/offer-detail.module';
-
 
 export function app_init(configService: ConfigurationService) {
   return () => configService.init();
@@ -80,17 +73,11 @@ export function app_init(configService: ConfigurationService) {
   ],
   imports: [
     NgbModule,
-    BrowserModule,
-    HttpClientModule,
     RouterModule,
-    ClickOutsideModule,
-    PerfectScrollbarModule,
-    ModalModule.forRoot(),
-    NgbModule.forRoot(),
-    BrowserAnimationsModule,
-    NgCircleProgressModule.forRoot(),
+    BrowserModule,
     FlexLayoutModule,
-    NgxWebstorageModule.forRoot(),
+    HttpClientModule,
+    BrowserAnimationsModule,
     UserIdleModule.forRoot({ idle: 10, timeout: 600, ping: 0 }),
     CoreModule,
     SharedModule,
