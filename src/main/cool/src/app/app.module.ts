@@ -10,7 +10,6 @@ import { NgModule, APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { AuthErrorComponent } from './auth-error/auth-error.component';
 
 import { ActionsService } from './services/actions.service';
 import { MenuBarService } from './services/menu-bar.service';
@@ -52,7 +51,6 @@ export function app_init(configService: ConfigurationService) {
   declarations: [
     AppComponent,
     DashboardComponent,
-    AuthErrorComponent,
   ],
   imports: [
     NgbModule,
