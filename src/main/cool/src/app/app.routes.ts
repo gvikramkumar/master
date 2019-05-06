@@ -83,5 +83,9 @@ export const APP_ROUTES = [
         path: appRoutesNames.PIRATE_SHIP + '/:offerId/:caseId/:selectedAto',
         loadChildren: './pirate-ship/pirate-ship.module#PirateShipModule',
         resolve: { offerData: OfferOverViewResolver }
+    },
+    {
+        path: appRoutesNames.CSDL,
+        loadChildren: './csdl/csdl.module#CsdlModule',
     }
 ]
