@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import {OfferSetupService} from '@app/services/offer-setup.service';
 
 @Component({
   selector: 'app-atosummary',
@@ -9,6 +10,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 export class ATOSummaryComponent implements OnInit {
      offerId: string;
      selectedoffer: string;
+     response:any;
      Atosummary_be_sub: any = {
        ATO: 'AtoName',
        listSKUs: [
@@ -53,9 +55,20 @@ export class ATOSummaryComponent implements OnInit {
      Atosummary_af_sub: any = {};
      middlenumber: any;
   constructor(private router: Router,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private _offersetupService: OfferSetupService
+              ) { }
 
   ngOnInit() {
+    this.offerId = this.route.snapshot.params.offerId;
+    this.selectedoffer = this.route.snapshot.params.selectedAto;
+     this._offersetupService.getPricing_SKU_Detail(this.offerId, this.selectedoffer).subscribe(
+       (response) => {
+
+
+       }
+     );
+
     this.Atosummary_af_sub = {
       "ATO":"",
       "caseID":"",
@@ -73,8 +86,7 @@ export class ATOSummaryComponent implements OnInit {
 
    this.middlenumber = Math.ceil(this.Atosummary_be_sub.listSKUs.length / 2) - 1;
 
-    this.offerId = this.route.snapshot.params.offerId;
-    this.selectedoffer = this.route.snapshot.params.selectedAto;
+
   }
 
   updateATo(seletedATO: any) {

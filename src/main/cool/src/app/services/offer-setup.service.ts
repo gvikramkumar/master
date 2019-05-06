@@ -23,4 +23,9 @@ export class OfferSetupService {
     const url = this.environmentService.REST_API_OFFER_MODULE_STATUS_GET_URL + encodeURIComponent(moduleName) +'&offerId=' + offerId + '&offerATOLevel='+ offerLevel +'&functionalRole='+ functionalRole + '&mmval=' + derivedMM;
     return this.http.get(url, { withCredentials: true });
   }
+
+  getPricing_SKU_Detail(offerId: string, atoName: string) {
+    const url = " http://localhost:8080/coolsrv/serviceAnnuityPricing/getPricingAtoSkusLevel/"+offerId+"/"+atoName+"";
+    return this.http.get(url);
+  }
 }
