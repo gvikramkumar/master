@@ -47,6 +47,9 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
   stakeholders: any;
   stakeHolderData: any;
 
+  pirateShipModuleName: string;
+  isPirateShipSubModule: boolean;
+
   showDesignCanvasButton: boolean;
   disableDesignCanvasButton: boolean;
 
@@ -68,9 +71,14 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
 
     this.loaderService.startLoading();
 
+    // Initialize TaskBar Params
+    this.isPirateShipSubModule = true;
+    this.pirateShipModuleName = 'Modelling & Design';
+
   }
 
   ngOnInit() {
+
 
     this.atoTask = {} as Ato;
     this.atoNames.push(this.selectedAto);
@@ -91,7 +99,7 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
           && (this.atoTask['itemStatus'] === 'Completed')) ? false : true;
 
       }, () => {
-        this.disableDesignCanvasButton = true;
+        this.disableDesignCanvasButton = false;
       });
 
     // Retrieve Offer Details
@@ -128,11 +136,7 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
 
   }
 
-  goToPirateShip() {
-    this.router.navigate(['/offerSetup', this.offerId, this.caseId, this.selectedAto]);
-  }
-
-  // -------------------------------------------------------n------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
 
 
   showSelectedAtoView(dropDownValue: string) {

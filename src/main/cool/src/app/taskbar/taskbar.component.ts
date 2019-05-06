@@ -1,9 +1,8 @@
-import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { Router, ActivatedRoute, ResolveEnd } from '@angular/router';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { offerBuilderStepsEnum } from '@shared/enums';
 import { taskBarNavConstant } from '@shared/constants/taskBarNav.constants';
-import { BehaviorSubject } from 'rxjs';
-import { SharedService } from '@app/shared-service.service';
+import { SharedService } from '@shared/services/common/shared-service.service';
 
 @Component({
   selector: 'app-taskbar',
@@ -12,51 +11,62 @@ import { SharedService } from '@app/shared-service.service';
 })
 export class TaskbarComponent implements OnInit {
 
-  @Input() isDashboard: boolean = false;
-  @Input() actionCount: { pendingActionCount: number, needImmediateActionCount: number };
-  @Input() showSave: boolean = false;
-  @Input() showOfferDtlsBtn: boolean = true;
+  @Input() showSave = false;
+  @Input() isDashboard = false;
+  @Input() showOfferDtlsBtn = true;
   @Input() isValidToProceed: boolean;
-
+  @Input() pirateShipModuleName: string;
+  @Input() isPirateShipSubModule: boolean;
+  @Input() actionCount: { pendingActionCount: number, needImmediateActionCount: number };
 
   @Output() newBtnClick = new EventEmitter();
   @Output() onProceedToNext = new EventEmitter();
 
-  taskBarNavSteps = taskBarNavConstant;
-  subscribedEvents = new Array();
-  currentOfferId: string;
   caseId: string;
-  currentStepIndex: number = 0;
-  disableBackBtn: boolean = false;
-  isLastStep: boolean;
-  currentPage: string = 'dashboard';
-  proceedToOfferSetup: Boolean = false;
+  offerId: string;
+  selectedAto: string;
+
   userRole: boolean;
+  isLastStep: boolean;
+  currentStepIndex = 0;
+  disableBackBtn = false;
+
+  currentPage = 'dashboard';
+  taskBarNavSteps = taskBarNavConstant;
+  proceedToOfferSetup: Boolean = false;
+
 
   constructor(
     private router: Router,
+    private sharedService: SharedService,
     private activatedRoute: ActivatedRoute,
-    private sharedService: SharedService
   ) { }
 
 
   ngOnInit() {
-    this.currentPage = this.router.url.split('/')[1]
-    this.currentOfferId = this.activatedRoute.snapshot.params['offerId'];
-    this.caseId = this.activatedRoute.snapshot.params['caseId'];
 
-    this.setTaskBar();
+    this.currentPage = this.router.url.split('/')[1];
+    this.caseId = this.activatedRoute.snapshot.params['caseId'];
+    this.offerId = this.activatedRoute.snapshot.params['offerId'];
+    this.selectedAto = this.activatedRoute.snapshot.params['selectedAto'];
+
     this.userRole = this.sharedService.userFunctionalRole;
     this.sharedService.userEventEmit.subscribe((role) => {
       this.userRole = role;
       this.sharedService.userFunctionalRole = role;
     });
+
+    this.setTaskBar();
+
   }
 
   setTaskBar() {
-    if (this.currentPage != 'dashboard' && this.currentPage != "action") {
+
+    if (this.isPirateShipSubModule) {
+      this.currentPage = 'pirate-ship-module';
+    } else if (this.currentPage !== 'dashboard' && this.currentPage !== 'action') {
       this.currentStepIndex = offerBuilderStepsEnum[this.currentPage];
-      this.disableBackBtn = this.currentStepIndex > 0 ? false : this.currentOfferId ? true : false;
+      this.disableBackBtn = this.currentStepIndex > 0 ? false : this.offerId ? true : false;
       this.isLastStep = this.currentStepIndex < Object.keys(offerBuilderStepsEnum).length - 1 ? false : true;
       this.proceedToOfferSetup = this.isValidToProceed;
     }
@@ -67,7 +77,7 @@ export class TaskbarComponent implements OnInit {
   }
 
   saveCurrentState() {
-    this.onProceedToNext.emit('false')
+    this.onProceedToNext.emit('false');
   }
 
   proceedToNextStep() {
@@ -75,15 +85,19 @@ export class TaskbarComponent implements OnInit {
   }
 
   goBack() {
-    if (this.currentStepIndex > 0 && this.currentOfferId) {
+    if (this.currentStepIndex > 0 && this.offerId) {
       const prevPage = offerBuilderStepsEnum[this.currentStepIndex - 1];
-      this.router.navigate(['/' + prevPage, this.currentOfferId, this.caseId]);
-    } else if (!this.currentOfferId) {
+      this.router.navigate(['/' + prevPage, this.offerId, this.caseId]);
+    } else if (!this.offerId) {
       this.router.navigate(['/dashboard']);
     }
   }
 
+  goToPirateShip() {
+    this.router.navigate(['/offerSetup', this.offerId, this.caseId, this.selectedAto]);
+  }
+
   gotoOfferviewDetails() {
-    this.router.navigate(['/offerDetailView', this.currentOfferId, this.caseId]);
+    this.router.navigate(['/offerDetailView', this.offerId, this.caseId]);
   }
 }
