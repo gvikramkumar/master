@@ -2,8 +2,6 @@
 import { appRoutesNames } from './app.routes.names';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { OfferOverViewResolver } from './services/offer-overview-resolver.service';
-import { DesignReviewComponent } from './review/design-review/design-review.component';
-import { StrategyReviewComponent } from './review/strategy-review/strategy-review.component';
 import { OfferDetailViewComponent } from './offer-detail/offer-detail-view/offer-detail-view.component';
 
 export const APP_ROUTES = [
@@ -48,7 +46,7 @@ export const APP_ROUTES = [
     },
     {
         path: appRoutesNames.STRATEGY_REVIEW + '/:offerId/:caseId',
-        component: StrategyReviewComponent,
+        loadChildren: './strategy-review/strategy-review.module#StrategyReviewModule',
         resolve: { offerData: OfferOverViewResolver }
     },
     {
@@ -73,7 +71,7 @@ export const APP_ROUTES = [
     },
     {
         path: appRoutesNames.DESIGN_REVIEW + '/:offerId/:caseId',
-        component: DesignReviewComponent,
+        loadChildren: './design-review/design-review.module#DesignReviewModule',
         resolve: { offerData: OfferOverViewResolver }
     },
     {

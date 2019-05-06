@@ -1,27 +1,29 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MonetizationModelService } from '@app/services/monetization-model.service';
-import { StakeholderfullService } from '@app/services/stakeholderfull.service';
-import { ActionsService } from '@app/services/actions.service';
-import { SharedService } from '@app/shared-service.service';
-import { Subscription, forkJoin } from 'rxjs';
-import { RightPanelService } from '@app/services/right-panel.service';
-import { MessageService } from '@app/services/message.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { StakeholderfullService } from '@app/services/stakeholderfull.service';
+import { StrategyReviewService } from '@app/services/strategy-review.service';
 import { NgForm } from '@angular/forms';
-import { UserService, HeaderService } from '@app/core/services';
+import { Subscription, forkJoin } from 'rxjs';
+import { ActionsService } from '@app/services/actions.service';
+import { SharedService } from '@shared/services/shared/shared-service.service';
+import { MessageService } from '@app/services/message.service';
+import { RightPanelService } from '@app/services/right-panel.service';
+import { AccessManagementService } from '@app/services/access-management.service';
 import { CreateActionComment } from '@app/models/create-action-comment';
 import { CreateActionApprove } from '@app/models/create-action-approve';
-import { AccessManagementService } from '@app/services/access-management.service';
-import { ExitCriteriaValidationService } from '@app/services/exit-criteria-validation.service';
+import { UserService, HeaderService } from '@app/core/services';
 import { DashboardService, CreateOfferService } from '@shared/services';
 
+
 @Component({
-  selector: 'app-designreview',
-  templateUrl: './design-review.component.html',
-  styleUrls: ['./design-review.component.css']
+  selector: 'app-strategy-review',
+  templateUrl: './strategy-review.component.html',
+  styleUrls: ['./strategy-review.component.css'],
+  providers: [SharedService]
 })
-export class DesignReviewComponent implements OnInit, OnDestroy {
+export class StrategyReviewComponent implements OnInit, OnDestroy {
 
   @ViewChild('createActionForm') createActionForm: NgForm;
   @ViewChild('createActionApproveForm') createActionApproveForm: NgForm;
@@ -40,7 +42,6 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
   newDataArray = [];
   offerBuilderdata = {};
   minDate: Date;
-  updateStakeData;
   setFlag;
   currentUser;
   managerName;
@@ -64,19 +65,11 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
   conditionallyApprovedCount: any = 0;
   notApprovedCount: any = 0;
   notReviewedCount: any = 0;
-  completeStrategyReviewAvailable: Boolean = false;
-  firstData: Object;
-  stakeHolderInfo: any;
-  subscription: Subscription;
-  proceedButtonStatusValid = true;
-  backbuttonStatusValid = true;
-  milestoneList;
-  designReviewList;
-  milestoneValue: string;
   showButtonSection = false;
   doNotApproveSection = false;
   showConditionalApprovalSection = false;
   escalateVisibleAvailable: Boolean = false;
+  completeStrategyReviewAvailable: Boolean = false;
   showApproveSection = false;
   action: any;
   currentTaskId: any;
@@ -84,30 +77,36 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
   commentValue: string;
   titleValue: string;
   descriptionValue: string;
+  milestoneValue: string;
   functionNameValue: string;
   assigneeValue: Array<any>;
   dueDateValue: any;
   functionList;
   assigneeList;
+  milestoneList;
   strategyReviewList;
+  firstData: Object;
+  stakeHolderInfo: any;
+  subscription: Subscription;
+  proceedButtonStatusValid = true;
+  backbuttonStatusValid = true;
   currentFunctionalRole;
-  loadExitCriteria = false;
 
-  proceedToOfferSetup: Boolean = true;
+  loadExitCriteria = false;
 
   constructor(private router: Router,
     private stakeholderfullService: StakeholderfullService,
     private monetizationModelService: MonetizationModelService,
     private activatedRoute: ActivatedRoute,
+    private strategyReviewService: StrategyReviewService,
     private actionsService: ActionsService,
+    private userService: UserService,
     private sharedService: SharedService,
     private messageService: MessageService,
     private headerService: HeaderService,
-    private userService: UserService,
-    private accessManagementService: AccessManagementService,
     private rightPanelService: RightPanelService,
+    private accessManagementService: AccessManagementService,
     private dashboardService: DashboardService,
-    private exitCriteriaValidationService: ExitCriteriaValidationService,
     private createOfferService: CreateOfferService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['offerId'];
@@ -136,26 +135,26 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
         });
       });
 
-    forkJoin([this.exitCriteriaValidationService.getDesignReview(this.caseId),
-    this.actionsService.getMilestones(this.caseId)]).subscribe(data => {
-      const [designReviewData, milstones] = data;
-      this.getDesignReview(designReviewData);
-      this.getMilestones(milstones);
-      this.completeDesignReview();
-    });
+    forkJoin([this.strategyReviewService.getStrategyReview(this.caseId), this.actionsService.getMilestones(this.caseId)])
+      .subscribe(data => {
+        const [strategyReviewData, milstones] = data;
+        this.getStrategyReview(strategyReviewData);
+        this.getMilestones(milstones);
+        this.completeStrategyReview();
+      });
 
     const canApproveUsers = [];
     const canEscalateUsers = [];
 
     this.subscription = this.messageService.getMessage()
-      .subscribe(message => {
-        this.getDesignReviewInfo();
+      .subscribe(() => {
+        this.getStrategyReviewInfo();
       });
 
     this.data = [];
     this.message = {
       contentHead: 'Great Work!',
-      content: 'Design Review Message.',
+      content: 'Strategy review message.',
       color: 'black'
     };
 
@@ -169,23 +168,27 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
     });
 
     this.stakeholderfullService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
+
       this.firstData = data;
       this.offerId = this.currentOfferId;
       this.data = this.firstData['stakeholders'];
       this.derivedMM = this.firstData['derivedMM'];
       this.offerName = this.firstData['offerName'];
+
       if (Array.isArray(this.firstData['primaryBEList']) && this.firstData['primaryBEList'].length) {
         this.primaryBE = this.firstData['primaryBEList'][0];
       }
+
       this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe(
         (leadTime) => {
-          this.noOfWeeksDifference = Number(leadTime['averageOverall']).toFixed(1);
           this.displayLeadTime = true;
+          this.noOfWeeksDifference = Number(leadTime['averageOverall']).toFixed(1);
         },
         () => {
           this.noOfWeeksDifference = 'N/A';
         }
       );
+
       this.stakeHolderInfo = {};
 
       for (let i = 0; i <= this.data.length - 1; i++) {
@@ -196,16 +199,17 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
 
         this.stakeHolderInfo[this.data[i]['offerRole']].push(
           {
-            userName: this.data[i]['name'],
-            emailId: this.data[i]['_id'] + '@cisco.com',
             _id: this.data[i]['_id'],
+            userName: this.data[i]['name'],
+            offerRole: this.data[i]['offerRole'],
+            emailId: this.data[i]['_id'] + '@cisco.com',
             businessEntity: this.data[i]['businessEntity'],
             functionalRole: this.data[i]['functionalRole'],
-            offerRole: this.data[i]['offerRole'],
             stakeholderDefaults: this.data[i]['stakeholderDefaults']
           });
-          
+
       }
+
       this.stakeData = this.stakeHolderInfo;
 
       for (const auth in this.stakeData) {
@@ -227,25 +231,27 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
           this.managerName = userData[0].manager;
         });
       });
+
     });
+
     this.minDate = new Date();
     this.dpConfig = Object.assign({}, { containerClass: 'theme-blue', showWeekNumbers: false });
+
     this.getOfferDetails();
+
   }
 
   // --------------------------------------------------------------------------------------------------------------------------------
 
-  offerSetupView() {
- 
-    this.router.navigate(['/offerSetup', this.currentOfferId, this.caseId]);
-  }
-
   private getMilestones(milestones) {
-    const result = milestones.plan;
+
     this.milestoneList = [];
+    const result = milestones.ideate;
+
     this.lastValueInMilestone = result.slice(-1)[0];
     const mile = this.lastValueInMilestone;
     this.milestoneValue = mile['subMilestone'];
+
   }
 
   getOfferDetails() {
@@ -270,36 +276,44 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
   }
 
   // --------------------------------------------------------------------------------------------------------------------------------
-  // Retrieve Design Review Info
-  getDesignReviewInfo() {
-    this.exitCriteriaValidationService.getDesignReview(this.caseId).subscribe((resDesignReview) => {
-      this.getDesignReview(resDesignReview);
+
+  // Retrieve Strategy Review Info
+
+  getStrategyReviewInfo() {
+    this.strategyReviewService.getStrategyReview(this.caseId).subscribe((resStrategyReview) => {
+      this.getStrategyReview(resStrategyReview);
     });
   }
 
-  getDesignReview(resDesignReview) {
-    this.designReviewList = resDesignReview;
-    this.totalApprovalsCount = resDesignReview.length;
-    this.approvedCount = resDesignReview.filter(task => task.status && task.status.toUpperCase() === 'APPROVED').length;
-    this.notApprovedCount = resDesignReview.filter(task => task.status && task.status.toUpperCase() === 'NOT APPROVED').length;
-    this.conditionallyApprovedCount = resDesignReview.filter(task => task.status &&
-      task.status.toUpperCase() === 'CONDITIONALLY APPROVED').length;
-    this.notReviewedCount = resDesignReview.filter(task => task.status && task.status.toUpperCase() === 'NOT REVIEWED').length;
+  getStrategyReview(resStrategyReview) {
+    this.strategyReviewList = resStrategyReview;
+    this.totalApprovalsCount = resStrategyReview.length;
+    this.approvedCount = resStrategyReview.filter(task => task.status && task.status.toUpperCase() === 'APPROVED').length;
+    this.notReviewedCount = resStrategyReview.filter(task => task.status && task.status.toUpperCase() === 'NOT REVIEWED').length;
+    this.notApprovedCount = resStrategyReview.filter(task => task.status && task.status.toUpperCase() === 'NOT APPROVED').length;
+    this.conditionallyApprovedCount = resStrategyReview.filter(task => task.status && task.status.toUpperCase() === 'CONDITIONALLY APPROVED').length;
   }
 
   // --------------------------------------------------------------------------------------------------------------------------------
 
   goBack() {
-    this.router.navigate(['/offerConstruct', this.currentOfferId, this.caseId]);
+    // this._location.back();
+    // this.router.navigate(['/stakeholderFull',this.currentOfferId]);
+    this.router.navigate(['/stakeholderFull', this.currentOfferId, this.caseId]);
   }
-
   gotoOfferviewDetails() {
     this.router.navigate(['/offerDetailView', this.currentOfferId, this.caseId]);
   }
 
   // --------------------------------------------------------------------------------------------------------------------------------
 
-  completeDesignReview() {
+  completeStrategyReview() {
+
+    // if strategy review milestone is availaible and
+    // if total approvals count is greater than 0 and
+    // if not reviewed count is 0
+    // then mark the offer strategy review milestone as complete
+
     if (this.lastValueInMilestone['status'].toUpperCase() === 'AVAILABLE' &&
       this.totalApprovalsCount > 0 &&
       this.notReviewedCount === 0
@@ -309,17 +323,24 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
         'userId': this.offerBuilderdata['offerOwner'],
         'caseId': this.caseId,
         'offerId': this.currentOfferId,
-        'taskName': 'Design Review',
+        'taskName': 'Strategy Review',
         'action': '',
         'comment': ''
       };
-      return this.sharedService.proceedToNextPhase(proceedPayload).subscribe(result => {
+      this.sharedService.proceedToNextPhase(proceedPayload).subscribe(() => {
         this.loadExitCriteria = true;
-      }, (error) => {
+      }, () => {
       });
     } else {
       this.loadExitCriteria = true;
     }
+
+  }
+
+  // --------------------------------------------------------------------------------------------------------------------------------
+
+  offerDetailOverView() {
+    this.router.navigate(['/offerDimension', this.currentOfferId, this.caseId]);
   }
 
   // --------------------------------------------------------------------------------------------------------------------------------
@@ -364,6 +385,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
   // --------------------------------------------------------------------------------------------------------------------------------
 
   getSelectFunctionRole(functionRole) {
+
     // Reset AssignList and AsigneeValue before service call
     this.assigneeList = [];
     this.assigneeValue = [];
@@ -429,7 +451,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
     const assignee = [this.assigneeValue];
     const actionDescription = this.descriptionValue;
 
-    this.actionsService.createConditionalApprovalAction(createActionPayload).subscribe(response => {
+    this.actionsService.createConditionalApprovalAction(createActionPayload).subscribe(() => {
       this.actionComment(createActionComment, assignee, offerId, actionTitle, actionDescription);
     }, (error) => {
       console.log(error);
@@ -439,10 +461,10 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
   }
 
   actionComment(createActionComment, assignee, offerId, actionTitle, actionDescription) {
-    this.actionsService.createNotAndConditional(createActionComment).subscribe((data) => {
+    this.actionsService.createNotAndConditional(createActionComment).subscribe(() => {
       this.closeForm();
-      this.getDesignReviewInfo();
-      this.actionsService.sendNotification(assignee, offerId, actionTitle, actionDescription).subscribe(res => { });
+      this.getStrategyReviewInfo();
+      this.actionsService.sendNotification(assignee, offerId, actionTitle, actionDescription).subscribe(() => { });
     });
   }
 
@@ -461,36 +483,36 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
       false,
       status
     );
-    this.actionsService.createActionApprove(createActionApprove).subscribe((data) => {
+    this.actionsService.createActionApprove(createActionApprove).subscribe(() => {
       this.closeForm();
-      this.getDesignReviewInfo();
+      this.getStrategyReviewInfo();
     });
     this.createActionApproveForm.reset();
   }
 
   // --------------------------------------------------------------------------------------------------------------------------------
 
-  async onEscalate(element, designReviewData) {
-    element.disabled = true;
+  async onEscalate(strategyReviewData, element) {
+    element.disabled = true; 
     // Initialize Variables
     const mailList = [];
-    const functionNameMap = this.stakeData[designReviewData["function"]];
+    const functionNameMap = this.stakeData[strategyReviewData["function"]];
     const payload = {};
     // Iterate - Function Names
     for (const employee of Array.from(functionNameMap.values())) {
       // Compute Manager List
       const userId = employee['_id'];
       const managerDetailsList = await this.accessManagementService.getUserDetails(userId.toString()).toPromise();
+
       // Iterate - Manager Names
       for (const manager of Array.from(managerDetailsList.values())) {
         mailList.push(manager['manager']);
       }
     }
-    // Payload for updating Escalation Details
     payload['escalatedBy'] = this.stakeData['Owner'][0]._id;
-    payload['escalatedOn'] = designReviewData.assignees;
+    payload['escalatedOn'] = strategyReviewData.assignees;
     payload['escalatedTo'] = mailList;
-    payload['taskId'] = designReviewData.taskId;
+    payload['taskId'] = strategyReviewData.taskId;
     payload['caseId'] = this.caseId;
     payload['offerId'] = this.currentOfferId;
     // Initialize Email Variables
@@ -502,12 +524,13 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
     this.actionsService.updateEscalationDetails(payload).subscribe(data =>{
     });
     // Send EMail
-    this.actionsService.escalateNotification(emailPayload).subscribe(data => {
-      this.getDesignReviewInfo();
+    this.actionsService.escalateNotification(emailPayload).subscribe(() => {
+      this.getStrategyReviewInfo();
     });
   }
 
   // --------------------------------------------------------------------------------------------------------------------------------
+
 
   updateMessage(message) {
     if (message != null && message !== '') {
@@ -538,5 +561,6 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
   }
 
   // --------------------------------------------------------------------------------------------------------------------------------
+
 
 }

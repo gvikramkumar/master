@@ -4,7 +4,8 @@
     <div *ngSwitchCase="'dashboard'" class="panel panel--indigo panel--loose header-bar base-margin-top task--bar">
       <div class="header-bar__main col-md-6">
         <div class="header-heading">
-          <h1 class="page-title"><span class="action--value">{{actionCount.pendingActionCount}}</span> <span class="action--value-label">Pending
+          <h1 class="page-title"><span class="action--value">{{actionCount.pendingActionCount}}</span> <span
+              class="action--value-label">Pending
               Actions</span></h1>
           <span class="vertical-divider"></span>
           <h1 class="page-title"><span class="action--value">{{actionCount.needImmediateActionCount}}</span> <span
@@ -13,7 +14,8 @@
         </div>
       </div>
       <div class="header-toolbar col-md-6" *ngIf="userRole">
-        <button (click)="newBtnClick.next()" class="btn btn--white cta--action"><span class="icon-add icon-small"></span>
+        <button (click)="newBtnClick.next()" class="btn btn--white cta--action"><span
+            class="icon-add icon-small"></span>
           <span class="button--label">New Offer</span></button>
       </div>
     </div>
@@ -21,7 +23,8 @@
     <div *ngSwitchCase="'action'" class="panel panel--indigo panel--loose header-bar base-margin-top task--bar">
       <div class="header-bar__main col-md-6">
         <div class="header-heading">
-          <h1 class="page-title"><span class="action--value">{{actionCount.pendingActionCount}}</span> <span class="action--value-label">Pending
+          <h1 class="page-title"><span class="action--value">{{actionCount.pendingActionCount}}</span> <span
+              class="action--value-label">Pending
               Actions</span></h1>
           <span class="vertical-divider"></span>
           <h1 class="page-title"><span class="action--value">{{actionCount.needImmediateActionCount}}</span> <span
@@ -30,8 +33,18 @@
         </div>
       </div>
       <div class="header-toolbar col-md-6">
-        <button (click)="newBtnClick.next()" class="btn btn--white cta--action"><span class="icon-add icon-small"></span>
+        <button (click)="newBtnClick.next()" class="btn btn--white cta--action"><span
+            class="icon-add icon-small"></span>
           <span class="button--label">Create New Action</span></button>
+      </div>
+    </div>
+
+    <div *ngSwitchCase="'pirate-ship-module'" class="panel panel--indigo panel--compressed task--bar">
+      <div class="row">
+        <div class="col-md-4">
+          <h4><button (click)='goToPirateShip()' class="btn--back btn btn--icon btn--white"><span
+                class="icon-back"></span></button>{{pirateShipModuleName}}</h4>
+        </div>
       </div>
     </div>
 
@@ -45,10 +58,12 @@
           <button *ngIf="showSave" class="btn btn--white" (click)='saveCurrentState()'> Save </button>
           <button *ngIf="showOfferDtlsBtn" class="btn btn--white" (click)="gotoOfferviewDetails()"> Offer Detail View
           </button>
-          <button *ngIf="!isLastStep" class="btn btn--white" [disabled]="proceedToOfferSetup" (click)='proceedToNextStep()'>Proceed to
+          <button *ngIf="!isLastStep" class="btn btn--white" [disabled]="proceedToOfferSetup"
+            (click)='proceedToNextStep()'>Proceed to
             {{taskBarNavSteps[currentStepIndex].nxtBtnTitle}}&nbsp;<span class="icon-chevron-right"></span></button>
         </div>
       </div>
     </div>
+
   </div>
 </div>

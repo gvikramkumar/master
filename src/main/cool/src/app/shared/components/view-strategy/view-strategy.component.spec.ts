@@ -1,20 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ViewStrategyComponent } from './view-strategy.component';
 
-import { AuthErrorComponent } from './auth-error.component';
-
-describe('AuthErrorComponent', () => {
-  let component: AuthErrorComponent;
-  let fixture: ComponentFixture<AuthErrorComponent>;
+describe('ViewStrategyComponent', () => {
+  let component: ViewStrategyComponent;
+  let fixture: ComponentFixture<ViewStrategyComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AuthErrorComponent ]
+      declarations: [ ViewStrategyComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AuthErrorComponent);
+    fixture = TestBed.createComponent(ViewStrategyComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
