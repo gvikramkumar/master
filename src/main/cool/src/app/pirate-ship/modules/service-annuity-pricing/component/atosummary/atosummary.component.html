@@ -7,7 +7,7 @@
 
      <div class="row" style="margin-top: 20px">
        <div class="col-3">
-         <button class="btn btn--primary" (click)="updatecasestatus()">Submit Setup</button>
+         <button class="btn btn--primary" (click)="updatecasestatus()" [disabled]="Atosummary_be_sub.clickable">Submit Setup</button>
        </div>
        <div class="col-6"></div>
 
@@ -37,13 +37,13 @@
            </tr>
            </thead>
            <tbody>
-           <tr *ngFor="let item of Atosummary_be_sub.listSKUs; let i = index;">
+           <tr *ngFor="let item of Atosummary_be_sub.skuList; let i = index;">
              <td>{{item.sku}}</td>
              <td>{{item.ranking}}</td>
              <td>{{item.plpPercentage}}</td>
              <td>${{item.monthlyThreshold}}</td>
              <td style="border-right: 1px solid #dfdfdf;">
-               <i *ngIf="Atosummary_af_sub.listSKUs[i].basedSupportItem" class="fas fa-check-square" style="font-size: 17px"></i></td>
+               <i *ngIf="Atosummary_af_sub.skuList[i].basedSupportItem" class="fas fa-check-square" style="font-size: 17px"></i></td>
 
              <td style="border: 0;background-color: #fff;" *ngIf="middlenumber === i">
 

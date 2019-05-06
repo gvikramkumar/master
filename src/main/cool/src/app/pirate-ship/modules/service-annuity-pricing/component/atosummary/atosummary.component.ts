@@ -14,8 +14,9 @@ export class ATOSummaryComponent implements OnInit {
 
      response: any;
      Atosummary_be_sub: any = {
-       ATO: 'AtoName',
-       listSKUs: [
+       atoName: 'AtoName',
+       clickable: true,
+       skuList: [
          {
            "sku":"sku1",
            "plpPercentage":"10%",
@@ -66,7 +67,15 @@ export class ATOSummaryComponent implements OnInit {
 
      this._offersetupService.getPricing_SKU_Detail(this.offerId, this.selectedAto).subscribe(
        (response) => {
+         debugger;
+         this.Atosummary_be_sub = response;
+         for (let i =0; i < this.Atosummary_be_sub.skuList.length; i++) {
+           this.Atosummary_af_sub.skuList.push({
+             "sku":"",
+             "basedSupportItem":false
 
+           });
+         }
 
        }
      );
@@ -75,61 +84,57 @@ export class ATOSummaryComponent implements OnInit {
       "ATO":"",
       "caseID":"",
       status:"",
-      listSKUs:[
+      skuList:[
       ]
     };
-    for(let i =0; i< this.Atosummary_be_sub.listSKUs.length; i++){
-         this.Atosummary_af_sub.listSKUs.push({
-           "sku":"",
-           "basedSupportItem":false
 
-         });
-    }
-
-   this.middlenumber = Math.ceil(this.Atosummary_be_sub.listSKUs.length / 2) - 1;
+   this.middlenumber = Math.ceil(this.Atosummary_be_sub.skuList.length / 2) - 1;
 
 
   }
 
   updateATo(seletedATO: any) {
     this.selectedAto = seletedATO;
-    console.log('this  place will call API for update' + seletedATO + 'pricing' + this.offerId);
+
 
   }
 
 
   updatecasestatus() {
-    this.Atosummary_af_sub = {
-      "ATO":"AtoName",
-      "caseID":"case#124",
-      status:"Complete",
-      listSKUs:[
-        {
-          "sku":"sku1",
-          "basedSupportItem":true
-        },
-        {
-          "sku":"sku2",
-          "basedSupportItem":true
-        },
-        {
-          "sku":"sku3",
-          "basedSupportItem":false
-        },
-        {
-          "sku":"sku4",
-          "basedSupportItem":true
-        },
-        {
-          "sku":"sku5",
-          "basedSupportItem":false
-        },
-        {
-          "sku":"sku6",
-          "basedSupportItem":true
-        }
-      ]
-    };
+
+
+
+    // this.Atosummary_af_sub = {
+    //   "ATO":"AtoName",
+    //   "caseID":"case#124",
+    //   status:"Complete",
+    //   skuList:[
+    //     {
+    //       "sku":"sku1",
+    //       "basedSupportItem":true
+    //     },
+    //     {
+    //       "sku":"sku2",
+    //       "basedSupportItem":true
+    //     },
+    //     {
+    //       "sku":"sku3",
+    //       "basedSupportItem":false
+    //     },
+    //     {
+    //       "sku":"sku4",
+    //       "basedSupportItem":true
+    //     },
+    //     {
+    //       "sku":"sku5",
+    //       "basedSupportItem":false
+    //     },
+    //     {
+    //       "sku":"sku6",
+    //       "basedSupportItem":true
+    //     }
+    //   ]
+    // };
 
   }
 
