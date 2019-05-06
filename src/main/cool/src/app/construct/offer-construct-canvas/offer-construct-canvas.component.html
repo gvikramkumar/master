@@ -930,9 +930,15 @@
     </div>
   </div>
   <p-dialog header="Add Details for {{this.popHeadName}}" [resizable]="false" [draggable]="false" closable="true"
+<<<<<<< .merge_file_3BkqHG
             modal="true" [showHeader]="true" (onHide)="onHide()" [responsive]="true" [(visible)]="displayAddDetails"
             [contentStyle]="{'height': '450px',  'max-height':'450px', 'max-width':'1000px', 'overflow-y':'scroll'}"
             positionTop='150'>
+=======
+    modal="true" [showHeader]="true" (onHide)="onHide()" [responsive]="true" *ngIf="displayAddDetails" [(visible)]="displayAddDetails"
+    [contentStyle]="{'height': '450px',  'max-height':'450px', 'max-width':'1000px', 'overflow-y':'scroll'}"
+    positionTop='150'>
+>>>>>>> .merge_file_z0Byc0
     <div class="divider" style="margin-top: -1.5%"></div>
     <form (keydown.enter)="$event.preventDefault()" (keyup.enter)="$event.preventDefault()"
           (ngSubmit)="addItemDetails()" [formGroup]="questionForm">
