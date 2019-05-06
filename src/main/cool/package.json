@@ -36,7 +36,8 @@
     "primeng": "^7.1.2",
     "rxjs": "~6.3.3",
     "tslib": "^1.9.0",
-    "zone.js": "~0.8.26"
+    "zone.js": "~0.8.26",
+    "@ngrx/store": "^7.0.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.12.3",
@@ -48,6 +49,8 @@
     "@cisco-ngx/cui-pipes": "^6.5.18",
     "@cisco-ngx/cui-services": "^6.5.18",
     "@cisco-ngx/cui-utils": "^6.5.18",
+    "@ngrx/schematics": "^7.4.0",
+    "@ngrx/store": "^7.4.0",
     "@phenomnomnominal/angular-lazy-routes-fix": "^0.1.5",
     "@types/jasmine": "^2.8.14",
     "@types/jasminewd2": "^2.0.6",
