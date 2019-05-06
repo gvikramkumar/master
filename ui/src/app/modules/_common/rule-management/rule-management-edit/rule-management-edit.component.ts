@@ -303,6 +303,10 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       });
   }
 
+  canApprove() {
+    return this.uiUtil.canAdminApprove(this.rule.updatedBy);
+  }
+
   reject() {
     this.uiUtil.confirmReject('rule')
       .subscribe(resultConfirm => {
