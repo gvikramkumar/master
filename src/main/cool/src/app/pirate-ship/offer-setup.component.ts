@@ -69,8 +69,7 @@ export class OfferSetupComponent implements OnInit {
     // Get Offer Details
     this.getOfferDetails();
 
-    // Get Module Name and Status
-    this.getAllModuleData();
+   
 
     // for refresh
     interval(9000000).subscribe(x =>
@@ -104,6 +103,8 @@ export class OfferSetupComponent implements OnInit {
       this.derivedMM = offerDetails['derivedMM'];
       this.offerName = offerDetails['offerName'];
       this.stakeHolderData = offerDetails['stakeholders'];
+       // Get Module Name and Status
+      this.getAllModuleData();
 
       if (this.derivedMM !== 'Not Aligned') {
         this.showMM = true;
