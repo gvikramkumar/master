@@ -82,7 +82,7 @@
           </p-treeTable>
         </div>
         <div class="row col-md-12 base-margin-top">
-          <button class="btn btn--cool btn--primary" [disabled]="selectedProductNodes ? null : true"
+          <button class="btn btn--cool btn--primary" [disabled]="!selectedProductNodes || selectedProductNodes.length === 0"
             (click)="removeProductDetails()">
             Remove
           </button>
