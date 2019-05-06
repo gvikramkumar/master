@@ -1,11 +1,8 @@
 
 import { DatePipe } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { ModalModule } from 'ngx-bootstrap/modal';
-import { ClickOutsideModule } from 'ng-click-outside';
+ import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserModule } from '@angular/platform-browser';
-import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -13,16 +10,7 @@ import { NgModule, APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { AuthErrorComponent } from './auth-error/auth-error.component';
 
-import { AppRoutingModule } from './app-routing.module';
-import { DesignReviewComponent } from '@app/review/design-review/design-review.component';
-import { ViewStrategyComponent } from '@app/review/view-strategy/view-strategy.component';
-import { StrategyReviewComponent } from '@app/review/strategy-review/strategy-review.component';
-import { ExitCriteriaValidationComponent } from '@app/review/exit-criteria-validation/exit-criteria-validation.component';
-import { DesignReviewExitCriteriaComponent } from '@app/review/design-review-exit-criteria/design-review-exit-criteria.component';
-
-import { SharedService } from './shared-service.service';
 import { ActionsService } from './services/actions.service';
 import { MenuBarService } from './services/menu-bar.service';
 import { OfferPhaseService } from './services/offer-phase.service';
@@ -42,26 +30,18 @@ import { ExitCriteriaValidationService } from './services/exit-criteria-validati
 import { EnvironmentService } from 'src/environments/environment.service';
 import { ConfigurationService, HttpInterceptorService } from '@core/services';
 
-
 import { MessageService } from './services/message.service';
-import { NgxWebstorageModule } from 'ngx-webstorage';
 import { UserIdleModule } from 'angular-user-idle';
-import { NgCircleProgressModule } from 'ng-circle-progress';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { CoreModule } from '@core/core.module';
 import { SharedModule } from '@shared/shared.module';
+import { AppRoutingModule } from './app-routing.module';
+
 import { MenuBarModule } from './menu/menu-bar.module';
 import { TaskBarModule } from './taskbar/task-bar.module';
 import { RightPanelModule } from './right-panel/right-panel.module';
 import { OfferDetailModule } from './offer-detail/offer-detail.module';
-
-import { CustomMinValidatorDirective } from './validators/custom-min-validator.directive';
-import { CustomRangeValidatorDirective } from './validators/custom-range-validator.directive';
-import { ItemCreationComponent } from '@app/pirate-ship/modules/item-creation/item-creation.component';
-import { ReviewEditForm } from '@app/pirate-ship/modules/item-creation/components/review-edit-form/review-edit-form';
-import { TreeTableModule, AutoCompleteModule } from 'primeng/primeng';
-
 
 export function app_init(configService: ConfigurationService) {
   return () => configService.init();
@@ -71,38 +51,22 @@ export function app_init(configService: ConfigurationService) {
   declarations: [
     AppComponent,
     DashboardComponent,
-    StrategyReviewComponent,
-    AuthErrorComponent,
-    ViewStrategyComponent,
-    DesignReviewComponent,
-    ExitCriteriaValidationComponent,
-    DesignReviewExitCriteriaComponent,
-    CustomMinValidatorDirective,
-    CustomRangeValidatorDirective,
   ],
   imports: [
     NgbModule,
-    BrowserModule,
-    HttpClientModule,
     RouterModule,
-    ClickOutsideModule,
-    PerfectScrollbarModule,
-    ModalModule.forRoot(),
-    NgbModule.forRoot(),
-    BrowserAnimationsModule,
-    NgCircleProgressModule.forRoot(),
+    BrowserModule,
     FlexLayoutModule,
-    NgxWebstorageModule.forRoot(),
+    HttpClientModule,
+    BrowserAnimationsModule,
     UserIdleModule.forRoot({ idle: 10, timeout: 600, ping: 0 }),
+    CoreModule,
+    SharedModule,
     MenuBarModule,
     TaskBarModule,
     RightPanelModule,
     OfferDetailModule,
-    CoreModule,
-    SharedModule,
-    AppRoutingModule,
-    TreeTableModule,
-    AutoCompleteModule
+    AppRoutingModule
   ],
   providers:
     [
@@ -112,7 +76,6 @@ export function app_init(configService: ConfigurationService) {
         multi: true
       },
       ConfigurationService,
-      SharedService,
       SearchCollaboratorService,
       EnvironmentService,
       MonetizationModelService,

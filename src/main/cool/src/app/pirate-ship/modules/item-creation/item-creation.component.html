@@ -36,7 +36,7 @@
           </div>
         </div>
         <div class="row col-md-12 base-margin-top">
-          <p-treeTable [value]="productDetails" [columns]="productColumns" selectionMode="checkbox"
+          <p-treeTable class="item-creation" [value]="productDetails" [columns]="productColumns" selectionMode="checkbox"
             [(selection)]="selectedProductNodes" [resizableColumns]="true">
             <ng-template pTemplate="header" let-columns>
               <tr>
@@ -50,8 +50,8 @@
             <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
               <tr>
                 <td *ngFor="let col of columns; let i = index">
-                  <p-treeTableCheckbox [value]="rowNode" *ngIf="i == 0"></p-treeTableCheckbox>
-                  <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+                  <p-treeTableCheckbox class="pull-left" [value]="rowNode" *ngIf="i == 0"></p-treeTableCheckbox>
+                  <p-treeTableToggler class="pull-left" [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
                   <span *ngIf="col.field == 'newItemStatus' || col.field == 'moduleStatus'">
                     <div class="text-center">
                       <span *ngIf="rowData[col.field] == 'Available'">
@@ -70,11 +70,11 @@
                     </div>
                   </span>
                   <span *ngIf="col.field == 'basePrice' && rowData[col.field]!=''">
-                    ${{rowData[col.field]}}
+                    <div class="text-center">${{rowData[col.field]}}</div>
                   </span>
                   <span
                     *ngIf="col.field !== 'newItemStatus' && col.field !== 'moduleStatus' && col.field !== 'basePrice'">
-                    {{rowData[col.field]}}
+                    <div class="text-center">{{rowData[col.field]}}</div>
                   </span>
                 </td>
               </tr>
@@ -98,5 +98,5 @@
 </div>
 
 <div *ngIf='display'>
-  <review-edit-form (valueChange)='replacetabularFormQuestion($event)' [indexVal]="ind"></review-edit-form>
+  <dynamic-form-multiple (clkDownloadZip)='downloadZip()' (valueChange)='replacetabularFormQuestion($event)' [isItemCreation]="true" [indexVal]="ind"></dynamic-form-multiple>
 </div>

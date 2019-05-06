@@ -1,23 +1,16 @@
 import { NgModule } from '@angular/core';
-import { AuthGuard } from '@app/core/guards';
-import { Routes, RouterModule } from '@angular/router';
-import { AccessManagementComponent } from './access-management.component';
+import { RouterModule } from '@angular/router';
 
 import { SharedModule } from '@shared/shared.module';
+import { ACCESS_MANAGEMENT_ROUTES } from './access-management.routes';
+import { AccessManagementComponent } from './access-management.component';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: AccessManagementComponent,
-    canActivate: [AuthGuard]
-  },
-];
 
 @NgModule({
   declarations: [AccessManagementComponent],
   imports: [
     SharedModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(ACCESS_MANAGEMENT_ROUTES)
   ]
 })
 export class AccessManagementModule { }

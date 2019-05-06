@@ -7,7 +7,11 @@ import { OfferSetupService } from '../services/offer-setup.service';
 import { RightPanelService } from '@app/services/right-panel.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 
+import { appRoutesNames } from '../app.routes.names';
+import { pirateShipRoutesNames } from './pirate-ship.routes.names';
+
 import { interval } from 'rxjs';
+
 
 @Component({
   selector: 'app-offer-setup',
@@ -22,9 +26,10 @@ export class OfferSetupComponent implements OnInit {
   offerName;
   offerData;
 
-  derivedMM:any ='MM4';
+  showMM: boolean = false;
+  derivedMM;
   moduleStatus;
-  functionalRole:any ='BUPM';
+  functionalRole:any = 'BUPM';
 
   stakeHolderData;
   stakeholders: any;
@@ -48,7 +53,6 @@ export class OfferSetupComponent implements OnInit {
   constructor(private router: Router,
     private userService: UserService,
     private activatedRoute: ActivatedRoute,
-    private messageService: MessageService,
     private offerSetupService: OfferSetupService,
     private rightPanelService: RightPanelService,
     private stakeholderfullService: StakeholderfullService) {
@@ -61,8 +65,24 @@ export class OfferSetupComponent implements OnInit {
   ngOnInit() {
 
     //  =======================================================================================
-    // this.functionalRole = this.userService.getFunctionalRole();
+    this.functionalRole = this.userService.getFunctionalRole();
     // Get Offer Details
+    this.getOfferDetails();
+
+    // Get Module Name and Status
+    this.getAllModuleData();
+
+    // for refresh
+    interval(9000000).subscribe(x =>
+      this.getAllModuleData()
+    )
+
+
+  }
+
+  // Get offer Details
+
+  getOfferDetails() {
     this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
 
       this.offerBuilderdata = offerDetails;
@@ -85,6 +105,10 @@ export class OfferSetupComponent implements OnInit {
       this.offerName = offerDetails['offerName'];
       this.stakeHolderData = offerDetails['stakeholders'];
 
+      if (this.derivedMM !== 'Not Aligned') {
+        this.showMM = true;
+      }
+
       if (Array.isArray(offerDetails['primaryBEList']) && offerDetails['primaryBEList'].length) {
         this.primaryBE = offerDetails['primaryBEList'][0];
       }
@@ -104,27 +128,16 @@ export class OfferSetupComponent implements OnInit {
       // Populate Stake Holder Info
       this.processStakeHolderInfo();
     });
-
-    // for refresh
-
-    this.getAllModuleData();
-    interval(9000000).subscribe(x =>
-      this.getAllModuleData()
-    )
-
-
   }
-
 
   // Get All the ModuleName and place in order
   getAllModuleData() {
-    this.offerSetupService.getModuleData(this.derivedMM, this.offerId, this.functionalRole,this.selectedAto).subscribe(data => {
+    this.offerSetupService.getModuleData(this.derivedMM, this.offerId, this.functionalRole, this.selectedAto).subscribe(data => {
       this.groupData = {};
-      console.log(this.groupData);
+
       this.Options = data['listATOs'];
       data['listSetupDetails'].forEach(group => {
 
-        // this.getModuleStatus(group);
         let groupName = group['groupName']
         if (this.groupData[groupName] == null) {
           this.groupData[groupName] = { 'left': [], 'right': [] };
@@ -140,6 +153,7 @@ export class OfferSetupComponent implements OnInit {
     }
     );
   }
+
   // sort the module location
   sortGroupData() {
     this.groupData['Group3']['left'].sort(
@@ -150,13 +164,7 @@ export class OfferSetupComponent implements OnInit {
     );
   }
 
-  // Get Status For Each Module
-  getModuleStatus(group) {
-    this.offerSetupService.getModuleStatus(group['moduleName'], this.selectedOffer, this.offerId, this.functionalRole, this.derivedMM).subscribe(data => {
-      group['status'] = data['message'];
 
-    });
-  }
 
   // get stakeHolder information
   private processStakeHolderInfo() {
@@ -197,14 +205,14 @@ export class OfferSetupComponent implements OnInit {
 
   getElementDetails(element) {
     if (element.moduleName === 'Item Creation') {
-      this.router.navigate(['item-creation', this.offerId, this.caseId, this.selectedAto]);
+      this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.ITEM_CREATION, this.selectedAto]);
     } else if (element.moduleName === 'Modeling & Design') {
-      this.router.navigate(['modelling-design', this.offerId, this.caseId, this.selectedAto]);
+      this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.MODELLING_DESIGN, this.selectedAto]);
     }
 
   }
 
-  
+
 
   onProceedToNext() {
   }
