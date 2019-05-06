@@ -27,6 +27,7 @@ export class OfferSetupComponent implements OnInit {
   offerData;
 
   showMM: boolean = false;
+  readOnly: boolean = false;
   derivedMM;
   moduleStatus;
   functionalRole;
@@ -66,6 +67,8 @@ export class OfferSetupComponent implements OnInit {
 
     //  =======================================================================================
     this.functionalRole = this.userService.getFunctionalRole();
+  
+
     // Get Offer Details
     this.getOfferDetails();
 
