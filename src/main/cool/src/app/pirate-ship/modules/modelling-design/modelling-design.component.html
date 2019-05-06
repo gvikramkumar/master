@@ -17,7 +17,7 @@
           <div class="row flex-center-vertical">
             <div class="col-sm-12">
 
-              <div *ngIf="showDesignCanvasButton">
+              <div class="pull-left" *ngIf="showDesignCanvasButton">
                 <button class="btn btn--primary btn--cool btn--small tooltip" placement="top"
                   (click)="goToDesignCanvas()" [disabled]="!disableDesignCanvasButton">
                   Go To Design Canvas <i class="icon-popout"></i>
@@ -39,14 +39,14 @@
 
           <ng-template #selectedAtoView>
 
-            <br>Status: {{atoTask['itemStatus']}}<br>
+            <p>Status: {{atoTask['itemStatus']}}</p>
 
-            <br><br>
-            <h3>Modelling</h3><br><br>
+
+            <h3>Modeling</h3>
             <app-task-summary [tasks]="atoTask['modelTasks']">/</app-task-summary>
 
-            <br><br>
-            <h3>Provisioning & Mediation</h3><br><br>
+
+            <h3>Provisioning & Mediation</h3>
             <app-task-summary [tasks]="atoTask['provisionTasks']">/</app-task-summary>
 
           </ng-template>
