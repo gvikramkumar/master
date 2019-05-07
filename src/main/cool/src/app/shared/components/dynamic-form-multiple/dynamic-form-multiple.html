@@ -21,8 +21,8 @@
             <button class="display-none"></button>
             <button class="btn btn--primary" (click)='saveForm()'>Save</button>
             <button class="btn btn--secondary" (click)="closeDialog()">Cancel</button>
-            <a *ngIf="isItemCreation" href="javascript: void(0);" class="base-margin-right" (click)='downloadZip()'><span
-              class="icon-export--cool half-margin-right"></span> Export as .XLS</a>
+            <a *ngIf="isItemCreation" href="javascript: void(0);" class="base-margin-right"
+              (click)='downloadZip()'><span class="icon-export--cool half-margin-right"></span> Export as .XLS</a>
           </div>
 
         </ul>
@@ -161,7 +161,7 @@
                                   <div class="on-focus clearfix">
                                     <input [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' id=""
                                       [(ngModel)]="pInfo.currentValue"
-                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'])"
+                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                                       #freeText="ngModel" class="form-control">
@@ -216,8 +216,9 @@
                                   [class.has-success]="qafreeText.valid">
                                   <div class="on-focus clearfix">
                                     <input [name]='item.egineAttribue_+parentIndex+ ChildIndex'
-                                      [(ngModel)]="pInfo.currentValue" [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
-                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'])"
+                                      [(ngModel)]="pInfo.currentValue"
+                                      [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
+                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'], ques.value['groupName'])"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                                       #qafreeText="ngModel" class="form-control" placement="top">
@@ -263,7 +264,8 @@
                                 <div class="form-group__text">
                                   <div class="on-focus clearfix">
                                     <input type="text" [name]='item.egineAttribue_+parentIndex+ ChildIndex'
-                                      class="form-control" bsDatepicker [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
+                                      class="form-control" bsDatepicker
+                                      [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
                                       [ngModel]="dateFormat(pInfo.currentValue)"
                                       (ngModelChange)="pInfo.currentValue = updateDate($event)">
                                   </div>
@@ -281,7 +283,7 @@
                                       [id]="ques.value['title']+'_'+ques.value['uniqueKey']+pInfo.egineAttribue+parentIndex+'_'+childIndex"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                                       [(ngModel)]="pInfo.currentValue"
-                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'])"
+                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       #radioButton="ngModel" class="form-control" placement="top"
                                       [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']">
                                       <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
@@ -334,7 +336,7 @@
                                   <div class="on-focus clearfix">
                                     <select [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control"
                                       [(ngModel)]="pInfo.currentValue"
-                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'])"
+                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
@@ -390,7 +392,7 @@
                                   <div class="on-focus clearfix">
                                     <select [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control"
                                       [(ngModel)]="pInfo.currentValue"
-                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'])"
+                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
@@ -444,7 +446,7 @@
                                 <p-multiSelect [name]='item.egineAttribue_+parentIndex+ ChildIndex'
                                   [options]="pInfo.listMutiSelect" optionLabel="name"
                                   [(ngModel)]="pInfo.listCurrentValue"
-                                  (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'])"
+                                  (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                   [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
                                   maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                   [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
@@ -503,9 +505,9 @@
                                   <div class="on-focus clearfix">
                                     <input [name]='item.egineAttribue_+parentIndex+ ChildIndex'
                                       [(ngModel)]="pInfo.currentValue"
-                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'])"
+                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
-                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'])"
+                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                                       #freeText="ngModel" class="form-control" placement="top"
@@ -566,8 +568,9 @@
                                   <div class="on-focus clearfix">
                                     <input [name]='item.egineAttribue_+parentIndex+ ChildIndex'
                                       [(ngModel)]="pInfo.currentValue"
-                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'])"
-                                      class="form-control" [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
+                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
+                                      class="form-control"
+                                      [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                                       #qafreeText="ngModel" class="form-control" placement="top"
@@ -617,7 +620,7 @@
                                   <div class="on-focus clearfix">
                                     <select [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control"
                                       [(ngModel)]="pInfo.currentValue"
-                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'])"
+                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
@@ -672,7 +675,7 @@
                                   <div class="on-focus clearfix">
                                     <select [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control"
                                       [(ngModel)]="pInfo.currentValue"
-                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'])"
+                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
@@ -728,7 +731,7 @@
                                   <div class="on-focus clearfix">
                                     <select [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control"
                                       [(ngModel)]="pInfo.currentValue"
-                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'])"
+                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
@@ -782,7 +785,7 @@
                                 <p-multiSelect [name]='item.egineAttribue_+parentIndex+ ChildIndex'
                                   [options]="pInfo.listMutiSelect" optionLabel="name"
                                   [(ngModel)]="pInfo.listCurrentValue"
-                                  (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'])"
+                                  (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                   [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
                                   maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                   [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
