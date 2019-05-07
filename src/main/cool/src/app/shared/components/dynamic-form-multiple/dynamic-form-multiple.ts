@@ -40,9 +40,10 @@ export class DynamicFormMultipleComponent implements OnInit {
     offerForm: FormGroup;
     onLoad: boolean = false;
     public showLoader: boolean = false;
-
+    private billing_soa = "Billing SOA SKU";
+    lastIndex = -1;
     @Input() indexVal;
-    @Input() isItemCreation:boolean;
+    @Input() isItemCreation: boolean;
 
     constructor(public offerConstructService: OfferConstructService,
         private offerConstructCanvasService: OfferconstructCanvasService,
@@ -60,6 +61,9 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.tableShowCondition = true;
         this.selectedTab = 'major';
         this.createObjectForSearch();
+
+        console.log(this.offerInfo);
+
     }
 
     createObjectForSearch() {
@@ -93,11 +97,6 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.selectedTab = 'minor';
     }
 
-    onHide() {
-        this.offerConstructService.closeAddDetails = false;
-        this.closeDialog();
-    }
-
     onHideViewDetailsModal() {
         console.log("test");
 
@@ -126,10 +125,17 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.valueChange.emit(counter);
         this.offerConstructService.closeAddDetails = false;
     }
-
+    onShowDialog(){
+        document.getElementById('tabsv4-2').click()
+        setTimeout(() => {
+            document.getElementById('tabsv4-1').click()
+        }, 0);
+    }
     closeDialog() {
-        let isUdate: boolean = true;
         this.majorSection();
+        this.offerConstructService.closeAddDetails = false;
+        this.indexVal = this.lastIndex--;
+        let isUdate: boolean = true;
         this.majorOfferInfo.forEach((list, index) => {
             let groupName: any = Object.keys(list);
             this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element, index) => {
@@ -160,7 +166,6 @@ export class DynamicFormMultipleComponent implements OnInit {
                 }
             });
         });
-        this.offerConstructService.closeAddDetails = false;
     }
 
     replaceOrUpdatevalue(questions, isUdate) {
@@ -356,17 +361,19 @@ export class DynamicFormMultipleComponent implements OnInit {
     }
 
 
-    addAllDetailsValidationsonChange(e, question, questionList?) {
+    addAllDetailsValidationsonChange(e, question, questionList?, groupName?) {
 
-        // set base price value according to billing_soa SOA Pricing selection type
+        // set base price value according to billing_soa SOA Pricing selection type && questionList == this.billing_soa
         if (questionList !== undefined) {
-            if (question.question == "SOA Pricing") {
-                if (question.currentValue == "Flat") {
-                    this.defaultValueServices.setBasePriceInBillingSOADForFlat(questionList);
-                }
+            if (groupName == this.billing_soa) {
+                if (question.question == "SOA Pricing") {
+                    if (question.currentValue == "Flat") {
+                        this.defaultValueServices.setBasePriceInBillingSOADForFlat(questionList);
+                    }
 
-                if (question.currentValue == "% of Product List") {
-                    this.defaultValueServices.setBasePriceInBillingSOAForProduct(questionList);
+                    if (question.currentValue == "% of Product List") {
+                        this.defaultValueServices.setBasePriceInBillingSOAForProduct(questionList);
+                    }
                 }
             }
 
@@ -408,26 +415,26 @@ export class DynamicFormMultipleComponent implements OnInit {
                 }
 
             }
-            
+
             if (question.question == "Delivery Option") {
-               if (question.currentValue == "ELECTRONIC") {
-                   this.defaultValueServices.setEnablePartySWKey(questionList);
-               }
-               else{
-                   this.defaultValueServices.setEnablePartySWKeyN(questionList);
-               }
-   
-           }
-       
-           if (question.question == "Terms & Payments Required") {
-               if (question.currentValue == "Yes") {
-                   this.defaultValueServices.setSubscriptionOffset(questionList);
-               }
-               else{
-                   this.defaultValueServices.setSubscriptionOffsetN(questionList);
-               }
-       
-           }
+                if (question.currentValue == "ELECTRONIC") {
+                    this.defaultValueServices.setEnablePartySWKey(questionList);
+                }
+                else {
+                    this.defaultValueServices.setEnablePartySWKeyN(questionList);
+                }
+
+            }
+
+            if (question.question == "Terms & Payments Required") {
+                if (question.currentValue == "Yes") {
+                    this.defaultValueServices.setSubscriptionOffset(questionList);
+                }
+                else {
+                    this.defaultValueServices.setSubscriptionOffsetN(questionList);
+                }
+
+            }
 
         }
         var validatorPattern = '';
@@ -548,7 +555,7 @@ export class DynamicFormMultipleComponent implements OnInit {
         }
 
     }
-    downloadZip(){
+    downloadZip() {
         this.clkDownloadZip.emit()
     }
 }

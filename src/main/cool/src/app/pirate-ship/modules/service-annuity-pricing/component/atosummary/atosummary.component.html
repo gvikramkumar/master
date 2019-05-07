@@ -7,7 +7,7 @@
 
      <div class="row" style="margin-top: 20px">
        <div class="col-3">
-         <button class="btn btn--primary" (click)="updatecasestatus()" [disabled]="Atosummary_be_sub.clickable">Submit Setup</button>
+         <button class="btn btn--primary" (click)="updatecasestatus()" [disabled]="!Atosummary_be_sub.clickable">Submit Setup</button>
        </div>
        <div class="col-6"></div>
 

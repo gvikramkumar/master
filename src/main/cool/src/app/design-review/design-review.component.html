@@ -7,7 +7,7 @@
 
     <div class="panel-wrapper mt-15">
 
-      <app-taskbar (onProceedToNext)="offerSetupView()">
+      <app-taskbar [goToOfferSetup]="strategyReviewComplete" (onProceedToNext)="offerSetupView()">
       </app-taskbar>
 
       <div class="contentBox mt-10">

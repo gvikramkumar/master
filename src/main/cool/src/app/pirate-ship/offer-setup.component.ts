@@ -136,7 +136,7 @@ export class OfferSetupComponent implements OnInit {
         this.groupData = {};
 
         this.Options = data['listATOs'];
-      this.offerSetupService.setAtolist(this.Options);
+        this.offerSetupService.setAtolist(this.Options);
         data['listSetupDetails'].forEach(group => {
 
           let groupName = group['groupName']
@@ -230,7 +230,6 @@ export class OfferSetupComponent implements OnInit {
   }
 
 }
-
 
 
 
