@@ -77,7 +77,7 @@ export class ATOSummaryComponent implements OnInit {
     };
     // this.updatedata()
     this.updatawithoutAPi();
-
+   this.updatedata();
 
    this.middlenumber = Math.ceil(this.Atosummary_be_sub.skuList.length / 2) - 1;
 
@@ -140,8 +140,10 @@ export class ATOSummaryComponent implements OnInit {
 
    }
   updatedata(){
+
     this._offersetupService.getPricing_SKU_Detail(this.offerId, this.selectedAto).subscribe(
       (response) => {
+        debugger;
         this.loading = false;
         this.Atosummary_af_sub.skuList=[];
         this.Atosummary_be_sub =[];
