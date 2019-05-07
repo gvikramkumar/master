@@ -15,7 +15,7 @@
       <div class="leftContent col-sm-12 col-md-9">
         <div class="row base-margin-top">
           <div class="col-md-9">
-            <button (click)='showReviewEdit()' class="btn btn--cool btn--primary">
+            <button (click)='showReviewEdit()' [disabled]="!permission" class="btn btn--cool btn--primary">
               <span class="icon-pencil icon-small"></span> Review/Edit Items
             </button>
           </div>
@@ -82,7 +82,7 @@
           </p-treeTable>
         </div>
         <div class="row col-md-12 base-margin-top">
-          <button class="btn btn--cool btn--primary" [disabled]="!selectedProductNodes || selectedProductNodes.length === 0"
+          <button class="btn btn--cool btn--primary" [disabled]="!selectedProductNodes || selectedProductNodes.length === 0 || !permission"
             (click)="removeProductDetails()">
             Remove
           </button>
