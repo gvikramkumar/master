@@ -1,7 +1,8 @@
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
-
+import { ConfigurationService } from '@app/core/services';
+import { EnvironmentService } from '@env/environment.service';
 import { LoaderService } from '@app/core/services/loader.service';
 import { RightPanelService } from '@app/services/right-panel.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
@@ -9,12 +10,13 @@ import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 
+
 @Component({
-  selector: 'app-service-annuity-pricing',
-  templateUrl: './service-annuity-pricing.component.html',
-  styleUrls: ['./service-annuity-pricing.component.scss']
+  selector: 'app-self-service-orderability',
+  templateUrl: './self-service-orderability.component.html',
+  styleUrls: ['./self-service-orderability.component.css']
 })
-export class ServiceAnnuityPricingComponent implements OnInit, OnDestroy {
+export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
 
   caseId: string;
   planId: string;
@@ -43,6 +45,8 @@ export class ServiceAnnuityPricingComponent implements OnInit, OnDestroy {
     private loaderService: LoaderService,
     private activatedRoute: ActivatedRoute,
     private rightPanelService: RightPanelService,
+    private environmentService: EnvironmentService,
+    private configurationService: ConfigurationService,
     private stakeholderfullService: StakeholderfullService
   ) {
 
@@ -56,7 +60,7 @@ export class ServiceAnnuityPricingComponent implements OnInit, OnDestroy {
 
     // Initialize TaskBar Params
     this.isPirateShipSubModule = true;
-    this.pirateShipModuleName = ' Service Annuity % Pricing';
+    this.pirateShipModuleName = 'Self Service Orderability';
 
   }
 
@@ -84,6 +88,20 @@ export class ServiceAnnuityPricingComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.paramsSubscription.unsubscribe();
   }
+
+  // -------------------------------------------------------------------------------------------------------------------
+
+  goToOrderabilitySSO() {
+
+    const userId = this.configurationService.startupData.userId;
+    let urlToOpen = this.environmentService.owbUrl + '/manage/offer/owbOfferDefinition?';
+    urlToOpen += 'selectedAto=' + this.selectedAto + '&planId=' + this.planId + '&userId=' + userId;
+
+    urlToOpen = 'https://www.google.com';
+    window.open(urlToOpen, '_blank');
+
+  }
+
 
   // -------------------------------------------------------------------------------------------------------------------
 
@@ -140,6 +158,5 @@ export class ServiceAnnuityPricingComponent implements OnInit, OnDestroy {
   }
 
   // -------------------------------------------------------------------------------------------------------------------
-
 
 }

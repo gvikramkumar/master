@@ -1,4 +1,4 @@
-<p-dialog header="Add All Item Details" (onHide)="onHide()" class="add-details-dialog"
+<p-dialog #dialog header="Add All Item Details" (onShow)="onShowDialog()" (onHide)="closeDialog()" class="add-details-dialog"
   [(visible)]="offerConstructService.closeAddDetails" [resizable]="false" [draggable]="false" [maximizable]="true"
   [contentStyle]="{'min-height':'450px', 'overflow-y':'scroll', 'width':'100%'}">
   <div class="divider" style="margin-top: -1.5%"></div>
@@ -6,13 +6,13 @@
     <div class="row">
       <div class="col-sm-12">
         <ul id="tabsv4" class="tabs tabs--tall">
-          <li id="tabsv4-1" class="tab">
-            <a (click)='majorSection()'
+          <li class="tab">
+            <a  id="tabsv4-1" (click)='majorSection()'
               [ngClass]="{'active': majorLineItemsActive, 'tab__heading':true,'bBtm':onLoad}">Add Major Line
               Details</a>
           </li>
-          <li id="tabsv4-2" class="tab">
-            <a (click)='minorSection()' [ngClass]="{'active': minorLineItemsActive, 'tab__heading':true}">Add Minor Line
+          <li class="tab">
+            <a  id="tabsv4-2" (click)='minorSection()' [ngClass]="{'active': minorLineItemsActive, 'tab__heading':true}">Add Minor Line
               Details</a>
           </li>
 
@@ -163,6 +163,7 @@
                                       [(ngModel)]="pInfo.currentValue"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'])"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
+                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                                       #freeText="ngModel" class="form-control">
 
@@ -220,6 +221,7 @@
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'])"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
+                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
                                       #qafreeText="ngModel" class="form-control" placement="top">
                                     <div class="tool-tip  slideIn"
                                       *ngIf="qafreeText.invalid && (qafreeText.dirty || qafreeText.touched)">
@@ -265,6 +267,7 @@
                                     <input type="text" [name]='item.egineAttribue_+parentIndex+ ChildIndex'
                                       class="form-control" bsDatepicker [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
                                       [ngModel]="dateFormat(pInfo.currentValue)"
+                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
                                       (ngModelChange)="pInfo.currentValue = updateDate($event)">
                                   </div>
                                 </div>
@@ -508,6 +511,7 @@
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'])"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
+                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
                                       #freeText="ngModel" class="form-control" placement="top"
                                       (mouseenter)="showError = true; " (mouseleave)="showError = false;" ng-class=''>
 
@@ -570,6 +574,7 @@
                                       class="form-control" [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
+                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
                                       #qafreeText="ngModel" class="form-control" placement="top"
                                       (mouseenter)="showError = true; " (mouseleave)="showError = false;">
                                     <div class="tool-tip  slideIn"
