@@ -41,7 +41,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     onLoad: boolean = false;
     public showLoader: boolean = false;
     private billing_soa = "Billing SOA SKU";
-
+    lastIndex = -1;
     @Input() indexVal;
     @Input() isItemCreation: boolean;
 
@@ -97,11 +97,6 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.selectedTab = 'minor';
     }
 
-    onHide() {
-        this.offerConstructService.closeAddDetails = false;
-        this.closeDialog();
-    }
-
     onHideViewDetailsModal() {
         console.log("test");
 
@@ -130,10 +125,17 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.valueChange.emit(counter);
         this.offerConstructService.closeAddDetails = false;
     }
-
+    onShowDialog(){
+        document.getElementById('tabsv4-2').click()
+        setTimeout(() => {
+            document.getElementById('tabsv4-1').click()
+        }, 0);
+    }
     closeDialog() {
-        let isUdate: boolean = true;
         this.majorSection();
+        this.offerConstructService.closeAddDetails = false;
+        this.indexVal = this.lastIndex--;
+        let isUdate: boolean = true;
         this.majorOfferInfo.forEach((list, index) => {
             let groupName: any = Object.keys(list);
             this.offerConstructService.singleMultipleFormInfo.major[index][groupName]['productInfo'].forEach((element, index) => {
@@ -164,7 +166,6 @@ export class DynamicFormMultipleComponent implements OnInit {
                 }
             });
         });
-        this.offerConstructService.closeAddDetails = false;
     }
 
     replaceOrUpdatevalue(questions, isUdate) {
