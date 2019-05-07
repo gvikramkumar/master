@@ -147,7 +147,7 @@ export class OfferSetupComponent implements OnInit {
   getAllModuleData() {
     this.offerSetupService.getModuleData(this.derivedMM, this.offerId, this.functionalRole, this.selectedAto).subscribe(data => {
       this.groupData = {};
-
+      console.log('group data', this.groupData);
       this.Options = data['listATOs'];
       data['listSetupDetails'].forEach(group => {
 
@@ -217,10 +217,25 @@ export class OfferSetupComponent implements OnInit {
 
 
   getElementDetails(element) {
-    if (element.moduleName === 'Item Creation') {
+    /* if (element.moduleName === 'Item Creation') {
       this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.ITEM_CREATION, this.selectedAto]);
     } else if (element.moduleName === 'Modeling & Design') {
       this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.MODELLING_DESIGN, this.selectedAto]);
+    } */
+
+    switch(element.moduleName) {
+      case 'Item Creation': {
+        this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.ITEM_CREATION, this.selectedAto]);
+        break;
+      }
+      case 'Modeling & Design': {
+        this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.MODELLING_DESIGN, this.selectedAto]);
+        break;
+      }
+      case 'Service Annuity  % Pricing': {
+        this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.SERVICE_ANNUITY_PRICING, this.selectedAto]);
+        break;
+      }
     }
 
   }
