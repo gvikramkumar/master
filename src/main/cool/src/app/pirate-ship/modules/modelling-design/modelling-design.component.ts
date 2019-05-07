@@ -98,6 +98,8 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
             this.atoNames.push(dropDownValue.itemName);
           });
 
+        this.atoTask = this.atoList.find(ato => ato.itemName === this.selectedAto);
+
       });
 
     // Retrieve Offer Details
@@ -196,3 +198,4 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
 
 
 }
+
