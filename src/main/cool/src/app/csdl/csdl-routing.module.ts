@@ -1,16 +1,9 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 import { CsdlPlatformComponent } from './csdl-platform/csdl-platform.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
-    path: 'csdl-platform',
+    path: '',
     component: CsdlPlatformComponent
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class CsdlRoutingModule { }

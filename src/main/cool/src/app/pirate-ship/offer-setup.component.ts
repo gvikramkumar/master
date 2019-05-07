@@ -208,8 +208,13 @@ export class OfferSetupComponent implements OnInit {
       this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.ITEM_CREATION, this.selectedAto]);
     } else if (element.moduleName === 'Modeling & Design') {
       this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.MODELLING_DESIGN, this.selectedAto]);
+    } else if (element.moduleName === 'CSDL') {
+      this.router.navigate([appRoutesNames.CSDL, this.offerId, this.caseId]);
     }
+  }
 
+  onCsdl() {
+    this.router.navigate([appRoutesNames.CSDL, this.offerId, this.caseId]);
   }
 
 

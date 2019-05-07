@@ -85,7 +85,8 @@ export const APP_ROUTES = [
         resolve: { offerData: OfferOverViewResolver }
     },
     {
-        path: appRoutesNames.CSDL,
+        path: appRoutesNames.CSDL + '/:offerId/:caseId',
         loadChildren: './csdl/csdl.module#CsdlModule',
+        resolve: { offerData: OfferOverViewResolver }
     }
 ]
