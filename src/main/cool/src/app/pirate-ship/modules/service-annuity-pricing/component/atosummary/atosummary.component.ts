@@ -143,7 +143,6 @@ export class ATOSummaryComponent implements OnInit {
 
     this._offersetupService.getPricing_SKU_Detail(this.offerId, this.selectedAto).subscribe(
       (response) => {
-        debugger;
         this.loading = false;
         this.Atosummary_af_sub.skuList=[];
         this.Atosummary_be_sub =[];
@@ -162,6 +161,7 @@ export class ATOSummaryComponent implements OnInit {
   }
 
   showSelectedAtoView(atoname: string) {
+
     // this.router.navigate(['../',appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.SERVICE_ANNUITY_PRICING, this.selectedAto]);
    // this.loading = true;
     this.selectedAto = atoname;
@@ -217,6 +217,9 @@ export class ATOSummaryComponent implements OnInit {
     };
     this.updatawithoutAPi();
    // this.updatedata();
+    if(atoname === 'Overall Offer') {
+      this.router.navigate(['../offerSetup',this.offerId,this.caseId]);
+    }
 
   }
 

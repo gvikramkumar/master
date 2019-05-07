@@ -15,47 +15,22 @@
 
         <div class="leftContent col-sm-12 col-md-9">
 
-          <div class="row flex-center-vertical" *ngIf="selectedAto === 'Overall Offer' else atosummary">
-
-            <div class="pull-right">
-              <app-view-offer [atoNames]="atoNames" [selectedAto]="selectedAto"
-                (atoSelection)="showSelectedAtoView($event)">
-              </app-view-offer>
-            </div>
-
-          </div>
-
           <ng-template #atosummary>
             <div class="row">
-             <app-atosummary [atoNames]="atoNames" [selectedAto]="selectedAto" [offerId]="offerId"  [caseId] = "caseId"></app-atosummary>
+              <app-atosummary [atoNames]="atoNames" [selectedAto]="selectedAto" [offerId]="offerId"  [caseId] = "caseId"></app-atosummary>
             </div>
           </ng-template>
 
-
-          <!-- <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer' else selectedAtoView">
+          <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer' else atosummary">
             <app-ato-list [atoList]="atoList"></app-ato-list>
           </div>
-
-          <ng-template #selectedAtoView>
-
-            <br>Status: {{atoTask['itemStatus']}}<br>
-
-            <br><br>
-            <h3>Modelling</h3><br><br>
-            <app-task-summary [tasks]="atoTask['modelTasks']">/</app-task-summary>
-
-            <br><br>
-            <h3>Provisioning & Mediation</h3><br><br>
-            <app-task-summary [tasks]="atoTask['provisionTasks']">/</app-task-summary>
-
-          </ng-template> -->
 
 
         </div>
 
         <div class="rightContent col-sm-12 col-md-3">
           <app-right-panel [stakeData]="stakeholders" [offerName]="offerName" [derivedMM]="derivedMM"
-            [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference">
+                           [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference">
           </app-right-panel>
         </div>
 

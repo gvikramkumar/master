@@ -5,9 +5,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LoaderService } from '@app/core/services/loader.service';
 import { RightPanelService } from '@app/services/right-panel.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
+import { ServiceAnnuityPricingService } from '@app/services/service_annuity_pricing.service';
 
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
+import { ServiceAnnuityDesign } from './model/service-annuity-design';
 
 @Component({
   selector: 'app-service-annuity-pricing',
@@ -36,6 +38,7 @@ export class ServiceAnnuityPricingComponent implements OnInit, OnDestroy {
 
   selectedAto: any;
   atoNames: string[] = [];
+  atoList: any;
 
   paramsSubscription: Subscription;
 
@@ -43,7 +46,8 @@ export class ServiceAnnuityPricingComponent implements OnInit, OnDestroy {
     private loaderService: LoaderService,
     private activatedRoute: ActivatedRoute,
     private rightPanelService: RightPanelService,
-    private stakeholderfullService: StakeholderfullService
+    private stakeholderfullService: StakeholderfullService,
+    private serviceAnnuityPricing : ServiceAnnuityPricingService,
   ) {
 
     this.paramsSubscription = this.activatedRoute.params.subscribe(params => {
@@ -79,6 +83,31 @@ export class ServiceAnnuityPricingComponent implements OnInit, OnDestroy {
 
     });
 
+    this.serviceAnnuityPricing.getOfferDropdownValues(this.offerId).subscribe(atoList => {
+      this.atoNames = atoList;
+    }, error => {
+      console.log('error', error);
+    });
+
+    this.serviceAnnuityPricing.getServiceAnnuityPricing(this.offerId).subscribe(atoList => {
+    }, error => {
+      console.log('error', error);
+    });
+    this.atoList = [
+      {
+          "itemName": "WS-C3850-48P-E",
+          "itemStatus": "Completed"
+      },
+      {
+          "itemName": "XaaS 1",
+          "itemStatus": "Completed"
+      },
+      {
+          "itemName": "Hardware 3",
+          "itemStatus": "Completed"
+      }
+  ];
+   
   }
 
   ngOnDestroy(): void {
