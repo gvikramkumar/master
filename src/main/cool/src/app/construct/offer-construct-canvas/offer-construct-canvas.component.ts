@@ -111,6 +111,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   public showLoader = false;
   private buttonId;
   private isMinorDragDrop: boolean = false;
+  private billing_soa = "Billing SOA SKU";
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -218,7 +219,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       this.offerConstructService.addDetails(groupsName).subscribe((data) => {
         this.listOfferQuestions = data.groups[0].listOfferQuestions;
 
-        if (obj.productName !== 'Billing SOA') {
+        if (obj.productName !== this.billing_soa) {
           if (obj.productName == 'License') {
             let listOfferQuestions = this.defaultValueServices.LicenseDefault(this.listOfferQuestions);
             obj['itemDetails'] = listOfferQuestions;
@@ -724,7 +725,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
                   obj1['itemDetails'] = element1.data['itemDetails'];
                   element.children.push(this.itemToTreeNode(obj1));
                   // Dragging Billing SOA from major to major
-                  if (element1.data.productName == 'Billing SOA') {
+                  if (element1.data.productName == this.billing_soa) {
                     this.setSameAsMajorLine(rowNode, element1.data['itemDetails']);
                   }
                   this.offerConstructItems = [...this.offerConstructItems];
@@ -763,7 +764,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
             obj['uniqueNodeId'] = this.draggedItem.uniqueNodeId;
             rowNode.node.children.push(this.itemToTreeNode(obj));
             // Dragging Billing SOA from major to major
-            if (this.draggedItem.data.productName == 'Billing SOA') {
+            if (this.draggedItem.data.productName == this.billing_soa) {
               this.setSameAsMajorLine(rowNode, this.draggedItem.data['itemDetails']);
             }
             this.delteFromParentObject();
@@ -802,7 +803,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           // obj['itemDetails'] = this.getQuestionOnDragDrop(groupsName);
           this.offerConstructService.addDetails(groupsName).subscribe((data) => {
             this.listOfferQuestions = data.groups[0].listOfferQuestions;
-            if (obj.productName !== 'Billing SOA') {
+            if (obj.productName !== this.billing_soa) {
               if (obj.productName == 'License') {
                 let listOfferQuestions = this.defaultValueServices.LicenseDefault(this.listOfferQuestions);
                 obj['itemDetails'] = listOfferQuestions;
@@ -1328,9 +1329,6 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       }
     });
     this.updateChildCount();
-
-    console.log('--------------------offerDetailRes.constructDetails', offerDetailRes.constructDetails);
-
   }
 
   dragStartRow(item) {
