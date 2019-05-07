@@ -93,7 +93,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
   strategyReviewList;
   currentFunctionalRole;
   loadExitCriteria = false;
-
+  strategyReviewComplete: Boolean = false;
   proceedToOfferSetup: Boolean = true;
 
   constructor(private router: Router,
@@ -140,6 +140,12 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
     forkJoin([this.exitCriteriaValidationService.getDesignReview(this.caseId),
     this.actionsService.getMilestones(this.caseId)]).subscribe(data => {
       const [designReviewData, milstones] = data;
+      //Enable offer setup only when Strategy Review is Complete
+      milstones['ideate'].forEach(element => {
+        if(element['subMilestone'] === 'Strategy Review' && element['status'] === 'Completed'){
+          this.strategyReviewComplete = true;
+        }
+      });
       this.getDesignReview(designReviewData);
       this.getMilestones(milstones);
       this.completeDesignReview();
