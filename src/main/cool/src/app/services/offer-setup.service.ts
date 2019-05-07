@@ -18,9 +18,5 @@ export class OfferSetupService {
     return this.http.get(url, { withCredentials: true });
   }
 
-  getModuleStatus(moduleName, offerLevel, offerId, functionalRole, derivedMM) {
 
-    const url = this.environmentService.REST_API_OFFER_MODULE_STATUS_GET_URL + encodeURIComponent(moduleName) + '&offerId=' + offerId + '&offerATOLevel=' + offerLevel + '&functionalRole=' + functionalRole + '&mmval=' + derivedMM;
-    return this.http.get(url, { withCredentials: true });
-  }
 }

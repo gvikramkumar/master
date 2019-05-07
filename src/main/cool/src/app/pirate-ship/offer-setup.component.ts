@@ -27,14 +27,16 @@ export class OfferSetupComponent implements OnInit {
   offerData;
 
   showMM: boolean = false;
+  readOnly: boolean = false;
   derivedMM;
   moduleStatus;
-  functionalRole: any = 'BUPM';
+  functionalRole;
 
-  stakeHolderData;
+  stakeHolderData = [];
   stakeholders: any;
 
   groupData = {};
+  showGroupData:boolean = false;
   primaryBE: string;
   stakeHolderInfo: any;
   offerBuilderdata = {};
@@ -67,6 +69,8 @@ export class OfferSetupComponent implements OnInit {
 
     //  =======================================================================================
     this.functionalRole = this.userService.getFunctionalRole();
+  
+
     // Check design review status for enabling Item Creation Module
     this.actionsService.getMilestones(this.caseId).subscribe(data => {
       data['plan'].forEach(element => {
@@ -78,8 +82,7 @@ export class OfferSetupComponent implements OnInit {
     // Get Offer Details
     this.getOfferDetails();
 
-    // Get Module Name and Status
-    this.getAllModuleData();
+   
 
     // for refresh
     interval(9000000).subscribe(x =>
@@ -113,6 +116,8 @@ export class OfferSetupComponent implements OnInit {
       this.derivedMM = offerDetails['derivedMM'];
       this.offerName = offerDetails['offerName'];
       this.stakeHolderData = offerDetails['stakeholders'];
+       // Get Module Name and Status
+      this.getAllModuleData();
 
       if (this.derivedMM !== 'Not Aligned') {
         this.showMM = true;
@@ -143,7 +148,7 @@ export class OfferSetupComponent implements OnInit {
   getAllModuleData() {
     this.offerSetupService.getModuleData(this.derivedMM, this.offerId, this.functionalRole, this.selectedAto).subscribe(data => {
       this.groupData = {};
-
+      this.showGroupData = false;
       this.Options = data['listATOs'];
       data['listSetupDetails'].forEach(group => {
 
@@ -159,6 +164,7 @@ export class OfferSetupComponent implements OnInit {
 
       });
       this.sortGroupData();
+      this.showGroupData = true;
     }
     );
   }
