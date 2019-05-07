@@ -1,6 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {OfferSetupService} from '@app/services/offer-setup.service';
+import {appRoutesNames} from '@app/app.routes.names';
+import {pirateShipRoutesNames} from '@pirateShip/pirate-ship.routes.names';
 
 @Component({
   selector: 'app-atosummary',
@@ -9,10 +11,12 @@ import {OfferSetupService} from '@app/services/offer-setup.service';
 })
 export class ATOSummaryComponent implements OnInit {
      @Input('offerId')offerId: string;
+     @Input('caseId')caseId: string;
      @Input('atoNames') atoNames: any = [];
      @Input('selectedAto')selectedAto: string;
 
      response: any;
+     loading: boolean = true;
      Atosummary_be_sub: any = {
        atoName: 'AtoName',
        clickable: true,
@@ -67,17 +71,17 @@ export class ATOSummaryComponent implements OnInit {
 
      this._offersetupService.getPricing_SKU_Detail(this.offerId, this.selectedAto).subscribe(
        (response) => {
-         debugger;
+
+         this.loading = false;
          this.Atosummary_be_sub = response;
-         for (let i =0; i < this.Atosummary_be_sub.skuList.length; i++) {
+         for (let i = 0; i < this.Atosummary_be_sub.skuList.length; i++) {
            this.Atosummary_af_sub.skuList.push({
              "sku":"",
              "basedSupportItem":false
-
            });
          }
-
        }
+
      );
 
     this.Atosummary_af_sub = {
@@ -89,7 +93,6 @@ export class ATOSummaryComponent implements OnInit {
     };
 
    this.middlenumber = Math.ceil(this.Atosummary_be_sub.skuList.length / 2) - 1;
-
 
   }
 
@@ -138,7 +141,28 @@ export class ATOSummaryComponent implements OnInit {
 
   }
 
-  showSelectedAtoView($event: string) {
+  showSelectedAtoView(atoname: string) {
+    // this.router.navigate(['../',appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.SERVICE_ANNUITY_PRICING, this.selectedAto]);
+  this.loading = true;
+    this._offersetupService.getPricing_SKU_Detail(this.offerId, this.selectedAto).subscribe(
+      (response) => {
+        this.loading = false;
+        this.Atosummary_af_sub.skuList=[];
+        this.Atosummary_be_sub =[];
+        this.Atosummary_be_sub = response;
+        this.selectedAto = atoname;
+        for (let i =0; i < this.Atosummary_be_sub.skuList.length; i++) {
+          this.Atosummary_af_sub.skuList.push({
+            "sku":"",
+            "basedSupportItem":false
+
+          });
+        }
+
+      }
+    );
+
 
   }
+
 }
