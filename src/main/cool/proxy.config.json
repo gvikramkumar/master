@@ -1,39 +1,39 @@
 {
-    "/api": {
-        
-       "target": "https://cool-srv-dev.cisco.com/coolsrv",
-        "secure": false,
-        "changeOrigin": true,
-        "logLevel": "debug",
-        "pathRewrite": {
-            "^/api": ""
-        }
-    },
-    "/pdafapp": {
-        "target": "https://api-supplychain-dev.cisco.com/pdafapp",
-        "secure": false,
-        "changeOrigin": true,
-        "logLevel": "debug",
-        "pathRewrite": {
-            "^/pdafapp": ""
-        }
-    },
-    "/sso": {
-        "target": "https://cloudsso-test.cisco.com",
-        "secure": false,
-        "changeOrigin": true,
-        "logLevel": "debug",
-        "pathRewrite": {
-            "^/sso": ""
-        }
-    },
-    "/idp": {
-        "target": "https://idp-stage-api.cisco.com",
-        "secure": false,
-        "changeOrigin": true,
-        "logLevel": "debug",
-        "pathRewrite": {
-            "^/idp": ""
-        }
+  "/api": {
+
+    "target": "https://cool-srv-dev.cisco.com/coolsrv",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api": ""
     }
+  },
+  "/pdafapp": {
+    "target": "https://api-supplychain-dev.cisco.com/pdafapp",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/pdafapp": ""
+    }
+  },
+  "/sso": {
+    "target": "https://cloudsso-test.cisco.com",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/sso": ""
+    }
+  },
+  "/idp": {
+    "target": "https://idp-stage-api.cisco.com",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/idp": ""
+    }
+  }
 }

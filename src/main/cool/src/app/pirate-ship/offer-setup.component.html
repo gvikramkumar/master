@@ -93,22 +93,22 @@
                         <!-- different status showing -->
                         <!-- Completed -->
                         <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success base-margin-bottom"
-                          placement="top" (click)="getElementDetails(element)">
+                          placement="top" (click)="designReviewComplete && getElementDetails(element)">
                           {{element["moduleName"]}}
                         </button>
                         <!-- In Progress-->
                         <button *ngIf="element['status']=='In Progress'" class="btn btn--small btn--warning base-margin-bottom"
-                          placement="top" (click)="getElementDetails(element)">
+                          placement="top" (click)="designReviewComplete && getElementDetails(element)">
                           {{element["moduleName"]}}
                         </button>
                         <!-- Available -->
                         <button *ngIf="element['status']=='Available'" class="btn btn--small btn--primary base-margin-bottom"
-                          placement="top" (click)="getElementDetails(element)">
+                          placement="top" (click)="designReviewComplete && getElementDetails(element)">
                           {{element["moduleName"]}}
                         </button>
                         <!-- Not Yet Available -->
                         <button *ngIf="element['status']=='Not Yet Available'" class="btn btn--small btn--gray-ghost base-margin-bottom"
-                          placement="top" >
+                          placement="top" (click)="designReviewComplete && getElementDetails(element)">
                           {{element["moduleName"]}}
                         </button>
                         <!-- Not Required -->

@@ -11,7 +11,7 @@ import { appRoutesNames } from '../app.routes.names';
 import { pirateShipRoutesNames } from './pirate-ship.routes.names';
 
 import { interval } from 'rxjs';
-
+import { ActionsService } from '@app/services/actions.service';
 
 @Component({
   selector: 'app-offer-setup',
@@ -48,7 +48,7 @@ export class OfferSetupComponent implements OnInit {
   Options: any[] = [];
   selectedOffer: any = 'Overall Offer';
   selectedAto: string = 'Overall Offer';
-
+  designReviewComplete: Boolean = false;
 
 
 
@@ -57,7 +57,8 @@ export class OfferSetupComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private offerSetupService: OfferSetupService,
     private rightPanelService: RightPanelService,
-    private stakeholderfullService: StakeholderfullService) {
+    private stakeholderfullService: StakeholderfullService,
+    private actionsService: ActionsService) {
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['offerId'];
       this.caseId = params['caseId'];
@@ -70,6 +71,14 @@ export class OfferSetupComponent implements OnInit {
     this.functionalRole = this.userService.getFunctionalRole();
   
 
+    // Check design review status for enabling Item Creation Module
+    this.actionsService.getMilestones(this.caseId).subscribe(data => {
+      data['plan'].forEach(element => {
+        if(element['subMilestone'] === 'Design Review' && element['status'] === 'Completed'){
+          this.designReviewComplete = true;
+        }
+      });
+    });
     // Get Offer Details
     this.getOfferDetails();
 
