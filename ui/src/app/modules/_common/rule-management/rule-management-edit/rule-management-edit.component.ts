@@ -358,7 +358,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
                 if (result) {
                   this.cleanUp();
                   const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
-                  this.ruleService.submitForApproval(this.rule, {saveMode})
+                  this.ruleService.submitForApproval(this.rule, {saveMode, type: 'rule-management'})
                     .subscribe(() => {
                       history.go(-1);
                     });

@@ -7,6 +7,11 @@ import {svrUtil} from '../common/svr-util';
 import {shUtil} from '../../../shared/misc/shared-util';
 import {sendHtmlMail} from '../common/mail';
 import AnyObj from '../../../shared/models/any-obj';
+import LookupRepo from '../../api/lookup/repo';
+import moment from 'moment';
+import UserListRepo from '../../api/user-list/repo';
+import {ModuleRepo} from '../../api/common/module/repo';
+import config from '../../config/get-config';
 
 export default class ApprovalController extends ControllerBase {
 
@@ -34,6 +39,7 @@ export default class ApprovalController extends ControllerBase {
     this.verifyProperties(req.query, ['saveMode']);
     const saveMode = req.query.saveMode;
     data.status = 'P';
+    data.approvalReminderTime = new Date();
     let promise;
     if (saveMode === 'add') {
       promise = this.addOnePromise(req, res, next);
@@ -43,9 +49,14 @@ export default class ApprovalController extends ControllerBase {
       promise = this.updatePromise(req, res, next);
     }
     promise
-      .then(item => {
-        return this.sendApprovalEmail(req, ApprovalMode.submit, item)
-          .then(() => res.json(item));
+      .then(savedItem => {
+        const newItem = _.clone(savedItem);
+        newItem.set('approvalUrl', `${req.headers.origin}/prof/${req.query.type}/edit/${savedItem.id};mode=view`);
+        this.repo.update(newItem, '', true, true, false)
+          .then(updatedItem => {
+            return this.sendApprovalEmail(req, ApprovalMode.submit, updatedItem)
+              .then(() => res.json(updatedItem));
+          });
       })
       .catch(next);
   }
@@ -166,20 +177,44 @@ export default class ApprovalController extends ControllerBase {
     throw new ApiError(`sendApprovalEmail not implemented`);
   }
 
-  sendApprovalEmailBase(req, mode: ApprovalMode, item: AnyObj, type: string, endpoint: string, omitProperties): Promise<any> {
-    const data = req.body;
-    const moduleId = req.dfa.moduleId;
-    const url = `${req.headers.origin}/prof/${endpoint}/edit/${item.id};mode=view`;
-    const link = `<a href="${url}">${url}</a>`;
-    let body;
-    const itadminEmail = svrUtil.getItadminEmail(req.dfa);
-    const dfaAdminEmail = svrUtil.getDfaAdminEmail(req.dfa);
-    const bizAdminEmail = svrUtil.getBizAdminEmail(req.dfa);
-    const ppmtEmail = svrUtil.getPpmtEmail(req.dfa);
+  approvalEmailReminder(type: string) {
+    const currentTime = new Date();
+    this.repo.getManyPending({moduleId : -1})
+      .then(docs => {
+        const pendingItems = docs.filter(doc => svrUtil.checkIfMoreThanADay(currentTime, doc.approvalReminderTime));
+        if (pendingItems.length) {
+          pendingItems.forEach(item => {
+            this.sendEmailBase({}, ApprovalMode.reminder, item, type)
+              .then(() => {
+                item.set('approvalReminderTime', currentTime);
+                this.repo.update(item, '', true, true, false);
+              });
+          });
+        }
+      });
+  }
+
+  sendEmailBase(req, mode: ApprovalMode, item: AnyObj, type: string, omitProperties?): Promise<any> {
     const promises = [];
+    let body, itadminEmail, dfaAdminEmail, bizAdminEmail, ppmtEmail, data, moduleId;
+    if (mode === ApprovalMode.reminder) {
+      const lookupRepo = new LookupRepo();
+      const moduleRepo = new ModuleRepo();
+      const userListRepo = new UserListRepo();
+      promises.push(lookupRepo.getValues(['itadmin-email', 'dfa-admin-email', 'dfa-biz-admin-email']), moduleRepo.getOneLatest({moduleId: item.moduleId}), userListRepo.getOneLatest({userId: item.updatedBy}));
+    } else {
+      itadminEmail = svrUtil.getItadminEmail(req.dfa);
+      dfaAdminEmail = svrUtil.getDfaAdminEmail(req.dfa);
+      bizAdminEmail = svrUtil.getBizAdminEmail(req.dfa);
+      ppmtEmail = svrUtil.getPpmtEmail(req.dfa);
+      data = req.body;
+      moduleId = req.dfa.moduleId;
+    }
+
     if (mode === ApprovalMode.submit && data.approvedOnce === 'Y') {
       promises.push(this.repo.getOneLatestActiveInactive({moduleId, name: data.name, approvedOnce: 'Y'}));
     }
+    const link = `<a href="${item.approvalUrl}">${item.approvalUrl}</a>`;
     return Promise.all(promises)
       .then(results => {
         switch (mode) {
@@ -213,13 +248,24 @@ export default class ApprovalController extends ControllerBase {
             }
             return sendHtmlMail(bizAdminEmail, `${item.updatedBy}@cisco.com`, `${itadminEmail},${ppmtEmail}`,
               `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Not Approved`, body);
+          case ApprovalMode.reminder:
+            itadminEmail = results[0][0];
+            dfaAdminEmail = results[0][1];
+            bizAdminEmail = results[0][2];
+            const module = results[1];
+            const user = results[2];
+            let timebasedMsg;
+            timebasedMsg = svrUtil.checkIfMoreThanDays(2, item.get('approvalReminderTime'), item.get('updatedDate')) ? `since ${shUtil.convertToPSTTime(item.get('updatedDate'))}` : 'for more than 24 hours';
+            body = `A new DFA - ${_.upperFirst(type)} submitted by ${user.get('fullname')} has been pending for approval ${timebasedMsg}, please approve or reject on priority:<br><br>${link}`;
+            return sendHtmlMail(dfaAdminEmail, bizAdminEmail, `${itadminEmail},${item.updatedBy}@cisco.com`,
+              `${this.getEnv()}DFA - ${module.name} - ${_.upperFirst(type)} Submitted for Approval`, body);
         }
       });
 
   }
 
   getEnv() {
-    switch (process.env.NODE_ENV) {
+    switch (config.env) {
       case 'dev':
         return 'LOCAL: ';
       case 'sdev':
