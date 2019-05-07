@@ -21,5 +21,10 @@ export const PIRATE_SHIP_ROUTES = [
         path: pirateShipRoutesNames.SERVICE_ANNUITY_PRICING + '/:selectedAto',
         loadChildren: './modules/service-annuity-pricing/service-annuity-pricing.module#ServiceAnnuityPricingModule',
         resolve: { offerData: OfferOverViewResolver }
+    },
+    {
+        path: pirateShipRoutesNames.SELF_SERVICE_ORDERABILITY + '/:selectedAto',
+        loadChildren: './modules/self-service-orderability/self-service-orderability.module#SelfServiceOrderabilityModule',
+        resolve: { offerData: OfferOverViewResolver }
     }
 ]

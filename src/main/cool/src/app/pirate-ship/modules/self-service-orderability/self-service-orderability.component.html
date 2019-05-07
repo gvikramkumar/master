@@ -6,7 +6,8 @@
 
     <div class="panel-wrapper mt-15">
 
-      <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName"></app-taskbar>
+      <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName">
+      </app-taskbar>
 
       <br><br>
 
@@ -17,12 +18,10 @@
           <div class="row flex-center-vertical">
             <div class="col-sm-12">
 
-              <div class="pull-left" *ngIf="showDesignCanvasButton">
-                <button class="btn btn--primary btn--cool btn--small tooltip" placement="top"
-                  (click)="goToDesignCanvas()" [disabled]="!disableDesignCanvasButton">
-                  Go To Design Canvas <i class="icon-popout"></i>
-                </button>
-              </div>
+              <button class="btn btn--primary btn--cool btn--small tooltip" placement="top"
+                (click)="goToOrderabilitySSO()">Update Orderability In SSO <i class="icon-popout"></i>
+              </button>
+
 
               <div class="pull-right">
                 <app-view-offer [atoNames]="atoNames" [selectedAto]="selectedAto"
@@ -33,23 +32,23 @@
             </div>
           </div>
 
-          <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer' else selectedAtoView">
+          <!-- <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer' else selectedAtoView">
             <app-ato-list [atoList]="atoList"></app-ato-list>
           </div>
 
           <ng-template #selectedAtoView>
 
-            <p>Status: {{atoTask['itemStatus']}}</p>
+            <br>Status: {{atoTask['itemStatus']}}<br>
 
-
-            <h3>Modeling</h3>
+            <br><br>
+            <h3>Modelling</h3><br><br>
             <app-task-summary [tasks]="atoTask['modelTasks']">/</app-task-summary>
 
-
-            <h3>Provisioning & Mediation</h3>
+            <br><br>
+            <h3>Provisioning & Mediation</h3><br><br>
             <app-task-summary [tasks]="atoTask['provisionTasks']">/</app-task-summary>
 
-          </ng-template>
+          </ng-template> -->
 
 
         </div>

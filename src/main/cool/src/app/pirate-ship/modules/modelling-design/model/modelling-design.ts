@@ -2,7 +2,6 @@ import { Ato } from './ato';
 
 export interface ModellingDesign {
 
-
     'action': string;
     'module': string;
 

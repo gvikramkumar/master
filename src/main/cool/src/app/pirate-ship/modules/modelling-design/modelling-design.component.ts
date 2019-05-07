@@ -54,7 +54,6 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
   disableDesignCanvasButton: boolean;
 
   constructor(
-    private router: Router,
     private loaderService: LoaderService,
     private activatedRoute: ActivatedRoute,
     private rightPanelService: RightPanelService,
@@ -130,7 +129,7 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
 
     const userId = this.configurationService.startupData.userId;
     let urlToOpen = this.environmentService.owbUrl + '/manage/offer/owbOfferDefinition?';
-    urlToOpen += 'selectedAto=' + this.selectedAto + '&planId=' + this.planId + '&userId=' + userId;
+    urlToOpen += 'selectedAto=' + this.selectedAto + '&planId=' + this.planId + '&userId=' + userId + '&coolOfferId=' + this.offerId;;
 
     window.open(urlToOpen, '_blank');
 
