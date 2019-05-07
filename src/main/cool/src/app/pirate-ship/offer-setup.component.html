@@ -61,7 +61,7 @@
                         <!-- different status showing -->
                         <!-- Completed -->
                         <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success base-margin-bottom"
-                          placement="top" (click)="getElementDetails(element)">
+                          placement="top" (click)="getElementDetails(element)" [disabled]="readOnly">
                           {{element["moduleName"]}}
                         </button>
                         <!-- In Progress-->
