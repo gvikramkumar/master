@@ -72,11 +72,11 @@ imports: ServiceTrainingUploadImport[];
     this.imports = this.rows1.map(row => new ServiceTrainingUploadImport(row, this.fiscalMonth));
     const obj = {};
     this.imports.forEach(val => {
-      const salesNodeLevel3Code = val.salesNodeLevel3Code.toUpperCase();
-      if (obj[salesNodeLevel3Code] !== undefined) {
-        obj[salesNodeLevel3Code] += val.splitPercentage;
+      const productFamily = val.productFamily.toUpperCase();
+      if (obj[productFamily] !== undefined) {
+        obj[productFamily] += val.splitPercentage;
       } else {
-        obj[salesNodeLevel3Code] = val.splitPercentage;
+        obj[productFamily] = val.splitPercentage;
       }
     });
     _.forEach(obj, (val, sl3) => {
@@ -86,7 +86,7 @@ imports: ServiceTrainingUploadImport[];
     });
 
     if (this.errors.length) {
-      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Sales Level 3 Code percentage values not 100%', this.errors));
+      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Product Family percentage values not 100%', this.errors));
     }
     return Promise.resolve();
   }
@@ -97,10 +97,9 @@ imports: ServiceTrainingUploadImport[];
 
   removeDuplicatesFromDatabase(imports: ServiceTrainingUploadImport[]) {
     const duplicates = _.uniqWith(imports, (a, b) => {
-      return a.salesTerritoryCode === b.salesTerritoryCode &&
-        a.salesNodeLevel3Code === b.salesNodeLevel3Code;
+      return a.productFamily === b.productFamily;
     })
-      .map(x => _.pick(x, ['salesTerritoryCode', 'salesNodeLevel3Code']))
+      .map(x => _.pick(x, ['productFamily']))
     return this.repo.bulkRemove(duplicates);
   }
 

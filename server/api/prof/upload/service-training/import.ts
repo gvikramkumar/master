@@ -16,7 +16,7 @@ export default class ServiceTrainingUploadImport {
     this.salesNodeLevel3Code = row[1] && String(row[1]);
     this.extTheaterName = row[2] && String(row[2]);
     this.salesCountryName = row[3] && String(row[3]);
-    this.productFamily = (row[4] && String(row[4]) || 'TRAINING');
+    this.productFamily = (row[4] && String(row[4])) || 'TRAINING';
     this.splitPercentage = row[5] && Number(row[5]);
 
     svrUtil.trimStringProperties(this);
