@@ -3,8 +3,6 @@ import { FormGroup } from '@angular/forms';
 import { OfferConstructService } from '@app/services/offer-construct.service';
 import { BsDatepickerConfig,BsDaterangepickerDirective } from 'ngx-bootstrap/datepicker';
 import * as moment from 'moment';
-
-
 @Component({
 selector: 'app-dynamic-form-question',
 templateUrl: './dynamic-form-question.component.html',
@@ -28,7 +26,7 @@ export class DynamicFormQuestionComponent implements OnInit {
       try{
         return moment(val).format('DD-MMM-YYYY');
       }catch(err){}
-    }
+   }
   }
   updateDate(e){
     if(e!==''){
@@ -37,5 +35,4 @@ export class DynamicFormQuestionComponent implements OnInit {
       }catch(err){}
     }
   }
-
 }
