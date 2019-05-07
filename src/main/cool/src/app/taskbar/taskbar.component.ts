@@ -18,7 +18,6 @@ export class TaskbarComponent implements OnInit {
   @Input() pirateShipModuleName: string;
   @Input() isPirateShipSubModule: boolean;
   @Input() actionCount: { pendingActionCount: number, needImmediateActionCount: number };
-  @Input() goToOfferSetup: boolean;
   @Output() newBtnClick = new EventEmitter();
   @Output() onProceedToNext = new EventEmitter();
 
