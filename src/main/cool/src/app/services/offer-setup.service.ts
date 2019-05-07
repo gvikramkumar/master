@@ -15,9 +15,9 @@ export class OfferSetupService {
   setAtolist( options) {
     this.listAtos = options;
   }
-    getAtolist() {
+  getAtolist() {
     return this.listAtos;
-    }
+  }
   getModuleData(derivedMM, offerId, functionalRole, offerLevel) {
     const url = this.environmentService.REST_API_OFFER_SETUP_MODULE_GET_URL + derivedMM + '&offerId=' + offerId + '&functionalRole=' + functionalRole + '&offerATOLevel=' + offerLevel;
     return this.http.get(url, { withCredentials: true });
@@ -35,5 +35,4 @@ export class OfferSetupService {
     return this.http.get(url);
   }
 }
-
 

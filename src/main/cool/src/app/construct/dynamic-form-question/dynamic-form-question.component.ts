@@ -1,8 +1,10 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { OfferConstructService } from '@app/services/offer-construct.service';
-import { BsDatepickerConfig,BsDaterangepickerDirective } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerConfig, BsDaterangepickerDirective } from 'ngx-bootstrap/datepicker';
 import * as moment from 'moment';
+
+
 @Component({
   selector: 'app-dynamic-form-question',
   templateUrl: './dynamic-form-question.component.html',
@@ -35,4 +37,5 @@ export class DynamicFormQuestionComponent implements OnInit {
       }catch(err){}
     }
   }
+
 }
