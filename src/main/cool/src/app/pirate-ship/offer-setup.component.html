@@ -56,7 +56,7 @@
                 <div class="row base-margin-bottom">
                   <div class="col-sm-3 half-margin-left">
                     <!-- Group 0 -->
-                    <div *ngIf="showGroupData">
+                    <div *ngIf="groupData !== null && groupData['Group0'] !== null">
                       <li *ngFor="let element of groupData['Group0']['left']">
                         <!-- different status showing -->
                         <!-- Completed -->
@@ -85,10 +85,11 @@
                           {{element["moduleName"]}}
                         </button>
 
+
                       </li>
                     </div>
                     <!-- Group 1 -->
-                    <div class="last" *ngIf="showGroupData">
+                    <div class="last" *ngIf="groupData !== null && groupData['Group1'] !== null">
                       <li *ngFor="let element of groupData['Group1']['left']">
                         <!-- different status showing -->
                         <!-- Completed -->
@@ -130,7 +131,7 @@
                       <div class="row">
                         <div class="col-sm-12 col-md-6">
                           <!-- Group 2 left-->
-                          <div *ngIf="showGroupData">
+                          <div *ngIf="groupData !== null && groupData['Group2'] !== null">
                             <li *ngFor="let element of groupData['Group2']['left']">
                               <!-- different status showing -->
                               <!-- Completed -->
@@ -166,7 +167,7 @@
                         </div>
                         <div class="col-sm-12 col-md-6">
                           <!-- Group 2 right -->
-                          <div *ngIf="showGroupData">
+                          <div *ngIf="groupData !== null && groupData['Group2'] !== null">
                             <li *ngFor="let element of groupData['Group2']['right']">
                               <!-- different status showing -->
                               <!-- Completed -->
@@ -208,7 +209,7 @@
                       <div class="row">
                         <div class="col-sm-12 col-md-6">
                           <!-- Group 3 left -->
-                          <div *ngIf="showGroupData">
+                          <div *ngIf="groupData !== null && groupData['Group3'] !== null">
                             <li *ngFor="let element of groupData['Group3']['left']">
                               <!-- different status showing -->
                               <!-- Completed -->
@@ -244,7 +245,7 @@
 
                         <div class="col-sm-12 col-md-6">
                           <!-- Group 3 right -->
-                          <div *ngIf="showGroupData">
+                          <div *ngIf="groupData !== null && groupData['Group3'] !== null">
                             <li *ngFor="let element of groupData['Group3']['right']">
                               <!-- different status showing -->
                               <!-- Completed -->
@@ -286,7 +287,7 @@
 
                   <div class="col-sm-3 half-margin-left">
                     <!-- Group 4 -->
-                    <div *ngIf="showGroupData">
+                    <div *ngIf="groupData !== null && groupData['Group4'] !== null">
                       <li class="base-padding-bottom" *ngFor="let element of groupData['Group4']['left']">
                         <!-- Completed -->
                         <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success half-margin-top"
@@ -320,7 +321,7 @@
 
                   <div class="col-sm-3">
                     <!-- Group 5 -->
-                    <div *ngIf="showGroupData">
+                    <div *ngIf="groupData !== null && groupData['Group5'] !== null">
                       <li class="base-padding-bottom" *ngFor="let element of groupData['Group5']['left']">
                         <!-- Completed -->
                         <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success half-margin-top"
@@ -350,7 +351,7 @@
                       </li>
                     </div>
                     <!-- Group 6 -->
-                    <div class="last" *ngIf="showGroupData">
+                    <div class="last" *ngIf="groupData !== null && groupData['Group6'] !== null">
                       <li *ngFor="let element of groupData['Group6']['left']">
                         <!-- Completed -->
                         <button *ngIf="element['status']=='Completed'" class="btn btn--small btn--success base-margin-bottom"

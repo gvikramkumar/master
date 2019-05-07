@@ -32,11 +32,10 @@ export class OfferSetupComponent implements OnInit {
   moduleStatus;
   functionalRole;
 
-  stakeHolderData = [];
+  stakeHolderData;
   stakeholders: any;
 
   groupData = {};
-  showGroupData:boolean = false;
   primaryBE: string;
   stakeHolderInfo: any;
   offerBuilderdata = {};
@@ -148,7 +147,7 @@ export class OfferSetupComponent implements OnInit {
   getAllModuleData() {
     this.offerSetupService.getModuleData(this.derivedMM, this.offerId, this.functionalRole, this.selectedAto).subscribe(data => {
       this.groupData = {};
-      this.showGroupData = false;
+
       this.Options = data['listATOs'];
       data['listSetupDetails'].forEach(group => {
 
@@ -164,7 +163,6 @@ export class OfferSetupComponent implements OnInit {
 
       });
       this.sortGroupData();
-      this.showGroupData = true;
     }
     );
   }
