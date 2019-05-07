@@ -30,11 +30,7 @@ export class OfferSetupComponent implements OnInit {
   readOnly: boolean = false;
   derivedMM;
   moduleStatus;
-<<<<<<< HEAD
   functionalRole;
-=======
-  functionalRole: any = 'BUPM';
->>>>>>> feature/release-2.0
 
   stakeHolderData;
   stakeholders: any;
