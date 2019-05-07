@@ -1,11 +1,7 @@
 
 import {
   Component,
-  OnInit,
-  ChangeDetectorRef,
-  ElementRef,
-  Input,
-  OnDestroy
+  OnInit
 } from '@angular/core';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 import { RightPanelService } from '@app/services/right-panel.service';
@@ -558,7 +554,7 @@ export class ItemCreationComponent implements OnInit {
     });
 
     this.offerConstructCanvasService.saveOfferConstructChanges(cds).subscribe(() => {
-      this.loaderService.stopLoading();
+      this.displaySelectedOffer(this.selectedOffer);
     },
       () => {
         this.loaderService.stopLoading();
@@ -593,6 +589,7 @@ export class ItemCreationComponent implements OnInit {
     }
     this.itemCreationService.getItemDetails(this.offerId, dropdownValue).subscribe(response => {
       this.productDetails = response.data;
+      this.loaderService.stopLoading();
     })
   }
 

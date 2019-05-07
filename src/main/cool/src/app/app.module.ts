@@ -42,6 +42,8 @@ import { MenuBarModule } from './menu/menu-bar.module';
 import { TaskBarModule } from './taskbar/task-bar.module';
 import { RightPanelModule } from './right-panel/right-panel.module';
 import { OfferDetailModule } from './offer-detail/offer-detail.module';
+import { StoreModule } from '@ngrx/store';
+import { reducers, metaReducers } from './reducers';
 
 export function app_init(configService: ConfigurationService) {
   return () => configService.init();
@@ -66,7 +68,8 @@ export function app_init(configService: ConfigurationService) {
     TaskBarModule,
     RightPanelModule,
     OfferDetailModule,
-    AppRoutingModule
+    AppRoutingModule,
+    StoreModule.forRoot(reducers, { metaReducers })
   ],
   providers:
     [

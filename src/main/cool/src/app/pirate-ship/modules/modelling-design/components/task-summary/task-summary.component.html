@@ -3,7 +3,7 @@
   <p-dataTable [value]="tasks" scrollable="true" [rows]="10" [paginator]="true" scrollHeight="350px"
     [resizableColumns]="true">
 
-    <p-column field="ato" sortable="true" header="ATO/PID">
+    <p-column field="ato" sortable="true" header="TASKS">
       <ng-template let-col let-task="rowData" pTemplate="body">
         <span>{{task['taskName']}}<br /></span>
       </ng-template>
