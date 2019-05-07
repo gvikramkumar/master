@@ -80,9 +80,12 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
 
 
     this.atoTask = {} as Ato;
-    this.atoNames.push(this.selectedAto);
+    this.atoNames.push('Overall Offer');
+
     this.functionalRole = this.configurationService.startupData.functionalRole;
     this.showDesignCanvasButton = this.selectedAto === 'Overall Offer' ? false : true;
+    this.disableDesignCanvasButton = (this.functionalRole.includes('BUPM') || this.functionalRole.includes('PDT'))
+      ? false : true;
 
     this.modellingDesignSubscription = this.modellingDesignService.retrieveAtoList(this.offerId)
       .subscribe((modellingDesignResponse: ModellingDesign) => {
@@ -90,15 +93,11 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
         this.modellingDesign = modellingDesignResponse;
         this.atoList = this.modellingDesign['data'] ? this.modellingDesign['data'] : [];
 
-        this.atoList.map(dropDownValue => {
-          this.atoNames.push(dropDownValue.itemName);
-        });
+        this.atoList.
+          map(dropDownValue => {
+            this.atoNames.push(dropDownValue.itemName);
+          });
 
-        this.disableDesignCanvasButton = ((this.functionalRole.includes('BUPM') || this.functionalRole.includes('PDT'))
-          && (this.atoTask['itemStatus'] === 'Completed')) ? false : true;
-
-      }, () => {
-        this.disableDesignCanvasButton = false;
       });
 
     // Retrieve Offer Details
@@ -128,7 +127,7 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
   goToDesignCanvas() {
 
     const userId = this.configurationService.startupData.userId;
-    let urlToOpen = this.environmentService.owbUrl + '/manage/offer/owbOfferDefinition?';
+    let urlToOpen = this.environmentService.owbUrl + '/owb/manage/offer/owbOfferDefinition?';
     urlToOpen += 'selectedAto=' + this.selectedAto + '&planId=' + this.planId + '&userId=' + userId + '&coolOfferId=' + this.offerId;;
 
     window.open(urlToOpen, '_blank');
@@ -150,8 +149,6 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
       this.selectedAto = dropDownValue;
       this.showDesignCanvasButton = true;
       this.atoTask = this.atoList.find(ato => ato.itemName === dropDownValue);
-      this.disableDesignCanvasButton = ((this.functionalRole.includes('BUPM') || this.functionalRole.includes('PDT'))
-        && (this.atoTask['itemStatus'] === 'Completed')) ? false : true;
 
     }
   }

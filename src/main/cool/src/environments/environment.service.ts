@@ -68,7 +68,6 @@ export class EnvironmentService {
 
 
     // OFFER DIMENSIONS URLs
-
     REST_API_RETRIEVE_OFFER_DIMENSIONS_INFO_URL: string;
     REST_API_VALIDATE_OFFER_DIMENSIONS_INFO_URL: string;
     REST_API_RETRIEVE_MM_OFFER_DIMENSIONS_ATTRIBUTES_URL: string;
@@ -180,7 +179,7 @@ export class EnvironmentService {
                 this.baseIdpUrl = 'https://idp-stage-api.cisco.com';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
-                this.owbUrl = 'https://owb-stage.cloudapps.cisco.com/owb';
+                this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
                 break;
             case 'qualityassurance':
                 this.baseApiUrl = 'https://cool-srv-qa.cisco.com/coolsrv';
@@ -191,7 +190,7 @@ export class EnvironmentService {
                 this.baseIdpUrl = 'https://idp-stage-api.cisco.com';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
-                this.owbUrl = 'https://owb-stage.cloudapps.cisco.com/owb';
+                this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
                 break;
             case 'development':
                 this.baseApiUrl = 'https://cool-srv-dev.cisco.com/coolsrv';
@@ -202,7 +201,7 @@ export class EnvironmentService {
                 this.baseIdpUrl = 'https://idp-stage-api.cisco.com';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
-                this.owbUrl = 'https://owb-stage.cloudapps.cisco.com/owb';
+                this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
                 break;
             default:
                 this.baseApiUrl = '/api';
@@ -213,7 +212,7 @@ export class EnvironmentService {
                 this.baseIdpUrl = '/idp';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
-                this.owbUrl = 'https://owb-stage.cloudapps.cisco.com/owb';
+                this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
         }
 
         // ----------------------- AUTHENTICATION URLs -----------------------------------------------
