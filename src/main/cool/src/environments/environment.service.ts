@@ -111,7 +111,7 @@ export class EnvironmentService {
     REST_API_NOTIFICATION_PRIMARY_POC_POST_URL: string;
     REST_API_CREATE_STRATEGY_REVIEW_TASKS: string;
     REST_API_CREATE_DESIGN_REVIEW_TASKS: string;
-
+    REST_API_UPDATE_ESCALATION_DETAILS: string;
     // DOWNLOAD N UPLOAD URLs
     REST_API_DOWNLOAD_OFFER_DETAILS_PDF_URL: string;
     REST_API_FILE_UPLOAD_FOR_ACTION: string;
@@ -326,7 +326,7 @@ export class EnvironmentService {
         this.REST_API_CREATE_DESIGN_REVIEW_TASKS = this.baseApiUrl + '/action/create/tasks/designReviewTasks/'
         this.REST_API_ACTION_PRIMARY_POC_POST_URL = this.baseApiUrl + '/action/create/task/solutioningTask/action';
         this.REST_API_NOTIFICATION_PRIMARY_POC_POST_URL = this.baseApiUrl + '/action/create/task/solutioningTask/notification';
-
+        this.REST_API_UPDATE_ESCALATION_DETAILS = this.baseApiUrl + '/action/task/escalate';
         // ------------------------- DOWNLOAD N UPLOAD URLs ----------------------------------------------
 
         this.REST_API_FILE_UPLOAD_FOR_ACTION = this.baseApiUrl + '/upload/file';

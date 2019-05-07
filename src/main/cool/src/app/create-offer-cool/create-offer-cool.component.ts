@@ -121,6 +121,9 @@ export class CreateOfferCoolComponent implements OnInit {
           this.expectedLaunchDateValue = moment(offerDetailRes.expectedLaunchDate).format('MM/DD/YYYY');
           this.idpvalue = offerDetailRes.iDPId;
           this.loadPrimaryBe();
+          /* Enable 'Proceed to Offer Builder' button */
+          this.enableOfferbuild = false;
+          this.validFlag = false;
           this.disablePrimaryBEList = true;
         });
 
@@ -488,7 +491,6 @@ export class CreateOfferCoolComponent implements OnInit {
 
     const offerCreationDate = moment(new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })).format();
     const selectedPrimaryBe = [];
-    const constructDetails = [];
     selectedPrimaryBe.push(this.primaryBusinessEntitiesValue);
     const createoffer: CreateOffer = new CreateOffer(
       loggedInUserId,
@@ -506,8 +508,7 @@ export class CreateOfferCoolComponent implements OnInit {
       this.iDPId,
       offerCreatedBy,
       offerCreationDate,
-      status,
-      constructDetails);
+      status);
     this.disablePrimaryBEList = true;
     this.createOfferService.disablePrBEList = true;
     this.strategyReviewDateValue = moment(this.strategyReviewDateValue).toISOString();
@@ -530,8 +531,7 @@ export class CreateOfferCoolComponent implements OnInit {
       this.iDPId,
       offerCreatedBy,
       offerCreationDate,
-      status,
-      constructDetails
+      status
     );
     if (!this.offerId) {
       this.createOffer(createoffer);
