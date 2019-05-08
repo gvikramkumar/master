@@ -18,7 +18,6 @@ export class TaskbarComponent implements OnInit {
   @Input() pirateShipModuleName: string;
   @Input() isPirateShipSubModule: boolean;
   @Input() actionCount: { pendingActionCount: number, needImmediateActionCount: number };
-
   @Output() newBtnClick = new EventEmitter();
   @Output() onProceedToNext = new EventEmitter();
 
@@ -68,12 +67,11 @@ export class TaskbarComponent implements OnInit {
       this.currentStepIndex = offerBuilderStepsEnum[this.currentPage];
       this.disableBackBtn = this.currentStepIndex > 0 ? false : this.offerId ? true : false;
       this.isLastStep = this.currentStepIndex < Object.keys(offerBuilderStepsEnum).length - 1 ? false : true;
-      this.proceedToOfferSetup = this.isValidToProceed;
     }
 
-    if (this.taskBarNavSteps[this.currentStepIndex].nxtBtnTitle === 'Readiness Review') {
-      this.proceedToOfferSetup = true;
-    }
+    // if (this.taskBarNavSteps[this.currentStepIndex].nxtBtnTitle === 'Readiness Review') {
+    //   this.proceedToOfferSetup = true;
+    // }
   }
 
   saveCurrentState() {

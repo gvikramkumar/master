@@ -68,7 +68,6 @@ export class EnvironmentService {
 
 
     // OFFER DIMENSIONS URLs
-
     REST_API_RETRIEVE_OFFER_DIMENSIONS_INFO_URL: string;
     REST_API_VALIDATE_OFFER_DIMENSIONS_INFO_URL: string;
     REST_API_RETRIEVE_MM_OFFER_DIMENSIONS_ATTRIBUTES_URL: string;
@@ -111,7 +110,7 @@ export class EnvironmentService {
     REST_API_NOTIFICATION_PRIMARY_POC_POST_URL: string;
     REST_API_CREATE_STRATEGY_REVIEW_TASKS: string;
     REST_API_CREATE_DESIGN_REVIEW_TASKS: string;
-
+    REST_API_UPDATE_ESCALATION_DETAILS: string;
     // DOWNLOAD N UPLOAD URLs
     REST_API_DOWNLOAD_OFFER_DETAILS_PDF_URL: string;
     REST_API_FILE_UPLOAD_FOR_ACTION: string;
@@ -134,6 +133,10 @@ export class EnvironmentService {
     REST_API_GET_ITEM_DETAILS: string;
     REST_API_GET_OFFER_DROPDOWN: string;
     REST_API_REMOVE_ITEM_DETAILS: string;
+
+    //SERVICE ANNUITY URLs
+    REST_API_RETRIEVE_SERVICE_ATO_LIST_URL: string;
+    REST_API_RETRIEVE_SERVICE_ANNUITY_PRICING_URL: string;
     // -------------------------------------------------------------------------------------------------
 
 
@@ -176,7 +179,7 @@ export class EnvironmentService {
                 this.baseIdpUrl = 'https://idp-stage-api.cisco.com';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
-                this.owbUrl = 'https://owb-stage.cloudapps.cisco.com/owb';
+                this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
                 break;
             case 'qualityassurance':
                 this.baseApiUrl = 'https://cool-srv-qa.cisco.com/coolsrv';
@@ -187,7 +190,7 @@ export class EnvironmentService {
                 this.baseIdpUrl = 'https://idp-stage-api.cisco.com';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
-                this.owbUrl = 'https://owb-stage.cloudapps.cisco.com/owb';
+                this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
                 break;
             case 'development':
                 this.baseApiUrl = 'https://cool-srv-dev.cisco.com/coolsrv';
@@ -198,7 +201,7 @@ export class EnvironmentService {
                 this.baseIdpUrl = 'https://idp-stage-api.cisco.com';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
-                this.owbUrl = 'https://owb-stage.cloudapps.cisco.com/owb';
+                this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
                 break;
             default:
                 this.baseApiUrl = '/api';
@@ -209,7 +212,7 @@ export class EnvironmentService {
                 this.baseIdpUrl = '/idp';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
-                this.owbUrl = 'https://owb-stage.cloudapps.cisco.com/owb';
+                this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
         }
 
         // ----------------------- AUTHENTICATION URLs -----------------------------------------------
@@ -326,7 +329,7 @@ export class EnvironmentService {
         this.REST_API_CREATE_DESIGN_REVIEW_TASKS = this.baseApiUrl + '/action/create/tasks/designReviewTasks/'
         this.REST_API_ACTION_PRIMARY_POC_POST_URL = this.baseApiUrl + '/action/create/task/solutioningTask/action';
         this.REST_API_NOTIFICATION_PRIMARY_POC_POST_URL = this.baseApiUrl + '/action/create/task/solutioningTask/notification';
-
+        this.REST_API_UPDATE_ESCALATION_DETAILS = this.baseApiUrl + '/action/task/escalate';
         // ------------------------- DOWNLOAD N UPLOAD URLs ----------------------------------------------
 
         this.REST_API_FILE_UPLOAD_FOR_ACTION = this.baseApiUrl + '/upload/file';
@@ -355,6 +358,12 @@ export class EnvironmentService {
         this.REST_API_GET_ITEM_DETAILS = this.baseApiUrl + '/itemcreation/getDetails';
         this.REST_API_REMOVE_ITEM_DETAILS = this.baseApiUrl + '/itemcreation/removeATOs';  
         
+        // -------------------------------------------------------------------------------------------------
+
+        // --------------------------------------- SERVICE ANNUITY  CREATION --------------------------------------------
+
+        this.REST_API_RETRIEVE_SERVICE_ATO_LIST_URL = this.baseApiUrl + '/itemcreation/getATOs';
+        this.REST_API_RETRIEVE_SERVICE_ANNUITY_PRICING_URL = this.baseApiUrl + '/serviceAnnuityPricing/getPricingOfferLevel';        
         // -------------------------------------------------------------------------------------------------
 
     }

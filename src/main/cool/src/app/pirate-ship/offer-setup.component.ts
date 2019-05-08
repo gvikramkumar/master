@@ -11,7 +11,7 @@ import { appRoutesNames } from '../app.routes.names';
 import { pirateShipRoutesNames } from './pirate-ship.routes.names';
 
 import { interval } from 'rxjs';
-
+import { ActionsService } from '@app/services/actions.service';
 
 @Component({
   selector: 'app-offer-setup',
@@ -27,9 +27,10 @@ export class OfferSetupComponent implements OnInit {
   offerData;
 
   showMM: boolean = false;
+  readOnly: boolean = false;
   derivedMM;
   moduleStatus;
-  functionalRole: any = 'BUPM';
+  functionalRole;
 
   stakeHolderData;
   stakeholders: any;
@@ -46,7 +47,7 @@ export class OfferSetupComponent implements OnInit {
   Options: any[] = [];
   selectedOffer: any = 'Overall Offer';
   selectedAto: string = 'Overall Offer';
-
+  designReviewComplete: Boolean = false;
 
 
 
@@ -55,10 +56,14 @@ export class OfferSetupComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private offerSetupService: OfferSetupService,
     private rightPanelService: RightPanelService,
-    private stakeholderfullService: StakeholderfullService) {
+    private stakeholderfullService: StakeholderfullService,
+    private actionsService: ActionsService) {
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['offerId'];
       this.caseId = params['caseId'];
+      if (params['selectedAto']) {
+        this.selectedAto = params['selectedAto'];
+      }
     });
   }
 
@@ -66,11 +71,20 @@ export class OfferSetupComponent implements OnInit {
 
     //  =======================================================================================
     this.functionalRole = this.userService.getFunctionalRole();
+  
+
+    // Check design review status for enabling Item Creation Module
+    this.actionsService.getMilestones(this.caseId).subscribe(data => {
+      data['plan'].forEach(element => {
+        if(element['subMilestone'] === 'Design Review' && element['status'] === 'Completed'){
+          this.designReviewComplete = true;
+        }
+      });
+    });
     // Get Offer Details
     this.getOfferDetails();
 
-    // Get Module Name and Status
-    this.getAllModuleData();
+   
 
     // for refresh
     interval(9000000).subscribe(x =>
@@ -104,6 +118,8 @@ export class OfferSetupComponent implements OnInit {
       this.derivedMM = offerDetails['derivedMM'];
       this.offerName = offerDetails['offerName'];
       this.stakeHolderData = offerDetails['stakeholders'];
+       // Get Module Name and Status
+      this.getAllModuleData();
 
       if (this.derivedMM !== 'Not Aligned') {
         this.showMM = true;
@@ -134,7 +150,7 @@ export class OfferSetupComponent implements OnInit {
   getAllModuleData() {
     this.offerSetupService.getModuleData(this.derivedMM, this.offerId, this.functionalRole, this.selectedAto).subscribe(data => {
       this.groupData = {};
-
+      console.log('group data', this.groupData);
       this.Options = data['listATOs'];
       data['listSetupDetails'].forEach(group => {
 
@@ -204,12 +220,25 @@ export class OfferSetupComponent implements OnInit {
 
 
   getElementDetails(element) {
-    if (element.moduleName === 'Item Creation') {
+    /* if (element.moduleName === 'Item Creation') {
       this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.ITEM_CREATION, this.selectedAto]);
     } else if (element.moduleName === 'Modeling & Design') {
       this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.MODELLING_DESIGN, this.selectedAto]);
-    } else if (element.moduleName === 'CSDL') {
-      this.router.navigate([appRoutesNames.CSDL, this.offerId, this.caseId]);
+    } */
+
+    switch(element.moduleName) {
+      case 'Item Creation': {
+        this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.ITEM_CREATION, this.selectedAto]);
+        break;
+      }
+      case 'Modeling & Design': {
+        this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.MODELLING_DESIGN, this.selectedAto]);
+        break;
+      }
+      case 'Service Annuity  % Pricing': {
+        this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.SERVICE_ANNUITY_PRICING, this.selectedAto]);
+        break;
+      }
     }
   }
 

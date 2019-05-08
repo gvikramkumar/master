@@ -93,7 +93,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
   strategyReviewList;
   currentFunctionalRole;
   loadExitCriteria = false;
-
+  strategyReviewComplete: Boolean = false;
   proceedToOfferSetup: Boolean = true;
 
   constructor(private router: Router,
@@ -140,6 +140,12 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
     forkJoin([this.exitCriteriaValidationService.getDesignReview(this.caseId),
     this.actionsService.getMilestones(this.caseId)]).subscribe(data => {
       const [designReviewData, milstones] = data;
+      //Enable offer setup only when Strategy Review is Complete
+      milstones['ideate'].forEach(element => {
+        if(element['subMilestone'] === 'Strategy Review' && element['status'] === 'Completed'){
+          this.strategyReviewComplete = true;
+        }
+      });
       this.getDesignReview(designReviewData);
       this.getMilestones(milstones);
       this.completeDesignReview();
@@ -471,11 +477,12 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
 
   // --------------------------------------------------------------------------------------------------------------------------------
 
-  async onEscalate(functionName: string, element) {
-    element.disabled = true; //Immediately disable the button on click
+  async onEscalate(element, designReviewData) {
+    element.disabled = true;
     // Initialize Variables
     const mailList = [];
-    const functionNameMap = this.stakeData[functionName];
+    const functionNameMap = this.stakeData[designReviewData["function"]];
+    const payload = {};
     // Iterate - Function Names
     for (const employee of Array.from(functionNameMap.values())) {
       // Compute Manager List
@@ -486,18 +493,25 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
         mailList.push(manager['manager']);
       }
     }
-
+    // Payload for updating Escalation Details
+    payload['escalatedBy'] = this.stakeData['Owner'][0]._id;
+    payload['escalatedOn'] = designReviewData.assignees;
+    payload['escalatedTo'] = mailList;
+    payload['taskId'] = designReviewData.taskId;
+    payload['caseId'] = this.caseId;
+    payload['offerId'] = this.currentOfferId;
     // Initialize Email Variables
     const emailPayload = {};
     emailPayload['toMailLists'] = mailList;
     emailPayload['subject'] = 'Immediate Attention needed! ' + this.currentOfferId + ' + ' + this.offerName + ' Approval pending';
     emailPayload['emailBody'] = 'Hello You are receiving this message because the below offer has a pending approval that requires review from a member of your team. Offer ID: ' + this.currentOfferId + ' Offer Name: ' + this.offerName + ' Your immediate attention is highly appreciated. Thanks';
-
+    //Update Escalation Details
+    this.actionsService.updateEscalationDetails(payload).subscribe(data =>{
+    });
     // Send EMail
     this.actionsService.escalateNotification(emailPayload).subscribe(data => {
       this.getDesignReviewInfo();
     });
-
   }
 
   // --------------------------------------------------------------------------------------------------------------------------------

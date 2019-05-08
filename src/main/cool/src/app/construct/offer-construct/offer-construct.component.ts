@@ -60,8 +60,7 @@ export class OfferConstructComponent implements OnInit, OnDestroy {
     });
 
     this.subscription = this.offerConstructCanvasService.getMessage().subscribe(constructMessage => {
-       this.constructDetails = constructMessage;
-        console.log(this.constructDetails);
+      this.constructDetails = constructMessage;
     });
   }
 
@@ -80,8 +79,8 @@ export class OfferConstructComponent implements OnInit, OnDestroy {
       this.data = this.firstData['stakeholders'];
       this.offerName = this.firstData['offerName'];
       this.offerOwner = data['offerOwner'];
-      if(Array.isArray(this.firstData['primaryBEList']) && this.firstData['primaryBEList'].length){
-       this.primaryBE = this.firstData['primaryBEList'][0];
+      if (Array.isArray(this.firstData['primaryBEList']) && this.firstData['primaryBEList'].length) {
+        this.primaryBE = this.firstData['primaryBEList'][0];
       }
       this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe(
         (leadTime) => {
@@ -185,7 +184,7 @@ export class OfferConstructComponent implements OnInit, OnDestroy {
       'userId': this.offerOwner,
       'caseId': this.caseId,
       'offerId': this.currentOfferId,
-      'taskName': 'Operational Assessment',
+      'taskName': 'Design Review',
       'action': '',
       'comment': ''
     };
@@ -208,48 +207,48 @@ export class OfferConstructComponent implements OnInit, OnDestroy {
         this.router.navigate(['/designReview', this.currentOfferId, this.caseId]);
       }
     } else {
-    this.constructDetails['message'].forEach(item => {
-      if (item.data.isMajorLineItem === true) {
-        majorItemData.push(item);
-      }
-    });
-
-    this.constructDetails['message'].forEach(minorItem => {
-      minorItem['children'].forEach(element => {
-        if (element.data.isMajorLineItem === false) {
-          minorItemData.push(element);
+      this.constructDetails['message'].forEach(item => {
+        if (item.data.isMajorLineItem === true) {
+          majorItemData.push(item);
         }
       });
-    });
 
-    this.constructDetails['message'].forEach(majorItem => {
-      majorItem['children'].forEach(ele => {
-        if (ele.data.isGroupNode) {
-          if (ele.children.length > 0) {
-            ele.children.forEach(element => {
-              minorItemData.push(element);
-            });
+      this.constructDetails['message'].forEach(minorItem => {
+        minorItem['children'].forEach(element => {
+          if (element.data.isMajorLineItem === false) {
+            minorItemData.push(element);
           }
-        }
+        });
       });
-    });
 
-    if (majorItemData.length > 0 && minorItemData.length > 0) {
-      forkJoin([this.offerPhaseService.createSolutioningActions(operationalAssesmentProceedPayload),
+      this.constructDetails['message'].forEach(majorItem => {
+        majorItem['children'].forEach(ele => {
+          if (ele.data.isGroupNode) {
+            if (ele.children.length > 0) {
+              ele.children.forEach(element => {
+                minorItemData.push(element);
+              });
+            }
+          }
+        });
+      });
+
+      if (majorItemData.length > 0 && minorItemData.length > 0) {
+        forkJoin([this.offerPhaseService.createSolutioningActions(operationalAssesmentProceedPayload),
         this.offerPhaseService.createSolutioningActions(designReviewProceedPayload)]).subscribe(result => {
+          this.messageService.sendMessage('Save Offer Construct Details');
+          if (msg !== 'stay_on_this_page') {
+            this.router.navigate(['/designReview', this.currentOfferId, this.caseId]);
+          }
+        });
+      } else {
         this.messageService.sendMessage('Save Offer Construct Details');
         if (msg !== 'stay_on_this_page') {
           this.router.navigate(['/designReview', this.currentOfferId, this.caseId]);
         }
-      });
-    } else {
-      this.messageService.sendMessage('Save Offer Construct Details');
-      if (msg !== 'stay_on_this_page') {
-        this.router.navigate(['/designReview', this.currentOfferId, this.caseId]);
       }
     }
   }
-}
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
