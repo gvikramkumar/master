@@ -89,6 +89,11 @@ export class ActionsService {
     return this._http.post(url, emailPayload);
   }
 
+  updateEscalationDetails(payload){
+    const url = this.environmentService.REST_API_UPDATE_ESCALATION_DETAILS;
+    return this._http.post(url, payload);
+  }
+  
   downloadActionDetailsFile(caseid) {
     const url = `${this.environmentService.REST_API_DOWNLOAD_FILE_FOR_ACTION}/${caseid}`;
     let headers = new HttpHeaders();

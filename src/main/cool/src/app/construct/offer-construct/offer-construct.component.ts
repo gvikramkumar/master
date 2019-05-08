@@ -184,7 +184,7 @@ export class OfferConstructComponent implements OnInit, OnDestroy {
       'userId': this.offerOwner,
       'caseId': this.caseId,
       'offerId': this.currentOfferId,
-      'taskName': 'Operational Assessment',
+      'taskName': 'Design Review',
       'action': '',
       'comment': ''
     };

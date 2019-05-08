@@ -6,7 +6,8 @@
 
     <div class="panel-wrapper mt-15">
 
-      <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName"></app-taskbar>
+      <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName">
+      </app-taskbar>
 
       <br><br>
 
@@ -19,7 +20,7 @@
 
               <div class="pull-left" *ngIf="showDesignCanvasButton">
                 <button class="btn btn--primary btn--cool btn--small tooltip" placement="top"
-                  (click)="goToDesignCanvas()" [disabled]="!disableDesignCanvasButton">
+                  (click)="goToDesignCanvas()" [disabled]="disableDesignCanvasButton">
                   Go To Design Canvas <i class="icon-popout"></i>
                 </button>
               </div>
@@ -34,6 +35,7 @@
           </div>
 
           <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer' else selectedAtoView">
+            <br><br>
             <app-ato-list [atoList]="atoList"></app-ato-list>
           </div>
 
@@ -41,11 +43,11 @@
 
             <p>Status: {{atoTask['itemStatus']}}</p>
 
-
+            <br><br>
             <h3>Modeling</h3>
             <app-task-summary [tasks]="atoTask['modelTasks']">/</app-task-summary>
 
-
+            <br><br>
             <h3>Provisioning & Mediation</h3>
             <app-task-summary [tasks]="atoTask['provisionTasks']">/</app-task-summary>
 

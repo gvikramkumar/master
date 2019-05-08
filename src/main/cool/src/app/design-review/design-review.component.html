@@ -7,7 +7,7 @@
 
     <div class="panel-wrapper mt-15">
 
-      <app-taskbar [goToOfferSetup]="strategyReviewComplete" (onProceedToNext)="offerSetupView()">
+      <app-taskbar (onProceedToNext)="offerSetupView()">
       </app-taskbar>
 
       <div class="contentBox mt-10">
@@ -136,7 +136,7 @@
                             milestone summary.
                             This is the design review milestone and the content is ... </p>
                           <button class="btn btn--secondary" [disabled]="strategyReviewData.flag=='Not Escalate'"
-                            (click)="onEscalate(strategyReviewData.function, $event.target)">Escalate</button>
+                            (click)="onEscalate($event.target, strategyReviewData)">Escalate</button>
                         </div>
                       </ng-template>
 
