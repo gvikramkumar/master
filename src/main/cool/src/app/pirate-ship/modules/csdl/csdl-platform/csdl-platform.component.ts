@@ -12,6 +12,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 })
 export class CsdlPlatformComponent implements OnInit {
   csdlForm: FormGroup;
+  notRequiredCsdlForm: FormGroup;
   public currentOfferId: any;
   caseId: string;
   selectedOffer: string;
@@ -33,6 +34,7 @@ export class CsdlPlatformComponent implements OnInit {
   stakeHolders = {};
   csdlRequired: Boolean = false;
   csdlNotRequired: Boolean = false;
+  displayNewCsdlIdDailog: Boolean = false;
 
   constructor(private router: Router,
       private activatedRoute: ActivatedRoute,
@@ -53,6 +55,10 @@ export class CsdlPlatformComponent implements OnInit {
 
     this.csdlForm = new FormGroup({
       csdlId: new FormControl(null, Validators.required)
+    });
+
+    this.notRequiredCsdlForm = new FormGroup({
+      noCode: new FormControl('', Validators.required)
     });
 
     this.dashboardService.getMyOffersList()
@@ -145,8 +151,15 @@ export class CsdlPlatformComponent implements OnInit {
         }
       }
     }
-  
-    // --------------------------------------------------------------------------------------------------------------------------------
+  // --------------------------------------------------------------------------------------------------------------------------------
+
+  createNewCsdlIdDailog() {
+    this.displayNewCsdlIdDailog = true;
+  }
+
+  closeCreateNewCsdlIdDailog() {
+    this.displayNewCsdlIdDailog = false;
+  }
 
   goBackToOfferSetup() {
     this.router.navigate(['/offerSetup', this.currentOfferId, this.caseId]);

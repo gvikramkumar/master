@@ -28,21 +28,19 @@
           </div>
           <div class="row">
             <div class="col-md-12">
-              <div class="col-md-4">
-                <div class="form-group form-group--inline">
-                  <label class="radio">
-                    <input type="radio" name="inline-regular-radio" (change)="onCsdlRequired($event)">
-                    <span class="radio__input"></span>
-                    <span class="radio__label">Yes</span>
-                  </label>
-                </div>
-                <div class="form-group form-group--inline">
-                  <label class="radio">
-                    <input type="radio" name="inline-regular-radio" (change)="onCsdlNotRequired($event)">
-                    <span class="radio__input"></span>
-                    <span class="radio__label">No</span>
-                  </label>
-                </div>
+              <div class="form-group form-group--inline">
+                <label class="radio">
+                  <input type="radio" name="inline-regular-radio" (change)="onCsdlRequired($event)">
+                  <span class="radio__input"></span>
+                  <span class="radio__label">Yes</span>
+                </label>
+              </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <div class="form-group form-group--inline">
+                <label class="radio">
+                  <input type="radio" name="inline-regular-radio" (change)="onCsdlNotRequired($event)">
+                  <span class="radio__input"></span>
+                  <span class="radio__label">No</span>
+                </label>
               </div>
             </div>
           </div><br>
@@ -50,57 +48,65 @@
           <div class="row" *ngIf="csdlRequired">
             <div class="col-md-12">
               <div class="panel panel--ltgray panel--loose">
-                  <div class="row">
-                    <form [formGroup]="csdlForm">
-                      <div class="row">
-                        <div class="col-md-6">
-                          <div class="form-group half-margin-bottom">
-                            <div class="form-group__text">
-                              <p-autoComplete formControlName="csdlId" class="form-control" [size]="100" field="csdlId"
-                                [minLength]="3" scrollHeight="150px" placeholder="Search by CSDL ID or Project Name"
-                                required>
-                              </p-autoComplete>
-                            </div>
-                          </div><br>
-                          <span>ID or Project not showing up?</span>&nbsp;&nbsp;
-                          <span class="icon-refresh">Refresh Latest Search Data</span>
-                        </div>
-                        <div class="col-md-2">
-                          <button class="btn btn--primary" type="submit">Submit</button>
-                        </div>
-                        <div class="col-md-4">
-                          <button class="btn btn--primary" type="submit">Create New ID</button><br><br>
-                          <span class="icon-info-outline icon-small"> I don't have an ID, create one for me</span>
-                        </div>
+                <div class="row">
+                  <form [formGroup]="csdlForm">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group half-margin-bottom">
+                          <div class="form-group__text">
+                            <p-autoComplete formControlName="csdlId" class="form-control" [size]="100" field="csdlId"
+                              [minLength]="3" scrollHeight="150px" placeholder="Search by CSDL ID or Project Name"
+                              required>
+                            </p-autoComplete>
+                          </div>
+                        </div><br>
+                        <span>ID or Project not showing up?</span>&nbsp;&nbsp;
+                        <span class="icon-refresh">Refresh Latest Search Data</span>
                       </div>
-                    </form>              
-                  </div>
+                      <div class="col-md-2">
+                        <button class="btn btn--primary" type="submit" [disabled]="!csdlForm.valid">Submit</button>
+                      </div>
+                      <div class="col-md-4">
+                        <button class="btn btn--primary" type="submit" (click)="createNewCsdlIdDailog()">Create New
+                          ID</button><br><br>
+                        <span class="icon-info-outline icon-small" pTooltip="Creating a New ID will notify and create Loorem ipsum dolor sit amet, consectetur
+                          adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore" tooltipPosition="top">
+                          I don't have an ID, create one for me</span>
+                      </div>
+                    </div>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
           <div class="row" *ngIf="csdlNotRequired">
-            <div class="col-md-12">
-              <div class="subheader" style="color: midnightblue">Why is CSDL not Required?</div>
-              <div class="form-group">
+            <form [formGroup]="notRequiredCsdlForm">
+              <div class="col-md-12">
+                <div class="subheader" style="color: midnightblue">Why is CSDL not Required?</div>
+                <div class="form-group">
                   <label class="radio">
-                      <input type="radio" name="stacked-radio">
-                      <span class="radio__input"></span>
-                      <h5 class="radio__label">No code executed</h5>
-                      <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit,</span>
-                  </label>
-              </div>
-              <div class="form-group">
+                    <input type="radio" name="stacked-radio" value="noCode" formControlName="noCode" name="noCode"
+                      class="form-control">
+                    <span class="radio__input"></span>&nbsp;&nbsp;
+                    <span class="radio__label">No code executed</span>
+                  </label>&nbsp;&nbsp;
+                  <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit,</span>
+                </div><br><br>
+                <div class="form-group">
                   <label class="radio">
-                      <input type="radio" name="stacked-radio">
-                      <span class="radio__input"></span>
-                     <h5 class="radio__label">No new code</h5>
-                     <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit,</span>
-                  </label>
+                    <input type="radio" name="stacked-radio" value="newCode" formControlName="noCode" name="noCode"
+                      class="form-control">
+                    <span class="radio__input"></span>&nbsp;&nbsp;
+                    <span class="radio__label">No new code</span>
+                  </label>&nbsp;&nbsp;
+                  <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit,</span>
+                </div><br><br>
+                <div class="form-group">
+                  <button class="btn btn--primary" type="submit"
+                    [disabled]="!notRequiredCsdlForm.valid">Complete</button>
+                </div>
               </div>
-              <div class="form-group">
-                <button class="btn btn--primary" type="submit">Complete</button>
-              </div>
-            </div>
+            </form>
           </div>
         </div>
         <div class="rightContent">
@@ -110,5 +116,41 @@
         </div>
       </div>
     </div>
+    <p-dialog [showHeader]="false" [responsive]="true" [(visible)]="displayNewCsdlIdDailog" [width]="600" [height]="450"
+      [minWidth]="600" [minHeight]="450">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="pull-right">
+            <span class="icon-close" (click)="closeCreateNewCsdlIdDailog()"></span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Create a New CSDL ID</h2>
+        </div>
+      </div><br><br>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <h3>A new project will be created leveraging the following information</h3>
+          </div><br><br>
+          <div class="row">
+            <span>Product Family: Xaas</span>
+          </div>
+          <div class="row">
+            <span>Offer Name: Extra Long Super Duper Offer Name</span>
+          </div>
+          <div class="row">
+            <span>Business Unit contact: John Smith</span>
+          </div>
+        </div>
+      </div><br><br>
+      <div class="row">
+        <div class="col-md-12">
+          <button class="btn btn--primary" type="submit">Submit</button>
+        </div>
+      </div>
+    </p-dialog>
   </div>
 </div>
