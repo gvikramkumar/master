@@ -633,18 +633,14 @@ export class ItemCreationComponent implements OnInit {
   }
 
   showSelectedAtoView(dropDownValue: string) {
-
     if (dropDownValue === 'Overall Offer') {
-
       this.selectedAto = dropDownValue;
-
     } else {
-
       this.selectedAto = dropDownValue;
-
     }
     this.displaySelectedOffer(this.selectedAto);
   }
+  
   goBackToOfferSetup() {
     this.router.navigate(['/offerSetup', this.offerId, this.caseId, this.selectedAto]);
   }
