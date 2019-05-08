@@ -349,11 +349,18 @@ th.ui-sortable-column.ng-star-inserted {
 /* Tree Table */
 .cool.cui .item-creation .ui-treetable .ui-treetable-tbody>tr>td:first-child div.text-center {
   text-align: left!important;
+  line-height: 1.25;
+  padding-top: 3px;
 }
 .cool.cui .item-creation .ui-treetable .ui-treetable-thead th {
   font-weight: normal;
 }
-
+.cool.cui .item-creation .ui-treetable .ui-treetable-thead th:nth-child(4) {
+  width:11%;
+}
+.cool.cui .item-creation .ui-treetable .ui-treetable-thead th:nth-child(2) {
+  width:15%;
+}
 
 /* Custom 3-segment Progress Bar */
 .cui .td--progress-fitted .row.no-gutters {
@@ -1234,6 +1241,9 @@ span[class*="display-"] {
 }
 
 /* helpers */
+.ui-widget {
+  font-family: "CiscoSans", "Arial", sans-serif!important;
+}
 .btns-right .btn + .btn {
   margin-right: 10px;
 }
