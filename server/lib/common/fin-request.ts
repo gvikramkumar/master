@@ -7,7 +7,7 @@ export function finRequest(options) {
 
     request(options, (err, resp, body) => {
       if (err) {
-        reject(new ApiError('Request error', {
+        reject(new ApiError('Request error.', {
           error: Object.assign({message: err.message}, err),
           options: options
         }));

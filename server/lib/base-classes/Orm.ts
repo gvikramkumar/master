@@ -43,7 +43,7 @@ export class Orm {
       // } else
       if (map.prop && !map.field) {
         if (map.mgDefault === undefined) {
-          throw new ApiError(`Orm.recordToObject no mgDefault for ${map.prop}`);
+          throw new ApiError(`Orm.recordToObject no mgDefault for ${map.prop}.`);
         }
         _.set(obj, map.prop, map.mgDefault);
       } else if (map.type === OrmTypes.number) {
@@ -80,7 +80,7 @@ export class Orm {
     this.mapsToPg.forEach(map => {
       if (map.field && !map.prop) {
         if (map.pgDefault === undefined) {
-          throw new ApiError(`Orm.objectToRecord no pgDefault for ${map.field}`);
+          throw new ApiError(`Orm.objectToRecord no pgDefault for ${map.field}.`);
         }
         record[map.field] = map.pgDefault;
       } else if (map.type === OrmTypes.date) {
@@ -98,7 +98,7 @@ export class Orm {
 
   getPgValue(prop, field, val) {
     if (!prop && !field) {
-      throw new ApiError('OrmGetPgValue has no prop or field');
+      throw new ApiError('OrmGetPgValue has no prop or field.');
     }
     if (val === undefined) {
       return val;
@@ -131,7 +131,7 @@ export class Orm {
   getPgField(idProp) {
     const map = _.find(this.maps, {prop: idProp});
     if (!map) {
-      throw new ApiError('Failed to find idProp map');
+      throw new ApiError('Failed to find idProp map.');
     }
     return map.field;
   }

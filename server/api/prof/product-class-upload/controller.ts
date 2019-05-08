@@ -25,7 +25,7 @@ export default class ProductClassUploadController extends ControllerBase {
         objs.forEach(obj => {
           const sub = _.find(subs, x => x.name.toLowerCase() === obj.submeasureName.toLowerCase());
           if (!sub) {
-            throw new ApiError(`${tableName}: no submeasure for submeasureName: ${obj.submeasureName}`);
+            throw new ApiError(`${tableName}: no submeasure for submeasureName: ${obj.submeasureName}.`);
           }
           obj.submeasureKey = sub.submeasureKey;
         });
@@ -47,12 +47,12 @@ export default class ProductClassUploadController extends ControllerBase {
           res.status(204).end();
         } else {
           if (docs.length !== 2) {
-            throw new ApiError(`getManualMixValuesForSubmeasureName: expected 2 records but got: ${docs.length}`);
+            throw new ApiError(`getManualMixValuesForSubmeasureName: expected 2 records but got: ${docs.length}.`);
           }
           const hw = _.find(docs, {splitCategory: 'HARDWARE'});
           const sw = _.find(docs, {splitCategory: 'SOFTWARE'});
           if (!(hw && sw)) {
-            throw new ApiError(`getManualMixValuesForSubmeasureName: missing HW or SW value`);
+            throw new ApiError(`getManualMixValuesForSubmeasureName: missing HW or SW value.`);
           }
           res.json({
             HW: hw.splitPercentage,

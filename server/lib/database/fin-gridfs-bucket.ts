@@ -38,7 +38,7 @@ export default class FinGridFSBucket {
   addOne(file, metadata: AnyObj = {}) {
     this.getGfs();
     if (!metadata.directory) {
-      throw new ApiError('metadata.directory required');
+      throw new ApiError('metadata.directory required.');
     }
     const fileName = file.originalname;
     metadata.fileName = fileName;

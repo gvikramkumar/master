@@ -50,7 +50,7 @@ export default class AllocationRuleController extends ApprovalController {
         }
       });
       if (errs.length) {
-        throw new ApiError('Add rule errors', errs, 400);
+        throw new ApiError('Add rule errors.', errs, 400);
       }
     });
   }
@@ -126,7 +126,7 @@ export default class AllocationRuleController extends ApprovalController {
     return this.repo.getManyLatestGroupByNameActiveInactive(req.dfa.module.moduleId)
       .then(rules => {
         if (firstTimeApprove && _.find(rules, {name: data.name})) {
-          throw new ApiError(`Rule name already exists: ${data.name}`);
+          throw new ApiError(`Rule name already exists: ${data.name}.`);
         }
       });
   }

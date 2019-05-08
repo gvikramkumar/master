@@ -7,8 +7,9 @@
 // to separate the two
 
 export const environment = {
-  production: false,
+  production: true,
   apiUrl: 'http://localhost:3002',
   logState: false,
-  disableAnimations: false
+  disableAnimations: false,
+  showVerboseErrorMessages: false
 };

@@ -11,7 +11,7 @@ export class CookieController {
         new FinDfaCookie(req, res).updateCookieFromEndpoint(req.body);
         break;
       default:
-        throw new ApiError('No cookie name in body', null, 400);
+        throw new ApiError('No cookie name in body.', null, 400);
     }
     next();
   }

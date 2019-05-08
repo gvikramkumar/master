@@ -53,7 +53,7 @@ export default class PgLookupRepo {
 
   getManualMixHwSwBySubmeasureKey(req) {
     if (!req.dfa.module) {
-      throw new ApiError('getManualMixHwSwBySubmeasureKey: No module');
+      throw new ApiError('getManualMixHwSwBySubmeasureKey: No module.');
     }
     this.verifyProperties(req.body, ['submeasureKey']);
     const module = req.dfa.modules
@@ -653,7 +653,7 @@ export default class PgLookupRepo {
 
   checkForExistenceAndReturnValue(table, column, value, upper = true) {
     if (!value && value !== 0) {
-      throw new ApiError('checkForExistenceAndReturnValue: undefined or null value', null, 400);
+      throw new ApiError('checkForExistenceAndReturnValue: undefined or null value.', null, 400);
     }
     let val;
     let sql = `select ${column} as col from ${table} where `; // ${column} = $1 limit 1) as exists`
@@ -676,7 +676,7 @@ export default class PgLookupRepo {
 
   checkForExistenceValue(table, column, value, upper = true) {
     if (!value && value !== 0) {
-      throw new ApiError('checkForExistenceAndReturnValue: undefined or null value', null, 400);
+      throw new ApiError('checkForExistenceAndReturnValue: undefined or null value.', null, 400);
     }
     let val;
     let sql = `select exists (select 1 from ${table} where `; // ${column} = $1 limit 1) as exists`
@@ -693,11 +693,11 @@ export default class PgLookupRepo {
 
   checkForExistenceArray(table, column, arr, upper = true): Promise<{values: any[], exist: boolean}> {
     if (!arr.length) {
-      throw new ApiError('checkForExistenceArray: empty array', null, 400);
+      throw new ApiError('checkForExistenceArray: empty array.', null, 400);
     }
     arr.forEach(val => {
       if (val === undefined || val === null) {
-        throw new ApiError('checkForExistenceArray: undefined or null value', null, 400);
+        throw new ApiError('checkForExistenceArray: undefined or null value.', null, 400);
       }
     })
     const promises = [];
@@ -712,7 +712,7 @@ export default class PgLookupRepo {
 
   selectWhereIn(table, column, arr, conditional: 'in'|'not in' = 'in') {
     if (!arr.length) {
-      throw new ApiError('selectWhereIn: empty array', null, 400);
+      throw new ApiError('selectWhereIn: empty array.', null, 400);
     }
     const vars = arr.map((x, idx) => `$${idx + 1}`).join(',');
     const sql = `select * from ${table} where ${column} ${conditional} ( ${vars} )`;
@@ -722,7 +722,7 @@ export default class PgLookupRepo {
 
   selectWhereInUpper(table, column, arr) {
     if (!arr.length) {
-      throw new ApiError('selectWhereIn: empty array', null, 400);
+      throw new ApiError('selectWhereIn: empty array.', null, 400);
     }
     const vars = arr.map((x, idx) => `$${idx + 1}`).join(',');
     const sql = `select * from ${table} where upper(${column}) in ( ${vars} )`;
