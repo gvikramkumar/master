@@ -201,7 +201,9 @@ export default class ApprovalController extends ControllerBase {
       const lookupRepo = new LookupRepo();
       const moduleRepo = new ModuleRepo();
       const userListRepo = new UserListRepo();
-      promises.push(lookupRepo.getValues(['itadmin-email', 'dfa-admin-email', 'dfa-biz-admin-email']), moduleRepo.getOneLatest({moduleId: item.moduleId}), userListRepo.getOneLatest({userId: item.updatedBy}));
+      promises.push(lookupRepo.getValues(['itadmin-email', 'dfa-admin-email', 'dfa-biz-admin-email']),
+        moduleRepo.getOneByQuery({moduleId: item.moduleId}),
+        userListRepo.getOneLatest({userId: item.updatedBy}));
     } else {
       itadminEmail = svrUtil.getItadminEmail(req.dfa);
       dfaAdminEmail = svrUtil.getDfaAdminEmail(req.dfa);
@@ -254,11 +256,9 @@ export default class ApprovalController extends ControllerBase {
             bizAdminEmail = results[0][2];
             const module = results[1];
             const user = results[2];
-            let timebasedMsg;
-            timebasedMsg = svrUtil.checkIfMoreThanDays(2, item.get('approvalReminderTime'), item.get('updatedDate')) ? `since ${shUtil.convertToPSTTime(item.get('updatedDate'))}` : 'for more than 24 hours';
-            body = `A new DFA - ${_.upperFirst(type)} submitted by ${user.get('fullname')} has been pending for approval ${timebasedMsg}, please approve or reject on priority:<br><br>${link}`;
-            return sendHtmlMail(dfaAdminEmail, bizAdminEmail, `${itadminEmail},${item.updatedBy}@cisco.com`,
-              `${this.getEnv()}DFA - ${module.name} - ${_.upperFirst(type)} Submitted for Approval`, body);
+            body = `A new DFA - ${_.upperFirst(type)} submitted by ${user.get('fullname')} has been pending for approval since ${shUtil.convertToPSTTime(item.get('updatedDate'))}:<br><br>${link}`;
+            return sendHtmlMail(dfaAdminEmail, bizAdminEmail, `${itadminEmail},${item.get('updatedBy')}@cisco.com`,
+              `${this.getEnv()}DFA - ${module.name} - ${_.upperFirst(type)} Pending for Approval`, body);
         }
       });
 

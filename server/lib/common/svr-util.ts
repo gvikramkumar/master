@@ -28,18 +28,14 @@ export const svrUtil = {
   postgresReplaceQuotes,
   toFixed8,
   toFixed,
-  checkIfMoreThanADay,
-  checkIfMoreThanDays
+  checkIfMoreThanADay
 };
 
 function checkIfMoreThanADay(now, lastReminderTime) {
-  return checkIfMoreThanDays(1, now, lastReminderTime);
+  const oneDay = 1 * (24 * 60 * 60 * 1000);
+  return (now - lastReminderTime) > oneDay;
 }
 
-function checkIfMoreThanDays(numberOfDays, now, lastReminderTime) {
-  const days =  24 * 60 * 60 * 1000 * numberOfDays
-  return (now - lastReminderTime) > days;
-}
 
 function toFixed8(val) {
   return toFixed(val, 8);
