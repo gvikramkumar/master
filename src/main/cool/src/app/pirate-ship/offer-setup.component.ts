@@ -61,6 +61,9 @@ export class OfferSetupComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['offerId'];
       this.caseId = params['caseId'];
+      if (params['selectedAto']) {
+        this.selectedAto = params['selectedAto'];
+      }
     });
   }
 
