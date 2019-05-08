@@ -65,7 +65,7 @@ export class OfferConstructDefaultValue {
                     element.previousValue = 'EVENT';
                 }
             }
-            if (element.question == 'Subscription Offset') {
+            if (element.question == 'Subscription Offset(In Days)') {
                 if (chargeTypeValue == recurringType) {
                     element.currentValue = '30';
                     element.previousValue = '30';
