@@ -26,11 +26,11 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
   atoList: Array<Ato>;
   modellingDesign: ModellingDesign;
 
-  paramsSubscription: Subscription;
-  modellingDesignSubscription: Subscription;
-
   selectedAto: any;
   atoNames: string[] = [];
+
+  paramsSubscription: Subscription;
+  modellingDesignSubscription: Subscription;
 
   caseId: string;
   planId: string;
@@ -78,6 +78,7 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    // Retrieve ATO Details
 
     this.atoTask = {} as Ato;
     this.atoNames.push('Overall Offer');
@@ -105,11 +106,11 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
     // Retrieve Offer Details
     this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
 
-      this.planId = offerDetails['planId'];
       this.derivedMM = offerDetails['derivedMM'];
       this.offerName = offerDetails['offerName'];
       this.primaryBE = offerDetails['primaryBEList'][0];
       this.stakeHolderData = offerDetails['stakeholders'];
+      this.planId = _.isEmpty(offerDetails['planId']) ? 0 : offerDetails['planId'];
 
       this.processStakeHolderInfo();
       this.getLeadTimeCalculation();
