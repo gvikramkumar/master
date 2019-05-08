@@ -11,11 +11,15 @@ import * as _ from 'lodash';
 import { SELF_SERVICE_ORDERABILITY_ROUTES } from './self-service-orderability.routes';
 
 import { SelfServiceOrderabilityComponent } from './self-service-orderability.component';
+import { SsoAtoSummaryComponent } from './components/sso-ato-summary/sso-ato-summary.component';
+import { SsoAtoListComponent } from './components/sso-ato-list/sso-ato-list.component';
 
 @NgModule({
 
   declarations: [
-    SelfServiceOrderabilityComponent
+    SsoAtoSummaryComponent,
+    SelfServiceOrderabilityComponent,
+    SsoAtoListComponent,
   ],
   imports: [
     SharedModule,

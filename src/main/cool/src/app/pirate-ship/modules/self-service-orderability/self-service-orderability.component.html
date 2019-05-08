@@ -32,23 +32,16 @@
             </div>
           </div>
 
-          <!-- <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer' else selectedAtoView">
-            <app-ato-list [atoList]="atoList"></app-ato-list>
+          <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer' else selectedAtoView">
+              <app-sso-ato-list></app-sso-ato-list>
           </div>
 
           <ng-template #selectedAtoView>
 
-            <br>Status: {{atoTask['itemStatus']}}<br>
-
             <br><br>
-            <h3>Modelling</h3><br><br>
-            <app-task-summary [tasks]="atoTask['modelTasks']">/</app-task-summary>
+            <app-sso-ato-summary></app-sso-ato-summary>
 
-            <br><br>
-            <h3>Provisioning & Mediation</h3><br><br>
-            <app-task-summary [tasks]="atoTask['provisionTasks']">/</app-task-summary>
-
-          </ng-template> -->
+          </ng-template>
 
 
         </div>
