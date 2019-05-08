@@ -33,6 +33,7 @@ export class ItemCreationComponent implements OnInit {
   offerId: string;
   caseId: string;
   selectedOffer: string;
+  selectedAto: string;
   display: Boolean = false;
   functionalRole: Array<String>;
   removeList: any;
@@ -74,7 +75,7 @@ export class ItemCreationComponent implements OnInit {
       this.currentOfferId = params['offerId'];
       this.offerId = params['offerId'];
       this.caseId = params['caseId'];
-      this.selectedOffer = params['selectedAto'];
+      this.selectedAto = params['selectedAto'];
     });
   }
 
@@ -83,7 +84,7 @@ export class ItemCreationComponent implements OnInit {
     if(this.functionalRole.includes('BUPM') || this.functionalRole.includes('SOE')){
       this.permission = true;
     }
-    this.displaySelectedOffer(this.selectedOffer);
+    this.displaySelectedOffer(this.selectedAto);
     this.productColumns = [
       { field: 'product', header: 'PRODUCTS' },
       { field: 'iccType', header: 'ICC TYPE' },
@@ -560,7 +561,7 @@ export class ItemCreationComponent implements OnInit {
     });
 
     this.offerConstructCanvasService.saveOfferConstructChanges(cds).subscribe(() => {
-      this.displaySelectedOffer(this.selectedOffer);
+      this.displaySelectedOffer(this.selectedAto);
     },
       () => {
         this.loaderService.stopLoading();
@@ -589,7 +590,7 @@ export class ItemCreationComponent implements OnInit {
   }
 
   displaySelectedOffer(dropdownValue: string) {
-    this.selectedOffer = dropdownValue;
+    //this.selectedOffer = dropdownValue;
     if (dropdownValue == 'Overall Offer') {
       dropdownValue = 'ALL';
     }
@@ -631,8 +632,21 @@ export class ItemCreationComponent implements OnInit {
     });
   }
 
+  showSelectedAtoView(dropDownValue: string) {
+
+    if (dropDownValue === 'Overall Offer') {
+
+      this.selectedAto = dropDownValue;
+
+    } else {
+
+      this.selectedAto = dropDownValue;
+
+    }
+    this.displaySelectedOffer(this.selectedAto);
+  }
   goBackToOfferSetup() {
-    this.router.navigate(['/offerSetup', this.offerId, this.caseId, this.selectedOffer]);
+    this.router.navigate(['/offerSetup', this.offerId, this.caseId, this.selectedAto]);
   }
   replacetabularFormQuestion() {
     // replace tabular form  question with offerConstructItems itemsDeatails
