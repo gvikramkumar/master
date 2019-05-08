@@ -20,17 +20,10 @@
             </button>
           </div>
           <div class="col-md-3">
-            <!-- <label class="base-margin-right" for="offerList">Viewing</label> -->
-            <!-- <p-dropdown [options]="offerDropdownValues" [(ngModel)]="selectedOffer" id="offerList" class="form-control" name="offerList">
-        </p-dropdown> -->
-            <div class="form-group dropdown label--inline">
-              <div class="form-group__text select">
-                <label>Viewing</label>
-                <select #dropdown="ngModel" [(ngModel)]="selectedOffer" (change)="displaySelectedOffer(dropdown.value)">
-                  <option *ngFor="let offer of offerDropdownValues" [value]="offer">
-                    {{offer}}</option>
-                </select>
-              </div>
+            <div class="pull-right">
+              <app-view-offer [atoNames]="offerDropdownValues" [selectedAto]="selectedAto"
+                (atoSelection)="showSelectedAtoView($event)">
+              </app-view-offer>
             </div>
 
           </div>
