@@ -18,7 +18,7 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 // wait for database connections, then all middleware will have a connection to work with (instead of a promise)
-Promise.all([mgc.promise, pgc.promise])
+export const serverPromise = Promise.all([mgc.promise, pgc.promise])
   .then(databaseUpdate)
   .then(() => {
 

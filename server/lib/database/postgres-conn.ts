@@ -1,6 +1,7 @@
-import { Pool } from 'pg';
+import {Pool} from 'pg';
 import _config from '../../config/get-config';
 import AnyObj from '../../../shared/models/any-obj';
+
 const config = _config.postgres;
 
 const pool = new Pool({
@@ -26,15 +27,17 @@ if (process.env.NO_POSTGRES === 'true') {
       return pgc;
     });
 } else {
-  pgc.promise = pool.connect()
-    .then(() => {
-      console.log(`postgres connected on: ${config.host}:${config.port}/${config.database}`)
-      return pgc;
-    })
-    .catch(err => {
-      console.error('failed to connect to postgres');
-      return Promise.reject(err);
-    });
+  pgc.promise =
+    Promise.resolve()
+      .then(() => pool.connect())
+      .then(() => {
+        console.log(`postgres connected on: ${config.host}:${config.port}/${config.database}`)
+        return pgc;
+      })
+      .catch(err => {
+        console.error('failed to connect to postgres');
+        return Promise.reject(err);
+      });
 }
 
 
