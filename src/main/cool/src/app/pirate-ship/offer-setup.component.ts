@@ -220,6 +220,7 @@ export class OfferSetupComponent implements OnInit {
 
 
   getElementDetails(element) {
+    console.log(element.moduleName);
     /* if (element.moduleName === 'Item Creation') {
       this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.ITEM_CREATION, this.selectedAto]);
     } else if (element.moduleName === 'Modeling & Design') {
@@ -239,14 +240,12 @@ export class OfferSetupComponent implements OnInit {
         this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.SERVICE_ANNUITY_PRICING, this.selectedAto]);
         break;
       }
+      case 'CSDL': {
+        this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.CSDL, this.selectedAto]);
+        break;
+      }
     }
   }
-
-  onCsdl() {
-    this.router.navigate([appRoutesNames.CSDL, this.offerId, this.caseId]);
-  }
-
-
 
   onProceedToNext() {
   }

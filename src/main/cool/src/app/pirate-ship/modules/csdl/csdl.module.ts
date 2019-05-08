@@ -8,7 +8,7 @@ import { MenuBarModule } from '@app/menu/menu-bar.module';
 import { RightPanelModule } from '@app/right-panel/right-panel.module';
 import { OfferDetailModule } from '@app/offer-detail/offer-detail.module';
 import { RouterModule } from '@angular/router';
-import { routes } from './csdl-routing.module';
+import { CSDL_ROUTES } from './csdl-routing.module';
 
 @NgModule({
   declarations: [CsdlPlatformComponent],
@@ -19,7 +19,7 @@ import { routes } from './csdl-routing.module';
     MenuBarModule,
     RightPanelModule,
     OfferDetailModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(CSDL_ROUTES)
   ]
 })
 export class CsdlModule { }

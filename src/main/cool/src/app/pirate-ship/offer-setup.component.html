@@ -29,10 +29,7 @@
               </div>
 
             </li>
-          </ul><br>
-          <div class="row">
-            <button class="btn btn--small btn--success" (click)="onCsdl()">CSDL</button>
-          </div>
+          </ul>
 
           <!-- Control Bar -->
           <div class="row base-margin-top">
@@ -232,7 +229,7 @@
                               </button>
                               <!-- Not Yet Available -->
                               <button *ngIf="element['status']=='Not Yet Available'"
-                                class="btn btn--small btn--gray-ghost base-margin-bottom" placement="top">
+                                class="btn btn--small btn--gray-ghost base-margin-bottom" placement="top" (click)="getElementDetails(element)">
                                 {{element["moduleName"]}}
                               </button>
                               <!-- Not Required -->

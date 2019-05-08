@@ -14,6 +14,5 @@ export const appRoutesNames = {
     OAS: 'oas',
     DESIGN_REVIEW: 'designReview',
     PIRATE_SHIP: 'offerSetup',
-    CSDL: 'csdl',
 }
 

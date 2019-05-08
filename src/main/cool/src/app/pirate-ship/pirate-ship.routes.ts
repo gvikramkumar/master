@@ -26,5 +26,10 @@ export const PIRATE_SHIP_ROUTES = [
         path: pirateShipRoutesNames.SELF_SERVICE_ORDERABILITY + '/:selectedAto',
         loadChildren: './modules/self-service-orderability/self-service-orderability.module#SelfServiceOrderabilityModule',
         resolve: { offerData: OfferOverViewResolver }
+    },
+    {
+        path: pirateShipRoutesNames.CSDL + '/:selectedAto',
+        loadChildren: './modules/csdl/csdl.module#CsdlModule',
+        resolve: { offerData: OfferOverViewResolver }
     }
 ]

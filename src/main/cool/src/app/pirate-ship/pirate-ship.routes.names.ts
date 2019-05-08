@@ -4,5 +4,6 @@ export const pirateShipRoutesNames = {
     MODELLING_DESIGN: 'modelling-design',
     SERVICE_ANNUITY_PRICING: 'service-annuity-pricing',
     SELF_SERVICE_ORDERABILITY: 'self-service-orderabilty',
+    CSDL: 'csdl'
 
 }

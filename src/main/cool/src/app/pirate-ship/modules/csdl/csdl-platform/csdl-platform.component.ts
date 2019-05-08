@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 import { RightPanelService } from '@app/services/right-panel.service';
 import { DashboardService } from '@shared/services';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-csdl-platform',
@@ -10,6 +11,7 @@ import { DashboardService } from '@shared/services';
   styleUrls: ['./csdl-platform.component.scss']
 })
 export class CsdlPlatformComponent implements OnInit {
+  csdlForm: FormGroup;
   public currentOfferId: any;
   caseId: string;
   selectedOffer: string;
@@ -29,6 +31,8 @@ export class CsdlPlatformComponent implements OnInit {
   pirateShipModuleName: string;
   isPirateShipSubModule: boolean;
   stakeHolders = {};
+  csdlRequired: Boolean = false;
+  csdlNotRequired: Boolean = false;
 
   constructor(private router: Router,
       private activatedRoute: ActivatedRoute,
@@ -46,6 +50,10 @@ export class CsdlPlatformComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.csdlForm = new FormGroup({
+      csdlId: new FormControl(null, Validators.required)
+    });
 
     this.dashboardService.getMyOffersList()
       .subscribe(resOffers => {
@@ -104,7 +112,17 @@ export class CsdlPlatformComponent implements OnInit {
     });
   }
 
-    // --------------------------------------------------------------------------------------------------------------------------------
+  onCsdlRequired(event) {
+    this.csdlRequired = true;
+    this.csdlNotRequired = false;
+  }
+
+  onCsdlNotRequired(event) {
+    this.csdlNotRequired = true;
+    this.csdlRequired = false;
+  }
+
+  // --------------------------------------------------------------------------------------------------------------------------------
 
     updateMessage(message) {
       if (message != null && message !== '') {
