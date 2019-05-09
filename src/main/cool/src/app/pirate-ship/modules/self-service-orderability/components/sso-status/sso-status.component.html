@@ -1,0 +1,33 @@
+<div class="ui-fluid">
+
+  <table class="responsive-table">
+ 
+    <tr class="ui-datatable-even">
+      <td>Completed</td>
+      <td>Warning</td>
+      <td>Hold</td>
+      <td>Error</td>
+      <td>Not Required</td>
+    </tr>
+
+    <tr class="ui-datatable-odd">
+      <td>
+        <div *ngFor="let status of ssoStatus['completed']">{{status}}</div>
+      </td>
+      <td>
+        <div *ngFor="let status of ssoStatus['warning']">{{status}}</div>
+      </td>
+      <td>
+        <div *ngFor="let status of ssoStatus['hold']">{{status}}</div>
+      </td>
+      <td>
+        <div *ngFor="let status of ssoStatus['error']">{{status}}</div>
+      </td>
+      <td>
+        <div *ngFor="let status of ssoStatus['notRequired']">{{status}}</div>
+      </td>
+    </tr>
+ 
+  </table>
+
+</div>

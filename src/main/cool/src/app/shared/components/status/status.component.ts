@@ -14,4 +14,11 @@ export class StatusComponent implements OnInit {
   ngOnInit() {
   }
 
+  checkInProgress() {
+    if (this.status === 'In Progress' || this.status === 'Reopen') {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
