@@ -1,9 +1,9 @@
 <div class="responsive-table">
 
   <p-dataTable [value]="ssoList" scrollable="true" [rows]="10" [paginator]="true" scrollHeight="350px"
-    [resizableColumns]="true">
+    [resizableColumns]="true" expandableRows="true">
 
-    <p-column field="productName" sortable="true" header="PRODUCT NAME">
+    <p-column field="productName" expander="true" sortable="true" header="PRODUCT NAME">
       <ng-template let-col let-task="rowData" pTemplate="body">
         <span>{{task['productName']}}<br /></span>
       </ng-template>
