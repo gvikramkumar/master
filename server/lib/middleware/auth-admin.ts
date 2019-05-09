@@ -8,7 +8,7 @@ export function authAdmin() {
 
   return (req, res, next) => {
     if (!(req.user.hasAdminRole() || req.user.isGenericUser())) {
-      throw new ApiError('Admin access only', null, 401);
+      throw new ApiError('Admin access only.', null, 401);
     }
     next();
   };

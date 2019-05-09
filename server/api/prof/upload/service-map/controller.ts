@@ -121,10 +121,9 @@ imports: ServiceMapUploadImport[];
 
   removeDuplicatesFromDatabase(imports: ServiceMapUploadImport[]) {
     const duplicates = _.uniqWith(imports, (a, b) => {
-      return a.salesTerritoryCode === b.salesTerritoryCode &&
-        a.businessEntity === b.businessEntity;
+      return a.businessEntity === b.businessEntity;
     })
-      .map(x => _.pick(x, ['salesTerritoryCode', 'businessEntity']))
+      .map(x => _.pick(x, ['businessEntity']))
     return this.repo.bulkRemove(duplicates);
   }
 

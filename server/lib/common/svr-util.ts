@@ -3,6 +3,7 @@ import {Buffer} from 'buffer';
 import _ from 'lodash';
 import {ApiError} from './api-error';
 import {DfaModuleIds} from '../../../shared/misc/enums';
+import config from '../../config/get-config';
 
 export const svrUtil = {
   isLocalEnv,
@@ -28,14 +29,12 @@ export const svrUtil = {
   postgresReplaceQuotes,
   toFixed8,
   toFixed,
-  checkIfMoreThanADay
+  isProdEnv
 };
 
-function checkIfMoreThanADay(now, lastReminderTime) {
-  const oneDay = 1 * (24 * 60 * 60 * 1000);
-  return (now - lastReminderTime) > oneDay;
+function isProdEnv() {
+  return config.env === 'prod';
 }
-
 
 function toFixed8(val) {
   return toFixed(val, 8);
@@ -216,7 +215,7 @@ function checkParams(obj, arrProps, next) {
     }
   });
   if (missing.length) {
-    const err = new ApiError(`Missing parameters: ${missing.join(', ')}`, obj, 400);
+    const err = new ApiError(`Missing parameters: ${missing.join(', ')}.`, obj, 400);
     next(err);
     return true;
   }

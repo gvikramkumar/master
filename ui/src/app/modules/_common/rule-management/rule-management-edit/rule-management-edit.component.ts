@@ -303,6 +303,10 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       });
   }
 
+  canApprove() {
+    return this.uiUtil.canAdminApprove(this.rule.updatedBy);
+  }
+
   reject() {
     this.uiUtil.confirmReject('rule')
       .subscribe(resultConfirm => {
@@ -500,6 +504,9 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   valueChange() {
+    if (this.viewMode || this.editMode) {
+      return; // can't edit anything but active flag so no reason to generate new name
+    }
     // code below would work, but this would be faster than waiting for asyncs
     if (!(this.rule.driverName && this.rule.period)) {
       delete this.rule.name;

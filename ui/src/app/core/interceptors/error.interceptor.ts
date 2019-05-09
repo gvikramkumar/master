@@ -44,7 +44,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             err = resp.error;
           } else {
             err = {
-              message: 'Unknown server error',
+              message : error.isTrusted ? 'Unable to connect to the server.' : 'Unknown server error.',
               data: error
             };
           }
@@ -62,8 +62,8 @@ export class ErrorInterceptor implements HttpInterceptor {
           if (err.data) {
             delete err.data.stack;
           }
-
-          this.uiUtil.genericDialog(err.message, err && err.data, 'Error', DialogType.ok, DialogSize.large);
+          const showVerboseErrorMessages = environment.showVerboseErrorMessages;
+          this.uiUtil.genericDialog(err.message, err && err.data, 'Error', DialogType.ok, DialogSize.large, true, showVerboseErrorMessages);
           return throwError(err);
         }));
   }

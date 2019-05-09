@@ -22,7 +22,7 @@ export function databaseUpdate() {
   }
 
   if (!svrUtil.isLocalEnv && !build_number) {
-    throw new ApiError('No BUILD_NUMBER environment variable');
+    throw new ApiError('No BUILD_NUMBER environment variable.');
   }
 
   /*

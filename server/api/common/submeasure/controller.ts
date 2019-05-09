@@ -173,7 +173,7 @@ export default class SubmeasureController extends ApprovalController {
   getGroupingSubmeasures(req, res, next) {
     const measureId = req.body.measureId;
     if (!measureId) {
-      throw new ApiError('getGroupingSubmeasures called with no measureId');
+      throw new ApiError('getGroupingSubmeasures called with no measureId.');
     }
     this.repo.getManyLatestGroupByNameActive(req.body.moduleId, {
       measureId,

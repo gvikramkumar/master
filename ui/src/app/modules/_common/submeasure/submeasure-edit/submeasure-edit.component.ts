@@ -1146,4 +1146,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     !this.sm.inputFilterLevel.glSegLevel.length;
   }
 
+  canApprove() {
+    return this.uiUtil.canAdminApprove(this.sm.updatedBy);
+  }
 }

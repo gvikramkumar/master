@@ -164,6 +164,10 @@ export class UiUtil {
 
   // instance methods (must be after static methods)
 
+  canAdminApprove(id) {
+    return this.store.user.isItAdmin() ? true : this.store.user.isModuleAdmin() && id !== this.store.user.id;
+  }
+
   toast(message, action = '', duration?) {
 
     const options: MatSnackBarConfig = {
@@ -196,14 +200,14 @@ export class UiUtil {
       }
     */
 
-  genericDialog(message: string, data = null, title = null, mode = DialogType.ok, size = DialogSize.small, showPre = true): Observable<any> {
+  genericDialog(message: string, data = null, title = null, mode = DialogType.ok, size = DialogSize.small, showPre = true, showVerboseErrorMessages = true): Observable<any> {
     if (this.dialog.openDialogs.length) {
       console.log('genericDialog: dialog already open');
       return;
     }
 
     const config = <MatDialogConfig> {
-      data: {message, title, mode, showPre, data},
+      data: {message, title, mode, showPre, data, showVerboseErrorMessages},
       width: size,
       backdropClass: 'bg-modal-backdrop'
     };

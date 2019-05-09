@@ -129,7 +129,7 @@ export default class RepoBase {
   // get lastest active or inactive version, whichever is later, refer to getManyLatestGroupByNameActive() comments
   getManyLatestGroupByNameActiveInactive(moduleId, _filter = {}) {
     if (!moduleId) {
-      throw new ApiError('getManyLatestGroupByNameActiveInactive: no moduleId');
+      throw new ApiError('getManyLatestGroupByNameActiveInactive: no moduleId.');
     }
     const filter = Object.assign(_filter, {
       groupField: 'name',
@@ -145,7 +145,7 @@ export default class RepoBase {
   // active period
   getManyEarliestGroupByNameActive(moduleId, _filter = {}) {
     if (!moduleId) {
-      throw new ApiError('getManyEarliestGroupByNameActive: no moduleId');
+      throw new ApiError('getManyEarliestGroupByNameActive: no moduleId.');
     }
     const filter = Object.assign(_filter, {
       groupField: 'name',
@@ -296,7 +296,7 @@ export default class RepoBase {
         return this.Model.replaceOne({_id: data.id}, data)
           .then(results => {
             if (results.nModified !== 1) {
-              throw new ApiError('Failed to update document', data);
+              throw new ApiError('Failed to update document.', data);
             }
             return data;
           });
@@ -306,7 +306,7 @@ export default class RepoBase {
 
   removeMany(filter): Promise<any> {
     if (!filter) {
-      throw new ApiError('No filter for removeMany');
+      throw new ApiError('No filter for removeMany.');
     }
     return this.Model.deleteMany(filter).exec();
   }
@@ -337,7 +337,7 @@ export default class RepoBase {
 
   upsertQueryOne(filter, data, userId, concurrencyCheck = true, cleanDuplicates = false) {
     if (Object.keys(filter).length === 0) {
-      throw new ApiError('upsertQueryOne called with no filter', null, 400);
+      throw new ApiError('upsertQueryOne called with no filter.', null, 400);
     }
     return this.getOneByQuery(filter)
       .then(doc => {
@@ -351,7 +351,7 @@ export default class RepoBase {
 
   updateQueryOne(filter, data, userId, concurrencyCheck = true, cleanDuplicates = false) {
     if (Object.keys(filter).length === 0) {
-      throw new ApiError('updateQueryOne called with no filter', null, 400);
+      throw new ApiError('updateQueryOne called with no filter.', null, 400);
     }
     const query = this.Model.find(filter);
     if (data.updatedDate && concurrencyCheck) {
@@ -362,13 +362,13 @@ export default class RepoBase {
         if (docs.length > 1 && !cleanDuplicates) {
           throw new ApiError('updateQueryOne refers to more than one item.', null, 400);
         } else if (!docs.length) {
-          throw new ApiError('updateQueryOne item not found', null, 400);
+          throw new ApiError('updateQueryOne item not found.', null, 400);
         }
 
         let promise;
         if (docs.length > 1 && cleanDuplicates) {
           if (!this.hasUpdatedDate()) {
-            throw new ApiError('cleanDuplicates used on repo with no updatedDate');
+            throw new ApiError('cleanDuplicates used on repo with no updatedDate.');
           }
           const latestId = _.sortBy(docs, 'updatedDate').reverse()[0].id;
           promise = this.Model.deleteMany({_id: {$ne: latestId}});
@@ -508,7 +508,7 @@ export default class RepoBase {
     // we expect repo.isModuleRepo repo's to always specify a moduleId
     if (this.isModuleRepo) {
       if (!data.moduleId || data.moduleId === -1) {
-        throw new ApiError(`${this.modelName} repo add call is missing moduleId`, null, 400);
+        throw new ApiError(`${this.modelName} repo add call is missing moduleId.`, null, 400);
       }
     }
   }

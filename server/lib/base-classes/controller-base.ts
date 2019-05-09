@@ -66,7 +66,7 @@ export default class ControllerBase {
         } else if (setNoError) {
           res.status(204).end();
         } else {
-          next(new ApiError('Not found', null, 404));
+          next(new ApiError('Not found.', null, 404));
         }
       })
       .catch(next);
@@ -82,7 +82,7 @@ export default class ControllerBase {
         } else if (req.query.setNoError) {
           res.status(204).end();
         } else {
-          next(new ApiError('Not found', null, 404));
+          next(new ApiError('Not found.', null, 404));
         }
       })
       .catch(next);
@@ -187,7 +187,7 @@ export default class ControllerBase {
   callMethod(req, res, next) {
     const method = this[req.params.method];
     if (!method) {
-      throw new ApiError(`Controller Base: no method found for ${req.params.method}`);
+      throw new ApiError(`Controller Base: no method found for ${req.params.method}.`);
     }
     method.call(this, req, res, next);
   }
