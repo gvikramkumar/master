@@ -15,7 +15,7 @@ export class CookieBase {
         this.cookie = cookie;
       }
     } catch (err) {
-      throw new ApiError(`Failed to parse cookie: ${this.name}`, err);
+      throw new ApiError(`Failed to parse cookie: ${this.name}.`, err);
     }
 
   }

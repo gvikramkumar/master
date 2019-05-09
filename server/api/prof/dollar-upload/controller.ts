@@ -22,7 +22,7 @@ export default class DollarUploadController extends ControllerBase {
         dums.forEach(dum => {
           const sub = _.find(subs, x => x.name.toLowerCase() === dum.submeasureName.toLowerCase());
           if (!sub) {
-            throw new ApiError(`${tableName}: no submeasure for submeasureName: ${dum.submeasureName}`);
+            throw new ApiError(`${tableName}: no submeasure for submeasureName: ${dum.submeasureName}.`);
           }
 
           const dup = new DollarUploadPg(dum);

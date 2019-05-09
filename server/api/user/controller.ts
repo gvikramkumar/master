@@ -21,7 +21,7 @@ export default class UserController extends ControllerCallMethodBase {
     getArtRoles(req.user.id)
       .then(roles => {
           if (!roles || roles.length === 0) {
-            next(new ApiError(`No ART roles for user: ${req.user.id}`));
+            next(new ApiError(`No ART roles for user: ${req.user.id}.`));
           } else {
             res.json({userId: req.user.id, roles});
           }

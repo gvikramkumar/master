@@ -21,7 +21,7 @@ export default class DeptUploadController extends ControllerBase {
         objs.forEach(obj => {
           const sub = _.find(subs, x => x.name.toLowerCase() === obj.submeasureName.toLowerCase());
           if (!sub) {
-            throw new ApiError(`${tableName}: no submeasure for submeasureName: ${obj.submeasureName}`);
+            throw new ApiError(`${tableName}: no submeasure for submeasureName: ${obj.submeasureName}.`);
           }
           obj.submeasureKey = sub.submeasureKey;
         });

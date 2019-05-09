@@ -140,7 +140,7 @@ export function getArtRoles(userId) {
   const artUser = process.env.ART_USER;
   const artPassword = process.env.ART_PASSWORD;
   if (!artUser || !artPassword) {
-    throw new ApiError('No ART_USER or ART_PASSWORD');
+    throw new ApiError('No ART_USER or ART_PASSWORD.');
   }
   const options = {
     url: config.art.url,

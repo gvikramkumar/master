@@ -15,7 +15,7 @@ export class PgLookupController {
   callMethod(req, res, next) {
     const method = this[req.params.method];
     if (!method) {
-      throw new ApiError(`PgLookupController: no method found for ${req.params.method}`)
+      throw new ApiError(`PgLookupController: no method found for ${req.params.method}.`);
     }
     method.call(this, req, res, next);
   }
@@ -23,7 +23,7 @@ export class PgLookupController {
   callRepoMethod(req, res, next) {
     const method = this.repo[req.params.method];
     if (!method) {
-      throw new ApiError(`PgLookupController: no method found for ${req.params.method}`)
+      throw new ApiError(`PgLookupController: no method found for ${req.params.method}.`);
     }
     method.call(this.repo, req)
       .then(docs => res.json(docs))

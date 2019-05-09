@@ -63,7 +63,7 @@ Model: Model<any>;
       .then(doc => doc.value)
       .catch(err => {
         if (err.message.match(/duplicate/i)) {
-          throw new ApiError(`Lookup key already exists for this moduleId/key: ${data.moduleId}/${data.key}`);
+          throw new ApiError(`Lookup key already exists for this moduleId/key: ${data.moduleId}/${data.key}.`);
         }
       });
   }

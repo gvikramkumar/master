@@ -6,6 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "build-prod": "ng build --prod",
+    "build-devStage": "ng build --configuration=\"devStage\" --output-path \"dist\"",
     "test": "ng test",
     "e2e": "cd ui && ng e2e -e=unit %1 %2",
     "lint": "ng lint"

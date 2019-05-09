@@ -75,7 +75,7 @@ export default class UploadController {
     this.rows2 = [];
     if (this.hasTwoSheets) {
       if (!sheets[1]) {
-        next(new ApiError('Upload expects 2 sheets in upload file', null, 400));
+        next(new ApiError('Upload expects 2 sheets in upload file.', null, 400));
         return;
       }
       this.rows2 = sheets[1].data.slice(5).filter(row => row.length > 0);
@@ -124,7 +124,7 @@ export default class UploadController {
           if (err.stack) {
             data.stack = err.stack;
           }
-          const _err = new ApiError(`Unexpected ${this.uploadName} Error`, data);
+          const _err = new ApiError(`Unexpected ${this.uploadName} Error.`, data);
           this.sendErrorEmail(_err);
           next(_err);
         }
@@ -157,7 +157,7 @@ export default class UploadController {
   }
 
   removeDuplicatesFromDatabase(imports: AnyObj[]): Promise<any> {
-    return Promise.reject(new ApiError('removeDuplicatesFromDatabase not implemented'));
+    return Promise.reject(new ApiError('removeDuplicatesFromDatabase not implemented.'));
   }
 
   removeSubmeasureNameDuplicatesFromDatabase(imports: AnyObj[]) {
@@ -269,11 +269,12 @@ export default class UploadController {
   }
 
   buildErrorEmailBody(err) {
-    return `
-    <div>${err.message}</div>
+    const body = svrUtil.isProdEnv() ? `<div>${err.message}</div>` :
+    `<div>${err.message}</div>
     <pre>
       ${JSON.stringify(err.data, null, 2)}
     </pre>`;
+    return body;
   }
 
   buildValidationEmailBody() {
@@ -440,7 +441,7 @@ export default class UploadController {
   setUploadType() {
     const uploadType = this.req.path.substr(this.req.path.lastIndexOf('/') + 1);
     if (uploadType.length < 3) {
-      throw new ApiError(`no uploadType: ${uploadType}`);
+      throw new ApiError(`no uploadType: ${uploadType}.`);
     }
     this.req.query.uploadType = uploadType; // set for autoSync
   }
@@ -468,7 +469,7 @@ export default class UploadController {
     const syncMap = new SyncMap();
     const syncProp = _.find(uploadTypes[this.req.dfa.module.abbrev], {type: this.req.query.uploadType}).syncMapProp;
     if (!syncProp) {
-      throw new ApiError(`getSyncMapFromUploadType: no syncProp`);
+      throw new ApiError(`getSyncMapFromUploadType: no syncProp.`);
     }
     syncMap[syncProp] = true;
     return syncMap;
