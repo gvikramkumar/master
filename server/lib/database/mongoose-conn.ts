@@ -1,6 +1,7 @@
 import _config from '../../config/get-config';
 import mg from 'mongoose';
 import AnyObj from '../../../shared/models/any-obj';
+
 const config = _config.mongo;
 
 const options = {
@@ -14,9 +15,10 @@ const options = {
   pass: process.env.MONGODB_PASSWORD
 };
 
-export const mgc: {promise: Promise<AnyObj>, db: AnyObj, mongo: AnyObj} = <any>{};
+export const mgc: { promise: Promise<AnyObj>, db: AnyObj, mongo: AnyObj } = <any>{};
 
-mgc.promise = mg.connect(config.uri, options)
+mgc.promise = Promise.resolve()
+  .then(() => mg.connect(config.uri, options))
   .then(() => {
     console.log(`mongoose connected on: ${config.uri}`);
     mg.connection.on('disconnected', () => console.log('mongoose disconnected'));
