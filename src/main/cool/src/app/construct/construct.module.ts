@@ -1,8 +1,8 @@
 
 
 import {
-    DialogModule, AutoCompleteModule, MultiSelectModule, TreeTableModule,
-    TooltipModule, DragDropModule
+  DialogModule, AutoCompleteModule, MultiSelectModule, TreeTableModule,
+  TooltipModule, DragDropModule
 } from 'primeng/primeng';
 
 import { NgModule } from '@angular/core';
@@ -25,26 +25,26 @@ import { CONSTRUCT_ROUTES } from './construct.routes';
 
 
 @NgModule({
-    declarations: [
-        OfferConstructComponent,
-        OfferconstructChildComponent,
-        DynamicFormQuestionComponent,
-        OfferconstructCanvasComponent
-    ],
-    imports: [
-        TableModule,
-        DialogModule,
-        DragDropModule,
-        TooltipModule,
-        TreeTableModule,
-        MultiSelectModule,
-        AutoCompleteModule,
-        SharedModule,
-        MenuBarModule,
-        TaskBarModule,
-        RightPanelModule,
-        OfferDetailModule,
-        RouterModule.forChild(CONSTRUCT_ROUTES)
-    ]
+  declarations: [
+    OfferConstructComponent,
+    OfferconstructChildComponent,
+    DynamicFormQuestionComponent,
+    OfferconstructCanvasComponent
+  ],
+  imports: [
+    TableModule,
+    DialogModule,
+    DragDropModule,
+    TooltipModule,
+    TreeTableModule,
+    MultiSelectModule,
+    AutoCompleteModule,
+    SharedModule,
+    MenuBarModule,
+    TaskBarModule,
+    RightPanelModule,
+    OfferDetailModule,
+    RouterModule.forChild(CONSTRUCT_ROUTES)
+  ]
 })
 export class ConstructModule { }

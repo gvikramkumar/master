@@ -217,84 +217,84 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       const groupsName = { groups: info };
       // this.getQuestionOnDragDrop(groupsName);  //set listOfOfferquestion to itemDeatils of objects
       this.offerConstructService.addDetails(groupsName).subscribe((data) => {
-        this.listOfferQuestions = data.groups[0].listOfferQuestions;
+          this.listOfferQuestions = data.groups[0].listOfferQuestions;
 
-        if (obj.productName !== this.billing_soa) {
-          if (obj.productName == 'License') {
-            let listOfferQuestions = this.defaultValueServices.LicenseDefault(this.listOfferQuestions);
-            obj['itemDetails'] = listOfferQuestions;
-          }
-          else {
-            let listOfferQuestions = this.defaultValueServices.LicenseDefaultOptional(this.listOfferQuestions);
-            obj['itemDetails'] = listOfferQuestions;
-          }
-          if (obj.productName == 'Billing') {
-            let listOfferQuestions = this.defaultValueServices.setTermsNPayments(this.listOfferQuestions);
-            obj['itemDetails'] = listOfferQuestions;
-          }
-          else {
-            let listOfferQuestions = this.defaultValueServices.setTermsNPaymentsN(this.listOfferQuestions);
-            obj['itemDetails'] = listOfferQuestions;
-          }
-          if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS' || obj.productName == 'Billing') {
-            let listOfferQuestions = this.defaultValueServices.getLicenseDeliveryTypeDefaultValues(this.listOfferQuestions, this.licenseDelivery);
-            obj['itemDetails'] = listOfferQuestions;
-          }
-          else {
-            let listOfferQuestions = this.defaultValueServices.getLicenseDeliveryTypeDefaultValuesN(this.listOfferQuestions, this.licenseDelivery);
-            obj['itemDetails'] = listOfferQuestions;
-          }
+          if (obj.productName !== this.billing_soa) {
+            if (obj.productName == 'License') {
+              let listOfferQuestions = this.defaultValueServices.LicenseDefault(this.listOfferQuestions);
+              obj['itemDetails'] = listOfferQuestions;
+            }
+            else {
+              let listOfferQuestions = this.defaultValueServices.LicenseDefaultOptional(this.listOfferQuestions);
+              obj['itemDetails'] = listOfferQuestions;
+            }
+            if (obj.productName == 'Billing') {
+              let listOfferQuestions = this.defaultValueServices.setTermsNPayments(this.listOfferQuestions);
+              obj['itemDetails'] = listOfferQuestions;
+            }
+            else {
+              let listOfferQuestions = this.defaultValueServices.setTermsNPaymentsN(this.listOfferQuestions);
+              obj['itemDetails'] = listOfferQuestions;
+            }
+            if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS' || obj.productName == 'Billing') {
+              let listOfferQuestions = this.defaultValueServices.getLicenseDeliveryTypeDefaultValues(this.listOfferQuestions, this.licenseDelivery);
+              obj['itemDetails'] = listOfferQuestions;
+            }
+            else {
+              let listOfferQuestions = this.defaultValueServices.getLicenseDeliveryTypeDefaultValuesN(this.listOfferQuestions, this.licenseDelivery);
+              obj['itemDetails'] = listOfferQuestions;
+            }
 
-          if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS' || obj.productName == 'Billing') {
-            let listOfferQuestions = this.defaultValueServices.getChargeTypeValidationValues(this.listOfferQuestions, this.chargeTypeValue);
-            obj['itemDetails'] = listOfferQuestions;
-          }
+            if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS' || obj.productName == 'Billing') {
+              let listOfferQuestions = this.defaultValueServices.getChargeTypeValidationValues(this.listOfferQuestions, this.chargeTypeValue);
+              obj['itemDetails'] = listOfferQuestions;
+            }
 
-          if (obj.productName == 'XaaS') {
-            let listOfferQuestions = this.defaultValueServices.ImageSigningForXaas(this.listOfferQuestions);
-            obj['itemDetails'] = listOfferQuestions;
-          }
-          else if (obj.productName == 'Hardware') {
-            let listOfferQuestions = this.defaultValueServices.ImageSigningForHardware(this.listOfferQuestions);
-            obj['itemDetails'] = listOfferQuestions;
-          }
-          else {
-            let listOfferQuestions = this.defaultValueServices.ImageSigningForHardwareDefault(this.listOfferQuestions);
-            obj['itemDetails'] = listOfferQuestions;
-          }
+            if (obj.productName == 'XaaS') {
+              let listOfferQuestions = this.defaultValueServices.ImageSigningForXaas(this.listOfferQuestions);
+              obj['itemDetails'] = listOfferQuestions;
+            }
+            else if (obj.productName == 'Hardware') {
+              let listOfferQuestions = this.defaultValueServices.ImageSigningForHardware(this.listOfferQuestions);
+              obj['itemDetails'] = listOfferQuestions;
+            }
+            else {
+              let listOfferQuestions = this.defaultValueServices.ImageSigningForHardwareDefault(this.listOfferQuestions);
+              obj['itemDetails'] = listOfferQuestions;
+            }
 
-          if (obj.productName == 'License') {
-            let listOfferQuestions = this.defaultValueServices.setSoftwareLicense(this.listOfferQuestions);
+            if (obj.productName == 'License') {
+              let listOfferQuestions = this.defaultValueServices.setSoftwareLicense(this.listOfferQuestions);
+              obj['itemDetails'] = listOfferQuestions;
+            }
+            else {
+              let listOfferQuestions = this.defaultValueServices.setSoftwareLicenseDefault(this.listOfferQuestions);
+              obj['itemDetails'] = listOfferQuestions;
+            }
+
+            // if (obj.productName == 'License') {
+            //     let listOfferQuestions = this.defaultValueServices.setSoftwareLicenseNSKU(this.listOfferQuestions);
+            //     obj['itemDetails'] = listOfferQuestions;
+            // }
+            // else{
+            //     let listOfferQuestions = this.defaultValueServices.setSoftwareLicenseNSKUDefault(this.listOfferQuestions);
+            //     obj['itemDetails'] = listOfferQuestions;
+            // }
+
+            obj['itemDetails'] = this.listOfferQuestions;
+          } else {
+            let listOfferQuestions = this.defaultValueServices.billingSOADefaultValue(this.listOfferQuestions, this.chargeTypeValue);
             obj['itemDetails'] = listOfferQuestions;
           }
-          else {
-            let listOfferQuestions = this.defaultValueServices.setSoftwareLicenseDefault(this.listOfferQuestions);
-            obj['itemDetails'] = listOfferQuestions;
-          }
-
-          // if (obj.productName == 'License') {
-          //     let listOfferQuestions = this.defaultValueServices.setSoftwareLicenseNSKU(this.listOfferQuestions);
-          //     obj['itemDetails'] = listOfferQuestions;
-          // } 
-          // else{
-          //     let listOfferQuestions = this.defaultValueServices.setSoftwareLicenseNSKUDefault(this.listOfferQuestions);
-          //     obj['itemDetails'] = listOfferQuestions;
-          // }
-
-          obj['itemDetails'] = this.listOfferQuestions;
-        } else {
-          let listOfferQuestions = this.defaultValueServices.billingSOADefaultValue(this.listOfferQuestions, this.chargeTypeValue);
-          obj['itemDetails'] = listOfferQuestions;
-        }
-        this.offerConstructItems.push(this.itemToTreeNode(obj));
-        this.offerConstructItems = [...this.offerConstructItems];
-        this.countableItems.push(this.uniqueId);
-        this.updateChildCount();
-        this.getQuestionList(obj);
-      }, (err) => {
-        console.log('error' + err);
-        this.loaderService.stopLoading();
-      },
+          this.offerConstructItems.push(this.itemToTreeNode(obj));
+          this.offerConstructItems = [...this.offerConstructItems];
+          this.countableItems.push(this.uniqueId);
+          this.updateChildCount();
+          this.getQuestionList(obj);
+        }, (err) => {
+          console.log('error' + err);
+          this.loaderService.stopLoading();
+        },
         () => {
         });
     }
@@ -302,8 +302,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
   getQuestionOnDragDrop(groupsName) {
     this.offerConstructService.addDetails(groupsName).subscribe((data) => {
-      return data.groups[0].listOfferQuestions;
-    }, () => { },
+        return data.groups[0].listOfferQuestions;
+      }, () => { },
       () => {
       });
   }
@@ -440,9 +440,9 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   searchCopyAttributes(event) {
     const searchString = event.query.toUpperCase();
     this.offerConstructCanvasService.searchEgenie(searchString).subscribe((results) => {
-      this.copyAttributeResults = [...results];
-      this.showLoader = true;
-    },
+        this.copyAttributeResults = [...results];
+        this.showLoader = true;
+      },
       () => {
         this.results = [];
       }
@@ -802,76 +802,76 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           const groupsName = { groups: test };
           // obj['itemDetails'] = this.getQuestionOnDragDrop(groupsName);
           this.offerConstructService.addDetails(groupsName).subscribe((data) => {
-            this.listOfferQuestions = data.groups[0].listOfferQuestions;
-            if (obj.productName !== this.billing_soa) {
-              if (obj.productName == 'License') {
-                let listOfferQuestions = this.defaultValueServices.LicenseDefault(this.listOfferQuestions);
-                obj['itemDetails'] = listOfferQuestions;
-              }
-              else {
-                let listOfferQuestions = this.defaultValueServices.LicenseDefaultOptional(this.listOfferQuestions);
-                obj['itemDetails'] = listOfferQuestions;
-              }
-              if (obj.productName == 'Billing') {
-                let listOfferQuestions = this.defaultValueServices.setTermsNPayments(this.listOfferQuestions);
-                obj['itemDetails'] = listOfferQuestions;
-              }
-              else {
-                let listOfferQuestions = this.defaultValueServices.setTermsNPaymentsN(this.listOfferQuestions);
-                obj['itemDetails'] = listOfferQuestions;
-              }
-              if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS' || obj.productName == 'Billing') {
-                let listOfferQuestions = this.defaultValueServices.getLicenseDeliveryTypeDefaultValues(this.listOfferQuestions, this.licenseDelivery);
-                obj['itemDetails'] = listOfferQuestions;
-              }
-              else {
-                let listOfferQuestions = this.defaultValueServices.getLicenseDeliveryTypeDefaultValuesN(this.listOfferQuestions, this.licenseDelivery);
-                obj['itemDetails'] = listOfferQuestions;
-              }
+              this.listOfferQuestions = data.groups[0].listOfferQuestions;
+              if (obj.productName !== this.billing_soa) {
+                if (obj.productName == 'License') {
+                  let listOfferQuestions = this.defaultValueServices.LicenseDefault(this.listOfferQuestions);
+                  obj['itemDetails'] = listOfferQuestions;
+                }
+                else {
+                  let listOfferQuestions = this.defaultValueServices.LicenseDefaultOptional(this.listOfferQuestions);
+                  obj['itemDetails'] = listOfferQuestions;
+                }
+                if (obj.productName == 'Billing') {
+                  let listOfferQuestions = this.defaultValueServices.setTermsNPayments(this.listOfferQuestions);
+                  obj['itemDetails'] = listOfferQuestions;
+                }
+                else {
+                  let listOfferQuestions = this.defaultValueServices.setTermsNPaymentsN(this.listOfferQuestions);
+                  obj['itemDetails'] = listOfferQuestions;
+                }
+                if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS' || obj.productName == 'Billing') {
+                  let listOfferQuestions = this.defaultValueServices.getLicenseDeliveryTypeDefaultValues(this.listOfferQuestions, this.licenseDelivery);
+                  obj['itemDetails'] = listOfferQuestions;
+                }
+                else {
+                  let listOfferQuestions = this.defaultValueServices.getLicenseDeliveryTypeDefaultValuesN(this.listOfferQuestions, this.licenseDelivery);
+                  obj['itemDetails'] = listOfferQuestions;
+                }
 
-              if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS' || obj.productName == 'Billing') {
-                let listOfferQuestions = this.defaultValueServices.getChargeTypeValidationValues(this.listOfferQuestions, this.chargeTypeValue);
-                obj['itemDetails'] = listOfferQuestions;
-              }
-              // 
-              // if (obj.productName == 'License') {
-              //     let listOfferQuestions = this.defaultValueServices.setEntitlementTerm(this.listOfferQuestions);
-              //     obj['itemDetails'] = listOfferQuestions;
-              // }else{
-              //     let listOfferQuestions = this.defaultValueServices.setEntitlementTermN(this.listOfferQuestions);
-              //     obj['itemDetails'] = listOfferQuestions;
-              // } 
+                if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS' || obj.productName == 'Billing') {
+                  let listOfferQuestions = this.defaultValueServices.getChargeTypeValidationValues(this.listOfferQuestions, this.chargeTypeValue);
+                  obj['itemDetails'] = listOfferQuestions;
+                }
+                //
+                // if (obj.productName == 'License') {
+                //     let listOfferQuestions = this.defaultValueServices.setEntitlementTerm(this.listOfferQuestions);
+                //     obj['itemDetails'] = listOfferQuestions;
+                // }else{
+                //     let listOfferQuestions = this.defaultValueServices.setEntitlementTermN(this.listOfferQuestions);
+                //     obj['itemDetails'] = listOfferQuestions;
+                // }
 
-              if (obj.productName == 'XaaS') {
-                let listOfferQuestions = this.defaultValueServices.ImageSigningForXaas(this.listOfferQuestions);
-                obj['itemDetails'] = listOfferQuestions;
-              }
-              else if (obj.productName == 'Hardware') {
-                let listOfferQuestions = this.defaultValueServices.ImageSigningForHardware(this.listOfferQuestions);
-                obj['itemDetails'] = listOfferQuestions;
-              }
-              else {
-                let listOfferQuestions = this.defaultValueServices.ImageSigningForHardwareDefault(this.listOfferQuestions);
-                obj['itemDetails'] = listOfferQuestions;
-              }
+                if (obj.productName == 'XaaS') {
+                  let listOfferQuestions = this.defaultValueServices.ImageSigningForXaas(this.listOfferQuestions);
+                  obj['itemDetails'] = listOfferQuestions;
+                }
+                else if (obj.productName == 'Hardware') {
+                  let listOfferQuestions = this.defaultValueServices.ImageSigningForHardware(this.listOfferQuestions);
+                  obj['itemDetails'] = listOfferQuestions;
+                }
+                else {
+                  let listOfferQuestions = this.defaultValueServices.ImageSigningForHardwareDefault(this.listOfferQuestions);
+                  obj['itemDetails'] = listOfferQuestions;
+                }
 
-              obj['itemDetails'] = this.listOfferQuestions;
-            } else {
-              let listOfferQuestions = this.defaultValueServices.billingSOADefaultValue(this.listOfferQuestions, this.chargeTypeValue);
-              obj['itemDetails'] = listOfferQuestions;
-            }
-            this.setSameAsMajorLine(rowNode, this.listOfferQuestions);
-            rowNode.node.children.push(this.itemToTreeNode(obj));
-            this.offerConstructItems = [...this.offerConstructItems];
-            this.updateChildCount();
-            this.getQuestionList(obj);
-            this.isDisabledView = false;
-            this.isMinorDragDrop = false;
-            this.loaderService.stopLoading();
-          }, (err) => {
-            console.log('error' + err);
-            this.loaderService.stopLoading();
-          },
+                obj['itemDetails'] = this.listOfferQuestions;
+              } else {
+                let listOfferQuestions = this.defaultValueServices.billingSOADefaultValue(this.listOfferQuestions, this.chargeTypeValue);
+                obj['itemDetails'] = listOfferQuestions;
+              }
+              this.setSameAsMajorLine(rowNode, this.listOfferQuestions);
+              rowNode.node.children.push(this.itemToTreeNode(obj));
+              this.offerConstructItems = [...this.offerConstructItems];
+              this.updateChildCount();
+              this.getQuestionList(obj);
+              this.isDisabledView = false;
+              this.isMinorDragDrop = false;
+              this.loaderService.stopLoading();
+            }, (err) => {
+              console.log('error' + err);
+              this.loaderService.stopLoading();
+            },
             () => {
               // if (obj.productName !== 'Billing SOA' || obj.productName !== 'Billing') {
 
@@ -1023,8 +1023,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.loaderService.startLoading();
     this.subscription = this.messageService.getMessage()
       .subscribe(() => {
-        this.saveOfferConstructChanges();
-      },
+          this.saveOfferConstructChanges();
+        },
         (err) => { this.loaderService.stopLoading(); },
         () => { });
 
@@ -1048,10 +1048,10 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       });
 
       this.offerConstructService.closeDialog.subscribe((val) => {
-        if (val == 'close') {
-          this.display = false;
-        }
-      }, () => { this.loaderService.stopLoading(); },
+          if (val == 'close') {
+            this.display = false;
+          }
+        }, () => { this.loaderService.stopLoading(); },
         () => { });
 
       this.offerConstructItems = [...this.offerConstructItems];
@@ -1075,7 +1075,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
       // Initialize Offer Types
       const componentsObj = offerDetails['selectedCharacteristics'] == null ? null : offerDetails['selectedCharacteristics'].
-        filter(char => char.subgroup === 'Offer Components');
+      filter(char => char.subgroup === 'Offer Components');
       // const components = componentsObj == null ? null : componentsObj[0]['characteristics'];
       let components = null;
       if (componentsObj.length > 0) {
@@ -1101,41 +1101,41 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       // Call offerconstruct request to get Major/Minor Line Items
       this.offerConstructCanvasService.retrieveIccDetails(iccRequest).subscribe((iccResponse) => {
 
-        this.majorAndMinorInfo = iccResponse;
+          this.majorAndMinorInfo = iccResponse;
 
-        // Extract Major / Minor Category Details
-        const minorItems = iccResponse['minor'];
-        const majorItems = iccResponse['major'];
+          // Extract Major / Minor Category Details
+          const minorItems = iccResponse['minor'];
+          const majorItems = iccResponse['major'];
 
-        let majorItemsList = [];
-        let minorItemsList = [];
+          let majorItemsList = [];
+          let minorItemsList = [];
 
-        majorItemsList = majorItems.map(function (item) {
-          return {
-            productName: item,
-            categoryName: item,
-            isMajorLineItem: true,
-            listPrice: ''
-          };
-        });
+          majorItemsList = majorItems.map(function (item) {
+            return {
+              productName: item,
+              categoryName: item,
+              isMajorLineItem: true,
+              listPrice: ''
+            };
+          });
 
-        minorItemsList = minorItems.map(function (item) {
-          return {
-            productName: item,
-            categoryName: item,
-            isMajorLineItem: false,
-            listPrice: ''
-          };
-        });
+          minorItemsList = minorItems.map(function (item) {
+            return {
+              productName: item,
+              categoryName: item,
+              isMajorLineItem: false,
+              listPrice: ''
+            };
+          });
 
-        // Populate Item Categories List
-        this.itemCategories = majorItemsList.concat(minorItemsList);
+          // Populate Item Categories List
+          this.itemCategories = majorItemsList.concat(minorItemsList);
 
 
-      }, (err) => {
-        console.log(err);
-        this.loaderService.stopLoading();
-      },
+        }, (err) => {
+          console.log(err);
+          this.loaderService.stopLoading();
+        },
         () => (this.createMajorMinorGroup(), this.offerDetailView()));
 
     });
@@ -1529,11 +1529,11 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 
   /**
-  * Called when an Minor Item is added in to Offer Components Tree table
-  * after e-ginie search.
-  * A minor item is added to the last added major item in the canvas
-  * @param searchResult
-  */
+   * Called when an Minor Item is added in to Offer Components Tree table
+   * after e-ginie search.
+   * A minor item is added to the last added major item in the canvas
+   * @param searchResult
+   */
   addMinorItem(searchResult) {
     const titleName = this.selectedPids.PID;
     if (this.offerConstructItems.length > 0) {
@@ -1580,8 +1580,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   searchForItemFromPdaf(event) {
     const searchString = event.query.toUpperCase();
     this.offerConstructCanvasService.searchEgenie(searchString).subscribe((results) => {
-      this.results = [...results];
-    },
+        this.results = [...results];
+      },
       () => {
         this.results = [];
       }
@@ -1595,20 +1595,20 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   addSearchedItemToOfferConfig() {
     this.loaderService.startLoading();
     this.offerConstructCanvasService.getPidDetails(this.selectedPids.PID).subscribe((results) => {
-      this.loaderService.stopLoading();
+        this.loaderService.stopLoading();
 
-      // Raviraj US290268
-      if (results.body) {
-        if (results.body['major/minor'] === 'Minor Line') {
-          if (results.body['WorkFlow Status'] === 'APPROVED' &&
-            ((results.body['WorkFlow Status Requested By'] === 'BUC') || (
-              results.body['WorkFlow Status Requested By'] === 'PDT'))) {
-            // Call to add minor line item.
-            this.addMinorItem(results.body);
+        // Raviraj US290268
+        if (results.body) {
+          if (results.body['major/minor'] === 'Minor Line') {
+            if (results.body['WorkFlow Status'] === 'APPROVED' &&
+              ((results.body['WorkFlow Status Requested By'] === 'BUC') || (
+                results.body['WorkFlow Status Requested By'] === 'PDT'))) {
+              // Call to add minor line item.
+              this.addMinorItem(results.body);
+            }
           }
         }
-      }
-    },
+      },
       () => {
         this.results = [];
         this.loaderService.stopLoading();
@@ -1630,58 +1630,58 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     let questionsList: any;
     if (!isFromDB) {  // form search PID
       this.offerConstructService.addDetails(groupsName).subscribe((data) => {
-        questionsList = data.groups[0].listOfferQuestions;
-        for (const element in searchResult) {
-          questionsList.forEach(ques => {
-            if (element == ques.question) {
-              ques.currentValue = searchResult[element];
-            }
-            if (ques.egineAttribue == 'Item Name (PID)') {
-              ques.currentValue = obj.title;
-              ques.previousValue = obj.title;
-            }
-          });
-        }
-        const groupinfo = {
-          uniqueKey: obj.uniqueKey,
-          title: obj.title,
-          uniqueNodeId: obj.uniqueNodeId,
-          childCount: obj.childCount,
-          isMajor: obj.isMajorLineItem,
-          isGroupNode: obj.isGroupNode,
-          groupName: obj.productName,
-          eGenieFlag: true,
-          listOfferQuestions: questionsList
-        };
-        const setinfo = { [groupName]: groupinfo };
-        this.setProductInfo(groupName, isMajorOrMinor, setinfo, data.groups[0].listOfferQuestions);
-      }, () => { },
+          questionsList = data.groups[0].listOfferQuestions;
+          for (const element in searchResult) {
+            questionsList.forEach(ques => {
+              if (element == ques.question) {
+                ques.currentValue = searchResult[element];
+              }
+              if (ques.egineAttribue == 'Item Name (PID)') {
+                ques.currentValue = obj.title;
+                ques.previousValue = obj.title;
+              }
+            });
+          }
+          const groupinfo = {
+            uniqueKey: obj.uniqueKey,
+            title: obj.title,
+            uniqueNodeId: obj.uniqueNodeId,
+            childCount: obj.childCount,
+            isMajor: obj.isMajorLineItem,
+            isGroupNode: obj.isGroupNode,
+            groupName: obj.productName,
+            eGenieFlag: true,
+            listOfferQuestions: questionsList
+          };
+          const setinfo = { [groupName]: groupinfo };
+          this.setProductInfo(groupName, isMajorOrMinor, setinfo, data.groups[0].listOfferQuestions);
+        }, () => { },
         () => {
         });
     } else {
       this.offerConstructService.addDetails(groupsName).subscribe((data) => {
-        questionsList = data.groups[0].listOfferQuestions;
-        searchResult.forEach(element => {
-          questionsList.forEach(ques => {
-            if (element.egineAttribue == ques.question) {
-              ques.currentValue = element.values;
-            }
+          questionsList = data.groups[0].listOfferQuestions;
+          searchResult.forEach(element => {
+            questionsList.forEach(ques => {
+              if (element.egineAttribue == ques.question) {
+                ques.currentValue = element.values;
+              }
+            });
           });
-        });
-        const groupinfo = {
-          uniqueKey: obj.uniqueKey,
-          title: obj.title,
-          uniqueNodeId: obj.uniqueNodeId,
-          childCount: obj.childCount,
-          isMajor: obj.isMajorLineItem,
-          isGroupNode: obj.isGroupNode,
-          groupName: obj.productName,
-          eGenieFlag: true,
-          listOfferQuestions: questionsList
-        };
-        const setinfo = { [groupName]: groupinfo };
-        this.setProductInfo(groupName, isMajorOrMinor, setinfo, data.groups[0].listOfferQuestions);
-      }, () => { },
+          const groupinfo = {
+            uniqueKey: obj.uniqueKey,
+            title: obj.title,
+            uniqueNodeId: obj.uniqueNodeId,
+            childCount: obj.childCount,
+            isMajor: obj.isMajorLineItem,
+            isGroupNode: obj.isGroupNode,
+            groupName: obj.productName,
+            eGenieFlag: true,
+            listOfferQuestions: questionsList
+          };
+          const setinfo = { [groupName]: groupinfo };
+          this.setProductInfo(groupName, isMajorOrMinor, setinfo, data.groups[0].listOfferQuestions);
+        }, () => { },
         () => {
         });
     }
@@ -1738,7 +1738,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   replaceSingleFormQuestionWith(popHeadName) {
     const title = this.QuestionsNodeInfo[popHeadName].title;
     if (this.QuestionsNodeInfo[popHeadName].isMajor) {     // for major group
-      // for major group
+                                                           // for major group
       for (const x in this.offerConstructService.singleMultipleFormInfo['major']) {
         if (x == this.QuestionsNodeInfo[popHeadName].groupName) {
           this.offerConstructService.singleMultipleFormInfo.major[x]['productInfo'].forEach(element => {
@@ -2046,8 +2046,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
     console.log('cds', cds);
     this.offerConstructCanvasService.saveOfferConstructChanges(cds).subscribe(() => {
-      this.loaderService.stopLoading();
-    },
+        this.loaderService.stopLoading();
+      },
       () => {
         this.loaderService.stopLoading();
       });
