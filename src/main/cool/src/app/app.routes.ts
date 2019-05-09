@@ -3,6 +3,7 @@ import { appRoutesNames } from './app.routes.names';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { OfferOverViewResolver } from './services/offer-overview-resolver.service';
 import { OfferDetailViewComponent } from './offer-detail/offer-detail-view/offer-detail-view.component';
+import { AuthGuard } from './core/guards/auth-guard';
 
 export const APP_ROUTES = [
     {

@@ -13,6 +13,7 @@ import { SELF_SERVICE_ORDERABILITY_ROUTES } from './self-service-orderability.ro
 import { SelfServiceOrderabilityComponent } from './self-service-orderability.component';
 import { SsoAtoSummaryComponent } from './components/sso-ato-summary/sso-ato-summary.component';
 import { SsoAtoListComponent } from './components/sso-ato-list/sso-ato-list.component';
+import { SsoStatusComponent } from './components/sso-status/sso-status.component';
 
 @NgModule({
 
@@ -20,6 +21,7 @@ import { SsoAtoListComponent } from './components/sso-ato-list/sso-ato-list.comp
     SsoAtoSummaryComponent,
     SelfServiceOrderabilityComponent,
     SsoAtoListComponent,
+    SsoStatusComponent,
   ],
   imports: [
     SharedModule,

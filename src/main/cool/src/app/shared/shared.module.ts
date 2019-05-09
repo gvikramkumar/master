@@ -21,6 +21,7 @@ import {
   ViewcommentComponent,
   TurbotaxviewComponent,
   ViewStrategyComponent,
+  PirateShipLegendComponent,
   DynamicFormMultipleComponent
 } from './components';
 
@@ -36,10 +37,10 @@ import { CustomRangeValidatorDirective } from './validators/custom-range-validat
     ViewcommentComponent,
     ViewStrategyComponent,
     TurbotaxviewComponent,
+    PirateShipLegendComponent,
     DynamicFormMultipleComponent,
     CustomMinValidatorDirective,
-    CustomRangeValidatorDirective
-
+    CustomRangeValidatorDirective,
   ],
   imports: [
     FormsModule,
@@ -83,6 +84,7 @@ import { CustomRangeValidatorDirective } from './validators/custom-range-validat
     ViewcommentComponent,
     ViewStrategyComponent,
     TurbotaxviewComponent,
+    PirateShipLegendComponent,
     DynamicFormMultipleComponent,
   ]
 })
