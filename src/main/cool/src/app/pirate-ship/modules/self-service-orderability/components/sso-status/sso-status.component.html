@@ -1,33 +1,49 @@
 <div class="ui-fluid">
+  <div class="responsive-table">
 
-  <table class="responsive-table">
- 
-    <tr class="ui-datatable-even">
-      <td>Completed</td>
-      <td>Warning</td>
-      <td>Hold</td>
-      <td>Error</td>
-      <td>Not Required</td>
-    </tr>
+    <table class="table">
 
-    <tr class="ui-datatable-odd">
-      <td>
-        <div *ngFor="let status of ssoStatus['completed']">{{status}}</div>
-      </td>
-      <td>
-        <div *ngFor="let status of ssoStatus['warning']">{{status}}</div>
-      </td>
-      <td>
-        <div *ngFor="let status of ssoStatus['hold']">{{status}}</div>
-      </td>
-      <td>
-        <div *ngFor="let status of ssoStatus['error']">{{status}}</div>
-      </td>
-      <td>
-        <div *ngFor="let status of ssoStatus['notRequired']">{{status}}</div>
-      </td>
-    </tr>
- 
-  </table>
+      <thead>
+        <tr>
+          <th style="width: auto;">Completed<br>
+            <div class="divider divider--thick"></div>
+          </th>
+          <th style="width: auto;">Warning<br>
+            <div class="divider divider--thick"></div>
+          </th>
+          <th style="width: auto;">Hold<br>
+            <div class="divider divider--thick"></div>
+          </th>
+          <th style="width: auto;">Error<br>
+            <div class="divider divider--thick"></div>
+          </th>
+          <th style="width: auto;">Not Required<br>
+            <div class="divider divider--thick"></div>
+          </th>
+        </tr>
+      </thead>
 
+      <tbody>
+        <tr>
+          <td>
+            <div *ngFor="let status of ssoStatus['completed']">{{status}}</div>
+          </td>
+          <td>
+            <div *ngFor="let status of ssoStatus['warning']">{{status}}</div>
+          </td>
+          <td>
+            <div *ngFor="let status of ssoStatus['hold']">{{status}}</div>
+          </td>
+          <td>
+            <div *ngFor="let status of ssoStatus['error']">{{status}}</div>
+          </td>
+          <td>
+            <div *ngFor="let status of ssoStatus['notRequired']">{{status}}</div>
+          </td>
+        </tr>
+      </tbody>
+
+    </table>
+
+  </div>
 </div>

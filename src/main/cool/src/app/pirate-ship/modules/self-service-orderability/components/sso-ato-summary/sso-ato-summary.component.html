@@ -1,29 +1,36 @@
 <div class="ui-fluid">
   <blockquote class="blockquote--blue">
 
-    <table class="responsive-table">
-      <tr class="ui-datatable-even">
-        <td>PRODUCT NAME</td>
-        <td>ITEM TYPE</td>
-        <td>ORGANIZATION</td>
-        <td>CURRENT STATUS</td>
-        <td>NPI TEST ORDER FLAG</td>
-        <td>ORDERABILITY CHECK STATUS</td>
-        <td>ERROR WARNING</td>
-      </tr>
-      <tr class="ui-datatable-odd">
-        <td>{{sso['productName']}}</td>
-        <td>{{sso['type']}}</td>
-        <td>{{sso['organization']}}</td>
-        <td>{{sso['currentStatus']}}</td>
-        <td>{{sso['npiTestOrderFlag']}}</td>
-        <td>
-          <div class="text-center">
-            <app-status [status]="sso['orderabilityCheckStatus']"></app-status>
-          </div>
-        </td>
-        <td>{{sso['errorOrWarning']}}</td>
-      </tr>
+    <table class="table">
+
+      <thead>
+        <tr>
+          <th style="width: auto;">PRODUCT NAME</th>
+          <th style="width: auto;">ITEM TYPE</th>
+          <th style="width: auto;">ORGANIZATION</th>
+          <th style="width: auto;">CURRENT STATUS</th>
+          <th style="width: auto;">NPI TEST ORDER FLAG</th>
+          <th style="width: auto;">ORDERABILITY CHECK STATUS</th>
+          <th style="width: auto;">ERROR WARNING</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>{{sso['productName']}}</td>
+          <td>{{sso['type']}}</td>
+          <td>{{sso['organization']}}</td>
+          <td>{{sso['currentStatus']}}</td>
+          <td>{{sso['npiTestOrderFlag']}}</td>
+          <td>
+            <div class="text-center">
+              <app-status [status]="sso['orderabilityCheckStatus']"></app-status>
+            </div>
+          </td>
+          <td>{{sso['errorOrWarning']}}</td>
+        </tr>
+      </tbody>
+
     </table>
 
     <br><br>

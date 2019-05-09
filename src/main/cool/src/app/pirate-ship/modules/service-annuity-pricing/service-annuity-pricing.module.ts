@@ -10,10 +10,12 @@ import { RouterModule } from '@angular/router';
 import { SERVICE_ANNUITY_PRICING_ROUTES } from './service-annuity-pricing.routes';
 
 import { ServiceAnnuityPricingComponent } from './service-annuity-pricing.component';
+import {ATOSummaryComponent} from '@pirateShip/modules/service-annuity-pricing/component/atosummary/atosummary.component';
 
 @NgModule({
   declarations: [
-    ServiceAnnuityPricingComponent
+    ServiceAnnuityPricingComponent,
+    ATOSummaryComponent
   ],
   imports: [
     SharedModule,
