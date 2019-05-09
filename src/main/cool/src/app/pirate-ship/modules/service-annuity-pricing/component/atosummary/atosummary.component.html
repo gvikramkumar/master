@@ -57,7 +57,8 @@
                    <td>{{item.plpPercentage}}</td>
                    <td>${{item.monthlyThreshold}}</td>
                    <td style="border-right: 1px solid #dfdfdf;">
-                     <i *ngIf="Atosummary_af_sub.skuList[i].basedSupportItem" class="fas fa-check-square" style="font-size: 17px"></i></td>
+                     <span *ngIf="Atosummary_af_sub.skuList[i].basedSupportItem" class="icon-lock icon-medium" style="font-size: 17px"></span>
+                    </td>
 
                    <td style="border: 0;background-color: #fff;" *ngIf="middlenumber === i">
 
