@@ -5,3 +5,4 @@ export * from './viewcomment/viewcomment.component';
 export * from './turbotaxview/turbotaxview.component';
 export * from './view-strategy/view-strategy.component';
 export * from './dynamic-form-multiple/dynamic-form-multiple';
+export * from './pirate-ship-legend/pirate-ship-legend.component';

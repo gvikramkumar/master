@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { SsoAto } from '../../models/sso-ato';
 
 @Component({
   selector: 'app-sso-ato-list',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sso-ato-list.component.css']
 })
 export class SsoAtoListComponent implements OnInit {
+
+  @Input() ssoList: Array<SsoAto>;
 
   constructor() { }
 

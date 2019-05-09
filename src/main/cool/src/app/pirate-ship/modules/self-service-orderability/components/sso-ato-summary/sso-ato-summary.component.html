@@ -1,3 +1,40 @@
-<p>
-  sso-ato-summary works!
-</p>
+<div class="ui-fluid">
+  <blockquote class="blockquote--blue">
+
+    <table class="table">
+
+      <thead>
+        <tr>
+          <th style="width: auto;">PRODUCT NAME</th>
+          <th style="width: auto;">ITEM TYPE</th>
+          <th style="width: auto;">ORGANIZATION</th>
+          <th style="width: auto;">CURRENT STATUS</th>
+          <th style="width: auto;">NPI TEST ORDER FLAG</th>
+          <th style="width: auto;">ORDERABILITY CHECK STATUS</th>
+          <th style="width: auto;">ERROR WARNING</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>{{sso['productName']}}</td>
+          <td>{{sso['type']}}</td>
+          <td>{{sso['organization']}}</td>
+          <td>{{sso['currentStatus']}}</td>
+          <td>{{sso['npiTestOrderFlag']}}</td>
+          <td>
+            <div class="text-center">
+              <app-status [status]="sso['orderabilityCheckStatus']"></app-status>
+            </div>
+          </td>
+          <td>{{sso['errorOrWarning']}}</td>
+        </tr>
+      </tbody>
+
+    </table>
+
+    <br><br>
+    <app-sso-status [ssoStatus]="sso['ssoStatus']"></app-sso-status>
+
+  </blockquote>
+</div>
