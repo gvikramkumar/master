@@ -179,15 +179,15 @@ export class OfferConstructComponent implements OnInit, OnDestroy {
   }
 
   onProceedToNext(msg) {
-    const operationalAssesmentProceedPayload = {
-      'taskId': '',
-      'userId': this.offerOwner,
-      'caseId': this.caseId,
-      'offerId': this.currentOfferId,
-      'taskName': 'Design Review',
-      'action': '',
-      'comment': ''
-    };
+    // const operationalAssesmentProceedPayload = {
+    //   'taskId': '',
+    //   'userId': this.offerOwner,
+    //   'caseId': this.caseId,
+    //   'offerId': this.currentOfferId,
+    //   'taskName': 'Design Review',
+    //   'action': '',
+    //   'comment': ''
+    // };
     const designReviewProceedPayload = {
       'taskId': '',
       'userId': this.offerOwner,
@@ -234,7 +234,7 @@ export class OfferConstructComponent implements OnInit, OnDestroy {
       });
 
       if (majorItemData.length > 0 && minorItemData.length > 0) {
-        forkJoin([this.offerPhaseService.createSolutioningActions(operationalAssesmentProceedPayload),
+        forkJoin([// this.offerPhaseService.createSolutioningActions(operationalAssesmentProceedPayload),
         this.offerPhaseService.createSolutioningActions(designReviewProceedPayload)]).subscribe(result => {
           this.messageService.sendMessage('Save Offer Construct Details');
           if (msg !== 'stay_on_this_page') {
