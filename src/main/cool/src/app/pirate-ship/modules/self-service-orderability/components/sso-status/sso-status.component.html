@@ -1,49 +1,41 @@
-<div class="ui-fluid">
-  <div class="responsive-table">
+<div class="row sso--statuses">
 
-    <table class="table">
-
-      <thead>
-        <tr>
-          <th style="width: auto;">Completed<br>
-            <div class="divider divider--thick"></div>
-          </th>
-          <th style="width: auto;">Warning<br>
-            <div class="divider divider--thick"></div>
-          </th>
-          <th style="width: auto;">Hold<br>
-            <div class="divider divider--thick"></div>
-          </th>
-          <th style="width: auto;">Error<br>
-            <div class="divider divider--thick"></div>
-          </th>
-          <th style="width: auto;">Not Required<br>
-            <div class="divider divider--thick"></div>
-          </th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr>
-          <td>
-            <div *ngFor="let status of ssoStatus['completed']">{{status}}</div>
-          </td>
-          <td>
-            <div *ngFor="let status of ssoStatus['warning']">{{status}}</div>
-          </td>
-          <td>
-            <div *ngFor="let status of ssoStatus['hold']">{{status}}</div>
-          </td>
-          <td>
-            <div *ngFor="let status of ssoStatus['error']">{{status}}</div>
-          </td>
-          <td>
-            <div *ngFor="let status of ssoStatus['notRequired']">{{status}}</div>
-          </td>
-        </tr>
-      </tbody>
-
-    </table>
-
+  <div class="col-md-1"></div>
+  <div class="col-md-2">
+    <div class="sso--status-completed"> Completed
+    </div>
+    <ul>
+      <li *ngFor="let status of ssoStatus['completed']">{{status}}</li>
+    </ul>
   </div>
+  <div class="col-md-2">
+    <div class="sso--status-warning">Warning
+    </div>
+    <ul>
+      <li *ngFor="let status of ssoStatus['warning']">{{status}}</li>
+    </ul>
+  </div>
+  <div class="col-md-2">
+    <div class="sso--status-hold">Hold
+    </div>
+    <ul>
+      <li *ngFor="let status of ssoStatus['hold']">{{status}}</li>
+    </ul>
+  </div>
+  <div class="col-md-2">
+    <div class="sso--status-error">Error
+    </div>
+    <ul>
+      <li *ngFor="let status of ssoStatus['error']">{{status}}</li>
+    </ul>
+  </div>
+  <div class="col-md-2">
+    <div class="sso--status-notreq">Not Required
+    </div>
+    <ul>
+      <li *ngFor="let status of ssoStatus['notRequired']">{{status}}</li>
+    </ul>
+  </div>
+
+  <div class="col-md-1"></div>
 </div>

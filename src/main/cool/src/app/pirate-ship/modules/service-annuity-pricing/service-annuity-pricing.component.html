@@ -15,13 +15,13 @@
 
         <div class="leftContent col-sm-12 col-md-9">
 
-          <ng-template #atosummary>
-            <div class="row">
-              <app-atosummary [atoNames]="atoNames" [selectedAto]="selectedAto" [offerId]="offerId"  [caseId] = "caseId"></app-atosummary>
-            </div>
-          </ng-template>
+<!--          <ng-template #atosummary>-->
+<!--            <div class="row">-->
+<!--              <app-atosummary [atoNames]="atoNames" [selectedAto]="selectedAto" [offerId]="offerId"  [caseId] = "caseId"></app-atosummary>-->
+<!--            </div>-->
+<!--          </ng-template>-->
 
-          <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer' else atosummary">
+          <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer'">
             <app-ato-list [atoList]="atoList"></app-ato-list>
           </div>
 
