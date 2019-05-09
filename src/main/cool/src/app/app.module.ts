@@ -44,6 +44,7 @@ import { RightPanelModule } from './right-panel/right-panel.module';
 import { OfferDetailModule } from './offer-detail/offer-detail.module';
 import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from './reducers';
+import { CalendarModule } from 'primeng/calendar';
 
 export function app_init(configService: ConfigurationService) {
   return () => configService.init();
@@ -69,6 +70,7 @@ export function app_init(configService: ConfigurationService) {
     RightPanelModule,
     OfferDetailModule,
     AppRoutingModule,
+    CalendarModule,
     StoreModule.forRoot(reducers, { metaReducers })
   ],
   providers:
