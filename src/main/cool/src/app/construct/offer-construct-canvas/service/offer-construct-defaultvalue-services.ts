@@ -392,6 +392,7 @@ export class OfferConstructDefaultValue {
         question.rules.isDisabled = true;
       }
     });
+
     return questionList;
   }
   setSoftwareLicenseDefault(questionList) {
