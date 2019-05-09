@@ -118,7 +118,7 @@ export default class AllocationRuleController extends ApprovalController {
       'prodPFCritCond', 'prodPFCritChoices', 'prodBUCritCond', 'prodBUCritChoices', 'prodTGCritCond', 'prodTGCritChoices',
       'scmsCritCond', 'scmsCritChoices', 'beCritCond', 'beCritChoices'
     ];
-    return this.sendEmailBase(req, mode, item, 'rule', omitProperties);
+    return this.sendApprovalEmailBase(req, mode, item, 'rule', omitProperties);
   }
 
   preApproveStep(data, firstTimeApprove, req) {

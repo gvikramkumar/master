@@ -3,8 +3,7 @@
 export enum ApprovalMode {
   submit = 1,
   approve,
-  reject,
-  reminder
+  reject
 }
 
 export enum Statuses {

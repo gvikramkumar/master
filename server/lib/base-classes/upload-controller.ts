@@ -244,7 +244,7 @@ export default class UploadController {
 
   sendEmail(subject, body) {
     return sendHtmlMail(
-      svrUtil.getDfaAdminEmail(this.dfa),
+      this.dfa.dfaAdminEmail,
       this.req.user.email,
       null,
       subject,
