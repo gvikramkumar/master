@@ -253,6 +253,9 @@
   text-align: center;
   border-color: #d6d6d6;
 }
+.cool.cui .table th {
+  font-weight: normal;
+}
 
 .cui .row.card-table-header {
   border-bottom: 0;
