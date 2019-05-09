@@ -45,7 +45,7 @@
                 <td *ngFor="let col of columns; let i = index">
                   <p-treeTableCheckbox class="pull-left" [value]="rowNode" *ngIf="i == 0"></p-treeTableCheckbox>
                   <p-treeTableToggler class="pull-left" [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
-                  <span *ngIf="col.field == 'newItemStatus' || col.field == 'moduleStatus'">
+                  <span *ngIf="(col.field == 'newItemStatus' || col.field == 'moduleStatus') && rowData['existing'] == false">
                     <div class="text-center">
                       <span *ngIf="rowData[col.field] == 'Available'">
                         <span class="available">
@@ -61,6 +61,9 @@
                         </span>
                       </span>
                     </div>
+                  </span>
+                  <span *ngIf="col.field == 'newItemStatus' && rowData['existing'] == true"> 
+                    <div class="text-center">--</div>
                   </span>
                   <span *ngIf="col.field == 'basePrice' && rowData[col.field]!=''">
                     <div class="text-center">${{rowData[col.field]}}</div>
