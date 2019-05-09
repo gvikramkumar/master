@@ -10,13 +10,13 @@
         [selectedATO]="selectedAto">
       </app-taskbar>
 
-      <br><br>
+
 
       <div class="row">
 
         <div class="leftContent col-sm-12 col-md-9">
 
-          <div class="row flex-center-vertical">
+          <div class="row flex-center-vertical base-margin-top">
             <div class="col-sm-12">
 
               <button class="btn btn--primary btn--cool btn--small tooltip" placement="top"
@@ -38,14 +38,14 @@
 
           <ng-template #selectedAtoView>
 
-            <br><br>
-            <app-sso-ato-summary [sso]="sso"></app-sso-ato-summary>
+
+            <app-sso-ato-summary [sso]="sso" class="base-margin-top"></app-sso-ato-summary>
 
           </ng-template>
 
-          <br><br>
-          <app-pirate-ship-legend></app-pirate-ship-legend>
- 
+
+          <app-pirate-ship-legend class="base-margin-top"></app-pirate-ship-legend>
+
         </div>
 
         <div class="rightContent col-sm-12 col-md-3">
