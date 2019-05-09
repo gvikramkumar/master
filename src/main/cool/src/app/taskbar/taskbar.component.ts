@@ -17,6 +17,7 @@ export class TaskbarComponent implements OnInit {
   @Input() isValidToProceed: boolean;
   @Input() pirateShipModuleName: string;
   @Input() isPirateShipSubModule: boolean;
+  @Input() selectedATO: string;
   @Input() actionCount: { pendingActionCount: number, needImmediateActionCount: number };
   @Output() newBtnClick = new EventEmitter();
   @Output() onProceedToNext = new EventEmitter();
@@ -48,7 +49,7 @@ export class TaskbarComponent implements OnInit {
     this.currentPage = this.router.url.split('/')[1];
     this.caseId = this.activatedRoute.snapshot.params['caseId'];
     this.offerId = this.activatedRoute.snapshot.params['offerId'];
-    this.selectedAto = this.activatedRoute.snapshot.params['selectedAto'];
+
     this.setTaskBar();
     this.userRole = this.sharedService.userFunctionalRole;
     this.sharedService.userEventEmit.subscribe((role) => {
@@ -106,7 +107,7 @@ export class TaskbarComponent implements OnInit {
   }
 
   goToPirateShip() {
-    this.router.navigate(['/offerSetup', this.offerId, this.caseId, this.selectedAto]);
+    this.router.navigate(['/offerSetup', this.offerId, this.caseId, this.selectedATO]);
   }
 
   gotoOfferviewDetails() {

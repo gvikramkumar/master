@@ -6,9 +6,13 @@ import { EnvironmentService } from '@env/environment.service';
 import { LoaderService } from '@app/core/services/loader.service';
 import { RightPanelService } from '@app/services/right-panel.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
+import { SelfServiceOrderabilityService } from '../../../services/self-service-orderability.service';
 
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
+
+import { SsoAto } from './models/sso-ato';
+import { SelfServiceOrderability } from './models/self-service-orderability';
 
 
 @Component({
@@ -17,6 +21,16 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./self-service-orderability.component.css']
 })
 export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
+
+  sso: SsoAto;
+  ssoList: Array<SsoAto>;
+  selfServiceOrderability: SelfServiceOrderability;
+
+  selectedAto: any;
+  atoNames: string[] = [];
+
+  paramsSubscription: Subscription;
+  selfServiceOrderabilitySubscription: Subscription;
 
   caseId: string;
   planId: string;
@@ -36,10 +50,8 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
   pirateShipModuleName: string;
   isPirateShipSubModule: boolean;
 
-  selectedAto: any;
-  atoNames: string[] = [];
-
-  paramsSubscription: Subscription;
+  showOrderabilitySsoButton: boolean;
+  disableorderabilitySsoButton: boolean;
 
   constructor(
     private loaderService: LoaderService,
@@ -47,7 +59,8 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
     private rightPanelService: RightPanelService,
     private environmentService: EnvironmentService,
     private configurationService: ConfigurationService,
-    private stakeholderfullService: StakeholderfullService
+    private stakeholderfullService: StakeholderfullService,
+    private selfServiceOrderabilityService: SelfServiceOrderabilityService,
   ) {
 
     this.paramsSubscription = this.activatedRoute.params.subscribe(params => {
@@ -69,6 +82,34 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    // Retrieve ATO Details
+
+    this.sso = {} as SsoAto;
+    this.atoNames.push('Overall Offer');
+
+    this.functionalRole = this.configurationService.startupData.functionalRole;
+    this.showOrderabilitySsoButton = this.selectedAto === 'Overall Offer' ? false : true;
+    this.disableorderabilitySsoButton = (this.functionalRole.includes('BUPM') || this.functionalRole.includes('PDT'))
+      ? false : true;
+
+    // this.selfServiceOrderabilitySubscription = this.selfServiceOrderabilityService.retrieveAtoList(this.offerId)
+    //   .subscribe((selfServiceOrderabilityResponse: SelfServiceOrderability) => {
+
+    // this.selfServiceOrderability = selfServiceOrderabilityResponse;
+
+    this.selfServiceOrderability = { "planId": "23423234", "coolOfferId": "COOL_123", "planStatus": "INPROGRESS|COMPLETE", "module": "SELF_SERVICE_ORDERABILITY", "ssoTasks": [{ "type": "ATO Model", "productName": "L-WEBEX-TP-JABBER", "organization": "GLO SSO (BGM)", "currentStatus": "ENABLE-MAJ", "errorOrWarning": "Cisco 4200 Series", "npiTestOrderFlag": "On", "orderabilityCheckStatus": "In Progress", "ssoStatus": { "error": ["--"], "hold": ["Pending Price Change"], "warning": ["XaaS Price Approval", "Price List Availability", "Offer Readiness Review"], "completed": ["FCS Date", "Eco Release", "SBP Readiness", "Global Org Active",], "notRequired": ["Global Org Not Active Status"] } }, { "type": "ATO Model", "productName": "L-WEBEX-TP-JABBER", "organization": "GLO SSO (BGM)", "currentStatus": "ENABLE-MAJ", "errorOrWarning": "Cisco 4200 Series", "npiTestOrderFlag": "On", "orderabilityCheckStatus": "Completed", "ssoStatus": { "error": ["--"], "hold": ["Pending Price Change"], "warning": ["XaaS Price Approval", "Price List Availability", "Offer Readiness Review"], "completed": ["FCS Date", "Eco Release", "SBP Readiness", "Global Org Active",], "notRequired": ["Global Org Not Active Status"] } }] };
+
+    this.ssoList = this.selfServiceOrderability['ssoTasks'] ? this.selfServiceOrderability['ssoTasks'] : [];
+
+    this.ssoList.
+      map(dropDownValue => {
+        this.atoNames.push(dropDownValue.productName);
+      });
+
+    this.sso = this.ssoList.find(ato => ato.productName === this.selectedAto);
+
+    // });
+
     // Retrieve Offer Details
     this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
 
@@ -87,6 +128,7 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.paramsSubscription.unsubscribe();
+    // this.selfServiceOrderabilitySubscription.unsubscribe();
   }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -110,12 +152,16 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
     if (dropDownValue === 'Overall Offer') {
 
       this.selectedAto = dropDownValue;
+      this.showOrderabilitySsoButton = false;
 
     } else {
 
       this.selectedAto = dropDownValue;
+      this.showOrderabilitySsoButton = true;
+      this.sso = this.ssoList.find(ato => ato.productName === dropDownValue);
 
     }
+
   }
 
   // -------------------------------------------------------------------------------------------------------------------
