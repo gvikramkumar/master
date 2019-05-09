@@ -1,13 +1,16 @@
-import * as _ from 'lodash';
+import _ from 'lodash';
 import AnyObj from '../shared/models/any-obj';
 import {shUtil} from '../shared/misc/shared-util';
 import {svrUtil} from '../server/lib/common/svr-util';
-import * as Q from 'q';
+import Q from 'q';
 
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
 
+
+
+/*
 console.log(toFixed('xx.123456789', 8));
 console.log(toFixed(12, 8));
 console.log(toFixed(12., 8));
@@ -30,6 +33,7 @@ function toFixed(val, places) {
   return Number(Number(val).toFixed(places));
 }
 
+*/
 
 
 /*
@@ -174,8 +178,8 @@ console.log(arr);
 console.log(out);
 */
 /*
-import * as fs from 'fs';
-import * as path from 'path';
+import fs from 'fs';
+import path from 'path';
 
 const pwd = '/apps/sparkadm/dfa/dfa_ui/dist/server';
 

@@ -1,7 +1,7 @@
 import {svrUtil} from './svr-util';
 
 
-fdescribe('svrUtil tests', () => {
+describe('svrUtil tests', () => {
 
   describe('toFixed tests', () => {
 
