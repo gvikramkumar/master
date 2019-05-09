@@ -6,7 +6,7 @@ import {ApiError} from '../../../lib/common/api-error';
 import {addFilterLevelColumnsForPgSync} from '../dollar-upload/controller';
 import SubmeasureRepo from '../../common/submeasure/repo';
 import {MappingUploadPg, MappingUploadPgRepo} from './pgrepo';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 @injectable()
 export default class MappingUploadController extends ControllerBase {
@@ -22,7 +22,7 @@ export default class MappingUploadController extends ControllerBase {
         mums.forEach(mum => {
           const sub = _.find(subs, x => x.name.toLowerCase() === mum.submeasureName.toLowerCase());
           if (!sub) {
-            throw new ApiError(`${tableName}: no submeasure for submeasureName: ${mum.submeasureName}`);
+            throw new ApiError(`${tableName}: no submeasure for submeasureName: ${mum.submeasureName}.`);
           }
 
           const mup = new MappingUploadPg(mum);

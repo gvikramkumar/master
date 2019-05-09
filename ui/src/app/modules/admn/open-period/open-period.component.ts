@@ -8,7 +8,7 @@ import {DfaModule} from '../../_common/models/module';
 import {shUtil} from '../../../../../../shared/misc/shared-util';
 import {OpenPeriodService} from '../../_common/services/open-period.service';
 import {FiscalMonth} from '../../_common/models/fiscalMonth';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {PgLookupService} from '../../_common/services/pg-lookup.service';
 import {OpenPeriod} from '../../_common/models/open-period';
 

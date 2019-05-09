@@ -5,7 +5,7 @@ import {DfaModuleIds} from '../../../../shared/misc/enums';
 import {ApiError} from '../../../lib/common/api-error';
 import SubmeasureRepo from '../../common/submeasure/repo';
 import {AlternateSl2UploadPgRepo} from './pgrepo';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 
 @injectable()

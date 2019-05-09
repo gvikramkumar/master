@@ -2,7 +2,7 @@ import {injectable} from 'inversify';
 import UploadController from '../../../../lib/base-classes/upload-controller';
 import PgLookupRepo from '../../../pg-lookup/repo';
 import ServiceTrainingUploadTemplate from './template';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import ServiceTrainingUploadImport from './import';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
@@ -72,24 +72,21 @@ imports: ServiceTrainingUploadImport[];
     this.imports = this.rows1.map(row => new ServiceTrainingUploadImport(row, this.fiscalMonth));
     const obj = {};
     this.imports.forEach(val => {
-      const salesTerritoryCode = val.salesTerritoryCode.toUpperCase();
-      const salesNodeLevel3Code = val.salesNodeLevel3Code.toUpperCase();
-      if (obj[salesTerritoryCode] && obj[salesTerritoryCode][salesNodeLevel3Code] !== undefined) {
-        obj[salesTerritoryCode][salesNodeLevel3Code] += val.splitPercentage;
+      const productFamily = val.productFamily.toUpperCase();
+      if (obj[productFamily] !== undefined) {
+        obj[productFamily] += val.splitPercentage;
       } else {
-        obj[salesTerritoryCode] = {[salesNodeLevel3Code]: val.splitPercentage};
+        obj[productFamily] = val.splitPercentage;
       }
     });
-    _.forEach(obj, (obj1, salesTerr) => {
-      _.forEach(obj1, (val, busEntity) => {
-        if (svrUtil.toFixed8(val) !== 1.0) {
-          this.addError(`${salesTerr} / ${busEntity}`, val);
-        }
-      });
+    _.forEach(obj, (val, sl3) => {
+      if (svrUtil.toFixed8(val) !== 1.0) {
+        this.addError(`${sl3}`, val);
+      }
     });
 
     if (this.errors.length) {
-      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Sales Territory Code / Sales Level 3 Code  percentage values not 100%', this.errors));
+      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Product Family percentage values not 100%', this.errors));
     }
     return Promise.resolve();
   }
@@ -100,10 +97,9 @@ imports: ServiceTrainingUploadImport[];
 
   removeDuplicatesFromDatabase(imports: ServiceTrainingUploadImport[]) {
     const duplicates = _.uniqWith(imports, (a, b) => {
-      return a.salesTerritoryCode === b.salesTerritoryCode &&
-        a.salesNodeLevel3Code === b.salesNodeLevel3Code;
+      return a.productFamily === b.productFamily;
     })
-      .map(x => _.pick(x, ['salesTerritoryCode', 'salesNodeLevel3Code']))
+      .map(x => _.pick(x, ['productFamily']))
     return this.repo.bulkRemove(duplicates);
   }
 

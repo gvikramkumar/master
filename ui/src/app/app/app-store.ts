@@ -3,7 +3,7 @@ import {BehaviorSubject, Subject} from 'rxjs';
 import {StoreBase} from '../core/base-classes/store-base';
 import {CuiHeaderOptions} from '@cisco-ngx/cui-components';
 import {first} from 'rxjs/operators';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {DfaModule} from '../modules/_common/models/module';
 import DfaUser from '../../../../shared/models/dfa-user';
 import {shUtil} from '../../../../shared/misc/shared-util';

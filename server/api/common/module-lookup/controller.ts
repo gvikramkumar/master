@@ -15,7 +15,7 @@ export default class ModuleLookupController {
     } else if (req.query.key && req.query.moduleIds) {
       this.getOneValueManyModules(req, res, next);
     } else {
-      throw new ApiError('ModuleLookup getMany called with bad parameters', null, 400);
+      throw new ApiError('ModuleLookup getMany called with bad parameters.', null, 400);
     }
   }
 
@@ -35,7 +35,7 @@ export default class ModuleLookupController {
 
   getValue(req, res, next) {
     if (!req.query.moduleId) {
-      next(new ApiError('moduleId required', null, 400));
+      next(new ApiError('moduleId required.', null, 400));
       return Promise.resolve();
     }
     return this.repo.getOne(Number(req.query.moduleId), req.params.key)
@@ -75,7 +75,7 @@ export default class ModuleLookupController {
 
   remove(req, res, next) {
     if (!req.query.moduleId) {
-      next(new ApiError('moduleId required', null, 400));
+      next(new ApiError('moduleId required.', null, 400));
     }
     return this.repo.getOne(Number(req.query.moduleId), req.params.key)
       .then(item => {

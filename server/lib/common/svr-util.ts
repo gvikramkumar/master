@@ -3,10 +3,13 @@ import {Buffer} from 'buffer';
 import _ from 'lodash';
 import {ApiError} from './api-error';
 import {DfaModuleIds} from '../../../shared/misc/enums';
+import config from '../../config/get-config';
 
 export const svrUtil = {
   isLocalEnv,
   getItadminEmail,
+  getDfaAdminEmail,
+  getBizAdminEmail,
   getPpmtEmail,
   trimStringProperties,
   getMemoryUsage,
@@ -25,8 +28,13 @@ export const svrUtil = {
   docToObject,
   postgresReplaceQuotes,
   toFixed8,
-  toFixed
+  toFixed,
+  isProdEnv
 };
+
+function isProdEnv() {
+  return config.env === 'prod';
+}
 
 function toFixed8(val) {
   return toFixed(val, 8);
@@ -70,6 +78,20 @@ function getItadminEmail(dfa) {
     return dfa.user.email;
   }
   return dfa.itadminEmail;
+}
+
+function getDfaAdminEmail(dfa) {
+  if (isLocalEnv()) {
+    return dfa.user.email;
+  }
+  return dfa.dfaAdminEmail;
+}
+
+function getBizAdminEmail(dfa) {
+  if (isLocalEnv()) {
+    return dfa.user.email;
+  }
+  return dfa.bizAdminEmail;
 }
 
 function getPpmtEmail(dfa) {
@@ -193,7 +215,7 @@ function checkParams(obj, arrProps, next) {
     }
   });
   if (missing.length) {
-    const err = new ApiError(`Missing parameters: ${missing.join(', ')}`, obj, 400);
+    const err = new ApiError(`Missing parameters: ${missing.join(', ')}.`, obj, 400);
     next(err);
     return true;
   }

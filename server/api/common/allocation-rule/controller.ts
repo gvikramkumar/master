@@ -8,7 +8,7 @@ import {sendHtmlMail} from '../../../lib/common/mail';
 import LookupRepo from '../../lookup/repo';
 import {svrUtil} from '../../../lib/common/svr-util';
 import {shUtil} from '../../../../shared/misc/shared-util';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import AnyObj from '../../../../shared/models/any-obj';
 import {ruleUtil} from '../../../../shared/misc/rule-util';
 
@@ -50,7 +50,7 @@ export default class AllocationRuleController extends ApprovalController {
         }
       });
       if (errs.length) {
-        throw new ApiError('Add rule errors', errs, 400);
+        throw new ApiError('Add rule errors.', errs, 400);
       }
     });
   }
@@ -121,12 +121,12 @@ export default class AllocationRuleController extends ApprovalController {
     return this.sendApprovalEmailBase(req, mode, item, 'rule', 'rule-management', omitProperties);
   }
 
-  preApproveStep(data, req) {
+  preApproveStep(data, firstTimeApprove, req) {
     // we only check for duplicate names in active/inactive, NOT pending, someone could get theirs approved before yours, if so, you get an error
     return this.repo.getManyLatestGroupByNameActiveInactive(req.dfa.module.moduleId)
       .then(rules => {
-        if (_.find(rules, {name: data.name})) {
-          throw new ApiError(`Rule name already exists: ${data.name}`);
+        if (firstTimeApprove && _.find(rules, {name: data.name})) {
+          throw new ApiError(`Rule name already exists: ${data.name}.`);
         }
       });
   }

@@ -1,6 +1,6 @@
 import {BehaviorSubject} from 'rxjs';
 import {Injectable} from '@angular/core';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 export enum BreakpointDirection {
   initial = 1,

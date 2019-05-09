@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {ApiError} from '../common/api-error';
 
 export default function() {

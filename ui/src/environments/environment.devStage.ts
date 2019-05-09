@@ -3,5 +3,5 @@ export const environment = {
   apiUrl: '',
   logState: false,
   disableAnimations: false,
-  showVerboseErrorMessages : false
+  showVerboseErrorMessages: true
 };

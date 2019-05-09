@@ -3,7 +3,7 @@ import ControllerBase from '../../../lib/base-classes/controller-base';
 import DeptUploadRepo from './repo';
 import {DeptUploadPgRepo} from './pgrepo';
 import SubmeasureRepo from '../../common/submeasure/repo';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {ApiError} from '../../../lib/common/api-error';
 import {DfaModuleIds} from '../../../../shared/misc/enums';
 
@@ -21,7 +21,7 @@ export default class DeptUploadController extends ControllerBase {
         objs.forEach(obj => {
           const sub = _.find(subs, x => x.name.toLowerCase() === obj.submeasureName.toLowerCase());
           if (!sub) {
-            throw new ApiError(`${tableName}: no submeasure for submeasureName: ${obj.submeasureName}`);
+            throw new ApiError(`${tableName}: no submeasure for submeasureName: ${obj.submeasureName}.`);
           }
           obj.submeasureKey = sub.submeasureKey;
         });

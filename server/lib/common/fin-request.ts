@@ -1,14 +1,13 @@
 import {ApiError} from './api-error';
-import * as _request from 'request';
+import request from 'request';
 
 export function finRequest(options) {
-  const request = _request.default;
 
   return new Promise((resolve, reject) => {
 
     request(options, (err, resp, body) => {
       if (err) {
-        reject(new ApiError('Request error', {
+        reject(new ApiError('Request error.', {
           error: Object.assign({message: err.message}, err),
           options: options
         }));

@@ -1,7 +1,7 @@
 import {injectable} from 'inversify';
 import DeptUploadImport from './import';
 import DeptUploadRepo from '../../dept-upload/repo';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import UploadController from '../../../../lib/base-classes/upload-controller';
 import DeptUploadDeptTemplate from './dept-template';
 import DeptUploadExludeAcctTemplate from './exclude-acct-template';

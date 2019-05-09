@@ -1,7 +1,7 @@
 import {injectable} from 'inversify';
 import {mgc} from '../../lib/database/mongoose-conn';
 import Q from 'q';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {svrUtil} from '../../lib/common/svr-util';
 import {ApiError} from '../../lib/common/api-error';
 import FileRepo from './repo';
@@ -44,7 +44,7 @@ export default class FileController {
         if (item) {
           res.json(item);
         } else {
-          next(new ApiError('Not found', null, 404));
+          next(new ApiError('Not found.', null, 404));
         }
       })
       .catch(next);

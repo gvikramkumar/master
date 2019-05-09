@@ -1,5 +1,5 @@
 import DfaUser from '../../../shared/models/dfa-user';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import LookupRepo from '../../api/lookup/repo';
 import {ModuleRepo} from '../../api/common/module/repo';
 import {shUtil} from '../../../shared/misc/shared-util';
@@ -140,7 +140,7 @@ export function getArtRoles(userId) {
   const artUser = process.env.ART_USER;
   const artPassword = process.env.ART_PASSWORD;
   if (!artUser || !artPassword) {
-    throw new ApiError('No ART_USER or ART_PASSWORD');
+    throw new ApiError('No ART_USER or ART_PASSWORD.');
   }
   const options = {
     url: config.art.url,
@@ -166,7 +166,8 @@ export function getArtRoles(userId) {
     .then(result => _.get(result, 'body.resources.resourceFQN') || [])
     .then(roles => roles.map(x => x.toLowerCase()))
     .catch(err => {
-      throw new ApiError('art request failure', err);
+      console.error('ART request failure', err);
+      return []; // failover to database when ART is down
     });
 
 }

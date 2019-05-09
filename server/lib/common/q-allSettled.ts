@@ -1,5 +1,5 @@
-import * as Q from 'q';
-import * as _ from 'lodash';
+import Q from 'q';
+import _ from 'lodash';
 import AnyObj from '../../../shared/models/any-obj';
 
 

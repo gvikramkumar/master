@@ -1,5 +1,5 @@
 import {injectable} from 'inversify';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import UploadController from '../../../../lib/base-classes/upload-controller';
 import CorpAdjustmentsUploadTemplate from './template';
 import CorpAdjustmentsUploadImport from './import';
@@ -83,8 +83,7 @@ export default class CorpAdjustmentsUploadUploadController extends UploadControl
   }
 
   removeDuplicatesFromDatabase(imports: CorpAdjustmentsUploadImport[]) {
-    const list = _.map(imports, 'salesCountryName');
-    return this.repo.removeMany({salesCountryName: {$in: list}});
+    return this.repo.removeMany({});
   }
 
   validateCountryName() {

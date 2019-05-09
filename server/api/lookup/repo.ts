@@ -1,6 +1,6 @@
 import {injectable} from 'inversify';
 import {model, Model, Schema} from 'mongoose';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {ApiError} from '../../lib/common/api-error';
 
 const schema = new Schema(
@@ -61,7 +61,7 @@ Model: Model<any>;
       .then(doc => doc.value)
       .catch(err => {
         if (err.message.match(/duplicate/i)) {
-          throw new ApiError(`Lookup key already exists: ${data.key}`);
+          throw new ApiError(`Lookup key already exists: ${data.key}.`);
         }
       });
   }

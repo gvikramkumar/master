@@ -8,7 +8,7 @@ import {AllocationRule} from '../../../../../../../shared/models/allocation-rule
 import {of} from 'rxjs';
 import {MeasureService} from '../../services/measure.service';
 import {Measure} from '../../models/measure';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {UiUtil} from '../../../../core/services/ui-util';
 import {SourceService} from '../../services/source.service';
 import {Source} from '../../../../../../../shared/models/source';
@@ -1146,4 +1146,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     !this.sm.inputFilterLevel.glSegLevel.length;
   }
 
+  canApprove() {
+    return this.uiUtil.canAdminApprove(this.sm.updatedBy);
+  }
 }

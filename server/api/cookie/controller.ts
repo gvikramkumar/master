@@ -1,7 +1,7 @@
 import {FinDfaCookie} from './fin-dfa.cookie';
 import {ApiError} from '../../lib/common/api-error';
 import {shUtil} from '../../../shared/misc/shared-util';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 export class CookieController {
 
@@ -11,7 +11,7 @@ export class CookieController {
         new FinDfaCookie(req, res).updateCookieFromEndpoint(req.body);
         break;
       default:
-        throw new ApiError('No cookie name in body', null, 400);
+        throw new ApiError('No cookie name in body.', null, 400);
     }
     next();
   }

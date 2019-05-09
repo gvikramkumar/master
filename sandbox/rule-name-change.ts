@@ -3,8 +3,8 @@ const inj = injector; // required to import reflect-metadata before any injectio
 import {mgc} from '../server/lib/database/mongoose-conn';
 import AllocationRuleRepo from '../server/api/common/allocation-rule/repo';
 import AnyObj from '../shared/models/any-obj';
-import * as fs from 'fs';
-import * as _ from 'lodash';
+import fs from 'fs';
+import _ from 'lodash';
 import LookupRepo from '../server/api/lookup/repo';
 import SubmeasureRepo from '../server/api/common/submeasure/repo';
 import {SelectExceptionMap} from '../shared/classes/select-exception-map';

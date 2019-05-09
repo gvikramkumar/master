@@ -2,7 +2,7 @@ import AnyObj from '../../../shared/models/any-obj';
 import {Orm, OrmMap} from './Orm';
 import {pgc} from '../database/postgres-conn';
 import {ApiError} from '../common/api-error';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 // date assumption: assumes all dates are iso date strings, can't pass in objects with Date types
 // passed in filter objects use object properties, not table fields
@@ -43,7 +43,7 @@ export class PgRepoBase {
     return this.getMany({[this.idProp]: idVal})
       .then(objs => {
         if (objs.length > 1) {
-          throw new ApiError('Multiple rows returned from getOne query', null, 400);
+          throw new ApiError('Multiple rows returned from getOne query.', null, 400);
         }
         return objs[0];
       });
@@ -94,7 +94,7 @@ export class PgRepoBase {
    */
   updateQueryOne(filter, obj, userId, concurrencyCheck = true, bypassCreatedUpdated = false) {
     if (Object.keys(filter).length === 0) {
-      throw new ApiError('updateQueryOne called with no filter', null, 400);
+      throw new ApiError('updateQueryOne called with no filter.', null, 400);
     }
     if (this.hasCreatedBy() && concurrencyCheck) {
       filter.updatedDate = obj.updatedDate;
@@ -131,7 +131,7 @@ export class PgRepoBase {
 
   updateQueryOneNoCheck(filter, obj, userId, bypassCreatedUpdated = false) {
     if (Object.keys(filter).length === 0) {
-      throw new ApiError('updateQueryOne called with no filter', null, 400);
+      throw new ApiError('updateQueryOne called with no filter.', null, 400);
     }
     if (!bypassCreatedUpdated) {
       this.addUpdatedBy(obj, userId);
@@ -198,7 +198,7 @@ export class PgRepoBase {
     return this.getMany(filter)
       .then(objs => {
         if (objs.length > 1) {
-          throw new ApiError('Multiple rows returned from getOne query', null, 400);
+          throw new ApiError('Multiple rows returned from getOne query.', null, 400);
         }
         return objs[0];
       });
@@ -206,7 +206,7 @@ export class PgRepoBase {
 
   upsertQueryOne(filter, obj, userId) {
     if (Object.keys(filter).length === 0) {
-      throw new ApiError('upsertQueryOne called with no filter', null, 400);
+      throw new ApiError('upsertQueryOne called with no filter.', null, 400);
     }
     return this.getMany(filter)
       .then(docs => {
@@ -223,7 +223,7 @@ export class PgRepoBase {
 
   removeQueryOne(filter) {
     if (Object.keys(filter).length === 0) {
-      throw new ApiError('removeQueryOne called with no filter', null, 400);
+      throw new ApiError('removeQueryOne called with no filter.', null, 400);
     }
     return this.getMany(filter)
       .then(items => {
@@ -383,7 +383,7 @@ export class PgRepoBase {
 
   buildIdsWhereClause(ids) {
     if (!ids.length) {
-      throw new ApiError('No ids for buildIdsWhereClause');
+      throw new ApiError('No ids for buildIdsWhereClause.');
     }
     const sql = ` where ${this.orm.getPgField(this.idProp)} in (${ids.join(', ')}) `;
     return sql;
@@ -402,7 +402,7 @@ export class PgRepoBase {
         }
         const map = _.find(this.orm.maps, {prop: key});
         if (!map) {
-          throw new ApiError(`No property found in ormMap for ${key}`, null, 400);
+          throw new ApiError(`No property found in ormMap for ${key}.`, null, 400);
         }
         const field = map.field;
         if (idx !== 0) {
@@ -455,7 +455,7 @@ export class PgRepoBase {
   verifyModuleId(filter) {
     if (this.isModuleRepo) {
       if (!filter.moduleId) {
-        throw new ApiError(`${this.table} repo call is missing moduleId`, null, 400);
+        throw new ApiError(`${this.table} repo call is missing moduleId.`, null, 400);
       } else if (filter.moduleId === -1) {
         delete filter.moduleId; // get all modules
       } else {

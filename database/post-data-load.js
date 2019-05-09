@@ -23,12 +23,14 @@ db.getCollection('dfa_allocation_rule').updateMany({glSegmentsMatch: ''}, {$set:
 db.dfa_lookup.insertMany([
   {
     key: 'database-version',
-    value: 18
+    value: 19
   },
   {
     key: 'build-number',
     value: "0"
   },
+  {key: 'dfa-admin-email', value: 'dfa-admin@cisco.com'},
+  {key: 'dfa-biz-admin-email', value: 'dfa_business_admin@cisco.com'},
   {
     key: 'itadmin-email',
     value: 'dfa-admin@cisco.com'

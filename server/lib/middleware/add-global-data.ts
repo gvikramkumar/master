@@ -1,6 +1,6 @@
 import LookupRepo from '../../api/lookup/repo';
 import {ModuleRepo} from '../../api/common/module/repo';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import AnyObj from '../../../shared/models/any-obj';
 import {DfaModule} from '../../../ui/src/app/modules/_common/models/module';
 import DfaUser from '../../../shared/models/dfa-user';
@@ -13,6 +13,8 @@ export class ApiDfaData {
   modules: DfaModule[];
   fiscalMonths: AnyObj;
   itadminEmail: string;
+  dfaAdminEmail: string;
+  bizAdminEmail: string;
   ppmtEmail: string;
   user: DfaUser;
   req: IncomingMessage
@@ -44,7 +46,7 @@ export function addGlobalData() {
 
   return function (req, res, next) {
     Promise.all([
-      lookupRepo.getValues(['itadmin-email', 'ppmt-email']),
+      lookupRepo.getValues(['itadmin-email', 'dfa-admin-email', 'dfa-biz-admin-email', 'ppmt-email']),
       moduleRepo.getNonAdminSortedByDisplayOrder(),
       openPeriodRepo.getMany()
     ])
@@ -60,7 +62,9 @@ export function addGlobalData() {
           req: req,
           user: req.user,
           itadminEmail: lookups[0],
-          ppmtEmail: lookups[1],
+          dfaAdminEmail: lookups[1],
+          bizAdminEmail: lookups[2],
+          ppmtEmail: lookups[3],
           modules,
           fiscalMonths
         });

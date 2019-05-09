@@ -3,11 +3,11 @@ import {MatPaginator, MatSort, MatTableDataSource, PageEvent, Sort} from '@angul
 import {RuleService} from '../../services/rule.service';
 import {FormControl} from '@angular/forms';
 import {AllocationRule} from '../../../../../../../shared/models/allocation-rule';
-import * as moment from 'moment';
+import moment from 'moment';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppStore} from '../../../../app/app-store';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {UiUtil} from '../../../../core/services/ui-util';
 import {shUtil} from '../../../../../../../shared/misc/shared-util';
 import {DialogSize, DialogType} from '../../../../core/models/ui-enums';

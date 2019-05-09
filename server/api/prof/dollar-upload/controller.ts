@@ -5,7 +5,7 @@ import {DfaModuleIds} from '../../../../shared/misc/enums';
 import {ApiError} from '../../../lib/common/api-error';
 import SubmeasureRepo from '../../common/submeasure/repo';
 import {DollarUploadPg, DollarUploadPgRepo} from './pgrepo';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {filterLevelMap} from '../../../../shared/models/filter-level-map';
 
 @injectable()
@@ -22,7 +22,7 @@ export default class DollarUploadController extends ControllerBase {
         dums.forEach(dum => {
           const sub = _.find(subs, x => x.name.toLowerCase() === dum.submeasureName.toLowerCase());
           if (!sub) {
-            throw new ApiError(`${tableName}: no submeasure for submeasureName: ${dum.submeasureName}`);
+            throw new ApiError(`${tableName}: no submeasure for submeasureName: ${dum.submeasureName}.`);
           }
 
           const dup = new DollarUploadPg(dum);

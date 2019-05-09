@@ -2,9 +2,9 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource, MatCheckbox, MatDialogConfig, MatDialog} from '@angular/material';
 import {FormControl} from '@angular/forms';
 import {Subject, Subscription} from 'rxjs';
-import * as moment from 'moment';
+import moment from 'moment';
 import {ActivatedRoute, Router} from '@angular/router';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {debounceTime} from 'rxjs/operators';
 import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
 import {AllocationRule} from '../../../../../../../shared/models/allocation-rule';
@@ -80,7 +80,8 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
   refreshRules() {
     this.ruleService.getManyPending()
       .subscribe(rules => {
-        this.rules = _.orderBy(rules, ['updatedDate'], ['desc']);
+        const filteredRules = rules.filter(rule => this.uiUtil.canAdminApprove(rule.updatedBy));
+        this.rules = _.orderBy(filteredRules, ['updatedDate'], ['desc']);
         this.ruleDataSource = new MatTableDataSource(this.rules);
         this.ruleDataSource.paginator = this.rulePaginator;
         this.ruleDataSource.sort = this.ruleSort;
@@ -91,7 +92,8 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
   refreshSubmeasures() {
     this.submeasureService.getManyPending()
       .subscribe(submeasures => {
-        this.submeasures = _.orderBy(submeasures, ['updatedDate'], ['desc']);
+        const filteredSms = submeasures.filter(sm => this.uiUtil.canAdminApprove(sm.updatedBy));
+        this.submeasures = _.orderBy(filteredSms, ['updatedDate'], ['desc']);
         this.submeasureDataSource = new MatTableDataSource(this.submeasures);
         this.submeasureDataSource.paginator = this.submeasurePaginator;
         this.submeasureDataSource.sort = this.submeasureSort;

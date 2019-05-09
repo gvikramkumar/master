@@ -9,11 +9,11 @@ import {SubmeasureService} from '../../services/submeasure.service';
 import {DollarUploadService} from '../../../prof/services/dollar-upload.service';
 import {MappingUploadService} from '../../../prof/services/mapping-upload.service';
 import {environment} from '../../../../../environments/environment';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {UiUtil} from '../../../../core/services/ui-util';
 import {shUtil} from '../../../../../../../shared/misc/shared-util';
 import {PgLookupService} from '../../services/pg-lookup.service';
-import * as moment from 'moment';
+import moment from 'moment';
 
 interface ReportSettings {
   submeasureKey?: number;

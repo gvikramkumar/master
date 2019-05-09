@@ -1,6 +1,6 @@
 /*tslint:disable max-line-length  */
 import {injectable} from 'inversify';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import DollarUploadController from '../../prof/dollar-upload/controller';
 import MappingUploadController from '../../prof/mapping-upload/controller';
 import DeptUploadController from '../../prof/dept-upload/controller';
@@ -469,13 +469,13 @@ export default class ReportController extends ControllerBase {
         break;
 
       default:
-        next(new ApiError('Bad report type', null, 400));
+        next(new ApiError('Bad report type.', null, 400));
         return;
     }
 
       if (multiSheetReport) {
         if ((excelHeaders && excelHeaders.length < 2) || excelSheetname.length < 2 || excelProperties.length < 2) {
-          next(new ApiError(`excelHeaders, excelProperties, excelSheetname array lengths must be > 1 for multisheet report`, body, 400));
+          next(new ApiError(`excelHeaders, excelProperties, excelSheetname array lengths must be > 1 for multisheet report.`, body, 400));
           return;
         }
         promise

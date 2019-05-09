@@ -1,5 +1,5 @@
 import {Schema, model, Model} from 'mongoose';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {svrUtil} from '../../lib/common/svr-util';
 import {injectable} from 'inversify';
 

@@ -2,7 +2,7 @@ import RepoBase from './repo-base';
 import ControllerBase from './controller-base';
 import {ApiError} from '../common/api-error';
 import {ApprovalMode} from '../../../shared/misc/enums';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {svrUtil} from '../common/svr-util';
 import {shUtil} from '../../../shared/misc/shared-util';
 import {sendHtmlMail} from '../common/mail';
@@ -53,18 +53,20 @@ export default class ApprovalController extends ControllerBase {
   approve(req, res, next) {
     const data = req.body;
     this.repo.validate(data);
+    let firstTimeApprove = false;
     if (data.approvedOnce === 'Y') {
       data.status = data.activeStatus;
       data.approvedBy = req.user.id;
       data.approvedDate = new Date();
     } else if (data.approvedOnce === 'N' && data.status === 'P') {
+      firstTimeApprove = true;
       data.status = 'A';
       data.activeStatus = 'A';
       data.approvedOnce = 'Y';
       data.approvedBy = req.user.id;
       data.approvedDate = new Date();
     }
-    this.preApproveStep(data, req)
+    this.preApproveStep(data, firstTimeApprove, req)
       .then(() => {
       this.repo.update(data, req.user.id, true, true, false)
         .then(item => {
@@ -146,7 +148,7 @@ export default class ApprovalController extends ControllerBase {
   }
 
   // this step can modify the data, as it's pre-save
-  preApproveStep(data, req) {
+  preApproveStep(data, firstTimeApprove, req) {
     return Promise.resolve();
   }
 
@@ -170,7 +172,9 @@ export default class ApprovalController extends ControllerBase {
     const url = `${req.headers.origin}/prof/${endpoint}/edit/${item.id};mode=view`;
     const link = `<a href="${url}">${url}</a>`;
     let body;
-    const adminEmail = svrUtil.getItadminEmail(req.dfa);
+    const itadminEmail = svrUtil.getItadminEmail(req.dfa);
+    const dfaAdminEmail = svrUtil.getDfaAdminEmail(req.dfa);
+    const bizAdminEmail = svrUtil.getBizAdminEmail(req.dfa);
     const ppmtEmail = svrUtil.getPpmtEmail(req.dfa);
     const promises = [];
     if (mode === ApprovalMode.submit && data.approvedOnce === 'Y') {
@@ -193,21 +197,21 @@ export default class ApprovalController extends ControllerBase {
             } else {
               body = `A new DFA ${type} has been submitted by ${req.user.fullName} for approval: <br><br>${link}`;
             }
-            return sendHtmlMail(req.user.email, ppmtEmail, adminEmail,
+            return sendHtmlMail(dfaAdminEmail, bizAdminEmail, `${itadminEmail},${ppmtEmail},${req.user.email}`,
               `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Submitted for Approval`, body);
           case ApprovalMode.approve:
             body = `The DFA ${type} submitted by ${item.updatedBy} for approval has been approved:<br><br>${link}`;
             if (data.approveRejectMessage) {
               body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
-            return sendHtmlMail(ppmtEmail, `${item.createdBy}@cisco.com`, `${ppmtEmail},${adminEmail}`,
+            return sendHtmlMail(bizAdminEmail, `${item.updatedBy}@cisco.com`, `${itadminEmail},${ppmtEmail}`,
               `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Approved`, body);
           case ApprovalMode.reject:
             body = `The DFA ${type} submitted by ${item.updatedBy} for approval has been rejected:<br><br>${link}`;
             if (data.approveRejectMessage) {
               body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
-            return sendHtmlMail(ppmtEmail, `${item.createdBy}@cisco.com`, `${ppmtEmail},${adminEmail}`,
+            return sendHtmlMail(bizAdminEmail, `${item.updatedBy}@cisco.com`, `${itadminEmail},${ppmtEmail}`,
               `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Not Approved`, body);
         }
       });
