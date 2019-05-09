@@ -6,13 +6,13 @@
     <div class="row">
       <div class="col-sm-12">
         <ul id="tabsv4" class="tabs tabs--tall">
-          <li class="tab">
-            <a  id="tabsv4-1" (click)='majorSection()'
+          <li id="tabsv4-1" class="tab">
+            <a (click)='majorSection()'
               [ngClass]="{'active': majorLineItemsActive, 'tab__heading':true,'bBtm':onLoad}">Add Major Line
               Details</a>
           </li>
-          <li class="tab">
-            <a  id="tabsv4-2" (click)='minorSection()' [ngClass]="{'active': minorLineItemsActive, 'tab__heading':true}">Add Minor Line
+          <li id="tabsv4-2" class="tab">
+            <a (click)='minorSection()' [ngClass]="{'active': minorLineItemsActive, 'tab__heading':true}">Add Minor Line
               Details</a>
           </li>
 
@@ -152,7 +152,9 @@
                               <div class="form-group input--compressed" *ngIf="i == 0">
                                 <div class="form-group__text">
                                   <input [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'
-                                    value="{{ques.value['title']}}" [attr.disabled]='true'>
+                                  [(ngModel)]="ques.value['title']" value="{{ques.value['title']}}"
+                                  [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
+                                  >
                                 </div>
                               </div>
                               <div class="form-group input--compressed" *ngIf="i !== 0">
