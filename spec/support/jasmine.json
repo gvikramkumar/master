@@ -2,7 +2,8 @@
   "spec_dir": "dist",
   "spec_files": [
     "spec/init.js",
-    "server/**/*[sS]pec.js"
+    "server/**/*[sS]pec.js",
+    "shared/**/*[sS]pec.js"
   ],
   "helpers": [
     "spec/helpers/**/*.js"

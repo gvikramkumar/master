@@ -8,8 +8,6 @@ import Q from 'q';
 // import {take, first} from 'rxjs/operators';
 
 
-Q('lala')
-  .then(val => console.log(val));
 
 
 /*
