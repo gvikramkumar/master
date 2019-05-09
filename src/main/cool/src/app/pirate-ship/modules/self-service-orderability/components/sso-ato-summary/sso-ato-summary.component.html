@@ -1,4 +1,33 @@
-<p>
-  sso-ato-summary works!
-  {{sso|json}}
-</p>
+<div class="ui-fluid">
+  <blockquote class="blockquote--blue">
+
+    <table class="responsive-table">
+      <tr class="ui-datatable-even">
+        <td>PRODUCT NAME</td>
+        <td>ITEM TYPE</td>
+        <td>ORGANIZATION</td>
+        <td>CURRENT STATUS</td>
+        <td>NPI TEST ORDER FLAG</td>
+        <td>ORDERABILITY CHECK STATUS</td>
+        <td>ERROR WARNING</td>
+      </tr>
+      <tr class="ui-datatable-odd">
+        <td>{{sso['productName']}}</td>
+        <td>{{sso['type']}}</td>
+        <td>{{sso['organization']}}</td>
+        <td>{{sso['currentStatus']}}</td>
+        <td>{{sso['npiTestOrderFlag']}}</td>
+        <td>
+          <div class="text-center">
+            <app-status [status]="sso['orderabilityCheckStatus']"></app-status>
+          </div>
+        </td>
+        <td>{{sso['errorOrWarning']}}</td>
+      </tr>
+    </table>
+
+    <br><br>
+    <app-sso-status [ssoStatus]="sso['ssoStatus']"></app-sso-status>
+
+  </blockquote>
+</div>

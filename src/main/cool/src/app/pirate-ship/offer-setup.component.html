@@ -59,8 +59,10 @@
           <div class="row base-margin-top">
             <div class="col-sm-12">
               <ul class="osw-module--btns">
+
                 <div class="row base-margin-bottom">
                   <div class="col-sm-3 half-margin-left">
+                    
                     <!-- Group 0 -->
                     <div *ngIf="showGroupData">
                       <li *ngFor="let element of groupData['Group0']['left']">
@@ -97,6 +99,7 @@
 
                       </li>
                     </div>
+
                     <!-- Group 1 -->
                     <div class="last" *ngIf="showGroupData">
                       <li *ngFor="let element of groupData['Group1']['left']">
@@ -133,15 +136,20 @@
 
                       </li>
                     </div>
+
                   </div>
                 </div>
+
                 <!-- box group -->
-                <div class="row base-margin-bottom">
+                <div class="row base-margin-bottom">s
+
                   <!-- left box -->
                   <div class="col-sm-6">
                     <div class="panel panel--bordered">
                       <div class="row">
+
                         <div class="col-sm-12 col-md-6">
+                          
                           <!-- Group 2 left-->
                           <div *ngIf="showGroupData">
                             <li *ngFor="let element of groupData['Group2']['left']">
@@ -180,7 +188,9 @@
                           </div>
 
                         </div>
+
                         <div class="col-sm-12 col-md-6">
+                        
                           <!-- Group 2 right -->
                           <div *ngIf="showGroupData">
                             <li *ngFor="let element of groupData['Group2']['right']">
@@ -214,18 +224,21 @@
                                 {{element["moduleName"]}}
                               </button>
 
-
                             </li>
                           </div>
                         </div>
+
                       </div>
+
                     </div>
                   </div>
+
                   <!-- right box -->
                   <div class="col-sm-6">
                     <div class="panel panel--bordered">
                       <div class="row">
                         <div class="col-sm-12 col-md-6">
+                          
                           <!-- Group 3 left -->
                           <div *ngIf="showGroupData">
                             <li *ngFor="let element of groupData['Group3']['left']">
@@ -262,9 +275,11 @@
 
                             </li>
                           </div>
+
                         </div>
 
                         <div class="col-sm-12 col-md-6">
+                          
                           <!-- Group 3 right -->
                           <div *ngIf="showGroupData">
                             <li *ngFor="let element of groupData['Group3']['right']">
@@ -301,15 +316,20 @@
 
                             </li>
                           </div>
+
                         </div>
+
                       </div>
                     </div>
                   </div>
+
                 </div>
+
                 <!-- bottom modules -->
                 <div class="row base-margin-top">
 
                   <div class="col-sm-3 half-margin-left">
+                    
                     <!-- Group 4 -->
                     <div *ngIf="showGroupData">
                       <li class="base-padding-bottom" *ngFor="let element of groupData['Group4']['left']">
@@ -343,10 +363,13 @@
                         </button>
                       </li>
                     </div>
+
                   </div>
+
                   <div class="col-sm-3 half-margin-left"></div>
 
                   <div class="col-sm-3">
+                    
                     <!-- Group 5 -->
                     <div *ngIf="showGroupData">
                       <li class="base-padding-bottom" *ngFor="let element of groupData['Group5']['left']">
@@ -380,6 +403,7 @@
                         </button>
                       </li>
                     </div>
+
                     <!-- Group 6 -->
                     <div class="last" *ngIf="showGroupData">
                       <li *ngFor="let element of groupData['Group6']['left']">
@@ -413,62 +437,18 @@
                         </button>
                       </li>
                     </div>
+
                   </div>
+
                 </div>
+
               </ul>
             </div>
           </div>
 
           <!-- Legend -->
-          <div class="row base-margin-top base-margin-bottom">
-            <div class="col-sm-12 col-md-5">
-              <ul class="osw-ps-legend">
-                <div class="row">
-                  <div class="col-sm-6">
-                    <li class="half-margin-bottom">
-                      <span class="legend-available"></span>
-                      Available
-                    </li>
-
-                    <li class="half-margin-bottom">
-                      <span class="legend-completed">
-                        <span class="icon-check"></span>
-                      </span>
-                      Completed
-                    </li>
-
-                    <li>
-                      <span class="legend-milestone">
-                        <span class="milestone"></span>
-                      </span>
-                      Milestone
-                    </li>
-
-                  </div>
-                  <div class="col-sm-6">
-                    <li class="half-margin-bottom">
-                      <span class="legend-notavail"></span>
-                      Not Yet Available
-                    </li>
-
-                    <li class="half-margin-bottom">
-                      <span class="legend-inprog">
-                        <span class="in-progress"></span>
-                      </span>
-                      In-Progess
-                    </li>
-
-
-                    <li>
-                      <span class="legend-notreq"></span>
-                      Not Required
-                    </li>
-
-                  </div>
-                </div>
-              </ul>
-            </div>
-          </div>
+          <br><br>
+          <app-pirate-ship-legend></app-pirate-ship-legend>
 
         </div>
 
