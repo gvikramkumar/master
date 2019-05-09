@@ -3,6 +3,6 @@ export const environment = {
   apiUrl: 'http://localhost:3001',
   logState: false,
   disableAnimations: true,
-  showVerboseErrorMessages: false
+  showVerboseErrorMessages: true
 };
 

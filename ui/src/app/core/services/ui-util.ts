@@ -200,7 +200,7 @@ export class UiUtil {
       }
     */
 
-  genericDialog(message: string, data = null, title = null, mode = DialogType.ok, size = DialogSize.small, showPre = true, showVerboseErrorMessages = false): Observable<any> {
+  genericDialog(message: string, data = null, title = null, mode = DialogType.ok, size = DialogSize.small, showPre = true, showVerboseErrorMessages = true): Observable<any> {
     if (this.dialog.openDialogs.length) {
       console.log('genericDialog: dialog already open');
       return;

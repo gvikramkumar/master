@@ -1,7 +1,7 @@
 export const environment = {
-  production: false,
-  apiUrl: 'http://localhost:3002',
+  production: true,
+  apiUrl: '',
   logState: false,
   disableAnimations: false,
-  showVerboseErrorMessages: false
+  showVerboseErrorMessages: true
 };

@@ -11,5 +11,5 @@ export const environment = {
   apiUrl: 'http://localhost:3002',
   logState: false,
   disableAnimations: false,
-  showVerboseErrorMessages: false
+  showVerboseErrorMessages: true
 };

@@ -1,7 +1,7 @@
 <div *ngIf="data.title" mat-dialog-title>{{data.title}}</div>
 <h4 *ngIf="data.message" class="fin-dialog-title">{{data.message}}</h4>
 <div mat-dialog-content>
-  <div *ngIf="data.showPre && data.data && !data.showVerboseErrorMessages"  class="fin-dialog-data-pre">
+  <div *ngIf="data.showPre && data.data && data.showVerboseErrorMessages"  class="fin-dialog-data-pre">
     <pre>{{data.data}}</pre>
   </div>
   <div *ngIf="!data.showPre && data.data"  class="fin-dialog-data-div">
