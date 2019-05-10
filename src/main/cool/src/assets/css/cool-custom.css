@@ -2,25 +2,39 @@
   background: #fff;
   overflow: visible;
 }
-
 .cool.cui .header {
-  background: #fafafa;
-  border-bottom: 1px solid #dfdfdf;
+  background: #005073;
+  border-bottom: transparent;
 }
-
+.cool.cui .header-heading .page-title {
+  color: #fff;
+  opacity: .75;
+}
 .cool.cui header ul.tabs>li,
 .cool.cui header .nav-tabs>li {
   margin: 0 20px 0 0;
 }
-
-.cool.cui header ul.tabs>li.active>a,
+.cool.cui header ul.tabs > li > a, .cool.cui header .nav-tabs > li > a {
+  color: #fff;
+}
+.cool.cui header ul.tabs > li.active > a, .cool.cui header ul.tabs > li:hover > a, .cool.cui header .nav-tabs > li.active > a, .cool.cui header .nav-tabs > li:hover > a {
+  font-weight: normal;
+  color: #fff;
+}
+.cool.cui .header-toolbar a.avatar {
+  color:white;
+}
+.cool.cui a.avatar span.role.userIdSpacing {
+  opacity: .75;
+}
+/* .cool.cui header ul.tabs>li.active>a,
 .cool.cui header ul.tabs>li:hover>a,
 .cool.cui header .nav-tabs>li.active>a,
 .cool.cui header .nav-tabs>li:hover>a {
   font-weight: normal;
   box-shadow: 0 -3px 0 #005073 inset;
   color: #005073;
-}
+} */
 
 .cool.cui .btn.btn--small,
 .cui .btn.btn--wide {
@@ -310,8 +324,7 @@
   color: #1b1d1f;
 }
 
-.cool.cui th.ui-state-default.ui-sortable-column,
-th.ui-sortable-column.ng-star-inserted {
+.cool.cui .actions-notifications .ui-table .ui-table-thead>tr>th {
   outline: 0;
   padding: 1em .65em;
 }
