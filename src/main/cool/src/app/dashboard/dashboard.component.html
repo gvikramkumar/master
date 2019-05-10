@@ -2,7 +2,7 @@
   <div class="container">
     <app-taskbar [actionCount]='actionCount' (newBtnClick)="createNewOffer()"></app-taskbar>
 
-    <!-- My Actions & Notifications Section -->
+
     <div class="row">
       <div class="col-md-12">
         <div class="card card--raised base-margin-top">
@@ -10,8 +10,6 @@
             <div class="row card-table-header">
               <div class="col-md-8">
                 <h2 class="page--subheading">My Actions &amp; Notifications</h2>
-                <!--<label class="header-link"><a href="">View All<span
-                      class="icon-chevron-right inline-icon"></span></a></label>-->
               </div>
 
               <div class="col-md-4">
@@ -27,8 +25,8 @@
                 </div>
               </div>
             </div>
-
-            <div class="responsive-table">
+ <!-- My Actions & Notifications Section -->
+            <div class="responsive-table actions-notifications">
 
               <p-table [columns]="myActionColumns" [value]="myActionsAndNotifications" [rows]="10" [paginator]="true"
                 #globalFilter
@@ -158,8 +156,6 @@
               <div class="row card-table-header">
                 <div class="col-md-8">
                   <h2 class="page--subheading">My Offers</h2>
-                  <!--<label class="header-link"><a href="">View All Offers<span
-                      class="icon-chevron-right inline-icon"></span></a></label>-->
                 </div>
 
                 <div class="col-md-4">
@@ -177,7 +173,7 @@
 
               </div>
 
-              <div class="responsive-table">
+              <div class="responsive-table my-offers">
 
                 <p-table [columns]="offerColumns" #dt [value]="myOffers" [scrollable]="true" scrollHeight="400px"
                   [globalFilterFields]="['offerId','offerName','ownerName','expectedLaunchDate']" sortMode="multiple">
