@@ -47,10 +47,10 @@ export function addSsoUser() {
           }
           genericUsers.push('jodoe');
           return new DfaUser(
-            'dakahle',
+            'jodoe',
             'John',
             'Doe',
-            'dakahle@cisco.com',
+            'jodoe@cisco.com',
             localRoles,
             genericUsers,
             modules

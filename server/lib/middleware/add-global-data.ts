@@ -7,17 +7,18 @@ import DfaUser from '../../../shared/models/dfa-user';
 import {ApiError} from '../common/api-error';
 import {IncomingMessage} from 'http';
 import OpenPeriodRepo from '../../api/common/open-period/repo';
+import {svrUtil} from '../common/svr-util';
 
 export class ApiDfaData {
   _module?: DfaModule;
   modules: DfaModule[];
   fiscalMonths: AnyObj;
-  itadminEmail: string;
-  dfaAdminEmail: string;
-  bizAdminEmail: string;
-  ppmtEmail: string;
+  _itadminEmail: string;
+  _dfaAdminEmail: string;
+  _bizAdminEmail: string;
+  _ppmtEmail: string;
   user: DfaUser;
-  req: IncomingMessage
+  req: IncomingMessage;
 
   constructor(data) {
     Object.assign(this, data);
@@ -32,6 +33,39 @@ export class ApiDfaData {
   set module(module) {
     this._module = module;
   }
+
+  get itadminEmail() {
+    return svrUtil.getEnvEmail(this._itadminEmail);
+  }
+
+  set itadminEmail(email) {
+    this._itadminEmail = email;
+  }
+
+  get dfaAdminEmail() {
+    return svrUtil.getEnvEmail(this._dfaAdminEmail);
+  }
+
+  set dfaAdminEmail(email) {
+    this._dfaAdminEmail = email;
+  }
+
+  get bizAdminEmail() {
+    return svrUtil.getEnvEmail(this._bizAdminEmail);
+  }
+
+  set bizAdminEmail(email) {
+    this._bizAdminEmail = email;
+  }
+
+  get ppmtEmail() {
+    return svrUtil.getEnvEmail(this._ppmtEmail);
+  }
+
+  set ppmtEmail(email) {
+    this._ppmtEmail = email;
+  }
+
   get moduleId() {
     return this.module.moduleId;
   }

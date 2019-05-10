@@ -1,8 +1,18 @@
 const conn = new Mongo(host + ':' + port);
 const db = conn.getDB(_db);
+db.dfa_user.insertOne({
+  "roles" : [
+    "it administrator"
+  ],
+  "userId" : "jodoe",
+  "fullName" : "John Doe",
+  "email" : "jodoe@cisco.com",
+  "updatedDate" : ISODate("2019-04-14T21:11:26.366Z"),
+});
 
 db.dfa_submeasure.insertMany([
   {
+    _id : ObjectId("5cd5c201b2db8208c0cb4c2f"),
     submeasureId: NumberInt(1),
     submeasureKey: NumberInt(1),
     moduleId: NumberInt(1),
@@ -108,9 +118,9 @@ db.dfa_allocation_rule.insertMany([
     "driverName" : "2TSUBDIR",
     "period" : "MTD",
     "glSegmentsMatch" : [],
-    "createdBy" : "system",
+    "createdBy" : "jodoe",
     "createdDate" : ISODate("2019-05-01T19:42:44.327Z"),
-    "updatedBy" : "system",
+    "updatedBy" : "jodoe",
     "updatedDate" : ISODate("2019-05-01T19:42:44.327Z"),
     "approvedBy" : "jodoe",
     "approvedDate" : ISODate("2018-12-01T00:11:48.460Z")
@@ -126,9 +136,9 @@ db.dfa_allocation_rule.insertMany([
     "driverName" : "SHIPREV",
     "period" : "QTD",
     "moduleId" : 1,
-    "createdBy" : "system",
+    "createdBy" : "jodoe",
     "createdDate" : ISODate("2019-05-01T19:42:44.327Z"),
-    "updatedBy" : "system",
+    "updatedBy" : "jodoe",
     "updatedDate" : ISODate("2019-05-01T19:42:44.327Z"),
     "approvedBy" : "jodoe",
     "approvedDate" : ISODate("2018-12-01T00:11:48.460Z")
@@ -144,9 +154,9 @@ db.dfa_allocation_rule.insertMany([
     "driverName" : "GLREVMIX",
     "period" : "ROLL3",
     "moduleId" : 1,
-    "createdBy" : "system",
+    "createdBy" : "jodoe",
     "createdDate" : ISODate("2019-05-01T19:42:44.327Z"),
-    "updatedBy" : "system",
+    "updatedBy" : "jodoe",
     "updatedDate" : ISODate("2019-05-01T19:42:44.327Z"),
     "approvedBy" : "jodoe",
     "approvedDate" : ISODate("2018-12-01T00:11:48.460Z")
@@ -178,7 +188,7 @@ const collectionsWithCreatedUpdated = [
   'dfa_module',
   'dfa_module_data_source',
   'dfa_open_period',
-  'dfa_submeasure',
+ // 'dfa_submeasure',
   'dfa_prof_dept_acct_map_upld',
   'dfa_prof_input_amnt_upld',
   'dfa_prof_manual_map_upld',

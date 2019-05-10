@@ -57,6 +57,8 @@ const schema = new Schema({
     approvedOnce: {type: String, enum: ['Y', 'N'], required: true},
     // we validate early in approval repos, when this isn't set yet, if we set it before validation,
     // we mess up our concurrency check, can't win then, we'll sacrifice the required=true
+    approvalReminderTime: {type: Date},
+    approvalUrl: {type: String},
     approvedBy: {type: String},
     approvedDate: {type: Date},
     createdBy: {type: String},

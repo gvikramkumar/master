@@ -187,7 +187,7 @@ export default class SubmeasureController extends ApprovalController {
       '_id', 'id', 'status', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate', '__v', 'approvedOnce',
       'indicators._id', 'inputFilterLevel._id', 'manualMapping._id',
     ];
-    return this.sendApprovalEmailBase(req, mode, item, 'submeasure', 'submeasure', omitProperties);
+    return this.sendApprovalEmailBase(req, mode, item, 'submeasure', omitProperties);
   }
 
   preApproveStep(sm, firstTimeApprove, req) {

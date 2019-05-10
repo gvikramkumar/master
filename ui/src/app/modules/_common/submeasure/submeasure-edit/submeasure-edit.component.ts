@@ -914,7 +914,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
             .subscribe(result => {
               if (result) {
                 const saveMode = UiUtil.getApprovalSaveMode(this.sm.status, this.addMode, this.editMode, this.copyMode);
-                this.submeasureService.submitForApproval(this.sm, {saveMode})
+                this.submeasureService.submitForApproval(this.sm, {saveMode, type: 'submeasure'})
                   .subscribe(() => {
                     history.go(-1);
                   });

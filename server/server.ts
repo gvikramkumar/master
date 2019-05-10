@@ -11,6 +11,8 @@ import {mgc} from './lib/database/mongoose-conn';
 import {pgc} from './lib/database/postgres-conn';
 import expressSetup from './express-setup';
 import {databaseUpdate} from './database-update';
+import {approvalEmailReminder} from './lib/common/approval-email-reminder';
+
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -65,6 +67,7 @@ export const serverPromise = Promise.all([mgc.promise, pgc.promise])
         }
         console.log('BUILD_NUMBER:', process.env.BUILD_NUMBER);
         console.log(`${protocol} server listening on ${port}`);
+        approvalEmailReminder();
       });
     }
   )

@@ -7,10 +7,6 @@ import config from '../../config/get-config';
 
 export const svrUtil = {
   isLocalEnv,
-  getItadminEmail,
-  getDfaAdminEmail,
-  getBizAdminEmail,
-  getPpmtEmail,
   trimStringProperties,
   getMemoryUsage,
   cleanCsv,
@@ -29,12 +25,27 @@ export const svrUtil = {
   postgresReplaceQuotes,
   toFixed8,
   toFixed,
+  checkIfMoreThanADay,
+  getEnvEmail,
   isProdEnv
 };
+
+function getEnvEmail(email) {
+  if (isLocalEnv() && !isUnitEnv()) {
+    return getTestEmail();
+  }
+  return email;
+}
 
 function isProdEnv() {
   return config.env === 'prod';
 }
+
+function checkIfMoreThanADay(now, lastReminderTime) {
+  const oneDay = 1 * (24 * 60 * 60 * 1000);
+  return (now - lastReminderTime) > oneDay;
+}
+
 
 function toFixed8(val) {
   return toFixed(val, 8);
@@ -73,33 +84,12 @@ function isLocalEnv() {
   return !process.env.NODE_ENV || _.includes(['dev', 'ldev', 'unit'], process.env.NODE_ENV);
 }
 
-function getItadminEmail(dfa) {
-  if (isLocalEnv()) {
-    return dfa.user.email;
-  }
-  return dfa.itadminEmail;
+function isUnitEnv() {
+  return process.env.NODE_ENV === 'unit';
 }
 
-function getDfaAdminEmail(dfa) {
-  if (isLocalEnv()) {
-    return dfa.user.email;
-  }
-  return dfa.dfaAdminEmail;
-}
-
-function getBizAdminEmail(dfa) {
-  if (isLocalEnv()) {
-    return dfa.user.email;
-  }
-  return dfa.bizAdminEmail;
-}
-
-function getPpmtEmail(dfa) {
-  if (isLocalEnv()) {
-    return dfa.user.email;
-  }
-  return dfa.ppmtEmail; // hack until we get the real module admin email groups
-  // return `DFA-${DfaModuleIds[dfa.moduleId].toUpperCase()}-ADMIN@cisco.com`;
+function getTestEmail() {
+  return process.env.TEST_EMAIL;
 }
 
 function sortedListNotExists(values, value) {
@@ -215,7 +205,7 @@ function checkParams(obj, arrProps, next) {
     }
   });
   if (missing.length) {
-    const err = new ApiError(`Missing parameters: ${missing.join(', ')}.`, obj, 400);
+    const err = new ApiError(`Missing parameters: ${missing.join(', ')}`, obj, 400);
     next(err);
     return true;
   }
