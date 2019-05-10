@@ -64,7 +64,7 @@
           <button (click)='goBack()' [disabled]="disableBackBtn" class="btn btn--secondary">
              <span class="icon-chevron-left"></span>&nbsp; Previous
           </button>
-          <button *ngIf="!isLastStep" class="btn btn--secondary"
+          <button *ngIf="!isLastStep" class="btn btn--primary"
             (click)='proceedToNextStep()' [disabled]="proceedToOfferSetup">Proceed to
             {{taskBarNavSteps[currentStepIndex].nxtBtnTitle}}&nbsp;<span class="icon-chevron-right"></span></button>
         </div>
