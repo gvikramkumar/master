@@ -126,9 +126,9 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.offerConstructService.closeAddDetails = false;
     }
     onShowDialog(){
-        document.getElementById('tabsv4-2').click()
+       this.minorSection();
         setTimeout(() => {
-            document.getElementById('tabsv4-1').click()
+            this.majorSection();
         }, 0);
     }
     closeDialog() {
