@@ -29,7 +29,7 @@
   color:white;
 }
 .cool.cui .avatar .ico-avatar {
-  display: inline-block;
+  display: block;
   vertical-align: text-top;
   float: left;
   margin-right: 10px;

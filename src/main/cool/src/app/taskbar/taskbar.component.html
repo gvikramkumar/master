@@ -47,11 +47,15 @@
       </div>
     </div>
 
-    <div *ngSwitchCase="'pirate-ship-module'" class="panel panel--ltgray panel--compressed task--bar">
+    <div *ngSwitchCase="'pirate-ship-module'" class="panel panel--compressed task--bar">
       <div class="row">
         <div class="col-md-4 flex-center-vertical">
-          <h4><button (click)='goToPirateShip()' class="btn--back btn btn--icon btn--white"><span
-                class="icon-back"></span></button>{{pirateShipModuleName}}</h4>
+          <h4>{{pirateShipModuleName}}</h4>
+        </div>
+        <div class="col-md-8 text-right">
+          <button (click)='goToPirateShip()' class="btn btn--secondary">
+            <span class="icon-back"></span>
+          </button>
         </div>
       </div>
     </div>
