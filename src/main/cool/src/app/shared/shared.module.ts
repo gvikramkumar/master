@@ -8,10 +8,11 @@ import { TableModule } from 'primeng/table';
 import {
   DataTableModule, MultiSelectModule, AccordionModule, TooltipModule, OverlayPanelModule,
   DialogModule,
-  AutoCompleteModule
+  AutoCompleteModule,ConfirmDialogModule
 } from 'primeng/primeng';
 
 import { DashboardService, CreateOfferService, SharedService, TurbotaxService, ViewcommentService } from './services';
+import {ConfirmationService} from 'primeng/api';
 
 
 import {
@@ -55,6 +56,7 @@ import { CustomRangeValidatorDirective } from './validators/custom-range-validat
     DataTableModule,
     MultiSelectModule,
     AutoCompleteModule,
+    ConfirmDialogModule,
     BsDatepickerModule.forRoot()
   ],
   providers: [
@@ -63,6 +65,7 @@ import { CustomRangeValidatorDirective } from './validators/custom-range-validat
     DashboardService,
     CreateOfferService,
     ViewcommentService,
+    ConfirmationService
   ],
   exports: [
     FormsModule,
