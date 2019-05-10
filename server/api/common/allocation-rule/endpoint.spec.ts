@@ -2,7 +2,7 @@ import request from 'supertest';
 import {serverPromise} from '../../../server';
 
 let server;
-describe('allocation rule tests', () => {
+fdescribe('allocation rule tests', () => {
 
   beforeAll(function (done) {
     serverPromise.then(function (_server) {
@@ -18,6 +18,17 @@ describe('allocation rule tests', () => {
         const arr = res.body;
         expect(arr.length).toBe(3);
         expect(arr.map(x => x.name).sort()).toEqual(['2TSUBDIR-MTD', 'GLREVMIX-ROLL3', 'SHIPREV-QTD']);
+      })
+      .end(done);
+  });
+
+  it('should get one', function (done) {
+    request(server)
+      .get('/api/allocation-rule/5cc830e9fa6d247f5496638f')
+      .expect(200)
+      .expect(function(res) {
+        const rule = res.body;
+        expect(rule.name).toEqual('RULE1');
       })
       .end(done);
   });

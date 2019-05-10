@@ -230,9 +230,11 @@ export default class ApprovalController extends ControllerBase {
 
   approvalEmailReminder(type: string) {
     const currentTime = new Date();
-    Promise.all([this.repo.getManyPending({moduleId : -1}),
+    console.log(`In approval Email Reminder`);
+    return Promise.all([this.repo.getManyPending({moduleId : -1}),
       new LookupRepo().getValues(['itadmin-email', 'dfa-admin-email', 'dfa-biz-admin-email'])])
       .then(results => {
+        console.log(`Connected to database. Results found: ${results.length}`);
         const pendingItems = results[0].filter(doc => svrUtil.checkIfMoreThanADay(currentTime, doc.approvalReminderTime));
         const adminEmails = results[1];
         if (pendingItems.length) {
