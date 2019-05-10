@@ -238,24 +238,35 @@ export class DynamicFormMultipleComponent implements OnInit {
         return array;
     }
 
-    patchvalueToSelected(groupName) {
-        let itemsData = this.itemsData;
-        if (itemsData !== undefined) {
-            if (groupName === itemsData['Item Category']) {
-                this.selectedProduct.forEach(product => {
-                    if (groupName = product.groupName) {
-                        for (let searchValue in itemsData) {
-                            product.listOfferQuestions.forEach(element => {
-                                if (searchValue === element.question) {
-                                    element.currentValue = itemsData[searchValue];
-                                }
-                            });
-                        }
-                    }
-                });
-            }
-        }
+  patchvalueToSelected(groupName) {
+    // If Billing SOA SKU is selected, for comparison with PID's Item category Name,
+    // it needs to be assigned to Billing.
+    let isBillingSOA = false;
+    if (groupName === 'Billing SOA SKU') {
+      groupName = 'Billing';
+      isBillingSOA = true;
     }
+
+    let itemsData = this.itemsData;
+    if (itemsData !== undefined) {
+      if (groupName === itemsData['Item Category']) {
+        if (isBillingSOA) {
+          groupName = 'Billing SOA SKU';
+        }
+        this.selectedProduct.forEach(product => {
+          if (groupName = product.groupName) {
+            for (let searchValue in itemsData) {
+              product.listOfferQuestions.forEach(element => {
+                if (searchValue === element.question) {
+                  element.currentValue = itemsData[searchValue];
+                }
+              });
+            }
+          }
+        });
+      }
+    }
+  }
 
     addItms(groupName) {
         let selectedSection = this.selectedTab;
@@ -283,15 +294,25 @@ export class DynamicFormMultipleComponent implements OnInit {
             }
         }
     }
+
     dateFormat(val) {
         if (val !== '') {
             return this.datePipe.transform(new Date(val), 'MM/dd/yyyy');
         }
     }
+
     updateDate(e) {
         return this.datePipe.transform(new Date(e), 'MM/dd/yyyy');
     }
+
     patchToALL(groupName) {
+      // If Billing SOA SKU is selected, for comparison with PID's Item category Name,
+      //  it needs to be assigned to Billing.
+      let isBillingSOA = false;
+        if (groupName === 'Billing SOA SKU') {
+          groupName = 'Billing';
+          isBillingSOA = true;
+        }
 
         let itemsData = this.itemsData;
         // copy items from the same ICC type
@@ -311,6 +332,9 @@ export class DynamicFormMultipleComponent implements OnInit {
                         }
                     });
                 } else {
+                    if (isBillingSOA) {
+                      groupName = 'Billing SOA SKU';
+                    }
                     this.minorOfferInfo.forEach((element, index) => {
                         let gname: any = Object.keys(element);
                         if (gname == groupName) {
