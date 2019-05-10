@@ -1,24 +1,27 @@
+<app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="offerId" [offerName]="offerName"
+[stakeData]="stakeData" (updateMessage)="updateMessage($event)">
+</app-menu-bar>
+
 <div class="content">
   <div class="container">
-    <app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="offerId" [offerName]="offerName"
-      [stakeData]="stakeData" (updateMessage)="updateMessage($event)">
-    </app-menu-bar>
+
 
     <!-- <app-taskbar [isValidToProceed]="enableOfferbuild" (onProceedToNext)="proceedToOfferBuilder()" [showOfferDtlsBtn]="false"></app-taskbar> -->
 
-    <div class="panel panel--indigo panel--compressed task--bar panel-wrapper mt-15">
+    <div class="panel panel--compressed task--bar panel-wrapper half-margin-top">
       <div class="row">
         <div class="col-sm-4">
-          <h2 class="page--subheading"><button class="btn--back btn btn--icon btn--white" (click)="goBack()"><span
-                class="icon-back"></span></button>
+          <h2 class="page--subheading">
             Offer Info</h2>
         </div>
         <div class="col-sm-8 text-right">
-          <span>
-            <button class="btn btn--white" [disabled]="enableOfferbuild || validFlag"
+          <button class="btn btn--secondary" (click)="goBack()">
+             <span class="icon-chevron-left"></span>&nbsp; Previous
+          </button>
+            <button class="btn btn--primary" [disabled]="enableOfferbuild || validFlag"
               (click)="proceedToOfferBuilder()">Proceed to
               Offer Builder <span class="icon-chevron-right"></span></button>
-          </span>
+
         </div>
       </div>
     </div>

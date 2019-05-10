@@ -1,9 +1,10 @@
+<app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId" [offerName]="offerName"
+[stakeData]="stakeData">
+</app-menu-bar>
+
+
 <div class="content">
   <div class="container">
-
-    <app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId" [offerName]="offerName"
-      [stakeData]="stakeData">
-    </app-menu-bar>
 
     <div class="panel-wrapper mt-15">
 
@@ -116,8 +117,8 @@
                         </div>
                       </p-header>
 
-                      <!-- 
-                        If the action is still in 'Not Reviewed' status 
+                      <!--
+                        If the action is still in 'Not Reviewed' status
                         then  users who belong to the escalate users group will see the escalate section
                         and, users who the task is assigned to will see the approval section
                         everyone will see the comments irrespective of the status of the action
