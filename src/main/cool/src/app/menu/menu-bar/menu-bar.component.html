@@ -4,38 +4,38 @@
       <div class="col-md-6">
       <h1 class="relative display-4 base-margin-top half-margin-bottom">
 
-        <button class="btn btn--icon btn--white" id="flyOut"><span class="icon-list-menu"></span>
+        <button class="btn btn--icon" id="flyOut"><span class="icon-list-menu"></span>
         </button>
 
         <div id='flyoutmenu'>
 
-          <ul class="panel--indigo">
+          <ul class="panel">
 
-            <li *ngFor="let item of items"><span>{{item['label']}}</span>
-              <ul class="panel--vibblue">
+            <li *ngFor="let item of items"><span class="menu-label">{{item['label']}}</span>
+              <ul>
                 <li *ngFor="let subItem of item['items']" [ngClass]="{'disable-item': itemShow[subItem['label']] !== true}"
-                  (click)="navigate(subItem['label'])"><span>{{subItem['label']}}</span>
+                  (click)="navigate(subItem['label'])"><span class="link">{{subItem['label']}}</span>
                 </li>
               </ul>
             </li>
 
-            <li> <span>On Hold/Cancel</span>
+            <li> <span class="menu-label">On Hold/Cancel</span>
 
-              <ul *ngIf="!currentOfferId" class="panel--vibblue">
-                <li [ngClass]="{'disable-item': holdStatusValid == true}" (click)='showOppupFunc("hold")'><span>On
+              <ul *ngIf="!currentOfferId">
+                <li [ngClass]="{'disable-item': holdStatusValid == true}" (click)='showOppupFunc("hold")'><span class="link">On
                     Hold</span>
                 </li>
                 <li [ngClass]="{'disable-item': cancelStatusValid == true}" (click)='showOppupFunc("cancel")'>
-                  <span>Cancel</span>
+                  <span class="link">Cancel</span>
                 </li>
               </ul>
 
-              <ul *ngIf="currentOfferId" class="panel--vibblue">
-                <li [ngClass]="{'disable-item': holdStatusValid !== true}" (click)='showOppupFunc("hold")'><span>On
+              <ul *ngIf="currentOfferId">
+                <li [ngClass]="{'disable-item': holdStatusValid !== true}" (click)='showOppupFunc("hold")'><span class="link">On
                     Hold</span>
                 </li>
                 <li [ngClass]="{'disable-item': cancelStatusValid !== true}" (click)='showOppupFunc("cancel")'>
-                  <span>Cancel</span>
+                  <span class="link">Cancel</span>
                 </li>
               </ul>
 
@@ -50,14 +50,22 @@
           <span>Create New Offer</span>
         </ng-template>
         <ng-template #oldOffer>
-          <span> {{offerName}}&nbsp;<span class="offerID">(Offer ID {{currentOfferId}})</span></span>
+          <span> {{offerName}}&nbsp;<span class="offerID">(Offer ID {{currentOfferId}})</span></span> <button class="btn btn--icon btn--transparent"><span class="icon-more"></span></button>
         </ng-template>
 
       </h1>
     </div>
-    <div class="col-md-6">
-        <button *ngIf="showSave" class="btn btn--primary" (click)='saveCurrentState()'> Save </button>
+    <div class="col-md-6 flex-center-vertical">
+        <!-- <button *ngIf="showSave" class="btn btn--primary" (click)='saveCurrentState()'> Save </button>
         <button *ngIf="showOfferDtlsBtn" class="btn btn--primary" (click)="gotoOfferviewDetails()"> Offer Detail View
+        </button> -->
+        <button class="menu-btn">
+          <span class="ico-save-offer"></span>
+          Save
+        </button>
+        <button class="menu-btn">
+          <span class="ico-offer-details"></span>
+          Offer Details
         </button>
     </div>
     </div>
