@@ -237,30 +237,30 @@ export default class ApprovalController extends ControllerBase {
         const adminEmails = results[1];
         if (pendingItems.length) {
           pendingItems.forEach(item => {
-            this.sendReminderEmail(adminEmails, item, type)
-              .then(() => {
-                item.set('approvalReminderTime', currentTime);
-                this.repo.update(item, '', true, true, false);
+            Promise.all([new ModuleRepo().getOneByQuery({moduleId: item.moduleId}),
+              new UserListRepo().getOneLatest({userId: item.updatedBy})])
+              .then(itemResults => {
+                const module = itemResults[0];
+                const user = itemResults[1];
+                this.sendReminderEmail(adminEmails, module, user, item, type)
+                  .then(() => {
+                    item.set('approvalReminderTime', currentTime);
+                    this.repo.update(item, '', true, true, false);
+                  });
               });
           });
         }
       });
   }
 
-  sendReminderEmail(adminEmails: string[], item: AnyObj, type: string) {
-    return Promise.all([new ModuleRepo().getOneByQuery({moduleId: item.moduleId}),
-      new UserListRepo().getOneLatest({userId: item.updatedBy})])
-      .then(results => {
-        const module = results[0];
-        const user = results[1];
-        const itadminEmail = svrUtil.isLocalEnv() ? svrUtil.getTestEmail() : adminEmails[0];
-        const dfaAdminEmail = svrUtil.isLocalEnv() ? svrUtil.getTestEmail() : adminEmails[1];
-        const dfaBizAdminEmail = svrUtil.isLocalEnv() ? svrUtil.getTestEmail() : adminEmails[2];
+  sendReminderEmail(adminEmails: string[], module, user, item: AnyObj, type: string) {
+        const itadminEmail = svrUtil.getEnvEmail(adminEmails[0]);
+        const dfaAdminEmail = svrUtil.getEnvEmail(adminEmails[1]);
+        const dfaBizAdminEmail = svrUtil.getEnvEmail(adminEmails[2]);
         const link = `<a href="${item.approvalUrl}">${item.approvalUrl}</a>`;
         const body = `A new DFA - ${_.upperFirst(type)} submitted by ${user.get('fullname')} has been pending for approval since ${shUtil.convertToPSTTime(item.get('updatedDate'))}:<br><br>${link}`;
         const subject = `${this.getEnv()}DFA - ${module.name} - ${_.upperFirst(type)} Pending for Approval`;
         return sendHtmlMail(dfaAdminEmail, dfaBizAdminEmail, `${itadminEmail},${item.get('updatedBy')}@cisco.com`, subject, body);
-      });
   }
 
   getEnv() {

@@ -1,14 +1,12 @@
-import ApprovalController from '../base-classes/approval-controller';
-import SubmeasureRepo from '../../api/common/submeasure/repo';
-import AllocationRuleRepo from '../../api/common/allocation-rule/repo';
 import config from '../../config/get-config';
+import {injector} from './inversify.config';
+import SubmeasureController from '../../api/common/submeasure/controller';
+import AllocationRuleController from '../../api/common/allocation-rule/controller';
 
 export function approvalEmailReminder() {
   setInterval(() => {
-    new ApprovalController(new SubmeasureRepo()).approvalEmailReminder('submeasure');
-    new ApprovalController(new AllocationRuleRepo()).approvalEmailReminder('rule');
+    injector.get(SubmeasureController).approvalEmailReminder('submeasure');
+    injector.get(AllocationRuleController).approvalEmailReminder('rule');
   }, config.submitForApprovalPeriod);
  }
-
-
 

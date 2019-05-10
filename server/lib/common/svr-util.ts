@@ -26,9 +26,16 @@ export const svrUtil = {
   toFixed8,
   toFixed,
   checkIfMoreThanADay,
-  getTestEmail,
+  getEnvEmail,
   isProdEnv
 };
+
+function getEnvEmail(email) {
+  if (isLocalEnv()) {
+    return getTestEmail();
+  }
+  return email;
+}
 
 function isProdEnv() {
   return config.env === 'prod';

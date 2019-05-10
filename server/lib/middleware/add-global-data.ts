@@ -35,10 +35,7 @@ export class ApiDfaData {
   }
 
   get itadminEmail() {
-    if (svrUtil.isLocalEnv()) {
-      return svrUtil.getTestEmail();
-    }
-    return this._itadminEmail;
+    return svrUtil.getEnvEmail(this._itadminEmail);
   }
 
   set itadminEmail(email) {
@@ -46,10 +43,7 @@ export class ApiDfaData {
   }
 
   get dfaAdminEmail() {
-    if (svrUtil.isLocalEnv()) {
-      return svrUtil.getTestEmail();
-    }
-    return this._dfaAdminEmail;
+    return svrUtil.getEnvEmail(this._dfaAdminEmail);
   }
 
   set dfaAdminEmail(email) {
@@ -57,10 +51,7 @@ export class ApiDfaData {
   }
 
   get bizAdminEmail() {
-    if (svrUtil.isLocalEnv()) {
-      return svrUtil.getTestEmail();
-    }
-    return this._bizAdminEmail;
+    return svrUtil.getEnvEmail(this._bizAdminEmail);
   }
 
   set bizAdminEmail(email) {
@@ -68,10 +59,7 @@ export class ApiDfaData {
   }
 
   get ppmtEmail() {
-    if (svrUtil.isLocalEnv()) {
-      return svrUtil.getTestEmail();
-    }
-    return this._ppmtEmail;
+    return svrUtil.getEnvEmail(this._ppmtEmail);
   }
 
   set ppmtEmail(email) {
