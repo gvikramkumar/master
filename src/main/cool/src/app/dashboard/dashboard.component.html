@@ -1,6 +1,8 @@
+<app-taskbar [actionCount]='actionCount' (newBtnClick)="createNewOffer()"></app-taskbar>
+
 <div class="content">
   <div class="container">
-    <app-taskbar [actionCount]='actionCount' (newBtnClick)="createNewOffer()"></app-taskbar>
+
 
 
     <div class="row">
@@ -25,7 +27,7 @@
                 </div>
               </div>
             </div>
- <!-- My Actions & Notifications Section -->
+        <!-- My Actions & Notifications Section -->
             <div class="responsive-table actions-notifications">
 
               <p-table [columns]="myActionColumns" [value]="myActionsAndNotifications" [rows]="10" [paginator]="true"

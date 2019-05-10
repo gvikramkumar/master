@@ -28,9 +28,7 @@
               <div class="tab__heading" title="Offers" *ngIf="isBupmUser">Offers</div>
             </a>
           </li>
-          <!-- <li routerLinkActive="active">
-            <a><div class="tab__heading" title="Analytics">Analytics</div></a>
-          </li> -->
+
           <li routerLinkActive="active">
             <a routerLink="/action">
               <div class="tab__heading" title="Actions">Actions</div>
@@ -48,21 +46,21 @@
 
     <div class="header-toolbar">
 
-      <a href="javascript:;" class="avatar">{{userName}}<span class="icon-chevron-down"></span><span
+      <a href="javascript:;" class="avatar" (click)="op1.toggle($event)">{{userName}}<span class="icon-chevron-down"></span><span
           class="role userIdSpacing">{{functionalRole}}</span></a>
-      <a href="javascript:;" class="btn btn--icon">
+      <!-- <a href="javascript:;" class="btn btn--icon">
         <span class="icon-search"></span>
       </a>
       <a href="javascript:;" class="btn btn--icon">
         <span class="icon-alert"></span>
       </a>
       <a href="javascript:;" class="btn btn--icon">
-        <span class="icon-email" (click)="op1.toggle($event)">
+        <span class="icon-email" >
         </span>
       </a>
       <a href="javascript:;" class="btn btn--icon">
         <span class="icon-cog"></span>
-      </a>
+      </a> -->
 
       <p-overlayPanel [style]="{'width':'300px'}" #op1 (onHide)="onClickedOutside()">
         <p-accordion>

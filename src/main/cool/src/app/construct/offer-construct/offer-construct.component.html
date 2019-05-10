@@ -1,8 +1,9 @@
+<app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId" [offerName]="offerName"
+[stakeData]="stakeData" (updateMessage)="updateMessage($event)">
+</app-menu-bar>
+
 <div class="content">
   <div class="container">
-    <app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId" [offerName]="offerName"
-      [stakeData]="stakeData" (updateMessage)="updateMessage($event)">
-    </app-menu-bar>
     <div class="panel-wrapper mt-15">
       <app-taskbar (onProceedToNext)="onProceedToNext($event)"></app-taskbar>
       <div class="contentBox mt-10">

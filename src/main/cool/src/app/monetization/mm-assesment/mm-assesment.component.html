@@ -1,10 +1,9 @@
+<app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId"
+[offerName]="offerBuilderdata['offerName']" [stakeData]="stakeholders" (updateMessage)="updateMessage($event)">
+</app-menu-bar>
+
 <div class="content">
   <div class="container">
-
-    <app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId"
-      [offerName]="offerBuilderdata['offerName']" [stakeData]="stakeholders" (updateMessage)="updateMessage($event)">
-    </app-menu-bar>
-
     <div class="panel-wrapper mt-15">
 
       <app-taskbar *ngIf="!dimensionMode" (onProceedToNext)="proceedToStakeholder($event)" [showSave]="false">

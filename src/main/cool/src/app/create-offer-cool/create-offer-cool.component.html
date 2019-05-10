@@ -1,12 +1,14 @@
+<app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="offerId" [offerName]="offerName"
+[stakeData]="stakeData" (updateMessage)="updateMessage($event)">
+</app-menu-bar>
+
 <div class="content">
   <div class="container">
-    <app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="offerId" [offerName]="offerName"
-      [stakeData]="stakeData" (updateMessage)="updateMessage($event)">
-    </app-menu-bar>
+
 
     <!-- <app-taskbar [isValidToProceed]="enableOfferbuild" (onProceedToNext)="proceedToOfferBuilder()" [showOfferDtlsBtn]="false"></app-taskbar> -->
 
-    <div class="panel panel--indigo panel--compressed task--bar panel-wrapper mt-15">
+    <div class="panel panel--compressed task--bar panel-wrapper half-margin-top">
       <div class="row">
         <div class="col-sm-4">
           <h2 class="page--subheading"><button class="btn--back btn btn--icon btn--white" (click)="goBack()"><span
