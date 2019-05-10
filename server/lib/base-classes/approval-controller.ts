@@ -195,7 +195,7 @@ export default class ApprovalController extends ControllerBase {
         switch (mode) {
           case ApprovalMode.submit:
             if (data.approvedOnce === 'Y') {
-              body = `The "${data.name}" DFA ${type} has been updated and submitted by ${svrUtil.getEnvEmail(req.user.fullName)} for approval: <br><br>${link}`;
+              body = `The "${data.name}" DFA ${type} has been updated and submitted by ${req.user.fullName} for approval: <br><br>${link}`;
               const oldObj = results[0];
               if (oldObj) {
                 if (item.toObject) {
@@ -207,7 +207,7 @@ export default class ApprovalController extends ControllerBase {
             } else {
               body = `A new DFA ${type} has been submitted by ${req.user.fullName} for approval: <br><br>${link}`;
             }
-            return sendHtmlMail(dfaAdminEmail, bizAdminEmail, `${itadminEmail},${ppmtEmail},${req.user.email}`,
+            return sendHtmlMail(dfaAdminEmail, bizAdminEmail, `${itadminEmail},${ppmtEmail},${svrUtil.getEnvEmail(req.user.email)}`,
               `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Submitted for Approval`, body);
           case ApprovalMode.approve:
             body = `The DFA ${type} submitted by ${item.updatedBy} for approval has been approved:<br><br>${link}`;
