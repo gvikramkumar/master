@@ -53,12 +53,12 @@ export class OfferSetupComponent implements OnInit {
 
 
   constructor(private router: Router,
-    private userService: UserService,
-    private activatedRoute: ActivatedRoute,
-    private offerSetupService: OfferSetupService,
-    private rightPanelService: RightPanelService,
-    private stakeholderfullService: StakeholderfullService,
-    private actionsService: ActionsService) {
+              private userService: UserService,
+              private activatedRoute: ActivatedRoute,
+              private offerSetupService: OfferSetupService,
+              private rightPanelService: RightPanelService,
+              private stakeholderfullService: StakeholderfullService,
+              private actionsService: ActionsService) {
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['offerId'];
       this.caseId = params['caseId'];
@@ -72,7 +72,7 @@ export class OfferSetupComponent implements OnInit {
 
     //  =======================================================================================
     this.functionalRole = this.userService.getFunctionalRole();
-  
+
 
     // Check design review status for enabling Item Creation Module
     this.actionsService.getMilestones(this.caseId).subscribe(data => {
@@ -85,7 +85,7 @@ export class OfferSetupComponent implements OnInit {
     // Get Offer Details
     this.getOfferDetails();
 
-   
+
 
     // for refresh
     interval(9000000).subscribe(x =>
@@ -119,7 +119,7 @@ export class OfferSetupComponent implements OnInit {
       this.derivedMM = offerDetails['derivedMM'];
       this.offerName = offerDetails['offerName'];
       this.stakeHolderData = offerDetails['stakeholders'];
-       // Get Module Name and Status
+      // Get Module Name and Status
       this.getAllModuleData();
 
       if (this.derivedMM !== 'Not Aligned') {
@@ -149,26 +149,26 @@ export class OfferSetupComponent implements OnInit {
 
   // Get All the ModuleName and place in order
   getAllModuleData() {
-    this.offerSetupService.getModuleData(this.derivedMM, this.offerId, this.functionalRole, this.selectedAto).subscribe(data => {
-      this.groupData = {};
-      this.showGroupData = false;
-      this.Options = data['listATOs'];
-      data['listSetupDetails'].forEach(group => {
+    this.offerSetupService.getModuleData(this.offerId, this.selectedAto, this.functionalRole, this.derivedMM ).subscribe(data => {
+        this.groupData = {};
+        this.showGroupData = false;
+        this.Options = data['listATOs'];
+        data['listSetupDetails'].forEach(group => {
 
-        let groupName = group['groupName']
-        if (this.groupData[groupName] == null) {
-          this.groupData[groupName] = { 'left': [], 'right': [] };
-        }
-        if (group['colNum'] == 1) {
-          this.groupData[groupName]['left'].push(group);
-        } else {
-          this.groupData[groupName]['right'].push(group);
-        }
+          let groupName = group['groupName']
+          if (this.groupData[groupName] == null) {
+            this.groupData[groupName] = { 'left': [], 'right': [] };
+          }
+          if (group['colNum'] == 1) {
+            this.groupData[groupName]['left'].push(group);
+          } else {
+            this.groupData[groupName]['right'].push(group);
+          }
 
-      });
-      this.sortGroupData();
-      this.showGroupData = true;
-    }
+        });
+        this.sortGroupData();
+        this.showGroupData = true;
+      }
     );
   }
 

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { SsoStatus } from '../../models/sso-status';
 
 @Component({
   selector: 'app-sso-status',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sso-status.component.css']
 })
 export class SsoStatusComponent implements OnInit {
+
+  @Input() ssoStatus: SsoStatus;
 
   constructor() { }
 
