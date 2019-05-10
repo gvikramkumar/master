@@ -85,6 +85,7 @@ export class ExitCriteriaValidationComponent implements OnInit {
   }
 
   requestForApproval() {
+
     // Once Request for approval is clicked
     // Disable the button
     this.requestApprovalAvailable = false;
