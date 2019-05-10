@@ -7,7 +7,7 @@ import { OfferConstructService } from '@app/services/offer-construct.service';
 import * as moment from 'moment';
 import { OfferconstructCanvasService } from './../../../construct/offer-construct-canvas/service/offerconstruct-canvas.service';
 import { OfferConstructDefaultValue } from './../../../construct/offer-construct-canvas/service/offer-construct-defaultvalue-services';
-
+import {ConfirmationService} from 'primeng/api';
 
 @Component({
     selector: 'dynamic-form-multiple',
@@ -42,6 +42,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     public showLoader: boolean = false;
     private billing_soa = "Billing SOA SKU";
     lastIndex = -1;
+    closeDialogAction:number = 0;
     @Input() indexVal;
     @Input() isItemCreation: boolean;
 
@@ -49,7 +50,8 @@ export class DynamicFormMultipleComponent implements OnInit {
         private offerConstructCanvasService: OfferconstructCanvasService,
         private loaderService: LoaderService,
         private datePipe: DatePipe,
-        private defaultValueServices: OfferConstructDefaultValue) {
+        private defaultValueServices: OfferConstructDefaultValue,
+        private confirmationService: ConfirmationService) {
     }
 
     ngOnInit() {
@@ -126,11 +128,24 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.offerConstructService.closeAddDetails = false;
     }
     onShowDialog(){
-       this.minorSection();
-        setTimeout(() => {
-            this.majorSection();
-        }, 0);
-    }
+        this.closeDialogAction = 0;
+        this.minorSection();
+         setTimeout(() => {
+             this.majorSection();
+         }, 0);
+     }
+     confirmDialog() {
+         this.closeDialogAction++;
+         if(this.closeDialogAction<=1){
+             this.confirmationService.confirm({
+                 message: 'You have not saved changes to this page. If you would like to save these changes, please Save before proceeding to another screen.',
+                 accept: () => {
+                 },
+                 reject:()=>{
+                 }
+             });
+         }else {this.closeDialog()}
+     }
     closeDialog() {
         this.majorSection();
         this.offerConstructService.closeAddDetails = false;
