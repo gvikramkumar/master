@@ -181,7 +181,7 @@ export default class ApprovalController extends ControllerBase {
     const data = req.body;
     const moduleId = req.dfa.moduleId;
     const link = `<a href="${item.approvalUrl}">${item.approvalUrl}</a>`;
-    let body;
+    let body, requester;
     const itadminEmail = req.dfa.itadminEmail;
     const dfaAdminEmail = req.dfa.dfaAdminEmail;
     const bizAdminEmail = req.dfa.bizAdminEmail;
@@ -195,7 +195,7 @@ export default class ApprovalController extends ControllerBase {
         switch (mode) {
           case ApprovalMode.submit:
             if (data.approvedOnce === 'Y') {
-              body = `The "${data.name}" DFA ${type} has been updated and submitted by ${req.user.fullName} for approval: <br><br>${link}`;
+              body = `The "${data.name}" DFA ${type} has been updated and submitted by ${svrUtil.getEnvEmail(req.user.fullName)} for approval: <br><br>${link}`;
               const oldObj = results[0];
               if (oldObj) {
                 if (item.toObject) {
@@ -214,14 +214,16 @@ export default class ApprovalController extends ControllerBase {
             if (data.approveRejectMessage) {
               body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
-            return sendHtmlMail(bizAdminEmail, `${item.updatedBy}@cisco.com`, `${itadminEmail},${ppmtEmail}`,
+            requester = svrUtil.getEnvEmail(`${item.updatedBy}@cisco.com`);
+            return sendHtmlMail(bizAdminEmail, requester, `${itadminEmail},${ppmtEmail}`,
               `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Approved`, body);
           case ApprovalMode.reject:
             body = `The DFA ${type} submitted by ${item.updatedBy} for approval has been rejected:<br><br>${link}`;
             if (data.approveRejectMessage) {
               body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
-            return sendHtmlMail(bizAdminEmail, `${item.updatedBy}@cisco.com`, `${itadminEmail},${ppmtEmail}`,
+            requester = svrUtil.getEnvEmail(`${item.updatedBy}@cisco.com`);
+            return sendHtmlMail(bizAdminEmail, requester, `${itadminEmail},${ppmtEmail}`,
               `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Not Approved`, body);
         }
       });
@@ -230,11 +232,9 @@ export default class ApprovalController extends ControllerBase {
 
   approvalEmailReminder(type: string) {
     const currentTime = new Date();
-    console.log(`In approval Email Reminder`);
     return Promise.all([this.repo.getManyPending({moduleId : -1}),
       new LookupRepo().getValues(['itadmin-email', 'dfa-admin-email', 'dfa-biz-admin-email'])])
       .then(results => {
-        console.log(`Connected to database. Results found: ${results.length}`);
         const pendingItems = results[0].filter(doc => svrUtil.checkIfMoreThanADay(currentTime, doc.approvalReminderTime));
         const adminEmails = results[1];
         if (pendingItems.length) {
@@ -244,7 +244,7 @@ export default class ApprovalController extends ControllerBase {
               .then(itemResults => {
                 const module = itemResults[0];
                 const user = itemResults[1];
-                this.sendReminderEmail(adminEmails, module, user, item, type)
+                this.sendReminderEmail(adminEmails, module, user, item, type, sendHtmlMail)
                   .then(() => {
                     item.set('approvalReminderTime', currentTime);
                     this.repo.update(item, '', true, true, false);
@@ -255,14 +255,14 @@ export default class ApprovalController extends ControllerBase {
       });
   }
 
-  sendReminderEmail(adminEmails: string[], module, user, item: AnyObj, type: string) {
+  sendReminderEmail(adminEmails: string[], module, user, item, type: string, _sendHtmlMail) {
         const itadminEmail = svrUtil.getEnvEmail(adminEmails[0]);
         const dfaAdminEmail = svrUtil.getEnvEmail(adminEmails[1]);
         const dfaBizAdminEmail = svrUtil.getEnvEmail(adminEmails[2]);
         const link = `<a href="${item.approvalUrl}">${item.approvalUrl}</a>`;
-        const body = `A new DFA - ${_.upperFirst(type)} submitted by ${user.get('fullname')} has been pending for approval since ${shUtil.convertToPSTTime(item.get('updatedDate'))}:<br><br>${link}`;
+        const body = `A new DFA - ${_.upperFirst(type)} submitted by ${user.fullName} has been pending for approval since ${shUtil.convertToPSTTime(item.updatedDate)}:<br><br>${link}`;
         const subject = `${this.getEnv()}DFA - ${module.name} - ${_.upperFirst(type)} Pending for Approval`;
-        return sendHtmlMail(dfaAdminEmail, dfaBizAdminEmail, `${itadminEmail},${item.get('updatedBy')}@cisco.com`, subject, body);
+        return _sendHtmlMail(dfaAdminEmail, dfaBizAdminEmail, `${itadminEmail},${svrUtil.getEnvEmail(user.email)}`, subject, body);
   }
 
   getEnv() {

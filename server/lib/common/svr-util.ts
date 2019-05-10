@@ -31,7 +31,7 @@ export const svrUtil = {
 };
 
 function getEnvEmail(email) {
-  if (isLocalEnv()) {
+  if (isLocalEnv() && !isUnitEnv()) {
     return getTestEmail();
   }
   return email;
@@ -82,6 +82,10 @@ function base64ToAscii(base64) {
 
 function isLocalEnv() {
   return !process.env.NODE_ENV || _.includes(['dev', 'ldev', 'unit'], process.env.NODE_ENV);
+}
+
+function isUnitEnv() {
+  return process.env.NODE_ENV === 'unit';
 }
 
 function getTestEmail() {

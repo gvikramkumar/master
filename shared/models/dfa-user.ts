@@ -3,6 +3,7 @@ import {difference, flatten, includes, intersection} from 'lodash';
 import AnyObj from './any-obj';
 import {DfaModule} from '../../ui/src/app/modules/_common/models/module';
 import {shUtil} from '../misc/shared-util';
+import {svrUtil} from '../../server/lib/common/svr-util';
 
 export default class DfaUser {
   moduleId?: number;
@@ -14,7 +15,7 @@ export default class DfaUser {
     public id: string,
     public firstName: string,
     public lastName: string,
-    public email: string,
+    public _email: string,
     public roles: string[],
     public genericUsers,
     public modules: DfaModule[]) {
@@ -22,6 +23,14 @@ export default class DfaUser {
 
   get fullName() {
     return this.firstName + ' ' + this.lastName;
+  }
+
+  get email() {
+    return svrUtil.getEnvEmail(this._email);
+  }
+
+  set email(email) {
+    this._email = email;
   }
 
   isGenericUser() {
