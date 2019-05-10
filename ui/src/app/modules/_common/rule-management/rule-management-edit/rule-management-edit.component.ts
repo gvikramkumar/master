@@ -235,32 +235,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   cleanUp() {
-    // if match selected and cond selected and not choices, clear out cond
-    if (!this.rule.salesSL1CritChoices.length) {
-      this.rule.salesSL1CritCond = undefined;
-    }
-    if (!this.rule.salesSL2CritChoices.length) {
-      this.rule.salesSL2CritCond = undefined;
-    }
-    if (!this.rule.salesSL3CritChoices.length) {
-      this.rule.salesSL3CritCond = undefined;
-    }
-    if (!this.rule.prodPFCritChoices.length) {
-      this.rule.prodPFCritCond = undefined;
-    }
-    if (!this.rule.prodBUCritChoices.length) {
-      this.rule.prodBUCritCond = undefined;
-    }
-    if (!this.rule.prodTGCritChoices.length) {
-      this.rule.prodTGCritCond = undefined;
-    }
-    if (!this.rule.scmsCritChoices.length) {
-      this.rule.scmsCritCond = undefined;
-    }
-    if (!this.rule.beCritChoices.length) {
-      this.rule.beCritCond = undefined;
-    }
-
     this.updateSelectStatements();
   }
 
@@ -282,6 +256,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     UiUtil.waitForAsyncValidations(this.form)
       .then(() => {
         if (this.form.valid) {
+          this.cleanUp();
           const errors = this.validate();
           if (errors) {
             this.uiUtil.validationErrorsDialog(errors);
@@ -315,7 +290,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
             .subscribe(resultPrompt => {
               if (resultPrompt !== 'DIALOG_CANCEL') {
                 this.rule.approveRejectMessage = resultPrompt;
-                this.cleanUp();
                 this.ruleService.reject(this.rule)
                   .subscribe(rule => {
                     history.go(-1);
@@ -337,7 +311,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
             .subscribe(resultPrompt => {
               if (resultPrompt !== 'DIALOG_CANCEL') {
                 this.rule.approveRejectMessage = resultPrompt;
-                this.cleanUp();
                 this.ruleService.approve(this.rule)
                   .subscribe(() => {
                     history.go(-1);
@@ -353,6 +326,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     UiUtil.waitForAsyncValidations(this.form)
       .then(() => {
         if (this.form.valid) {
+          this.cleanUp();
           const errors = this.validate();
           if (errors) {
             this.uiUtil.validationErrorsDialog(errors);
@@ -360,7 +334,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
             this.uiUtil.confirmSubmitForApproval()
               .subscribe(result => {
                 if (result) {
-                  this.cleanUp();
                   const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
                   this.ruleService.submitForApproval(this.rule, {saveMode, type: 'rule-management'})
                     .subscribe(() => {
@@ -519,6 +492,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           // we need to clone the selectMap, otherwise they add to it then remove their entry, but addition is still there
           // so we'll clone it every time we generate a new name
           const smap = _.cloneDeep(this.selectMap);
+          this.updateSelectStatements();
           ruleUtil.addRuleNameAndDescription(this.rule, smap, this.drivers, this.periods);
           // console.log(smap.buMap);
           this.checkIfRuleNameAlreadyExists();

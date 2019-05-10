@@ -51,7 +51,7 @@ export default class ApprovalController extends ControllerBase {
     promise
       .then(savedItem => {
         const newItem = _.clone(savedItem);
-        newItem.set('approvalUrl', `${req.headers.origin}/prof/${req.query.type}/edit/${savedItem.id};mode=view`);
+        newItem.approvalUrl = `${req.headers.origin}/prof/${req.query.type}/edit/${savedItem.id};mode=view`;
         this.repo.update(newItem, '', true, true, false)
           .then(updatedItem => {
             return this.sendApprovalEmail(req, ApprovalMode.submit, updatedItem)
@@ -246,7 +246,7 @@ export default class ApprovalController extends ControllerBase {
                 const user = itemResults[1];
                 this.sendReminderEmail(adminEmails, module, user, item, type, sendHtmlMail)
                   .then(() => {
-                    item.set('approvalReminderTime', currentTime);
+                    item.approvalReminderTime = currentTime;
                     this.repo.update(item, '', true, true, false);
                   });
               });
