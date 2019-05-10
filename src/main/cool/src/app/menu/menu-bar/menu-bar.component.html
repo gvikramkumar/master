@@ -59,11 +59,11 @@
         <!-- <button *ngIf="showSave" class="btn btn--primary" (click)='saveCurrentState()'> Save </button>
         <button *ngIf="showOfferDtlsBtn" class="btn btn--primary" (click)="gotoOfferviewDetails()"> Offer Detail View
         </button> -->
-        <button class="menu-btn">
+        <button class="menu-btn" (click)="saveCurrentState()">
           <span class="ico-save-offer"></span>
           Save
         </button>
-        <button class="menu-btn">
+        <button class="menu-btn" (click)="gotoOfferviewDetails()">
           <span class="ico-offer-details"></span>
           Offer Details
         </button>
