@@ -1,8 +1,7 @@
 {
   "spec_dir": "dist",
   "spec_files": [
-    "server/**/*.spec.js",
-    "shared/**/*.spec.js"
+    "server/**/*.e2e-spec.js"
   ],
   "helpers": [
     "spec/helpers/**/*.js"

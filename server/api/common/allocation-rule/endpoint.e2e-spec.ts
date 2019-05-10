@@ -2,7 +2,7 @@ import request from 'supertest';
 import {serverPromise} from '../../../server';
 
 let server;
-describe('allocation rule tests', () => {
+fdescribe('allocation rule tests', () => {
 
   beforeAll(function (done) {
     serverPromise.then(function (_server) {
