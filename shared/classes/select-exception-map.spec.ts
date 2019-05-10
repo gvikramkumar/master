@@ -1,7 +1,8 @@
 import {SelectExceptionMap} from './select-exception-map';
+import {AllocationRule} from '../models/allocation-rule';
 
 
-fdescribe('SelectExceptionMap tests', () => {
+describe('SelectExceptionMap tests', () => {
   let emap, one, two, three;
   beforeEach(() => {
     emap = new SelectExceptionMap();
@@ -74,7 +75,14 @@ fdescribe('SelectExceptionMap tests', () => {
     });
 
   });
-  
+
+  it('getSelectArrayFromRule tests', () => {
+    const rule = new AllocationRule();
+    rule.salesSL1CritCond = 'IN';
+    rule.salesSL1CritChoices = ['one', 'two', 'three'];
+    expect(emap.getSelectArrayFromRule('sl1', rule)).toEqual(['IN', 'ONE', 'TWO', 'THREE']);
+  });
+
 });
 
 
