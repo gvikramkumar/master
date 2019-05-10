@@ -70,13 +70,13 @@
                         <!-- Completed -->
                         <button *ngIf="element['status']=='Completed'"
                                 class="btn btn--small btn--success base-margin-bottom" placement="top"
-                                (click)="getElementDetails(element)" [disabled]="readOnly">
+                                (click)="getElementDetails(element)" [disabled]="readOnly"><span class="icon-check pull-left"></span>&nbsp;
                           {{element["moduleName"]}}
                         </button>
                         <!-- In Progress-->
                         <button *ngIf="element['status']=='In Progress'"
                                 class="btn btn--small  btn--warning base-margin-bottom" placement="top"
-                                (click)="getElementDetails(element)">
+                                (click)="getElementDetails(element)"><span class="in-progress pull-left"></span>&nbsp;
                           {{element["moduleName"]}}
                         </button>
                         <!-- Available -->
@@ -107,13 +107,13 @@
                         <!-- Completed -->
                         <button *ngIf="element['status']=='Completed'"
                                 class="btn btn--small btn--success base-margin-bottom" placement="top"
-                                (click)="designReviewComplete && getElementDetails(element)">
+                                (click)="designReviewComplete && getElementDetails(element)"><span class="icon-check pull-left"></span>&nbsp;
                           {{element["moduleName"]}}
                         </button>
                         <!-- In Progress-->
                         <button *ngIf="element['status']=='In Progress'"
                                 class="btn btn--small btn--warning base-margin-bottom" placement="top"
-                                (click)="designReviewComplete && getElementDetails(element)">
+                                (click)="designReviewComplete && getElementDetails(element)"><span class="in-progress pull-left"></span>&nbsp;
                           {{element["moduleName"]}}
                         </button>
                         <!-- Available -->
@@ -157,13 +157,13 @@
                               <!-- Completed -->
                               <button *ngIf="element['status']=='Completed'"
                                       class="btn btn--small btn--success base-margin-bottom" placement="top"
-                                      (click)="getElementDetails(element)">
+                                      (click)="getElementDetails(element)"><span class="icon-check pull-left"></span>&nbsp;
                                 {{element["moduleName"]}}
                               </button>
                               <!-- In Progress-->
                               <button *ngIf="element['status']=='In Progress'"
                                       class="btn btn--small  btn--warning base-margin-bottom" placement="top"
-                                      (click)="getElementDetails(element)">
+                                      (click)="getElementDetails(element)"><span class="in-progress pull-left"></span>&nbsp;
                                 {{element["moduleName"]}}
                               </button>
                               <!-- Available -->
@@ -198,13 +198,13 @@
                               <!-- Completed -->
                               <button *ngIf="element['status']=='Completed'"
                                       class="btn btn--small btn--success base-margin-bottom" placement="top"
-                                      (click)="getElementDetails(element)">
+                                      (click)="getElementDetails(element)"><span class="icon-check pull-left"></span>&nbsp;
                                 {{element["moduleName"]}}
                               </button>
                               <!-- In Progress-->
                               <button *ngIf="element['status']=='In Progress'"
                                       class="btn btn--small  btn--warning base-margin-bottom" placement="top"
-                                      (click)="getElementDetails(element)">
+                                      (click)="getElementDetails(element)"><span class="in-progress pull-left"></span>&nbsp;
                                 {{element["moduleName"]}}
                               </button>
                               <!-- Available -->
@@ -246,13 +246,13 @@
                               <!-- Completed -->
                               <button *ngIf="element['status']=='Completed'"
                                       class="btn btn--small btn--success base-margin-bottom" placement="top"
-                                      (click)="getElementDetails(element)">
+                                      (click)="getElementDetails(element)"><span class="icon-check pull-left"></span>&nbsp;
                                 {{element["moduleName"]}}
                               </button>
                               <!-- In Progress-->
                               <button *ngIf="element['status']=='In Progress'"
                                       class="btn btn--small  btn--warning base-margin-bottom" placement="top"
-                                      (click)="getElementDetails(element)">
+                                      (click)="getElementDetails(element)"><span class="in-progress pull-left"></span>&nbsp;
                                 {{element["moduleName"]}}
                               </button>
                               <!-- Available -->
@@ -287,13 +287,13 @@
                               <!-- Completed -->
                               <button *ngIf="element['status']=='Completed'"
                                       class="btn btn--small btn--success base-margin-bottom" placement="top"
-                                      (click)="getElementDetails(element)">
+                                      (click)="getElementDetails(element)"><span class="icon-check pull-left"></span>&nbsp;
                                 {{element["moduleName"]}}
                               </button>
                               <!-- In Progress-->
                               <button *ngIf="element['status']=='In Progress'"
                                       class="btn btn--small  btn--warning base-margin-bottom" placement="top"
-                                      (click)="getElementDetails(element)">
+                                      (click)="getElementDetails(element)"><span class="in-progress pull-left"></span>&nbsp;
                                 {{element["moduleName"]}}
                               </button>
                               <!-- Available -->
@@ -336,13 +336,13 @@
                         <!-- Completed -->
                         <button *ngIf="element['status']=='Completed'"
                                 class="btn btn--small btn--success half-margin-top" placement="top"
-                                (click)="getElementDetails(element)">
+                                (click)="getElementDetails(element)"><span class="icon-check pull-left"></span>&nbsp;
                           {{element["moduleName"]}}
                         </button>
                         <!-- In Progress-->
                         <button *ngIf="element['status']=='In Progress'"
                                 class="btn btn--small btn--warning half-margin-top" placement="top"
-                                (click)="getElementDetails(element)">
+                                (click)="getElementDetails(element)"><span class="in-progress pull-left"></span>&nbsp;
                           {{element["moduleName"]}}
                         </button>
                         <!-- Available -->
@@ -376,13 +376,13 @@
                         <!-- Completed -->
                         <button *ngIf="element['status']=='Completed'"
                                 class="btn btn--small btn--success half-margin-top" placement="top"
-                                (click)="getElementDetails(element)">
+                                (click)="getElementDetails(element)"><span class="icon-check pull-left"></span>&nbsp;
                           {{element["moduleName"]}}
                         </button>
                         <!-- In Progress-->
                         <button *ngIf="element['status']=='In Progress'"
                                 class="btn btn--small btn--warning half-margin-top" placement="top"
-                                (click)="getElementDetails(element)">
+                                (click)="getElementDetails(element)"><span class="in-progress pull-left"></span>&nbsp;
                           {{element["moduleName"]}}
                         </button>
                         <!-- Available -->
@@ -393,12 +393,12 @@
                         </button>
                         <!-- Not Yet Available -->
                         <button *ngIf="element['status']=='Not Yet Available'"
-                                class="btn btn--small btn--gray-ghost half-margin-top" placement="top">
+                                class="btn btn--small btn--gray-ghost half-margin-top" placement="top"><span class="milestone pull-left"></span>&nbsp;
                           {{element["moduleName"]}}
                         </button>
                         <!-- Not Required -->
                         <button *ngIf="element['status']=='Not Required'"
-                                class="btn btn--small btn--default half-margin-top" placement="top">
+                                class="btn btn--small btn--default half-margin-top" placement="top"><span class="milestone pull-left"></span>&nbsp;
                           {{element["moduleName"]}}
                         </button>
                       </li>
@@ -410,13 +410,13 @@
                         <!-- Completed -->
                         <button *ngIf="element['status']=='Completed'"
                                 class="btn btn--small btn--success base-margin-bottom" placement="top"
-                                (click)="getElementDetails(element)">
+                                (click)="getElementDetails(element)"><span class="icon-check pull-left"></span>&nbsp;
                           {{element["moduleName"]}}
                         </button>
                         <!-- In Progress-->
                         <button *ngIf="element['status']=='In Progress'"
                                 class="btn btn--small btn--warning base-margin-bottom" placement="top"
-                                (click)="getElementDetails(element)">
+                                (click)="getElementDetails(element)"><span class="in-progress pull-left"></span>&nbsp;
                           {{element["moduleName"]}}
                         </button>
                         <!-- Available -->
