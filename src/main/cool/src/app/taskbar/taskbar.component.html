@@ -25,6 +25,8 @@
     </div>
 
     <div *ngSwitchCase="'action'" class="panel panel--ltgray panel--compressed header-bar task--bar">
+      <div class="container">
+      <div class="row">
       <div class="header-bar__main col-md-6">
         <div class="header-heading">
           <h1 class="page-title"><span class="action--value">{{actionCount.pendingActionCount}}</span> <span
@@ -40,6 +42,8 @@
         <button (click)="newBtnClick.next()" class="btn btn--white cta--action"><span
             class="icon-add icon-small"></span>
           <span class="button--label">Create New Action</span></button>
+      </div>
+      </div>
       </div>
     </div>
 

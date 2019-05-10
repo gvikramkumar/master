@@ -23,10 +23,16 @@
 .cool.cui header ul.tabs > li.active > a, .cool.cui header ul.tabs > li:hover > a, .cool.cui header .nav-tabs > li.active > a, .cool.cui header .nav-tabs > li:hover > a {
   font-weight: normal;
   color: #fff;
-  box-shadow: 0 -3px 0 rgba(255,255,255,.25) inset;
+  box-shadow: 0 -3px 0 #00bceb inset;
 }
 .cool.cui .header-toolbar a.avatar {
   color:white;
+}
+.cool.cui .avatar .ico-avatar {
+  display: inline-block;
+  vertical-align: text-top;
+  float: left;
+  margin-right: 10px;
 }
 .cool.cui a.avatar span.role.userIdSpacing {
   opacity: .75;
@@ -1351,7 +1357,7 @@ span[class*="display-"] {
 
 .cool.cui header .header-toolbar .ui-overlaypanel {
   margin-left: 15px;
-  margin-top: 15px;
+  margin-top: 5px;
   border-radius: 10px;
   border: none;
 }
