@@ -7,7 +7,7 @@ import { OfferConstructService } from '@app/services/offer-construct.service';
 import * as moment from 'moment';
 import { OfferconstructCanvasService } from './../../../construct/offer-construct-canvas/service/offerconstruct-canvas.service';
 import { OfferConstructDefaultValue } from './../../../construct/offer-construct-canvas/service/offer-construct-defaultvalue-services';
-
+import {ConfirmationService} from 'primeng/api';
 
 @Component({
     selector: 'dynamic-form-multiple',
@@ -42,6 +42,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     public showLoader: boolean = false;
     private billing_soa = "Billing SOA SKU";
     lastIndex = -1;
+    closeDialogAction:number = 0;
     @Input() indexVal;
     @Input() isItemCreation: boolean;
 
@@ -49,7 +50,8 @@ export class DynamicFormMultipleComponent implements OnInit {
         private offerConstructCanvasService: OfferconstructCanvasService,
         private loaderService: LoaderService,
         private datePipe: DatePipe,
-        private defaultValueServices: OfferConstructDefaultValue) {
+        private defaultValueServices: OfferConstructDefaultValue,
+        private confirmationService: ConfirmationService) {
     }
 
     ngOnInit() {
@@ -126,11 +128,24 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.offerConstructService.closeAddDetails = false;
     }
     onShowDialog(){
-        document.getElementById('tabsv4-2').click()
-        setTimeout(() => {
-            document.getElementById('tabsv4-1').click()
-        }, 0);
-    }
+        this.closeDialogAction = 0;
+        this.minorSection();
+         setTimeout(() => {
+             this.majorSection();
+         }, 0);
+     }
+     confirmDialog() {
+         this.closeDialogAction++;
+         if(this.closeDialogAction<=1){
+             this.confirmationService.confirm({
+                 message: 'You have not saved changes to this page. If you would like to save these changes, please Save before proceeding to another screen.',
+                 accept: () => {
+                 },
+                 reject:()=>{
+                 }
+             });
+         }else {this.closeDialog()}
+     }
     closeDialog() {
         this.majorSection();
         this.offerConstructService.closeAddDetails = false;
@@ -238,24 +253,35 @@ export class DynamicFormMultipleComponent implements OnInit {
         return array;
     }
 
-    patchvalueToSelected(groupName) {
-        let itemsData = this.itemsData;
-        if (itemsData !== undefined) {
-            if (groupName === itemsData['Item Category']) {
-                this.selectedProduct.forEach(product => {
-                    if (groupName = product.groupName) {
-                        for (let searchValue in itemsData) {
-                            product.listOfferQuestions.forEach(element => {
-                                if (searchValue === element.question) {
-                                    element.currentValue = itemsData[searchValue];
-                                }
-                            });
-                        }
-                    }
-                });
-            }
-        }
+  patchvalueToSelected(groupName) {
+    // If Billing SOA SKU is selected, for comparison with PID's Item category Name,
+    // it needs to be assigned to Billing.
+    let isBillingSOA = false;
+    if (groupName === 'Billing SOA SKU') {
+      groupName = 'Billing';
+      isBillingSOA = true;
     }
+
+    let itemsData = this.itemsData;
+    if (itemsData !== undefined) {
+      if (groupName === itemsData['Item Category']) {
+        if (isBillingSOA) {
+          groupName = 'Billing SOA SKU';
+        }
+        this.selectedProduct.forEach(product => {
+          if (groupName = product.groupName) {
+            for (let searchValue in itemsData) {
+              product.listOfferQuestions.forEach(element => {
+                if (searchValue === element.question) {
+                  element.currentValue = itemsData[searchValue];
+                }
+              });
+            }
+          }
+        });
+      }
+    }
+  }
 
     addItms(groupName) {
         let selectedSection = this.selectedTab;
@@ -283,15 +309,25 @@ export class DynamicFormMultipleComponent implements OnInit {
             }
         }
     }
+
     dateFormat(val) {
         if (val !== '') {
             return this.datePipe.transform(new Date(val), 'MM/dd/yyyy');
         }
     }
+
     updateDate(e) {
         return this.datePipe.transform(new Date(e), 'MM/dd/yyyy');
     }
+
     patchToALL(groupName) {
+      // If Billing SOA SKU is selected, for comparison with PID's Item category Name,
+      //  it needs to be assigned to Billing.
+      let isBillingSOA = false;
+        if (groupName === 'Billing SOA SKU') {
+          groupName = 'Billing';
+          isBillingSOA = true;
+        }
 
         let itemsData = this.itemsData;
         // copy items from the same ICC type
@@ -311,6 +347,9 @@ export class DynamicFormMultipleComponent implements OnInit {
                         }
                     });
                 } else {
+                    if (isBillingSOA) {
+                      groupName = 'Billing SOA SKU';
+                    }
                     this.minorOfferInfo.forEach((element, index) => {
                         let gname: any = Object.keys(element);
                         if (gname == groupName) {

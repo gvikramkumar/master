@@ -655,6 +655,10 @@ export class ItemCreationComponent implements OnInit {
         title = Object.keys(element);
         // if (Object.keys(element) == title) {
         this.changeItemDetails(true, element[title]);
+        this.offerConstructItems.forEach(e => {
+          if(e.data.uniqueKey===element[title].uniqueKey)
+            {e.data.title = e.data.label = element[title].title;}
+        });
         // }
       });
 

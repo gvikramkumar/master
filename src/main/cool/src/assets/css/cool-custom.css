@@ -2,25 +2,39 @@
   background: #fff;
   overflow: visible;
 }
-
 .cool.cui .header {
-  background: #fafafa;
-  border-bottom: 1px solid #dfdfdf;
+  background: #005073;
+  border-bottom: transparent;
 }
-
+.cool.cui .header-heading .page-title {
+  color: #fff;
+  opacity: .75;
+}
 .cool.cui header ul.tabs>li,
 .cool.cui header .nav-tabs>li {
   margin: 0 20px 0 0;
 }
-
-.cool.cui header ul.tabs>li.active>a,
+.cool.cui header ul.tabs > li > a, .cool.cui header .nav-tabs > li > a {
+  color: #fff;
+}
+.cool.cui header ul.tabs > li.active > a, .cool.cui header ul.tabs > li:hover > a, .cool.cui header .nav-tabs > li.active > a, .cool.cui header .nav-tabs > li:hover > a {
+  font-weight: normal;
+  color: #fff;
+}
+.cool.cui .header-toolbar a.avatar {
+  color:white;
+}
+.cool.cui a.avatar span.role.userIdSpacing {
+  opacity: .75;
+}
+/* .cool.cui header ul.tabs>li.active>a,
 .cool.cui header ul.tabs>li:hover>a,
 .cool.cui header .nav-tabs>li.active>a,
 .cool.cui header .nav-tabs>li:hover>a {
   font-weight: normal;
   box-shadow: 0 -3px 0 #005073 inset;
   color: #005073;
-}
+} */
 
 .cool.cui .btn.btn--small,
 .cui .btn.btn--wide {
@@ -236,7 +250,9 @@
 .cool.cui .ui-datatable .ui-datatable-data>tr>td {
   padding: .65em .5em;
 }
-
+.cool.cui .ui-datatable .ui-datatable-thead>tr>th {
+  padding:10px;
+}
 .cui .ui-table .ui-table-tbody>tr>td {
   border: 0
 }
@@ -245,13 +261,17 @@
 .cui .ui-table .ui-table-thead>tr>th {
   white-space: nowrap;
   font-weight: normal;
-  background: #EAEAEa;
+  background: #f2f2f2;
   color: #333333;
   font-size: 12px;
   text-transform: uppercase;
   /* width: 10%; */
   text-align: center;
   border-color: #d6d6d6;
+}
+.cool.cui .table th {
+  font-weight: normal;
+  font-size: 12px;
 }
 
 .cui .row.card-table-header {
@@ -304,8 +324,7 @@
   color: #1b1d1f;
 }
 
-.cool.cui th.ui-state-default.ui-sortable-column,
-th.ui-sortable-column.ng-star-inserted {
+.cool.cui .actions-notifications .ui-table .ui-table-thead>tr>th {
   outline: 0;
   padding: 1em .65em;
 }

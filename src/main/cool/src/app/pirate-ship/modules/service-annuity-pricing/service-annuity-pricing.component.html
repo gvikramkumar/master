@@ -14,39 +14,23 @@
       <div class="row">
 
         <div class="leftContent col-sm-12 col-md-9">
-          
-          <div class="row flex-center-vertical">
-              <div class="col-sm-12">
 
-                <div class="pull-right">
-                  <app-view-offer [atoNames]="atoNames" [selectedAto]="selectedAto"
-                    (atoSelection)="showSelectedAtoView($event)">
-                  </app-view-offer>
-                </div>
-                
-              </div>
+<!--          <ng-template #atosummary>-->
+<!--            <div class="row">-->
+<!--              <app-atosummary [atoNames]="atoNames" [selectedAto]="selectedAto" [offerId]="offerId"  [caseId] = "caseId"></app-atosummary>-->
+<!--            </div>-->
+<!--          </ng-template>-->
+
+          <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer'">
+            <app-ato-list [atoList]="atoList"></app-ato-list>
           </div>
 
-
-        <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer' else selectedAtoView">
-          <app-ato-list [atoList]="atoList"></app-ato-list>
-        </div>
-
-        <ng-template #selectedAtoView>
-
-            <!-- <br>Status: {{atoTask['itemStatus']}}<br>
-
-            <br><br>
-            <h3>Modelling</h3><br><br>
-            <app-task-summary [tasks]="atoTask['modelTasks']">/</app-task-summary> -->
-              <h3>Need to build</h3>
-        </ng-template>
 
         </div>
 
         <div class="rightContent col-sm-12 col-md-3">
           <app-right-panel [stakeData]="stakeholders" [offerName]="offerName" [derivedMM]="derivedMM"
-            [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference">
+                           [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference">
           </app-right-panel>
         </div>
 

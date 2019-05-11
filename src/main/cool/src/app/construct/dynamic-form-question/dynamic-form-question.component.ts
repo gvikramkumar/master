@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { OfferConstructService } from '@app/services/offer-construct.service';
-import { BsDatepickerConfig,BsDaterangepickerDirective } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerConfig, BsDaterangepickerDirective } from 'ngx-bootstrap/datepicker';
 import * as moment from 'moment';
 @Component({
-selector: 'app-dynamic-form-question',
-templateUrl: './dynamic-form-question.component.html',
-styleUrls: ['./dynamic-form-question.component.css']
+  selector: 'app-dynamic-form-question',
+  templateUrl: './dynamic-form-question.component.html',
+  styleUrls: ['./dynamic-form-question.component.css']
 })
 export class DynamicFormQuestionComponent implements OnInit {
   @Input() question: any;
@@ -18,7 +18,7 @@ export class DynamicFormQuestionComponent implements OnInit {
   minDate: Date;
   constructor(public offerConstructService: OfferConstructService) {
   }
-  ngOnInit() { 
+  ngOnInit() {
     this.minDate = new Date();
   }
   dateFormat(val){
