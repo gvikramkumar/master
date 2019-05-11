@@ -11,7 +11,6 @@ import { ActionsService } from '@app/services/actions.service';
 })
 export class TaskbarComponent implements OnInit {
 
-  @Input() showSave = false;
   @Input() isDashboard = false;
   @Input() showOfferDtlsBtn = true;
   @Input() isValidToProceed: boolean;
@@ -87,10 +86,6 @@ export class TaskbarComponent implements OnInit {
     if(this.taskBarNavSteps[this.currentStepIndex].nxtBtnTitle === 'Readiness Review') {
       this.proceedToOfferSetup = true;
     }
-  }
-
-  saveCurrentState() {
-    this.onProceedToNext.emit('false');
   }
 
   proceedToNextStep() {

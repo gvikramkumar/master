@@ -1,69 +1,74 @@
-<div class="row">
-  <div class="col-md-12" [ngSwitch]="currentPage">
+<div [ngSwitch]="currentPage">
 
-    <div *ngSwitchCase="'dashboard'" class="panel panel--indigo panel--loose header-bar base-margin-top task--bar">
-      <div class="header-bar__main col-md-6">
-        <div class="header-heading">
-          <h1 class="page-title"><span class="action--value">{{actionCount.pendingActionCount}}</span> <span
-              class="action--value-label">Pending
-              Actions</span></h1>
-          <span class="vertical-divider"></span>
-          <h1 class="page-title"><span class="action--value">{{actionCount.needImmediateActionCount}}</span> <span
-              class="action--value-label">Need
-              Immediate Action</span></h1>
-        </div>
-      </div>
-      <div class="header-toolbar col-md-6" *ngIf="userRole">
-        <button (click)="newBtnClick.next()" class="btn btn--white cta--action"><span
-            class="icon-add icon-small"></span>
-          <span class="button--label">New Offer</span></button>
-      </div>
-    </div>
-
-    <div *ngSwitchCase="'action'" class="panel panel--indigo panel--loose header-bar base-margin-top task--bar">
-      <div class="header-bar__main col-md-6">
-        <div class="header-heading">
-          <h1 class="page-title"><span class="action--value">{{actionCount.pendingActionCount}}</span> <span
-              class="action--value-label">Pending
-              Actions</span></h1>
-          <span class="vertical-divider"></span>
-          <h1 class="page-title"><span class="action--value">{{actionCount.needImmediateActionCount}}</span> <span
-              class="action--value-label">Need
-              Immediate Action</span></h1>
-        </div>
-      </div>
-      <div class="header-toolbar col-md-6">
-        <button (click)="newBtnClick.next()" class="btn btn--white cta--action"><span
-            class="icon-add icon-small"></span>
-          <span class="button--label">Create New Action</span></button>
-      </div>
-    </div>
-
-    <div *ngSwitchCase="'pirate-ship-module'" class="panel panel--indigo panel--compressed task--bar">
+  <div *ngSwitchCase="'dashboard'" class="panel panel--ltgray panel--compressed header-bar task--bar">
+    <div class="container">
       <div class="row">
-        <div class="col-md-4">
-          <h4><button (click)='goToPirateShip()' class="btn--back btn btn--icon btn--white"><span
-                class="icon-back"></span></button>{{pirateShipModuleName}}</h4>
+        <div class="header-bar__main col-md-6">
+          <div class="header-heading">
+            <h1 class="page-title"><span class="action--value">{{actionCount.pendingActionCount}}</span> <span
+                class="action--value-label">Pending
+                Actions</span></h1>
+            <span class="vertical-divider"></span>
+            <h1 class="page-title"><span class="action--value">{{actionCount.needImmediateActionCount}}</span> <span
+                class="action--value-label">Need
+                Immediate Action</span></h1>
+          </div>
+        </div>
+        <div class="header-toolbar col-md-6" *ngIf="userRole">
+          <button (click)="newBtnClick.next()" class="btn btn--white cta--action"><span
+              class="icon-add icon-small"></span>
+            <span class="button--label">New Offer</span></button>
         </div>
       </div>
     </div>
-
-    <div *ngSwitchDefault class="panel panel--indigo panel--compressed task--bar">
-      <div class="row">
-        <div class="col-md-4">
-          <h4><button (click)='goBack()' [disabled]="disableBackBtn" class="btn--back btn btn--icon btn--white"><span
-                class="icon-back"></span></button>{{taskBarNavSteps[currentStepIndex].title}}</h4>
-        </div>
-        <div class="col-md-8 text-right">
-          <button *ngIf="showSave" class="btn btn--white" (click)='saveCurrentState()'> Save </button>
-          <button *ngIf="showOfferDtlsBtn" class="btn btn--white" (click)="gotoOfferviewDetails()"> Offer Detail View
-          </button>
-          <button *ngIf="!isLastStep" class="btn btn--white"
-            (click)='proceedToNextStep()' [disabled]="proceedToOfferSetup">Proceed to
-            {{taskBarNavSteps[currentStepIndex].nxtBtnTitle}}&nbsp;<span class="icon-chevron-right"></span></button>
-        </div>
-      </div>
-    </div>
-
   </div>
+
+  <div *ngSwitchCase="'action'" class="panel panel--ltgray panel--compressed header-bar task--bar">
+    <div class="container">
+      <div class="row">
+        <div class="header-bar__main col-md-6">
+          <div class="header-heading">
+            <h1 class="page-title"><span class="action--value">{{actionCount.pendingActionCount}}</span> <span
+                class="action--value-label">Pending
+                Actions</span></h1>
+            <span class="vertical-divider"></span>
+            <h1 class="page-title"><span class="action--value">{{actionCount.needImmediateActionCount}}</span> <span
+                class="action--value-label">Need
+                Immediate Action</span></h1>
+          </div>
+        </div>
+        <div class="header-toolbar col-md-6">
+          <button (click)="newBtnClick.next()" class="btn btn--white cta--action"><span
+              class="icon-add icon-small"></span>
+            <span class="button--label">Create New Action</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngSwitchCase="'pirate-ship-module'" class="panel panel--ltgray panel--compressed task--bar">
+    <div class="row">
+      <div class="col-md-4 flex-center-vertical">
+        <h4><button (click)='goToPirateShip()' class="btn--back btn btn--icon btn--white"><span
+              class="icon-back"></span></button>{{pirateShipModuleName}}</h4>
+      </div>
+    </div>
+  </div>
+
+  <div *ngSwitchDefault class="panel panel--compressed task--bar">
+    <div class="row">
+      <div class="col-md-4 flex-center-vertical">
+        <h4>{{taskBarNavSteps[currentStepIndex].title}}</h4>
+      </div>
+      <div class="col-md-8 text-right">
+        <button (click)='goBack()' [disabled]="disableBackBtn" class="btn btn--secondary">
+          <span class="icon-chevron-left"></span>&nbsp; Previous
+        </button>
+        <button *ngIf="!isLastStep" class="btn btn--primary" (click)='proceedToNextStep()'
+          [disabled]="proceedToOfferSetup">Proceed to
+          {{taskBarNavSteps[currentStepIndex].nxtBtnTitle}}&nbsp;<span class="icon-chevron-right"></span></button>
+      </div>
+    </div>
+  </div>
+
 </div>
