@@ -3,6 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import * as _ from 'lodash';
+import { OverlayPanelModule } from 'primeng/primeng';
+
 import { MenuBarComponent } from '@app/menu/menu-bar/menu-bar.component';
 import { MenuBarPopupComponent } from '@app/menu/menu-bar-popup/menu-bar-popup.component';
 
@@ -14,7 +16,8 @@ import { MenuBarPopupComponent } from '@app/menu/menu-bar-popup/menu-bar-popup.c
     ],
     imports: [
         FormsModule,
-        CommonModule
+        CommonModule,
+        OverlayPanelModule
     ], exports: [
         MenuBarComponent,
         MenuBarPopupComponent
