@@ -13,11 +13,12 @@ import { UserService } from '@app/core/services';
 export class MenuBarComponent implements OnInit {
 
     @Input() caseId: string;
-    @Input() currentMMModel: string;
     @Input() offerId: string;
     @Input() offerName: string;
     @Input() stakeData: object;
+    @Input() currentMMModel: string;
 
+    @Input() showSave = false;
     @Output() onProceedToNext = new EventEmitter();
     @Output() updateMessage = new EventEmitter<string>();
 
