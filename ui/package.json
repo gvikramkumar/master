@@ -8,7 +8,7 @@
     "build-prod": "ng build --prod",
     "build-devStage": "ng build --configuration=\"devStage\" --output-path \"dist\"",
     "test": "ng test",
-    "e2e": "cd ui && ng e2e -e=unit %1 %2",
+    "e2e": "set NODE_ENV=unit&&set POSTGRES_USER=postgres&&set POSTGRES_PASSWORD=findfa&&ng e2e --port=4201",
     "lint": "ng lint"
   },
   "private": true,
