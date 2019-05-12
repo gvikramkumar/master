@@ -1,27 +1,29 @@
-<div class="content">
+<app-menu-bar [caseId]="caseId" [offerId]="offerId" [offerName]="offerName" [currentMMModel]="derivedMM">
+  </app-menu-bar>
+
+  <div class="content">
   <div class="container">
 
-    <app-menu-bar [caseId]="caseId" [offerId]="offerId" [offerName]="offerName" [currentMMModel]="derivedMM">
-    </app-menu-bar>
+
 
     <div class="panel-wrapper mt-15">
 
-      <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName">
+      <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName"
+        [selectedATO]="selectedAto">
       </app-taskbar>
 
-      <br><br>
+
 
       <div class="row">
 
         <div class="leftContent col-sm-12 col-md-9">
 
-          <div class="row flex-center-vertical">
+          <div class="row flex-center-vertical base-margin-top">
             <div class="col-sm-12">
 
               <button class="btn btn--primary btn--cool btn--small tooltip" placement="top"
                 (click)="goToOrderabilitySSO()">Update Orderability In SSO <i class="icon-popout"></i>
               </button>
-
 
               <div class="pull-right">
                 <app-view-offer [atoNames]="atoNames" [selectedAto]="selectedAto"
@@ -32,24 +34,19 @@
             </div>
           </div>
 
-          <!-- <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer' else selectedAtoView">
-            <app-ato-list [atoList]="atoList"></app-ato-list>
+          <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer' else selectedAtoView">
+            <app-sso-ato-list [ssoList]="ssoList"></app-sso-ato-list>
           </div>
 
           <ng-template #selectedAtoView>
 
-            <br>Status: {{atoTask['itemStatus']}}<br>
 
-            <br><br>
-            <h3>Modelling</h3><br><br>
-            <app-task-summary [tasks]="atoTask['modelTasks']">/</app-task-summary>
+            <app-sso-ato-summary [sso]="sso"></app-sso-ato-summary>
 
-            <br><br>
-            <h3>Provisioning & Mediation</h3><br><br>
-            <app-task-summary [tasks]="atoTask['provisionTasks']">/</app-task-summary>
+          </ng-template>
 
-          </ng-template> -->
 
+          <app-pirate-ship-legend></app-pirate-ship-legend>
 
         </div>
 

@@ -1,8 +1,8 @@
-export const pirateShipRoutesNames = {
+  export const pirateShipRoutesNames = {
 
     ITEM_CREATION: 'item-creation',
     MODELLING_DESIGN: 'modelling-design',
     SERVICE_ANNUITY_PRICING: 'service-annuity-pricing',
-    SELF_SERVICE_ORDERABILITY: 'self-service-orderabilty',
+    SELF_SERVICE_ORDERABILITY: 'self-service-orderability',
 
 }

@@ -1,12 +1,14 @@
-<div class="content">
+<app-menu-bar [caseId]="caseId" [offerId]="offerId" [offerName]="offerName" [currentMMModel]="derivedMM">
+  </app-menu-bar>
+
+  <div class="content">
   <div class="container">
 
-    <app-menu-bar [caseId]="caseId" [offerId]="offerId" [offerName]="offerName" [currentMMModel]="derivedMM">
-    </app-menu-bar>
+
 
     <div class="panel-wrapper mt-15">
 
-      <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName">
+      <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName" [selectedATO]="selectedAto">
       </app-taskbar>
 
       <br><br>

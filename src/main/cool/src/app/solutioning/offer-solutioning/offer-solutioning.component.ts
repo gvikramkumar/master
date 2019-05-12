@@ -273,6 +273,11 @@ export class OfferSolutioningComponent implements OnInit {
           childQuestionAndAnswers.hideQuestion = true;
         }
 
+        const parentQuestion = this.unGroupedQuestionsAndAnswers[parentQuestionIndex]['question'];
+        if (parentQuestion === 'Is this offer commissionable? ' && parentAnswer === 'No') {
+          childQuestionAndAnswers.hideQuestion = true;
+        }
+
         return childQuestionAndAnswers;
       } else {
         return childQuestionAndAnswers;

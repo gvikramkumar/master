@@ -1,18 +1,22 @@
-<p-dialog #dialog header="Add All Item Details" (onShow)="onShowDialog()" (onHide)="closeDialog()" class="add-details-dialog"
+<p-dialog #dialog header="Add All Item Details" [closable]="false" [modal]="true" 
+  [closeOnEscape]="false" (onShow)="onShowDialog()" class="add-details-dialog"
   [(visible)]="offerConstructService.closeAddDetails" [resizable]="false" [draggable]="false" [maximizable]="true"
   [contentStyle]="{'min-height':'450px', 'overflow-y':'scroll', 'width':'100%'}">
+  <p-header>
+    <span class="pi pi-times close-add-all-details" (click)="confirmDialog()"></span>
+  </p-header>
   <div class="divider" style="margin-top: -1.5%"></div>
   <div class="line-items-nav">
     <div class="row">
       <div class="col-sm-12">
         <ul id="tabsv4" class="tabs tabs--tall">
-          <li class="tab">
-            <a  id="tabsv4-1" (click)='majorSection()'
+          <li id="tabsv4-1" class="tab">
+            <a (click)='majorSection()'
               [ngClass]="{'active': majorLineItemsActive, 'tab__heading':true,'bBtm':onLoad}">Add Major Line
               Details</a>
           </li>
-          <li class="tab">
-            <a  id="tabsv4-2" (click)='minorSection()' [ngClass]="{'active': minorLineItemsActive, 'tab__heading':true}">Add Minor Line
+          <li id="tabsv4-2" class="tab">
+            <a (click)='minorSection()' [ngClass]="{'active': minorLineItemsActive, 'tab__heading':true}">Add Minor Line
               Details</a>
           </li>
 
@@ -20,7 +24,7 @@
             <!-- <a href="#" class="base-margin-right"><span class="icon-export--cool half-margin-right"></span> Export as .XLS</a> -->
             <button class="display-none"></button>
             <button class="btn btn--primary" (click)='saveForm()'>Save</button>
-            <button class="btn btn--secondary" (click)="closeDialog()">Cancel</button>
+            <button class="btn btn--secondary" (click)="confirmDialog()">Cancel</button>
             <a *ngIf="isItemCreation" href="javascript: void(0);" class="base-margin-right"
               (click)='downloadZip()'><span class="icon-export--cool half-margin-right"></span> Export as .XLS</a>
           </div>
@@ -152,7 +156,9 @@
                               <div class="form-group input--compressed" *ngIf="i == 0">
                                 <div class="form-group__text">
                                   <input [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'
-                                    value="{{ques.value['title']}}" [attr.disabled]='true'>
+                                  [(ngModel)]="ques.value['title']" value="{{ques.value['title']}}"
+                                  [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
+                                  >
                                 </div>
                               </div>
                               <div class="form-group input--compressed" *ngIf="i !== 0">
@@ -863,3 +869,9 @@
     </tr>
   </table>
 </p-dialog>
+
+<p-confirmDialog  #cd header="Cancel Changes?">
+  <p-footer>
+    <button type="button" pButton label="OK" (click)="cd.accept()"></button>
+</p-footer>
+</p-confirmDialog>
