@@ -49,6 +49,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   drivers: {name: string, value: string}[];
   periods: {period: string}[];
   submeasures: Submeasure[] = [];
+  submeasuresAll: Submeasure[] = [];
   usingSubmeasuresNamesTooltip = '';
 
   conditionalOperators = [{operator: 'IN'}, {operator: 'NOT IN'}];
@@ -98,8 +99,10 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       this.lookupService.getValues(['drivers', 'periods']).toPromise()
     ];
     if (this.viewMode || this.editMode || this.copyMode) {
-      promises.push(this.ruleService.getOneById(this.route.snapshot.params.id).toPromise(),
-        this.submeasureService.getManyLatestGroupByNameActive().toPromise());
+      promises.push(
+        this.ruleService.getOneById(this.route.snapshot.params.id).toPromise(),
+        this.submeasureService.getManyLatestGroupByNameActive().toPromise()
+      );
     }
     Promise.all(promises)
       .then(results => {
@@ -119,10 +122,12 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
         if (this.viewMode || this.editMode || this.copyMode) {
           this.rule = results[6];
+          this.submeasuresAll = results[7];
           this.editModeAI = this.editMode && _.includes(['A', 'I'], this.rule.status);
           this.editModeDPApprovedOnce = this.editMode && _.includes(['D', 'P'], this.rule.status) && this.rule.approvedOnce === 'Y';
           this.editModeDPNotApprovedOnce = this.editMode && _.includes(['D', 'P'], this.rule.status) && this.rule.approvedOnce !== 'Y';
           this.viewModeDPNotApprovedOnce = this.viewMode && _.includes(['D', 'P'], this.rule.status) && this.rule.approvedOnce !== 'Y';
+          this.checkIfInUse();
         }
         this.rule.period = this.rule.period || this.periods[0].period;
         if (this.copyMode) {
@@ -134,9 +139,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           if (this.editModeAI) {
             delete this.rule.createdBy;
             delete this.rule.createdDate;
-            this.submeasures = results[7].filter(sm => _.includes(sm.rules, this.rule.name));
-            this.usingSubmeasuresNamesTooltip = 'Rule is in use by the following submeasures: ';
-            this.usingSubmeasuresNamesTooltip += this.submeasures.map(sm => sm.name).join(', ');
           }
           if (this.editModeAI || this.editModeDPApprovedOnce) {
             // they can't edit approvedOnce rules other than to set active/inactive. The ruleNames are all status = active/inactive,
@@ -208,6 +210,12 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         this.checkIfRuleNameAlreadyExists();
       }
     }
+  }
+
+  checkIfInUse() {
+    this.submeasures = this.submeasuresAll.filter(sm => _.includes(sm.rules, this.rule.name));
+    this.usingSubmeasuresNamesTooltip = 'Rule is in use by the following submeasures: ';
+    this.usingSubmeasuresNamesTooltip += this.submeasures.map(sm => sm.name).join(', ');
   }
 
   hasChanges() {
