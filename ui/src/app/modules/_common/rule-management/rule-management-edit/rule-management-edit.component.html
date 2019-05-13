@@ -15,7 +15,7 @@
       </div>
       <div class="col-lg-6">
         <div fxLayout="row" fxLayoutAlign="center start" class="status-section">
-          <div *ngIf="rule.approvedOnce === 'Y'" class="form-group-check">
+          <div *ngIf="isApprovedOnce()" class="form-group-check">
             <span class="in-use text--danger cursor-pointer" [fxShow]="submeasures.length"
                   [matTooltip]="usingSubmeasuresNamesTooltip">in use</span>
             <fin-checkbox name="status" label="Active" [(model)]="rule.activeStatus"
