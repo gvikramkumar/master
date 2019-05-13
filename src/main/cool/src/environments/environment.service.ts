@@ -330,6 +330,7 @@ export class EnvironmentService {
         this.REST_API_ACTION_PRIMARY_POC_POST_URL = this.baseApiUrl + '/action/create/task/solutioningTask/action';
         this.REST_API_NOTIFICATION_PRIMARY_POC_POST_URL = this.baseApiUrl + '/action/create/task/solutioningTask/notification';
         this.REST_API_UPDATE_ESCALATION_DETAILS = this.baseApiUrl + '/action/task/escalate';
+
         // ------------------------- DOWNLOAD N UPLOAD URLs ----------------------------------------------
 
         this.REST_API_FILE_UPLOAD_FOR_ACTION = this.baseApiUrl + '/upload/file';
@@ -355,12 +356,12 @@ export class EnvironmentService {
 
         this.REST_API_GET_OFFER_DROPDOWN = this.baseApiUrl + '/itemcreation/getATOs';
         this.REST_API_GET_ITEM_DETAILS = this.baseApiUrl + '/itemcreation/getDetails';
-        this.REST_API_REMOVE_ITEM_DETAILS = this.baseApiUrl + '/itemcreation/removeATOs';  
-      
+        this.REST_API_REMOVE_ITEM_DETAILS = this.baseApiUrl + '/itemcreation/removeATOs';
+
         // --------------------------------------- SERVICE ANNUITY  CREATION --------------------------------------------
 
         this.REST_API_RETRIEVE_SERVICE_ATO_LIST_URL = this.baseApiUrl + '/itemcreation/getATOs';
-        this.REST_API_RETRIEVE_SERVICE_ANNUITY_PRICING_URL = this.baseApiUrl + '/serviceAnnuityPricing/getPricingOfferLevel';        
+        this.REST_API_RETRIEVE_SERVICE_ANNUITY_PRICING_URL = this.baseApiUrl + '/serviceAnnuityPricing/getPricingOfferLevel';
         // -------------------------------------------------------------------------------------------------
 
     }

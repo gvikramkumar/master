@@ -1,15 +1,21 @@
+<app-menu-bar *ngIf="dimensionMode" [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId"
+  [offerName]="offerBuilderdata['offerName']" [stakeData]="stakeholders" (updateMessage)="updateMessage($event)"
+  [showSave]="true" (onProceedToNext)="proceedToOfferSolution($event)">
+</app-menu-bar>
+
+<app-menu-bar *ngIf="!dimensionMode" [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId"
+  [offerName]="offerBuilderdata['offerName']" [stakeData]="stakeholders" (updateMessage)="updateMessage($event)"
+  [showSave]="false">
+</app-menu-bar>
+
 <div class="content">
   <div class="container">
-
-    <app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId"
-      [offerName]="offerBuilderdata['offerName']" [stakeData]="stakeholders" (updateMessage)="updateMessage($event)">
-    </app-menu-bar>
-
     <div class="panel-wrapper mt-15">
 
-      <app-taskbar *ngIf="!dimensionMode" (onProceedToNext)="proceedToStakeholder($event)" [showSave]="false">
+      <app-taskbar *ngIf="!dimensionMode" (onProceedToNext)="proceedToStakeholder($event)">
       </app-taskbar>
-      <app-taskbar *ngIf="dimensionMode" (onProceedToNext)="proceedToOfferSolution($event)" [showSave]="true">
+
+      <app-taskbar *ngIf="dimensionMode" (onProceedToNext)="proceedToOfferSolution($event)">
       </app-taskbar>
 
       <div class="contentBox mt-10">
@@ -126,7 +132,7 @@
 
         </div>
       </div>
-    </div>
 
+    </div>
   </div>
 </div>
