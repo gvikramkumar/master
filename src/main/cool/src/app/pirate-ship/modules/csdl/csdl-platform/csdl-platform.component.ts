@@ -126,6 +126,11 @@ export class CsdlPlatformComponent implements OnInit {
     });
   }
 
+  onOpenCsdlTab() {
+    let urlToOpen = 'https://csdl.cisco.com';
+    window.open(urlToOpen, '_blank');
+  }
+
   onCsdlRequired(event) {
     this.csdlRequired = true;
     this.csdlNotRequired = false;
