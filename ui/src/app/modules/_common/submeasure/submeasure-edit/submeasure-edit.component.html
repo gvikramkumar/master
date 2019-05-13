@@ -16,7 +16,7 @@
       <div class="col-lg-6">
         <div fxLayout="row" fxLayoutAlign="center start" class="status-section" [class.disabled]="!sm.measureId">
           <div *ngIf="isApprovedOnce()" class="form-group-check form-group-inline-30">
-            <fin-checkbox label="Active" [(model)]="sm.activeStatus" trueVal="A" falseVal="I"></fin-checkbox>
+            <fin-checkbox label="Active" [(model)]="sm.activeStatus" trueVal="A" falseVal="I" (modelChange)="verifyRulesActive(true)"></fin-checkbox>
           </div>
           <div class="form-group-text" style="margin-left:30px;">Status: {{UiUtil.getStatusText(sm.status)}}</div>
         </div>
