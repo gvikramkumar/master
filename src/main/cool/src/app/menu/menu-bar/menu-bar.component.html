@@ -6,7 +6,7 @@
         <h1 class="relative display-4 half-margin-top half-margin-bottom">
 
           <button class="btn btn--icon" id="flyOut">
-            <span class="icon-list-menu" (click)="hamburgerMenu.toggle($event)"></span>
+            <span class="icon-list-menu"></span>
           </button>
 
           <div id='flyoutmenu'>
@@ -69,8 +69,8 @@
       </div>
 
       <div class="col-md-6 flex-center-vertical">
-        <button class="menu-btn">
-          <span class="ico-save-offer" *ngIf="showSave"></span>
+        <button class="menu-btn" (click)="saveCurrentState()" *ngIf="showSave">
+          <span class="ico-save-offer"></span>
           Save
         </button>
         <button class="menu-btn" (click)="gotoOfferviewDetails()">
@@ -84,7 +84,7 @@
 </div>
 
 <p-overlayPanel [style]="{'width':'300px'}" #basicOfferInfo>
-  COOL Menu PopUp
+  <app-offer-detail-pop-up [offerBuilderdata]="offerBuilderdata"></app-offer-detail-pop-up>
 </p-overlayPanel>
 
 <app-menu-bar-popup [show]="showPopup" [popupType]="popupType" (closePopup)="closePopup($event)"></app-menu-bar-popup>

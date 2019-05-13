@@ -7,12 +7,14 @@ import { OverlayPanelModule } from 'primeng/primeng';
 
 import { MenuBarComponent } from '@app/menu/menu-bar/menu-bar.component';
 import { MenuBarPopupComponent } from '@app/menu/menu-bar-popup/menu-bar-popup.component';
+import { OfferDetailPopUpComponent } from './offer-detail-pop-up/offer-detail-pop-up.component';
 
 
 @NgModule({
     declarations: [
         MenuBarComponent,
         MenuBarPopupComponent,
+        OfferDetailPopUpComponent,
     ],
     imports: [
         FormsModule,
@@ -20,7 +22,8 @@ import { MenuBarPopupComponent } from '@app/menu/menu-bar-popup/menu-bar-popup.c
         OverlayPanelModule
     ], exports: [
         MenuBarComponent,
-        MenuBarPopupComponent
+        MenuBarPopupComponent,
+        OfferDetailPopUpComponent
     ]
 })
 
