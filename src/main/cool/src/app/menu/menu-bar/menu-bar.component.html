@@ -1,6 +1,7 @@
 <div class="panel panel--ltgray panel--compressed">
   <div class="container">
     <div class="row">
+
       <div class="col-md-6">
         <h1 class="relative display-4 half-margin-top half-margin-bottom">
 
@@ -8,26 +9,20 @@
             <span class="icon-list-menu" (click)="hamburgerMenu.toggle($event)"></span>
           </button>
 
-          <p-overlayPanel #hamburgerMenu>
+          <div id='flyoutmenu'>
 
-            <div class="panel">
+            <ul class="panel">
 
-              <div *ngFor="let item of items">
-
-                <span class="menu-label">{{item['label']}}</span>
-
+              <li *ngFor="let item of items"><span class="menu-label">{{item['label']}}</span>
                 <ul>
                   <li *ngFor="let subItem of item['items']"
                     [ngClass]="{'disable-item': itemShow[subItem['label']] !== true}"
                     (click)="navigate(subItem['label'])"><span class="link">{{subItem['label']}}</span>
                   </li>
                 </ul>
+              </li>
 
-              </div>
-
-              <div>
-
-                <span class="menu-label">On Hold/Cancel</span>
+              <li> <span class="menu-label">On Hold/Cancel</span>
 
                 <ul *ngIf="!currentOfferId">
                   <li [ngClass]="{'disable-item': holdStatusValid == true}" (click)='showOppupFunc("hold")'><span
@@ -49,11 +44,10 @@
                   </li>
                 </ul>
 
-              </div>
+              </li>
 
-            </div>
-
-          </p-overlayPanel>
+            </ul>
+          </div>
 
           <span *ngIf="!currentOfferId; then newOffer else oldOffer"></span>
 
@@ -66,16 +60,17 @@
               <span class="offerID">(Offer ID {{currentOfferId}})</span>
             </span>
             <button class="btn btn--icon btn--transparent">
-              <span class="icon-more" (click)="basicOfferInfo.toggle($event)"></span>
+              <span class="icon-more" (click)="basicOfferInfo.toggle($event)">
+              </span>
             </button>
           </ng-template>
 
         </h1>
       </div>
 
-      <div class=" col-md-6 flex-center-vertical">
-        <button class="menu-btn" (click)="saveCurrentState()" *ngIf="showSave">
-          <span class="ico-save-offer"></span>
+      <div class="col-md-6 flex-center-vertical">
+        <button class="menu-btn">
+          <span class="ico-save-offer" *ngIf="showSave"></span>
           Save
         </button>
         <button class="menu-btn" (click)="gotoOfferviewDetails()">
@@ -89,7 +84,7 @@
 </div>
 
 <p-overlayPanel [style]="{'width':'300px'}" #basicOfferInfo>
-  hi shree
+  COOL Menu PopUp
 </p-overlayPanel>
 
 <app-menu-bar-popup [show]="showPopup" [popupType]="popupType" (closePopup)="closePopup($event)"></app-menu-bar-popup>

@@ -1,21 +1,47 @@
-<div class="panel-wrapper">
+<div class="panel panel--indigo offer-detail">
 
     <!-- <div class="panel-body mt-10 offerData" *ngIf="panels.panel1"> -->
 
-    <div class="offer-header card card--raised base-margin-top">
+    <div class="offer-header">
       <div class="row">
-        <div class="col-md-12">
-          <div class="flex-fluid text-left half-margin-left">
-            <div class="text-bold">Offer Description</div>
+        <div class="col-md-6">
+            <div class="flex-fluid text-left half-margin-left half-margin-bottom half-margin-top">
+                <div class="display-6">Offer ID</div>
+                <div></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="flex-fluid text-left half-margin-left half-margin-bottom half-margin-top">
+                <div class="align-status half-margin-right"><span class="icon-check"></span><span class="text-bold">Aligned</span></div>
+                <span class="align-type half-margin-left">MM4- SAAS</span>
+            </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="flex-fluid text-left half-margin-left half-margin-bottom half-margin-top">
+            <div class="display-6">Offer Description</div>
             <div>{{ offerBuilderdata["offerDesc"] }}</div>
           </div>
+        </div>
+        <div class="col-md-6">
+            <div class="flex-fluid text-left half-margin-left half-margin-bottom half-margin-top">
+                <div class="display-6">Business Entity</div>
+                <div>
+                  {{
+                    offerBuilderdata["BEList"] != null
+                      ? offerBuilderdata["BEList"].join(", ")
+                      : ""
+                  }}
+                </div>
+              </div>
         </div>
       </div>
 
       <div class="row">
-        <div class="col-md-3">
-          <div class="flex-fluid text-left half-margin-left">
-            <div class="text-bold">Expected Launch Date</div>
+        <div class="col-md-6">
+          <div class="flex-fluid text-left half-margin-left half-margin-bottom half-margin-top">
+            <div class="display-6">Expected Launch Date</div>
             <div>
               {{
                 offerBuilderdata["expectedLaunchDate"]
@@ -26,31 +52,20 @@
         </div>
 
         <div class="col-md-6">
-          <div class="flex-fluid text-left half-margin-left">
-            <div class="text-bold">Business Entity</div>
-            <div>
-              {{
-                offerBuilderdata["BEList"] != null
-                  ? offerBuilderdata["BEList"].join(", ")
-                  : ""
-              }}
-            </div>
-          </div>
+            <div class="flex-fluid text-left half-margin-left half-margin-bottom half-margin-top">
+                <div class="display-6">Business Unit</div>
+                <div>
+                  {{
+                    offerBuilderdata["BUList"] != null
+                      ? offerBuilderdata["BUList"].join(", ")
+                      : ""
+                  }}
+                </div>
+              </div>
         </div>
 
-        <div class="col-md-3">
-          <div class="flex-fluid text-left half-margin-left">
-            <div class="text-bold">Business Unit</div>
-            <div>
-              {{
-                offerBuilderdata["BUList"] != null
-                  ? offerBuilderdata["BUList"].join(", ")
-                  : ""
-              }}
-            </div>
-          </div>
-        </div>
-        
+
+
       </div>
     </div>
   </div>
