@@ -76,25 +76,25 @@ export class OfferConstructDefaultValue {
       if (element.question === 'Service Type?') {
         // set pre define value according to service type
           this.serviceTypeValue = element.currentValue;
-          this.setSubscriptionType(listOfferQuestions);
+          this.setSubscriptionType(listOfferQuestions, this.serviceTypeValue);
         }
 
     });
     return listOfferQuestions;
   }
 
-  setSubscriptionType(listOfferQuestions) {
+  setSubscriptionType(listOfferQuestions, serviceTypeValue) {
     listOfferQuestions.forEach(element => {
-        if (element.question === 'Subscription Type') {
-            if (this.serviceTypeValue === 'Support') {
-                element.currentValue = 'Support';
-                element.previousValue = 'Support';
-            }
-            if (this.serviceTypeValue === 'Service') {
-                element.currentValue = 'Service';
-                element.previousValue = 'Service';
-            }
+      if (element.question === 'Subscription Type') {
+        if (serviceTypeValue === 'Support') {
+            element.currentValue = 'Support';
+            element.previousValue = 'Support';
         }
+        if (serviceTypeValue === 'Service') {
+            element.currentValue = 'Service';
+            element.previousValue = 'Service';
+        }
+      }
     });
   }
 
