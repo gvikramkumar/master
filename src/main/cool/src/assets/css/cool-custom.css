@@ -1193,9 +1193,20 @@ span[class*="display-"] {
 /* Offer Detail */
 .offer-detail {
   width: 975px;
-  min-height: 300px;
+  min-height: 250px;
   font-size: 16px;
   border-radius: 10px;
+}
+.offer-detail .display-6 {
+  font-size: 18px;
+  font-weight: 200;
+}
+.align-status {
+  color: #6EBE4A;
+  display: inline-block;
+}
+.align-type {
+  display: inline-block;
 }
 /* .cool.cui .offer-header.card .row:last-child div[class*="col-"] {
   border-bottom: none;
