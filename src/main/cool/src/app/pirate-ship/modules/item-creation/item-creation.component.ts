@@ -139,7 +139,8 @@ export class ItemCreationComponent implements OnInit {
     });
 
 
-
+    //Update my flag if ATO uploaded into EGENIE
+  this.offerConstructService.updateNewEgenieFlag(this.currentOfferId).subscribe(response => {
     // Prepare payload to fetch item categories. Obtain MM information.
     this.offerConstructCanvasService.getMMInfo(this.currentOfferId).subscribe((offerDetails) => {
 
@@ -182,6 +183,7 @@ export class ItemCreationComponent implements OnInit {
         () => (this.createMajorMinorGroup(), this.offerDetailView()));
 
     });
+  });
   }
   createMajorMinorGroup() {
 
@@ -272,6 +274,7 @@ export class ItemCreationComponent implements OnInit {
       obj['eginieItem'] = node['eGenieFlag'];
       // obj['itemDetails'] = this.draggedItem.data['itemDetails'];
     }
+    obj['newItemEGenieStatus'] = node['newItemEGenieStatus'];
     const tempNode = this.itemToTreeNode(obj);
     this.offerConstructItems.push(tempNode);
     this.offerConstructItems = [...this.offerConstructItems];
@@ -307,6 +310,7 @@ export class ItemCreationComponent implements OnInit {
       obj['eginieItem'] = childNode['eGenieFlag'];
       // obj['itemDetails'] = this.draggedItem.data['itemDetails'];
     }
+    obj['newItemEGenieStatus'] = childNode['newItemEGenieStatus'];
     const tempNode = this.itemToTreeNode(obj);
     parentNode.children.push(tempNode);
     this.offerConstructItems = [...this.offerConstructItems];
@@ -345,7 +349,8 @@ export class ItemCreationComponent implements OnInit {
       isGroupNode: obj.isGroupNode,
       groupName: obj.productName,
       eGenieFlag: false,
-      listOfferQuestions: listOfferQuestions
+      listOfferQuestions: listOfferQuestions,
+      newItemEGenieStatus: obj.newItemEGenieStatus
     };
     const setinfo = { [groupName]: groupinfo };
     this.setProductInfo(obj.productName, obj.isMajorLineItem, setinfo, listOfferQuestions);
@@ -413,7 +418,8 @@ export class ItemCreationComponent implements OnInit {
           isGroupNode: obj.isGroupNode,
           groupName: obj.productName,
           eGenieFlag: true,
-          listOfferQuestions: questionsList
+          listOfferQuestions: questionsList,
+          newItemEGenieStatus: obj.newItemEGenieStatus
         };
         const setinfo = { [groupName]: groupinfo };
         this.setProductInfo(groupName, isMajorOrMinor, setinfo, data.groups[0].listOfferQuestions);
@@ -439,7 +445,8 @@ export class ItemCreationComponent implements OnInit {
           isGroupNode: obj.isGroupNode,
           groupName: obj.productName,
           eGenieFlag: true,
-          listOfferQuestions: questionsList
+          listOfferQuestions: questionsList,
+          newItemEGenieStatus: obj.newItemEGenieStatus
         };
         const setinfo = { [groupName]: groupinfo };
         this.setProductInfo(groupName, isMajorOrMinor, setinfo, data.groups[0].listOfferQuestions);
