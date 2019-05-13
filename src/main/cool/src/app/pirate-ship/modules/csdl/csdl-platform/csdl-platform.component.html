@@ -4,110 +4,142 @@
       [currentMMModel]="derivedMM" (updateMessage)="updateMessage($event)">
     </app-menu-bar>
     <div class="panel-wrapper mt-15">
-      <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName">
+      <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName"
+        [selectedATO]="selectedAto">
       </app-taskbar>
       <br><br>
-      <!-- <div class="panel panel--indigo panel--compressed task--bar panel-wrapper mt-15">
-            <div class="row">
-              <div class="col-sm-4">
-                <h2 class="page--subheading"><button class="btn--back btn btn--icon btn--white"
-                    (click)="goBackToOfferSetup()"><span class="icon-back"></span></button>
-                  CSDL</h2>
-              </div>
-            </div>
-          </div><br><br> -->
       <div class="contentBox mt-10">
         <div class="leftContent">
-          <div class="row">
-            <div class="col-md-12">
-              <h3 style="color: mediumblue">Is CSDL Required?</h3>
-              <p>CSDL - Cisco Security Development Lyfecycle is Required when<br>
-                Loren ipsum dolor sit amet, consectetur adipiscing elit, set do<br>
-                elusmod More information</p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group form-group--inline">
-                <label class="radio">
-                  <input type="radio" name="inline-regular-radio" (change)="onCsdlRequired($event)">
-                  <span class="radio__input"></span>
-                  <span class="radio__label">Yes</span>
-                </label>
-              </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <div class="form-group form-group--inline">
-                <label class="radio">
-                  <input type="radio" name="inline-regular-radio" (change)="onCsdlNotRequired($event)">
-                  <span class="radio__input"></span>
-                  <span class="radio__label">No</span>
-                </label>
-              </div>
-            </div>
-          </div><br>
-          <div class="divider divider--compressed"></div><br>
-          <div class="row" *ngIf="csdlRequired">
-            <div class="col-md-12">
-              <div class="panel panel--ltgray panel--loose">
-                <div class="row">
-                  <form [formGroup]="csdlForm">
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group half-margin-bottom">
-                          <div class="form-group__text">
-                            <p-autoComplete formControlName="csdlId" class="form-control" [size]="100" field="csdlId"
-                              [minLength]="3" scrollHeight="150px" placeholder="Search by CSDL ID or Project Name"
-                              required>
-                            </p-autoComplete>
-                          </div>
-                        </div><br>
-                        <span>ID or Project not showing up?</span>&nbsp;&nbsp;
-                        <span class="icon-refresh">Refresh Latest Search Data</span>
-                      </div>
-                      <div class="col-md-2">
-                        <button class="btn btn--primary" type="submit" [disabled]="!csdlForm.valid">Submit</button>
-                      </div>
-                      <div class="col-md-4">
-                        <button class="btn btn--primary" type="submit" (click)="createNewCsdlIdDailog()">Create New
-                          ID</button><br><br>
-                        <span class="icon-info-outline icon-small" pTooltip="Creating a New ID will notify and create Loorem ipsum dolor sit amet, consectetur
-                          adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore" tooltipPosition="top">
-                          I don't have an ID, create one for me</span>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row" *ngIf="csdlNotRequired">
-            <form [formGroup]="notRequiredCsdlForm">
+          <section *ngIf="isCsdlRequired">
+            <div class="row">
               <div class="col-md-12">
-                <div class="subheader" style="color: midnightblue">Why is CSDL not Required?</div>
-                <div class="form-group">
+                <h3 style="color: mediumblue">Is CSDL Required?</h3>
+                <p>CSDL - Cisco Security Development Lyfecycle is Required when<br>
+                  Loren ipsum dolor sit amet, consectetur adipiscing elit, set do<br>
+                  elusmod More information</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group form-group--inline">
                   <label class="radio">
-                    <input type="radio" name="stacked-radio" value="noCode" formControlName="noCode" name="noCode"
-                      class="form-control">
-                    <span class="radio__input"></span>&nbsp;&nbsp;
-                    <span class="radio__label">No code executed</span>
-                  </label>&nbsp;&nbsp;
-                  <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit,</span>
-                </div><br><br>
-                <div class="form-group">
+                    <input type="radio" name="inline-regular-radio" (change)="onCsdlRequired($event)">
+                    <span class="radio__input"></span>
+                    <span class="radio__label">Yes</span>
+                  </label>
+                </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="form-group form-group--inline">
                   <label class="radio">
-                    <input type="radio" name="stacked-radio" value="newCode" formControlName="noCode" name="noCode"
-                      class="form-control">
-                    <span class="radio__input"></span>&nbsp;&nbsp;
-                    <span class="radio__label">No new code</span>
-                  </label>&nbsp;&nbsp;
-                  <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit,</span>
-                </div><br><br>
-                <div class="form-group">
-                  <button class="btn btn--primary" type="submit"
-                    [disabled]="!notRequiredCsdlForm.valid">Complete</button>
+                    <input type="radio" name="inline-regular-radio" (change)="onCsdlNotRequired($event)">
+                    <span class="radio__input"></span>
+                    <span class="radio__label">No</span>
+                  </label>
                 </div>
               </div>
-            </form>
-          </div>
+            </div><br>
+            <div class="divider divider--compressed"></div><br>
+            <div class="row" *ngIf="csdlRequired">
+              <div class="col-md-12">
+                <div class="panel panel--ltgray panel--loose">
+                  <div class="row">
+                    <form [formGroup]="csdlForm">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group half-margin-bottom">
+                            <div class="form-group__text">
+                              <p-autoComplete formControlName="csdlId" class="form-control" [size]="100" field="csdlId"
+                                [minLength]="3" scrollHeight="150px" placeholder="Search by CSDL ID or Project Name"
+                                required>
+                              </p-autoComplete>
+                            </div>
+                          </div><br>
+                          <span>ID or Project not showing up?</span>&nbsp;&nbsp;
+                          <span class="icon-refresh">Refresh Latest Search Data</span>
+                        </div>
+                        <div class="col-md-2">
+                          <button class="btn btn--primary" type="submit" [disabled]="!csdlForm.valid">Submit</button>
+                        </div>
+                        <div class="col-md-4">
+                          <button class="btn btn--primary" type="submit" (click)="createNewCsdlIdDailog()">Create New
+                            ID</button><br><br>
+                          <span class="icon-info-outline icon-small" pTooltip="Creating a New ID will notify and create Loorem ipsum dolor sit amet, consectetur
+                          adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore" tooltipPosition="top">
+                            I don't have an ID, create one for me</span>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row" *ngIf="csdlNotRequired">
+              <form [formGroup]="notRequiredCsdlForm">
+                <div class="col-md-12">
+                  <div class="subheader" style="color: midnightblue">Why is CSDL not Required?</div>
+                  <div class="form-group">
+                    <label class="radio">
+                      <input type="radio" name="stacked-radio" value="noCode" formControlName="noCode" name="noCode"
+                        class="form-control">
+                      <span class="radio__input"></span>&nbsp;&nbsp;
+                      <span class="radio__label">No code executed</span>
+                    </label>&nbsp;&nbsp;
+                    <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit,</span>
+                  </div><br><br>
+                  <div class="form-group">
+                    <label class="radio">
+                      <input type="radio" name="stacked-radio" value="newCode" formControlName="noCode" name="noCode"
+                        class="form-control">
+                      <span class="radio__input"></span>&nbsp;&nbsp;
+                      <span class="radio__label">No new code</span>
+                    </label>&nbsp;&nbsp;
+                    <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit,</span>
+                  </div><br><br>
+                  <div class="form-group">
+                    <button class="btn btn--primary" type="submit"
+                      [disabled]="!notRequiredCsdlForm.valid">Complete</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </section>
+          <section *ngIf="refreshStatus">
+            <div class="row">
+              <div class="col-md-12">
+                <button class="btn btn--secondary" type="submit"><span class="icon-refresh">&nbsp;&nbsp;Refresh
+                    Status</span></button>
+              </div>
+            </div>
+            <div class="row" style="margin-top: 30px">
+              <div class="col-md-12">
+                <p-table [columns]="cols" [value]="csdlData" [rows]="4">
+                  <ng-template pTemplate="header" let-columns>
+                    <tr>
+                      <th>CSDL ID</th>
+                      <th><span class="icon-info-outline icon-small" pTooltip="Stop Ship Details Lorem ipsum dolor sit amet, 
+                      consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore"
+                          tooltipPosition="top">
+                        </span>&nbsp;STOP SHIP</th>
+                      <th><span class="icon-info-outline icon-small" pTooltip="Enforcement Details Lorem ipsum dolor sit amet, 
+                      consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore"
+                          tooltipPosition="top">
+                        </span>&nbsp;ENFORCEMENT</th>
+                      <th>LATEST STATUS UPDATE</th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body">
+                    <tr *ngFor="let csdl of csdlData">
+                      <td><span class="text-blue">{{csdl.csdlId}}</span></td>
+                      <td><span class="text-success">{{csdl.stopShip}}</span></td>
+                      <td>{{csdl.enforcement}}</td>
+                      <td>{{csdl.latestStatusUpdate}}
+                        <span class="icon-trash icon-small pull-right"></span>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </div>
+          </section>
         </div>
         <div class="rightContent">
           <app-right-panel [offerName]="offerName" [stakeData]="stakeData" [primaryBE]="primaryBE"
@@ -126,15 +158,17 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 text-center">
           <h2>Create a New CSDL ID</h2>
         </div>
-      </div><br><br>
-      <div class="row">
-        <div class="col-md-12">
-          <div class="row">
-            <h3>A new project will be created leveraging the following information</h3>
-          </div><br><br>
+      </div>
+      <div class="row" style="margin-top: 30px">
+        <div class="col-md-12 text-center">
+          <h5>A new project will be created leveraging the following information</h5>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 30px">
+        <div class="col-md-12 text-center">
           <div class="row">
             <span>Product Family: Xaas</span>
           </div>
@@ -145,10 +179,35 @@
             <span>Business Unit contact: John Smith</span>
           </div>
         </div>
+      </div>
+      <div class="row" style="margin-top: 75px">
+        <div class="col-md-12 text-center">
+          <button class="btn btn--primary" type="submit" (click)="onSubmit()">Submit</button>
+        </div>
+      </div>
+    </p-dialog>
+    <p-dialog [showHeader]="false" [responsive]="true" [(visible)]="displayIdCreationDailog" [width]="600"
+      [height]="400" [minWidth]="600" [minHeight]="400">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="pull-right">
+            <span class="icon-close" (click)="closeCreateNewCsdlIdDailog()"></span>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 30px">
+        <div class="col-md-12 text-center">
+          <h2>ID Creation In Progress</h2>
+        </div>
       </div><br><br>
       <div class="row">
         <div class="col-md-12 text-center">
-          <button class="btn btn--primary" type="submit">Submit</button>
+          <h5>A new ID is being created in CSDL please return here in 24 hours to confirm creation</h5>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 75px">
+        <div class="col-md-12 text-center">
+          <button class="btn btn--primary" type="submit" (click)="onContinue()">Continue</button>
         </div>
       </div>
     </p-dialog>

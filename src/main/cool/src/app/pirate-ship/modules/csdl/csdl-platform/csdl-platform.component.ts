@@ -4,6 +4,7 @@ import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 import { RightPanelService } from '@app/services/right-panel.service';
 import { DashboardService } from '@shared/services';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { HAMMER_LOADER } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-csdl-platform',
@@ -15,7 +16,6 @@ export class CsdlPlatformComponent implements OnInit {
   notRequiredCsdlForm: FormGroup;
   public currentOfferId: any;
   caseId: string;
-  selectedOffer: string;
   offerId: string;
   firstData: Object;
   public data = [];
@@ -35,6 +35,14 @@ export class CsdlPlatformComponent implements OnInit {
   csdlRequired: Boolean = false;
   csdlNotRequired: Boolean = false;
   displayNewCsdlIdDailog: Boolean = false;
+  displayIdCreationDailog: Boolean = false;
+  isCsdlRequired: Boolean = true;
+  refreshStatus: Boolean = false;
+  cols: any[];
+  selectedAto: any;
+  csdlData = [
+    {csdlId: '29385971', stopShip: 'False', enforcement: 'Hard', latestStatusUpdate: '05-Aug-2019 2:00pm'}
+  ];
 
   constructor(private router: Router,
       private activatedRoute: ActivatedRoute,
@@ -44,7 +52,7 @@ export class CsdlPlatformComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['offerId'];
       this.caseId = params['caseId'];
-      this.selectedOffer = params['selectedAto'];
+      this.selectedAto = params['selectedAto'];
     });
     // Initialize TaskBar Params
     this.isPirateShipSubModule = true;
@@ -128,6 +136,17 @@ export class CsdlPlatformComponent implements OnInit {
     this.csdlRequired = false;
   }
 
+  onSubmit() {
+    this.displayNewCsdlIdDailog = false;
+    this.displayIdCreationDailog = true;
+  }
+
+  onContinue() {
+    this.isCsdlRequired = false;
+    this.refreshStatus = true;
+    this.displayIdCreationDailog = false;
+  }
+
   // --------------------------------------------------------------------------------------------------------------------------------
 
     updateMessage(message) {
@@ -159,10 +178,7 @@ export class CsdlPlatformComponent implements OnInit {
 
   closeCreateNewCsdlIdDailog() {
     this.displayNewCsdlIdDailog = false;
-  }
-
-  goBackToOfferSetup() {
-    this.router.navigate(['/offerSetup', this.currentOfferId, this.caseId]);
+    this.displayIdCreationDailog = false;
   }
 
 }
