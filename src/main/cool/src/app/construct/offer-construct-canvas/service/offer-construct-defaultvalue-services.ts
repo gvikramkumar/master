@@ -7,6 +7,8 @@ import { Observable, Subject, BehaviorSubject } from 'rxjs';
 
 export class OfferConstructDefaultValue {
 
+  public serviceTypeValue: string;
+
   constructor() { }
 
   billingSOADefaultValue(listOfferQuestions, chargeTypeValue) {
@@ -71,11 +73,30 @@ export class OfferConstructDefaultValue {
           element.previousValue = '30';
         }
       }
+      if (element.question === 'Service Type?') {
+        // set pre define value according to service type
+          this.serviceTypeValue = element.currentValue;
+          this.setSubscriptionType(listOfferQuestions);
+        }
+
     });
     return listOfferQuestions;
   }
 
-
+  setSubscriptionType(listOfferQuestions) {
+    listOfferQuestions.forEach(element => {
+        if (element.question === 'Subscription Type') {
+            if (this.serviceTypeValue === 'Support') {
+                element.currentValue = 'Support';
+                element.previousValue = 'Support';
+            }
+            if (this.serviceTypeValue === 'Service') {
+                element.currentValue = 'Service';
+                element.previousValue = 'Service';
+            }
+        }
+    });
+  }
 
   setBasePriceInBillingSOADForFlat(questionList) {
     let monthlyAmountValue;
