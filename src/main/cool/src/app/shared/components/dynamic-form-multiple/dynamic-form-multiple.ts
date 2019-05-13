@@ -414,6 +414,17 @@ export class DynamicFormMultipleComponent implements OnInit {
                         this.defaultValueServices.setBasePriceInBillingSOAForProduct(questionList);
                     }
                 }
+                if (question.question === 'Service Type?') {
+                    if (question.currentValue === 'Support') {
+                        this.defaultValueServices.serviceTypeValue = 'Support';
+                        this.defaultValueServices.setSubscriptionType(questionList, this.defaultValueServices.serviceTypeValue);
+                    }
+
+                    if (question.currentValue === 'Service') {
+                        this.defaultValueServices.serviceTypeValue = 'Service';
+                        this.defaultValueServices.setSubscriptionType(questionList, this.defaultValueServices.serviceTypeValue);
+                    }
+                }
             }
 
             if (question.question == "Smart Licensing Enabled") {
