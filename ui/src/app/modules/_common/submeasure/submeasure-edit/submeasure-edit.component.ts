@@ -249,6 +249,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           this.sm = results[6];
           this.editModeAI = this.editMode && _.includes(['A', 'I'], this.sm.status);
         }
+
         // this is an edge case: create unallocated group >> approve >> now want to make it allocated
         this.effectiveMonthNotRequired = this.viewMode || (this.editMode && this.sm.approvedOnce === 'Y' && !this.isUnallocatedGroup());
         if (this.addMode) {
@@ -305,6 +306,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
             }
             this.orgSubmeasure = _.cloneDeep(this.sm);
             this.init();
+            this.verifyRulesActive();
           });
       });
   }
@@ -380,10 +382,21 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   removeRule(i) {
     this.arrRules.splice(i, 1);
+    this.sm.rules.splice(i, 1);
   }
 
   addRule(i) {
     this.arrRules.splice(i + 1, 0, '');
+    this.sm.rules.splice(i + 1, 0, '');
+    /* Test case: 2 existing rules, add a third in between(blank), the last rule no longer shows
+        This is the only way we get past it.
+    */
+    this.arrRules = _.clone(this.arrRules);
+    const oldRules = this.arrRules;
+    this.arrRules = [];
+    setTimeout(() => {
+      this.arrRules = oldRules;
+    });
   }
 
   // todo: make sure this hasn't changed, it's 4 currently
@@ -681,12 +694,16 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   cleanupRules() {
     // the list size is governed by arrRules, BUT, the values are in sm.rules
-    this.arrRules.forEach((x, idx) => this.arrRules[idx] = this.sm.rules[idx]);
+    this.syncRuleValues();
     this.arrRules = this.arrRules.filter(r => !!r);
     this.sm.rules = _.cloneDeep(this.arrRules);
     if (this.arrRules.length === 0) {
       this.arrRules[0] = '';
     }
+  }
+
+  syncRuleValues() {
+    this.arrRules.forEach((x, idx) => this.arrRules[idx] = this.sm.rules[idx]);
   }
 
   clearInputFilterLevels() {
@@ -1149,4 +1166,19 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   canApprove() {
     return this.uiUtil.canAdminApprove(this.sm.updatedBy);
   }
+
+  verifyRulesActive(revertCheck?) {
+    if (revertCheck) {
+      this.syncRuleValues();
+    }
+    const activeRules = this.rules.map(rule => rule.name);
+    const inactiveRules = this.arrRules.filter(ruleName => !_.includes(activeRules, ruleName));
+    if (inactiveRules.length) {
+      if (revertCheck && this.sm.status === 'I' && this.sm.activeStatus === 'A') {
+        setTimeout(() => this.sm.activeStatus = 'I');
+      }
+      this.uiUtil.genericDialog(`Submeasure has inactive rules: ${inactiveRules.join(', ')}.`);
+    }
+  }
+
 }
