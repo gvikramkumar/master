@@ -4,7 +4,6 @@ import PgLookupRepo from '../../pg-lookup/repo';
 import {ApiError} from '../../../lib/common/api-error';
 import ApprovalController from '../../../lib/base-classes/approval-controller';
 import {ApprovalMode} from '../../../../shared/misc/enums';
-import {sendHtmlMail} from '../../../lib/common/mail';
 import LookupRepo from '../../lookup/repo';
 import {svrUtil} from '../../../lib/common/svr-util';
 import {shUtil} from '../../../../shared/misc/shared-util';
