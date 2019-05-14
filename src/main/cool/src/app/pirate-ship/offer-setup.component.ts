@@ -151,6 +151,7 @@ export class OfferSetupComponent implements OnInit {
   getAllModuleData() {
     this.offerSetupService.getModuleData(this.offerId, this.selectedAto, this.functionalRole, this.derivedMM ).subscribe(data => {
         this.groupData = {};
+        console.log(this.groupData);
         this.showGroupData = false;
         this.Options = data['listATOs'];
         data['listSetupDetails'].forEach(group => {
@@ -239,6 +240,10 @@ export class OfferSetupComponent implements OnInit {
       }
       case 'Service Annuity  % Pricing': {
         this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.SERVICE_ANNUITY_PRICING, this.selectedAto]);
+        break;
+      }
+      case 'T&C Mapping': {
+        this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.TC_MAPPING, this.selectedAto]);
         break;
       }
     }
