@@ -120,7 +120,7 @@ export default class DatabaseController {
         }
         if (syncMap.dfa_prof_disti_to_direct_map_upld) {
           promises.push(this.distiDirectUploadController.mongoToPgSync('dfa_prof_disti_to_direct_map_upld', userId, log, elog,
-            {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}));
+            {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}, dfa));
         }
         if (syncMap.dfa_prof_service_map_upld) {
           promises.push(this.serviceMapUploadController.mongoToPgSync('dfa_prof_service_map_upld', userId, log, elog,
