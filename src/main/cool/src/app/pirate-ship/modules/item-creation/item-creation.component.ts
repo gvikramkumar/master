@@ -81,7 +81,7 @@ export class ItemCreationComponent implements OnInit {
 
   ngOnInit() {
     this.functionalRole = this.configurationService.startupData.functionalRole;
-    if(this.functionalRole.includes('BUPM') || this.functionalRole.includes('SOE')){
+    if (this.functionalRole.includes('BUPM') || this.functionalRole.includes('SOE')) {
       this.permission = true;
     }
     this.displaySelectedOffer(this.selectedAto);
@@ -140,50 +140,50 @@ export class ItemCreationComponent implements OnInit {
 
 
     //Update my flag if ATO uploaded into EGENIE
-  this.offerConstructService.updateNewEgenieFlag(this.currentOfferId).subscribe(response => {
-    // Prepare payload to fetch item categories. Obtain MM information.
-    this.offerConstructCanvasService.getMMInfo(this.currentOfferId).subscribe((offerDetails) => {
+    this.offerConstructService.updateNewEgenieFlag(this.currentOfferId).subscribe(response => {
+      // Prepare payload to fetch item categories. Obtain MM information.
+      this.offerConstructCanvasService.getMMInfo(this.currentOfferId).subscribe((offerDetails) => {
 
-      // Initialize MM ModelICC Request Param Details
-      const mmModel = offerDetails.derivedMM;
+        // Initialize MM ModelICC Request Param Details
+        const mmModel = offerDetails.derivedMM;
 
-      // Initialize Offer Types
-      const componentsObj = offerDetails['selectedCharacteristics'] == null ? null : offerDetails['selectedCharacteristics'].
-        filter(char => char.subgroup === 'Offer Components');
-      // const components = componentsObj == null ? null : componentsObj[0]['characteristics'];
-      let components = null;
-      if (componentsObj.length > 0) {
-        components = componentsObj == null ? null : componentsObj[0]['characteristics'] !== undefined ?
-          componentsObj[0]['characteristics'] : null;
-      } else {
-        components = null;
-        this.loaderService.stopLoading();
-      }
+        // Initialize Offer Types
+        const componentsObj = offerDetails['selectedCharacteristics'] == null ? null : offerDetails['selectedCharacteristics'].
+          filter(char => char.subgroup === 'Offer Components');
+        // const components = componentsObj == null ? null : componentsObj[0]['characteristics'];
+        let components = null;
+        if (componentsObj.length > 0) {
+          components = componentsObj == null ? null : componentsObj[0]['characteristics'] !== undefined ?
+            componentsObj[0]['characteristics'] : null;
+        } else {
+          components = null;
+          this.loaderService.stopLoading();
+        }
 
-      // Initialize Components
-      const offerTypeObj = !offerDetails['solutioningDetails'] ? [] :
-        offerDetails['solutioningDetails'].filter(sol => sol.dimensionSubgroup === 'Offer Type');
-      const offerType = offerTypeObj && offerTypeObj.length > 0 ? offerTypeObj[0]['dimensionAttribute'] : [];
+        // Initialize Components
+        const offerTypeObj = !offerDetails['solutioningDetails'] ? [] :
+          offerDetails['solutioningDetails'].filter(sol => sol.dimensionSubgroup === 'Offer Type');
+        const offerType = offerTypeObj && offerTypeObj.length > 0 ? offerTypeObj[0]['dimensionAttribute'] : [];
 
-      // Form ICC Request
-      const iccRequest = {
-        'mmModel': mmModel,
-        'offerType': offerType,
-        'components': components
-      };
+        // Form ICC Request
+        const iccRequest = {
+          'mmModel': mmModel,
+          'offerType': offerType,
+          'components': components
+        };
 
-      // Call offerconstruct request to get Major/Minor Line Items
-      this.offerConstructCanvasService.retrieveIccDetails(iccRequest).subscribe((iccResponse) => {
+        // Call offerconstruct request to get Major/Minor Line Items
+        this.offerConstructCanvasService.retrieveIccDetails(iccRequest).subscribe((iccResponse) => {
 
-        this.majorAndMinorInfo = iccResponse;
-      }, (err) => {
-        console.log(err);
-        this.loaderService.stopLoading();
-      },
-        () => (this.createMajorMinorGroup(), this.offerDetailView()));
+          this.majorAndMinorInfo = iccResponse;
+        }, (err) => {
+          console.log(err);
+          this.loaderService.stopLoading();
+        },
+          () => (this.createMajorMinorGroup(), this.offerDetailView()));
 
+      });
     });
-  });
   }
   createMajorMinorGroup() {
 
@@ -568,7 +568,11 @@ export class ItemCreationComponent implements OnInit {
     });
 
     this.offerConstructCanvasService.saveOfferConstructChanges(cds).subscribe(() => {
-      this.displaySelectedOffer(this.selectedAto);
+      this.itemCreationService.getOfferDropdownValues(this.offerId).subscribe(data => {
+        this.offerDropdownValues = data;
+        this.displaySelectedOffer('Overall Offer');
+        this.loaderService.stopLoading();
+      });
     },
       () => {
         this.loaderService.stopLoading();
@@ -632,7 +636,7 @@ export class ItemCreationComponent implements OnInit {
         }
       });
     }
-    
+
     this.productDetails = [...this.productDetails];
     this.itemCreationService.removeItemDetails(this.offerId, this.removeList).subscribe(response => {
 
@@ -645,9 +649,10 @@ export class ItemCreationComponent implements OnInit {
     } else {
       this.selectedAto = dropDownValue;
     }
+
     this.displaySelectedOffer(this.selectedAto);
   }
-  
+
   goBackToOfferSetup() {
     this.router.navigate(['/offerSetup', this.offerId, this.caseId, this.selectedAto]);
   }
@@ -663,8 +668,7 @@ export class ItemCreationComponent implements OnInit {
         // if (Object.keys(element) == title) {
         this.changeItemDetails(true, element[title]);
         this.offerConstructItems.forEach(e => {
-          if(e.data.uniqueKey===element[title].uniqueKey)
-            {e.data.title = e.data.label = element[title].title;}
+          if (e.data.uniqueKey === element[title].uniqueKey) { e.data.title = e.data.label = element[title].title; }
         });
         // }
       });
@@ -781,18 +785,18 @@ export class ItemCreationComponent implements OnInit {
   // donwnload Zip file
   downloadZip() {
     this.offerConstructCanvasService.downloadZip(this.currentOfferId).subscribe((res) => {
-        const nameOfFileToDownload = 'offer-construct';
-        const blob = new Blob([res], { type: 'application/zip' });
-        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-            window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
-        } else {
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = nameOfFileToDownload;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        }
+      const nameOfFileToDownload = 'offer-construct';
+      const blob = new Blob([res], { type: 'application/zip' });
+      if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveOrOpenBlob(blob, nameOfFileToDownload);
+      } else {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = nameOfFileToDownload;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
     });
   }
 }
