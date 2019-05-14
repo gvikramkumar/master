@@ -185,7 +185,7 @@ export default class SubmeasureController extends ApprovalController {
   sendApprovalEmail(req, mode: ApprovalMode, item): Promise<any> {
     const omitProperties = [
       '_id', 'id', 'status', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate', '__v', 'approvedOnce',
-      'indicators._id', 'inputFilterLevel._id', 'manualMapping._id',
+      'indicators._id', 'inputFilterLevel._id', 'manualMapping._id', 'approvalUrl', 'approvalReminderTime',
     ];
     return this.sendApprovalEmailBase(req, mode, item, 'submeasure', omitProperties);
   }
