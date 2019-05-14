@@ -131,7 +131,7 @@
                 <div *ngFor="let queslist of item.value['productInfo']">
                   <div *ngFor="let ques of queslist|keyvalue">
                     <table class="pid-data pull-left text-left table table--compressed table--bordered"
-                      style="max-width: 300px;">
+                      style="max-width: 300px;" (click)="eGenieDefault(ques)">
                       <tbody>
                         <tr>
                           <th>
@@ -157,6 +157,7 @@
                                 <div class="form-group__text">
                                   <input [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'
                                   [(ngModel)]="ques.value['title']" value="{{ques.value['title']}}"
+                                  (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                   [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
                                   >
                                 </div>
@@ -875,3 +876,11 @@
     <button type="button" pButton label="OK" (click)="cd.accept()"></button>
 </p-footer>
 </p-confirmDialog>
+
+<p-dialog id="eGenieAlert" header="eGenie Default attributes " [(visible)]="eGenieAlert" [modal]="true" [responsive]="true" 
+[style]="{width: '350px', minWidth: '200px'}" [contentStyle]="{'height': '50px!important'}" [baseZIndex]="10000">
+    <p>No more changes are allowed here.</p>
+        <p-footer>
+            <button type="button" pButton icon="pi pi-check" (click)="eGenieAlert=false" label="Ok"></button>
+        </p-footer>
+</p-dialog>>

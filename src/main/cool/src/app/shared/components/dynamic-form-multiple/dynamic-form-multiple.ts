@@ -45,6 +45,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     closeDialogAction:number = 0;
     @Input() indexVal;
     @Input() isItemCreation: boolean;
+    eGenieAlert:boolean;
 
     constructor(public offerConstructService: OfferConstructService,
         private offerConstructCanvasService: OfferconstructCanvasService,
@@ -127,8 +128,11 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.valueChange.emit(counter);
         this.offerConstructService.closeAddDetails = false;
     }
+    eGenieDefault(q){
+        if(q.value.eGenieFlag){this.eGenieAlert = true}
+    }
     onShowDialog(){
-        this.closeDialogAction = 0;
+        this.closeDialogAction = 1;
         this.minorSection();
          setTimeout(() => {
              this.majorSection();
@@ -401,18 +405,22 @@ export class DynamicFormMultipleComponent implements OnInit {
 
 
     addAllDetailsValidationsonChange(e, question, questionList?, groupName?) {
-
+        this.closeDialogAction = 0;
         // set base price value according to billing_soa SOA Pricing selection type && questionList == this.billing_soa
         if (questionList !== undefined) {
             if (groupName == this.billing_soa) {
-                if (question.question == "SOA Pricing") {
-                    if (question.currentValue == "Flat") {
-                        this.defaultValueServices.setBasePriceInBillingSOADForFlat(questionList);
-                    }
+                if (question.question == "SOA Pricing" || question.question == "Monthly Amount") {
+                    questionList.forEach(e => {
+                        if(e.question=="SOA Pricing"){
+                            if (e.currentValue == "Flat") {
+                                this.defaultValueServices.setBasePriceInBillingSOADForFlat(questionList);
+                            }
 
-                    if (question.currentValue == "% of Product List") {
-                        this.defaultValueServices.setBasePriceInBillingSOAForProduct(questionList);
-                    }
+                            if (e.currentValue == "% of Product List") {
+                                this.defaultValueServices.setBasePriceInBillingSOAForProduct(questionList);
+                            }
+                        }
+                    });
                 }
                 if (question.question === 'Service Type?') {
                     if (question.currentValue === 'Support') {

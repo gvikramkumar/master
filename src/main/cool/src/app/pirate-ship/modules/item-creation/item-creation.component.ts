@@ -681,6 +681,15 @@ export class ItemCreationComponent implements OnInit {
       this.offerConstructService.singleMultipleFormInfo.minor[index][groupName]['productInfo'].forEach(element => {
         title = Object.keys(element);
         this.changeItemDetails(false, element[title]);
+        this.offerConstructItems.forEach(major => {
+          if(major['children'].length>0){
+              major['children'].forEach(e => {
+              if(e.data.uniqueKey===element[title].uniqueKey){
+                e.data.title = e.data.label = element[title].title;
+              }
+            });
+          }
+        });
         // }
       });
     });
