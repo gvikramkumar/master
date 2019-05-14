@@ -10,13 +10,10 @@ import { RouterModule } from '@angular/router';
 import { TC_MAPPING_ROUTES } from './tc-mapping.routes';
 
 import { TcMappingComponent } from './tc-mapping.component';
-import {ATOSummaryComponent} from '@pirateShip/modules/service-annuity-pricing/component/atosummary/atosummary.component';
 
 @NgModule({
   declarations: [
-    TcMappingComponent,
-    ATOSummaryComponent
-  ],
+    TcMappingComponent  ],
   imports: [
     SharedModule,
     TaskBarModule,
