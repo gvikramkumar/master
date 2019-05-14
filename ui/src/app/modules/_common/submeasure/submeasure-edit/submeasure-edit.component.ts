@@ -1172,7 +1172,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.syncRuleValues();
     }
     const activeRules = this.rules.map(rule => rule.name);
-    const inactiveRules = this.arrRules.filter(ruleName => !_.includes(activeRules, ruleName));
+    // clear out the empty string rules, then filter for inactive
+    const inactiveRules = this.arrRules.filter(x => !!x).filter(ruleName => !_.includes(activeRules, ruleName));
     if (inactiveRules.length) {
       if (revertCheck && this.sm.status === 'I' && this.sm.activeStatus === 'A') {
         setTimeout(() => this.sm.activeStatus = 'I');
