@@ -1,42 +1,71 @@
+<app-menu-bar [caseId]="caseId" [offerId]="offerId" [offerName]="offerName" [currentMMModel]="derivedMM">
+</app-menu-bar>
+
 <div class="content">
-    <div class="container">
-  
-      <app-menu-bar [caseId]="caseId" [offerId]="offerId" [offerName]="offerName" [currentMMModel]="derivedMM">
-      </app-menu-bar>
-  
-      <div class="panel-wrapper mt-15">
-  
-        <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName">
-        </app-taskbar>
-  
-        <br><br>
-  
-        <div class="row">
-  
-          <div class="leftContent col-sm-12 col-md-9">
-  
-  <!--          <ng-template #atosummary>-->
-  <!--            <div class="row">-->
-  <!--              <app-atosummary [atoNames]="atoNames" [selectedAto]="selectedAto" [offerId]="offerId"  [caseId] = "caseId"></app-atosummary>-->
-  <!--            </div>-->
-  <!--          </ng-template>-->
-  
-            <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer'">
-              <app-ato-list [atoList]="atoList"></app-ato-list>
+<div class="container">
+
+
+
+  <div class="panel-wrapper mt-15">
+
+    <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName" [selectedATO]="selectedAto">
+    </app-taskbar>
+
+    <br><br>
+
+    <div class="row">
+
+      <div class="leftContent col-sm-12 col-md-9">
+
+        <div class="row flex-center-vertical">
+          <div class="col-sm-12">
+
+            <!-- <div class="pull-left" *ngIf="showDesignCanvasButton">
+              <button class="btn btn--primary btn--cool btn--small tooltip" placement="top"
+                (click)="goToDesignCanvas()" [disabled]="disableDesignCanvasButton">
+                Go To Design Canvas <i class="icon-popout"></i>
+              </button>
+            </div> -->
+
+            <div class="pull-right">
+              <app-view-offer [atoNames]="atoNames" [selectedAto]="selectedAto"
+                (atoSelection)="showSelectedAtoView($event)">
+              </app-view-offer>
             </div>
-  
-  
+
           </div>
-  
-          <div class="rightContent col-sm-12 col-md-3">
-            <app-right-panel [stakeData]="stakeholders" [offerName]="offerName" [derivedMM]="derivedMM"
-                             [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference">
-            </app-right-panel>
-          </div>
-  
         </div>
+
+        <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer'">
+          <br><br>
+          <app-ato-list [atoList]="atoList"></app-ato-list>
+        </div>
+
+        <!-- <ng-template #selectedAtoView>
+
+          <p>Status: {{atoTask['itemStatus']}}</p>
+
+          <br><br>
+          <h3>Modeling</h3>
+          <app-task-summary [tasks]="atoTask['modelTasks']">/</app-task-summary>
+
+          <br><br>
+          <h3>Provisioning & Mediation</h3>
+          <app-task-summary [tasks]="atoTask['provisionTasks']">/</app-task-summary>
+
+        </ng-template> -->
+
+
       </div>
-  
+
+      <div class="rightContent col-sm-12 col-md-3">
+        <app-right-panel [stakeData]="stakeholders" [offerName]="offerName" [derivedMM]="derivedMM"
+          [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference">
+        </app-right-panel>
+      </div>
+
     </div>
   </div>
-  
+
+</div>
+</div>
