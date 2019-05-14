@@ -1,4 +1,4 @@
-<ng-container *ngIf="status==='Completed'; else inProgress">
+<ng-container *ngIf="checkAvailable(); else inProgress">
   <span class="completed success">
     <span class="icon-check"></span>
   </span>
