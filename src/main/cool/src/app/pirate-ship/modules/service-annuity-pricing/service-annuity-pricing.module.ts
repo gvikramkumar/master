@@ -26,7 +26,8 @@ import {ATOSummaryComponent} from '@pirateShip/modules/service-annuity-pricing/c
     RouterModule.forChild(SERVICE_ANNUITY_PRICING_ROUTES)
   ],
   exports: [
-    RouterModule
+    RouterModule,
+    ATOSummaryComponent
   ]
 })
 export class ServiceAnnuityPricingModule { }
