@@ -5,13 +5,13 @@ import {ApprovalMode} from '../../../shared/misc/enums';
 import _ from 'lodash';
 import {svrUtil} from '../common/svr-util';
 import {shUtil} from '../../../shared/misc/shared-util';
-import {sendHtmlMail} from '../common/mail';
 import AnyObj from '../../../shared/models/any-obj';
 import LookupRepo from '../../api/lookup/repo';
 import moment from 'moment';
 import UserListRepo from '../../api/user-list/repo';
 import {ModuleRepo} from '../../api/common/module/repo';
 import config from '../../config/get-config';
+import {mail} from '../common/mail';
 
 export default class ApprovalController extends ControllerBase {
 
@@ -207,7 +207,7 @@ export default class ApprovalController extends ControllerBase {
             } else {
               body = `A new DFA ${type} has been submitted by ${req.user.fullName} for approval: <br><br>${link}`;
             }
-            return sendHtmlMail(dfaAdminEmail, bizAdminEmail, `${itadminEmail},${ppmtEmail},${svrUtil.getEnvEmail(req.user.email)}`,
+            return mail.sendHtmlMail(dfaAdminEmail, bizAdminEmail, `${itadminEmail},${ppmtEmail},${svrUtil.getEnvEmail(req.user.email)}`,
               `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Submitted for Approval`, body);
           case ApprovalMode.approve:
             body = `The DFA ${type} submitted by ${item.updatedBy} for approval has been approved:<br><br>${link}`;
@@ -215,7 +215,7 @@ export default class ApprovalController extends ControllerBase {
               body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
             requester = svrUtil.getEnvEmail(`${item.updatedBy}@cisco.com`);
-            return sendHtmlMail(bizAdminEmail, requester, `${itadminEmail},${ppmtEmail}`,
+            return mail.sendHtmlMail(bizAdminEmail, requester, `${itadminEmail},${ppmtEmail}`,
               `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Approved`, body);
           case ApprovalMode.reject:
             body = `The DFA ${type} submitted by ${item.updatedBy} for approval has been rejected:<br><br>${link}`;
@@ -223,7 +223,7 @@ export default class ApprovalController extends ControllerBase {
               body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
             requester = svrUtil.getEnvEmail(`${item.updatedBy}@cisco.com`);
-            return sendHtmlMail(bizAdminEmail, requester, `${itadminEmail},${ppmtEmail}`,
+            return mail.sendHtmlMail(bizAdminEmail, requester, `${itadminEmail},${ppmtEmail}`,
               `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Not Approved`, body);
         }
       });
@@ -244,7 +244,7 @@ export default class ApprovalController extends ControllerBase {
               .then(itemResults => {
                 const module = itemResults[0];
                 const user = itemResults[1];
-                this.sendReminderEmail(adminEmails, module, user, item, type, sendHtmlMail)
+                this.sendReminderEmail(adminEmails, module, user, item, type)
                   .then(() => {
                     item.approvalReminderTime = currentTime;
                     this.repo.update(item, '', true, true, false);
@@ -255,14 +255,14 @@ export default class ApprovalController extends ControllerBase {
       });
   }
 
-  sendReminderEmail(adminEmails: string[], module, user, item, type: string, _sendHtmlMail) {
+  sendReminderEmail(adminEmails: string[], module, user, item, type: string) {
         const itadminEmail = svrUtil.getEnvEmail(adminEmails[0]);
         const dfaAdminEmail = svrUtil.getEnvEmail(adminEmails[1]);
         const dfaBizAdminEmail = svrUtil.getEnvEmail(adminEmails[2]);
         const link = `<a href="${item.approvalUrl}">${item.approvalUrl}</a>`;
         const body = `A new DFA - ${_.upperFirst(type)} submitted by ${user.fullName} has been pending for approval since ${shUtil.convertToPSTTime(item.updatedDate)}:<br><br>${link}`;
         const subject = `${this.getEnv()}DFA - ${module.name} - ${_.upperFirst(type)} Pending for Approval`;
-        return _sendHtmlMail(dfaAdminEmail, dfaBizAdminEmail, `${itadminEmail},${svrUtil.getEnvEmail(user.email)}`, subject, body);
+        return mail.sendHtmlMail(dfaAdminEmail, dfaBizAdminEmail, `${itadminEmail},${svrUtil.getEnvEmail(user.email)}`, subject, body);
   }
 
   getEnv() {

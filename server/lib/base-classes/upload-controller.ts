@@ -2,7 +2,6 @@ import xlsx from 'node-xlsx';
 import {NamedApiError} from '../common/named-api-error';
 import {ApiError} from '../common/api-error';
 import _ from 'lodash';
-import {sendHtmlMail} from '../common/mail';
 import SubmeasureRepo from '../../api/common/submeasure/repo';
 import RepoBase from './repo-base';
 import ApiRequest from '../models/api-request';
@@ -16,6 +15,7 @@ import DatabaseController from '../../api/database/controller';
 import config from '../../config/get-config';
 import {injector} from '../common/inversify.config';
 import {shUtil} from '../../../shared/misc/shared-util';
+import {mail} from '../common/mail';
 
 
 export default class UploadController {
@@ -243,7 +243,7 @@ export default class UploadController {
   }
 
   sendEmail(subject, body) {
-    return sendHtmlMail(
+    return mail.sendHtmlMail(
       this.dfa.dfaAdminEmail,
       svrUtil.getEnvEmail(this.req.user.email),
       null,

@@ -13,7 +13,13 @@ const transporter = nodemailer.createTransport({
   port: config.port
 });
 
-export function sendTextMail(from, to, cc, subject, body) {
+export const mail = {
+  sendTextMail,
+  sendHtmlMail
+}
+
+
+function sendTextMail(from, to, cc, subject, body) {
   const mailOptions: AnyObj = {from, to, subject, text: body};
   if (cc) {
     mailOptions.cc = cc;
@@ -25,7 +31,7 @@ export function sendTextMail(from, to, cc, subject, body) {
     });
 }
 
-export function sendHtmlMail(from, to, cc, subject, body) {
+function sendHtmlMail(from, to, cc, subject, body) {
   const mailOptions: AnyObj = {from, to, subject, html: body};
   if (cc) {
     mailOptions.cc = cc;

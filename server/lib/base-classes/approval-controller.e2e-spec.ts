@@ -2,19 +2,28 @@ import {serverPromise} from '../../server';
 import SubmeasureController from '../../api/common/submeasure/controller';
 import ApprovalController from './approval-controller';
 import SubmeasureRepo from '../../api/common/submeasure/repo';
-import {svrUtil} from '../common/svr-util';
 import {shUtil} from '../../../shared/misc/shared-util';
+import {mail} from '../common/mail';
+import AnyObj from '../../../shared/models/any-obj';
 
 
-describe('Approval Controller Tests', () => {
+fdescribe('Approval Controller Tests', () => {
   let server, approvalController;
+  const sendHtmlMail = mail.sendHtmlMail;
 
   beforeAll(function(done) {
+    // how we'll mock "just for this test suite
+    // mail.sendHtmlMail = jasmine.createSpy();
     serverPromise.then(_server => {
       server = _server;
       done();
     });
   });
+
+  afterAll(() => {
+    // how we'll mock "just for this test suite
+    // mail.sendHtmlMail = sendHtmlMail;
+  })
 
   beforeEach(() => {
     approvalController = new ApprovalController(new SubmeasureRepo());
@@ -44,10 +53,8 @@ describe('Approval Controller Tests', () => {
      const subject = `$LOCAL: DFA - ${moduleName} - Submeasure Pending for Approval`;
      const body = `A new DFA - Submeasure submitted by ${fullName} has been pending for approval since ${shUtil.convertToPSTTime(item.updatedDate)}`;
 
-     const sendHtmlMail = jasmine.createSpy('sendHtmlEmail');
-
-     approvalController.sendReminderEmail(adminEmail, {name: moduleName}, {fullName}, item, 'submeasure', sendHtmlMail);
-     const args = sendHtmlMail.calls.allArgs()[0];
+     approvalController.sendReminderEmail(adminEmail, {name: moduleName}, {fullName}, item, 'submeasure');
+     const args = (<AnyObj>mail).sendHtmlMail.calls.allArgs()[0];
      // expect(sendHtmlMail).toHaveBeenCalledWith(adminEmail[1], adminEmail[2], `${adminEmail[0]},${updatedBy}@cisco.com`, subject, body);
       expect(args[0]).toBe(adminEmail[1]);
    });
