@@ -617,4 +617,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     downloadZip() {
         this.clkDownloadZip.emit()
     }
+    trimSpaces(obj, $event) {
+        obj.currentValue = $event.target.value.trim();
+    }
 }
