@@ -4,7 +4,8 @@ export default {
   corsOrigin: [],
   showStack: true,
   expressTimeout: 1000 * (55 + 60),
-  submitForApprovalPeriod: 1 * 24 * 60 * 60 * 1000,
+  submitForApprovalReminderInterval: 5 * (60 * 1000),
+  submitForApprovalReminderPeriod: 1 * (24 * 60 * 60 * 1000),
   fileUpload: {
     fileSizeMax: 10000000, // 10mb
     fileCountMax: 1, // limit file count and size for dos attacks

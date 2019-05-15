@@ -391,8 +391,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     /* Test case: 2 existing rules, add a third in between(blank), the last rule no longer shows
         This is the only way we get past it.
     */
-    this.arrRules = _.clone(this.arrRules);
-    const oldRules = this.arrRules;
+    const oldRules = _.clone(this.arrRules);
     this.arrRules = [];
     setTimeout(() => {
       this.arrRules = oldRules;
@@ -700,6 +699,11 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     if (this.arrRules.length === 0) {
       this.arrRules[0] = '';
     }
+  }
+
+  verifyRulesExist() {
+    this.syncRuleValues();
+    return this.arrRules.filter(r => !!r).length;
   }
 
   syncRuleValues() {
@@ -1124,8 +1128,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   verifyNoRulesGrouping() {
-    this.cleanupRules();
-    if (this.isUnallocatedGroup() && this.sm.rules.length) {
+    if (this.isUnallocatedGroup() && this.verifyRulesExist()) {
       setTimeout(() => {
         this.sm.indicators.groupFlag = 'N';
         this.sm.indicators.allocationRequired = 'N';
@@ -1138,8 +1141,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   verifyNoRulesGroupingAllocationRequired() {
-    this.cleanupRules();
-    if (this.isUnallocatedGroup() && this.sm.rules.length) {
+    if (this.isUnallocatedGroup() && this.verifyRulesExist()) {
       setTimeout(() => this.sm.indicators.allocationRequired = 'Y');
       return this.uiUtil.genericDialog('Not allowed to have rules for grouping Sub-Measure without allocation required.').toPromise();
     } else {
@@ -1148,8 +1150,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   verifyNoRulesPassThrough() {
-    this.cleanupRules();
-    if (this.sm.rules.length) {
+    if (this.verifyRulesExist()) {
       setTimeout(() => this.sm.indicators.passThrough = 'N');
       return this.uiUtil.genericDialog('Not allowed to have rules for pass through Sub-Measure.').toPromise();
     } else {

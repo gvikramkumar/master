@@ -7,6 +7,6 @@ export function approvalEmailReminder() {
   setInterval(() => {
     injector.get(SubmeasureController).approvalEmailReminder('submeasure');
     injector.get(AllocationRuleController).approvalEmailReminder('rule');
-  }, config.submitForApprovalPeriod);
+  }, config.submitForApprovalReminderInterval);
  }
 
