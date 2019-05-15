@@ -589,7 +589,7 @@
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                                       [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
-                                      #qafreeText="ngModel" class="form-control" placement="top"
+                                      #qafreeText="ngModel" placement="top"
                                       (mouseenter)="showError = true; " (mouseleave)="showError = false;">
                                     <div class="tool-tip  slideIn"
                                       *ngIf="qafreeText.invalid && (qafreeText.dirty || qafreeText.touched)">
