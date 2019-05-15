@@ -235,7 +235,7 @@ export default class ApprovalController extends ControllerBase {
     return Promise.all([this.repo.getManyPending({moduleId : -1}),
       new LookupRepo().getValues(['itadmin-email', 'dfa-admin-email', 'dfa-biz-admin-email'])])
       .then(results => {
-        const pendingItems = results[0].filter(doc => svrUtil.checkIfMoreThanADay(currentTime, doc.approvalReminderTime));
+        const pendingItems = results[0].filter(doc => this.checkIfMoreThanReminderPeriod(currentTime, doc.approvalReminderTime));
         const adminEmails = results[1];
         if (pendingItems.length) {
           pendingItems.forEach(item => {
@@ -253,6 +253,10 @@ export default class ApprovalController extends ControllerBase {
           });
         }
       });
+  }
+
+  checkIfMoreThanReminderPeriod(now, lastReminderTime) {
+    return (now - lastReminderTime) > config.submitForApprovalReminderPeriod;
   }
 
   sendReminderEmail(adminEmails: string[], module, user, item, type: string) {

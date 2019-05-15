@@ -25,7 +25,6 @@ export const svrUtil = {
   postgresReplaceQuotes,
   toFixed8,
   toFixed,
-  checkIfMoreThanADay,
   getEnvEmail,
   isProdEnv
 };
@@ -40,12 +39,6 @@ function getEnvEmail(email) {
 function isProdEnv() {
   return config.env === 'prod';
 }
-
-function checkIfMoreThanADay(now, lastReminderTime) {
-  const oneDay = 1 * (24 * 60 * 60 * 1000);
-  return (now - lastReminderTime) > oneDay;
-}
-
 
 function toFixed8(val) {
   return toFixed(val, 8);
