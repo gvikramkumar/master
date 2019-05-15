@@ -156,7 +156,7 @@
                               <div class="form-group input--compressed" *ngIf="i == 0">
                                 <div class="form-group__text">
                                   <input [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'
-                                  [(ngModel)]="ques.value['title']" value="{{ques.value['title']}}"
+                                  [(ngModel)]="ques.value['title']=pInfo.currentValue" value="{{pInfo.currentValue}}"
                                   (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                   [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
                                   >

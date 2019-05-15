@@ -1,16 +1,29 @@
-<ng-container *ngIf="checkAvailable(); else inProgress">
+<ng-container *ngIf="finalStatus==='Complete'; else inProgress">
   <span class="completed success">
     <span class="icon-check"></span>
   </span>
 </ng-container>
 
 <ng-template #inProgress>
-  <ng-container *ngIf="checkInProgress();else other">
+  <ng-container *ngIf="finalStatus==='InProgress';else available">
     <span class="in-progress">
     </span>
   </ng-container>
 </ng-template>
 
+<ng-template #available>
+  <ng-container *ngIf="finalStatus==='NotStarted';else notYetAvailable">
+    <span class="legend-available"></span>
+  </ng-container>
+</ng-template>
+
+<ng-template #notYetAvailable>
+  <ng-container *ngIf="finalStatus==='OfferNotPresent';else other">
+    <span class="legend-notavail">
+    </span>
+  </ng-container>
+</ng-template>
+
 <ng-template #other>
-  --
+  <span class="legend-notreq"></span>
 </ng-template>
