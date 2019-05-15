@@ -169,5 +169,9 @@ export class OfferConstructService {
         return new FormGroup(group);
     }
     
+    updateNewEgenieFlag(offerId): Observable<any>{
+        const url = `${this.environmentService.REST_API_UPDATE_EGENIE_FLAG}/${offerId}`;
+        return this.httpClient.put(url, { withCredentials: true });
+    }
 
 }

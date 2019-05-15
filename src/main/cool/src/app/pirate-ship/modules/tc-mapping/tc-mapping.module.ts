@@ -7,27 +7,23 @@ import { RightPanelModule } from '@app/right-panel/right-panel.module';
 import { OfferDetailModule } from '@app/offer-detail/offer-detail.module';
 
 import { RouterModule } from '@angular/router';
-import { SERVICE_ANNUITY_PRICING_ROUTES } from './service-annuity-pricing.routes';
+import { TC_MAPPING_ROUTES } from './tc-mapping.routes';
 
-import { ServiceAnnuityPricingComponent } from './service-annuity-pricing.component';
-import {ATOSummaryComponent} from '@pirateShip/modules/service-annuity-pricing/component/atosummary/atosummary.component';
+import { TcMappingComponent } from './tc-mapping.component';
 
 @NgModule({
   declarations: [
-    ServiceAnnuityPricingComponent,
-    ATOSummaryComponent
-  ],
+    TcMappingComponent  ],
   imports: [
     SharedModule,
     TaskBarModule,
     MenuBarModule,
     RightPanelModule,
     OfferDetailModule,
-    RouterModule.forChild(SERVICE_ANNUITY_PRICING_ROUTES)
+    RouterModule.forChild(TC_MAPPING_ROUTES)
   ],
   exports: [
-    RouterModule,
-    ATOSummaryComponent
+    RouterModule
   ]
 })
-export class ServiceAnnuityPricingModule { }
+export class TcMappingModule { }
