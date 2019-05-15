@@ -84,7 +84,7 @@
 </div>
 
 <p-overlayPanel [style]="{'width':'300px'}" #basicOfferInfo>
-  <app-offer-detail-pop-up [offerBuilderdata]="offerBuilderdata"></app-offer-detail-pop-up>
+  <app-offer-detail-pop-up [derivedMM]="currentMMModel" [offerBuilderdata]="offerBuilderdata"></app-offer-detail-pop-up>
 </p-overlayPanel>
 
 <app-menu-bar-popup [show]="showPopup" [popupType]="popupType" (closePopup)="closePopup($event)"></app-menu-bar-popup>

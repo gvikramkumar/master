@@ -7,6 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class OfferDetailPopUpComponent implements OnInit {
 
+  @Input() derivedMM: string;
   @Input() offerBuilderdata: any;
 
 
