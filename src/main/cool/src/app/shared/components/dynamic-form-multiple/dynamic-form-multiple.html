@@ -166,7 +166,8 @@
                                 <div class="form-group__text" [class.has-error]="freeText.invalid"
                                   [class.has-success]="freeText.valid">
                                   <div class="on-focus clearfix">
-                                    <input [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' id=""
+                                    <input [ngClass]="(pInfo.rules.isvalid == false || (pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen)) && (freeText.dirty || freeText.touched) ? 'validaionStyles' : 'validaionStylesValid'"
+                                      [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' id=""
                                       [(ngModel)]="pInfo.currentValue"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
@@ -223,7 +224,8 @@
                                 <div class="form-group__text" [class.has-error]="qafreeText.invalid"
                                   [class.has-success]="qafreeText.valid">
                                   <div class="on-focus clearfix">
-                                    <input [name]='item.egineAttribue_+parentIndex+ ChildIndex'
+                                    <input [ngClass]="((pInfo.rules.isvalid == false && pInfo.rules.validationMessage != '') || (pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen)) && (qafreeText.dirty || qafreeText.touched) ? 'validaionStyles' : 'validaionStylesValid'"
+                                    [name]='item.egineAttribue_+parentIndex+ ChildIndex'
                                       [(ngModel)]="pInfo.currentValue"
                                       [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'], ques.value['groupName'])"
@@ -513,7 +515,8 @@
                                 <div class="form-group__text" [class.has-error]="freeText.invalid"
                                   [class.has-success]="freeText.valid">
                                   <div class="on-focus clearfix">
-                                    <input [name]='item.egineAttribue_+parentIndex+ ChildIndex'
+                                    <input [ngClass]="(pInfo.rules.isvalid == false || (pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen)) && (freeText.dirty || freeText.touched) ? 'validaionStyles' : 'validaionStylesValid'"
+                                      [name]='item.egineAttribue_+parentIndex+ ChildIndex'
                                       [(ngModel)]="pInfo.currentValue"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
@@ -577,7 +580,8 @@
                                 <div class="form-group__text" [class.has-error]="qafreeText.invalid"
                                   [class.has-success]="qafreeText.valid">
                                   <div class="on-focus clearfix">
-                                    <input [name]='item.egineAttribue_+parentIndex+ ChildIndex'
+                                    <input [ngClass]="((pInfo.rules.isvalid == false && pInfo.rules.validationMessage != '') || (pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen)) && (qafreeText.dirty || qafreeText.touched) ? 'validaionStyles' : 'validaionStylesValid'"
+                                      [name]='item.egineAttribue_+parentIndex+ ChildIndex'
                                       [(ngModel)]="pInfo.currentValue"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       class="form-control"
