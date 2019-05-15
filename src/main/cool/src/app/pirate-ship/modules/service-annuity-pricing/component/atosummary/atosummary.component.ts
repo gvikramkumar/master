@@ -67,7 +67,7 @@ export class ATOSummaryComponent implements OnInit {
               ) { }
 
   ngOnInit() {
-     this.atoNames = this._offersetupService.getAtolist();
+    //this.atoNames = this._offersetupService.getAtolist();
     this.Atosummary_af_sub = {
       "ATO":"",
       "caseID":"",
@@ -77,7 +77,7 @@ export class ATOSummaryComponent implements OnInit {
     };
     // this.updatedata()
     this.updatawithoutAPi();
-   this.updatedata();
+   // ßthis.updatedata();
 
    this.middlenumber = Math.ceil(this.Atosummary_be_sub.skuList.length / 2) - 1;
 
@@ -139,26 +139,26 @@ export class ATOSummaryComponent implements OnInit {
      }
 
    }
-  updatedata(){
+  // updatedata(){
 
-    this._offersetupService.getPricing_SKU_Detail(this.offerId, this.selectedAto).subscribe(
-      (response) => {
-        this.loading = false;
-        this.Atosummary_af_sub.skuList=[];
-        this.Atosummary_be_sub =[];
-        this.Atosummary_be_sub = response;
-        for (let i =0; i < this.Atosummary_be_sub.skuList.length; i++) {
-          this.Atosummary_af_sub.skuList.push({
-            "sku":"",
-            "basedSupportItem":false
+  //   this._offersetupService.getPricing_SKU_Detail(this.offerId, this.selectedAto).subscribe(
+  //     (response) => {
+  //       this.loading = false;
+  //       this.Atosummary_af_sub.skuList=[];
+  //       this.Atosummary_be_sub =[];
+  //       this.Atosummary_be_sub = response;
+  //       for (let i =0; i < this.Atosummary_be_sub.skuList.length; i++) {
+  //         this.Atosummary_af_sub.skuList.push({
+  //           "sku":"",
+  //           "basedSupportItem":false
 
-          });
-        }
+  //         });
+  //       }
 
-      }
-    );
+  //     }
+  //   );
 
-  }
+  // }
 
   showSelectedAtoView(atoname: string) {
 

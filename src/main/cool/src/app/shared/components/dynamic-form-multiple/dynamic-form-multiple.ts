@@ -126,7 +126,8 @@ export class DynamicFormMultipleComponent implements OnInit {
 
         let counter = 10;
         this.valueChange.emit(counter);
-        this.offerConstructService.closeAddDetails = false;
+        this.closeDialogAction = 1;
+        //this.offerConstructService.closeAddDetails = false;
     }
     eGenieDefault(q){
         if(q.value.eGenieFlag){this.eGenieAlert = true}

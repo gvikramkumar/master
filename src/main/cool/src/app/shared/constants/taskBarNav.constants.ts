@@ -7,5 +7,5 @@ export const taskBarNavConstant = [
     { title: "Offer Solutioning", nxtBtnTitle: "Offer Components" },
     { title: "Offer Components", nxtBtnTitle: "Design Review" },
     { title: "Design Review", nxtBtnTitle: "Offer Setup" },
-    { title: "Offer Setup", nxtBtnTitle: "Readiness Review" },
+    { title: "Offer Setup Workflow", nxtBtnTitle: "Readiness Review" }
 ]

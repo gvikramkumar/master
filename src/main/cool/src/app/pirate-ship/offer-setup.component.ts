@@ -246,6 +246,10 @@ export class OfferSetupComponent implements OnInit {
         this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.CSDL, this.selectedAto]);
         break;
       }
+      case 'T&C Mapping': {
+        this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.TC_MAPPING, this.selectedAto]);
+        break;
+      }
     }
   }
 
