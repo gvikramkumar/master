@@ -138,9 +138,13 @@ export class ItemCreationComponent implements OnInit {
 
     });
 
+    this.initDynamicFormDetails();
+   
+  }
 
-    //Update my flag if ATO uploaded into EGENIE
-    this.offerConstructService.updateNewEgenieFlag(this.currentOfferId).subscribe(response => {
+  initDynamicFormDetails(){
+     //Update my flag if ATO uploaded into EGENIE
+     this.offerConstructService.updateNewEgenieFlag(this.currentOfferId).subscribe(response => {
       // Prepare payload to fetch item categories. Obtain MM information.
       this.offerConstructCanvasService.getMMInfo(this.currentOfferId).subscribe((offerDetails) => {
 
@@ -639,7 +643,7 @@ export class ItemCreationComponent implements OnInit {
 
     this.productDetails = [...this.productDetails];
     this.itemCreationService.removeItemDetails(this.offerId, this.removeList).subscribe(response => {
-
+      this.initDynamicFormDetails();
     });
   }
 
