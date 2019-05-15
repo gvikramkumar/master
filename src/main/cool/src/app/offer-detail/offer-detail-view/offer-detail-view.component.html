@@ -651,10 +651,85 @@
                 </div>
               </div>
             </p-accordionTab>
-            <p-accordionTab header="Execute">
+            <p-accordionTab header="Set Up">
               <div class="card">
-                Execute
-              </div>
+                <div class="timeline">
+                  <div class="timeline__list">
+                    <div class="timeline__item" *ngIf="offerOverviewDetailsList.setup[0]?.status != null">
+                      <div
+                          [ngClass]="(offerOverviewDetailsList.setup[0].status == 'Completed')?'timeline__icon timeline--success':'timeline__icon timeline--warning'">
+                          <span
+                            [ngClass]="(offerOverviewDetailsList.setup[0].status == 'Completed')?'icon-check':'icon-warning'"></span>
+                        </div>
+                        <div class="timeline__content">
+                          <div class="text-bold">
+                            <span
+                              [ngClass]="(offerOverviewDetailsList.setup[0].status == 'Completed')?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
+                            {{offerOverviewDetailsList.setup[0].subMilestone}}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="timeline__item" *ngIf="offerOverviewDetailsList.setup[1]?.status != null">
+                        <div
+                          [ngClass]="(offerOverviewDetailsList.setup[1].status == 'Completed')?'timeline__icon timeline--success':'timeline__icon timeline--warning'">
+                          <span
+                            [ngClass]="(offerOverviewDetailsList.setup[1].status == 'Completed')?'icon-check':'icon-warning'"></span>
+                        </div>
+                        <div class="timeline__content">
+                          <div class="text-bold">
+                            <span
+                              [ngClass]="(offerOverviewDetailsList.setup[1].status == 'Completed')?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
+                            {{offerOverviewDetailsList.setup[1].subMilestone}}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="timeline__item" *ngIf="offerOverviewDetailsList.setup[2]?.status != null">
+                        <div
+                          [ngClass]="(offerOverviewDetailsList.setup[2].status == 'Completed')?'timeline__icon timeline--success':'timeline__icon timeline--warning'">
+                          <span
+                            [ngClass]="(offerOverviewDetailsList.setup[2].status == 'Completed')?'icon-check':'icon-warning'"></span>
+                        </div>
+                        <div class="timeline__content">
+                          <div class="text-bold">
+                            <span
+                              [ngClass]="(offerOverviewDetailsList.setup[2].status == 'Completed')?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
+                            {{offerOverviewDetailsList.setup[2].subMilestone}}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="timeline__item" *ngIf="offerOverviewDetailsList.setup[3]?.status != null">
+                        <div
+                          [ngClass]="(offerOverviewDetailsList.setup[3].status == 'Completed')?'timeline__icon timeline--success':'timeline__icon timeline--warning'">
+                          <span
+                            [ngClass]="(offerOverviewDetailsList.setup[3].status == 'Completed')?'icon-check':'icon-warning'"></span>
+                        </div>
+                        <div class="timeline__content">
+                          <div class="text-bold">
+                            <span
+                              [ngClass]="(offerOverviewDetailsList.setup[3].status == 'Completed')?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
+                            {{offerOverviewDetailsList.setup[3].subMilestone}}
+                          </div>
+                          <div [hidden]="offerOverviewDetailsList.setup[3].status != 'Completed'">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="timeline__item" *ngIf="offerOverviewDetailsList.setup[4]?.status != null">
+                        <div
+                          [ngClass]="(offerOverviewDetailsList.setup[4].status == 'Completed')?'timeline__icon timeline--success':'timeline__icon timeline--warning'">
+                          <span
+                            [ngClass]="(offerOverviewDetailsList.setup[4].status == 'Completed')?'icon-check':'icon-warning'"></span>
+                        </div>
+                        <div class="timeline__content">
+                          <div class="text-bold">
+                            <span
+                              [ngClass]="(offerOverviewDetailsList.setup[4].status == 'Completed')?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
+                            {{offerOverviewDetailsList.setup[4].subMilestone}}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
             </p-accordionTab>
             <p-accordionTab header="Launch">
               <div class="card">
