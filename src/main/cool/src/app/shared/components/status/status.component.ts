@@ -7,27 +7,26 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class StatusComponent implements OnInit {
 
+  finalStatus: string;
   @Input() status: string;
 
   constructor() { }
 
   ngOnInit() {
-  }
 
-  checkAvailable() {
-    if (this.status === 'Completed' || this.status === 'Not Started') {
-      return true;
+    if (this.status === 'Completed') {
+      this.finalStatus = 'Complete';
+    } else if (this.status === 'In Progress' || this.status === 'Reopen') {
+      this.finalStatus = 'InProgress';
+    } else if (this.status === 'Not Started') {
+      this.finalStatus = 'NotStarted';
+    } else if (this.status === 'Offer Not Present' || this.status === 'Offer workflow not setup') {
+      this.finalStatus = 'OfferNotPresent';
     } else {
-      return false;
+      this.finalStatus = 'Other';
     }
   }
 
-  checkInProgress() {
-    if (this.status === 'In Progress' || this.status === 'Reopen') {
-      return true;
-    } else {
-      return false;
-    }
-  }
+
 }
 
