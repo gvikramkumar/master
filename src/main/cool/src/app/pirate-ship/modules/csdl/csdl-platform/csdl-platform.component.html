@@ -59,10 +59,10 @@
                           <span>ID or Project not showing up?</span>&nbsp;&nbsp;
                           <span class="icon-refresh">Refresh Latest Search Data</span>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 task--bar">
                           <button class="btn btn--primary" type="submit" [disabled]="!csdlForm.valid">Submit</button>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4 task--bar">
                           <button class="btn btn--primary" type="submit" (click)="createNewCsdlIdDailog()">Create New
                             ID</button><br><br>
                           <span class="icon-info-outline icon-small" pTooltip="Creating a New ID will notify and create Loorem ipsum dolor sit amet, consectetur
@@ -97,7 +97,7 @@
                     </label>&nbsp;&nbsp;
                     <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit,</span>
                   </div><br><br>
-                  <div class="form-group">
+                  <div class="form-group task--bar">
                     <button class="btn btn--primary" type="submit"
                       [disabled]="!notRequiredCsdlForm.valid">Complete</button>
                   </div>
@@ -107,7 +107,7 @@
           </section>
           <section *ngIf="refreshStatus">
             <div class="row">
-              <div class="col-md-12">
+              <div class="col-md-12 task--bar">
                 <button class="btn btn--secondary" type="submit"><span class="icon-refresh">&nbsp;&nbsp;Refresh
                     Status</span></button>
               </div>
@@ -184,7 +184,7 @@
         </div>
       </div>
       <div class="row" style="margin-top: 75px">
-        <div class="col-md-12 text-center">
+        <div class="col-md-12 text-center task--bar">
           <button class="btn btn--primary" type="submit" (click)="onSubmit()">Submit</button>
         </div>
       </div>
@@ -209,7 +209,7 @@
         </div>
       </div>
       <div class="row" style="margin-top: 75px">
-        <div class="col-md-12 text-center">
+        <div class="col-md-12 text-center task--bar">
           <button class="btn btn--primary" type="submit" (click)="onContinue()">Continue</button>
         </div>
       </div>
