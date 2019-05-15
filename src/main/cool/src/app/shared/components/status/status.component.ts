@@ -14,6 +14,14 @@ export class StatusComponent implements OnInit {
   ngOnInit() {
   }
 
+  checkAvailable() {
+    if (this.status === 'Completed' || this.status === 'Not Started') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   checkInProgress() {
     if (this.status === 'In Progress' || this.status === 'Reopen') {
       return true;
@@ -22,3 +30,4 @@ export class StatusComponent implements OnInit {
     }
   }
 }
+
