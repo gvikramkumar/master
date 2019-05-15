@@ -426,6 +426,16 @@ export class DynamicFormMultipleComponent implements OnInit {
                     }
                 }
             }
+            if (question.question === 'Service Type?') {
+                if (question.currentValue === 'N/A') {
+                    this.defaultValueServices.serviceTypeValue = 'Support';
+                    this.defaultValueServices.setSubscriptionType(questionList, this.defaultValueServices.serviceTypeValue);
+                }
+            }
+            
+            if (question.question == "Description") {
+                    this.defaultValueServices.setLongDescription(questionList);
+            }
 
             if (question.question == "Smart Licensing Enabled") {
                 if (question.currentValue == "Yes") {

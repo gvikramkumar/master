@@ -391,3 +391,13 @@ span.icon-cart {
 	bottom: 110%;
 }
 
+input.validaionStyles{
+    border: 1px solid #e2231a !important;
+    box-shadow: 0.025px 0.025px 0.025px red;
+    margin: 2px;
+    
+}
+
+input.validaionStylesValid{
+    background: white;
+} 

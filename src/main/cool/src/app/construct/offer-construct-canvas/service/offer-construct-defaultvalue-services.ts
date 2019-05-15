@@ -112,6 +112,21 @@ export class OfferConstructDefaultValue {
       }
     });
   }
+  
+  setLongDescription(questionList) {
+    let longDescriptionDefault;
+    questionList.forEach(question => {
+      if (question.question == "Description") {
+        longDescriptionDefault = question.currenftValue;
+      }
+    });
+
+    questionList.forEach(question => {
+      if (question.question == "Long Description") {
+        question.currentValue = longDescriptionDefault;
+      }
+    });
+  }
 
   setBasePriceInBillingSOAForProduct(questionList) {
     questionList.forEach(question => {
@@ -315,6 +330,17 @@ export class OfferConstructDefaultValue {
     });
     return questionList;
   }
+  
+  setCreateDefault(questionList) {
+    questionList.forEach(question => {
+      if (question.question == "Create/Update") {
+        question.currentValue = "Create";
+        question.rules.isDisabled = true;
+      }
+    });
+    return questionList;
+  }
+
 
   setEnablePartySWKey(questionList) {
     questionList.forEach(question => {
