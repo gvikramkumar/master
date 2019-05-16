@@ -895,3 +895,10 @@
             <button type="button" pButton icon="pi pi-check" (click)="eGenieAlert=false" label="Ok"></button>
         </p-footer>
 </p-dialog>>
+<p-dialog id="createdeGenie" header="PID created eGenie" [(visible)]="createdeGenie" [modal]="true" [responsive]="true"
+[style]="{width: '350px', minWidth: '200px'}" [contentStyle]="{'height': '50px!important'}" [baseZIndex]="10000">
+    <p>PID created in eGenie, changes are not allowed.</p>
+        <p-footer>
+            <button type="button" pButton icon="pi pi-check" (click)="createdeGenie=false" label="Ok"></button>
+        </p-footer>
+</p-dialog>>
