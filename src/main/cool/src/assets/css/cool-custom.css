@@ -1328,6 +1328,10 @@ span[class*="display-"] {
   color: #005073;
 }
 
+.cool.cui .ui-overlaypanel-content {
+  padding: 0;
+}
+
 .cool.cui .ui-overlaypanel-content .popover__body[_ngcontent-c5] {
   padding-top: 0;
 }
