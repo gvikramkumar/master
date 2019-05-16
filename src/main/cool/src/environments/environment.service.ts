@@ -133,7 +133,8 @@ export class EnvironmentService {
     REST_API_GET_ITEM_DETAILS: string;
     REST_API_GET_OFFER_DROPDOWN: string;
     REST_API_REMOVE_ITEM_DETAILS: string;
-
+    REST_API_UPDATE_EGENIE_FLAG: string;
+    
     //SERVICE ANNUITY URLs
     REST_API_RETRIEVE_SERVICE_ATO_LIST_URL: string;
     REST_API_RETRIEVE_SERVICE_ANNUITY_PRICING_URL: string;
@@ -357,6 +358,7 @@ export class EnvironmentService {
         this.REST_API_GET_OFFER_DROPDOWN = this.baseApiUrl + '/itemcreation/getATOs';
         this.REST_API_GET_ITEM_DETAILS = this.baseApiUrl + '/itemcreation/getDetails';
         this.REST_API_REMOVE_ITEM_DETAILS = this.baseApiUrl + '/itemcreation/removeATOs';
+        this.REST_API_UPDATE_EGENIE_FLAG = this.baseApiUrl + '/itemcreation/getEGenieStatus';
 
         // --------------------------------------- SERVICE ANNUITY  CREATION --------------------------------------------
 

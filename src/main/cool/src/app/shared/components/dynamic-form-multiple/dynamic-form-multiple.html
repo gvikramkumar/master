@@ -131,7 +131,7 @@
                 <div *ngFor="let queslist of item.value['productInfo']">
                   <div *ngFor="let ques of queslist|keyvalue">
                     <table class="pid-data pull-left text-left table table--compressed table--bordered"
-                      style="max-width: 300px;">
+                      style="max-width: 300px;" (click)="eGenieDefault(ques)">
                       <tbody>
                         <tr>
                           <th>
@@ -156,8 +156,9 @@
                               <div class="form-group input--compressed" *ngIf="i == 0">
                                 <div class="form-group__text">
                                   <input [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'
-                                  [(ngModel)]="ques.value['title']" value="{{ques.value['title']}}"
-                                  [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
+                                  [(ngModel)]="ques.value['title']=pInfo.currentValue" value="{{pInfo.currentValue}}" (blur)="trimSpaces(pInfo, $event)"
+                                  (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
+                                  [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
                                   >
                                 </div>
                               </div>
@@ -165,11 +166,12 @@
                                 <div class="form-group__text" [class.has-error]="freeText.invalid"
                                   [class.has-success]="freeText.valid">
                                   <div class="on-focus clearfix">
-                                    <input [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' id=""
+                                    <input [ngClass]="pInfo.currentValue !='' && (pInfo.rules.isvalid == false || (pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen)) && (freeText.dirty || freeText.touched) ? 'validaionStyles' : 'validaionStylesValid'"
+                                      [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' id=""
                                       [(ngModel)]="pInfo.currentValue"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
-                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
+                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                                       #freeText="ngModel" class="form-control">
 
@@ -222,13 +224,14 @@
                                 <div class="form-group__text" [class.has-error]="qafreeText.invalid"
                                   [class.has-success]="qafreeText.valid">
                                   <div class="on-focus clearfix">
-                                    <input [name]='item.egineAttribue_+parentIndex+ ChildIndex'
+                                    <input [ngClass]="(pInfo.currentValue !='' && (pInfo.rules.isvalid == false && pInfo.rules.validationMessage != '') || (pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen)) && (qafreeText.dirty || qafreeText.touched) ? 'validaionStyles' : 'validaionStylesValid'"
+                                    [name]='item.egineAttribue_+parentIndex+ ChildIndex'
                                       [(ngModel)]="pInfo.currentValue"
-                                      [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
+                                      [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'], ques.value['groupName'])"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
-                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
+                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
                                       #qafreeText="ngModel" class="form-control" placement="top">
                                     <div class="tool-tip  slideIn"
                                       *ngIf="qafreeText.invalid && (qafreeText.dirty || qafreeText.touched)">
@@ -273,9 +276,9 @@
                                   <div class="on-focus clearfix">
                                     <input type="text" [name]='item.egineAttribue_+parentIndex+ ChildIndex'
                                       class="form-control" bsDatepicker
-                                      [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
+                                      [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
                                       [ngModel]="dateFormat(pInfo.currentValue)"
-                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
+                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
                                       (ngModelChange)="pInfo.currentValue = updateDate($event)">
                                   </div>
                                 </div>
@@ -294,7 +297,7 @@
                                       [(ngModel)]="pInfo.currentValue"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       #radioButton="ngModel" class="form-control" placement="top"
-                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']">
+                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']">
                                       <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
                                     </select>
 
@@ -346,7 +349,7 @@
                                     <select [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control"
                                       [(ngModel)]="pInfo.currentValue"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
-                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
+                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                                       #qaRadioButton="ngModel" class="form-control" placement="top"
@@ -402,7 +405,7 @@
                                     <select [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control"
                                       [(ngModel)]="pInfo.currentValue"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
-                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
+                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                                       #dropDown="ngModel" class="form-control" placement="top"
@@ -456,7 +459,7 @@
                                   [options]="pInfo.listMutiSelect" optionLabel="name"
                                   [(ngModel)]="pInfo.listCurrentValue"
                                   (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
-                                  [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
+                                  [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
                                   maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                   [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                                   #multiSelectInput="ngModel" class="form-control" placement="top"
@@ -512,14 +515,15 @@
                                 <div class="form-group__text" [class.has-error]="freeText.invalid"
                                   [class.has-success]="freeText.valid">
                                   <div class="on-focus clearfix">
-                                    <input [name]='item.egineAttribue_+parentIndex+ ChildIndex'
+                                    <input [ngClass]="pInfo.currentValue !='' && (pInfo.rules.isvalid == false || (pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen)) && (freeText.dirty || freeText.touched) ? 'validaionStyles' : 'validaionStylesValid'"
+                                      [name]='item.egineAttribue_+parentIndex+ ChildIndex'
                                       [(ngModel)]="pInfo.currentValue"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
-                                      [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
+                                      [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
-                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
+                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
                                       #freeText="ngModel" class="form-control" placement="top"
                                       (mouseenter)="showError = true; " (mouseleave)="showError = false;" ng-class=''>
 
@@ -576,15 +580,16 @@
                                 <div class="form-group__text" [class.has-error]="qafreeText.invalid"
                                   [class.has-success]="qafreeText.valid">
                                   <div class="on-focus clearfix">
-                                    <input [name]='item.egineAttribue_+parentIndex+ ChildIndex'
+                                    <input [ngClass]="(pInfo.currentValue !='' && (pInfo.rules.isvalid == false && pInfo.rules.validationMessage != '') || (pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen)) && (qafreeText.dirty || qafreeText.touched) ? 'validaionStyles' : 'validaionStylesValid'"
+                                      [name]='item.egineAttribue_+parentIndex+ ChildIndex'
                                       [(ngModel)]="pInfo.currentValue"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       class="form-control"
-                                      [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
+                                      [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
-                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
-                                      #qafreeText="ngModel" class="form-control" placement="top"
+                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
+                                      #qafreeText="ngModel" placement="top"
                                       (mouseenter)="showError = true; " (mouseleave)="showError = false;">
                                     <div class="tool-tip  slideIn"
                                       *ngIf="qafreeText.invalid && (qafreeText.dirty || qafreeText.touched)">
@@ -632,7 +637,7 @@
                                     <select [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control"
                                       [(ngModel)]="pInfo.currentValue"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
-                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
+                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                                       #radioButton="ngModel" class="form-control" placement="top"
@@ -687,7 +692,7 @@
                                     <select [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control"
                                       [(ngModel)]="pInfo.currentValue"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
-                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
+                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                                       #qaRadioButton="ngModel" class="form-control" placement="top"
@@ -743,7 +748,7 @@
                                     <select [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control"
                                       [(ngModel)]="pInfo.currentValue"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
-                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
+                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                                       #dropDown="ngModel" class="form-control" placement="top"
@@ -797,7 +802,7 @@
                                   [options]="pInfo.listMutiSelect" optionLabel="name"
                                   [(ngModel)]="pInfo.listCurrentValue"
                                   (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
-                                  [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled']"
+                                  [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
                                   maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                   [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                                   #multiSelectInput="ngModel" class="form-control" placement="top"
@@ -875,3 +880,11 @@
     <button type="button" pButton label="OK" (click)="cd.accept()"></button>
 </p-footer>
 </p-confirmDialog>
+
+<p-dialog id="eGenieAlert" header="eGenie Default attributes " [(visible)]="eGenieAlert" [modal]="true" [responsive]="true" 
+[style]="{width: '350px', minWidth: '200px'}" [contentStyle]="{'height': '50px!important'}" [baseZIndex]="10000">
+    <p>No more changes are allowed here.</p>
+        <p-footer>
+            <button type="button" pButton icon="pi pi-check" (click)="eGenieAlert=false" label="Ok"></button>
+        </p-footer>
+</p-dialog>>
