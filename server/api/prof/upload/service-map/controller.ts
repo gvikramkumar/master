@@ -120,11 +120,7 @@ imports: ServiceMapUploadImport[];
   }
 
   removeDuplicatesFromDatabase(imports: ServiceMapUploadImport[]) {
-    const duplicates = _.uniqWith(imports, (a, b) => {
-      return a.businessEntity === b.businessEntity;
-    })
-      .map(x => _.pick(x, ['businessEntity']))
-    return this.repo.bulkRemove(duplicates);
+    return this.repo.removeMany({});
   }
 
   validateSplitPercentage() {
