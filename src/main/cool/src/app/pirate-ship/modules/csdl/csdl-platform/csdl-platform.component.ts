@@ -5,6 +5,7 @@ import { RightPanelService } from '@app/services/right-panel.service';
 import { DashboardService } from '@shared/services';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { HAMMER_LOADER } from '@angular/platform-browser';
+import { CsdlIntegrationService } from '@app/services/csdl-integration.service';
 
 @Component({
   selector: 'app-csdl-platform',
@@ -48,7 +49,8 @@ export class CsdlPlatformComponent implements OnInit {
       private activatedRoute: ActivatedRoute,
       private stakeholderfullService: StakeholderfullService,
       private rightPanelService: RightPanelService,
-      private dashboardService: DashboardService) {
+      private dashboardService: DashboardService,
+      private csdlIntegrationService: CsdlIntegrationService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['offerId'];
       this.caseId = params['caseId'];
@@ -61,6 +63,9 @@ export class CsdlPlatformComponent implements OnInit {
 
   ngOnInit() {
 
+    this.csdlIntegrationService.getAllProjects().subscribe( response => {
+      console.log(response);
+    });
     this.csdlForm = new FormGroup({
       csdlId: new FormControl(null, Validators.required)
     });
@@ -186,4 +191,15 @@ export class CsdlPlatformComponent implements OnInit {
     this.displayIdCreationDailog = false;
   }
 
+  searchProjectNames(event) {
+    const searchString = event.query.toUpperCase();
+    this.csdlIntegrationService.getAllProjects().subscribe((results) => {
+        // this.copyAttributeResults = [...results];
+        console.log(results);
+      },
+      () => {
+        // this.results = [];
+      }
+    );
+  }
 }

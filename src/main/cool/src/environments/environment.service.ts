@@ -9,6 +9,7 @@ export class EnvironmentService {
     redirectUrl: string;
     basePdafApiUrl: string;
     authTokenBaseApiUrl: string;
+    siUrl: string;
 
     clientId: string;
     idpClientId: string;
@@ -18,7 +19,7 @@ export class EnvironmentService {
     REST_API_AUTH_IDP_TOKEN_URL: string;
     REST_API_GENERATE_AUTH_TOKEN_URL: string;
 
-    // USER INFO URLs 
+    // USER INFO URLs
     REST_API_LDAP_USER_DETAILS_URL: string;
     REST_API_URL_GET_CURRENT_USER_URL: string;
 
@@ -134,12 +135,13 @@ export class EnvironmentService {
     REST_API_GET_OFFER_DROPDOWN: string;
     REST_API_REMOVE_ITEM_DETAILS: string;
     REST_API_UPDATE_EGENIE_FLAG: string;
-    
+
     //SERVICE ANNUITY URLs
     REST_API_RETRIEVE_SERVICE_ATO_LIST_URL: string;
     REST_API_RETRIEVE_SERVICE_ANNUITY_PRICING_URL: string;
     // -------------------------------------------------------------------------------------------------
-
+    // CSDL URLs
+    REST_API_GET_ALL_PROJECTS:string;
 
     constructor() {
         this.setEnvironmentVariables();
@@ -170,6 +172,7 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb.cloudapps.cisco.com/owb';
+                this.siUrl = 'https://wwwin-si.cisco.com/api/v2';
                 break;
             case 'stage':
                 this.baseApiUrl = 'https://cool-srv-stg.cisco.com/coolsrv';
@@ -181,6 +184,7 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
+                this.siUrl = 'https://wwwin-si.cisco.com/api/v2';
                 break;
             case 'qualityassurance':
                 this.baseApiUrl = 'https://cool-srv-qa.cisco.com/coolsrv';
@@ -192,6 +196,7 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
+                this.siUrl = 'https://wwwin-si.cisco.com/api/v2';
                 break;
             case 'development':
                 this.baseApiUrl = 'https://cool-srv-dev.cisco.com/coolsrv';
@@ -203,6 +208,7 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
+                this.siUrl = 'https://wwwin-si.cisco.com/api/v2';
                 break;
             default:
                 this.baseApiUrl = '/api';
@@ -214,6 +220,7 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
+                this.siUrl = 'https://wwwin-si.cisco.com/api/v2';
         }
 
         // ----------------------- AUTHENTICATION URLs -----------------------------------------------
@@ -365,6 +372,7 @@ export class EnvironmentService {
         this.REST_API_RETRIEVE_SERVICE_ATO_LIST_URL = this.baseApiUrl + '/itemcreation/getATOs';
         this.REST_API_RETRIEVE_SERVICE_ANNUITY_PRICING_URL = this.baseApiUrl + '/serviceAnnuityPricing/getPricingOfferLevel';
         // -------------------------------------------------------------------------------------------------
-
+        // -------------------------------------- CSDL -------------------------------------
+        this.REST_API_GET_ALL_PROJECTS = this.siUrl + '/projects';
     }
 }
