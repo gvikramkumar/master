@@ -149,7 +149,7 @@
                                   <span [id]='rowData["uniqueKey"]'
                                         (click)='focusMethod(rowData["uniqueKey"]);showButton($event, rowData["uniqueKey"]);'
                                         class="half-margin-right icon-edit"
-                                        *ngIf="!rowData['eginieItem && !readOnly']"></span>
+                                        *ngIf="!rowData['eginieItem'] && !readOnly"></span>
                                   <a [id]='rowData["uniqueKey"]'
                                      *ngIf='buttonId == rowData["uniqueKey"] && showButtons && !readOnly'
                                      (click)='saveData(rowNode)'>&nbsp;&nbsp;Save&nbsp;&nbsp;|</a>
