@@ -23,10 +23,6 @@
 
           <div class="leftContent col-sm-12 col-md-9">
 
-            <div class="panel-wrapper">
-              <app-offer-create-detail></app-offer-create-detail>
-            </div>
-
             <div class="alert base-margin-top half-margin-bottom"
               [ngClass]="{'alert--info':message['color']==='black','alert--success': message['color']==='green','alert--danger': message['color']==='red','alert--warning': message['color']==='yellow'}">
               <div class="alert__icon mm-alert-icon"
@@ -77,7 +73,7 @@
                     </div>
                   </div>
 
-                  <!-- <p-dialog name="events" [(visible)]="showDialog" width="500">
+                  <p-dialog name="events" [(visible)]="showDialog" width="500">
                     <h3 class="text-center">
                       <span class="pi pi-exclamation-triangle text-warning"></span>
                     </h3>
@@ -105,7 +101,7 @@
                           (click)="showErrorDialog=false;" label="Ok"></button>
                       </div>
                     </p-footer>
-                  </p-dialog> -->
+                  </p-dialog>
 
                   <div class="panel-footer base-margin-top">
                     <div class="btn-group btn-group--wide" style="margin: auto;width: 100%;">
