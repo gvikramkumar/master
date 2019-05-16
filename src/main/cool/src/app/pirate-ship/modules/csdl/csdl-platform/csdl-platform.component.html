@@ -15,10 +15,10 @@
               <div class="col-md-12">
                 <h3 style="color: mediumblue">Is CSDL Required?</h3>
                 <p>Cisco products and solutions are in the majority of enterprise,<br>
-                  service provider, government, and commercial entities around the world.<br> 
+                  service provider, government, and commercial entities around the world.<br>
                   This means Cisco offerings are consistent targets for miscreant hackers and nation-state attacks as well.<br>
-                  Employing the processes and tools of CSDL helps Cisco reduce security risks,<br> 
-                  mitigate key vulnerabilities, and better meet customer demands for a more-secure product.<br> 
+                  Employing the processes and tools of CSDL helps Cisco reduce security risks,<br>
+                  mitigate key vulnerabilities, and better meet customer demands for a more-secure product.<br>
                   To learn more about CSDL, <a (click)="onOpenCsdlTab()">click here.</a></p>
               </div>
             </div>
@@ -50,9 +50,21 @@
                         <div class="col-md-6">
                           <div class="form-group half-margin-bottom">
                             <div class="form-group__text">
-                              <p-autoComplete formControlName="csdlId" class="form-control" [size]="100" field="csdlId"
-                                [minLength]="3" scrollHeight="150px" placeholder="Search by CSDL ID or Project Name"
+                              <p-autoComplete formControlName="csdlId" [(ngModel)]="selectedProject" class="form-control" [size]="100" field="csdlId"
+                                [minLength]="3" scrollHeight="150px" placeholder="Search by CSDL ID or Project Name" [suggestions]="results" (completeMethod)="searchProjectNames($event)" field="project_id"
                                 required>
+                                <ng-template pTemplate="body" let-item>
+                                  <tbody>
+                                    <tr>
+                                      <td>
+                                        {{item.project_id}}
+                                      </td>
+                                      <td>
+                                        {{item.project_name}}
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </ng-template>
                               </p-autoComplete>
                             </div>
                           </div><br>
@@ -60,7 +72,7 @@
                           <span class="icon-refresh">Refresh Latest Search Data</span>
                         </div>
                         <div class="col-md-2 task--bar">
-                          <button class="btn btn--primary" type="submit" [disabled]="!csdlForm.valid">Submit</button>
+                          <button class="btn btn--primary" type="submit" [disabled]="!csdlForm.valid" (click)="clickSubmit()">Submit</button>
                         </div>
                         <div class="col-md-4 task--bar">
                           <button class="btn btn--primary" type="submit" (click)="createNewCsdlIdDailog()">Create New
@@ -118,11 +130,11 @@
                   <ng-template pTemplate="header" let-columns>
                     <tr>
                       <th>CSDL ID</th>
-                      <th><span class="icon-info-outline icon-small" pTooltip="Stop Ship Details Lorem ipsum dolor sit amet, 
+                      <th><span class="icon-info-outline icon-small" pTooltip="Stop Ship Details Lorem ipsum dolor sit amet,
                       consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore"
                           tooltipPosition="top">
                         </span>&nbsp;STOP SHIP</th>
-                      <th><span class="icon-info-outline icon-small" pTooltip="Enforcement Details Lorem ipsum dolor sit amet, 
+                      <th><span class="icon-info-outline icon-small" pTooltip="Enforcement Details Lorem ipsum dolor sit amet,
                       consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore"
                           tooltipPosition="top">
                         </span>&nbsp;ENFORCEMENT</th>

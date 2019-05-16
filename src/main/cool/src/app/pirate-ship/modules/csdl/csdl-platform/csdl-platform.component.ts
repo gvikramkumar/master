@@ -44,6 +44,8 @@ export class CsdlPlatformComponent implements OnInit {
   csdlData = [
     {csdlId: '29385971', stopShip: 'False', enforcement: 'Hard', latestStatusUpdate: '05-Aug-2019 2:00pm'}
   ];
+  results;
+  selectedProject;
 
   constructor(private router: Router,
       private activatedRoute: ActivatedRoute,
@@ -65,7 +67,10 @@ export class CsdlPlatformComponent implements OnInit {
 
     this.csdlIntegrationService.getAllProjects().subscribe( response => {
       console.log(response);
+      const filteredResults = response.results.projects.filter(project => project.project_name.includes('Cisco'));
+      console.log('filtered results' + JSON.stringify(filteredResults));
     });
+
     this.csdlForm = new FormGroup({
       csdlId: new FormControl(null, Validators.required)
     });
@@ -193,13 +198,24 @@ export class CsdlPlatformComponent implements OnInit {
 
   searchProjectNames(event) {
     const searchString = event.query.toUpperCase();
-    this.csdlIntegrationService.getAllProjects().subscribe((results) => {
-        // this.copyAttributeResults = [...results];
-        console.log(results);
-      },
+    this.csdlIntegrationService.getAllProjects().subscribe((response) => {
+      const filteredResults = response.results.projects.filter((project) => {
+        // Check if searched string containts in project name (or) project
+        // If not contains returns false
+        if ((project.project_name.toUpperCase().indexOf(searchString) >= 0) || (project.project_id.toString().indexOf(searchString) >= 0 )) {
+          return true;
+        }
+        return false;
+      });
+      this.results = filteredResults;
+    },
       () => {
         // this.results = [];
       }
     );
+  }
+
+  clickSubmit() {
+    console.log(this.selectedProject);
   }
 }
