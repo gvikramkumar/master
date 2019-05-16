@@ -52,7 +52,7 @@ export class EnvironmentService {
     REST_API_SECONDARY_BUSINESS_UNIT_URL: string;
     REST_API_SECONDARY_BUSINESS_ENTITY_URL: string;
     PDAF_ISVALID_EGINIE_PID: string;
-    
+
     // OFFER URL's
     REST_API_OFFER_STATUS: string;
     REST_API_OFFER_CREATE_URL: string;
@@ -108,6 +108,7 @@ export class EnvironmentService {
     REST_API_CREATE_STRATEGY_REVIEW_TASKS: string;
     REST_API_CREATE_DESIGN_REVIEW_TASKS: string;
     REST_API_UPDATE_ESCALATION_DETAILS: string;
+
     // DOWNLOAD N UPLOAD URLs
     REST_API_DOWNLOAD_OFFER_DETAILS_PDF_URL: string;
     REST_API_FILE_UPLOAD_FOR_ACTION: string;
@@ -131,10 +132,11 @@ export class EnvironmentService {
     REST_API_GET_OFFER_DROPDOWN: string;
     REST_API_REMOVE_ITEM_DETAILS: string;
     REST_API_UPDATE_EGENIE_FLAG: string;
-    
-    //SERVICE ANNUITY URLs
+
+    // SERVICE ANNUITY URLs
     REST_API_RETRIEVE_SERVICE_ATO_LIST_URL: string;
     REST_API_RETRIEVE_SERVICE_ANNUITY_PRICING_URL: string;
+    
     // -------------------------------------------------------------------------------------------------
 
         //SERVICE FOR BASIC MODULES URLs - NPI
@@ -274,7 +276,7 @@ export class EnvironmentService {
 
         this.REST_API_PRIMARY_URL = this.baseApiUrl + '/primaryBusiness/';
         this.PDAF_SEARCH_EGINIE = this.basePdafApiUrl + '/product/1.0/getPIDsdata?item_name=';
-        
+
         this.PDAF_API = this.basePdafApiUrl + '/mdm/1.0/hierarchy/getBUhierarchy';
         this.REST_API_PRIMARY_BUSINESS_UNIT_LULU_URL = this.basePdafApiUrl + '/mdm/1.0/hierarchy/getBUhierarchy?be=';
 
@@ -288,7 +290,7 @@ export class EnvironmentService {
 
         this.REST_API_SECONDARY_BUSINESS_ENTITY_URL = this.basePdafApiUrl + '/mdm/1.0/hierarchy/getBUhierarchy?business_unit=';
 
-        this.PDAF_ISVALID_EGINIE_PID = this.basePdafApiUrl + '/product/1.0/isPIDavailable?pid='; 
+        this.PDAF_ISVALID_EGINIE_PID = this.basePdafApiUrl + '/product/1.0/isPIDavailable?pid=';
         // --------------------------------OFFER URL's------------------------------------------------------------
 
         this.REST_API_OFFER_STATUS = this.baseApiUrl + '/offer/flags/';

@@ -4,6 +4,7 @@ import { MenuBarService } from '@app/services/menu-bar.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EnvironmentService } from '@env/environment.service';
 import { UserService } from '@app/core/services';
+import { MonetizationModelService } from '@app/services/monetization-model.service';
 
 @Component({
     selector: 'app-menu-bar',
@@ -27,17 +28,21 @@ export class MenuBarComponent implements OnInit {
     showPopup: boolean;
     popupType: String = '';
     itemShow: Object = {};
+    offerBuilderdata = {};
     navigateHash: Object = {};
+
     currentOfferId: String = '';
     holdStatusValid = true;
     cancelStatusValid = true;
     currentUsername: any;
 
-    constructor(private menuBarService: MenuBarService,
-        private userService: UserService,
+    constructor(
         private router: Router,
+        private userService: UserService,
+        private menuBarService: MenuBarService,
         private activatedRoute: ActivatedRoute,
-        private environmentService: EnvironmentService) {
+        private environmentService: EnvironmentService,
+        private monetizationModelService: MonetizationModelService) {
 
         this.showPopup = false;
 
@@ -61,18 +66,11 @@ export class MenuBarComponent implements OnInit {
                             }
                         });
                     }
-                    /* Uncomment below code for Sprint 5 */
-                    // if (data['execute'] != null) {
-                    //     data['execute'].forEach(element => {
-                    //         if (element['enable'] === true) {
-                    //             this.itemShow[element['subMilestone']] = true;
-                    //         }
-                    //     });
-                    // }
                 }
             }
 
         });
+
         this.navigateHash['Offer Creation'] = ['/coolOffer', this.currentOfferId, this.caseId];
         this.navigateHash['Offer Model Evaluation'] = ['/mmassesment', this.currentOfferId, this.caseId];
         this.navigateHash['Stakeholder Identification'] = ['/stakeholderFull', this.currentOfferId, this.caseId];
@@ -82,10 +80,11 @@ export class MenuBarComponent implements OnInit {
         this.navigateHash['Offer Components'] = ['/offerConstruct', this.currentOfferId, this.caseId];
         this.navigateHash['Design Review'] = ['/designReview', this.currentOfferId, this.caseId];
         /* Uncomment the below code for Sprint 5 */
-        //this.navigateHash['Modular Workflow Completion'] = ['/offerSetup', this.currentOfferId, this.caseId];
+        // this.navigateHash['Modular Workflow Completion'] = ['/offerSetup', this.currentOfferId, this.caseId];
     }
 
     ngOnInit() {
+
         this.items = [
             {
                 label: 'Ideate',
@@ -124,6 +123,25 @@ export class MenuBarComponent implements OnInit {
 
         ];
 
+
+        this.monetizationModelService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
+            this.offerBuilderdata = data;
+            this.offerBuilderdata['BEList'] = [];
+            this.offerBuilderdata['BUList'] = [];
+            if (this.offerBuilderdata['primaryBEList'] != null) {
+                this.offerBuilderdata['BEList'] = this.offerBuilderdata['BEList'].concat(this.offerBuilderdata['primaryBEList']);
+            }
+            if (this.offerBuilderdata['secondaryBEList'] != null) {
+                this.offerBuilderdata['BEList'] = this.offerBuilderdata['BEList'].concat(this.offerBuilderdata['secondaryBEList']);
+            }
+            if (this.offerBuilderdata['primaryBUList'] != null) {
+                this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['primaryBUList']);
+            }
+            if (this.offerBuilderdata['secondaryBUList'] != null) {
+                this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['secondaryBUList']);
+            }
+        });
+
     }
 
     showOppupFunc(ptype) {
@@ -145,19 +163,19 @@ export class MenuBarComponent implements OnInit {
                 this.cancelStatusValid = false;
                 this.currentUsername = this.userService.getName();
 
-                let textValue = document.createElement('a');
+                const textValue = document.createElement('a');
                 textValue.innerText = 'here';
                 textValue.href = this.environmentService.redirectUrl;
 
 
-                let emailSubject = `${this.offerName} (${this.offerId}) has been on hold by ${this.userService.getUserId()}`;
-                let emailBody = `Hello All,
+                const emailSubject = `${this.offerName} (${this.offerId}) has been on hold by ${this.userService.getUserId()}`;
+                const emailBody = `Hello All,
                 ${this.offerName}(${this.offerId}) has been on hold by ${this.userService.getName()}.
                 All related actions have been disabled.
                 Click ${textValue.href} to view on hold offer in COOL.
                 You are receiving this email because you have been identified as a stakeholder for ${this.offerName}.`;
-                let stakeHolders = [];
-                for (let prop in this.stakeData) {
+                const stakeHolders = [];
+                for (const prop in this.stakeData) {
                     this.stakeData[prop].forEach(stakeholder => {
                         if (stakeholder['emailId'] != null) {
                             stakeHolders.push(stakeholder['emailId']);
@@ -182,18 +200,18 @@ export class MenuBarComponent implements OnInit {
                 this.cancelStatusValid = false;
                 this.currentUsername = this.userService.getName();
 
-                let textValue = document.createElement('a');
+                const textValue = document.createElement('a');
                 textValue.innerText = 'here';
                 textValue.href = this.environmentService.redirectUrl;
 
-                let emailSubject = `${this.offerName}(${this.offerId}) has been canceled by ${this.userService.getUserId()}`;
-                let emailBody = `Hello All,
+                const emailSubject = `${this.offerName}(${this.offerId}) has been canceled by ${this.userService.getUserId()}`;
+                const emailBody = `Hello All,
                 ${this.offerName}(${this.offerId}) has been canceled by ${this.userService.getName()}.
                 All related actions have been disabled.
                 Click ${textValue} to view canceled offer in COOL.
                 You are receiving this email because you have been identified as a stakeholder for ${this.offerName}.`;
-                let stakeHolders = [];
-                for (let prop in this.stakeData) {
+                const stakeHolders = [];
+                for (const prop in this.stakeData) {
                     this.stakeData[prop].forEach(stakeholder => {
                         if (stakeholder['emailId'] != null) {
                             stakeHolders.push(stakeholder['emailId']);
