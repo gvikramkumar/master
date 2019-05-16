@@ -103,10 +103,4 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  /**
-   * Logic when user closes the panel.
-   */
-  onClickedOutside() {
-
-  }
 }
