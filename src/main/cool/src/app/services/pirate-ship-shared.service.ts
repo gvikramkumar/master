@@ -6,6 +6,9 @@ import { Injectable } from '@angular/core';
 export class PirateShipSharedService {
   private caseId: string;
   private offerId: string;
+  private _role: string;
+  private userName: string;
+  private userId: string;
   constructor() { }
    setOfferIdandcaseId(data) {
       this.caseId = data.caseId;
@@ -16,5 +19,28 @@ export class PirateShipSharedService {
         caseId: this.caseId,
         offerId: this.offerId
       };
+  }
+
+  getRole(): string {
+    return this._role;
+  }
+
+  setRole(value: string) {
+    this._role = value;
+  }
+  getUserName() {
+    return this.userName;
+  }
+
+  setUserName(userName: string) {
+    this.userName = userName;
+  }
+
+  getUserId() {
+    return this.userId;
+  }
+
+  setUserId(userId: string) {
+    this.userId = userId;
   }
 }
