@@ -176,11 +176,9 @@ export default class DeptUploadUploadController extends UploadController {
 
   removeDuplicatesFromDatabase(imports: DeptUploadImport[]) {
     if (this.submeasureMode) {
-      return this.repo.removeMany({submeasureName: this.submeasureName, temp: 'Y'});
+      return this.repo.removeMany({submeasureName: this.submeasureName});
     } else {
-      const duplicates = _.uniqWith(imports, (a, b) => a.submeasureName === b.submeasureName && a.nodeValue === b.nodeValue)
-        .map(x => _.pick(x, ['submeasureName', 'nodeValue']))
-      return this.repo.bulkRemove(duplicates);
+      return this.removeSubmeasureNameDuplicatesFromDatabase(imports);
     }
   }
 

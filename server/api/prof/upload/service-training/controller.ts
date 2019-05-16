@@ -9,6 +9,7 @@ import OpenPeriodRepo from '../../../common/open-period/repo';
 import {NamedApiError} from '../../../../lib/common/named-api-error';
 import ServiceTrainingUploadRepo from '../../service-training-upload/repo';
 import {svrUtil} from '../../../../lib/common/svr-util';
+import {shUtil} from '../../../../../shared/misc/shared-util';
 
 @injectable()
 export default class ServiceTrainingUploadUploadController extends UploadController {
@@ -69,7 +70,7 @@ imports: ServiceTrainingUploadImport[];
 
   validate() {
     // sort by submeasureName, add up splitPercentage, error if not 1.0
-    this.imports = this.rows1.map(row => new ServiceTrainingUploadImport(row, this.fiscalMonth));
+    this.imports = this.rows1.map(row => new ServiceTrainingUploadImport(row, this.fiscalYear));
     const obj = {};
     this.imports.forEach(val => {
       const productFamily = val.productFamily.toUpperCase();
@@ -96,11 +97,7 @@ imports: ServiceTrainingUploadImport[];
   }
 
   removeDuplicatesFromDatabase(imports: ServiceTrainingUploadImport[]) {
-    const duplicates = _.uniqWith(imports, (a, b) => {
-      return a.productFamily === b.productFamily;
-    })
-      .map(x => _.pick(x, ['productFamily']))
-    return this.repo.bulkRemove(duplicates);
+    return this.repo.removeMany({});
   }
 
   validateSplitPercentage() {

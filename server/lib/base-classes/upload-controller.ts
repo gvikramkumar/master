@@ -34,6 +34,7 @@ export default class UploadController {
   errors: object[];
   rowNum: number;
   fiscalMonth: number;
+  fiscalYear: number;
   temp;
   submeasure;
   PropNames;
@@ -94,7 +95,7 @@ export default class UploadController {
     }
 
     this.getInitialData()
-      .then(() => this.removeOtherFiscalMonthUploads())
+      .then(() => this.removeOtherFiscalMonthOrFiscalYearUploads())
       .then(() => this.getValidationAndImportData())
       .then(() => this.validateRows(1, this.rows1))
       .then(() => this.lookForTotalErrors())
@@ -138,15 +139,16 @@ export default class UploadController {
     ])
       .then(results => {
         this.fiscalMonth = results[0].fiscalMonth;
+        this.fiscalYear = shUtil.fiscalYearFromFiscalMonth(this.fiscalMonth)
         this.data.submeasures = results[1];
       });
   }
 
-  removeOtherFiscalMonthUploads() {
+  removeOtherFiscalMonthOrFiscalYearUploads() {
     if (this.repo.hasFiscalMonth()) {
       return this.repo.removeMany({fiscalMonth: {$ne: this.fiscalMonth}});
     } else if (this.repo.hasFiscalYear()) {
-      return this.repo.removeMany({fiscalYear: {$ne: shUtil.fiscalYearFromFiscalMonth(this.fiscalMonth)}});
+      return this.repo.removeMany({fiscalYear: {$ne: this.fiscalYear}});
     } else {
       return Promise.resolve();
     }

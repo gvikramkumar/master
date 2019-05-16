@@ -10,8 +10,8 @@ export default class ServiceTrainingUploadImport {
   productFamily: string;
   splitPercentage: number;
 
-  constructor(row, fiscalMonth) {
-    this.fiscalYear = shUtil.fiscalYearFromFiscalMonth(fiscalMonth);
+  constructor(row, fiscalYear) {
+    this.fiscalYear = fiscalYear;
     this.salesTerritoryCode = row[0] && String(row[0]);
     this.salesNodeLevel3Code = row[1] && String(row[1]);
     this.extTheaterName = row[2] && String(row[2]);
