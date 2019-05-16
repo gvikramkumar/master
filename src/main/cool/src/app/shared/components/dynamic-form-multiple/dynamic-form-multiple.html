@@ -1,4 +1,4 @@
-<p-dialog #dialog header="Add All Item Details" [closable]="false" [modal]="true" 
+<p-dialog #dialog header="Add All Item Details" [closable]="false" [modal]="true"
   [closeOnEscape]="false" (onShow)="onShowDialog()" class="add-details-dialog"
   [(visible)]="offerConstructService.closeAddDetails" [resizable]="false" [draggable]="false" [maximizable]="true"
   [contentStyle]="{'min-height':'450px', 'overflow-y':'scroll', 'width':'100%'}">
@@ -23,10 +23,10 @@
           <div class="btns-right pull-right flex-center-vertical">
             <!-- <a href="#" class="base-margin-right"><span class="icon-export--cool half-margin-right"></span> Export as .XLS</a> -->
             <button class="display-none"></button>
-            <button class="btn btn--primary" (click)='saveForm()'>Save</button>
+            <button class="btn btn--primary" [disabled]="itemNameInvalid" (click)='saveForm()'>Save</button>
             <button class="btn btn--secondary" (click)="confirmDialog()">Cancel</button>
             <a *ngIf="isItemCreation" href="javascript: void(0);" class="base-margin-right"
-              (click)='downloadZip()'><span class="icon-export--cool half-margin-right"></span> Export as .XLS</a>
+              (click)='downloadZip()'><span class="icon-export--cool half-margin-left"></span> Export as Excel</a>
           </div>
 
         </ul>
@@ -155,12 +155,19 @@
                             <td *ngSwitchCase="'Free Text'">
                               <div class="form-group input--compressed" *ngIf="i == 0">
                                 <div class="form-group__text">
-                                  <input [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'
-                                  [(ngModel)]="ques.value['title']=pInfo.currentValue" value="{{pInfo.currentValue}}" (blur)="trimSpaces(pInfo, $event)"
-                                  (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
-                                  [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
-                                  >
-                                </div>
+                                    <input [ngClass]="pInfo.currentValue !='' && (pInfo.rules.isvalid == false || (pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen)) && (itemName.dirty || itemName.touched) ? 'validaionStyles' : 'validaionStylesValid'"
+                                      [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'
+                                      [(ngModel)]="ques.value['title']=pInfo.currentValue" value="{{pInfo.currentValue}}"
+                                      (blur)="trimSpaces(pInfo, $event)"
+                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
+                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']" #itemName="ngModel">
+                                  </div>
+                                  <div class="tool-tip  slideIn"
+                                    *ngIf="pInfo.rules.validationMessage != '' && pInfo.rules.isvalid == false && (itemName.dirty || itemName.touched)">
+                                    <ul>
+                                      <li>{{pInfo.rules.validationMessage}}</li>
+                                    </ul>
+                                  </div>
                               </div>
                               <div class="form-group input--compressed" *ngIf="i !== 0">
                                 <div class="form-group__text" [class.has-error]="freeText.invalid"
@@ -881,10 +888,17 @@
 </p-footer>
 </p-confirmDialog>
 
-<p-dialog id="eGenieAlert" header="eGenie Default attributes " [(visible)]="eGenieAlert" [modal]="true" [responsive]="true" 
+<p-dialog id="eGenieAlert" header="eGenie Default attributes " [(visible)]="eGenieAlert" [modal]="true" [responsive]="true"
 [style]="{width: '350px', minWidth: '200px'}" [contentStyle]="{'height': '50px!important'}" [baseZIndex]="10000">
     <p>No more changes are allowed here.</p>
         <p-footer>
             <button type="button" pButton icon="pi pi-check" (click)="eGenieAlert=false" label="Ok"></button>
+        </p-footer>
+</p-dialog>>
+<p-dialog id="createdeGenie" header="PID created eGenie" [(visible)]="createdeGenie" [modal]="true" [responsive]="true"
+[style]="{width: '350px', minWidth: '200px'}" [contentStyle]="{'height': '50px!important'}" [baseZIndex]="10000">
+    <p>PID created in eGenie, changes are not allowed.</p>
+        <p-footer>
+            <button type="button" pButton icon="pi pi-check" (click)="createdeGenie=false" label="Ok"></button>
         </p-footer>
 </p-dialog>>

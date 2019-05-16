@@ -1280,6 +1280,7 @@ span.icon-check-outline.icon-medium {
 .ui-dialog.ui-widget .ui-dialog-content{height: 350px ;min-height: 100%}
 .ui-confirmdialog.ui-dialog.ui-widget  .ui-dialog-content{height: auto ;min-height: auto}
 #eGenieAlert .ui-dialog.ui-widget .ui-dialog-content{height: auto ;min-height: auto}
+#createdeGenie .ui-dialog.ui-widget .ui-dialog-content{height: auto ;min-height: auto}
 .add-details-dialog .pi.pi-window-maximize{padding-right: 20px}
 .add-details-dialog .pi.pi-window-minimize{padding-right: 20px}
 .add-details-dialog .close-add-all-details{position: absolute; right: 20px;top:15px;color:#017cad; cursor: pointer;}
