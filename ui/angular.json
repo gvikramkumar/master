@@ -52,7 +52,7 @@
                 }
               ]
             },
-            "devStage": {
+            "devstage": {
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -65,7 +65,7 @@
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.devStage.ts"
+                  "with": "src/environments/environment.devstage.ts"
                 }
               ]
             }
@@ -83,8 +83,8 @@
             "production": {
               "browserTarget": "ui:build:production"
             },
-            "devStage": {
-              "browserTarget": "ui:build:devStage"
+            "devstage": {
+              "browserTarget": "ui:build:devstage"
             }
           }
         },

@@ -1,13 +1,22 @@
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
-describe('AppComponent', () => {
+import {DfaCommonModule} from '../modules/_common/dfa-common.module';
+import {AppRoutingModule} from './app-routing.module';
+
+fdescribe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        AppRoutingModule,
+        DfaCommonModule
+      ],
       declarations: [
         AppComponent
       ],
     }).compileComponents();
   }));
+
+
   it('should create the app', async(() => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
