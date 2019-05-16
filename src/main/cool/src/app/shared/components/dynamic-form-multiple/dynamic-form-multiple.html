@@ -23,7 +23,7 @@
           <div class="btns-right pull-right flex-center-vertical">
             <!-- <a href="#" class="base-margin-right"><span class="icon-export--cool half-margin-right"></span> Export as .XLS</a> -->
             <button class="display-none"></button>
-            <button class="btn btn--primary" (click)='saveForm()'>Save</button>
+            <button class="btn btn--primary" [disabled]="itemNameInvalid" (click)='saveForm()'>Save</button>
             <button class="btn btn--secondary" (click)="confirmDialog()">Cancel</button>
             <a *ngIf="isItemCreation" href="javascript: void(0);" class="base-margin-right"
               (click)='downloadZip()'><span class="icon-export--cool half-margin-right"></span> Export as .XLS</a>
@@ -155,18 +155,26 @@
                             <td *ngSwitchCase="'Free Text'">
                               <div class="form-group input--compressed" *ngIf="i == 0">
                                 <div class="form-group__text">
-                                  <input [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'
-                                  [(ngModel)]="ques.value['title']=pInfo.currentValue" value="{{pInfo.currentValue}}" (blur)="trimSpaces(pInfo, $event)"
-                                  (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
-                                  [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
-                                  >
-                                </div>
+                                    <input [ngClass]="pInfo.currentValue !='' && (pInfo.rules.isvalid == false || (pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen)) && (itemName.dirty || itemName.touched) ? 'validaionStyles' : 'validaionStylesValid'"
+                                      [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'
+                                      [(ngModel)]="ques.value['title']=pInfo.currentValue" value="{{pInfo.currentValue}}"
+                                      (blur)="trimSpaces(pInfo, $event)"
+                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
+                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']" #itemName="ngModel">
+                                  </div>
+                                  <div class="tool-tip  slideIn"
+                                    *ngIf="pInfo.rules.validationMessage != '' && pInfo.rules.isvalid == false && (itemName.dirty || itemName.touched)">
+                                    <ul>
+                                      <li>{{pInfo.rules.validationMessage}}</li>
+                                    </ul>
+                                  </div>
                               </div>
                               <div class="form-group input--compressed" *ngIf="i !== 0">
                                 <div class="form-group__text" [class.has-error]="freeText.invalid"
                                   [class.has-success]="freeText.valid">
                                   <div class="on-focus clearfix">
-                                    <input [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' id=""
+                                    <input [ngClass]="pInfo.currentValue !='' && (pInfo.rules.isvalid == false || (pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen)) && (freeText.dirty || freeText.touched) ? 'validaionStyles' : 'validaionStylesValid'"
+                                      [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' id=""
                                       [(ngModel)]="pInfo.currentValue"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
@@ -223,7 +231,8 @@
                                 <div class="form-group__text" [class.has-error]="qafreeText.invalid"
                                   [class.has-success]="qafreeText.valid">
                                   <div class="on-focus clearfix">
-                                    <input [name]='item.egineAttribue_+parentIndex+ ChildIndex'
+                                    <input [ngClass]="(pInfo.currentValue !='' && (pInfo.rules.isvalid == false && pInfo.rules.validationMessage != '') || (pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen)) && (qafreeText.dirty || qafreeText.touched) ? 'validaionStyles' : 'validaionStylesValid'"
+                                    [name]='item.egineAttribue_+parentIndex+ ChildIndex'
                                       [(ngModel)]="pInfo.currentValue"
                                       [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'], ques.value['groupName'])"
@@ -513,7 +522,8 @@
                                 <div class="form-group__text" [class.has-error]="freeText.invalid"
                                   [class.has-success]="freeText.valid">
                                   <div class="on-focus clearfix">
-                                    <input [name]='item.egineAttribue_+parentIndex+ ChildIndex'
+                                    <input [ngClass]="pInfo.currentValue !='' && (pInfo.rules.isvalid == false || (pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen)) && (freeText.dirty || freeText.touched) ? 'validaionStyles' : 'validaionStylesValid'"
+                                      [name]='item.egineAttribue_+parentIndex+ ChildIndex'
                                       [(ngModel)]="pInfo.currentValue"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
@@ -577,7 +587,8 @@
                                 <div class="form-group__text" [class.has-error]="qafreeText.invalid"
                                   [class.has-success]="qafreeText.valid">
                                   <div class="on-focus clearfix">
-                                    <input [name]='item.egineAttribue_+parentIndex+ ChildIndex'
+                                    <input [ngClass]="(pInfo.currentValue !='' && (pInfo.rules.isvalid == false && pInfo.rules.validationMessage != '') || (pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen)) && (qafreeText.dirty || qafreeText.touched) ? 'validaionStyles' : 'validaionStylesValid'"
+                                      [name]='item.egineAttribue_+parentIndex+ ChildIndex'
                                       [(ngModel)]="pInfo.currentValue"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       class="form-control"
@@ -585,7 +596,7 @@
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                                       [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
-                                      #qafreeText="ngModel" class="form-control" placement="top"
+                                      #qafreeText="ngModel" placement="top"
                                       (mouseenter)="showError = true; " (mouseleave)="showError = false;">
                                     <div class="tool-tip  slideIn"
                                       *ngIf="qafreeText.invalid && (qafreeText.dirty || qafreeText.touched)">

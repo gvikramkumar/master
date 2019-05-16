@@ -50,4 +50,8 @@ export class OfferconstructCanvasService {
     return this.httpClient.post(this.environmentService.REST_API_GET_ICC_DETAILS_URL, iccRequest);
   }
 
+  validatePID(pid): Observable<any> {
+    return this.httpClient.get(this.environmentService.PDAF_ISVALID_EGINIE_PID + pid);
+  }
+
 }
