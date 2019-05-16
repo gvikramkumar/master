@@ -44,18 +44,15 @@ export class EnvironmentService {
     //  PDAF URLs
     REST_API_PRIMARY_URL: string;
     PDAF_SEARCH_EGINIE: string;
-
     PDAF_API: string;
     REST_API_PRIMARY_BUSINESS_UNIT_LULU_URL: string;
-
     REST_API_PRIMARY_BUSINESS_ENTITY_URL: string;
     REST_API_PRIMARY_BUSINESS_ENTITY_LULU_URL: string;
-
     REST_API_SECONDARY_BUSINESS_UNIT_LULU_URL: string;
     REST_API_SECONDARY_BUSINESS_UNIT_URL: string;
-
     REST_API_SECONDARY_BUSINESS_ENTITY_URL: string;
-
+    PDAF_ISVALID_EGINIE_PID: string;
+    
     // OFFER URL's
     REST_API_OFFER_STATUS: string;
     REST_API_OFFER_CREATE_URL: string;
@@ -255,7 +252,7 @@ export class EnvironmentService {
 
         this.REST_API_PRIMARY_URL = this.baseApiUrl + '/primaryBusiness/';
         this.PDAF_SEARCH_EGINIE = this.basePdafApiUrl + '/product/1.0/getPIDsdata?item_name=';
-
+        
         this.PDAF_API = this.basePdafApiUrl + '/mdm/1.0/hierarchy/getBUhierarchy';
         this.REST_API_PRIMARY_BUSINESS_UNIT_LULU_URL = this.basePdafApiUrl + '/mdm/1.0/hierarchy/getBUhierarchy?be=';
 
@@ -269,6 +266,7 @@ export class EnvironmentService {
 
         this.REST_API_SECONDARY_BUSINESS_ENTITY_URL = this.basePdafApiUrl + '/mdm/1.0/hierarchy/getBUhierarchy?business_unit=';
 
+        this.PDAF_ISVALID_EGINIE_PID = this.basePdafApiUrl + '/product/1.0/isPIDavailable?pid='; 
         // --------------------------------OFFER URL's------------------------------------------------------------
 
         this.REST_API_OFFER_STATUS = this.baseApiUrl + '/offer/flags/';
