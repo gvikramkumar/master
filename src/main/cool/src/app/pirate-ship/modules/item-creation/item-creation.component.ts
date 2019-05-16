@@ -643,6 +643,7 @@ export class ItemCreationComponent implements OnInit {
 
     this.productDetails = [...this.productDetails];
     this.itemCreationService.removeItemDetails(this.offerId, this.removeList).subscribe(response => {
+      this.selectedProductNodes.length = 0;
       this.itemCreationService.getOfferDropdownValues(this.offerId).subscribe(data => {
         this.offerDropdownValues = data;
         this.displaySelectedOffer('Overall Offer');
