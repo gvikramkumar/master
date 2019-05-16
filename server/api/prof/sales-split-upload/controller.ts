@@ -10,10 +10,4 @@ export default class SalesSplitUploadController extends ControllerBase {
     super(repo, pgRepo);
   }
 
-  mongoToPgSyncRecords(pgRemoveFilter, objs, userId, dfa) {
-    return this.pgRepo.syncRecordsReplaceAllWhereProps(pgRemoveFilter, ['accountId', 'companyCode', 'subaccountCode'],
-      objs, userId, true)
-      .then(results => results.recordCount);
-  }
-
 }

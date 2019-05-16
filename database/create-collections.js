@@ -12,14 +12,27 @@ print(uri);
 db = connect(uri);
 
 /*
+// uploads
+  'dfa_prof_dept_acct_map_upld', truncate/load
+  'dfa_prof_disti_to_direct_map_upld', truncate/load
+  'dfa_prof_input_amnt_upld', pkMongo: submeasureName, pkPg: truncate/load
+  'dfa_prof_manual_map_upld', pkMongo: submeasureName, pkPg: submeasureKey
+  'dfa_prof_sales_split_pctmap_upld', truncate/load
+  'dfa_prof_swalloc_manualmix_upld', pkMongo: submeasureName, pkPg: submeasureKey
+  'dfa_prof_scms_triang_altsl2_map_upld', truncate/load
+  'dfa_prof_scms_triang_corpadj_map_upld', truncate/load
+  'dfa_prof_service_map_upld', truncate/load
+  'dfa_prof_service_trngsplit_pctmap_upld', truncate/load
+
 // rollover tables
-fpadfa.dfa_prof_disti_to_direct_map_upld // autosync: replace all
-fpadfa.dfa_prof_manual_map_upld // autosync: insert/update
-fpadfa.dfa_prof_sales_split_pctmap_upld // autosync: insert/update
-fpadfa.dfa_prof_swalloc_manualmix_upld // autosync: insert/update
-fpadfa.dfa_prof_scms_triang_altsl2_map_upld // autosync: replace all
-fpadfa.dfa_prof_scms_triang_corpadj_map_upld // autosync: insert/update
+  fpadfa.dfa_prof_disti_to_direct_map_upld
+  fpadfa.dfa_prof_manual_map_upld
+  fpadfa.dfa_prof_sales_split_pctmap_upld
+  fpadfa.dfa_prof_swalloc_manualmix_upld
+  fpadfa.dfa_prof_scms_triang_altsl2_map_upld
+  fpadfa.dfa_prof_scms_triang_corpadj_map_upld
  */
+
 
 // this is a case INsensitive database because of this collation setting we do. All collections
 // have to be added to this and go through this collation setting, either here or in an update.
