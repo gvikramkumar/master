@@ -5,3 +5,5 @@
 /target
 /src/main/webapp/*
 /node_installation/*
+/package-lock.json
+/src/main/cool/package-lock.json
