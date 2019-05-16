@@ -469,7 +469,6 @@ export class MmAssesmentComponent implements OnInit {
       if (attribute.type === 2 && attribute.status === -1) {
         attribute.type = 0;
         this.canClickNextStep = false;
-        return;
       }
       attribute.status = -attribute.status;
 
