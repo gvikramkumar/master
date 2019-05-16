@@ -23,7 +23,7 @@
 
               <div class="pull-left" *ngIf="showDesignCanvasButton">
                 <button class="btn btn--primary btn--cool btn--small tooltip" placement="top"
-                  (click)="goToDesignCanvas()" [disabled]="disableDesignCanvasButton">
+                  (click)="goToDesignCanvas()" [disabled]="!disableDesignCanvasButton">
                   Go To Design Canvas <i class="icon-popout"></i>
                 </button>
               </div>
