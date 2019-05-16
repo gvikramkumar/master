@@ -46,7 +46,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     @Input() indexVal;
     @Input() isItemCreation: boolean;
     eGenieAlert:boolean;
-
+    itemNameInvalid: Boolean = false;
     constructor(public offerConstructService: OfferConstructService,
         private offerConstructCanvasService: OfferconstructCanvasService,
         private loaderService: LoaderService,
@@ -60,7 +60,7 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.offerInfo = this.offerConstructService.singleMultipleFormInfo;
         this.majorOfferInfo = this.offerInfo.major;
         this.minorOfferInfo = this.offerInfo.minor;
-
+        
         this.tableShowCondition = true;
         this.selectedTab = 'major';
         this.createObjectForSearch();
@@ -611,6 +611,20 @@ export class DynamicFormMultipleComponent implements OnInit {
                     question.rules.isvalid = true;
                 }
             }
+        }else{
+            this.itemNameInvalid = true;
+            this.offerConstructCanvasService.validatePID(question.currentValue).subscribe((data) => {
+                if(data.length > 0){
+                    question.rules.validationMessage = "Item name already exists, please remove this item if no longer needed and add the correct new or existing item";
+                    question.rules.isvalid = false;
+                    this.itemNameInvalid = true;
+                }else{
+                    question.rules.validationMessage = "";
+                    question.rules.isvalid = true;
+                    this.itemNameInvalid = false;
+                }
+            });
+           
         }
 
     }
