@@ -19,12 +19,12 @@
 
           <div class="row base-margin-top">
 
-              <div class="col-md-6" *ngIf="mStatus.status!=='Complete'">
+              <div class="col-md-6" *ngIf="!mStatus">
                 <button class="btn btn--small btn--primary" (click)="markAsCompleteModal()">Mark as Complete</button>
               </div>
 
 
-            <div class="col-md-9" *ngIf="mStatus.status==='Complete'">
+            <div class="col-md-9" *ngIf="mStatus && mStatus.status==='Complete'">
               <button type="button" class="btn btn--small btn--green-ghost"><span class="text-align:right;"><span class="icon-check-outline icon-small"></span></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Complete</button>
             </div>
             <!--<span class="label label--success label--outlined"><span class="icon-check-outline icon-small"></span> succe2ss</span>
