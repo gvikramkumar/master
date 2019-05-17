@@ -39,7 +39,6 @@ export class ItemCreationComponent implements OnInit {
   removeList: any;
   offerName: string;
   offerOwner: string;
-
   primaryBE: string;
   derivedMM: string;
   displayLeadTime = false;
@@ -610,11 +609,21 @@ export class ItemCreationComponent implements OnInit {
       dropdownValue = 'ALL';
     }
     this.itemCreationService.getItemDetails(this.offerId, dropdownValue).subscribe(response => {
-      this.productDetails = response.data;
+      this.productDetails = this.addingUniqueKey(response.data)
       this.loaderService.stopLoading();
     })
   }
-
+  addingUniqueKey(array){
+    let offerList  = 0;
+    return array.map(function(item, index) {
+      if(item.children.length>0){
+          item.children.map(function(i, ix) {
+            i.data['id'] = offerList++; return i;
+         })
+      }
+      item.data['id'] = offerList++; return item;
+    });
+  }
   removeProductDetails() {
     this.removeList = [];
     if (this.selectedProductNodes.length) {
