@@ -223,9 +223,10 @@ export class ChangestatusComponent implements OnInit {
 
     this.changestatusService.updateStatus(data).subscribe(obj => {
       this.moduleOfStatus = obj;
+      this.mStatus = obj;
     });
     this.ishide = !this.ishide;
-    this.mStatus.status = 'Complete';
+    //this.mStatus.status = 'Complete';
   }
 
   /**
