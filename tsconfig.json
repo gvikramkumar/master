@@ -15,7 +15,7 @@
             ]
         },
 
-      "lib": ["es6", "es2015", "es2017"],
+      "lib": ["es6", "es2015", "es2017", "dom"],
       "types": ["reflect-metadata", "node", "jasmine"],
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true,

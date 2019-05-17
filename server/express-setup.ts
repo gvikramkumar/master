@@ -89,7 +89,7 @@ export default function () {
     // console.log('>>>>>> served index.html');
     res.sendFile(path.resolve(__dirname, '../../ui/dist/index.html'));
   });
-
+if (config.env !== 'unit') {
   app.use(morgan(function (tokens, req, res) {
     return [
       new Date().toISOString(),
@@ -101,6 +101,8 @@ export default function () {
       tokens['response-time'](req, res), 'ms'
     ].join(' ');
   }));
+}
+
 
 /*
   app.get('/cause-error', function (req, res, next) {

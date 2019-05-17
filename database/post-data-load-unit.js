@@ -1,6 +1,6 @@
 const conn = new Mongo(host + ':' + port);
 const db = conn.getDB(_db);
-db.dfa_user.insertOne({
+db.dfa_user.insertMany([{
   "roles" : [
     "it administrator"
   ],
@@ -8,7 +8,17 @@ db.dfa_user.insertOne({
   "fullName" : "John Doe",
   "email" : "jodoe@cisco.com",
   "updatedDate" : ISODate("2019-04-14T21:11:26.366Z"),
-});
+},
+  {
+    "roles" : [
+      "it administrator"
+    ],
+    "userId" : "khisyed",
+    "fullName" : "Khizer Syed",
+    "email" : "khisyed@cisco.com",
+    "updatedDate" : ISODate("2019-04-14T21:11:26.366Z"),
+  }
+]);
 
 db.dfa_submeasure.insertMany([
   {

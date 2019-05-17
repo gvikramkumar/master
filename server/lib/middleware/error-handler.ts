@@ -3,6 +3,7 @@ import {pgc} from '../database/postgres-conn';
 import {ApiError} from '../common/api-error';
 import AnyObj from '../../../shared/models/any-obj';
 import {DisregardError} from '../common/disregard-error';
+import config from '../../config/get-config';
 
 /**
  * errorHandler
@@ -60,7 +61,9 @@ export function errorHandler (options) {
         obj.data = Object.assign(data, obj.data);
       }
     }
-    console.error(obj);
+    if (config.env !== 'unit') {
+      console.error(obj);
+    }
     if (!res.headersSent) {
       res.status(statusCode).send(obj);
     }
