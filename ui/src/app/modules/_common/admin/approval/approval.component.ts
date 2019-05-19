@@ -120,12 +120,11 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
           this.uiUtil.promptDialog('Add approval comments', null, DialogInputType.textarea)
             .subscribe(resultPrompt => {
               if (resultPrompt !== 'DIALOG_CANCEL') {
-                const promises = [];
-                for (let i = 0; i < this.ruleSelection.selected.length; i++) {
-                  this.ruleSelection.selected[i].approveRejectMessage = resultPrompt;
-                  promises.push(this.ruleService.approve(this.ruleSelection.selected[i]).toPromise());
-                }
-                Promise.all(promises)
+                const arr = [];
+                this.ruleSelection.selected.forEach(rule => {
+                  rule.approveRejectMessage = resultPrompt;
+                })
+                this.ruleService.approveMany(this.ruleSelection.selected).toPromise()
                   .then(result => {
                     this.uiUtil.toast('Rule(s) approved, user(s) notified.');
                     this.refreshRules();
@@ -144,11 +143,10 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
             .subscribe(resultPrompt => {
               if (resultPrompt !== 'DIALOG_CANCEL') {
                 const promises = [];
-                for (let i = 0; i < this.submeasureSelection.selected.length; i++) {
-                  this.submeasureSelection.selected[i].approveRejectMessage = resultPrompt;
-                  promises.push(this.submeasureService.approve(this.submeasureSelection.selected[i]).toPromise());
-                }
-                Promise.all(promises)
+                this.submeasureSelection.selected.forEach(sm => {
+                  sm.approveRejectMessage = resultPrompt;
+                })
+                this.submeasureService.approveMany(this.submeasureSelection.selected).toPromise()
                   .then(result => {
                     this.uiUtil.toast('Submeasure(s) approved, user(s) notified.');
                     this.refreshSubmeasures();

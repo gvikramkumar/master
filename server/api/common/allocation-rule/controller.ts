@@ -10,6 +10,7 @@ import {shUtil} from '../../../../shared/misc/shared-util';
 import _ from 'lodash';
 import AnyObj from '../../../../shared/models/any-obj';
 import {ruleUtil} from '../../../../shared/misc/rule-util';
+import {SelectExceptionMap} from '../../../../shared/classes/select-exception-map';
 
 @injectable()
 export default class AllocationRuleController extends ApprovalController {
@@ -120,13 +121,16 @@ export default class AllocationRuleController extends ApprovalController {
     return this.sendApprovalEmailBase(req, mode, item, 'rule', omitProperties);
   }
 
-  preApproveStep(data, firstTimeApprove, req) {
-    // we only check for duplicate names in active/inactive, NOT pending, someone could get theirs approved before yours, if so, you get an error
-    return this.repo.getManyLatestGroupByNameActiveInactive(req.dfa.module.moduleId)
-      .then(rules => {
-        if (firstTimeApprove && _.find(rules, {name: data.name})) {
-          throw new ApiError(`Rule name already exists: ${data.name}.`);
-        }
+  approveValidate(approvalItems, req) {
+    return super.approveValidate(approvalItems, req)
+      .then(aiItems => {
+        return this.repo.getManyLatestGroupByNameActiveInactiveConcatDraftPending(req.dfa.moduleId)
+          .then(aidpItems => {
+            const selectMap = new SelectExceptionMap();
+            // this will crash if there are any clashes in exceptions. This should never happen, but we need to know if it does and this
+            // and the rule edit page are both good places to verify.
+            selectMap.parseRules(aidpItems.concat(approvalItems));
+          });
       });
   }
 

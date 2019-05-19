@@ -27,6 +27,12 @@ export class ApprovalRestBase<T extends AnyObj> extends RestBase<T> {
     return this.callMethod('submitForApproval', data, params);
   }
 
+  approveMany(arr) {
+    const params: AnyObj = {};
+    params.showProgress = true;
+    return this.callMethod('approveMany', arr, params);
+  }
+
   approve(data) {
     const params: AnyObj = {};
     params.showProgress = true;

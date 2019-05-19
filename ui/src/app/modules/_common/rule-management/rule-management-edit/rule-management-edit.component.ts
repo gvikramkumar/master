@@ -132,6 +132,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         this.rule.period = this.rule.period || this.periods[0].period;
         if (this.copyMode) {
           this.rule.approvedOnce = 'N';
+          this.rule.status = 'D';
           delete this.rule.createdBy;
           delete this.rule.createdDate;
         }

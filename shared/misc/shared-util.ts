@@ -18,8 +18,22 @@ export const shUtil = {
   isDeptUploadMeasure,
   fiscalYearFromFiscalMonth,
   isManualMix,
-  convertToPSTTime
+  convertToPSTTime,
+  findDuplicatesByProperty
 };
+
+function findDuplicatesByProperty(arr, prop) {
+  const obj = {};
+  const dups = [];
+  arr.forEach(item => {
+    if (obj[prop]) {
+      dups.push(prop);
+    } else {
+      obj[prop] = 1;
+    }
+  });
+  return _.uniq(dups);
+}
 
 function fiscalYearFromFiscalMonth(fimo) {
   return Number(fimo.toString().substr(0, 4));

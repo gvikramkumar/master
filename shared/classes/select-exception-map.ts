@@ -65,7 +65,7 @@ export class SelectExceptionMap {
         const selectArr = this.getSelectArrayFromRule(prefix, rule);
         if (entry) {
           if (!this.verifyEntryInMapArray(entry, selectArr)) {
-            throw new Error(`SelectExceptionMap.parseRuleName: Bad selectArr in ${prefix}Map: ${selectArr}, index: ${idx}`);
+            throw new Error(`Duplicate rule select exception for rule: ${rule.name}, exception: ${ex}.`);
           }
         } else {
           map.push(new SelectExceptionIndexMap(selectArr, idx));

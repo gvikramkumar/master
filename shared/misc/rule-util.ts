@@ -173,7 +173,8 @@ function parseSelect(str) {
   return rtn;
 }
 
-function createSelect(cond, choices) {
+function createSelect(cond, _choices) {
+  const choices = _.uniq(_choices);
   let sql = ` ${cond} ( `;
   choices.forEach((choice, idx) => {
     sql += `'${choice.trim()}'`;

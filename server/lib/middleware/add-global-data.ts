@@ -34,6 +34,10 @@ export class ApiDfaData {
     this._module = module;
   }
 
+  get moduleId() {
+    return this.module.moduleId;
+  }
+
   get itadminEmail() {
     return svrUtil.getEnvEmail(this._itadminEmail);
   }
@@ -64,10 +68,6 @@ export class ApiDfaData {
 
   set ppmtEmail(email) {
     this._ppmtEmail = email;
-  }
-
-  get moduleId() {
-    return this.module.moduleId;
   }
 
 }

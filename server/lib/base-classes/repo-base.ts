@@ -175,6 +175,28 @@ export default class RepoBase {
     return this.getOneLatest(filter);
   }
 
+  getManyLatestGroupByNameActiveInactiveConcatDraftPending(moduleId) {
+    return Promise.all([
+      this.getManyLatestGroupByNameActiveInactive(moduleId),
+      this.getMany({
+        status: {$in: ['D', 'P']},
+        moduleId: moduleId})
+    ])
+      .then(results => results[0].concat(results[1]));
+  }
+
+  getManyLatestGroupByNameActiveInactiveConcatDraftPendingOfUser(moduleId, userId) {
+    return     Promise.all([
+      this.getManyLatestGroupByNameActiveInactive(moduleId),
+      this.getMany({
+        status: {$in: ['D', 'P']},
+        createdBy: userId,
+        moduleId
+      })
+    ])
+      .then(results => results[0].concat(results[1]));
+  }
+
   getOneWithTimestamp(data) {
     const query = this.Model.findOne({_id: data.id});
     if (this.hasCreatedBy()) {
