@@ -1,21 +1,28 @@
 <div class="content">
-  <div class="container">
+    <div class="panel panel--ltgray panel--compressed">
+        <div class="container">
     <div class="row">
-      <div class="col-md-12">
-        <h1 class="display-4 base-margin-top half-margin-bottom">{{offerName}}<span class="offerID">(Offer ID
-            {{currentOfferId}})</span></h1>
+        <div class="col-md-12">
+          <h1 class="display-4 base-margin-top half-margin-bottom">{{offerName}}<span class="offerID">(Offer ID
+              {{currentOfferId}})</span></h1>
+        </div>
+      </div>
       </div>
     </div>
-    <div class="panel panel--indigo panel--compressed task--bar">
+  <div class="container">
+
+    <div class="panel panel--compressed task--bar base-margin-top">
       <div class="row">
         <div class="col-md-4">
-          <h2 class="page--subheading"><button class="btn--back btn btn--icon btn--white" (click)="goBack()"><span
-                class="icon-back"></span></button>
+          <h2 class="page--subheading">
+
             Offer Detail Overview</h2>
         </div>
         <div class="col-md-8 text-right">
-          <button class="btn btn--white" (click)="onExportPdf()">Export&nbsp;<span
-              class="icon-right-arrow"></span></button>
+            <button class="btn btn--secondary" (click)="goBack()"><span
+              class="icon-back"></span>&nbsp; Previous</button>
+          <button class="btn btn--primary" (click)="onExportPdf()">Export&nbsp;<span
+              class="icon-right-arrow" style="color:white;"></span></button>
         </div>
       </div>
     </div>
