@@ -6,6 +6,7 @@ import { DashboardService } from '@shared/services';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { HAMMER_LOADER } from '@angular/platform-browser';
 import { CsdlIntegrationService } from '@app/services/csdl-integration.service';
+import { CsdlPayload } from '../model/csdl-payload';
 
 @Component({
   selector: 'app-csdl-platform',
@@ -41,6 +42,7 @@ export class CsdlPlatformComponent implements OnInit {
   refreshStatus: Boolean = false;
   cols: any[];
   selectedAto: any;
+  productFamilyAnswer;
   csdlData = [
     {csdlId: '29385971', stopShip: 'False', enforcement: 'Hard', latestStatusUpdate: '05-Aug-2019 2:00pm'}
   ];
@@ -133,6 +135,15 @@ export class CsdlPlatformComponent implements OnInit {
 
       }
       this.stakeData = this.stakeHolderInfo;
+
+      this.firstData['solutioningDetails'].forEach(element => {
+        element.Details.forEach(ele => {
+          if (ele.egenieAttributeName === 'Product Family') {
+            this.productFamilyAnswer = ele.solutioningAnswer;
+          }
+        });
+      });
+
     });
   }
 
@@ -151,9 +162,26 @@ export class CsdlPlatformComponent implements OnInit {
     this.csdlRequired = false;
   }
 
-  onSubmit() {
+  submitCsdlAssociation() {
     this.displayNewCsdlIdDailog = false;
     this.displayIdCreationDailog = true;
+    const csdlPayload = new CsdlPayload(
+      this.currentOfferId,
+      this.offerName,
+      'YES',
+      this.productFamilyAnswer,
+      'John Smith',
+      this.derivedMM
+    );
+    this.createCsdlAssociation(csdlPayload);
+  }
+
+  createCsdlAssociation(csdlPayload: CsdlPayload) {
+    this.csdlIntegrationService.createCsdlAssociation(csdlPayload).subscribe(data => {
+    },
+    (err) => {
+      console.log(err);
+    });
   }
 
   onContinue() {

@@ -16,14 +16,15 @@
                 <h3 style="color: mediumblue">Is CSDL Required?</h3>
                 <p>Cisco products and solutions are in the majority of enterprise,<br>
                   service provider, government, and commercial entities around the world.<br>
-                  This means Cisco offerings are consistent targets for miscreant hackers and nation-state attacks as well.<br>
+                  This means Cisco offerings are consistent targets for miscreant hackers and nation-state attacks as
+                  well.<br>
                   Employing the processes and tools of CSDL helps Cisco reduce security risks,<br>
                   mitigate key vulnerabilities, and better meet customer demands for a more-secure product.<br>
                   To learn more about CSDL, <a (click)="onOpenCsdlTab()">click here.</a></p>
               </div>
             </div>
             <div class="row">
-              <div class="col-md-12">
+              <div class="col-md-12" *ngIf="derivedMM !== 'MM6'">
                 <div class="form-group form-group--inline">
                   <label class="radio">
                     <input type="radio" name="inline-regular-radio" (change)="onCsdlRequired($event)">
@@ -39,9 +40,25 @@
                   </label>
                 </div>
               </div>
+              <div class="col-md-12" *ngIf="derivedMM === 'MM6'">
+                <div class="form-group form-group--inline">
+                  <label class="radio">
+                    <input type="radio" name="inline-regular-radio" checked>
+                    <span class="radio__input"></span>
+                    <span class="radio__label">Yes</span>
+                  </label>
+                </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="form-group form-group--inline">
+                  <label class="radio disabled">
+                    <input type="radio" name="inline-regular-radio">
+                    <span class="radio__input"></span>
+                    <span class="radio__label">No</span>
+                  </label>
+                </div>
+              </div>
             </div><br>
             <div class="divider divider--compressed"></div><br>
-            <div class="row" *ngIf="csdlRequired">
+            <div class="row" *ngIf="derivedMM === 'MM6' || csdlRequired">
               <div class="col-md-12">
                 <div class="panel panel--ltgray panel--loose">
                   <div class="row">
@@ -50,9 +67,10 @@
                         <div class="col-md-6">
                           <div class="form-group half-margin-bottom">
                             <div class="form-group__text">
-                              <p-autoComplete formControlName="csdlId" [(ngModel)]="selectedProject" class="form-control" [size]="100" field="csdlId"
-                                [minLength]="3" scrollHeight="150px" placeholder="Search by CSDL ID or Project Name" [suggestions]="results" (completeMethod)="searchProjectNames($event)" field="project_id"
-                                required>
+                              <p-autoComplete formControlName="csdlId" [(ngModel)]="selectedProject"
+                                class="form-control" [size]="100" field="csdlId" [minLength]="3" scrollHeight="150px"
+                                placeholder="Search by CSDL ID or Project Name" [suggestions]="results"
+                                (completeMethod)="searchProjectNames($event)" field="project_id" required>
                                 <ng-template pTemplate="body" let-item>
                                   <tbody>
                                     <tr>
@@ -72,7 +90,8 @@
                           <span class="icon-refresh">Refresh Latest Search Data</span>
                         </div>
                         <div class="col-md-2 task--bar">
-                          <button class="btn btn--primary" type="submit" [disabled]="!csdlForm.valid" (click)="clickSubmit()">Submit</button>
+                          <button class="btn btn--primary" type="submit" [disabled]="!csdlForm.valid"
+                            (click)="clickSubmit()">Submit</button>
                         </div>
                         <div class="col-md-4 task--bar">
                           <button class="btn btn--primary" type="submit" (click)="createNewCsdlIdDailog()">Create New
@@ -185,10 +204,10 @@
       <div class="row" style="margin-top: 30px">
         <div class="col-md-12 text-center">
           <div class="row">
-            <span>Product Family: Xaas</span>
+            <span>Product Family: {{ productFamilyAnswer }}</span>
           </div>
           <div class="row">
-            <span>Offer Name: Extra Long Super Duper Offer Name</span>
+            <span>Offer Name: {{ offerName }}</span>
           </div>
           <div class="row">
             <span>Business Unit contact: John Smith</span>
@@ -197,7 +216,7 @@
       </div>
       <div class="row" style="margin-top: 75px">
         <div class="col-md-12 text-center task--bar">
-          <button class="btn btn--primary" type="submit" (click)="onSubmit()">Submit</button>
+          <button class="btn btn--primary" type="submit" (click)="submitCsdlAssociation()">Submit</button>
         </div>
       </div>
     </p-dialog>

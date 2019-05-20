@@ -141,7 +141,8 @@ export class EnvironmentService {
 
     // -------------------------------------------------------------------------------------------------
     // CSDL URLs
-    REST_API_GET_ALL_PROJECTS:string;
+    REST_API_GET_ALL_PROJECTS: string;
+    REST_API_POST_CREATE_CSDL_ASSOCIATION: string;
 
 
         //SERVICE FOR BASIC MODULES URLs - NPI
@@ -399,6 +400,7 @@ export class EnvironmentService {
         // -------------------------------------------------------------------------------------------------
         // -------------------------------------- CSDL -------------------------------------
         this.REST_API_GET_ALL_PROJECTS = this.siUrl + '/projects';
+        this.REST_API_POST_CREATE_CSDL_ASSOCIATION = this.baseApiUrl + '/csdl/persistCsdlInfo';
 
          // --------------------------------------- BASIC MODULES - NPI Licensing ----------------------------------------------
          this.REST_API_GET_ALL_COMMENTS_NPI_URL = this.baseApiUrl + '/pirateship/module/getNPILicensingComment';

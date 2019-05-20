@@ -2,6 +2,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EnvironmentService } from '../../environments/environment.service';
+import { CsdlPayload } from '@app/pirate-ship/modules/csdl/model/csdl-payload';
 
 @Injectable({
     providedIn: 'root',
@@ -17,5 +18,9 @@ export class CsdlIntegrationService {
           'Content-Type': 'application/json'
         })
       });
+  }
+
+  createCsdlAssociation(csdlPayload: CsdlPayload): Observable<any> {
+    return this._http.post(this.environmentService.REST_API_POST_CREATE_CSDL_ASSOCIATION, csdlPayload, { withCredentials: true });
   }
 }
