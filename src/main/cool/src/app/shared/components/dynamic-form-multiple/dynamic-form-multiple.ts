@@ -46,6 +46,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     @Input() indexVal;
     @Input() isItemCreation: boolean;
     eGenieAlert:boolean;
+    createdeGenie:boolean;
     itemNameInvalid: Boolean = false;
     constructor(public offerConstructService: OfferConstructService,
         private offerConstructCanvasService: OfferconstructCanvasService,
@@ -131,6 +132,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     }
     eGenieDefault(q){
         if(q.value.eGenieFlag){this.eGenieAlert = true}
+        if(q.value.newItemEGenieStatus){this.createdeGenie = true}
     }
     onShowDialog(){
         this.closeDialogAction = 1;

@@ -6,6 +6,7 @@ import { CreateOfferService } from '@shared/services';
 import { HeaderService } from '../../services/header.service';
 import { UserService } from '../../services/user.service';
 import { ConfigurationService } from '../../services/configuration.service';
+import {PirateShipSharedService} from '@app/services/pirate-ship-shared.service';
 
 
 
@@ -60,14 +61,17 @@ export class HeaderComponent implements OnInit {
   }
 
   constructor(private headerService: HeaderService, private router: Router,
+    private _pirshipService: PirateShipSharedService,
     private userService: UserService,
     private createOfferService: CreateOfferService,
     private startupService: ConfigurationService, private sharedService: SharedService) {
 
     this.headerService.getCurrentUser().subscribe((user: any) => {
       this.userId = user;
+      this._pirshipService.setUserId(this.userId);
       this.headerService.getUserInfo(user).subscribe((data: any) => {
         this.userName = data[0].cn;
+        this._pirshipService.setUserName(this.userName);
       });
 
       this.hasAdminAccess = this.startupService.startupData['hasAdminAccess'];
@@ -103,10 +107,4 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  /**
-   * Logic when user closes the panel.
-   */
-  onClickedOutside() {
-
-  }
 }

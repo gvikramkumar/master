@@ -38,8 +38,6 @@
                           [ngClass]="(offerOverviewDetailsList.ideate[0].status == 'Completed')?'icon-chevron-down icon-small':'icon-chevron-up icon-small'"></span>
                         {{offerOverviewDetailsList.ideate[0].subMilestone}}
                       </div>
-                      <app-offer-create-detail [hidden]="offerOverviewDetailsList.ideate[0].status != 'Completed'">
-                      </app-offer-create-detail>
                     </div>
                   </div>
                   <div class="timeline__item" *ngIf="offerOverviewDetailsList.ideate[1]?.status != null">

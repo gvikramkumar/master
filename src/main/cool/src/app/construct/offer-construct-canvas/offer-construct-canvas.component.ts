@@ -112,6 +112,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   private buttonId;
   private isMinorDragDrop: boolean = false;
   private billing_soa = "Billing SOA SKU";
+  private counterList: any = [];
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -1262,6 +1263,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     const obj = Object.create(null);
     obj['uniqueKey'] = node.constructNodeId;
     this.counter = Number(node.constructNodeId);
+    this.counterList.push(this.counter);
     obj['productName'] = node.constructType;
     obj['isGroupNode'] = node.groupNode;
     obj['label'] = node.constructItemName;
@@ -1301,6 +1303,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     const obj = Object.create(null);
     obj['uniqueKey'] = childNode.constructNodeId;
     this.counter = Number(childNode.constructNodeId);
+    this.counterList.push(this.counter);
     obj['productName'] = childNode.constructType;
     obj['isGroupNode'] = childNode.groupNode;
     obj['label'] = childNode.constructItemName;
@@ -1358,6 +1361,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
         });
       }
     });
+    this.counter = Math.max(...this.counterList);
     this.updateChildCount();
   }
 
@@ -1796,8 +1800,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
         // if (Object.keys(element) == title) {
         this.changeItemDetails(true, element[title]);
         this.offerConstructItems.forEach(e => {
-          if(e.data.uniqueKey===element[title].uniqueKey)
-            {e.data.title = e.data.label = element[title].title;}
+          if (e.data.uniqueKey === element[title].uniqueKey) { e.data.title = e.data.label = element[title].title; }
         });
         // }
       });
@@ -1811,9 +1814,9 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
         title = Object.keys(element);
         this.changeItemDetails(false, element[title]);
         this.offerConstructItems.forEach(major => {
-          if(major['children'].length>0){
+          if (major['children'].length > 0) {
             major['children'].forEach(e => {
-              if(e.data.uniqueKey===element[title].uniqueKey){
+              if (e.data.uniqueKey === element[title].uniqueKey) {
                 e.data.title = e.data.label = element[title].title;
               }
             });
