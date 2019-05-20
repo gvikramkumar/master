@@ -39,7 +39,7 @@
               <app-share-modal [ishide]="ishide" (changestatus)="changemodalstatus()" >
                 <div modalbody>
                   <!--{{infohelp}}-->
-                  <div [innerHTML]="infohelp"></div>
+                  <div style="white-space: normal; text-align: left;" [innerHTML]="infohelp"></div>
                   <div *ngIf="isBtnNeeded">
                     <button class="btn btn--small btn--primary" (click)="markAsComplete()" (changestatus)="changemodalstatus()">Continue</button>
                   </div>
