@@ -281,7 +281,7 @@ export class OfferSetupComponent implements OnInit {
 
         break;
       }
-      case 'Testing' : {
+      case 'Test Orderability' : {
         this.router.navigate([appRoutesNames.PIRATE_SHIP,
           this.offerId,
           this.caseId,
@@ -290,7 +290,7 @@ export class OfferSetupComponent implements OnInit {
 
         break;
       }
-      case 'Pricing Uplift' : {
+      case 'Pricing Uplift Setup' : {
         this.router.navigate([appRoutesNames.PIRATE_SHIP,
           this.offerId,
           this.caseId,
