@@ -250,6 +250,60 @@ export class OfferSetupComponent implements OnInit {
         this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.TC_MAPPING, this.selectedAto]);
         break;
       }
+      case 'NPI Licensing': {
+        this.router.navigate([appRoutesNames.PIRATE_SHIP,
+          this.offerId,
+          this.caseId,
+          pirateShipRoutesNames.CHANGE_STATUS,
+          this.selectedAto, element.moduleName]);
+
+        break;
+      }
+      case 'Royalty Setup' : {
+        this.router.navigate([appRoutesNames.PIRATE_SHIP,
+          this.offerId,
+          this.caseId,
+          pirateShipRoutesNames.CHANGE_STATUS,
+          this.selectedAto, element.moduleName]);
+
+        break;
+      }
+      case 'Offer Attribution' : {
+        this.router.navigate([appRoutesNames.PIRATE_SHIP,
+          this.offerId,
+          this.caseId,
+          pirateShipRoutesNames.CHANGE_STATUS,
+          this.selectedAto, element.moduleName]);
+
+        break;
+      }
+      case 'Export Compliance' : {
+        this.router.navigate([appRoutesNames.PIRATE_SHIP,
+          this.offerId,
+          this.caseId,
+          pirateShipRoutesNames.CHANGE_STATUS,
+          this.selectedAto, element.moduleName]);
+
+        break;
+      }
+      case 'Testing' : {
+        this.router.navigate([appRoutesNames.PIRATE_SHIP,
+          this.offerId,
+          this.caseId,
+          pirateShipRoutesNames.CHANGE_STATUS,
+          this.selectedAto, element.moduleName]);
+
+        break;
+      }
+      case 'Pricing Uplift' : {
+        this.router.navigate([appRoutesNames.PIRATE_SHIP,
+          this.offerId,
+          this.caseId,
+          pirateShipRoutesNames.CHANGE_STATUS,
+          this.selectedAto, element.moduleName]);
+
+        break;
+      }
     }
   }
 

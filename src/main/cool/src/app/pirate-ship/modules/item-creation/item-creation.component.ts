@@ -39,7 +39,6 @@ export class ItemCreationComponent implements OnInit {
   removeList: any;
   offerName: string;
   offerOwner: string;
-
   primaryBE: string;
   derivedMM: string;
   displayLeadTime = false;
@@ -138,9 +137,13 @@ export class ItemCreationComponent implements OnInit {
 
     });
 
+    this.initDynamicFormDetails();
+   
+  }
 
-    //Update my flag if ATO uploaded into EGENIE
-    this.offerConstructService.updateNewEgenieFlag(this.currentOfferId).subscribe(response => {
+  initDynamicFormDetails(){
+     //Update my flag if ATO uploaded into EGENIE
+     this.offerConstructService.updateNewEgenieFlag(this.currentOfferId).subscribe(response => {
       // Prepare payload to fetch item categories. Obtain MM information.
       this.offerConstructCanvasService.getMMInfo(this.currentOfferId).subscribe((offerDetails) => {
 
@@ -606,11 +609,21 @@ export class ItemCreationComponent implements OnInit {
       dropdownValue = 'ALL';
     }
     this.itemCreationService.getItemDetails(this.offerId, dropdownValue).subscribe(response => {
-      this.productDetails = response.data;
+      this.productDetails = this.addingUniqueKey(response.data)
       this.loaderService.stopLoading();
     })
   }
-
+  addingUniqueKey(array){
+    let offerList  = 0;
+    return array.map(function(item, index) {
+      if(item.children.length>0){
+          item.children.map(function(i, ix) {
+            i.data['id'] = offerList++; return i;
+         })
+      }
+      item.data['id'] = offerList++; return item;
+    });
+  }
   removeProductDetails() {
     this.removeList = [];
     if (this.selectedProductNodes.length) {
@@ -639,7 +652,12 @@ export class ItemCreationComponent implements OnInit {
 
     this.productDetails = [...this.productDetails];
     this.itemCreationService.removeItemDetails(this.offerId, this.removeList).subscribe(response => {
-
+      this.selectedProductNodes.length = 0;
+      this.itemCreationService.getOfferDropdownValues(this.offerId).subscribe(data => {
+        this.offerDropdownValues = data;
+        this.displaySelectedOffer('Overall Offer');
+      });
+      this.initDynamicFormDetails();
     });
   }
 

@@ -141,15 +141,15 @@
                                 <span (focusout)='editData=true' (click)='enableEdit()'>
                                   <input (keyup)="onValidateChars($event)" maxlength="18" [id]='rowData["uniqueKey"]'
                                          autocomplete="off" (click)='showButton($event, rowData["uniqueKey"]);'
-                                         (change)="handleChange(rowData, $event)" class='text-input-box' type='text'
-                                         [disabled]="editData ? true : null" value="{{rowData['title']}}"
+                                         (change)="handleChange(rowData, $event)" (blur)="trimSpaces(rowData, $event)" class='text-input-box' type='text'
+                                         [disabled]="rowData['newItemEGenieStatus'] || (editData ? true : null)" value="{{rowData['title']}}"
                                          [autofocus]='autoFocus' *ngIf="!rowData['eginieItem']">
                                   <a *ngIf="rowData['eginieItem']">{{rowData['title']}}</a>
                                   <span *ngIf="rowData['isMajorLineItem']"> ({{rowData['childCount']}})</span>
                                   <span [id]='rowData["uniqueKey"]'
                                         (click)='focusMethod(rowData["uniqueKey"]);showButton($event, rowData["uniqueKey"]);'
                                         class="half-margin-right icon-edit"
-                                        *ngIf="!rowData['eginieItem && !readOnly']"></span>
+                                        *ngIf="!rowData['eginieItem'] && !readOnly"></span>
                                   <a [id]='rowData["uniqueKey"]'
                                      *ngIf='buttonId == rowData["uniqueKey"] && showButtons && !readOnly'
                                      (click)='saveData(rowNode)'>&nbsp;&nbsp;Save&nbsp;&nbsp;|</a>
