@@ -102,8 +102,9 @@ export function addGlobalData() {
           modules,
           fiscalMonths
         });
-        if (req.query.moduleId || req.body.moduleId) {
-          dfa.module = _.find(modules, {moduleId: Number(req.query.moduleId || req.body.moduleId)});
+        const moduleId = req.query.moduleId || req.body.moduleId;
+        if (moduleId) {
+          dfa.module = _.find(modules, {moduleId: Number(moduleId)});
         }
         req.dfa = dfa;
         next();

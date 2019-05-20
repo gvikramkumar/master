@@ -61,7 +61,7 @@ export default class ApprovalController extends ControllerBase {
       .catch(next);
   }
 
-  approveValidate(approvalItems, req): any {
+  approveValidate(approvalItems, req, next): any {
     const invalidItems = [];
     approvalItems.forEach(item => {
       if (item.status !== 'P') {
@@ -77,12 +77,12 @@ export default class ApprovalController extends ControllerBase {
       throw new ApiError(`Multiple approval items have the same name: ${dups.join(', ')}`);
     }
 
-    return this.repo.getManyLatestGroupByNameActiveInactive(req.dfa.module.moduleId)
-      .then(dbItems => {
+    return this.repo.getManyLatestGroupByNameActiveInactive(req.dfa.moduleId)
+      .then(aiItems => {
 
         approvalItems.forEach(item => {
           // if new item, verify name doesn't exist already
-          if (item.approvedOnce !== 'Y' && _.find(dbItems, {name: item.name})) {
+          if (item.approvedOnce !== 'Y' && _.find(aiItems, {name: item.name})) {
             invalidItems.push(item);
           }
         });
@@ -90,16 +90,17 @@ export default class ApprovalController extends ControllerBase {
           throw new ApiError(`Name already exists for items: ${invalidItems.map(x => x.name)}`);
         }
 
-      })
-      .then(dbItems => dbItems);
+      });
   }
 
   approveMany(req, res, next) {
     const items = req.body;
     Promise.resolve()
       .then(() => {
-        this.approveValidate(items, req);
-        items.forEach(item => this.approve(item, req, res, next));
+        return this.approveValidate(items, req, next)
+          .then(() => {
+            items.forEach(item => this.approve(item, req, res, next));
+          });
       })
       .catch(next);
   }
@@ -108,15 +109,16 @@ export default class ApprovalController extends ControllerBase {
     const item = req.body;
     Promise.resolve()
       .then(() => {
-        this.approveValidate([item], req.dfa);
-        this.approve(item, req, res, next);
+        return this.approveValidate([item], req, next)
+          .then(() => {
+            this.approve(item, req, res, next);
+          });
       })
       .catch(next);
   }
 
   approve(data, req, res, next) {
     this.repo.validate(data);
-    this.approveValidate([data], req);
     let firstTimeApprove = false;
     if (data.approvedOnce === 'Y') {
       data.status = data.activeStatus;
@@ -157,36 +159,26 @@ export default class ApprovalController extends ControllerBase {
       });
   }
 
-  activate(req, res, next) {
-    req.body.status = 'A';
-    this.update(req, res, next);
-  }
-
-  inactivate(req, res, next) {
-    req.body.status = 'I';
-    this.updateOneNoValidate(req, res, next);
-  }
-
   getManyLatestGroupByNameActive(req, res, next) {
-    this.repo.getManyLatestGroupByNameActive(Number(req.query.moduleId) || req.body.moduleId)
+    this.repo.getManyLatestGroupByNameActive(req.dfa.moduleId)
       .then(docs => res.send(docs))
       .catch(next);
   }
 
   getManyLatestGroupByNameActiveInactive(req, res, next) {
-    this.repo.getManyLatestGroupByNameActiveInactive(req.body.moduleId)
+    this.repo.getManyLatestGroupByNameActiveInactive(req.dfa.moduleId)
       .then(docs => res.send(docs))
       .catch(next);
   }
 
   getManyLatestGroupByNameActiveInactiveConcatDraftPendingOfUser(req, res, next) {
-    this.repo.getManyLatestGroupByNameActiveInactiveConcatDraftPendingOfUser(req.body.moduleId, req.user.id)
+    this.repo.getManyLatestGroupByNameActiveInactiveConcatDraftPendingOfUser(req.dfa.moduleId, req.user.id)
       .then(items => res.json(items))
       .catch(next);
   }
 
   getManyLatestGroupByNameActiveInactiveConcatDraftPending(req, res, next) {
-   this.repo.getManyLatestGroupByNameActiveInactiveConcatDraftPending(req.body.moduleId)
+   this.repo.getManyLatestGroupByNameActiveInactiveConcatDraftPending(req.dfa.moduleId)
      .then(items => res.json(items))
       .catch(next);
   }

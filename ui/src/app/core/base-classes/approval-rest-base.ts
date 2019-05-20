@@ -36,7 +36,7 @@ export class ApprovalRestBase<T extends AnyObj> extends RestBase<T> {
   approve(data) {
     const params: AnyObj = {};
     params.showProgress = true;
-    return this.callMethod('approve', data, params);
+    return this.callMethod('approveOne', data, params);
   }
 
   reject(data) {
@@ -45,20 +45,7 @@ export class ApprovalRestBase<T extends AnyObj> extends RestBase<T> {
     return this.callMethod('reject', data, params);
   }
 
-  activate(data) {
-    const params: AnyObj = {};
-    params.moduleId = this.store.getNonAdminModuleId();
-    this.callMethod('activate', data, params);
-  }
-
-  inactivate(data) {
-    const params: AnyObj = {};
-    params.moduleId = this.store.getNonAdminModuleId();
-    this.callMethod('inactivate', data, params);
-  }
-
   getApprovalVersionedListByNameAndUserType() {
-    const moduleId = this.store.module.moduleId;
     const user = this.store.user;
     if (user.isModuleBusinessUser() || user.isModuleEndUser()) {
       return this.callMethod('getManyLatestGroupByNameActiveInactive');
@@ -67,6 +54,10 @@ export class ApprovalRestBase<T extends AnyObj> extends RestBase<T> {
     } else if (user.isModuleAdminOrGreater()) {
       return this.callMethod('getManyLatestGroupByNameActiveInactiveConcatDraftPending');
     }
+  }
+
+  getManyLatestGroupByNameActiveInactiveConcatDraftPending() {
+    return this.callMethod('getManyLatestGroupByNameActiveInactiveConcatDraftPending');
   }
 
 }

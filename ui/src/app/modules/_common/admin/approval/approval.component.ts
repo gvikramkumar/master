@@ -114,7 +114,7 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
   }
 
   approveRules() {
-    this.uiUtil.confirmApprove('rule')
+    this.uiUtil.confirmApprove('rule(s)')
       .subscribe(resultConfirm => {
         if (resultConfirm) {
           this.uiUtil.promptDialog('Add approval comments', null, DialogInputType.textarea)
@@ -136,7 +136,7 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
   }
 
   approveSubmeasures() {
-    this.uiUtil.confirmApprove('submeasure')
+    this.uiUtil.confirmApprove('submeasure(s)')
       .subscribe(resultConfirm => {
         if (resultConfirm) {
           this.uiUtil.promptDialog('Add approval comments', null, DialogInputType.textarea)

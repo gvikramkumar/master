@@ -121,16 +121,19 @@ export default class AllocationRuleController extends ApprovalController {
     return this.sendApprovalEmailBase(req, mode, item, 'rule', omitProperties);
   }
 
-  approveValidate(approvalItems, req) {
-    return super.approveValidate(approvalItems, req)
+  approveValidate(approvalItems, req, next) {
+    return super.approveValidate(approvalItems, req, next)
       .then(aiItems => {
         return this.repo.getManyLatestGroupByNameActiveInactiveConcatDraftPending(req.dfa.moduleId)
           .then(aidpItems => {
+            aidpItems.forEach(rule => ruleUtil.createSelectArrays(rule));
             const selectMap = new SelectExceptionMap();
             // this will crash if there are any clashes in exceptions. This should never happen, but we need to know if it does and this
             // and the rule edit page are both good places to verify.
-            selectMap.parseRules(aidpItems.concat(approvalItems));
-          });
+            selectMap.parseRules(aidpItems);
+          })
+          // needed to catch selectMap errors
+          .catch(next);
       });
   }
 

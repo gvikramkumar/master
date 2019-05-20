@@ -95,7 +95,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_products', 'technology_group_id').toPromise(),
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_coverage_code').toPromise(),
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_be_hierarchy', 'business_entity_descr').toPromise(),
-      this.ruleService.callMethod('getManyLatestGroupByNameActiveInactive').toPromise(),
+      this.getRulesAndRuleNamesAndGenerateSelectMap(),
       this.lookupService.getValues(['drivers', 'periods']).toPromise()
     ];
     if (this.viewMode || this.editMode || this.copyMode) {
@@ -112,11 +112,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         this.prodTgChoices = results[1].map(x => ({name: x}));
         this.scmsChoices = results[2].map(x => ({name: x}));
         this.internalBeChoices = results[3].map(x => ({name: x}));
-        // sort by oldName || name for comparison selectMap generaged by sandbox/rule-name-change.ts
-        // the original order by rule-name-change order by old name
-        // this.rules = _.sortBy(results[4], r => r.oldName || r.name);
-        this.rules = results[4];
-        this.ruleNames = this.rules.map(x => x.name);
         this.drivers = _.sortBy(results[5][0], 'name');
         this.periods = results[5][1];
 
@@ -200,17 +195,33 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       // so update them right after creating the select arrays, "then" save to orgRule
       this.updateSelectStatements();
       this.orgRule = _.cloneDeep(this.rule);
-      this.rules.forEach(rule => ruleUtil.createSelectArrays(rule));
-      this.selectMap = new SelectExceptionMap();
-      this.selectMap.parseRules(this.rules);
-      // The "special case" here is:
-      // mary makes ONE, john makes ONE, both are pending so allows both to coexist, then someone approves mary's ONE. If someone approves
-      // johns one, they get an error on approval. If someone views or edit's johns now... he should get a message as one already exists, BUT...
-      // what if john is just editing active flag? So we put up the message on edit or view "only if not approvedOnce"
+      // for draft/pending we need to let them know name already exists, but not for approvedOnce = 'Y', as the name is already locked by then
       if (this.editModeDPNotApprovedOnce || this.viewModeDPNotApprovedOnce) {
         this.checkIfRuleNameAlreadyExists();
       }
     }
+  }
+
+  getRulesAndRuleNamesAndGenerateSelectMap() {
+    return this.ruleService.getManyLatestGroupByNameActiveInactiveConcatDraftPending().toPromise()
+      .then(rules => {
+        // remove this rule if it's in the list, it can muck up the selectMap if it has different values from the present
+        this.rules = rules.filter(r => this.rule.id ? r.id !== this.rule.id : true);
+        // we allow duplicate names in draft/pending, will complain on approval
+        this.ruleNames = this.rules.filter(r => _.includes(['A', 'I'], r.status)).map(x => x.name);
+        this.rules.forEach(rule => ruleUtil.createSelectArrays(rule));
+      })
+      .then(() => {
+        this.selectMap = new SelectExceptionMap();
+        // we check for validity of selectMap on entry/save and on approve in controller. We can't have this selectMap ever be corrupt,
+        // so both places will put up modals, should never happen, but if it does... we have to know
+        try {
+          this.selectMap.parseRules(this.rules);
+        } catch (err) {
+          this.uiUtil.genericDialog(err.message);
+          return Promise.reject();
+        }
+      });
   }
 
   checkIfInUse() {
@@ -258,15 +269,35 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   validate() {
     const errors = [];
-    // shouldn't happen
-    if (!(this.rule.name && this.rule.name.trim())) {
-      errors.push('You must define a name to save to draft.');
+
+/*
+    if (something wrong) {
+      errors.push('some message');
     }
-    // shouldn't happen
-    if (_.includes(this.ruleNames, this.rule.name)) {
-      errors.push('Rule name already exists.');
-    }
-    return errors.length ? errors : null;
+*/
+  return errors.length ? errors : null;
+  }
+
+  validateNameAndSelectmap() {
+    // we need to check if any conflicting rules. yes we just did that multiple times maybe on blur call, but we need to do it
+    // a final time "with the lastest aidp values". I.e. on blur we used the values on page load, we can never have them create duplicate
+    // rule select exceptions, so we check right before save (grrr, this isn't right before save), still have that dialog to put up and down
+    // for submit... so we'll have to validate after as well then
+    return this.getRulesAndRuleNamesAndGenerateSelectMap()
+      .then (() => {
+        const oldName = this.rule.name;
+        // generate a new name considering the latest approved rules
+        return this.valueChange()
+          .then (ruleNameExists => {
+            if (ruleNameExists) {
+              return Promise.reject('disregard');
+            } else if (this.rule.name !== oldName) {
+              // they need to be notified so they can update the associated submeasures
+              this.uiUtil.genericDialog('A select exception conflict caused a name change. Please review.');
+              return Promise.reject('disregard');
+            }
+          });
+      });
   }
 
   saveToDraft() {
@@ -278,22 +309,29 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           const errors = this.validate();
           if (errors) {
             this.uiUtil.validationErrorsDialog(errors);
-          } else {
-            const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
-            this.ruleService.saveToDraft(this.rule, {saveMode})
-              .subscribe(rule => {
-                // once saved we need to update, not add, so move mode to edit (uiUtil.getApprovalSaveMode())
-                this.addMode = false;
-                this.copyMode = false;
-                this.editMode = true;
-                this.rule = rule;
-                this.orgRule = _.cloneDeep(rule);
-                this.init();
-                this.uiUtil.toast('Rule saved to draft.');
-              });
+            return Promise.reject('disregard');
           }
+          this.validateNameAndSelectmap()
+            .then(() => {
+              const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
+              this.ruleService.saveToDraft(this.rule, {saveMode})
+                .subscribe(rule => {
+                  // once saved we need to update, not add, so move mode to edit (uiUtil.getApprovalSaveMode())
+                  this.addMode = false;
+                  this.copyMode = false;
+                  this.editMode = true;
+                  this.rule = rule;
+                  this.orgRule = _.cloneDeep(rule);
+                  this.init();
+                  this.uiUtil.toast('Rule saved to draft.');
+                });
+            })
+            // this to supress the angular error upon seeing a reject. Funny thing is: the one in the outer "then" won't do,
+            // have to catch it in here to catch the validateNameAndSelectmap rejects
+            .catch(shUtil.catchDisregardHandler);
         }
-      });
+      })
+      .catch(shUtil.catchDisregardHandler);
   }
 
   canApprove() {
@@ -349,19 +387,29 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           if (errors) {
             this.uiUtil.validationErrorsDialog(errors);
           } else {
-            this.uiUtil.confirmSubmitForApproval()
-              .subscribe(result => {
+            this.uiUtil.confirmSubmitForApproval().toPromise()
+              .then(result => {
                 if (result) {
-                  const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
-                  this.ruleService.submitForApproval(this.rule, {saveMode, type: 'rule-management'})
-                    .subscribe(() => {
-                      history.go(-1);
-                    });
+                  // we cannot under any circumstance allow these select exceptions to be compromised.
+                  // we cannot afford to do it "before" the confirmation dialog, we have to do it right before save, so has its own validation function
+                  // that gets called after confirmation goes down
+                  this.validateNameAndSelectmap()
+                    .then(() => {
+                      const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
+                      this.ruleService.submitForApproval(this.rule, {saveMode, type: 'rule-management'})
+                        .subscribe(() => {
+                          history.go(-1);
+                        });
+                    })
+                    // this to supress the angular error upon seeing a reject. Funny thing is: the one in the outer "then" won't do,
+                    // have to catch it in here to catch the validateNameAndSelectmap rejects
+                    .catch(shUtil.catchDisregardHandler);
                 }
               });
           }
         }
-      });
+      })
+      .catch(shUtil.catchDisregardHandler);
   }
 
   salesSL2ChoicesValidator(): AsyncValidatorFn {
@@ -495,16 +543,17 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   valueChange() {
-    if (this.viewMode || this.editMode) {
-      return; // can't edit anything but active flag so no reason to generate new name
+    // shouldn't get called for viewMode and if approvedOnce, they can only edit active flag, so just return
+    if (this.viewMode || this.isApprovedOnce()) {
+      return Promise.resolve(false);
     }
     // code below would work, but this would be faster than waiting for asyncs
     if (!(this.rule.driverName && this.rule.period)) {
       delete this.rule.name;
       delete this.rule.desc;
-      return;
+      return Promise.resolve(false);
     }
-    UiUtil.waitForAsyncValidations(this.form)
+    return UiUtil.waitForAsyncValidations(this.form)
       .then(() => {
         if (this.form.valid) {
           // we need to clone the selectMap, otherwise they add to it then remove their entry, but addition is still there
@@ -513,10 +562,11 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           this.updateSelectStatements();
           ruleUtil.addRuleNameAndDescription(this.rule, smap, this.drivers, this.periods);
           // console.log(smap.buMap);
-          this.checkIfRuleNameAlreadyExists();
+          return this.checkIfRuleNameAlreadyExists();
         } else {
           delete this.rule.name;
           delete this.rule.desc;
+          return Promise.resolve(false);
         }
       });
   }
