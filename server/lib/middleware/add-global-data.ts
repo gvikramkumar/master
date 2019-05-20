@@ -34,6 +34,10 @@ export class ApiDfaData {
     this._module = module;
   }
 
+  get moduleId() {
+    return this.module.moduleId;
+  }
+
   get itadminEmail() {
     return svrUtil.getEnvEmail(this._itadminEmail);
   }
@@ -64,10 +68,6 @@ export class ApiDfaData {
 
   set ppmtEmail(email) {
     this._ppmtEmail = email;
-  }
-
-  get moduleId() {
-    return this.module.moduleId;
   }
 
 }
@@ -102,8 +102,9 @@ export function addGlobalData() {
           modules,
           fiscalMonths
         });
-        if (req.query.moduleId || req.body.moduleId) {
-          dfa.module = _.find(modules, {moduleId: Number(req.query.moduleId || req.body.moduleId)});
+        const moduleId = req.query.moduleId || req.body.moduleId;
+        if (moduleId) {
+          dfa.module = _.find(modules, {moduleId: Number(moduleId)});
         }
         req.dfa = dfa;
         next();

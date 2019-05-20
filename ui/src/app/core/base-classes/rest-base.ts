@@ -63,9 +63,8 @@ export class RestBase<T extends AnyObj> {
 
   // this calls getManyLatestGroupByNameActiveInactive, then filters for active only
   getManyLatestGroupByNameActive(moduleId?) {
-      const data = moduleId ? {moduleId: moduleId} : {};
-    this.addModuleId(data);
-    return this.callMethod('getManyLatestGroupByNameActive', data);
+      const params = moduleId ? {moduleId: moduleId} : {};
+    return this.callMethod('getManyLatestGroupByNameActive', {}, params);
   }
 
   // skip/limit required, sort optional, but surely needed to line up in pages. params become find(filter)
@@ -100,12 +99,14 @@ export class RestBase<T extends AnyObj> {
   }
 
   callMethod(method, data = {}, params = {}, headers = {}) {
-    this.addModuleId(data);
+    this.addModuleId(data); // add needs it in data
+    this.addModuleId(params); // some places need it in query
     return this.httpClient.post<any>(`${this.endpointUrl}/call-method/${method}`, data, {params, headers});
   }
 
   callRepoMethod(method, data = {}, params = {}) {
-    this.addModuleId(data);
+    this.addModuleId(data); // add needs it in data
+    this.addModuleId(params); // some places need it in query
     return this.httpClient.post<any>(`${this.endpointUrl}/call-repo-method/${method}`, data, {params});
   }
 

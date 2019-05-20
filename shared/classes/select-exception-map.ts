@@ -65,7 +65,7 @@ export class SelectExceptionMap {
         const selectArr = this.getSelectArrayFromRule(prefix, rule);
         if (entry) {
           if (!this.verifyEntryInMapArray(entry, selectArr)) {
-            throw new Error(`SelectExceptionMap.parseRuleName: Bad selectArr in ${prefix}Map: ${selectArr}, index: ${idx}`);
+            throw new Error(`Duplicate rule select exception for rule: ${rule.name}, exception: ${ex}.`);
           }
         } else {
           map.push(new SelectExceptionIndexMap(selectArr, idx));
@@ -78,25 +78,32 @@ export class SelectExceptionMap {
   }
 
   getSelectArrayFromRule(prefix, rule) {
-    switch (prefix) {
-      case 'sl1':
-        return ([rule.salesSL1CritCond].concat(rule.salesSL1CritChoices)).map(x => x.toUpperCase());
-      case 'sl2':
-        return ([rule.salesSL2CritCond].concat(rule.salesSL2CritChoices)).map(x => x.toUpperCase());
-      case 'sl3':
-        return ([rule.salesSL3CritCond].concat(rule.salesSL3CritChoices)).map(x => x.toUpperCase());
-      case 'tg':
-        return ([rule.prodTGCritCond].concat(rule.prodTGCritChoices)).map(x => x.toUpperCase());
-      case 'bu':
-        return ([rule.prodBUCritCond].concat(rule.prodBUCritChoices)).map(x => x.toUpperCase());
-      case 'pf':
-        return ([rule.prodPFCritCond].concat(rule.prodPFCritChoices)).map(x => x.toUpperCase());
-      case 'scms':
-        return ([rule.scmsCritCond].concat(rule.scmsCritChoices)).map(x => x.toUpperCase());
-      case 'ibe':
-        return ([rule.beCritCond].concat(rule.beCritChoices)).map(x => x.toUpperCase());
-      default:
-        throw Error(`SelectExceptionMap.getSelectArray: no case for prefix: ${prefix} for rule name: ${rule.name}`);
+    try {
+      switch (prefix) {
+        case 'sl1':
+          return ([rule.salesSL1CritCond].concat(rule.salesSL1CritChoices)).map(x => x.toUpperCase());
+        case 'sl2':
+          return ([rule.salesSL2CritCond].concat(rule.salesSL2CritChoices)).map(x => x.toUpperCase());
+        case 'sl3':
+          return ([rule.salesSL3CritCond].concat(rule.salesSL3CritChoices)).map(x => x.toUpperCase());
+        case 'tg':
+          return ([rule.prodTGCritCond].concat(rule.prodTGCritChoices)).map(x => x.toUpperCase());
+        case 'bu':
+          return ([rule.prodBUCritCond].concat(rule.prodBUCritChoices)).map(x => x.toUpperCase());
+        case 'pf':
+          return ([rule.prodPFCritCond].concat(rule.prodPFCritChoices)).map(x => x.toUpperCase());
+        case 'scms':
+          return ([rule.scmsCritCond].concat(rule.scmsCritChoices)).map(x => x.toUpperCase());
+        case 'ibe':
+          return ([rule.beCritCond].concat(rule.beCritChoices)).map(x => x.toUpperCase());
+        default:
+          throw Error(`SelectExceptionMap.getSelectArray: no case for prefix: ${prefix} for rule name: ${rule.name}`);
+      }
+    } catch (err) {
+      if (err.message.indexOf('SelectExceptionMap') === 0) {
+        throw err;
+      }
+      throw Error(`SelectExceptionMap.getSelectArray: error buiding selectArray: ${prefix} for rule name: ${rule.name}`);
     }
   }
 
