@@ -160,7 +160,8 @@ export class OfferConstructDefaultValue {
   setTermsPaymentsRequired(questionList) {
     questionList.forEach(question => {
       if (question.question == "Initial Term" || question.question == "NON STD INITIAL TERM" ||
-        question.question == "STD AUTO RENEWAL TERM" || question.question == "NON STD AUTO RENEWAL TERM" || question.question == "Default Initial Term") {
+        question.question == "STD AUTO RENEWAL TERM" || question.question == "NON STD AUTO RENEWAL TERM" || question.question == "Default Initial Term" || 
+        question.question == "Default Auto Renewal Term") {
         question.rules.isMandatoryOptional = "Mandatory";
       }
       if (question.question == "Req Start Date Window") {
@@ -572,6 +573,35 @@ export class OfferConstructDefaultValue {
       }
     });
   }
+  
+  setDefaultAutoRenewalTerm(questionList) {
+    let stdAutoRenewalTermDefault;
+    let stdAutoRenewalTermDefaultValues;
+    questionList.forEach(question => {
+      if (question.question == "STD AUTO RENEWAL TERM") {
+        stdAutoRenewalTermDefault = question.currentValue;
+        stdAutoRenewalTermDefaultValues = stdAutoRenewalTermDefault.split(',')
+        console.log("trueUpDefaultValues1", stdAutoRenewalTermDefaultValues);
+      }
+    });
+
+    questionList.forEach(question => {
+      if (question.question == "Default Auto Renewal Term") {
+               console.log("question.currentValue",question.currentValue)
+             
+             if(stdAutoRenewalTermDefaultValues.includes(question.currentValue)){
+                 question.rules.isvalid = true;
+                 question.rules.validationMessage = "";
+             }
+             else{
+                  question.rules.isvalid = false;
+                  question.rules.validationMessage = question.egineAttribue + " should be a value from True Up Term ";
+                  console.log("question.currentValue != trueUpValue", question.rules.isvalid )
+             }
+      }
+    });
+  }
+
 
   // setSoftwareLicenseNSKU(questionList) {
   //     questionList.forEach(question => {

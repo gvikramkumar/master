@@ -453,6 +453,10 @@ export class DynamicFormMultipleComponent implements OnInit {
             if (question.question == "Default Initial Term") {
                     this.defaultValueServices.setDefaultInitialTerm(questionList);
                 }
+                
+            if (question.question == "Default Auto Renewal Term") {
+                    this.defaultValueServices.setDefaultAutoRenewalTerm(questionList);
+                }
 
             if (question.question == "Smart Licensing Enabled") {
                 if (question.currentValue == "Yes") {
