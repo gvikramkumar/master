@@ -445,6 +445,14 @@ export class DynamicFormMultipleComponent implements OnInit {
             if (question.question == "Description") {
                     this.defaultValueServices.setLongDescription(questionList);
                 }
+                
+            if (question.question == "Default True Up Term") {
+                    this.defaultValueServices.setDefaultTrueupTerm(questionList);
+                }
+                
+            if (question.question == "Default Initial Term") {
+                    this.defaultValueServices.setDefaultInitialTerm(questionList);
+                }
 
             if (question.question == "Smart Licensing Enabled") {
                 if (question.currentValue == "Yes") {

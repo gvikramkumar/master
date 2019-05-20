@@ -282,6 +282,16 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
               let listOfferQuestions = this.defaultValueServices.setCreateDefault(this.listOfferQuestions);
               obj['itemDetails'] = listOfferQuestions;
             }
+            
+            if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'Billing') {
+              let listOfferQuestions = this.defaultValueServices.setAdjustable(this.listOfferQuestions);
+              obj['itemDetails'] = listOfferQuestions;
+            }
+            
+            if (obj.productName == 'XaaS' || obj.productName == 'Billing') {
+              let listOfferQuestions = this.defaultValueServices.setTaxCategory(this.listOfferQuestions);
+              obj['itemDetails'] = listOfferQuestions;
+            }
             // if (obj.productName == 'License') {
             //     let listOfferQuestions = this.defaultValueServices.setSoftwareLicenseNSKU(this.listOfferQuestions);
             //     obj['itemDetails'] = listOfferQuestions;

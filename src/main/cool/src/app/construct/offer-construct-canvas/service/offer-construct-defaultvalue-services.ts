@@ -160,7 +160,7 @@ export class OfferConstructDefaultValue {
   setTermsPaymentsRequired(questionList) {
     questionList.forEach(question => {
       if (question.question == "Initial Term" || question.question == "NON STD INITIAL TERM" ||
-        question.question == "STD AUTO RENEWAL TERM" || question.question == "NON STD AUTO RENEWAL TERM") {
+        question.question == "STD AUTO RENEWAL TERM" || question.question == "NON STD AUTO RENEWAL TERM" || question.question == "Default Initial Term") {
         question.rules.isMandatoryOptional = "Mandatory";
       }
       if (question.question == "Req Start Date Window") {
@@ -397,6 +397,17 @@ export class OfferConstructDefaultValue {
 
       }
 
+      if (question.question == "Non Standard True Up Term") {
+        if (chargeTypeValue == trueUp) {
+          question.rules.isDisabled = false;
+        }
+        else {
+          question.rules.isDisabled = true;
+          question.rules.isMandatoryOptional = "Optional";
+        }
+
+      }
+      
       if (question.question == "Usage Type") {
         if (chargeTypeValue == usageType) {
           question.rules.isDisabled = false;
@@ -471,7 +482,7 @@ export class OfferConstructDefaultValue {
   setPricingFormula(questionList) {
     questionList.forEach(question => {
       if (question.question == "Pricing Formula") {
-        question.currentValue = "blank";
+        question.currentValue = "Blank";
       }
     });
 
@@ -484,6 +495,82 @@ export class OfferConstructDefaultValue {
       }
     });
 
+  }
+  
+  setAdjustable(questionList) {
+    questionList.forEach(question => {
+      if (question.question == "$Adjustable") {
+        question.currentValue = "No";
+      }
+    });
+    return questionList;
+  }
+  
+  setTaxCategory(questionList) {
+    questionList.forEach(question => {
+      if (question.question == "Tax Category") {
+        question.currentValue = "eDelivery";
+      }
+    });
+    return questionList;
+  }
+  
+  setDefaultTrueupTerm(questionList) {
+    let trueUpDefault;
+    let trueUpDefaultValues;
+    questionList.forEach(question => {
+      if (question.question == "True Up Term") {
+        trueUpDefault = question.currentValue;
+        trueUpDefaultValues = trueUpDefault.split(',')
+        console.log("trueUpDefaultValues1", trueUpDefaultValues);
+      }
+    });
+
+    questionList.forEach(question => {
+      if (question.question == "Default True Up Term") {
+               console.log("question.currentValue",question.currentValue)
+             
+             if(trueUpDefaultValues.includes(question.currentValue)){
+                 question.rules.isvalid = true;
+                 question.rules.validationMessage = "";
+                 console.log("question.currentValue == trueUpValue", question.rules.isvalid )
+             }
+             else{
+                  question.rules.isvalid = false;
+                  question.rules.validationMessage = question.egineAttribue + " should be a value from True Up Term ";
+                  console.log("question.currentValue != trueUpValue", question.rules.isvalid )
+             }
+      }
+    });
+  }
+
+  setDefaultInitialTerm(questionList) {
+    let initialTermDefault;
+    let initialTermDefaultValues;
+    questionList.forEach(question => {
+      if (question.question == "Initial Term") {
+        initialTermDefault = question.currentValue;
+        initialTermDefaultValues = initialTermDefault.split(',')
+        console.log("trueUpDefaultValues1", initialTermDefaultValues);
+      }
+    });
+
+    questionList.forEach(question => {
+      if (question.question == "Default Initial Term") {
+               console.log("question.currentValue",question.currentValue)
+             
+             if(initialTermDefaultValues.includes(question.currentValue)){
+                 question.rules.isvalid = true;
+                 question.rules.validationMessage = "";
+                 console.log("question.currentValue == trueUpValue", question.rules.isvalid )
+             }
+             else{
+                  question.rules.isvalid = false;
+                  question.rules.validationMessage = question.egineAttribue + " should be a value from True Up Term ";
+                  console.log("question.currentValue != trueUpValue", question.rules.isvalid )
+             }
+      }
+    });
   }
 
   // setSoftwareLicenseNSKU(questionList) {
