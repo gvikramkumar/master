@@ -517,7 +517,6 @@
                                       [(ngModel)]="pInfo.currentValue"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
-                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                                       [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"

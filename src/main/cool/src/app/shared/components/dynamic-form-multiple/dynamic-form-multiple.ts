@@ -406,7 +406,7 @@ export class DynamicFormMultipleComponent implements OnInit {
 
 
     addAllDetailsValidationsonChange(e, question, questionList?, groupName?) {
-        this.closeDialogAction = 0;
+       this.closeDialogAction = 0;
         // set base price value according to billing_soa SOA Pricing selection type && questionList == this.billing_soa
         if (questionList !== undefined) {
             if (groupName == this.billing_soa) {
@@ -444,7 +444,7 @@ export class DynamicFormMultipleComponent implements OnInit {
             
             if (question.question == "Description") {
                     this.defaultValueServices.setLongDescription(questionList);
-            }
+                }
 
             if (question.question == "Smart Licensing Enabled") {
                 if (question.currentValue == "Yes") {
@@ -452,6 +452,16 @@ export class DynamicFormMultipleComponent implements OnInit {
                 }
                 if (question.currentValue == "No") {
                     this.defaultValueServices.setSmartAccountForSmartLicensingEnabledNo(questionList);
+                }
+
+            }
+            
+            if (question.question == "Is The PID Product Based?") {
+                if (question.currentValue == "Yes") {
+                    this.defaultValueServices.setPricingFormula(questionList);
+                }
+                if (question.currentValue == "No") {
+                    this.defaultValueServices.setPricingFormulaNo(questionList);
                 }
 
             }
@@ -552,7 +562,7 @@ export class DynamicFormMultipleComponent implements OnInit {
             }
             if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "First letter Caps, No special characters allowed and max of 60 characters") {
                 // validatorPattern = "^[A-Z][A-Za-z0-9\\s]*$";
-                if (!(/^[A-Z][A-Za-z0-9\\s]*$/.test(question.currentValue))) {
+                if (!(/^[A-Z][A-Za-z0-9\s]*$/.test(question.currentValue))) {
                     question.rules.validationMessage = question.egineAttribue + " should be in " + question.rules.textcase;
                     question.rules.isvalid = false;
                 }

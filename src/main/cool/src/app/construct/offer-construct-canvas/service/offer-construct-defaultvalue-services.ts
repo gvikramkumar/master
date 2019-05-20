@@ -117,7 +117,7 @@ export class OfferConstructDefaultValue {
     let longDescriptionDefault;
     questionList.forEach(question => {
       if (question.question == "Description") {
-        longDescriptionDefault = question.currenftValue;
+        longDescriptionDefault = question.currentValue;
       }
     });
 
@@ -432,6 +432,23 @@ export class OfferConstructDefaultValue {
     });
     return questionList;
   }
+  
+  
+  getProductQuantityDeliveryPreferenceValues(questionList, pakEligibility){
+      questionList.forEach(question => {
+        if (question.question == "Product Quantity Delivery Preference") {
+          if (pakEligibility == 'Yes') {
+            question.rules.isMandatoryOptional = 'Mandatory';
+          }
+          else {
+             question.rules.isMandatoryOptional = "Optional";
+          }
+
+        }
+      
+  });
+  return questionList;
+  }
 
   setSoftwareLicense(questionList) {
     questionList.forEach(question => {
@@ -449,6 +466,24 @@ export class OfferConstructDefaultValue {
       }
     });
     return questionList;
+  }
+
+  setPricingFormula(questionList) {
+    questionList.forEach(question => {
+      if (question.question == "Pricing Formula") {
+        question.currentValue = "blank";
+      }
+    });
+
+  }
+
+  setPricingFormulaNo(questionList) {
+    questionList.forEach(question => {
+      if (question.question == "Pricing Formula") {
+        question.currentValue = "";
+      }
+    });
+
   }
 
   // setSoftwareLicenseNSKU(questionList) {

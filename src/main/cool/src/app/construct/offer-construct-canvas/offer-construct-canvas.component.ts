@@ -93,6 +93,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   public chargeTypeValue: any;
   public licenseDelivery: any;
+  public pakEligibility: any;
   multiSelectItems: string[] = ['Route-to-Market',
     'Price List Availability',
     'GPL Publication',
@@ -247,6 +248,11 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
             if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS' || obj.productName == 'Billing') {
               let listOfferQuestions = this.defaultValueServices.getChargeTypeValidationValues(this.listOfferQuestions, this.chargeTypeValue);
+              obj['itemDetails'] = listOfferQuestions;
+            }
+            
+            if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'Billing') {
+              let listOfferQuestions = this.defaultValueServices.getProductQuantityDeliveryPreferenceValues(this.listOfferQuestions, this.pakEligibility);
               obj['itemDetails'] = listOfferQuestions;
             }
 
@@ -860,6 +866,11 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
                   let listOfferQuestions = this.defaultValueServices.getChargeTypeValidationValues(this.listOfferQuestions, this.chargeTypeValue);
                   obj['itemDetails'] = listOfferQuestions;
                 }
+                
+                if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'Billing') {
+                  let listOfferQuestions = this.defaultValueServices.getProductQuantityDeliveryPreferenceValues(this.listOfferQuestions, this.pakEligibility);
+                  obj['itemDetails'] = listOfferQuestions;
+                }
                 //
                 // if (obj.productName == 'License') {
                 //     let listOfferQuestions = this.defaultValueServices.setEntitlementTerm(this.listOfferQuestions);
@@ -881,6 +892,11 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
                   let listOfferQuestions = this.defaultValueServices.ImageSigningForHardwareDefault(this.listOfferQuestions);
                   obj['itemDetails'] = listOfferQuestions;
                 }
+                
+                if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS' || obj.productName == 'Billing') {
+                 let listOfferQuestions = this.defaultValueServices.setCreateDefault(this.listOfferQuestions);
+                 obj['itemDetails'] = listOfferQuestions;
+               }
 
                 obj['itemDetails'] = this.listOfferQuestions;
               } else {
@@ -1197,6 +1213,11 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           this.getLicenseDeliveryType(offerDetailRes.additionalCharacteristics);
         }
       }
+      if (offerDetailRes.solutioningDetails !== null && offerDetailRes.solutioningDetails !== undefined) {
+        if (offerDetailRes.solutioningDetails.length > 0) {
+          this.getPakEligibilityType(offerDetailRes.solutioningDetails);
+        }
+      }
     }, (err) => {
       console.log(err);
       this.loaderService.stopLoading();
@@ -1254,7 +1275,16 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       }
     });
   }
-
+  
+  getPakEligibilityType(solutioningDetails) {
+    solutioningDetails.forEach(element => {
+      element.Details.forEach(list => {
+        if (list.egenieAttributeName == 'PAK Eligibility' || list.egenieAttributeName == 'PAK Eligibility') {
+          this.pakEligibility = list.solutioningAnswer;
+        }
+      });
+    });
+  }
   /**
    * Method to add parent node to tree.
    * @param node
