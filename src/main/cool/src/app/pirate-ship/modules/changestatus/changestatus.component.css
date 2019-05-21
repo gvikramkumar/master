@@ -13,6 +13,9 @@
     overflow: auto;
   }
 
+  .message-box {
+      color: #005073;
+  }
 
   #style-1::-webkit-scrollbar-track
   {
