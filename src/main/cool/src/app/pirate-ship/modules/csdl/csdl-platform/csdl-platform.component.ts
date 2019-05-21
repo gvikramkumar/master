@@ -40,6 +40,7 @@ export class CsdlPlatformComponent implements OnInit {
   displayIdCreationDailog: Boolean = false;
   isCsdlRequired: Boolean = true;
   refreshStatus: Boolean = false;
+  isCompleteButtonDisabled: Boolean = true;
   cols: any[];
   selectedAto: any;
   productFamilyAnswer;
@@ -176,7 +177,7 @@ export class CsdlPlatformComponent implements OnInit {
     this.createCsdlAssociation(csdlPayload);
   }
 
-  createCsdlAssociation(csdlPayload: CsdlPayload) {
+  createCsdlAssociation(csdlPayload) {
     this.csdlIntegrationService.createCsdlAssociation(csdlPayload).subscribe(data => {
     },
     (err) => {
@@ -188,6 +189,24 @@ export class CsdlPlatformComponent implements OnInit {
     this.isCsdlRequired = false;
     this.refreshStatus = true;
     this.displayIdCreationDailog = false;
+  }
+
+  onComplete() {
+    const csdlPayload = new CsdlPayload(
+      this.currentOfferId,
+      this.offerName,
+      'YES',
+      this.productFamilyAnswer,
+      'John Smith',
+      this.derivedMM
+    );
+    this.csdlIntegrationService.createCsdlAssociation(csdlPayload).subscribe(data => {
+      this.isCompleteButtonDisabled = false;
+    },
+    (err) => {
+      console.log(err);
+      this.isCompleteButtonDisabled = false;
+    });
   }
 
   // --------------------------------------------------------------------------------------------------------------------------------
