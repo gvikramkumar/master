@@ -1,74 +1,37 @@
 import {serverPromise} from '../../server';
-import ApprovalController from './approval-controller';
-import SubmeasureRepo from '../../api/common/submeasure/repo';
-import {shUtil} from '../../../shared/misc/shared-util'
-import LookupRepo from '../../api/lookup/repo';
-import {ModuleRepo} from '../../api/common/module/repo';
-import UserListRepo from '../../api/user-list/repo';
+import _ from 'lodash';
+import {shUtil} from '../../../shared/misc/shared-util';
 import {mail} from '../common/mail';
 import AnyObj from '../../../shared/models/any-obj';
+import ApprovalController from './approval-controller';
+import SubmeasureRepo from '../../api/common/submeasure/repo';
+import AllocationRuleRepo from '../../api/common/allocation-rule/repo';
 
 
-describe('Approval Controller Tests >>>>>', () => {
-  let server, repo, approvalController;
+describe('Approval Controller Tests', () => {
+  let server;
 
-  beforeAll(function(done) {
+  beforeAll(function (done) {
     serverPromise.then(_server => {
       server = _server;
       done();
     });
   });
 
-  describe(`Approval Email Reminder>>>>>>`, () => {
-    beforeEach(() => {
-      repo = new SubmeasureRepo();
-      approvalController = new ApprovalController(repo);
+  describe(`Approval Email Reminder`, () => {
+    let smRepo, ruleRepo, approvalControllerForSubmeasure, approvalControllerForRule;
+    beforeAll(() => {
+      smRepo = new SubmeasureRepo();
+      ruleRepo = new AllocationRuleRepo();
+      approvalControllerForSubmeasure = new ApprovalController(smRepo);
+      approvalControllerForRule = new ApprovalController(ruleRepo);
     });
 
-     it('should get pending submeasures', () => {
-      repo.getManyPending({moduleId: -1})
-        .then(pendingItems => {
-          expect(pendingItems.length).toEqual(1);
-          expect(pendingItems[0].name).toEqual('2 Tier Adjustment');
-          expect(pendingItems[0].status).toEqual('P');
-          expect(pendingItems[0].approvalUrl).toEqual(`http://localhost:4200/prof/submeasure/edit/5cd5c201b2db8208c0cb4c2f;mode=view`);
-        });
-    });
-
-    it('should get admin emails', () => {
-      new LookupRepo().getValues(['itadmin-email', 'dfa-admin-email', 'dfa-biz-admin-email'])
-        .then(results => {
-          expect(results.length).toEqual(3);
-          expect(results[0]).toEqual(`dfa-admin@cisco.com`);
-          expect(results[1]).toEqual(`dfa-admin@cisco.com`);
-          expect(results[2]).toEqual(`dfa_business_admin@cisco.com`);
-        });
-    });
-
-    it('should get the module', () => {
-      new ModuleRepo().getOneByQuery({moduleId: 1})
-        .then(module => {
-          expect(module).toBeTruthy();
-          expect(module.moduleId).toEqual(1);
-          expect(module.name).toEqual(`Profitability Allocations`);
-        });
-    });
-
-    it(`should get the user`, () => {
-      new UserListRepo().getOneLatest({userId: 'jodoe'})
-        .then(user => {
-          expect(user).toBeTruthy();
-          expect(user.email).toEqual(`jodoe@cisco.com`);
-          expect(user.fullName).toEqual(`John Doe`);
-        });
-    });
-
-    it(`sendReminderEmail - test`, () => {
+    it(`sendReminderEmail - test`, (done) => {
       const itadminEmail = 'itadminEmail';
       const dfaAdminEmail = 'dfaAdminEmail';
       const dfaBizAdminEmail = 'dfaBizAdminEmail';
       const adminEmail = [itadminEmail, dfaAdminEmail, dfaBizAdminEmail];
-
       const moduleName = `Module Name`;
       const fullName = `User Name`;
       const approvalUrl = `Approval Url`;
@@ -81,8 +44,7 @@ describe('Approval Controller Tests >>>>>', () => {
       };
       const subject = `DFA - ${moduleName} - Submeasure Pending for Approval`;
       const body = `A new DFA - Submeasure submitted by ${fullName} has been pending for approval since ${shUtil.convertToPSTTime(item.updatedDate)}:<br><br><a href="${approvalUrl}">${approvalUrl}</a>`;
-
-      approvalController.sendReminderEmail(adminEmail, {name: moduleName}, {fullName, email}, item, 'submeasure');
+      approvalControllerForSubmeasure.sendReminderEmail(adminEmail, {name: moduleName}, user, item, 'submeasure');
       const args = (<AnyObj>mail).sendHtmlMail.calls.allArgs()[0];
       expect(mail.sendHtmlMail).toHaveBeenCalled();
       expect(args[0]).toBe(dfaAdminEmail);
@@ -90,6 +52,181 @@ describe('Approval Controller Tests >>>>>', () => {
       expect(args[2]).toBe(`${adminEmail[0]},${email}`);
       expect(args[3]).toBe(subject);
       expect(args[4]).toBe(body);
+      done();
+    });
+
+    describe(`Submeasure`, () => {
+      let orgSms = [];
+      beforeAll((done) => {
+        smRepo.getMany({moduleId: -1})
+          .then(sms => {
+            orgSms = sms;
+            spyOn(approvalControllerForSubmeasure, 'sendReminderEmail');
+            approvalControllerForSubmeasure.sendReminderEmail.and.returnValue(Promise.resolve());
+            done();
+          });
+      });
+      afterAll((done) => {
+        orgSms.forEach(item => smRepo.update(item, 'jodoe', false, false, false));
+        done();
+      });
+
+      beforeEach(() => {
+        approvalControllerForSubmeasure.sendReminderEmail.calls.reset();
+      });
+
+      it(`should not call sendReminderEmail if less than 24 hours`, (done) => {
+        const sm = _.cloneDeep(orgSms[0]);
+        sm.status = 'P';
+        sm.approvalReminderTime = new Date(Date.now() - (24 * 60 * 60 * 1000) + (10 * 1000));
+        smRepo.update(sm, 'jodoe', false)
+          .then(() => {
+            approvalControllerForSubmeasure.approvalEmailReminder('submeasure')
+              .then(() => {
+                expect(approvalControllerForSubmeasure.sendReminderEmail).not.toHaveBeenCalled();
+                done();
+              });
+          });
+      });
+
+      it(`should call sendReminderEmail if more than 24 hours`, (done) => {
+        const sm = _.cloneDeep(orgSms[0]);
+        sm.status = 'P';
+        sm.approvalReminderTime = new Date(Date.now() - (24 * 60 * 60 * 1000) - (10 * 1000));
+        smRepo.update(sm, 'jodoe', false)
+          .then(() => {
+            const updatedSm = _.cloneDeep(sm);
+            const currentTime = new Date();
+            approvalControllerForSubmeasure.approvalEmailReminder('submeasure')
+              .then(() => {
+                expect(approvalControllerForSubmeasure.sendReminderEmail).toHaveBeenCalled();
+                const args = approvalControllerForSubmeasure.sendReminderEmail.calls.allArgs()[0];
+                expect(args[0]).toEqual(['dfa-it-admin@cisco.com', 'dfa-admin@cisco.com', 'dfa_business_admin@cisco.com']);
+                expect(args[1].moduleId).toEqual(1);
+                expect(args[1].name).toEqual('Profitability Allocations');
+                expect(args[2].userId).toEqual('jodoe');
+                updatedSm.approvalReminderTime = currentTime.toISOString();
+                expect(args[3].toObject()).toEqual(updatedSm.toObject());
+                expect(args[4]).toEqual('submeasure');
+                done();
+              });
+          });
+      });
+
+      it(`should call sendReminderEmail for all submeasures that are pending for more than 24 hours`, (done) => {
+        const sms = _.cloneDeep(orgSms);
+        const promises = [];
+        sms.forEach(item => {
+          item.status = 'P';
+          item.approvalReminderTime = new Date(Date.now() - (24 * 60 * 60 * 1000) - (60 * 1000));
+          promises.push(smRepo.update(item, 'jodoe', false, false, false));
+        });
+        Promise.all(promises)
+          .then(() => {
+            const currentTime = new Date();
+            approvalControllerForSubmeasure.approvalEmailReminder('submeasure')
+              .then(() => {
+                expect(approvalControllerForSubmeasure.sendReminderEmail).toHaveBeenCalledTimes(orgSms.length);
+                const args = approvalControllerForSubmeasure.sendReminderEmail.calls.allArgs();
+                args.forEach((arg, idx) => {
+                  expect(arg[0]).toEqual(['dfa-it-admin@cisco.com', 'dfa-admin@cisco.com', 'dfa_business_admin@cisco.com']);
+                  expect(arg[1].moduleId).toEqual(sms[idx].moduleId);
+                  expect(arg[2].userId).toEqual('jodoe');
+                  sms[idx].approvalReminderTime = currentTime;
+                  expect(arg[3].toObject()).toEqual(sms[idx].toObject());
+                  expect(arg[4]).toEqual('submeasure');
+                });
+                done();
+              });
+          });
+      });
+    });
+
+    describe(`Rule`, () => {
+      let orgRules = [];
+      beforeAll((done) => {
+        ruleRepo.getMany({moduleId: -1})
+          .then(rules => {
+            orgRules = rules;
+            spyOn(approvalControllerForRule, 'sendReminderEmail');
+            approvalControllerForRule.sendReminderEmail.and.returnValue(Promise.resolve());
+            done();
+          });
+      });
+      afterAll((done) => {
+        orgRules.forEach(item => ruleRepo.update(item, 'jodoe', false, false, false));
+        done();
+      });
+
+      beforeEach(() => {
+        approvalControllerForRule.sendReminderEmail.calls.reset();
+      });
+
+      it(`should not call sendReminderEmail if less than 24 hours`, (done) => {
+        const rule = _.cloneDeep(orgRules[0]);
+        rule.status = 'P';
+        rule.approvalReminderTime = new Date(Date.now() - (24 * 60 * 60 * 1000) + (10 * 1000));
+        ruleRepo.update(rule, 'jodoe', false)
+          .then(() => {
+            approvalControllerForRule.approvalEmailReminder('rule')
+              .then(() => {
+                expect(approvalControllerForRule.sendReminderEmail).not.toHaveBeenCalled();
+                done();
+              });
+          });
+      });
+
+      it(`should call sendReminderEmail if more than 24 hours`, (done) => {
+        const rule = _.cloneDeep(orgRules[0]);
+        rule.status = 'P';
+        rule.approvalReminderTime = new Date(Date.now() - (24 * 60 * 60 * 1000) - (10 * 1000));
+        ruleRepo.update(rule, 'jodoe', false)
+          .then(() => {
+            const updatedrule = _.cloneDeep(rule);
+            const currentTime = new Date();
+            approvalControllerForRule.approvalEmailReminder('rule')
+              .then(() => {
+                expect(approvalControllerForRule.sendReminderEmail).toHaveBeenCalled();
+                const args = approvalControllerForRule.sendReminderEmail.calls.allArgs()[0];
+                expect(args[0]).toEqual(['dfa-it-admin@cisco.com', 'dfa-admin@cisco.com', 'dfa_business_admin@cisco.com']);
+                expect(args[1].moduleId).toEqual(1);
+                expect(args[1].name).toEqual('Profitability Allocations');
+                expect(args[2].userId).toEqual('jodoe');
+                updatedrule.approvalReminderTime = currentTime.toISOString();
+                expect(args[3].toObject()).toEqual(updatedrule.toObject());
+                expect(args[4]).toEqual('rule');
+                done();
+              });
+          });
+      });
+
+      it(`should call sendReminderEmail for all rules that are pending for more than 24 hours`, (done) => {
+        const rules = _.cloneDeep(orgRules);
+        const promises = [];
+        rules.forEach(item => {
+          item.status = 'P';
+          item.approvalReminderTime = new Date(Date.now() - (24 * 60 * 60 * 1000) - (60 * 1000));
+          promises.push(ruleRepo.update(item, 'jodoe', false, false, false));
+        });
+        Promise.all(promises)
+          .then(() => {
+            const currentTime = new Date();
+            approvalControllerForRule.approvalEmailReminder('rule')
+              .then(() => {
+                expect(approvalControllerForRule.sendReminderEmail).toHaveBeenCalledTimes(orgRules.length);
+                const args = approvalControllerForRule.sendReminderEmail.calls.allArgs();
+                args.forEach((arg, idx) => {
+                  expect(arg[0]).toEqual(['dfa-it-admin@cisco.com', 'dfa-admin@cisco.com', 'dfa_business_admin@cisco.com']);
+                  expect(arg[1].moduleId).toEqual(rules[idx].moduleId);
+                  expect(arg[2].userId).toEqual('jodoe');
+                  rules[idx].approvalReminderTime = currentTime;
+                  expect(arg[3].toObject()).toEqual(rules[idx].toObject());
+                  expect(arg[4]).toEqual('rule');
+                });
+                done();
+              });
+          });
+      });
     });
   });
-  });
+});

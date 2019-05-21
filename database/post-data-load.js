@@ -33,7 +33,7 @@ db.dfa_lookup.insertMany([
   {key: 'dfa-biz-admin-email', value: 'dfa_business_admin@cisco.com'},
   {
     key: 'itadmin-email',
-    value: 'dfa-admin@cisco.com'
+    value: 'dfa-it-admin@cisco.com'
   },
   {key: 'generic-users', value: ['dfaadmin.gen', 'dakahle', 'rsamband', 'amalakar']},
   {key: 'ppmt-email', value: 'dfa-ppmt@cisco.com'},

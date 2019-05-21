@@ -22,6 +22,6 @@ describe('allocation rule tests', () => {
       .end(done);
   });
 
-})
+});
 
 

@@ -1,52 +1,82 @@
 import { $, browser, by, element, protractor } from 'protractor';
 const EC = protractor.ExpectedConditions;
 export class SourcePO {
-  form = $('edit-form-container');
-  static navigateTo() {
+  form = element(by.className('edit-form-container'));
+  table = element(by.className(`mat-table`));
+  dialog = element(by.className(`mat-dialog-container`));
+   navigateTo() {
     return browser.get('/admn/source');
   }
 
-  static getSearchField() {
+   getSourceRange() {
+    return element(by.className(`mat-paginator-range-label`));
+  }
+
+   getSearchField() {
     return element.all(by.className(`mat-input-element`)).first();
   }
-  static getAddButton() {
+   getAddButton() {
     return element(by.buttonText(`Add New`));
   }
 
-  static getStatusCheckBox() {
+   getCancelButton() {
+    return element(by.buttonText(`Cancel`));
+  }
+
+   getStatusCheckBox() {
     return element(by.name(`status`)).element(by.className(`checkbox__input`));
   }
 
-  static getSubmitButton() {
+   getCheckBoxLabel() {
+    return element(by.name(`status`)).element(by.className(`checkbox__label`));
+  }
+
+   getSubmitButton() {
     return element(by.buttonText(`Submit`));
   }
 
-  static getPaginatorNextButton() {
+   getPaginatorNextButton() {
     return element(by.className(`mat-paginator-navigation-next`));
   }
 
-  static getCellRow() {
+   getCellRow() {
     return element.all(by.className(`mat-cell`));
   }
 
-  static getFirstCellInARow() {
-    return SourcePO.getCellRow().first().element(by.tagName(`a`));
+   getFirstCellInARow() {
+    return this.getCellRow().first().element(by.tagName(`a`));
   }
 
-  static getFormField(selector) {
+   getFormField(selector) {
     return element(by.name(selector)).element(by.className(`form-group__text`)).element(by.className(`ng-star-inserted`));
   }
 
-  static getFieldName() {
-    return SourcePO.getFormField(`name`);
+   getFieldName() {
+    return this.getFormField(`name`);
   }
 
-  static getFieldTypeCode() {
-    return SourcePO.getFormField(`typeCode`);
+   getFieldTypeCode() {
+    return this.getFormField(`typeCode`);
   }
 
-  static getFieldDescription() {
-    return SourcePO.getFormField(`desc`);
+   getFieldDescription() {
+    return this.getFormField(`desc`);
+  }
+
+   checkIfSourceIsUsed() {
+    return element(by.className(`in-use`)).isDisplayed();
+  }
+
+   getFormTitle() {
+    return element(by.tagName(`legend`));
+  }
+
+  getFormInputOnlyFields() {
+     return element.all(by.tagName(`fin-input`));
+  }
+
+  waitForSourcesToLoad() {
+    browser.wait(EC.presenceOf(this.table));
   }
 
   waitForFormUp() {
@@ -57,5 +87,35 @@ export class SourcePO {
     browser.wait(EC.stalenessOf(this.form));
   }
 
+  loadFormInEditModeForSource(name) {
+    this.getSearchField().sendKeys(name);
+    this.getFirstCellInARow().click();
+    this.waitForFormUp();
+  }
 
+  isCheckBoxDisabled() {
+    return element(by.className(`checkbox disabled`)).isPresent();
+  }
+
+  waitForDialogToShow() {
+     browser.wait(EC.presenceOf(this.dialog));
+  }
+
+  getDialogTitle() {
+     return element(by.className(`mat-dialog-title`));
+  }
+
+  getDialogMessage() {
+     return element(by.className(`fin-dialog-title`));
+  }
+
+  closeDialog() {
+     element(by.buttonText('OK')).click();
+     browser.wait(EC.stalenessOf(this.dialog));
+  }
+
+  pageRefresh() {
+     browser.refresh();
+     this.waitForSourcesToLoad();
+  }
 }
