@@ -67,10 +67,9 @@
                         <div class="col-md-6">
                           <div class="form-group half-margin-bottom">
                             <div class="form-group__text">
-                              <p-autoComplete formControlName="csdlId" [(ngModel)]="selectedProject"
-                                class="form-control" [size]="100" field="csdlId" [minLength]="3" scrollHeight="150px"
-                                placeholder="Search by CSDL ID or Project Name" [suggestions]="results"
-                                (completeMethod)="searchProjectNames($event)" field="project_id" required>
+                              <p-autoComplete formControlName="csdlId" [(ngModel)]="selectedProject" class="form-control" [size]="100" field="csdlId"
+                                [minLength]="3" scrollHeight="150px" placeholder="Search by CSDL ID or Project Name" [suggestions]="results" (completeMethod)="searchProjectNames($event)" field="project_id"
+                                required>
                                 <ng-template pTemplate="body" let-item>
                                   <tbody>
                                     <tr>
@@ -87,11 +86,10 @@
                             </div>
                           </div><br>
                           <span>ID or Project not showing up?</span>&nbsp;&nbsp;
-                          <span class="icon-refresh">Refresh Latest Search Data</span>
+                          <span class="icon-refresh" (click)="refreshProjectList()">Refresh Latest Search Data</span>
                         </div>
                         <div class="col-md-2 task--bar">
-                          <button class="btn btn--primary" type="submit" [disabled]="!csdlForm.valid"
-                            (click)="clickSubmit()">Submit</button>
+                          <button class="btn btn--primary" type="submit" [disabled]="!csdlForm.valid" (click)="submitCoolToCsdl()">Submit</button>
                         </div>
                         <div class="col-md-4 task--bar">
                           <button class="btn btn--primary" type="submit" (click)="createNewCsdlIdDailog()">Create New

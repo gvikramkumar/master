@@ -134,7 +134,6 @@ export class EnvironmentService {
     REST_API_REMOVE_ITEM_DETAILS: string;
     REST_API_UPDATE_EGENIE_FLAG: string;
 
-    //SERVICE ANNUITY URLs
     // SERVICE ANNUITY URLs
     REST_API_RETRIEVE_SERVICE_ATO_LIST_URL: string;
     REST_API_RETRIEVE_SERVICE_ANNUITY_PRICING_URL: string;
@@ -143,7 +142,7 @@ export class EnvironmentService {
     // CSDL URLs
     REST_API_GET_ALL_PROJECTS: string;
     REST_API_POST_CREATE_CSDL_ASSOCIATION: string;
-
+    REST_API_REFRESH_PROJECTS: string;
 
         //SERVICE FOR BASIC MODULES URLs - NPI
         REST_API_GET_ALL_COMMENTS_NPI_URL: string;
@@ -399,8 +398,9 @@ export class EnvironmentService {
         this.REST_API_RETRIEVE_SERVICE_ANNUITY_PRICING_URL = this.baseApiUrl + '/serviceAnnuityPricing/getPricingOfferLevel';
         // -------------------------------------------------------------------------------------------------
         // -------------------------------------- CSDL -------------------------------------
-        this.REST_API_GET_ALL_PROJECTS = this.siUrl + '/projects';
-        this.REST_API_POST_CREATE_CSDL_ASSOCIATION = this.baseApiUrl + '/csdl/persistCsdlInfo';
+        this.REST_API_GET_ALL_PROJECTS = this.baseApiUrl + '/csdl/searchCsdlProjectsNames';
+        this.REST_API_REFRESH_PROJECTS = this.baseApiUrl + '/csdl/getCsdlDetails';
+        this.REST_API_POST_CREATE_CSDL_ASSOCIATION = this.baseApiUrl + '/csdl/saveCsdlDetails';
 
          // --------------------------------------- BASIC MODULES - NPI Licensing ----------------------------------------------
          this.REST_API_GET_ALL_COMMENTS_NPI_URL = this.baseApiUrl + '/pirateship/module/getNPILicensingComment';
