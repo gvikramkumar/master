@@ -543,8 +543,7 @@ export class DynamicFormMultipleComponent implements OnInit {
                 }
             }
             if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "First letter Caps, No special characters allowed and max of 60 characters") {
-                // validatorPattern = "^[A-Z][A-Za-z0-9\\s]*$";
-                if (!(/^[A-Z][A-Za-z0-9\\s]*$/.test(question.currentValue))) {
+                if (!(/^[A-Z][A-Za-z0-9\s]*$/.test(question.currentValue))) {
                     question.rules.validationMessage = question.egineAttribue + " should be in " + question.rules.textcase;
                     question.rules.isvalid = false;
                 }

@@ -85,7 +85,6 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
 
     this.functionalRole = this.configurationService.startupData.functionalRole;
     this.showDesignCanvasButton = this.selectedAto === 'Overall Offer' ? false : true;
-    this.disableDesignCanvasButton = this.showDesignCanvasButton ? this.designCanvasButtonStatus(this.selectedAto) : false;
 
     this.modellingDesignSubscription = this.modellingDesignService.retrieveAtoList(this.offerId)
       .subscribe((modellingDesignResponse: ModellingDesign) => {
@@ -99,6 +98,8 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
           });
 
         this.atoTask = this.atoList.find(ato => ato.itemName === this.selectedAto);
+        const currentAtoStatus = _.isEmpty(this.atoTask.itemStatus) ? '' : this.atoTask.itemStatus;
+        this.disableDesignCanvasButton = this.showDesignCanvasButton ? this.designCanvasButtonStatus(currentAtoStatus) : false;
 
       });
 
@@ -221,4 +222,5 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
 
 
 }
+
 
