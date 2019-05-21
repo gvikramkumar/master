@@ -3,7 +3,7 @@ import {serverPromise} from '../../../server';
 import _ from 'lodash';
 import SourceRepo from './repo';
 
-fdescribe(`Source endpoint tests`, () => {
+describe(`Source endpoint tests`, () => {
   const endpoint = '/api/source';
   let server, addSourceReturn, updateSourceReturn;
   beforeAll((done) => {

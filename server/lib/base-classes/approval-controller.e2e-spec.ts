@@ -130,10 +130,11 @@ describe('Approval Controller Tests', () => {
                 const args = approvalControllerForSubmeasure.sendReminderEmail.calls.allArgs();
                 args.forEach((arg, idx) => {
                   expect(arg[0]).toEqual(['dfa-it-admin@cisco.com', 'dfa-admin@cisco.com', 'dfa_business_admin@cisco.com']);
-                  expect(arg[1].moduleId).toEqual(sms[idx].moduleId);
+                  expect(sms.filter(sm => sm.moduleId === arg[1].moduleId).length).toBeTruthy();
                   expect(arg[2].userId).toEqual('jodoe');
-                  sms[idx].approvalReminderTime = currentTime;
-                  expect(arg[3].toObject()).toEqual(sms[idx].toObject());
+                  const filteredSm = sms.filter(sm => sm.id === arg[3].id)[0];
+                  filteredSm.approvalReminderTime = currentTime;
+                  expect(filteredSm.toObject()).toEqual(arg[3].toObject());
                   expect(arg[4]).toEqual('submeasure');
                 });
                 done();
@@ -217,10 +218,11 @@ describe('Approval Controller Tests', () => {
                 const args = approvalControllerForRule.sendReminderEmail.calls.allArgs();
                 args.forEach((arg, idx) => {
                   expect(arg[0]).toEqual(['dfa-it-admin@cisco.com', 'dfa-admin@cisco.com', 'dfa_business_admin@cisco.com']);
-                  expect(arg[1].moduleId).toEqual(rules[idx].moduleId);
+                  expect(rules.filter(rule => rule.moduleId === arg[1].moduleId).length).toBeTruthy();
                   expect(arg[2].userId).toEqual('jodoe');
-                  rules[idx].approvalReminderTime = currentTime;
-                  expect(arg[3].toObject()).toEqual(rules[idx].toObject());
+                  const filteredRule = rules.filter(rule => rule.id === arg[3].id)[0];
+                  filteredRule.approvalReminderTime = currentTime;
+                  expect(filteredRule.toObject()).toEqual(arg[3].toObject());
                   expect(arg[4]).toEqual('rule');
                 });
                 done();
