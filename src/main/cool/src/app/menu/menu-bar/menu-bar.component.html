@@ -80,7 +80,8 @@
               <div class="switch__input"></div>
               <div class="switch__label">Mark Complete</div>
           </label>
-      </div>
+        </div>
+
         <button class="menu-btn" (click)="gotoOfferviewDetails()">
           <span class="ico-offer-details"></span>
           Offer Details
@@ -94,5 +95,6 @@
 <p-overlayPanel #basicOfferInfo>
   <app-offer-detail-pop-up [offerBuilderdata]="offerBuilderdata"></app-offer-detail-pop-up>
 </p-overlayPanel>
+
 
 <app-menu-bar-popup [show]="showPopup" [popupType]="popupType" (closePopup)="closePopup($event)"></app-menu-bar-popup>

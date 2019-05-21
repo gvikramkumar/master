@@ -1,0 +1,23 @@
+<div class="modal" [hidden]="!show">
+  <div class="modal__dialog">
+      <div class="modal__content">
+          <a class="modal__close" (click)="close()"><span class="icon-close"></span></a>
+          <div class="modal__header">
+              <div class="menu-popup-title">Mark Complete</div>
+          </div>
+          <div class="modal__body">
+             <div class="form-group label--floated">
+                
+                     <label>Making this page complete will lock edits</label>
+                     <label>Making this page complete will lock edits</label>
+                     <label>making this page complete will lock edits</label>
+                 
+             </div>
+          </div>
+          <div class="modal__footer">
+              <button class="btn" (click)="close()">Cancel</button>
+              <button type="button"class="btn btn--primary">Mark Complete</button>
+          </div>
+      </div>
+  </div>
+</div>
