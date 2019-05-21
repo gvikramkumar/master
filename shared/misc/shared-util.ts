@@ -3,6 +3,13 @@ import _ from 'lodash';
 import moment from 'moment-timezone';
 import AnyObj from '../models/any-obj';
 
+const catchDisregardHandler = err => {
+  if (err === 'disregard') {
+    return;
+  }
+  return Promise.reject(err);
+};
+
 export const shUtil = {
   getUpdateTable,
   getObjectChanges,
@@ -18,8 +25,23 @@ export const shUtil = {
   isDeptUploadMeasure,
   fiscalYearFromFiscalMonth,
   isManualMix,
-  convertToPSTTime
+  convertToPSTTime,
+  findDuplicatesByProperty,
+  catchDisregardHandler
 };
+
+function findDuplicatesByProperty(arr, prop) {
+  const obj = {};
+  const dups = [];
+  arr.forEach(item => {
+    if (obj[item[prop]]) {
+      dups.push(item[prop]);
+    } else {
+      obj[item[prop]] = 1;
+    }
+  });
+  return _.uniq(dups);
+}
 
 function fiscalYearFromFiscalMonth(fimo) {
   return Number(fimo.toString().substr(0, 4));

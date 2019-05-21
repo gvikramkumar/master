@@ -70,7 +70,7 @@ export default class ReportController extends ControllerBase {
   // we push headers, convert json to csv using properties, concat csv, join with line terminator and send
   getExcelReport(req, res, next) {
     this.verifyProperties(req.body, ['excelFilename']);
-    const moduleId = req.body.moduleId;
+    const moduleId = req.dfa.moduleId;
     const excelFilename = req.body.excelFilename;
     const body = _.omit(req.body, ['moduleId', 'excelFilename']);
     let excelSheetname;
