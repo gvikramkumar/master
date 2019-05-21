@@ -138,26 +138,29 @@
 .cui .btn {
   max-width: fit-content;
 }
-
 .cui .task--bar .btn {
   border-radius: 6px;
 }
-
 .cui .task--bar span.button--label {
   color: #58585b;
 }
-
 .cui .task--bar span {
   color: lightslategray;
   margin: auto 3px;
 }
-.cool.cui .panel.panel--ltgray.panel--compressed label.switch.switch—large {
+/* Switch */
+.cui .panel.panel--ltgray.panel--compressed label.switch.switch—large {
   display: inline-block;
 }
-.cool.cui .panel.panel--ltgray.panel--compressed label.switch.switch—large span.switch__input {
+.cui .panel.panel--ltgray.panel--compressed label.switch.switch—large span.switch__input {
   margin: 13px auto;
 }
-
+.cui .switch input ~ .switch__input:after {
+  background: #626469;
+}
+.cui .switch .switch__input {
+  background: #B6B9BB;
+}
 /*
 .cui .task--bar .btn--back.btn:hover {
   background: rgba(0, 0, 0, .15);
