@@ -68,6 +68,13 @@ export class MenuBarComponent implements OnInit {
                             }
                         });
                     }
+                    if (data['setup'] != null) {
+                        data['setup'].forEach(element => {
+                            if (element['enable'] === true) {
+                                this.itemShow[element['subMilestone']] = true;
+                            }
+                        });
+                    }
                 }
             }
 
@@ -81,8 +88,7 @@ export class MenuBarComponent implements OnInit {
         this.navigateHash['Offer Solutioning'] = ['/offerSolutioning', this.currentOfferId, this.caseId];
         this.navigateHash['Offer Components'] = ['/offerConstruct', this.currentOfferId, this.caseId];
         this.navigateHash['Design Review'] = ['/designReview', this.currentOfferId, this.caseId];
-        /* Uncomment the below code for Sprint 5 */
-        // this.navigateHash['Modular Workflow Completion'] = ['/offerSetup', this.currentOfferId, this.caseId];
+        this.navigateHash['Offer Setup Workflow'] = ['/offerSetup', this.currentOfferId, this.caseId];
     }
 
     ngOnInit() {
@@ -107,13 +113,13 @@ export class MenuBarComponent implements OnInit {
                 ]
             },
             {
-                label: 'Execute',
+                label: 'Set Up',
                 items: [
-                    { label: 'Modular Workflow Completion' },
-                    { label: 'PID & SKU Creation' },
-                    { label: 'Offer Set Up and Design' },
-                    { label: 'NPI Testing' },
-                    { label: 'Readiness Review' }
+                    { label: 'Offer Setup Workflow' },
+                    { label: 'Completion Index' },
+                    { label: 'Final Operational Assessment' },
+                    { label: 'Readiness Review' },
+                    { label: 'Orderability' }
                 ]
             },
             {
