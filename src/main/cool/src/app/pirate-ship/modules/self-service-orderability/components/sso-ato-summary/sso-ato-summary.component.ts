@@ -15,4 +15,6 @@ export class SsoAtoSummaryComponent implements OnInit {
   ngOnInit() {
   }
 
+
+
 }

@@ -14,16 +14,18 @@ export class StatusComponent implements OnInit {
 
   ngOnInit() {
 
-    if (this.status === 'Completed') {
-      this.finalStatus = 'Complete';
-    } else if (this.status === 'In Progress' || this.status === 'Reopen') {
-      this.finalStatus = 'InProgress';
-    } else if (this.status === 'Not Started') {
-      this.finalStatus = 'NotStarted';
-    } else if (this.status === 'Offer Not Present' || this.status === 'Offer workflow not setup') {
-      this.finalStatus = 'OfferNotPresent';
+    this.status = this.status.toUpperCase();
+
+    if (this.status === 'COMPLETED') {
+      this.finalStatus = 'complete';
+    } else if (this.status === 'IN PROGRESS' || this.status === 'REOPEN') {
+      this.finalStatus = 'inProgress';
+    } else if (this.status === 'NOT STARTED') {
+      this.finalStatus = 'notStarted';
+    } else if (this.status === 'OFFER NOT PRESENT' || this.status === 'OFFER WORKFLOW NOT SETUP') {
+      this.finalStatus = 'offerNotPresent';
     } else {
-      this.finalStatus = 'Other';
+      this.finalStatus = 'other';
     }
   }
 
