@@ -87,7 +87,7 @@ export default class ApprovalController extends ControllerBase {
           }
         });
         if (invalidItems.length) {
-          throw new ApiError(`Name already exists for items: ${invalidItems.map(x => x.name)}`);
+          throw new ApiError(`Name already exists for items: ${invalidItems.map(x => x.name).join(', ')}`);
         }
 
       });
