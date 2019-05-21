@@ -17,7 +17,7 @@ export class ChangestatusService {
   getAllComments(
     moduleName: string, 
     offerId: string): Observable<any> {
-    console.log('Module Name: ', moduleName);
+    //console.log('Module Name: ', moduleName);
     switch (moduleName) {
       case 'NPI Licensing' : {
         const url = `${this.environmentService.REST_API_GET_ALL_COMMENTS_NPI_URL}/${offerId}`;
@@ -39,12 +39,12 @@ export class ChangestatusService {
         return this._http.get(url, {withCredentials: true});
         break;
       }
-      case 'Testing' :  {
+      case 'Test Orderability' :  {
         const url = `${this.environmentService.REST_API_GET_ALL_COMMENTS_TESTING}/${offerId}`;
         return this._http.get(url, {withCredentials: true});
         break;
       }
-      case 'Pricing Uplift': {
+      case 'Pricing Uplift Setup': {
         const url = `${this.environmentService.REST_API_GET_ALL_COMMENTS_PRICING_UPLIFT}/${offerId}`;
         return this._http.get(url, {withCredentials: true});
         break;
@@ -75,12 +75,12 @@ export class ChangestatusService {
         return this._http.post<any[]>(url, payload);
         break;
       }
-      case 'Testing': {
+      case 'Test Orderability': {
         const url = `${this.environmentService.REST_API_ADD_COMMENT_TESTING}`;
         return this._http.post<any[]>(url, payload);
         break;
       }
-      case 'Pricing Uplift': {
+      case 'Pricing Uplift Setup': {
         const url = `${this.environmentService.REST_API_ADD_COMMENT_PRICING_UPLIFT}`;
         return this._http.post<any[]>(url, payload);
         break;

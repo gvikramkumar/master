@@ -20,25 +20,26 @@
           <div class="row base-margin-top">
 
               <div class="col-md-6" *ngIf="!mStatus">
-                <button class="btn btn--small btn--primary" (click)="markAsCompleteModal()">Mark as Complete</button>
+                <button class="btn btn--small btn--primary" [disabled]="isReadOnly" (click)="markAsCompleteModal()">Mark as Complete</button>
               </div>
 
 
             <div class="col-md-9" *ngIf="mStatus && mStatus.status==='Complete'">
-              <button type="button" class="btn btn--small btn--green-ghost"><span class="text-align:right;"><span class="icon-check-outline icon-small"></span></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Complete</button>
+              <button type="button" class="btn btn--small btn--green-ghost">
+                <span class="icon-check-outline icon-small pull-left"></span>&nbsp;Complete&nbsp;&nbsp;&nbsp;</button>
             </div>
             <!--<span class="label label--success label--outlined"><span class="icon-check-outline icon-small"></span> succe2ss</span>
               -->
           </div>
           <div class="row base-margin-top">
             <div class="col-md-9">
-              <div class="text-medium">If all required activities for Royality Setup are finished press complete</div>
+              <div class="text-medium">If all required activities for {{moduleName}} are finished press complete</div>
               <br/>
               <div class="text-medium"><a style="color: #0E748E;" (click)="changemodalstatus()"><span class="icon-info-outline">&nbsp;</span>How do you know when I am complete with my activities?</a></div>
               <app-share-modal [ishide]="ishide" (changestatus)="changemodalstatus()" >
                 <div modalbody>
-                  {{infohelp}}
-
+                  <!--{{infohelp}}-->
+                  <div style="white-space: normal; text-align: left;" [innerHTML]="infohelp"></div>
                   <div *ngIf="isBtnNeeded">
                     <button class="btn btn--small btn--primary" (click)="markAsComplete()" (changestatus)="changemodalstatus()">Continue</button>
                   </div>
@@ -103,12 +104,12 @@
               <div class="panel panel--bordered panel-scroll" id="style-1" *ngIf="comments">
                 <div class="panel panel--bordered-bottom" *ngFor="let comment of comments">
                   <div>
-                    <span class="icon-comment">&nbsp;</span>
-                    <span>{{comment.createdBy}}</span>
-                    <span>&nbsp;{{comment.timestamp | date:"MM/dd/yy"}}</span>
+                    <span class="icon-comment message-box">&nbsp;</span>
+                    <span>{{comment.createdBy}}&nbsp;&nbsp;</span>
+                    <span>{{comment.timestamp | date:"d-MMM-y h:mm"}}&nbsp;PST</span>
                   </div>
-                  <div>
-                    <span class="text-small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{comment.description}}</span>
+                  <div style="white-space:normal;word-break:break-all;padding-left:20px;">
+                    <span class="text-small">{{comment.description}}</span>
                   </div>
                 </div>
               </div>
