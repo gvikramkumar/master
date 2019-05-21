@@ -10,16 +10,22 @@ export const ruleUtil = {
 };
 
 function addRuleNameAndDescription(rule, selectMap, drivers, periods) {
-  const driver = _.find(drivers, {value: rule.driverName});
-  if (!driver) {
-    throw new Error(`Missing driver: ${rule.driverName}`);
-  }
-  const period = _.find(periods, {period: rule.period});
-  if (!period) {
-    throw new Error(`Missing period: ${rule.period}`);
-  }
+  let driver, period;
 
-  rule.name = `${driver.abbrev || driver.value}-${period.abbrev || period.period}`;
+  if (rule.driverName) {
+    driver = _.find(drivers, {value: rule.driverName});
+    if (!driver) {
+      throw new Error(`Missing driver: ${rule.driverName}`);
+    }
+  }
+  if (rule.period) {
+    period = _.find(periods, {period: rule.period});
+    if (!period) {
+      throw new Error(`Missing period: ${rule.period}`);
+    }
+  }
+  rule.name = driver ? `${driver.abbrev || driver.value}` : '';
+  rule.name += period ? `-${period.abbrev || period.period}` : '';
   addMatches(rule);
   addSelects(rule, selectMap);
   addDescription(rule, driver, period);
@@ -102,8 +108,8 @@ function addSelects(rule, selectMap) {
 function addDescription(rule, driver, period) {
   let desc = `Name:  ${rule.name}`;
   desc += rule.oldName ? `\nOld Name:  ${rule.oldName}` : '';
-  desc += `\nDriver:  ${driver.name}`;
-  desc += `\nPeriod:  ${period.period}`;
+  desc += driver ? `\nDriver:  ${driver.name}` : '';
+  desc += period ? `\nPeriod:  ${period.period}` : '';
 
   desc += rule.salesMatch ? `\nSales:  ${rule.salesMatch}` : '';
   desc += rule.productMatch ? `\nProduct:  ${rule.productMatch}` : '';
