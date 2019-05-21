@@ -57,7 +57,7 @@
                         <span class="ui-fluid">
                           <p-autoComplete [(ngModel)]="selectedPids" [suggestions]="results"
                                           (completeMethod)="searchForItemFromPdaf($event)" field="PID"
-                                          placeholder="SEARCH BY PRODUCT NAME, ID OR SKU" [size]="100" [minLength]="9"
+                                          placeholder="SEARCH BY PRODUCT NAME, ID OR SKU" [size]="100" [minLength]="4"
                                           formControlName="searchPID">
                             <ng-template pTemplate="body" let-item>
                               <tbody>
