@@ -28,6 +28,11 @@ export const PIRATE_SHIP_ROUTES = [
         resolve: { offerData: OfferOverViewResolver }
     },
     {
+        path: pirateShipRoutesNames.CSDL + '/:selectedAto',
+        loadChildren: './modules/csdl/csdl.module#CsdlModule',
+        resolve: { offerData: OfferOverViewResolver }
+    },
+    {
         path: pirateShipRoutesNames.TC_MAPPING + '/:selectedAto',
         loadChildren: './modules/tc-mapping/tc-mapping.module#TcMappingModule',
         resolve: { offerData: OfferOverViewResolver }
