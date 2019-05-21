@@ -120,7 +120,11 @@
   border: 0;
   background: transparent;
   cursor: pointer;
-  margin-top: 5px 10px;
+  margin: 5px 10px 5px 20px;
+}
+.menu-btn:last-child {
+  border-left:solid 1px #39393B;
+  padding-left: 25px;
 }
 .menu-btn span[class*="icon-"]{
   display: block;
@@ -147,6 +151,13 @@
   color: lightslategray;
   margin: auto 3px;
 }
+.cool.cui .panel.panel--ltgray.panel--compressed label.switch.switch—large {
+  display: inline-block;
+}
+.cool.cui .panel.panel--ltgray.panel--compressed label.switch.switch—large span.switch__input {
+  margin: 13px auto;
+}
+
 /*
 .cui .task--bar .btn--back.btn:hover {
   background: rgba(0, 0, 0, .15);
