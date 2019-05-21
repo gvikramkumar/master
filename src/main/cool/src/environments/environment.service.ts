@@ -166,6 +166,10 @@ export class EnvironmentService {
         // BASIC MODULE STATUS UPDATE API
         REST_API_UPDATE_MODULE_STATUS_URL: string;
         REST_API_GET_MODULE_STATUS_URL: string;
+        // MARK COMPLETE STATUS URLs
+        REST_API_GET_MARK_COMPLETE_STATUS_URL: string;
+        REST_API_UPDATE_MARK_COMPLETE_STATUS_URL: string;
+
     constructor() {
         this.setEnvironmentVariables();
     }
@@ -420,5 +424,8 @@ export class EnvironmentService {
          // --------------------------------------- BASIC MODULES - Pirateship --------------------------------------------
          this.REST_API_UPDATE_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module/addPirateshipModuleStatus';
          this.REST_API_GET_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module/getPirateshipModuleStatus';
+         // ------------------------------------MARK COMPLETE STATUS URLs-------------------------------------------------------------------
+        this.REST_API_GET_MARK_COMPLETE_STATUS_URL = this.baseApiUrl + '/offersetup/getTogglesStatus/';
+        this.REST_API_UPDATE_MARK_COMPLETE_STATUS_URL = this.baseApiUrl + '/offersetup/UpdateOrAddTogglesStatus';
     }
 }

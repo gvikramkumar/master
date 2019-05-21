@@ -73,14 +73,12 @@
           <span class="ico-save-offer"></span>
           Save
         </button>
-
-        <div>
-          <label class="switch">
-              <input type="checkbox">
-              <div class="switch__input"></div>
-              <div class="switch__label">Mark Complete</div>
-          </label>
-        </div>
+        
+        <label class="switch switch—large">
+          <input type="checkbox">
+          <div class="switch__input"></div>
+          <div class="switch__label">Mark Complete</div>
+      </label>
 
         <button class="menu-btn" (click)="gotoOfferviewDetails()">
           <span class="ico-offer-details"></span>
@@ -96,7 +94,5 @@
   <app-offer-detail-pop-up [offerBuilderdata]="offerBuilderdata"></app-offer-detail-pop-up>
 </p-overlayPanel>
 
-
 <app-menu-bar-popup [show]="showPopup" [popupType]="popupType" (closePopup)="closePopup($event)"></app-menu-bar-popup>
 
-<app-mark-complete-popup></app-mark-complete-popup>
