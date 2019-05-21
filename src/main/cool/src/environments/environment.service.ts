@@ -9,7 +9,6 @@ export class EnvironmentService {
     redirectUrl: string;
     basePdafApiUrl: string;
     authTokenBaseApiUrl: string;
-    siUrl: string;
 
     clientId: string;
     idpClientId: string;
@@ -196,7 +195,6 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb.cloudapps.cisco.com/owb';
-                this.siUrl = 'https://wwwin-si.cisco.com/api/v2';
                 break;
             case 'stage':
                 this.baseApiUrl = 'https://cool-srv-stg.cisco.com/coolsrv';
@@ -208,7 +206,6 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
-                this.siUrl = 'https://wwwin-si.cisco.com/api/v2';
                 break;
             case 'qualityassurance':
                 this.baseApiUrl = 'https://cool-srv-qa.cisco.com/coolsrv';
@@ -220,7 +217,6 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
-                this.siUrl = 'https://wwwin-si.cisco.com/api/v2';
                 break;
             case 'development':
                 this.baseApiUrl = 'https://cool-srv-dev.cisco.com/coolsrv';
@@ -232,7 +228,6 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
-                this.siUrl = 'https://wwwin-si.cisco.com/api/v2';
                 break;
             default:
                 this.baseApiUrl = '/api';
@@ -244,7 +239,6 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
-                this.siUrl = 'https://wwwin-si.cisco.com/api/v2';
         }
 
         // ----------------------- AUTHENTICATION URLs -----------------------------------------------
