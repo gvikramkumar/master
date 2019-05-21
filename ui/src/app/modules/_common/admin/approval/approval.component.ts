@@ -158,7 +158,7 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
   }
 
   rejectRules() {
-    this.uiUtil.confirmReject('rule')
+    this.uiUtil.confirmReject('rule(s)')
       .subscribe(resultConfirm => {
         if (resultConfirm) {
           this.uiUtil.promptDialog('Enter a reason for rejection', null, DialogInputType.textarea)
@@ -181,7 +181,7 @@ export class ApprovalComponent extends RoutingComponentBase implements OnInit {
   }
 
   rejectSubmeasures() {
-    this.uiUtil.confirmReject('submeasure')
+    this.uiUtil.confirmReject('submeasure(s)')
       .subscribe(resultConfirm => {
         if (resultConfirm) {
           this.uiUtil.promptDialog('Enter a reason for rejection', null, DialogInputType.textarea)

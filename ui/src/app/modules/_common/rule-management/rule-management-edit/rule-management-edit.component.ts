@@ -124,7 +124,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           this.viewModeDPNotApprovedOnce = this.viewMode && _.includes(['D', 'P'], this.rule.status) && this.rule.approvedOnce !== 'Y';
           this.checkIfInUse();
         }
-        this.rule.period = this.rule.period || this.periods[0].period;
         if (this.copyMode) {
           this.rule.approvedOnce = 'N';
           this.rule.status = 'D';
@@ -287,16 +286,15 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       .then (() => {
         const oldName = this.rule.name;
         // generate a new name considering the latest approved rules
-        return this.valueChange()
-          .then (ruleNameExists => {
-            if (ruleNameExists) {
-              return Promise.reject('disregard');
-            } else if (this.rule.name !== oldName) {
-              // they need to be notified so they can update the associated submeasures
-              this.uiUtil.genericDialog('A select exception conflict caused a name change. Please review.');
-              return Promise.reject('disregard');
-            }
-          });
+        const ruleNameExists = this.valueChange();
+        if (ruleNameExists) {
+          return Promise.reject('disregard');
+        } else if (this.rule.name !== oldName) {
+          // they need to be notified so they can update the associated submeasures
+          this.uiUtil.genericDialog('A select exception conflict caused a name change. Please review.');
+          return Promise.reject('disregard');
+        }
+
       });
   }
 
@@ -547,28 +545,14 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     if (this.viewMode || this.isApprovedOnce()) {
       return Promise.resolve(false);
     }
-    // code below would work, but this would be faster than waiting for asyncs
-    if (!(this.rule.driverName && this.rule.period)) {
-      delete this.rule.name;
-      delete this.rule.desc;
-      return Promise.resolve(false);
-    }
-    return UiUtil.waitForAsyncValidations(this.form)
-      .then(() => {
-        if (this.form.valid) {
-          // we need to clone the selectMap, otherwise they add to it then remove their entry, but addition is still there
-          // so we'll clone it every time we generate a new name
-          const smap = _.cloneDeep(this.selectMap);
-          this.updateSelectStatements();
-          ruleUtil.addRuleNameAndDescription(this.rule, smap, this.drivers, this.periods);
-          // console.log(smap.buMap);
-          return this.checkIfRuleNameAlreadyExists();
-        } else {
-          delete this.rule.name;
-          delete this.rule.desc;
-          return Promise.resolve(false);
-        }
-      });
+
+    // we need to clone the selectMap, otherwise they add to it then remove their entry, but addition is still there
+    // so we'll clone it every time we generate a new name
+    const smap = _.cloneDeep(this.selectMap);
+    this.updateSelectStatements();
+    ruleUtil.addRuleNameAndDescription(this.rule, smap, this.drivers, this.periods);
+    // console.log(smap.buMap);
+    return this.checkIfRuleNameAlreadyExists();
   }
 
   checkIfRuleNameAlreadyExists() {
