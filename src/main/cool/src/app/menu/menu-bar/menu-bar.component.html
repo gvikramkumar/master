@@ -74,8 +74,8 @@
           Save
         </button>
 
-        <div class="col-2">
-          <label class="switch switch--large">
+        <div>
+          <label class="switch">
               <input type="checkbox">
               <div class="switch__input"></div>
               <div class="switch__label">Mark Complete</div>
@@ -98,3 +98,5 @@
 
 
 <app-menu-bar-popup [show]="showPopup" [popupType]="popupType" (closePopup)="closePopup($event)"></app-menu-bar-popup>
+
+<app-mark-complete-popup></app-mark-complete-popup>

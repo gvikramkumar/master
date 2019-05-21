@@ -30,6 +30,8 @@ export class MenuBarComponent implements OnInit {
     itemShow: Object = {};
     offerBuilderdata = {};
     navigateHash: Object = {};
+    showMarkcompletePopup: boolean = false;
+    showMarkcompleteToggle: boolean = false;
 
     currentOfferId: String = '';
     holdStatusValid = true;
@@ -251,6 +253,10 @@ export class MenuBarComponent implements OnInit {
 
     gotoOfferviewDetails() {
         this.router.navigate(['/offerDetailView', this.offerId, this.caseId]);
+    }
+
+    showMarkCompletePopup() {
+        this.showMarkcompletePopup = true;
     }
 
 }
