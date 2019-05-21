@@ -44,7 +44,7 @@
                         <span class="icon-check" *ngIf="mileStoneStatus[2].status === 'visited'"></span>
                         <span *ngIf="mileStoneStatus[2].status !== 'visited'">3</span>
                     </div>
-                    <div class="step__label">Execute</div>
+                    <div class="step__label">Set Up</div>
                 </div>
                 <div class="ui-step {{mileStoneStatus[3].status}}">
                     <div class="step__icon">
@@ -157,44 +157,41 @@
                         </td>
                     </tr>
 
-                    <!-- Uncomment below code for Sprint 5 -->
-                    <!-- <tr>
+                    <tr>
                         <td class="panel--ltgray">
-                            <span class="head text-large text-indigo">Execute<br>
-                                <span class="text-small text-dkgray-1"> {{planCompletedCount}} of {{planCount}}
+                            <span class="head text-large text-indigo">Set Up<br>
+                                <span class="text-small text-dkgray-1"> {{setupCompleteCount}} of {{setupCount}}
                                     Completed
                                 </span>
                             </span>
                         </td>
-                        <td *ngIf="executeCount > 1" colspan="3">
+                        <td *ngIf="setupCount > 1" colspan="3">
                             <div class="responsive-table">
                                 <table #data class="table table--hover table--compressed table--nostripes">
                                     <tbody>
-                                        <tr [class.innerrow]="executeCount -1  > i  " class="innerrow"
-                                            *ngFor="let ideateData of offerPhaseDetailsList.execute; let i = index">
+                                        <tr [class.innerrow]="setupCount -1  > i  " class="innerrow"
+                                            *ngFor="let setupData of offerPhaseDetailsList.setup; let i = index">
                                             <td class="one-third-width">
-                                                <div *ngIf="!ideateData.enable; else enableOfferPhase">
-                                                    <span class="text-muted"
-                                                        pTooltip="Dependent activities are not yet satisfied"
-                                                        tooltipPosition="top">{{ideateData.subMilestone}}</span>
+                                                <div *ngIf="!setupData.enable; else enableOfferPhase">
+                                                    <span class="text-muted" pTooltip="Dependent activities are not yet satisfied"
+                                                        tooltipPosition="top">{{setupData.subMilestone}}</span>
                                                 </div>
                                                 <ng-template #enableOfferPhase>
                                                     <a><span style="color: #005073;"
-                                                            (click)="gotobackTomilestone(ideateData.subMilestone)">{{ideateData.subMilestone}}</span></a>
+                                                            (click)="gotobackTomilestone(setupData.subMilestone)">{{setupData.subMilestone}}</span></a>
                                                 </ng-template>
                                             </td>
                                             <td class="one-third-width"
-                                                [ngClass]="(ideateData.status == 'Completed' || ideateData.status == 'Not Applicable')?'text-success':'text-warning'">
-                                                {{ideateData.status}}</td>
+                                                [ngClass]="(setupData.status == 'Completed' || setupData.status == 'Not Applicable')?'text-success':'text-warning'">
+                                                {{setupData.status}}</td>
                                             <td class="one-third-width">
-                                                {{ideateData.completionDate | date:'dd-MMM-yyyy'}}</td>
+                                                {{setupData.completionDate | date:'dd-MMM-yyyy'}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </td>
-                    </tr> -->
-
+                    </tr>
                 </tbody>
             </table>
         </div>
