@@ -167,7 +167,7 @@
                                       [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']" #itemName="ngModel">
                                   </div>
                                   <div class="tool-tip  slideIn"
-                                    *ngIf="pInfo.rules.validationMessage != '' && pInfo.rules.isvalid == false && (itemName.dirty || itemName.touched)">
+                                    *ngIf="pInfo.rules.validationMessage != '' && pInfo.rules.isvalid == false">
                                     <ul>
                                       <li>{{pInfo.rules.validationMessage}}</li>
                                     </ul>

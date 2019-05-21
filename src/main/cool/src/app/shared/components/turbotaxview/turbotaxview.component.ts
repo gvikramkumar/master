@@ -13,15 +13,15 @@ export class TurbotaxviewComponent implements OnChanges {
     @Input() caseId: string;
     @Input() offerId: string;
 
-    public phases: any[] = ['ideate', 'plan', 'execute', 'launch'];
+    public phases: any[] = ['ideate', 'plan', 'setup', 'launch'];
     public mileStoneStatus: any[] = [];
 
     public ideateCount: any = 0;
     public ideateCompletedCount = 0;
     public planCount = 0;
     public planCompletedCount = 0;
-    public executeCount = 0;
-    public executeCompleteCount = 0;
+    public setupCount = 0;
+    public setupCompleteCount = 0;
     public offerPhaseDetailsList = null;
     public phaseProcessingCompleted = false;
     public isOfferPhaseBlank = true;
@@ -51,7 +51,8 @@ export class TurbotaxviewComponent implements OnChanges {
         this.navigateHash['Offer Solutioning'] = ['/offerSolutioning', offerId, caseId];
         this.navigateHash['Offer Components'] = ['/offerConstruct', offerId, caseId];
         this.navigateHash['Design Review'] = ['/designReview', offerId, caseId];
-        this.navigateHash['Modular Workflow Completion'] = ['/offerSetup', offerId, caseId];
+        this.navigateHash['Offer Setup Workflow'] = ['/offerSetup', offerId, caseId];
+
         this.turbotax.getRubboTaxMenu(caseId).subscribe(resOfferPhases => {
             if (resOfferPhases) {
                 console.log('response offer phases '+JSON.stringify(resOfferPhases));
@@ -63,8 +64,9 @@ export class TurbotaxviewComponent implements OnChanges {
                 this.planCount = resOfferPhases.plan ? resOfferPhases.plan.length : 0;
                 this.planCompletedCount = resOfferPhases.plan ? resOfferPhases.plan.filter(this.isMilestoneCompleted()).length : 0;
 
-                this.executeCount = resOfferPhases.execute ? resOfferPhases.execute.length : 0;
-                this.executeCompleteCount = resOfferPhases.execute ? resOfferPhases.execute.filter(this.isMilestoneCompleted()).length : 0;
+                this.setupCount = resOfferPhases.setup ? resOfferPhases.setup.length : 0;
+                this.setupCompleteCount = resOfferPhases.setup ? resOfferPhases.setup.filter(this.isMilestoneCompleted()).length : 0;
+
                 this.processCurrentPhaseInfo(resOfferPhases);
             }
             this.phaseProcessingCompleted = true;
@@ -97,6 +99,8 @@ export class TurbotaxviewComponent implements OnChanges {
         this.ideateCompletedCount = 0;
         this.planCount = 0;
         this.planCompletedCount = 0;
+        this.setupCount = 0;
+        this.setupCompleteCount = 0;
         this.offerPhaseDetailsList = null;
         this.phaseProcessingCompleted = false;
         this.navigateHash = {};

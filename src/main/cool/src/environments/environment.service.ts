@@ -18,7 +18,7 @@ export class EnvironmentService {
     REST_API_AUTH_IDP_TOKEN_URL: string;
     REST_API_GENERATE_AUTH_TOKEN_URL: string;
 
-    // USER INFO URLs 
+    // USER INFO URLs
     REST_API_LDAP_USER_DETAILS_URL: string;
     REST_API_URL_GET_CURRENT_USER_URL: string;
 
@@ -136,13 +136,17 @@ export class EnvironmentService {
     // SERVICE ANNUITY URLs
     REST_API_RETRIEVE_SERVICE_ATO_LIST_URL: string;
     REST_API_RETRIEVE_SERVICE_ANNUITY_PRICING_URL: string;
-    
+
     // -------------------------------------------------------------------------------------------------
+    // CSDL URLs
+    REST_API_GET_ALL_PROJECTS: string;
+    REST_API_POST_CREATE_CSDL_ASSOCIATION: string;
+    REST_API_REFRESH_PROJECTS: string;
 
         //SERVICE FOR BASIC MODULES URLs - NPI
         REST_API_GET_ALL_COMMENTS_NPI_URL: string;
         REST_API_ADD_COMMENT_NPI_URL: string;
-    
+
         //SERVICE FOR BASIC MODULES URLs - Royal Setup
         REST_API_GET_ALL_COMMENTS_ROYALTY_SETUP: string;
         REST_API_ADD_COMMENT_ROYALTY: string;
@@ -158,7 +162,7 @@ export class EnvironmentService {
         // SERVICE FOR BASIC MODULES URLs - Pricing Uplift
         REST_API_GET_ALL_COMMENTS_PRICING_UPLIFT: string;
         REST_API_ADD_COMMENT_PRICING_UPLIFT: string;
-    
+
         // BASIC MODULE STATUS UPDATE API
         REST_API_UPDATE_MODULE_STATUS_URL: string;
         REST_API_GET_MODULE_STATUS_URL: string;
@@ -387,16 +391,20 @@ export class EnvironmentService {
         this.REST_API_RETRIEVE_SERVICE_ATO_LIST_URL = this.baseApiUrl + '/itemcreation/getATOs';
         this.REST_API_RETRIEVE_SERVICE_ANNUITY_PRICING_URL = this.baseApiUrl + '/serviceAnnuityPricing/getPricingOfferLevel';
         // -------------------------------------------------------------------------------------------------
+        // -------------------------------------- CSDL -------------------------------------
+        this.REST_API_GET_ALL_PROJECTS = this.baseApiUrl + '/csdl/searchCsdlProjectsNames';
+        this.REST_API_REFRESH_PROJECTS = this.baseApiUrl + '/csdl/getCsdlDetails';
+        this.REST_API_POST_CREATE_CSDL_ASSOCIATION = this.baseApiUrl + '/csdl/saveCsdlDetails';
 
          // --------------------------------------- BASIC MODULES - NPI Licensing ----------------------------------------------
          this.REST_API_GET_ALL_COMMENTS_NPI_URL = this.baseApiUrl + '/pirateship/module/getNPILicensingComment';
          this.REST_API_UPDATE_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module';
          this.REST_API_ADD_COMMENT_NPI_URL = this.baseApiUrl + '/pirateship/module/addNPILicensingComments';
- 
+
          // --------------------------------------- BASIC MODULES - ROYALTY SETUP ----------------------------------------------
          this.REST_API_GET_ALL_COMMENTS_ROYALTY_SETUP = this.baseApiUrl + '/pirateship/module/getRoyaltySetupComment';
          this.REST_API_ADD_COMMENT_ROYALTY = this.baseApiUrl + '/pirateship/module/addRoyaltySetupComments';
- 
+
          // --------------------------------------- BASIC MODULES - OFFER ATTRIBUTION ---------------------------------------------
          this.REST_API_GET_ALL_COMMENTS_OFFER_ATTRIBUTION = this.baseApiUrl + '/pirateship/module/getOfferAttributionComment';
          this.REST_API_ADD_COMMENT_OFFER_ATTRIBUTION = this.baseApiUrl + '/pirateship/module/addOfferAttributionComments';
