@@ -1,10 +1,10 @@
 export const pirateShipRoutesNames = {
 
-    ITEM_CREATION: 'item-creation',
-    MODELLING_DESIGN: 'modelling-design',
-    SERVICE_ANNUITY_PRICING: 'service-annuity-pricing',
-    SELF_SERVICE_ORDERABILITY: 'self-service-orderability',
-    TC_MAPPING: 'tc-mapping',
-    CHANGE_STATUS: 'change-status'
+    REOPEN: 'REOPEN',
+    COMPLETED: 'COMPLETED',
+    IN_PROGRESS: 'IN PROGRESS',
+    NOT_STARTED: 'NOT STARTED',
+    OFFER_NOT_PRESENT: 'OFFER NOT PRESENT',
+    OFFER_WORKFLOW_NOT_SETUP: 'OFFER WORKFLOW NOT SETUP'
 
 }
