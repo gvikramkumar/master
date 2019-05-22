@@ -1,7 +1,7 @@
 <app-menu-bar [caseId]="caseId" [offerId]="offerId" [offerName]="offerName" [currentMMModel]="derivedMM">
-  </app-menu-bar>
+</app-menu-bar>
 
-  <div class="content">
+<div class="content">
   <div class="container">
 
 
@@ -35,16 +35,12 @@
           </div>
 
           <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer' else selectedAtoView">
-            <app-sso-ato-list [ssoList]="ssoList"></app-sso-ato-list>
+            <app-sso-ato-list [ssoList]="ssoList" (atoSelection)="showSelectedAtoView($event)"></app-sso-ato-list>
           </div>
 
           <ng-template #selectedAtoView>
-
-
             <app-sso-ato-summary [sso]="sso"></app-sso-ato-summary>
-
           </ng-template>
-
 
           <app-pirate-ship-legend></app-pirate-ship-legend>
 

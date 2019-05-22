@@ -114,6 +114,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   private billing_soa = "Billing SOA SKU";
   private counterList: any = [];
 
+  showMajorItemFoundDialog: Boolean;
+
   constructor(
     private cd: ChangeDetectorRef,
     private messageService: MessageService,
@@ -134,7 +136,11 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       // you can also set initial formgroup inside if you like
       companies: this._fb.array([])
     });
+
+    this.showMajorItemFoundDialog = false;
+
   }
+
 
   //
   onValidateChars(event) {
@@ -1632,7 +1638,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       this.loaderService.stopLoading();
 
       // Raviraj US290268
-      if (results.body) {
+      if (!_.isEmpty(results)) {
         if (results.body['major/minor'] === 'Minor Line') {
           if (results.body['WorkFlow Status'] === 'APPROVED' &&
             ((results.body['WorkFlow Status Requested By'] === 'BUC') || (
@@ -1641,6 +1647,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
             this.addMinorItem(results.body);
           }
         }
+      } else {
+        this.showMajorItemFoundDialog = true;
       }
     },
       () => {
@@ -1649,6 +1657,11 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       }
     );
   }
+
+  showMajorItemFoundDialogFunction() {
+    this.showMajorItemFoundDialog = false;
+  }
+
 
   // getAndSetQUestionAccordingToPID
 
