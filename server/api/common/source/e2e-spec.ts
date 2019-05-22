@@ -19,7 +19,7 @@ describe(`Source endpoint tests`, () => {
       .expect(200)
       .expect(function(res) {
         const arr = res.body;
-        expect(arr.length).toEqual(20);
+        expect(arr.length).toBeGreaterThan(20);
       })
       .end(done);
   });
