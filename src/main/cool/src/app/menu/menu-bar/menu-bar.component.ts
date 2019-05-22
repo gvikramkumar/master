@@ -46,7 +46,7 @@ export class MenuBarComponent implements OnInit {
         private activatedRoute: ActivatedRoute,     
         private environmentService: EnvironmentService,
         private monetizationModelService: MonetizationModelService) {
-            this.currentURL = activatedRoute.snapshot['_routerState'].url;
+        this.currentURL = activatedRoute.snapshot['_routerState'].url;
 
         this.showPopup = false;
 
