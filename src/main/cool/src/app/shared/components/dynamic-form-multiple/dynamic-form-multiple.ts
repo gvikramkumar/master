@@ -573,7 +573,7 @@ export class DynamicFormMultipleComponent implements OnInit {
                 }
             }
             if (question.egineAttribue == 'NON STD INITIAL TERM') {
-                if (!(/^0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120)$/.test(question.currentValue))) {
+                if (!(/^(0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120))(-(0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120)))$/.test(question.currentValue))) {
                     question.rules.validationMessage = "Value should be a numeric range where 1 is min and 120 is max (example: 1-12)";
                     question.rules.isvalid = false;
                 }
@@ -593,7 +593,7 @@ export class DynamicFormMultipleComponent implements OnInit {
                 }
             }
             if (question.egineAttribue == 'NON STD AUTO RENEWAL TERM') {
-                if (!(/^0*([1-9]|1[0-2])$/.test(question.currentValue))) {
+                if (!(/^(0*([1-9]|1[0-2]))(-(0*([1-9]|1[0-2])))$/.test(question.currentValue))) {
                     question.rules.validationMessage = question.egineAttribue + "Value should be a numeric range where 1 is min and 12 is max";
                     question.rules.isvalid = false;
                 }
@@ -605,6 +605,16 @@ export class DynamicFormMultipleComponent implements OnInit {
             if (question.egineAttribue == 'Subscription Offset(In Days)') {
                 if (!(/^0*([1-9]|[1-5][0-9]|60)$/.test(question.currentValue))) {
                     question.rules.validationMessage = "Mandatory entry of 1 numeric value between 1 and 60";
+                    question.rules.isvalid = false;
+                }
+                else {
+                    question.rules.validationMessage = "";
+                    question.rules.isvalid = true;
+                }
+            }
+            if (question.egineAttribue == 'Non Standard True Up Term') {
+                if (!(/^(0*([2-6]))(-(0*([2-6])))$/.test(question.currentValue))) {
+                    question.rules.validationMessage = "Value should be a numeric range (ex. 2-6)";
                     question.rules.isvalid = false;
                 }
                 else {
