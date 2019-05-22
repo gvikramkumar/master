@@ -30,6 +30,12 @@ export class MenuBarComponent implements OnInit {
     itemShow: Object = {};
     offerBuilderdata = {};
     navigateHash: Object = {};
+    showMarkcompletePopup: boolean = false;
+    showMarkcompleteToggle: boolean = false;
+    markCompleteStatus: boolean;
+    offerSolutioning_toggleStatus: boolean;
+    offerComponent_toggleStatus: boolean;
+    offerDimension_toggleStatus: boolean;
 
     currentOfferId: String = '';
     holdStatusValid = true;
@@ -128,7 +134,12 @@ export class MenuBarComponent implements OnInit {
             },
 
         ];
-
+        
+        this.menuBarService.getMarkCompleteStatus(this.offerId, this.caseId).subscribe(data => {
+            this.offerSolutioning_toggleStatus = data['offerSolutioning_toggleStatus'];
+            this.offerComponent_toggleStatus = data['offerComponent_toggleStatus'];
+            this.offerDimension_toggleStatus = data['offerDimension_toggleStatus'];
+        })
 
         this.monetizationModelService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
             this.offerBuilderdata = data;
@@ -257,6 +268,10 @@ export class MenuBarComponent implements OnInit {
 
     gotoOfferviewDetails() {
         this.router.navigate(['/offerDetailView', this.offerId, this.caseId]);
+    }
+
+    showMarkCompletePopup() {
+        this.showMarkcompletePopup = true;
     }
 
 }

@@ -143,33 +143,32 @@ export class EnvironmentService {
     REST_API_POST_CREATE_CSDL_ASSOCIATION: string;
     REST_API_REFRESH_PROJECTS: string;
 
-    //SERVICE FOR BASIC MODULES URLs - NPI
-    REST_API_GET_ALL_COMMENTS_NPI_URL: string;
-    REST_API_ADD_COMMENT_NPI_URL: string;
+        //SERVICE FOR BASIC MODULES URLs - NPI
+        REST_API_GET_ALL_COMMENTS_NPI_URL: string;
+        REST_API_ADD_COMMENT_NPI_URL: string;
 
-    // SERVICE FOR BASIC MODULES URLs - Royal Setup
-    REST_API_GET_ALL_COMMENTS_ROYALTY_SETUP: string;
-    REST_API_ADD_COMMENT_ROYALTY: string;
+        //SERVICE FOR BASIC MODULES URLs - Royal Setup
+        REST_API_GET_ALL_COMMENTS_ROYALTY_SETUP: string;
+        REST_API_ADD_COMMENT_ROYALTY: string;
+        //SERVICE FOR BASIC MODULES URLs - Offer Attribution
+        REST_API_GET_ALL_COMMENTS_OFFER_ATTRIBUTION: string;
+        REST_API_ADD_COMMENT_OFFER_ATTRIBUTION: string;
+        //SERVICE FOR BASIC MODULES URLs - Export Compliance
+        REST_API_GET_ALL_COMMENTS_EXPORT_COMPLIANCE: string;
+        REST_API_ADD_COMMENT_EXPORT_COMPLIANCE: string;
+        // SERVICE FOR BASIC MODULES URLs - Testing
+        REST_API_GET_ALL_COMMENTS_TESTING: string;
+        REST_API_ADD_COMMENT_TESTING: string;
+        // SERVICE FOR BASIC MODULES URLs - Pricing Uplift
+        REST_API_GET_ALL_COMMENTS_PRICING_UPLIFT: string;
+        REST_API_ADD_COMMENT_PRICING_UPLIFT: string;
 
-    // SERVICE FOR BASIC MODULES URLs - Offer Attribution
-    REST_API_GET_ALL_COMMENTS_OFFER_ATTRIBUTION: string;
-    REST_API_ADD_COMMENT_OFFER_ATTRIBUTION: string;
-
-    // SERVICE FOR BASIC MODULES URLs - Export Compliance
-    REST_API_GET_ALL_COMMENTS_EXPORT_COMPLIANCE: string;
-    REST_API_ADD_COMMENT_EXPORT_COMPLIANCE: string;
-
-    // SERVICE FOR BASIC MODULES URLs - Testing
-    REST_API_GET_ALL_COMMENTS_TESTING: string;
-    REST_API_ADD_COMMENT_TESTING: string;
-
-    // SERVICE FOR BASIC MODULES URLs - Pricing Uplift
-    REST_API_GET_ALL_COMMENTS_PRICING_UPLIFT: string;
-    REST_API_ADD_COMMENT_PRICING_UPLIFT: string;
-
-    // BASIC MODULE STATUS UPDATE API
-    REST_API_UPDATE_MODULE_STATUS_URL: string;
-    REST_API_GET_MODULE_STATUS_URL: string;
+        // BASIC MODULE STATUS UPDATE API
+        REST_API_UPDATE_MODULE_STATUS_URL: string;
+        REST_API_GET_MODULE_STATUS_URL: string;
+        // MARK COMPLETE STATUS URLs
+        REST_API_GET_MARK_COMPLETE_STATUS_URL: string;
+        REST_API_UPDATE_MARK_COMPLETE_STATUS_URL: string;
 
     constructor() {
         this.setEnvironmentVariables();
@@ -403,42 +402,32 @@ export class EnvironmentService {
         this.REST_API_GET_ALL_PROJECTS = this.baseApiUrl + '/csdl/searchCsdlProjectsNames';
         this.REST_API_POST_CREATE_CSDL_ASSOCIATION = this.baseApiUrl + '/csdl/saveCsdlDetails';
 
-        // --------------------------------------- BASIC MODULES - NPI Licensing ----------------------------------------------
+         // --------------------------------------- BASIC MODULES - NPI Licensing ----------------------------------------------
+         this.REST_API_GET_ALL_COMMENTS_NPI_URL = this.baseApiUrl + '/pirateship/module/getNPILicensingComment';
+         this.REST_API_UPDATE_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module';
+         this.REST_API_ADD_COMMENT_NPI_URL = this.baseApiUrl + '/pirateship/module/addNPILicensingComments';
 
-        this.REST_API_UPDATE_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module';
-        this.REST_API_ADD_COMMENT_NPI_URL = this.baseApiUrl + '/pirateship/module/addNPILicensingComments';
-        this.REST_API_GET_ALL_COMMENTS_NPI_URL = this.baseApiUrl + '/pirateship/module/getNPILicensingComment';
+         // --------------------------------------- BASIC MODULES - ROYALTY SETUP ----------------------------------------------
+         this.REST_API_GET_ALL_COMMENTS_ROYALTY_SETUP = this.baseApiUrl + '/pirateship/module/getRoyaltySetupComment';
+         this.REST_API_ADD_COMMENT_ROYALTY = this.baseApiUrl + '/pirateship/module/addRoyaltySetupComments';
 
-        // --------------------------------------- BASIC MODULES - ROYALTY SETUP ----------------------------------------------
-
-        this.REST_API_ADD_COMMENT_ROYALTY = this.baseApiUrl + '/pirateship/module/addRoyaltySetupComments';
-        this.REST_API_GET_ALL_COMMENTS_ROYALTY_SETUP = this.baseApiUrl + '/pirateship/module/getRoyaltySetupComment';
-
-
-        // --------------------------------------- BASIC MODULES - OFFER ATTRIBUTION ---------------------------------------------
-
-        this.REST_API_ADD_COMMENT_OFFER_ATTRIBUTION = this.baseApiUrl + '/pirateship/module/addOfferAttributionComments';
-        this.REST_API_GET_ALL_COMMENTS_OFFER_ATTRIBUTION = this.baseApiUrl + '/pirateship/module/getOfferAttributionComment';
-
-        // --------------------------------------- BASIC MODULES - Export Compliance ---------------------------------------------
-
-        this.REST_API_ADD_COMMENT_EXPORT_COMPLIANCE = this.baseApiUrl + '/pirateship/module/addExportComplianceComments';
-        this.REST_API_GET_ALL_COMMENTS_EXPORT_COMPLIANCE = this.baseApiUrl + '/pirateship/module/getExportComplianceComment';
-
-        // --------------------------------------- BASIC MODULES - Testing --------------------------------------------
-
-        this.REST_API_ADD_COMMENT_TESTING = this.baseApiUrl + '/pirateship/module/addTestingComments';
-        this.REST_API_GET_ALL_COMMENTS_TESTING = this.baseApiUrl + '/pirateship/module/getTestingComment';
-
-        // --------------------------------------- BASIC MODULES - Pricing Uplift --------------------------------------------
-
-        this.REST_API_ADD_COMMENT_PRICING_UPLIFT = this.baseApiUrl + '/pirateship/module/addPricingUpliftComments';
-        this.REST_API_GET_ALL_COMMENTS_PRICING_UPLIFT = this.baseApiUrl + '/pirateship/module/getPricingUpliftComment';
-
-        // --------------------------------------- BASIC MODULES - Pirateship --------------------------------------------
-
-        this.REST_API_GET_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module/getPirateshipModuleStatus';
-        this.REST_API_UPDATE_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module/addPirateshipModuleStatus';
-
+         // --------------------------------------- BASIC MODULES - OFFER ATTRIBUTION ---------------------------------------------
+         this.REST_API_GET_ALL_COMMENTS_OFFER_ATTRIBUTION = this.baseApiUrl + '/pirateship/module/getOfferAttributionComment';
+         this.REST_API_ADD_COMMENT_OFFER_ATTRIBUTION = this.baseApiUrl + '/pirateship/module/addOfferAttributionComments';
+         // --------------------------------------- BASIC MODULES - Export Compliance ---------------------------------------------
+         this.REST_API_GET_ALL_COMMENTS_EXPORT_COMPLIANCE = this.baseApiUrl + '/pirateship/module/getExportComplianceComment';
+         this.REST_API_ADD_COMMENT_EXPORT_COMPLIANCE = this.baseApiUrl + '/pirateship/module/addExportComplianceComments';
+         // --------------------------------------- BASIC MODULES - Testing --------------------------------------------
+         this.REST_API_GET_ALL_COMMENTS_TESTING = this.baseApiUrl + '/pirateship/module/getTestingComment';
+         this.REST_API_ADD_COMMENT_TESTING = this.baseApiUrl + '/pirateship/module/addTestingComments';
+         // --------------------------------------- BASIC MODULES - Pricing Uplift --------------------------------------------
+         this.REST_API_GET_ALL_COMMENTS_PRICING_UPLIFT = this.baseApiUrl + '/pirateship/module/getPricingUpliftComment';
+         this.REST_API_ADD_COMMENT_PRICING_UPLIFT = this.baseApiUrl + '/pirateship/module/addPricingUpliftComments';
+         // --------------------------------------- BASIC MODULES - Pirateship --------------------------------------------
+         this.REST_API_UPDATE_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module/addPirateshipModuleStatus';
+         this.REST_API_GET_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module/getPirateshipModuleStatus';
+         // ------------------------------------MARK COMPLETE STATUS URLs-------------------------------------------------------------------
+        this.REST_API_GET_MARK_COMPLETE_STATUS_URL = this.baseApiUrl + '/offersetup/getTogglesStatus/';
+        this.REST_API_UPDATE_MARK_COMPLETE_STATUS_URL = this.baseApiUrl + '/offersetup/UpdateOrAddTogglesStatus';
     }
 }

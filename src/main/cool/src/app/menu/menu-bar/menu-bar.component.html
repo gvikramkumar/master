@@ -70,17 +70,16 @@
 
       <div class="col-md-6 text-right">
         <button class="menu-btn" (click)="saveCurrentState()" *ngIf="showSave">
-          <span class="ico-save-offer"></span>
-          Save
+            <span class="ico-save-offer"></span>
+            Save
         </button>
 
-        <div class="col-2">
-          <label class="switch switch--large">
-              <input type="checkbox">
-              <div class="switch__input"></div>
-              <div class="switch__label">Mark Complete</div>
-          </label>
-      </div>
+        <label class="menu-btn switch switch—large">
+            <input type="checkbox">
+            <span class="switch__input"></span>
+            <span class="switch__label">Mark Complete</span>
+        </label>
+
         <button class="menu-btn" (click)="gotoOfferviewDetails()">
           <span class="ico-offer-details"></span>
           Offer Details
@@ -96,3 +95,4 @@
 </p-overlayPanel>
 
 <app-menu-bar-popup [show]="showPopup" [popupType]="popupType" (closePopup)="closePopup($event)"></app-menu-bar-popup>
+
