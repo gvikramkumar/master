@@ -544,6 +544,9 @@ export class OfferConstructDefaultValue {
       }
     });
   }
+  
+  
+  //////////////////// Test ///////////////////////////
 
   setDefaultInitialTerm(questionList) {
     let initialTermDefault;
@@ -558,7 +561,6 @@ export class OfferConstructDefaultValue {
 
     questionList.forEach(question => {
       if (question.question == "Default Initial Term") {
-               console.log("question.currentValue",question.currentValue)
              
              if(initialTermDefaultValues.includes(question.currentValue)){
                  question.rules.isvalid = true;
@@ -567,7 +569,7 @@ export class OfferConstructDefaultValue {
              }
              else{
                   question.rules.isvalid = false;
-                  question.rules.validationMessage = question.egineAttribue + " should be a value from True Up Term ";
+                  question.rules.validationMessage = question.egineAttribue + " should be a value from Initial Term ";
                   console.log("question.currentValue != trueUpValue", question.rules.isvalid )
              }
       }
@@ -603,23 +605,80 @@ export class OfferConstructDefaultValue {
   }
 
 
-  // setSoftwareLicenseNSKU(questionList) {
-  //     questionList.forEach(question => {
-  //         if (question.question == "UPG Family"  || question.question == "UPG Group" || question.question == "UPG Type" ) {
-  //             question.rules.isDisabled = false;
-  //         }
-  //     });
-  //       return questionList;
-  // }
-  // setSoftwareLicenseNSKUDefault(questionList) {
-  //     questionList.forEach(question => {
-  //         if (question.question == "UPG Family"  || question.question == "UPG Group" || question.question == "UPG Type" ) {
-  //             question.rules.isDisabled = true;
-  //         }
-  //     });
-  //      return questionList;
-  // }
 
+  setSoftwareLicenseNSKU(questionList) {
+      questionList.forEach(question => {
+          if (question.question == "UPG Family"  || question.question == "UPG Group" || question.question == "UPG Type" ) {
+              question.rules.isDisabled = false;
+          }
+      });
+        return questionList;
+  }
+  setSoftwareLicenseNSKUDefault(questionList) {
+      questionList.forEach(question => {
+          if (question.question == "UPG Family"  || question.question == "UPG Group" || question.question == "UPG Type" ) {
+              question.rules.isDisabled = true;
+              question.rules.isMandatoryOptional = "Optional";
+          }
+      });
+       return questionList;
+  }
 
+  getSpareTypeValues(questionList, createSpare){
+      questionList.forEach(question => {
+        if (question.question == "Spare Price" || question.question == "Spare Configurable") {
+          if (createSpare == 'Yes') {
+            question.rules.isDisabled = false;
+          }
+          else {
+              question.rules.isDisabled = true;
+              question.rules.isMandatoryOptional = "Optional";
+          }
+
+        }
+      
+  });
+  return questionList;
+  }
+  
+  
+  setEnablementFileType(questionList) {
+    questionList.forEach(question => {
+      if (question.question == "Enablement File Type") {
+        question.rules.isDisabled = false;
+      }
+    });
+    return questionList;
+  }
+  
+  setEnablementFileTypeN(questionList) {
+    questionList.forEach(question => {
+      if (question.question == "Enablement File Type") {
+          question.rules.isDisabled = true;
+          question.rules.isMandatoryOptional = "Optional";
+      }
+    });
+    return questionList;
+  }
+  
+  
+  setConditionalAccess(questionList) {
+    questionList.forEach(question => {
+      if (question.question == "Conditional Access") {
+        question.rules.isDisabled = false;
+      }
+    });
+    return questionList;
+  }
+  
+  setConditionalAccessN(questionList) {
+    questionList.forEach(question => {
+      if (question.question == "Conditional Access") {
+        question.rules.isDisabled = true;
+        question.rules.isMandatoryOptional = "Optional";
+      }
+    });
+    return questionList;
+  }
 
 }

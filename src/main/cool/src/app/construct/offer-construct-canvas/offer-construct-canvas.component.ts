@@ -94,6 +94,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   public chargeTypeValue: any;
   public licenseDelivery: any;
   public pakEligibility: any;
+  public createSpare: any;
   multiSelectItems: string[] = ['Route-to-Market',
     'Price List Availability',
     'GPL Publication',
@@ -292,14 +293,19 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
               let listOfferQuestions = this.defaultValueServices.setTaxCategory(this.listOfferQuestions);
               obj['itemDetails'] = listOfferQuestions;
             }
-            // if (obj.productName == 'License') {
-            //     let listOfferQuestions = this.defaultValueServices.setSoftwareLicenseNSKU(this.listOfferQuestions);
-            //     obj['itemDetails'] = listOfferQuestions;
-            // }
-            // else{
-            //     let listOfferQuestions = this.defaultValueServices.setSoftwareLicenseNSKUDefault(this.listOfferQuestions);
-            //     obj['itemDetails'] = listOfferQuestions;
-            // }
+            if (obj.productName == 'License') {
+                let listOfferQuestions = this.defaultValueServices.setSoftwareLicenseNSKU(this.listOfferQuestions);
+                obj['itemDetails'] = listOfferQuestions;
+            }
+            else{
+                let listOfferQuestions = this.defaultValueServices.setSoftwareLicenseNSKUDefault(this.listOfferQuestions);
+                obj['itemDetails'] = listOfferQuestions;
+            }
+            
+            if (obj.productName == 'License' || obj.productName == 'Hardware'){
+              let listOfferQuestions = this.defaultValueServices.getSpareTypeValues(this.listOfferQuestions, this.createSpare);
+              obj['itemDetails'] = listOfferQuestions;
+            }
 
             obj['itemDetails'] = this.listOfferQuestions;
           } else {
@@ -903,11 +909,44 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
                   obj['itemDetails'] = listOfferQuestions;
                 }
                 
+                if (obj.productName == 'License') {
+                  let listOfferQuestions = this.defaultValueServices.setSoftwareLicense(this.listOfferQuestions);
+                  obj['itemDetails'] = listOfferQuestions;
+                }
+                else {
+                  let listOfferQuestions = this.defaultValueServices.setSoftwareLicenseDefault(this.listOfferQuestions);
+                  obj['itemDetails'] = listOfferQuestions;
+                }
+                
                 if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS' || obj.productName == 'Billing') {
-                 let listOfferQuestions = this.defaultValueServices.setCreateDefault(this.listOfferQuestions);
-                 obj['itemDetails'] = listOfferQuestions;
-               }
-
+                  let listOfferQuestions = this.defaultValueServices.setCreateDefault(this.listOfferQuestions);
+                  obj['itemDetails'] = listOfferQuestions;
+                }
+                
+                if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'Billing') {
+                  let listOfferQuestions = this.defaultValueServices.setAdjustable(this.listOfferQuestions);
+                  obj['itemDetails'] = listOfferQuestions;
+                }
+                
+                if (obj.productName == 'XaaS' || obj.productName == 'Billing') {
+                  let listOfferQuestions = this.defaultValueServices.setTaxCategory(this.listOfferQuestions);
+                  obj['itemDetails'] = listOfferQuestions;
+                }
+                
+                if (obj.productName == 'License') {
+                    let listOfferQuestions = this.defaultValueServices.setSoftwareLicenseNSKU(this.listOfferQuestions);
+                    obj['itemDetails'] = listOfferQuestions;
+                }
+                else{
+                    let listOfferQuestions = this.defaultValueServices.setSoftwareLicenseNSKUDefault(this.listOfferQuestions);
+                    obj['itemDetails'] = listOfferQuestions;
+                }
+                
+                if (obj.productName == 'License' || obj.productName == 'Hardware'){
+                  let listOfferQuestions = this.defaultValueServices.getSpareTypeValues(this.listOfferQuestions, this.createSpare);
+                  obj['itemDetails'] = listOfferQuestions;
+                }
+                
                 obj['itemDetails'] = this.listOfferQuestions;
               } else {
                 let listOfferQuestions = this.defaultValueServices.billingSOADefaultValue(this.listOfferQuestions, this.chargeTypeValue);
@@ -1228,6 +1267,11 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           this.getPakEligibilityType(offerDetailRes.solutioningDetails);
         }
       }
+      if (offerDetailRes.solutioningDetails !== null && offerDetailRes.solutioningDetails !== undefined) {
+        if (offerDetailRes.solutioningDetails.length > 0) {
+          this.getCreateSpareType(offerDetailRes.solutioningDetails);
+        }
+      }
     }, (err) => {
       console.log(err);
       this.loaderService.stopLoading();
@@ -1295,6 +1339,17 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       });
     });
   }
+  
+  getCreateSpareType(solutioningDetails) {
+    solutioningDetails.forEach(element => {
+      element.Details.forEach(list => {
+        if (list.egenieAttributeName == 'Create Spare?' || list.egenieAttributeName == 'Create Spare?') {
+          this.createSpare = list.solutioningAnswer;
+        }
+      });
+    });
+  }
+  
   /**
    * Method to add parent node to tree.
    * @param node

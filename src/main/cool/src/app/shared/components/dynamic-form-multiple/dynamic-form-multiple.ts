@@ -526,6 +526,30 @@ export class DynamicFormMultipleComponent implements OnInit {
                 }
 
             }
+            
+            // if (question.question == "Product Reliability Class") {
+            //     if (question.currentValue == "Yes") {
+            //         this.defaultValueServices.setSubscriptionOffset(questionList);
+            //     }
+            // }
+            
+            if (question.question == "Enablement") {
+                if (question.currentValue == "Y") {
+                    this.defaultValueServices.setEnablementFileType(questionList);
+                }
+                else{
+                    this.defaultValueServices.setEnablementFileTypeN(questionList);
+                }
+            }
+            
+            if (question.question == "Enablement File Type") {
+                if (question.currentValue == "EMM" || question.currentValue == "Hybrid") {
+                    this.defaultValueServices.setConditionalAccess(questionList);
+                }
+                else{
+                    this.defaultValueServices.setConditionalAccessN(questionList);
+                }
+            }
 
         }
         var validatorPattern = '';
