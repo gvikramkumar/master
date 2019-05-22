@@ -95,7 +95,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_products', 'technology_group_id').toPromise(),
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_coverage_code').toPromise(),
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_be_hierarchy', 'business_entity_descr').toPromise(),
-      this.getRulesAndRuleNamesAndGenerateSelectMap(),
       this.lookupService.getValues(['drivers', 'periods']).toPromise()
     ];
     if (this.viewMode || this.editMode || this.copyMode) {
@@ -112,12 +111,12 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         this.prodTgChoices = results[1].map(x => ({name: x}));
         this.scmsChoices = results[2].map(x => ({name: x}));
         this.internalBeChoices = results[3].map(x => ({name: x}));
-        this.drivers = _.sortBy(results[5][0], 'name');
-        this.periods = results[5][1];
+        this.drivers = _.sortBy(results[4][0], 'name');
+        this.periods = results[4][1];
 
         if (this.viewMode || this.editMode || this.copyMode) {
-          this.rule = results[6];
-          this.submeasuresAll = results[7];
+          this.rule = results[5];
+          this.submeasuresAll = results[6];
           this.editModeAI = this.editMode && _.includes(['A', 'I'], this.rule.status);
           this.editModeDPApprovedOnce = this.editMode && _.includes(['D', 'P'], this.rule.status) && this.rule.approvedOnce === 'Y';
           this.editModeDPNotApprovedOnce = this.editMode && _.includes(['D', 'P'], this.rule.status) && this.rule.approvedOnce !== 'Y';
@@ -184,6 +183,9 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         };
 
         this.init(true);
+      })
+      .then(() => {
+        return this.getRulesAndRuleNamesAndGenerateSelectMap(); // must be "after" this.rule is set
       });
   }
 
@@ -211,11 +213,14 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         this.rules.forEach(rule => ruleUtil.createSelectArrays(rule));
       })
       .then(() => {
-        this.selectMap = new SelectExceptionMap();
+        const selectMap = new SelectExceptionMap();
         // we check for validity of selectMap on entry/save and on approve in controller. We can't have this selectMap ever be corrupt,
         // so both places will put up modals, should never happen, but if it does... we have to know
         try {
-          this.selectMap.parseRules(this.rules);
+          selectMap.parseRules(this.rules);
+          // we need to wait till here to set this as valueChange() is getting called on page load and can't get this  (parseRules is done)
+          // it returns if !this.selectMap
+          this.selectMap = selectMap;
         } catch (err) {
           this.uiUtil.genericDialog(err.message);
           return Promise.reject();
@@ -542,7 +547,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   valueChange() {
     // shouldn't get called for viewMode and if approvedOnce, they can only edit active flag, so just return
-    if (this.viewMode || this.isApprovedOnce()) {
+    if (!this.selectMap || this.viewMode || this.isApprovedOnce()) {
       return Promise.resolve(false);
     }
 
