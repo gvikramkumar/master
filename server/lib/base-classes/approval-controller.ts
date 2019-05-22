@@ -281,7 +281,8 @@ export default class ApprovalController extends ControllerBase {
               })
           );
           });
-          return Promise.all(promises);
+          return Promise.all(promises)
+            .then(calls => `${calls.length} items updated.`);
         }
       });
   }

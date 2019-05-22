@@ -55,7 +55,7 @@ describe('Approval Controller Tests', () => {
       done();
     });
 
-    describe(`Submeasure`, () => {
+    describe(`approvalEmailReminder - Submeasure`, () => {
       let orgSms = [];
       beforeAll((done) => {
         smRepo.getMany({moduleId: -1})
@@ -75,7 +75,7 @@ describe('Approval Controller Tests', () => {
         approvalControllerForSubmeasure.sendReminderEmail.calls.reset();
       });
 
-      it(`should not call sendReminderEmail if less than 24 hours`, (done) => {
+      it(`should NOT call sendReminderEmail if less than 24 hours - multiple submeasures/modules`, (done) => {
         const sm = _.cloneDeep(orgSms[0]);
         sm.status = 'P';
         sm.approvalReminderTime = new Date(Date.now() - (24 * 60 * 60 * 1000) + (10 * 1000));
@@ -89,7 +89,7 @@ describe('Approval Controller Tests', () => {
           });
       });
 
-      it(`should call sendReminderEmail if more than 24 hours`, (done) => {
+      it(`should call sendReminderEmail if more than 24 hours - one submeasure/module`, (done) => {
         const sm = _.cloneDeep(orgSms[0]);
         sm.status = 'P';
         sm.approvalReminderTime = new Date(Date.now() - (24 * 60 * 60 * 1000) - (10 * 1000));
@@ -105,7 +105,7 @@ describe('Approval Controller Tests', () => {
                 expect(args[1].moduleId).toEqual(1);
                 expect(args[1].name).toEqual('Profitability Allocations');
                 expect(args[2].userId).toEqual('jodoe');
-                updatedSm.approvalReminderTime = currentTime.toISOString();
+                updatedSm.approvalReminderTime = currentTime; // this is all we change in approvalEmailReminder, so set, then can use isEqual
                 expect(args[3].toObject()).toEqual(updatedSm.toObject());
                 expect(args[4]).toEqual('submeasure');
                 done();
@@ -113,7 +113,7 @@ describe('Approval Controller Tests', () => {
           });
       });
 
-      it(`should call sendReminderEmail for all submeasures that are pending for more than 24 hours`, (done) => {
+      it(`should call sendReminderEmail for all submeasures that are pending for more than 24 hours - multiple submeasures/modules`, (done) => {
         const sms = _.cloneDeep(orgSms);
         const promises = [];
         sms.forEach(item => {
@@ -129,12 +129,14 @@ describe('Approval Controller Tests', () => {
                 expect(approvalControllerForSubmeasure.sendReminderEmail).toHaveBeenCalledTimes(orgSms.length);
                 const args = approvalControllerForSubmeasure.sendReminderEmail.calls.allArgs();
                 args.forEach((arg, idx) => {
+                  const smForArg = _.find(sms, {id: arg[3].id});
+                  expect(smForArg).toBeDefined();
                   expect(arg[0]).toEqual(['dfa-it-admin@cisco.com', 'dfa-admin@cisco.com', 'dfa_business_admin@cisco.com']);
-                  expect(sms.filter(sm => sm.moduleId === arg[1].moduleId).length).toBeTruthy();
+                  expect(smForArg.moduleId).toBe(arg[1].moduleId);
                   expect(arg[2].userId).toEqual('jodoe');
-                  const filteredSm = sms.filter(sm => sm.id === arg[3].id)[0];
-                  filteredSm.approvalReminderTime = currentTime;
-                  expect(filteredSm.toObject()).toEqual(arg[3].toObject());
+                  expect(smForArg.id).toBe(arg[3].id);
+                  smForArg.approvalReminderTime = currentTime;
+                  expect(smForArg.toObject()).toEqual(arg[3].toObject());
                   expect(arg[4]).toEqual('submeasure');
                 });
                 done();
@@ -143,7 +145,7 @@ describe('Approval Controller Tests', () => {
       });
     });
 
-    describe(`Rule`, () => {
+    describe(`approvalEmailReminder - Rule`, () => {
       let orgRules = [];
       beforeAll((done) => {
         ruleRepo.getMany({moduleId: -1})
@@ -193,7 +195,7 @@ describe('Approval Controller Tests', () => {
                 expect(args[1].moduleId).toEqual(1);
                 expect(args[1].name).toEqual('Profitability Allocations');
                 expect(args[2].userId).toEqual('jodoe');
-                updatedrule.approvalReminderTime = currentTime.toISOString();
+                updatedrule.approvalReminderTime = currentTime;
                 expect(args[3].toObject()).toEqual(updatedrule.toObject());
                 expect(args[4]).toEqual('rule');
                 done();
