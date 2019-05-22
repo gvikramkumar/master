@@ -44,12 +44,18 @@
             <p-accordion>   
                 <p-accordionTab header="{{selectedAto}}" [selected]="true">
                   <div *ngFor="let eachElement of selectedObjectAto?.minorPids">
-                      <h5 style="background-color: grey;">
-                          {{eachElement?.itemName}}
-                      </h5> 
-                      <p *ngFor="let object of eachElement?.swSubcriptionSkuList">
-                        {{object}}
-                      </p>
+                      <table class="table" >
+                          <thead>
+                              <tr>
+                                 <th> {{eachElement?.itemName}}</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <tr *ngFor="let object of eachElement?.swSubcriptionSkuList">
+                                  <td> {{object}}</td>
+                              </tr>
+                          </tbody>
+                      </table> 
                     </div>
                 </p-accordionTab>
             </p-accordion>
