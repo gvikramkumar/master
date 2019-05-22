@@ -255,7 +255,7 @@ export default class ApprovalController extends ControllerBase {
 
   }
 
-  approvalEmailReminder(type: string) {
+  approvalEmailReminder(type: string): any {
     const currentTime = new Date();
     return Promise.all([this.repo.getManyPending({moduleId : -1}),
       new LookupRepo().getValues(['itadmin-email', 'dfa-admin-email', 'dfa-biz-admin-email'])])
@@ -263,19 +263,25 @@ export default class ApprovalController extends ControllerBase {
         const pendingItems = results[0].filter(doc => this.checkIfMoreThanReminderPeriod(currentTime, doc.approvalReminderTime));
         const adminEmails = results[1];
         if (pendingItems.length) {
+          const promises = [];
           pendingItems.forEach(item => {
-            Promise.all([new ModuleRepo().getOneByQuery({moduleId: item.moduleId}),
-              new UserListRepo().getOneLatest({userId: item.updatedBy})])
+            promises.push(
+            Promise.all([
+              new ModuleRepo().getOneByQuery({moduleId: item.moduleId}),
+              new UserListRepo().getOneLatest({userId: item.updatedBy})
+            ])
               .then(itemResults => {
                 const module = itemResults[0];
                 const user = itemResults[1];
-                this.sendReminderEmail(adminEmails, module, user, item, type)
+                return this.sendReminderEmail(adminEmails, module, user, item, type)
                   .then(() => {
                     item.approvalReminderTime = currentTime;
-                    this.repo.update(item, '', true, true, false);
+                    return this.repo.update(item, '', true, true, false);
                   });
-              });
+              })
+          );
           });
+          return Promise.all(promises);
         }
       });
   }

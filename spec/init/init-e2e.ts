@@ -4,7 +4,7 @@ import {serverPromise} from '../../server/server';
 
 const inj = injector;
 
-fdescribe('init-mocks.ts', () => {
+describe('init-mocks.ts', () => {
 
   beforeAll((done) => {
     // just in case we want to initialize server
