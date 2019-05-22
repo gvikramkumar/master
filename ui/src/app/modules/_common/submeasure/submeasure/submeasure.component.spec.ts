@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SubmeasureComponent } from './submeasure.component';
 
-describe('SubmeasureComponent', () => {
+xdescribe('SubmeasureComponent', () => {
   let component: SubmeasureComponent;
   let fixture: ComponentFixture<SubmeasureComponent>;
 
