@@ -549,32 +549,33 @@ export class OfferConstructDefaultValue {
   //////////////////// Test ///////////////////////////
 
   setDefaultInitialTerm(questionList) {
-    let initialTermDefault;
-    let initialTermDefaultValues;
-    questionList.forEach(question => {
-      if (question.question == "Initial Term") {
-        initialTermDefault = question.currentValue;
-        initialTermDefaultValues = initialTermDefault.split(',')
-        console.log("trueUpDefaultValues1", initialTermDefaultValues);
-      }
-    });
+      let initialTermDefault;
+      let initialTermDefaultValues;
+      questionList.forEach(question => {
+        if (question.question == "Initial Term") {
+          initialTermDefault = question.currentValue;
+          initialTermDefaultValues = initialTermDefault.split(',')
+          console.log("trueUpDefaultValues1", initialTermDefaultValues);
+        }
+      });
 
-    questionList.forEach(question => {
-      if (question.question == "Default Initial Term") {
-             
-             if(initialTermDefaultValues.includes(question.currentValue)){
-                 question.rules.isvalid = true;
-                 question.rules.validationMessage = "";
-                 console.log("question.currentValue == trueUpValue", question.rules.isvalid )
-             }
-             else{
-                  question.rules.isvalid = false;
-                  question.rules.validationMessage = question.egineAttribue + " should be a value from Initial Term ";
-                  console.log("question.currentValue != trueUpValue", question.rules.isvalid )
-             }
-      }
-    });
-  }
+      questionList.forEach(question => {
+        if (question.question == "Default Initial Term") {
+                 console.log("question.currentValue",question.currentValue)
+               
+               if(initialTermDefaultValues.includes(question.currentValue)){
+                   question.rules.isvalid = true;
+                   question.rules.validationMessage = "";
+                   console.log("question.currentValue == trueUpValue", question.rules.isvalid )
+               }
+               else{
+                    question.rules.isvalid = false;
+                    question.rules.validationMessage = question.egineAttribue + " should be a value from True Up Term ";
+                    console.log("question.currentValue != trueUpValue", question.rules.isvalid )
+               }
+        }
+      });
+    }
   
   setDefaultAutoRenewalTerm(questionList) {
     let stdAutoRenewalTermDefault;
