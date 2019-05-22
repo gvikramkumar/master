@@ -613,7 +613,7 @@ export class DynamicFormMultipleComponent implements OnInit {
                 }
             }
             if (question.egineAttribue == 'Non Standard True Up Term') {
-                if (!(/^(0*([2-6]))(-(0*([2-6])))$/.test(question.currentValue))) {
+                if (!(/^(0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120))(-(0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120)))$/.test(question.currentValue))) {
                     question.rules.validationMessage = "Value should be a numeric range (ex. 2-6)";
                     question.rules.isvalid = false;
                 }
