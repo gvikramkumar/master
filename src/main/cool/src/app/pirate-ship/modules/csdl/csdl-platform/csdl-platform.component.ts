@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 import { RightPanelService } from '@app/services/right-panel.service';
@@ -7,6 +7,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { HAMMER_LOADER } from '@angular/platform-browser';
 import { CsdlIntegrationService } from '@app/services/csdl-integration.service';
 import { CsdlPayload } from '../model/csdl-payload';
+import { CsdlStatusTrackComponent } from '../csdl-status-track/csdl-status-track.component';
 
 @Component({
   selector: "app-csdl-platform",
@@ -14,6 +15,7 @@ import { CsdlPayload } from '../model/csdl-payload';
   styleUrls: ["./csdl-platform.component.scss"]
 })
 export class CsdlPlatformComponent implements OnInit {
+  @ViewChild('refreshStatus', {read: ViewContainerRef}) vcr: ViewContainerRef;
   csdlForm: FormGroup;
   notRequiredCsdlForm: FormGroup;
   public currentOfferId: any;
@@ -39,19 +41,10 @@ export class CsdlPlatformComponent implements OnInit {
   displayNewCsdlIdDailog: Boolean = false;
   displayIdCreationDailog: Boolean = false;
   isCsdlRequired: Boolean = true;
-  refreshStatus: Boolean = false;
   isCompleteButtonDisabled: Boolean = true;
   cols: any[];
   selectedAto: any;
   productFamilyAnswer;
-  csdlData = [
-    {
-      csdlId: "29385971",
-      stopShip: "False",
-      enforcement: "Hard",
-      latestStatusUpdate: "05-Aug-2019 2:00pm"
-    }
-  ];
   results;
   selectedProject;
 
@@ -61,7 +54,8 @@ export class CsdlPlatformComponent implements OnInit {
     private stakeholderfullService: StakeholderfullService,
     private rightPanelService: RightPanelService,
     private dashboardService: DashboardService,
-    private csdlIntegrationService: CsdlIntegrationService
+    private csdlIntegrationService: CsdlIntegrationService,
+    private componentFactoryResolver: ComponentFactoryResolver
   ) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params["offerId"];
@@ -154,49 +148,50 @@ export class CsdlPlatformComponent implements OnInit {
       });
   }
 
+  /**
+   * When user click click here hyper link
+   */
   onOpenCsdlTab() {
-    let urlToOpen = "https://csdl.cisco.com";
-    window.open(urlToOpen, "_blank");
+    let urlToOpen = 'https://csdl.cisco.com';
+    window.open(urlToOpen, '_blank');
   }
 
+  /**
+   * When user select is Csdl Required 'Yes' radio button
+   * @ param event
+   */
   onCsdlRequired(event) {
     this.csdlRequired = true;
     this.csdlNotRequired = false;
   }
 
+  /**
+   * When user select is Csdl Required 'No' radio button 
+   * @ param event
+   */
   onCsdlNotRequired(event) {
     this.csdlNotRequired = true;
     this.csdlRequired = false;
   }
 
+  /**
+   * When user click on Create New Id and when user click submit button
+   */
   submitCsdlAssociation() {
     this.displayNewCsdlIdDailog = false;
     this.displayIdCreationDailog = true;
-    const csdlPayload = new CsdlPayload(
-      this.currentOfferId,
-      this.offerName,
-      "Y",
-      this.productFamilyAnswer,
-      "John Smith",
-      this.derivedMM,
-      "N",
-      "Test Offer Manager",
-      null,
-      null,
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
-    );
+    const csdlPayload = new CsdlPayload();
+    csdlPayload.offerId = this.currentOfferId;
+    csdlPayload.offerName = this.offerName;
+    csdlPayload.csdlProjectSelected = 'N';
+    csdlPayload.csdlApplicability = 'Y';
+    csdlPayload.monetizationModel = this.derivedMM;
     this.createCsdlAssociation(csdlPayload);
   }
 
   createCsdlAssociation(csdlPayload) {
-    this.csdlIntegrationService.createCsdlAssociation(csdlPayload).subscribe(
-      data => {},
+    this.csdlIntegrationService.createCsdlAssociation(csdlPayload).subscribe(data => {
+      },
       err => {
         console.log(err);
       }
@@ -205,30 +200,26 @@ export class CsdlPlatformComponent implements OnInit {
 
   onContinue() {
     this.isCsdlRequired = false;
-    this.refreshStatus = true;
     this.displayIdCreationDailog = false;
+    this.showComponent();
   }
 
+  showComponent() {
+    // Create component dynamically inside the ng-template
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(CsdlStatusTrackComponent);
+    const component = this.vcr.createComponent(componentFactory);
+  }
+
+  /**
+   * When user select is Csdl Not required 'No' radio button and upon clicking complete button
+   */
   onComplete() {
-    const csdlPayload = new CsdlPayload(
-      this.currentOfferId,
-      this.offerName,
-      "Y",
-      this.productFamilyAnswer,
-      "John Smith",
-      this.derivedMM,
-      "N",
-      "Test Offer Manager",
-      null,
-      null,
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
-    );
+    const csdlPayload = new CsdlPayload();
+    csdlPayload.offerId = this.currentOfferId;
+    csdlPayload.offerName = this.offerName;
+    csdlPayload.csdlProjectSelected = 'N';
+    csdlPayload.csdlApplicability = 'N';
+    csdlPayload.monetizationModel = this.derivedMM;
     this.csdlIntegrationService.createCsdlAssociation(csdlPayload).subscribe(
       data => {
         this.isCompleteButtonDisabled = false;
@@ -297,26 +288,17 @@ export class CsdlPlatformComponent implements OnInit {
    */
   submitCoolToCsdl() {
     console.log(this.selectedProject);
-    const csdlPayload = new CsdlPayload(
-      this.currentOfferId,
-      this.offerName,
-      "Y",
-      this.productFamilyAnswer,
-      "John Smith",
-      this.derivedMM,
-      "Y",
-      "Test Offer Manager",
-      null,
-      null,
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ''
-    );
+    const csdlPayload = new CsdlPayload();
+    csdlPayload.offerId = this.currentOfferId;
+    csdlPayload.offerName = this.offerName;
+    csdlPayload.csdlProjectSelected = 'Y';
+    csdlPayload.csdlApplicability = 'Y';
+    csdlPayload.projectId = this.selectedProject.project_id;
+    csdlPayload.monetizationModel = this.derivedMM;
     this.createCsdlAssociation(csdlPayload);
+    this.showComponent();
+    this.isCsdlRequired = false;
+    this.displayIdCreationDailog = false;
   }
 
   /**
