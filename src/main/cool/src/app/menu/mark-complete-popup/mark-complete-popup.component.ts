@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-mark-complete-popup',
@@ -7,9 +7,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MarkCompletePopupComponent implements OnInit {
 
+  @Input() show: boolean;
+  @Output() closeMarkCompletePopup = new EventEmitter<string>();
+  @Output() confirmMarkComplete = new EventEmitter<string>();
+  
+
   constructor() { }
 
   ngOnInit() {
+
+  }
+
+  close() {
+    this.closeMarkCompletePopup.next('');
+  }
+
+  confirm() {
+    this.confirmMarkComplete.next('');
   }
 
 }

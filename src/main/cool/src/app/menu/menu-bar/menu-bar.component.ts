@@ -33,10 +33,7 @@ export class MenuBarComponent implements OnInit {
     showMarkcompletePopup: boolean = false;
     showMarkcompleteToggle: boolean = false;
     markCompleteStatus: boolean;
-    offerSolutioning_toggleStatus: boolean;
-    offerComponent_toggleStatus: boolean;
-    offerDimension_toggleStatus: boolean;
-
+    currentURL: String;
     currentOfferId: String = '';
     holdStatusValid = true;
     cancelStatusValid = true;
@@ -46,9 +43,10 @@ export class MenuBarComponent implements OnInit {
         private router: Router,
         private userService: UserService,
         private menuBarService: MenuBarService,
-        private activatedRoute: ActivatedRoute,
+        private activatedRoute: ActivatedRoute,     
         private environmentService: EnvironmentService,
         private monetizationModelService: MonetizationModelService) {
+            this.currentURL = activatedRoute.snapshot['_routerState'].url;
 
         this.showPopup = false;
 
@@ -136,9 +134,17 @@ export class MenuBarComponent implements OnInit {
         ];
         
         this.menuBarService.getMarkCompleteStatus(this.offerId, this.caseId).subscribe(data => {
-            this.offerSolutioning_toggleStatus = data['offerSolutioning_toggleStatus'];
-            this.offerComponent_toggleStatus = data['offerComponent_toggleStatus'];
-            this.offerDimension_toggleStatus = data['offerDimension_toggleStatus'];
+            debugger;
+            if (this.currentURL.includes('offerDimension')) {
+                this.markCompleteStatus = data['offerDimension_toggleStatus'];
+                this.showMarkcompleteToggle = true;
+            } else if(this.currentURL.includes('offerSolutioning')){
+                this.markCompleteStatus = data['offerSolutioning_toggleStatus'];
+                this.showMarkcompleteToggle = true;
+            } else if (this.currentURL.includes('offerComponent')){
+                this.markCompleteStatus = data['offerComponent_toggleStatus'];
+                this.showMarkcompleteToggle = true;
+            }
         })
 
         this.monetizationModelService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
@@ -270,8 +276,19 @@ export class MenuBarComponent implements OnInit {
         this.router.navigate(['/offerDetailView', this.offerId, this.caseId]);
     }
 
-    showMarkCompletePopup() {
-        this.showMarkcompletePopup = true;
+    toggleMarkCompletePopup() {
+        debugger;
+        this.showMarkcompletePopup = !this.showMarkcompletePopup;
+    }
+
+    closeMarkCompletePopup(message) {
+        debugger;
+        this.showMarkcompletePopup = false;
+        this.markCompleteStatus = !this.markCompleteStatus;
+    }
+
+    confirmMarkComplete(message) {
+        this.showMarkcompletePopup = false;
     }
 
 }

@@ -74,8 +74,8 @@
             Save
         </button>
 
-        <label class="menu-btn switch switch—large">
-            <input type="checkbox">
+        <label class="menu-btn switch switch—large" *ngIf="showMarkcompleteToggle">
+            <input type="checkbox" [(ngModel)]="markCompleteStatus" (change)="toggleMarkCompletePopup()"/>
             <span class="switch__input"></span>
             <span class="switch__label">Mark Complete</span>
         </label>
@@ -95,4 +95,4 @@
 </p-overlayPanel>
 
 <app-menu-bar-popup [show]="showPopup" [popupType]="popupType" (closePopup)="closePopup($event)"></app-menu-bar-popup>
-
+<app-mark-complete-popup [show]="showMarkcompletePopup"  (closeMarkCompletePopup)="closeMarkCompletePopup($event)" (confirmMarkComplete)="confirmMarkComplete($event)"></app-mark-complete-popup>
