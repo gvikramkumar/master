@@ -21,7 +21,9 @@ export class ConfigurationService {
   }
 
   init() {
+    debugger;
     return new Promise((resolve, reject) => {
+      debugger;
       if (this._startupData.token || window.location.hash.indexOf('access_token') !== -1) {
         this._startupData.token = window.location.hash.split('&')[0].split('=')[1];
 
