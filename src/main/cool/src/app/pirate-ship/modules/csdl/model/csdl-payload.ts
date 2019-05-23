@@ -1,19 +1,22 @@
 export class CsdlPayload {
-  offerId: string;
+  coolOfferId: string;
   offerName: string;
-  csdlApplicability: string;
+  offerOwner: string;
+  csdlRequired: string;
+  csdlProjectSelected: string;
+  associationStatus: string;
+  associationMessage: string;
   productFamily: string;
   bUContact: string;
-  monetizationModel: string;
-  csdlProjectSelected: string;
   offerManagerInformation: string;
+  monetizationModel: string;
   projectId: string;
   projectType: string;
-  reason: string;
-  csdlActivityStatusAvailable: string;
+  reasonForNotRequired: string;
+  csdlMileStoneStatus: string;
   stopShipStatus: string;
   enforcementType: string;
-  latestUpdatedDate: string;
+  latestStatusUpdate: string;
   csdlOverAllstatus: string;
   history: string;
 

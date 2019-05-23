@@ -27,10 +27,20 @@ export class CsdlStatusTrackComponent implements OnInit {
    }
 
   ngOnInit() {
+    this.getUpdatedStatus();
+  }
+
+  getUpdatedStatus() {
+    console.log(this.currentOfferId);
     this.csdlIntegrationService.getCsdlInfo(this.currentOfferId).subscribe(data => {
+      this.csdlData = [];
       this.csdlData.push(data);
       console.log(data);
     });
+  }
+
+  refreshStatus() {
+    this.getUpdatedStatus();
   }
 
 }

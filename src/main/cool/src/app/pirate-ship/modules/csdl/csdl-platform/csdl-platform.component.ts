@@ -4,15 +4,15 @@ import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 import { RightPanelService } from '@app/services/right-panel.service';
 import { DashboardService } from '@shared/services';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { HAMMER_LOADER } from '@angular/platform-browser';
 import { CsdlIntegrationService } from '@app/services/csdl-integration.service';
 import { CsdlPayload } from '../model/csdl-payload';
 import { CsdlStatusTrackComponent } from '../csdl-status-track/csdl-status-track.component';
+import { error } from 'util';
 
 @Component({
-  selector: "app-csdl-platform",
-  templateUrl: "./csdl-platform.component.html",
-  styleUrls: ["./csdl-platform.component.scss"]
+  selector: 'app-csdl-platform',
+  templateUrl: './csdl-platform.component.html',
+  styleUrls: ['./csdl-platform.component.scss']
 })
 export class CsdlPlatformComponent implements OnInit {
   @ViewChild('refreshStatus', {read: ViewContainerRef}) vcr: ViewContainerRef;
@@ -41,7 +41,7 @@ export class CsdlPlatformComponent implements OnInit {
   displayNewCsdlIdDailog: Boolean = false;
   displayIdCreationDailog: Boolean = false;
   isCsdlRequired: Boolean = true;
-  isCompleteButtonDisabled: Boolean = true;
+  isCompleteButtonDisabled: Boolean = false;
   cols: any[];
   selectedAto: any;
   productFamilyAnswer;
@@ -58,13 +58,13 @@ export class CsdlPlatformComponent implements OnInit {
     private componentFactoryResolver: ComponentFactoryResolver
   ) {
     this.activatedRoute.params.subscribe(params => {
-      this.currentOfferId = params["offerId"];
-      this.caseId = params["caseId"];
-      this.selectedAto = params["selectedAto"];
+      this.currentOfferId = params['offerId'];
+      this.caseId = params['caseId'];
+      this.selectedAto = params['selectedAto'];
     });
     // Initialize TaskBar Params
     this.isPirateShipSubModule = true;
-    this.pirateShipModuleName = "CSDL";
+    this.pirateShipModuleName = 'CSDL';
   }
 
   ngOnInit() {
@@ -73,7 +73,23 @@ export class CsdlPlatformComponent implements OnInit {
     });
 
     this.notRequiredCsdlForm = new FormGroup({
-      noCode: new FormControl("", Validators.required)
+      noCode: new FormControl('', Validators.required)
+    });
+
+    // load status tracking component in the below conditions.
+    // 2. When csdlMileStone is in 'In progress'
+    this.csdlIntegrationService.getCsdlInfo(this.currentOfferId).subscribe((data) => {
+      this.isCsdlRequired = false;
+      if (data.csdlMileStoneStatus === 'In Progress') {
+        this.showComponent();
+      } else if (data.csdlMileStoneStatus === 'Complete') {
+        // When user selected CDSL Not Required and pressed complete button.
+      } else {
+        this.isCsdlRequired = true;
+      }
+    },
+    (error) => {
+      this.isCsdlRequired = true;
     });
 
     this.dashboardService.getMyOffersList().subscribe(resOffers => {
@@ -85,7 +101,7 @@ export class CsdlPlatformComponent implements OnInit {
               this.stakeHolders[ele.offerId][holder.functionalRole] = [];
             }
             this.stakeHolders[ele.offerId][holder.functionalRole].push(
-              holder["_id"]
+              holder['_id']
             );
           });
         }
@@ -97,50 +113,50 @@ export class CsdlPlatformComponent implements OnInit {
       .subscribe(data => {
         this.firstData = data;
         this.offerId = this.currentOfferId;
-        this.data = this.firstData["stakeholders"];
-        this.derivedMM = this.firstData["derivedMM"];
-        this.offerName = this.firstData["offerName"];
+        this.data = this.firstData['stakeholders'];
+        this.derivedMM = this.firstData['derivedMM'];
+        this.offerName = this.firstData['offerName'];
         if (
-          Array.isArray(this.firstData["primaryBEList"]) &&
-          this.firstData["primaryBEList"].length
+          Array.isArray(this.firstData['primaryBEList']) &&
+          this.firstData['primaryBEList'].length
         ) {
-          this.primaryBE = this.firstData["primaryBEList"][0];
+          this.primaryBE = this.firstData['primaryBEList'][0];
         }
         this.rightPanelService
           .displayAverageWeeks(this.primaryBE, this.derivedMM)
           .subscribe(
             leadTime => {
               this.noOfWeeksDifference = Number(
-                leadTime["averageOverall"]
+                leadTime['averageOverall']
               ).toFixed(1);
               this.displayLeadTime = true;
             },
             () => {
-              this.noOfWeeksDifference = "N/A";
+              this.noOfWeeksDifference = 'N/A';
             }
           );
         this.stakeHolderInfo = {};
 
         for (let i = 0; i <= this.data.length - 1; i++) {
-          if (this.stakeHolderInfo[this.data[i]["offerRole"]] == null) {
-            this.stakeHolderInfo[this.data[i]["offerRole"]] = [];
+          if (this.stakeHolderInfo[this.data[i]['offerRole']] == null) {
+            this.stakeHolderInfo[this.data[i]['offerRole']] = [];
           }
 
-          this.stakeHolderInfo[this.data[i]["offerRole"]].push({
-            userName: this.data[i]["name"],
-            emailId: this.data[i]["_id"] + "@cisco.com",
-            _id: this.data[i]["_id"],
-            businessEntity: this.data[i]["businessEntity"],
-            functionalRole: this.data[i]["functionalRole"],
-            offerRole: this.data[i]["offerRole"],
-            stakeholderDefaults: this.data[i]["stakeholderDefaults"]
+          this.stakeHolderInfo[this.data[i]['offerRole']].push({
+            userName: this.data[i]['name'],
+            emailId: this.data[i]['_id'] + '@cisco.com',
+            _id: this.data[i]['_id'],
+            businessEntity: this.data[i]['businessEntity'],
+            functionalRole: this.data[i]['functionalRole'],
+            offerRole: this.data[i]['offerRole'],
+            stakeholderDefaults: this.data[i]['stakeholderDefaults']
           });
         }
         this.stakeData = this.stakeHolderInfo;
 
-        this.firstData["solutioningDetails"].forEach(element => {
+        this.firstData['solutioningDetails'].forEach(element => {
           element.Details.forEach(ele => {
-            if (ele.egenieAttributeName === "Product Family") {
+            if (ele.egenieAttributeName === 'Product Family') {
               this.productFamilyAnswer = ele.solutioningAnswer;
             }
           });
@@ -178,15 +194,18 @@ export class CsdlPlatformComponent implements OnInit {
    * When user click on Create New Id and when user click submit button
    */
   submitCsdlAssociation() {
+    const csdlPayload = new CsdlPayload();
+    csdlPayload.coolOfferId = this.currentOfferId;
+    csdlPayload.csdlRequired = 'Y';
+    csdlPayload.csdlProjectSelected = 'N';
+    csdlPayload.associationStatus = 'Requested';
+    csdlPayload.productFamily = this.productFamilyAnswer;
+    // csdlPayload.bUContact = this.bUContact;
+    csdlPayload.csdlMileStoneStatus = 'In Progress';
+    this.createCsdlAssociation(csdlPayload);
+    // Hide Panels
     this.displayNewCsdlIdDailog = false;
     this.displayIdCreationDailog = true;
-    const csdlPayload = new CsdlPayload();
-    csdlPayload.offerId = this.currentOfferId;
-    csdlPayload.offerName = this.offerName;
-    csdlPayload.csdlProjectSelected = 'N';
-    csdlPayload.csdlApplicability = 'Y';
-    csdlPayload.monetizationModel = this.derivedMM;
-    this.createCsdlAssociation(csdlPayload);
   }
 
   createCsdlAssociation(csdlPayload) {
@@ -215,18 +234,17 @@ export class CsdlPlatformComponent implements OnInit {
    */
   onComplete() {
     const csdlPayload = new CsdlPayload();
-    csdlPayload.offerId = this.currentOfferId;
-    csdlPayload.offerName = this.offerName;
+    csdlPayload.coolOfferId = this.currentOfferId;
+    // csdlPayload.offerName = this.offerName;
     csdlPayload.csdlProjectSelected = 'N';
-    csdlPayload.csdlApplicability = 'N';
-    csdlPayload.monetizationModel = this.derivedMM;
+    csdlPayload.csdlRequired = 'N';
+    csdlPayload.csdlMileStoneStatus = 'Complete';
     this.csdlIntegrationService.createCsdlAssociation(csdlPayload).subscribe(
       data => {
-        this.isCompleteButtonDisabled = false;
+        this.isCompleteButtonDisabled = true;
       },
       err => {
         console.log(err);
-        this.isCompleteButtonDisabled = false;
       }
     );
   }
@@ -234,24 +252,24 @@ export class CsdlPlatformComponent implements OnInit {
   // --------------------------------------------------------------------------------------------------------------------------------
 
   updateMessage(message) {
-    if (message != null && message !== "") {
-      if (message === "hold") {
+    if (message != null && message !== '') {
+      if (message === 'hold') {
         this.proceedButtonStatusValid = false;
         this.backbuttonStatusValid = false;
         this.message = {
-          contentHead: "",
+          contentHead: '',
           content:
-            "The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.",
-          color: "black"
+            'The Offer has been placed on hold. All the stakeholders will be notified about the update status of the Offer.',
+          color: 'black'
         };
-      } else if (message === "cancel") {
+      } else if (message === 'cancel') {
         this.proceedButtonStatusValid = false;
         this.backbuttonStatusValid = false;
         this.message = {
-          contentHead: "",
+          contentHead: '',
           content:
-            "The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.",
-          color: "black"
+            'The Offer has been cancelled. All the stakeholders will be notified about the update status of the Offer.',
+          color: 'black'
         };
       }
     }
@@ -289,14 +307,18 @@ export class CsdlPlatformComponent implements OnInit {
   submitCoolToCsdl() {
     console.log(this.selectedProject);
     const csdlPayload = new CsdlPayload();
-    csdlPayload.offerId = this.currentOfferId;
-    csdlPayload.offerName = this.offerName;
+    csdlPayload.coolOfferId = this.currentOfferId;
+    csdlPayload.csdlRequired = 'Y';
     csdlPayload.csdlProjectSelected = 'Y';
-    csdlPayload.csdlApplicability = 'Y';
+    csdlPayload.associationStatus = 'Requested';
     csdlPayload.projectId = this.selectedProject.project_id;
-    csdlPayload.monetizationModel = this.derivedMM;
+    csdlPayload.projectType = this.selectedProject.project_type;
+    csdlPayload.productFamily = this.productFamilyAnswer;
+    csdlPayload.csdlMileStoneStatus = 'In Progress';
+    // csdlPayload.bUContact = this.bUContact;
     this.createCsdlAssociation(csdlPayload);
     this.showComponent();
+    // Hide Panels
     this.isCsdlRequired = false;
     this.displayIdCreationDailog = false;
   }

@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-12 task--bar">
-    <button class="btn btn--secondary" type="submit"><span class="icon-refresh">&nbsp;&nbsp;Refresh
+    <button class="btn btn--secondary" type="submit" (click)="refreshStatus()"><span class="icon-refresh">&nbsp;&nbsp;Refresh
         Status</span></button>
   </div>
 </div>
@@ -24,7 +24,7 @@
       <ng-template pTemplate="body" let-rowData>
         <tr>
           <td><span class="text-blue">{{rowData.projectId}}</span></td>
-          <td><span class="text-success">{{rowData.csdlActivityStatus}}</span></td>
+          <td><span class="text-success">{{rowData.stopShipStatus}}</span></td>
           <td>{{rowData.enforcementType}}</td>
           <td>{{rowData.latestUpdatedDate}}
             <span class="icon-trash icon-small pull-right"></span>
