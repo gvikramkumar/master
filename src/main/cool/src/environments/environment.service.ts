@@ -178,7 +178,8 @@ export class EnvironmentService {
     // SERVICE MAPPING
     REST_API_DOWNLOAD_CONFIG_SHEET: string;
     REST_API_GET_MAPPING_STATUS: string;
-
+    REST_CHECK_MAESTRO_PF_STATUS: string;
+    
     constructor() {
         this.setEnvironmentVariables();
     }
@@ -456,5 +457,6 @@ export class EnvironmentService {
         // --------------------------------------- SERVICE MAPPING --------------------------------------------
         this.REST_API_DOWNLOAD_CONFIG_SHEET = this.baseApiUrl + '/serviceMapping/xls';
         this.REST_API_GET_MAPPING_STATUS = this.baseApiUrl + '/serviceMapping/getStatus';
+        this.REST_CHECK_MAESTRO_PF_STATUS = this.baseApiUrl + 'serviceMapping/pf/status';
     }
 }

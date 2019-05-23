@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { MenuBarModule } from '@app/menu/menu-bar.module';
 import { RightPanelModule } from '@app/right-panel/right-panel.module';
 import { SharedModule } from '@shared/shared.module';
+import { TaskBarModule } from '@app/taskbar/task-bar.module';
 import * as _ from 'lodash';
 import { TreeTableModule, AutoCompleteModule } from 'primeng/primeng';
 
@@ -16,6 +17,7 @@ import { ServiceMappingComponent } from './service-mapping.component';
     imports: [
         SharedModule,
         MenuBarModule,
+        TaskBarModule,
         TreeTableModule,
         RightPanelModule,
         AutoCompleteModule,

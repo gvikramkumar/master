@@ -3,6 +3,9 @@ import { ItemCreationService } from '@app/services/item-creation.service';
 import { ActivatedRoute } from '@angular/router';
 import { TreeNode } from 'primeng/api';
 import { ServiceMappingService } from '@app/services/service-mapping.service';
+import { StakeholderfullService } from '@app/services/stakeholderfull.service';
+import { RightPanelService } from '@app/services/right-panel.service';
+import { LoaderService } from '@app/core/services/loader.service';
 
 @Component({
   selector: 'app-service-mapping',
@@ -18,8 +21,19 @@ export class ServiceMappingComponent implements OnInit {
   selectedAto: string;
   currentOfferId: string;
   offerDropdownValues: any;
+  derivedMM: string;
+  displayLeadTime = false;
+  noOfWeeksDifference: string;
+  stakeHolderData: any;
+  offerName: string;
+  primaryBE: string;
+  stakeholders: any;
+  isPirateShipSubModule: Boolean;
+  pirateShipModuleName: string;
   constructor(private itemCreationService: ItemCreationService,
-    private activatedRoute: ActivatedRoute, private serviceMappingService: ServiceMappingService) {
+    private activatedRoute: ActivatedRoute, private serviceMappingService: ServiceMappingService,
+    private stakeholderfullService: StakeholderfullService, private rightPanelService: RightPanelService,
+    private loaderService: LoaderService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['offerId'];
       this.offerId = params['offerId'];
@@ -29,61 +43,67 @@ export class ServiceMappingComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Initialize TaskBar Parameters
+    this.isPirateShipSubModule = true;
+    this.pirateShipModuleName = 'Service Mapping Dashboard';
+
     this.itemCreationService.getOfferDropdownValues(this.offerId).subscribe(data => {
       this.offerDropdownValues = data;
     });
     this.serviceMappingService.getServiceMappingStatus(this.offerId, this.selectedAto).subscribe(response => {
       this.productDetails = response.data;
-    })
+    });
     this.productColumns = [
-      { field: 'product', header: 'ATO' },
+      { field: 'product', header: 'ATO\'S' },
       { field: 'newItemStatus', header: 'STATUS' },
       { field: 'download', header: '' }
     ]
-    // this.productDetails = [
-    //   {
-    //     data: {
-    //       product: "CTS-MX300-K9-WS",
-    //       iccType: "XaaS",
-    //       productFamily: "POF000220",
-    //       basePrice: "",
-    //       newItemStatus: "Not Required",
-    //       moduleStatus: "",
-    //       existing: false
-    //     },
-    //     children: []
-    //   },
-    //   {
-    //     data: {
-    //       product: "HARDWARE 1CTS-MX30",
-    //       iccType: "Hardware",
-    //       productFamily: "POF000220",
-    //       basePrice: "",
-    //       newItemStatus: "Available",
-    //       moduleStatus: "",
-    //       existing: false
-    //     },
-    //     children: [
-    //       {
-    //         data: {
-    //           product: "NETWORK-PNP-LIC",
-    //           iccType: "License",
-    //           productFamily: "POF000220",
-    //           basePrice: "",
-    //           newItemStatus: "In-Progress",
-    //           moduleStatus: "",
-    //           existing: true
-    //         }
-    //       }
-    //     ]
-    //   }
-    // ]
+    this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
+      this.derivedMM = offerDetails['derivedMM'];
+      this.offerName = offerDetails['offerName'];
+      this.primaryBE = offerDetails['primaryBEList'][0];
+      this.stakeHolderData = offerDetails['stakeholders'];
+      this.processStakeHolderInfo();
+      this.getLeadTimeCalculation();
+    });
   }
 
-  downloadConfigSheet() {
+  private getLeadTimeCalculation() {
+    this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe((leadTime) => {
+      this.noOfWeeksDifference = Number(leadTime['averageOverall']).toFixed(1);
+      this.loaderService.stopLoading();
+      this.displayLeadTime = true;
+    }, () => {
+      this.noOfWeeksDifference = 'N/A';
+      this.loaderService.stopLoading();
+    });
+  }
+
+  private processStakeHolderInfo() {
+
+    this.stakeholders = {};
+
+    for (let i = 0; i <= this.stakeHolderData.length - 1; i++) {
+      if (this.stakeholders[this.stakeHolderData[i]['offerRole']] == null) {
+        this.stakeholders[this.stakeHolderData[i]['offerRole']] = [];
+      }
+      this.stakeholders[this.stakeHolderData[i]['offerRole']].push({
+        userName: this.stakeHolderData[i]['name'],
+        emailId: this.stakeHolderData[i]['_id'] + '@cisco.com',
+        _id: this.stakeHolderData[i]['_id'],
+        businessEntity: this.stakeHolderData[i]['businessEntity'],
+        functionalRole: this.stakeHolderData[i]['functionalRole'],
+        offerRole: this.stakeHolderData[i]['offerRole'],
+        stakeholderDefaults: this.stakeHolderData[i]['stakeholderDefaults']
+      });
+    }
+
+  }
+  downloadATODetails(productData) {
     console.log('---------download config sheet---------');
-    this.serviceMappingService.downloadConfigSheet(this.offerId, this.selectedAto).subscribe(element => {
-    })
+    productData['newItemStatus'] = 'Completed';
+    this.serviceMappingService.downloadConfigSheet(this.offerId, productData['product']).subscribe(element => {
+     });
   }
 
   showSelectedAtoView(dropDownValue: string) {
