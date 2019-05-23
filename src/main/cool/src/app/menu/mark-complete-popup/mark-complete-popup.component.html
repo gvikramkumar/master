@@ -1,6 +1,6 @@
 <div class="modal" [hidden]="!show">
   <div class="modal__dialog">
-      <div class="modal__content"  *ngIf="!markCompleteStatus">
+      <div class="modal__content"  >
           <a class="modal__close" (click)="close()"><span class="icon-close"></span></a>
           <div class="modal__header">
               <div class="menu-popup-title">Mark Complete</div>
@@ -20,7 +20,7 @@
           </div>
       </div>
 
-      <div class="modal__content" *ngIf="markCompleteStatus">
+      <!-- <div class="modal__content" *ngIf="markCompleteStatus">
         <a class="modal__close" (click)="close()"><span class="icon-close"></span></a>
         <div class="modal__header">
             <div class="menu-popup-title">Uncheck Complete</div>
@@ -38,6 +38,6 @@
             <button class="btn" (click)="close()">Cancel</button>
             <button type="button"class="btn btn--primary" (click)="confirm()">Mark Complete</button>
         </div>
-    </div>
+    </div> -->
   </div>
 </div>

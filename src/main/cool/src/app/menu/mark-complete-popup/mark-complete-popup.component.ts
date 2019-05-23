@@ -29,14 +29,14 @@ export class MarkCompletePopupComponent implements OnInit {
 
   confirm() {
     let updataStatusData = {};
-    updataStatusData['offerName'] = this.offerId;
+    updataStatusData['offerId'] = this.offerId;
     updataStatusData['caseId'] = this.caseId;
     if (this.currentURL.includes('offerDimension')) {
-      updataStatusData['offerDimension_toggleStatus'] = !this.markCompleteStatus;
+      updataStatusData['offerDimension_toggleStatus'] = this.markCompleteStatus;
   } else if(this.currentURL.includes('offerSolutioning')){
-    updataStatusData['offerSolutioning_toggleStatus'] = !this.markCompleteStatus;
-  } else if (this.currentURL.includes('offerComponent')){
-    updataStatusData['offerComponent_toggleStatus'] = !this.markCompleteStatus;
+    updataStatusData['offerSolutioning_toggleStatus'] = this.markCompleteStatus;
+  } else if (this.currentURL.includes('offerConstruct')){
+    updataStatusData['offerComponent_toggleStatus'] = this.markCompleteStatus;
   }
     this.menuBarService.updateMarkCompleteStatus(updataStatusData).subscribe(() => {
       this.confirmMarkComplete.next('');

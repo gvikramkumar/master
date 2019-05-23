@@ -51,6 +51,7 @@ export class MmAssesmentComponent implements OnInit {
   canClickTab = false;
   changeInMM = false;
   canClickNextStep = false;
+  canMarkComplete = false;
   backbuttonStatusValid = true;
   dimensionMode: Boolean = false;
   dimensionFirstGroupData: Object;
@@ -471,7 +472,7 @@ export class MmAssesmentComponent implements OnInit {
         this.canClickNextStep = false;
       }
       attribute.status = -attribute.status;
-
+    // In MM page, Set Condition To Enable Next Step Button
       if (this.activeTabIndex === 0 && this.dimensionMode !== true) {
         if (this.groupData[0]['Offer Components'].includes(attribute)) {
           this.changeSubGroupType(this.groupData[0]);
@@ -493,6 +494,31 @@ export class MmAssesmentComponent implements OnInit {
           this.canClickNextStep = false;
         }
       }
+    //  In Dimension Mode, Set Condition To Enable The Mark Complete Button
+      if (this.dimensionMode === true) {
+
+        let next = 0;
+        let subGroupLength = 0;
+        this.groupData.forEach(groupObj => {
+          const groupKeys = this.getGroupKeys(groupObj);
+          subGroupLength += groupKeys.length;
+          groupKeys.forEach(key => {
+            for (const attr of groupObj[key]) {
+              if (attr.status === 1 || attr.type === 2) {
+                next += 1;
+                break;
+              }
+            }
+          });
+        })
+        if (next === subGroupLength) {
+          this.canMarkComplete = true;
+        } else {
+          this.canMarkComplete = false;
+        }
+
+      }
+
 
       this.selectedGroupData = this.groupData;
     }
@@ -530,6 +556,17 @@ export class MmAssesmentComponent implements OnInit {
       return [];
     }
   }
+
+  // getAllDimensionGroupKeys(arr) {
+  //   let dimensionKeys = [];
+  //   arr.forEach(obj => {
+  //     if (typeof obj === 'object') {
+  //       dimensionKeys.concat(Object.keys(obj));
+  //     }
+  //   })
+  //   return dimensionKeys;
+
+  // }
 
   changeTab(index) {
     if (this.canClickNextStep === true) {
@@ -778,6 +815,7 @@ export class MmAssesmentComponent implements OnInit {
   // --------------------------------------------------------------------------------------------
 
   toNextStep() {
+    debugger;
 
     this.isAllowedtoNextStep = true;
 

@@ -18,7 +18,7 @@ export class MenuBarComponent implements OnInit {
     @Input() offerName: string;
     @Input() stakeData: object;
     @Input() currentMMModel: string;
-
+    @Input() canMarkComplete: boolean;
     @Input() showSave = false;
     @Output() onProceedToNext = new EventEmitter();
     @Output() updateMessage = new EventEmitter<string>();
@@ -141,7 +141,7 @@ export class MenuBarComponent implements OnInit {
             } else if(this.currentURL.includes('offerSolutioning')){
                 this.markCompleteStatus = data['offerSolutioning_toggleStatus'];
                 this.showMarkcompleteToggle = true;
-            } else if (this.currentURL.includes('offerComponent')){
+            } else if (this.currentURL.includes('offerConstruct')){
                 this.markCompleteStatus = data['offerComponent_toggleStatus'];
                 this.showMarkcompleteToggle = true;
             }
