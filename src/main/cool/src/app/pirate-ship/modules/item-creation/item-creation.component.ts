@@ -47,7 +47,8 @@ export class ItemCreationComponent implements OnInit {
   stakeholders: any;
   stakeHolderData: any;
   permission: Boolean = false;
-
+  isPirateShipSubModule: Boolean;
+  pirateShipModuleName: string;
   public majorAndMinorInfo: any;
   public currentOfferId: any;
   public offerConstructItems: TreeNode[] = [];
@@ -83,6 +84,8 @@ export class ItemCreationComponent implements OnInit {
     if (this.functionalRole.includes('BUPM') || this.functionalRole.includes('SOE')) {
       this.permission = true;
     }
+    this.isPirateShipSubModule = true;
+    this.pirateShipModuleName = 'Item Creation';
     this.displaySelectedOffer(this.selectedAto);
     this.productColumns = [
       { field: 'product', header: 'PRODUCTS' },
