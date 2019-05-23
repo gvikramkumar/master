@@ -1,29 +1,37 @@
+<app-menu-bar [caseId]="caseId" [offerId]="offerId" [offerName]="offerName" [currentMMModel]="derivedMM"></app-menu-bar>
+
 <div class="content">
   <div class="container">
 
-    <app-menu-bar [caseId]="caseId" [offerId]="offerId" [offerName]="offerName" [currentMMModel]="derivedMM">
-    </app-menu-bar>
-
     <div class="panel-wrapper mt-15">
-
-      <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName">
+      <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName" [selectedATO]="selectedAto">
       </app-taskbar>
 
       <br><br>
 
       <div class="row">
-
+        
         <div class="leftContent col-sm-12 col-md-9">
-
+          <div class="row flex-center-vertical">
+              <div class="col-sm-12">
+                <div class="pull-right">
+                  <app-view-offer [atoNames]="atoNames" [selectedAto]="selectedAto"
+                    (atoSelection)="showSelectedAtoView($event)">
+                  </app-view-offer>
+                </div>
+              </div>
+          </div>
+          <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer'">
+            <app-ato-list [atoList]="atoList"></app-ato-list>
+          </div>
 <!--          <ng-template #atosummary>-->
 <!--            <div class="row">-->
 <!--              <app-atosummary [atoNames]="atoNames" [selectedAto]="selectedAto" [offerId]="offerId"  [caseId] = "caseId"></app-atosummary>-->
 <!--            </div>-->
 <!--          </ng-template>-->
 
-          <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer'">
-            <app-ato-list [atoList]="atoList"></app-ato-list>
-          </div>
+          <app-pirate-ship-legend></app-pirate-ship-legend>
+
 
 
         </div>

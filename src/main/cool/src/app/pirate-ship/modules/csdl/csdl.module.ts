@@ -9,9 +9,10 @@ import { RightPanelModule } from '@app/right-panel/right-panel.module';
 import { OfferDetailModule } from '@app/offer-detail/offer-detail.module';
 import { RouterModule } from '@angular/router';
 import { CSDL_ROUTES } from './csdl-routing.module';
+import { CsdlStatusTrackComponent } from './csdl-status-track/csdl-status-track.component';
 
 @NgModule({
-  declarations: [CsdlPlatformComponent],
+  declarations: [CsdlPlatformComponent, CsdlStatusTrackComponent],
   imports: [
     CommonModule,
     SharedModule,
@@ -20,6 +21,8 @@ import { CSDL_ROUTES } from './csdl-routing.module';
     RightPanelModule,
     OfferDetailModule,
     RouterModule.forChild(CSDL_ROUTES)
-  ]
+  ], entryComponents: [
+    CsdlStatusTrackComponent
+  ],
 })
 export class CsdlModule { }

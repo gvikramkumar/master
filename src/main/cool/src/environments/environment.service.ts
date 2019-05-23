@@ -137,11 +137,15 @@ export class EnvironmentService {
     REST_API_RETRIEVE_SERVICE_ATO_LIST_URL: string;
     REST_API_RETRIEVE_SERVICE_ANNUITY_PRICING_URL: string;
 
+    // TERM AND CONTENT MAPPING URLs
+    REST_API_RETRIEVE_TERM_CONTENT_MAPPING_URL: string;
+
     // -------------------------------------------------------------------------------------------------
     // CSDL URLs
     REST_API_GET_ALL_PROJECTS: string;
     REST_API_POST_CREATE_CSDL_ASSOCIATION: string;
     REST_API_REFRESH_PROJECTS: string;
+    REST_API_CSDL_INFO_GET_URL: string;
 
     //SERVICE FOR BASIC MODULES URLs - NPI
     REST_API_GET_ALL_COMMENTS_NPI_URL: string;
@@ -214,7 +218,7 @@ export class EnvironmentService {
                 this.baseIdpUrl = 'https://idp-stage-api.cisco.com';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
-                this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
+                this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';                
                 break;
             case 'qualityassurance':
                 this.baseApiUrl = 'https://cool-srv-qa.cisco.com/coolsrv';
@@ -401,11 +405,16 @@ export class EnvironmentService {
         this.REST_API_RETRIEVE_SERVICE_ATO_LIST_URL = this.baseApiUrl + '/itemcreation/getATOs';
         this.REST_API_RETRIEVE_SERVICE_ANNUITY_PRICING_URL = this.baseApiUrl + '/serviceAnnuityPricing/getPricingOfferLevel';
 
+         // --------------------------------------- TERM AND CONTENT MAPPING --------------------------------------------
+
+         this.REST_API_RETRIEVE_TERM_CONTENT_MAPPING_URL = this.baseApiUrl + '/serviceAnnuityPricing/getPricingOfferLevel';
+ 
         // -------------------------------------- CSDL --------------------------------------------------------------------------
 
         this.REST_API_REFRESH_PROJECTS = this.baseApiUrl + '/csdl/getCsdlDetails';
         this.REST_API_GET_ALL_PROJECTS = this.baseApiUrl + '/csdl/searchCsdlProjectsNames';
         this.REST_API_POST_CREATE_CSDL_ASSOCIATION = this.baseApiUrl + '/csdl/saveCsdlDetails';
+        this.REST_API_CSDL_INFO_GET_URL = this.baseApiUrl + '/csdl/csdlInformation/';
 
         // --------------------------------------- BASIC MODULES - NPI Licensing ----------------------------------------------
 
