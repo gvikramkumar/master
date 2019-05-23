@@ -7,7 +7,7 @@ import { ConfigurationService } from '@app/core/services/configuration.service';
 
 import { RightPanelService } from '@app/services/right-panel.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
-import { ServiceAnnuityPricingService } from '@app/services/service_annuity_pricing.service';
+import { TcMappingService } from '@app/services/tc-mapping.service';
 
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
@@ -54,7 +54,7 @@ export class TcMappingComponent implements OnInit, OnDestroy {
     private environmentService: EnvironmentService,
     private configurationService: ConfigurationService,
     private stakeholderfullService: StakeholderfullService,
-    private serviceAnnuityPricing : ServiceAnnuityPricingService,
+    private tncMapping : TcMappingService,
   ) { 
     this.paramsSubscription = this.activatedRoute.params.subscribe(params => {
       this.caseId = params['caseId'];
@@ -128,21 +128,14 @@ export class TcMappingComponent implements OnInit, OnDestroy {
       }
     ];
 
-    this.serviceAnnuityPricing.getOfferDropdownValues(this.offerId).subscribe(atoList => {
+    this.tncMapping.getTncMapping(this.offerId).subscribe(atoList => {
       this.atoNames = ['Overall Offer'];
       for (let i = 0; i < this.atoList.length; i++) {
         this.atoNames.push(this.atoList[i].itemName);
       }
-      console.log('atonames', this.atoNames);
     }, error => {
       console.log('error', error);
-    });
-
-    // this.serviceAnnuityPricing.getServiceAnnuityPricing(this.offerId).subscribe(atoList => {
-    // }, error => {
-    //   console.log('error', error);
-    // });
-   
+    });   
   }
 
 
