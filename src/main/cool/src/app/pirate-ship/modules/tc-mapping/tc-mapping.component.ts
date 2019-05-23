@@ -115,17 +115,28 @@ export class TcMappingComponent implements OnInit, OnDestroy {
         "itemCategory": "MAJOR",
         "itemName": "Major2",
         "itemType": "LICENSE",
-      "itemStatus": "Complete",
-        "minorPids": [
-          {
-            "itemCategory": "Major",
-            "itemName": "Major2",
-            "itemType": "LICENSE",
-            "mappingStaus": "Y",
-            "swSubcriptionSkuList": ["CON-SKU-2"]
-          }
-        ]
-      }
+        "itemStatus": "Complete",
+          "minorPids": [
+            {
+              "itemCategory": "Major",
+              "itemName": "Major2",
+              "itemType": "LICENSE",
+              "mappingStaus": "Y",
+              "swSubcriptionSkuList": ["CON-SKU-2"]
+            }
+          ]
+      },
+      {
+            "itemName": "Hardware 1",
+            "itemType": "Hardware",
+            "itemCategory": "Major",
+            "mappingStatus": "Not Required",
+            "minorPids": [],
+            "orderabilityCheckStatus": null,
+            "npiTestOrderFlag": null,
+            "errorOrWarning": null,
+            "ssoStatus": null
+        }
     ];
 
     this.tncMapping.getTncMapping(this.offerId).subscribe(atoList => {
