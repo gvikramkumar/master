@@ -1640,7 +1640,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       // Raviraj US290268
       if (!_.isEmpty(results)) {
         if (results.body['major/minor'] === 'Minor Line') {
-          if (results.body['WorkFlow Status'] === 'APPROVED' &&
+          if ((results.body['WorkFlow Status'] === 'APPROVED' || results.body['WorkFlow Status'] === 'PENDING APPROVAL BUC' 
+          || results.body['WorkFlow Status'].toUpperCase() === 'PENDING PRODUCT CLASS') &&
             ((results.body['WorkFlow Status Requested By'] === 'BUC') || (
               results.body['WorkFlow Status Requested By'] === 'PDT'))) {
             // Call to add minor line item.
