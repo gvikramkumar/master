@@ -3,6 +3,8 @@ import {
   OnInit,
   ChangeDetectorRef,
   Input,
+  Output,
+  EventEmitter,
   OnDestroy
 } from '@angular/core';
 import { TreeNode } from 'primeng/api';
@@ -52,6 +54,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   addDetails;
   productName;
   @Input() questions: any[] = [];
+  @Output() getCanMarkCompleteStatus = new EventEmitter<string>();
   payLoad = '';
   itemCount;
   nodeToDelete;
@@ -187,11 +190,14 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
    * @param $event
    */
   dropItem() {
+    debugger;
+    this.dropItemImpl().then(() => this.checkCanMarkCompleteStatus());
+  }
 
+  dropItemImpl() {
+    debugger;
     this.initalRowAdded = false;
-
     if (this.draggedItem['isMajorLineItem']) {
-
       this.loaderService.startLoading();
       const obj = Object.create(null);
       obj['uniqueKey'] = ++this.counter;
@@ -305,6 +311,13 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
         () => {
         });
     }
+    var promise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        console.log("Async Work Complete");
+        resolve();
+      }, 1000);
+    });
+    return promise;
   }
 
   getQuestionOnDragDrop(groupsName) {
@@ -2317,7 +2330,20 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
-
-
+// check major and mirror status to make mark complete enable
+  checkCanMarkCompleteStatus() {
+    debugger;
+    let message = 'false';
+    if (this.offerConstructItems.length === 0) {
+      message = "false";
+    } else {
+      this.offerConstructItems.forEach(item => {
+        if (item.children.length > 0) {
+          message = "true";
+        }
+      })
+    }
+    this.getCanMarkCompleteStatus.next(message);
+  }
 
 }

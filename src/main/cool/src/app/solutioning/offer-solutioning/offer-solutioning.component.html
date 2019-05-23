@@ -1,5 +1,5 @@
 <app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="offerId" [offerName]="offerName"
-  [stakeData]="stakeData" (updateMessage)="updateMessage($event)" (onProceedToNext)="proceedToOfferComponents($event)"
+  [stakeData]="stakeData" [canMarkComplete]="osForm.valid" (updateMessage)="updateMessage($event)" (onProceedToNext)="proceedToOfferComponents($event)"
   [showSave]="true"> </app-menu-bar>
 
 <div class="content solutioning">

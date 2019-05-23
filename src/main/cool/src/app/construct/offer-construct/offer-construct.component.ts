@@ -44,6 +44,7 @@ export class OfferConstructComponent implements OnInit, OnDestroy {
   backbuttonStatusValid = true;
   proceedButtonStatusValid = true;
   subscription: Subscription;
+  canMarkComplete: boolean = false;
 
   constructor(private router: Router,
     private stakeholderfullService: StakeholderfullService,
@@ -237,6 +238,15 @@ export class OfferConstructComponent implements OnInit, OnDestroy {
           this.router.navigate(['/designReview', this.currentOfferId, this.caseId]);
         }
       }
+    }
+  }
+
+  getCanMarkCompleteStatus(message) {
+    debugger;
+    if (message === "true") {
+      this.canMarkComplete = true;
+    } else {
+      this.canMarkComplete = false;
     }
   }
 
