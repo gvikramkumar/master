@@ -31,4 +31,9 @@ export class CsdlIntegrationService {
     const url = `${this.environmentService.REST_API_REFRESH_PROJECTS}`;
     return this._http.get(url);
   }
+
+  getCsdlInfo(offerId): Observable<any> {
+    const url = this.environmentService.REST_API_CSDL_INFO_GET_URL + offerId;
+    return this._http.get(url, { withCredentials: true });
+  }
 }

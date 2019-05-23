@@ -1660,9 +1660,10 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
             this.addMinorItem(results.body);
           }
         }
-      } else {
-        this.showMajorItemFoundDialog = true;
-      }
+        else {
+          this.showMajorItemFoundDialog = true;
+        }
+      } 
     },
       () => {
         this.results = [];
