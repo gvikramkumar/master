@@ -516,6 +516,7 @@ export class OfferConstructDefaultValue {
     return questionList;
   }
   
+
   setDefaultTrueupTerm(questionList) {
     let trueUpDefault;
     let trueUpDefaultValues;
@@ -523,23 +524,44 @@ export class OfferConstructDefaultValue {
       if (question.question == "True Up Term") {
         trueUpDefault = question.currentValue;
         trueUpDefaultValues = trueUpDefault.split(',')
-        console.log("trueUpDefaultValues1", trueUpDefaultValues);
       }
     });
 
     questionList.forEach(question => {
       if (question.question == "Default True Up Term") {
-               console.log("question.currentValue",question.currentValue)
              
              if(trueUpDefaultValues.includes(question.currentValue)){
                  question.rules.isvalid = true;
-                 question.rules.validationMessage = "";
-                 console.log("question.currentValue == trueUpValue", question.rules.isvalid )
              }
              else{
                   question.rules.isvalid = false;
+                  
                   question.rules.validationMessage = question.egineAttribue + " should be a value from True Up Term ";
-                  console.log("question.currentValue != trueUpValue", question.rules.isvalid )
+             }
+      }
+    });
+  }
+  
+  setDefIniTerm(questionList) {
+    let iniDefault;
+    let iniDefaultValues;
+    questionList.forEach(question => {
+      if (question.question == "Initial Term") {
+        iniDefault = question.currentValue;
+        iniDefaultValues = iniDefault.split(',')
+      }
+    });
+
+    questionList.forEach(question => {
+      if (question.question == "Default Initial Term") {
+             
+             if(iniDefaultValues.includes(question.currentValue)){
+                 question.rules.isvalid = true;
+             }
+             else{
+                  question.rules.isvalid = false;
+                  
+                  question.rules.validationMessage = question.egineAttribue + " should be a value from Initial Term ";
              }
       }
     });
@@ -555,57 +577,37 @@ export class OfferConstructDefaultValue {
         if (question.question == "Initial Term") {
           initialTermDefault = question.currentValue;
           initialTermDefaultValues = initialTermDefault.split(',')
-          console.log("trueUpDefaultValues1", initialTermDefaultValues);
         }
       });
 
       questionList.forEach(question => {
         if (question.question == "Default Initial Term") {
-                 console.log("question.currentValue",question.currentValue)
-               
                if(initialTermDefaultValues.includes(question.currentValue)){
-                   question.rules.isvalid = true;
-                   question.rules.validationMessage = "";
-                   console.log("question.currentValue == trueUpValue", question.rules.isvalid )
+                  question.rules.isvalid = true;
                }
                else{
                     question.rules.isvalid = false;
-                    question.rules.validationMessage = question.egineAttribue + " should be a value from True Up Term ";
-                    console.log("question.currentValue != trueUpValue", question.rules.isvalid )
+                    question.rules.validationMessage = question.egineAttribue + " should be a value from Initial Term";
                }
         }
       });
     }
-  
-  setDefaultAutoRenewalTerm(questionList) {
-    let stdAutoRenewalTermDefault;
-    let stdAutoRenewalTermDefaultValues;
-    questionList.forEach(question => {
-      if (question.question == "STD AUTO RENEWAL TERM") {
-        stdAutoRenewalTermDefault = question.currentValue;
-        stdAutoRenewalTermDefaultValues = stdAutoRenewalTermDefault.split(',')
-        console.log("trueUpDefaultValues1", stdAutoRenewalTermDefaultValues);
-      }
-    });
+    
+    
+    setDefaultAutoRenewalTerm(questionList) {
+      let stdAutoRenewalTermDefault;
+      questionList.forEach(question => {
+        if (question.question == "STD AUTO RENEWAL TERM") {
+          stdAutoRenewalTermDefault = question.currentValue;
+        }
+      });
 
-    questionList.forEach(question => {
-      if (question.question == "Default Auto Renewal Term") {
-               console.log("question.currentValue",question.currentValue)
-             
-             if(stdAutoRenewalTermDefaultValues.includes(question.currentValue)){
-                 question.rules.isvalid = true;
-                 question.rules.validationMessage = "";
-             }
-             else{
-                  question.rules.isvalid = false;
-                  question.rules.validationMessage = question.egineAttribue + " should be a value from True Up Term ";
-                  console.log("question.currentValue != trueUpValue", question.rules.isvalid )
-             }
-      }
-    });
-  }
-
-
+      questionList.forEach(question => {
+        if (question.question == "Default Auto Renewal Term") {
+          question.currentValue = stdAutoRenewalTermDefault;
+        }
+      });
+    }
 
   setSoftwareLicenseNSKU(questionList) {
       questionList.forEach(question => {
@@ -682,4 +684,19 @@ export class OfferConstructDefaultValue {
     return questionList;
   }
 
+// getCountryNameValues(questionList) {
+//      let countryValues = ["AFGHANISTAN","ALBANIA","ALGERIA","AMERICAN SAMOA","ANDORRA","ANGOLA","ANGUILLA","ANTARCTICA","ANTIGUA AND BARBUDA","ARGENTINA","ARMENIA","ARUBA","AUSTRALIA","AUSTRIA","AZERBAIJAN","BAHAMAS","BAHRAIN","BANGLADESH","BARBADOS","BELARUS","BELGIUM","BELIZE","BENIN","BERMUDA","BHUTAN","BOLIVIA","BOSNIA AND HERZEGOVINA","BOTSWANA","BOUVET ISLAND","BRAZIL","BRITISH INDIAN OCEAN TERRITORY","BRUNEI DARUSSALAM","BULGARIA","BURKINA FASO","BURUNDI","CAMBODIA","CAMEROON","CANADA","CAPE VERDE","CAYMAN ISLANDS","CENTRAL AFRICAN REPUBLIC","CHAD","CHILE","CHINA","CHRISTMAS ISLAND","COCOS (KEELING) ISLANDS","COLOMBIA","COMOROS","CONGO","CONGO, THE DEMOCRATIC REPUBLIC OF THE","COOK ISLANDS","COSTA RICA","COTE D'IVOIRE","CROATIA","CUBA","CYPRUS","CZECH REPUBLIC","DENMARK","DJIBOUTI","DOMINICA","DOMINICAN REPUBLIC","ECUADOR","EGYPT","EL SALVADOR","EQUATORIAL GUINEA","ERITREA","ESTONIA","ETHIOPIA","FALKLAND ISLANDS (MALVINAS)","FAROE ISLANDS","FIJI","FINLAND","FRANCE","FRENCH GUIANA","FRENCH POLYNESIA","FRENCH SOUTHERN TERRITORIES","GABON","GAMBIA","GEORGIA","GERMANY","GHANA","GIBRALTAR","GREECE","GREENLAND","GRENADA","GUADELOUPE","GUAM","GUATEMALA","GUERNSEY","GUINEA","GUINEA-BISSAU","GUYANA","HAITI","HEARD ISLAND AND MCDONALD ISLANDS","HOLY SEE (VATICAN CITY STATE)","HONDURAS","HONG KONG","HUNGARY","ICELAND","INDIA","INDONESIA","IRAN, ISLAMIC REPUBLIC OF","IRAQ","IRELAND","ISLE OF MAN","ISRAEL","ITALY","JAMAICA","JAPAN","JERSEY","JORDAN","KAZAKHSTAN","KENYA","KIRIBATI","KOREA, DEMOCRATIC PEOPLE&#39;S REPUBLIC OF","KOREA, REPUBLIC OF","KUWAIT","KYRGYZSTAN","LAO PEOPLE&#39;S DEMOCRATIC REPUBLIC","LATVIA","LEBANON","LESOTHO","LIBERIA","LIBYAN ARAB JAMAHIRIYA","LIECHTENSTEIN","LITHUANIA","LUXEMBOURG","MACAO","MACEDONIA, THE FORMER YUGOSLAV REPUBLIC OF","MADAGASCAR","MALAWI","MALAYSIA","MALDIVES","MALI","MALTA","MARSHALL ISLANDS","MARTINIQUE","MAURITANIA","MAURITIUS","MAYOTTE","MEXICO","MICRONESIA, FEDERATED STATES OF","MOLDOVA, REPUBLIC OF","MONACO","MONGOLIA","MONTSERRAT","MOROCCO","MOZAMBIQUE","MYANMAR","NAMIBIA","NAURU","NEPAL","NETHERLANDS","NETHERLANDS ANTILLES","NEW CALEDONIA","NEW ZEALAND","NICARAGUA","NIGER","NIGERIA","NIUE","NORFOLK ISLAND","NORTHERN MARIANA ISLANDS","NORWAY","OMAN","PAKISTAN","PALAU","PALESTINIAN TERRITORY, OCCUPIED","PANAMA","PAPUA NEW GUINEA","PARAGUAY","PERU","PHILIPPINES","PITCAIRN","POLAND","PORTUGAL","PUERTO RICO","QATAR","REUNION","ROMANIA","RUSSIAN FEDERATION","RWANDA","SAINT HELENA","SAINT KITTS AND NEVIS","SAINT LUCIA","SAINT PIERRE AND MIQUELON","SAINT VINCENT AND THE GRENADINES","SAMOA","SAN MARINO","SAO TOME AND PRINCIPE","SAUDI ARABIA","SENEGAL","SERBIA AND MONTENEGRO","SEYCHELLES","SIERRA LEONE","SINGAPORE","SLOVAKIA","SLOVENIA","SOLOMON ISLANDS","SOMALIA","SOUTH AFRICA","SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS","SOUTH SUDAN","SPAIN","SRI LANKA","SUDAN","SURINAME","SVALBARD AND JAN MAYEN","SWAZILAND","SWEDEN","SWITZERLAND","SYRIAN ARAB REPUBLIC","TAIWAN, REPUBLIC OF CHINA","TAJIKISTAN","TANZANIA, UNITED REPUBLIC OF","THAILAND","TIMOR-LESTE","TOGO","TOKELAU","TONGA","TRINIDAD AND TOBAGO","TUNISIA","TURKEY","TURKMENISTAN","TURKS AND CAICOS ISLANDS","TUVALU","UGANDA","UKRAINE","UNITED ARAB EMIRATES","UNITED KINGDOM","UNITED STATES","UNITED STATES MINOR OUTLYING ISLANDS","URUGUAY","UZBEKISTAN","VANUATU","VENEZUELA","VIET NAM","VIRGIN ISLANDS, BRITISH","VIRGIN ISLANDS, U.S.","WALLIS AND FUTUNA","WESTERN SAHARA","YEMEN","ZAMBIA","ZIMBABWE"];
+// 
+//      questionList.forEach(question => {
+//        if (question.question == "Country Specific Association" || question.question == "ROHS") {
+//               if(countryValues.includes(question.currentValue)){
+//                  question.rules.isvalid = true;
+//               }
+//               else{
+//                    question.rules.isvalid = false;
+//                    question.rules.validationMessage = "Entry of a comma separated list of Country Names with no spaces";
+//               }
+//        }
+//      });
+//    }
 }

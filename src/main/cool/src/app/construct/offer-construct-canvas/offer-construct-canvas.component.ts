@@ -947,6 +947,11 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
                   obj['itemDetails'] = listOfferQuestions;
                 }
                 
+                // if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'SW Subscription Mapped SKU'){
+                //   let listOfferQuestions = this.defaultValueServices.getCountryNameValues(this.listOfferQuestions, this.createSpare);
+                //   obj['itemDetails'] = listOfferQuestions;
+                // }
+                
                 obj['itemDetails'] = this.listOfferQuestions;
               } else {
                 let listOfferQuestions = this.defaultValueServices.billingSOADefaultValue(this.listOfferQuestions, this.chargeTypeValue);

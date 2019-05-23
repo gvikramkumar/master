@@ -449,12 +449,15 @@ export class DynamicFormMultipleComponent implements OnInit {
             if (question.question == "Default True Up Term") {
                     this.defaultValueServices.setDefaultTrueupTerm(questionList);
                 }
+            if (question.question == "Default Initial Term") {
+                    this.defaultValueServices.setDefIniTerm(questionList);
+                }
                 
             if (question.question == "Default Initial Term") {
                     this.defaultValueServices.setDefaultInitialTerm(questionList);
                 }
                 
-            if (question.question == "Default Auto Renewal Term") {
+            if (question.question == "STD AUTO RENEWAL TERM") {
                     this.defaultValueServices.setDefaultAutoRenewalTerm(questionList);
                 }
 
@@ -554,7 +557,7 @@ export class DynamicFormMultipleComponent implements OnInit {
         }
         var validatorPattern = '';
         if (question.egineAttribue !== "Item Name (PID)") {
-            if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "numeric") {
+            if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "numeric" && question.question != "Default Initial Term") {
                 if (!(/^[0-9]*$/.test(question.currentValue))) {
                     question.rules.validationMessage = question.egineAttribue + " should be in " + question.rules.textcase;
                     question.rules.isvalid = false;
