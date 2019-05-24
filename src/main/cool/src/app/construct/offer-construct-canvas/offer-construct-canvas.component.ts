@@ -895,7 +895,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
               obj['itemDetails'] = this.listOfferQuestions;
             } else {
-              let listOfferQuestions = this.defaultValueServices.billingSOADefaultValue(this.listOfferQuestions, this.chargeTypeValue);
+              let listOfferQuestions = this.defaultValueServices.billingSOADefaultValue(this.listOfferQuestions, this.chargeTypeValue, this.beListType);
               obj['itemDetails'] = listOfferQuestions;
             }
             this.setSameAsMajorLine(rowNode, this.listOfferQuestions);
