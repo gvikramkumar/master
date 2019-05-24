@@ -104,7 +104,6 @@ export class MmAssesmentComponent implements OnInit {
 
     this.readOnly = this.configurationService.startupData.readOnly;
   
-    this.checkDimensionSubGroup();
 
     // Retrieve Offer Details
     // Get Attributes Of Each Group
@@ -265,6 +264,7 @@ export class MmAssesmentComponent implements OnInit {
           this.dimensionFirstGroupName = this.groupNames[0];
           this.groupData.shift();
           this.groupNames.shift();
+          this.checkDimensionSubGroup();
         }
 
         if (offerBuilderdata['derivedMM'] !== null && offerBuilderdata['derivedMM'] !== '') {
@@ -283,19 +283,6 @@ export class MmAssesmentComponent implements OnInit {
     this.strategyReviewService.getStrategyReview(this.caseId).subscribe((resStrategyReview) => {
       this.totalApprovalsCount = resStrategyReview.length;
     });
-// Get mark complete button status
-  //   this.menuBarService.getMarkCompleteStatus(this.offerId, this.caseId).subscribe(data => {
-  //     if (this.currentURL.includes('offerDimension')) {
-  //         this.markCompleteStatus = data['offerDimension_toggleStatus'];
-  //         this.showMarkcompleteToggle = true;
-  //     } else if(this.currentURL.includes('offerSolutioning')){
-  //         this.markCompleteStatus = data['offerSolutioning_toggleStatus'];
-  //         this.showMarkcompleteToggle = true;
-  //     } else if (this.currentURL.includes('offerConstruct')){
-  //         this.markCompleteStatus = data['offerComponent_toggleStatus'];
-  //         this.showMarkcompleteToggle = true;
-  //     }
-  // })
 
   }
 
