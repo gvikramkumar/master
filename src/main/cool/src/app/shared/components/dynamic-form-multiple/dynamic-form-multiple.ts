@@ -496,6 +496,90 @@ export class DynamicFormMultipleComponent implements OnInit {
                 }
 
             }
+            
+            if (question.question == "SOA Pricing") {
+                if (question.currentValue == "Flat") {
+                    this.defaultValueServices.setSoaPricingbasedDefaultsFlat(questionList);
+                }
+                else {
+                    this.defaultValueServices.setSoaPricingbasedDefaultsFlatN(questionList);
+                }
+            }
+            
+            if (question.question == "SOA Pricing") {
+                if(question.currentValue == "% of Product List") {
+                    this.defaultValueServices.setSoaPricingbasedDefaultsProduct(questionList);
+                }
+                else {
+                    this.defaultValueServices.setSoaPricingbasedDefaultsProductN(questionList);
+                }
+            }
+            
+            if (question.question == "Support Pricing Minimum (monthly) ") {
+                if(question.currentValue == "Yes") {
+                    this.defaultValueServices.setMonthlySupportPricingProduct(questionList);
+                }
+                else {
+                    this.defaultValueServices.setMonthlySupportPricingProductN(questionList);
+                }
+            }
+            
+            if (question.question == "Monthly Amount") {
+                if(question.currentValue != "$0") {
+                    this.defaultValueServices.setTMSNOde(questionList);
+                }
+                else{
+                    this.defaultValueServices.setTMSNOdeN(questionList);
+                }
+            }
+            
+            if (question.question == "Percentage Amount") {
+                if(question.currentValue != "blank" || question.currentValue != "") {
+                    this.defaultValueServices.setTMSNOde1(questionList);
+                }
+                else{
+                    this.defaultValueServices.setTMSNOdeN1(questionList);
+                }
+            }
+            
+            if (question.question == "Service Type?") {
+                if(question.currentValue == "Support") {
+                    this.defaultValueServices.setTMSNOdeN2(questionList);
+                }
+            }
+            
+            if (question.question == "Monthly Amount") {
+                if(question.currentValue != "$0") {
+                    this.defaultValueServices.setTMSNOdeTS(questionList);
+                }
+                else{
+                    this.defaultValueServices.setTMSNOdeTSN(questionList);
+                }
+            }
+            
+            if (question.question == "Percentage Amount") {
+                if(question.currentValue != "blank" || question.currentValue != "") {
+                    this.defaultValueServices.setTMSNOdeTS1(questionList);
+                }
+                else{
+                    this.defaultValueServices.setTMSNOdeTSN1(questionList);
+                }
+            }
+            
+            if (question.question == "Service Type?") {
+                if(question.currentValue == "Support") {
+                    this.defaultValueServices.setTMSNOdeTSN2(questionList);
+                }
+            }
+            // 
+            // if (question.question == "Service Type?") {
+            //     if(question.currentValue != "Service") {
+            //         this.defaultValueServices.setTMSNOde(questionList);
+            //     }
+            //     else{
+            //         this.defaultValueServices.setTMSNOdeN(questionList);
+            //     }
+            // }
 
         }
         var validatorPattern = '';

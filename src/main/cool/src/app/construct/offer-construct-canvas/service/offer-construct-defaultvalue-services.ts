@@ -11,7 +11,7 @@ export class OfferConstructDefaultValue {
 
   constructor() { }
 
-  billingSOADefaultValue(listOfferQuestions, chargeTypeValue) {
+  billingSOADefaultValue(listOfferQuestions, chargeTypeValue, beListType) {
     let usageType = 'Usage';
     let recurringType = 'Recurring';
     listOfferQuestions.forEach(element => {
@@ -73,12 +73,58 @@ export class OfferConstructDefaultValue {
           element.previousValue = '30';
         }
       }
+      
+      if (element.question == 'Service Type?') {
+          element.currentValue = 'Support';
+          element.previousValue = 'Support';
+          element.rules.isDisabled = false;
+      }
+      
+      if (element.question == 'SOA Pricing') {
+          element.rules.isDisabled = false;
+      }
+      
       if (element.question === 'Service Type?') {
         // set pre define value according to service type
           this.serviceTypeValue = element.currentValue;
           this.setSubscriptionType(listOfferQuestions, this.serviceTypeValue);
         }
 
+        if (element.question == "Support Pricing Minimum (monthly) ") {
+            if(element.currentValue == "Yes") {
+                this.setMonthlySupportPricingProduct(listOfferQuestions);
+            }
+            else {
+                this.setMonthlySupportPricingProductN(listOfferQuestions);
+            }
+        }
+        
+        if (element.question == "Monthly Amount") {
+            if(element.currentValue != "$0") {
+                this.setTMSNOde(listOfferQuestions);
+                this.setTMSNOdeTS(listOfferQuestions);
+            }
+            else{
+                this.setTMSNOdeN(listOfferQuestions);
+                this.setTMSNOdeTSN(listOfferQuestions);
+            }
+        }
+        
+        if (element.question == 'TMS Node TS') {
+          if (beListType == "Collaboration") {
+            element.currentValue = "UC/HVS/SWSS/SUB/TRAN Svc";
+            element.previousValue = "UC/HVS/SWSS/SUB/TRAN Svc";
+          }
+          if (beListType == "Security") {
+            element.currentValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
+            element.previousValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
+          }
+          else {
+            element.currentValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
+            element.previousValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
+          }
+        }
+        
     });
     return listOfferQuestions;
   }
@@ -418,13 +464,201 @@ export class OfferConstructDefaultValue {
   }
   setSoftwareLicenseDefault(questionList) {
     questionList.forEach(question => {
+        if (question.question == 'Service Type?') {
+            question.rules.isDisabled = true;
+        } 
+        if (question.question == 'SOA Pricing') {
+            question.rules.isDisabled = true;
+        }
+    });
+    return questionList;
+  }
+  
+  
+  nonSoaSkuDefaults(questionList) {
+    questionList.forEach(question => {
       if (question.question == "Software License" || question.question == "Entitlement Term") {
         question.rules.isDisabled = false;
       }
     });
     return questionList;
   }
+  
+  setSoaPricingbasedDefaultsFlat(questionList) {
+    questionList.forEach(question => {
+        if (question.question == "Monthly Amount") {
+          question.rules.isDisabled = false;
+          question.currentValue = '$0';
+        }
+    });
+    return questionList;
+  }
+  
+  setSoaPricingbasedDefaultsFlatN(questionList) {
+    questionList.forEach(question => {
+        if (question.question == "Monthly Amount") {
+          question.rules.isDisabled = true;
+          question.currentValue = '';
+          question.rules.isMandatoryOptional = "Optional";
+        }
+    });
+  }
+  
+  setSoaPricingbasedDefaultsProduct(questionList) {
+    questionList.forEach(question => {
+        if (question.question == "Percentage Amount") {
+          question.rules.isDisabled = false;
+        }
+        if (question.question == "Support Pricing Minimum (monthly) ") {
+          question.rules.isDisabled = false;
+          question.currentValue = 'No';
+          this.setMonthlySupportPricingProductN(questionList);
+        }
+    });
+  }
 
+  setSoaPricingbasedDefaultsProductN(questionList) {
+    questionList.forEach(question => {
+        if (question.question == "Percentage Amount") {
+          question.rules.isDisabled = true;
+          question.rules.isMandatoryOptional = "Optional";
+        }
+        
+        if (question.question == "Support Pricing Minimum (monthly) ") {
+          question.rules.isDisabled = true;
+          question.currentValue = '';
+          question.rules.isMandatoryOptional = "Optional";
+        }
+    });
+    return questionList;
+  }
+  
+  setMonthlySupportPricingProduct(questionList) {
+    questionList.forEach(question => {
+        if (question.question == "Monthly Support Pricing Minimum Value") {
+          question.rules.isDisabled = false;
+        }
+    });
+  }
+
+  setMonthlySupportPricingProductN(questionList) {
+    questionList.forEach(question => {
+        if (question.question == "Monthly Support Pricing Minimum Value") {
+          question.rules.isDisabled = true;
+          question.rules.isMandatoryOptional = "Optional";
+        }
+    });
+    return questionList;
+  }
+  
+  setTMSNOde(questionList) {
+    questionList.forEach(question => {
+        if (question.question == "TMS Node AS") {
+          question.rules.isDisabled = false;
+          question.rules.isMandatoryOptional = "Optional";
+        }
+    });
+  }
+  
+  setTMSNOdeN(questionList) {
+    questionList.forEach(question => {
+        if (question.question == "TMS Node AS") {
+          question.rules.isDisabled = true;
+        }
+    });
+  }
+  
+  setTMSNOde1(questionList) {
+    let tmsDefault;
+    questionList.forEach(question => {
+        if (question.question == "Service Type?") {
+          tmsDefault = question.currentValue;
+        }
+    });
+    questionList.forEach(question => {
+      if (question.question == "TMS Node AS") {
+        if(tmsDefault == "Service"){
+            question.rules.isDisabled = false;
+            question.rules.isMandatoryOptional = "Optional";
+        }
+        else{
+            question.rules.isDisabled = true;
+        }
+      }
+    });
+  }
+  
+  setTMSNOdeN1(questionList) {
+      questionList.forEach(question => {
+          if (question.question == "TMS Node AS") {
+            question.rules.isDisabled = true;
+          }
+      });
+  }
+  
+  setTMSNOdeN2(questionList) {
+      questionList.forEach(question => {
+          if (question.question == "TMS Node AS") {
+            question.rules.isDisabled = true;
+          }
+      });
+  }
+  
+  
+  setTMSNOdeTS(questionList) {
+    questionList.forEach(question => {
+        if (question.question == "TMS Node TS") {
+          question.rules.isDisabled = false;
+          question.rules.isMandatoryOptional = "Optional";
+        }
+    });
+  }
+  
+  setTMSNOdeTSN(questionList) {
+    questionList.forEach(question => {
+        if (question.question == "TMS Node TS") {
+          question.rules.isDisabled = true;
+        }
+    });
+  }
+  
+  setTMSNOdeTS1(questionList) {
+    let tmsDefault;
+    questionList.forEach(question => {
+        if (question.question == "Service Type?") {
+          tmsDefault = question.currentValue;
+        }
+    });
+    questionList.forEach(question => {
+      if (question.question == "TMS Node TS") {
+        if(tmsDefault == "Service"){
+            question.rules.isDisabled = false;
+            question.rules.isMandatoryOptional = "Optional";
+        }
+        else{
+            question.rules.isDisabled = true;
+        }
+      }
+    });
+  }
+  
+  setTMSNOdeTSN1(questionList) {
+      questionList.forEach(question => {
+          if (question.question == "TMS Node TS") {
+            question.rules.isDisabled = true;
+          }
+      });
+  }
+  
+  setTMSNOdeTSN2(questionList) {
+      questionList.forEach(question => {
+          if (question.question == "TMS Node TS") {
+            question.rules.isDisabled = true;
+          }
+      });
+  }
+  
+  
   // setSoftwareLicenseNSKU(questionList) {
   //     questionList.forEach(question => {
   //         if (question.question == "UPG Family"  || question.question == "UPG Group" || question.question == "UPG Type" ) {
