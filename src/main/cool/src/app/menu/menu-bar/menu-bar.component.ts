@@ -34,7 +34,7 @@ export class MenuBarComponent implements OnInit {
     offerBuilderdata = {};
     navigateHash: Object = {};
     showMarkcompletePopup: boolean = false;
-    showMarkcompleteToggle: boolean = true;
+    showMarkcompleteToggle: boolean = false;
     currentURL: String;
     currentOfferId: String = '';
     holdStatusValid = true;
