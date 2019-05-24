@@ -1,5 +1,6 @@
 import AnyObj from '../models/any-obj';
 import _ from 'lodash';
+import {DialogSize, DialogType} from '../../ui/src/app/core/models/ui-enums';
 
 
 export const ruleUtil = {
@@ -7,7 +8,21 @@ export const ruleUtil = {
   parseSelect,
   createSelect,
   addRuleNameAndDescription,
+  getRuleDescription
 };
+
+function getRuleDescription(rule) {
+  let html = `<table style='border:none'>`;
+  rule.desc.split('\n')
+    .forEach(x => {
+      const colonIdx = x.indexOf(':');
+      html += `<tr><td>${x.substring(0, colonIdx)}</td><td style="padding-left: 20px;">${x.substring(colonIdx + 1)}</td></tr>`;
+    });
+  html += `</table>`;
+  return html;
+}
+
+
 
 function addRuleNameAndDescription(rule, selectMap, drivers, periods) {
   let driver, period;

@@ -26,6 +26,7 @@ import {FsFile} from '../../models/fsfile';
 import {BusinessUploadFileType, Directory} from '../../../../../../../shared/misc/enums';
 import {FsFileService} from '../../../../core/services/fsfile.service';
 import {BusinessUploadService} from '../../services/business-upload.service';
+import {ruleUtil} from '../../../../../../../shared/misc/rule-util';
 
 @Component({
   selector: 'fin-submeasure-edit',
@@ -870,13 +871,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           const saveMode = UiUtil.getApprovalSaveMode(this.sm.status, this.addMode, this.editMode, this.copyMode);
           this.submeasureService.saveToDraft(this.sm, {saveMode})
             .subscribe(sm => {
-              // once saved we need to update, not add, so move mode to edit (uiUtil.getApprovalSaveMode())
-              this.addMode = false;
-              this.copyMode = false;
-              this.editMode = true;
-              this.sm = sm;
-              this.orgSubmeasure = _.cloneDeep(sm);
-              this.uiUtil.toast('Submeasure saved to draft.');
+              history.go(-1);
             });
         }
       });
@@ -1181,6 +1176,18 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       }
       this.uiUtil.genericDialog(`Submeasure has inactive rules: ${inactiveRules.join(', ')}.`);
     }
+  }
+
+  showDescription(idx) {
+    let html;
+    const name = this.sm.rules[idx];
+    const rule = _.find(this.rules, {name});
+    if (!rule) {
+      html = `Rule ${name} doesn't exist.`;
+    } else {
+      html = ruleUtil.getRuleDescription(rule);
+    }
+    this.uiUtil.genericDialog(null, html, null, DialogType.ok, DialogSize.large, false);
   }
 
 }
