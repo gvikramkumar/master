@@ -22,6 +22,9 @@ export class MenuBarComponent implements OnInit {
     @Input() showSave = false;
     @Output() onProceedToNext = new EventEmitter();
     @Output() updateMessage = new EventEmitter<string>();
+    @Output() getMarkCompleteStatus= new EventEmitter<boolean>();
+
+
 
 
     items: MenuItem[];
@@ -31,13 +34,14 @@ export class MenuBarComponent implements OnInit {
     offerBuilderdata = {};
     navigateHash: Object = {};
     showMarkcompletePopup: boolean = false;
-    showMarkcompleteToggle: boolean = false;
-    markCompleteStatus: boolean;
+    showMarkcompleteToggle: boolean = true;
     currentURL: String;
     currentOfferId: String = '';
     holdStatusValid = true;
     cancelStatusValid = true;
     currentUsername: any;
+    designReviewRequestApprovalStatus: boolean;
+    markCompleteStatus:boolean;
 
     constructor(
         private router: Router,
@@ -46,6 +50,7 @@ export class MenuBarComponent implements OnInit {
         private activatedRoute: ActivatedRoute,     
         private environmentService: EnvironmentService,
         private monetizationModelService: MonetizationModelService) {
+            debugger;
         this.currentURL = activatedRoute.snapshot['_routerState'].url;
 
         this.showPopup = false;
@@ -94,6 +99,7 @@ export class MenuBarComponent implements OnInit {
     }
 
     ngOnInit() {
+        debugger;
 
         this.items = [
             {
@@ -133,8 +139,12 @@ export class MenuBarComponent implements OnInit {
 
         ];
         
-        this.menuBarService.getMarkCompleteStatus(this.offerId, this.caseId).subscribe(data => {
+        this.menuBarService.getDesignReviewStatus(this.offerId).subscribe(data => {
             debugger;
+             this.designReviewRequestApprovalStatus = data['designReviewRequestApproval'];
+        })
+
+        this.menuBarService.getMarkCompleteStatus(this.offerId, this.caseId).subscribe(data => {
             if (this.currentURL.includes('offerDimension')) {
                 this.markCompleteStatus = data['offerDimension_toggleStatus'];
                 this.showMarkcompleteToggle = true;
@@ -145,6 +155,7 @@ export class MenuBarComponent implements OnInit {
                 this.markCompleteStatus = data['offerComponent_toggleStatus'];
                 this.showMarkcompleteToggle = true;
             }
+            this.getMarkCompleteStatus.next(this.markCompleteStatus);
         })
 
         this.monetizationModelService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
@@ -285,10 +296,12 @@ export class MenuBarComponent implements OnInit {
         debugger;
         this.showMarkcompletePopup = false;
         this.markCompleteStatus = !this.markCompleteStatus;
+        this.getMarkCompleteStatus.next(this.markCompleteStatus);
     }
 
     confirmMarkComplete(message) {
         this.showMarkcompletePopup = false;
+        this.getMarkCompleteStatus.next(this.markCompleteStatus);
     }
 
 }

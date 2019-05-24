@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MonetizationModelService } from '../../services/monetization-model.service';
 import { OfferPhaseService } from '../../services/offer-phase.service';
-
+import {MenuBarService} from '../../services/menu-bar.service';
 import { OfferDetailViewService } from '../../services/offer-detail-view.service';
 import { OffersolutioningService } from '../../services/offersolutioning.service';
 import { RightPanelService } from '../../services/right-panel.service';
@@ -52,6 +52,9 @@ export class MmAssesmentComponent implements OnInit {
   changeInMM = false;
   canClickNextStep = false;
   canMarkComplete = false;
+  // currentURL: String;
+  markCompleteStatus: boolean;
+  showMarkcompleteToggle: boolean;
   backbuttonStatusValid = true;
   dimensionMode: Boolean = false;
   dimensionFirstGroupData: Object;
@@ -68,6 +71,7 @@ export class MmAssesmentComponent implements OnInit {
 
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
+    private menuBarService: MenuBarService,
     private monetizationModelService: MonetizationModelService,
     private offerPhaseService: OfferPhaseService,
     private offerDetailViewService: OfferDetailViewService,
@@ -78,7 +82,7 @@ export class MmAssesmentComponent implements OnInit {
     private accessMgmtService: AccessManagementService,
     private strategyReviewService: StrategyReviewService
   ) {
-
+    // this.currentURL = activatedRoute.snapshot['_routerState'].url;
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['offerId'];
       this.caseId = params['caseId'];
@@ -99,6 +103,8 @@ export class MmAssesmentComponent implements OnInit {
     }
 
     this.readOnly = this.configurationService.startupData.readOnly;
+  
+    this.checkDimensionSubGroup();
 
     // Retrieve Offer Details
     // Get Attributes Of Each Group
@@ -277,11 +283,23 @@ export class MmAssesmentComponent implements OnInit {
     this.strategyReviewService.getStrategyReview(this.caseId).subscribe((resStrategyReview) => {
       this.totalApprovalsCount = resStrategyReview.length;
     });
-
-
+// Get mark complete button status
+  //   this.menuBarService.getMarkCompleteStatus(this.offerId, this.caseId).subscribe(data => {
+  //     if (this.currentURL.includes('offerDimension')) {
+  //         this.markCompleteStatus = data['offerDimension_toggleStatus'];
+  //         this.showMarkcompleteToggle = true;
+  //     } else if(this.currentURL.includes('offerSolutioning')){
+  //         this.markCompleteStatus = data['offerSolutioning_toggleStatus'];
+  //         this.showMarkcompleteToggle = true;
+  //     } else if (this.currentURL.includes('offerConstruct')){
+  //         this.markCompleteStatus = data['offerComponent_toggleStatus'];
+  //         this.showMarkcompleteToggle = true;
+  //     }
+  // })
 
   }
 
+  
   // --------------------------------------------------------------------------------------------
 
   getGroupData(group, selectedCharacteristics, toNextSetpFlag = false) {
@@ -465,63 +483,63 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   toggleSelected(attribute) {
+    debugger;
+    // In MM Page, toggle select
+  if(this.dimensionMode !== true) {
+
     if (this.readOnly === false) {
       this.isChangedAttribute = true;
       if (attribute.type === 2 && attribute.status === -1) {
-        attribute.type = 0;
+       attribute.type = 0;
+      this.canClickNextStep = false;
+    }
+    attribute.status = -attribute.status;
+  // In MM page, Set Condition To Enable Next Step Button
+    if (this.activeTabIndex === 0 && this.dimensionMode !== true) {
+      if (this.groupData[0]['Offer Components'].includes(attribute)) {
+        this.changeSubGroupType(this.groupData[0]);
+      }
+
+      let next = 0;
+      const groupKeys = this.getGroupKeys(this.groupData[this.activeTabIndex]);
+      groupKeys.forEach(key => {
+        for (const attr of this.groupData[0][key]) {
+          if (attr.status === 1 || attr.type === 2) {
+            next += 1;
+            break;
+          }
+        }
+      });
+      if (next === groupKeys.length) {
+        this.canClickNextStep = true;
+      } else {
         this.canClickNextStep = false;
       }
-      attribute.status = -attribute.status;
-    // In MM page, Set Condition To Enable Next Step Button
-      if (this.activeTabIndex === 0 && this.dimensionMode !== true) {
-        if (this.groupData[0]['Offer Components'].includes(attribute)) {
-          this.changeSubGroupType(this.groupData[0]);
-        }
-
-        let next = 0;
-        const groupKeys = this.getGroupKeys(this.groupData[this.activeTabIndex]);
-        groupKeys.forEach(key => {
-          for (const attr of this.groupData[0][key]) {
-            if (attr.status === 1 || attr.type === 2) {
-              next += 1;
-              break;
-            }
-          }
-        });
-        if (next === groupKeys.length) {
-          this.canClickNextStep = true;
-        } else {
-          this.canClickNextStep = false;
-        }
-      }
-    //  In Dimension Mode, Set Condition To Enable The Mark Complete Button
-      if (this.dimensionMode === true) {
-
-        let next = 0;
-        let subGroupLength = 0;
-        this.groupData.forEach(groupObj => {
-          const groupKeys = this.getGroupKeys(groupObj);
-          subGroupLength += groupKeys.length;
-          groupKeys.forEach(key => {
-            for (const attr of groupObj[key]) {
-              if (attr.status === 1 || attr.type === 2) {
-                next += 1;
-                break;
-              }
-            }
-          });
-        })
-        if (next === subGroupLength) {
-          this.canMarkComplete = true;
-        } else {
-          this.canMarkComplete = false;
-        }
-
-      }
-
-
-      this.selectedGroupData = this.groupData;
     }
+    this.selectedGroupData = this.groupData;
+ 
+  }
+}
+ 
+// In dimension Mode,toggle select and other condition check
+ 
+if (this.dimensionMode === true ) {
+  debugger;
+  if (this.readOnly === false && this.markCompleteStatus === false) {
+    this.isChangedAttribute = true;
+    if (attribute.type === 2 && attribute.status === -1) {
+     attribute.type = 0;
+    this.canClickNextStep = false;
+  }
+  attribute.status = -attribute.status;
+
+  this.checkDimensionSubGroup();
+  
+
+  this.selectedGroupData = this.groupData;
+
+}
+}
 
   }
 
@@ -557,16 +575,7 @@ export class MmAssesmentComponent implements OnInit {
     }
   }
 
-  // getAllDimensionGroupKeys(arr) {
-  //   let dimensionKeys = [];
-  //   arr.forEach(obj => {
-  //     if (typeof obj === 'object') {
-  //       dimensionKeys.concat(Object.keys(obj));
-  //     }
-  //   })
-  //   return dimensionKeys;
-
-  // }
+ 
 
   changeTab(index) {
     if (this.canClickNextStep === true) {
@@ -1293,5 +1302,36 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   // --------------------------------------------------------------------------------------------
+  // Check Dimension at least select one attribute in each subGroup
+  checkDimensionSubGroup(){
+    //  In Dimension Mode, Set Condition To Enable The Mark Complete Button
 
+    let next = 0;
+    let subGroupLength = 0;
+    this.groupData.forEach(groupObj => {
+      const groupKeys = this.getGroupKeys(groupObj);
+      subGroupLength += groupKeys.length;
+      groupKeys.forEach(key => {
+        for (const attr of groupObj[key]) {
+          if (attr.status === 1 || attr.type === 2) {
+            next += 1;
+            break;
+          }
+        }
+      });
+    })
+    if (next === subGroupLength) {
+        this.canMarkComplete = true;
+      
+    } else {
+      this.canMarkComplete = false;
+    }
+  }
+
+  getMarkCompleteStatus(status){
+    debugger;
+  this.markCompleteStatus = status;
+  }
+
+ 
 }
