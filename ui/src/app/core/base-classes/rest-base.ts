@@ -63,8 +63,13 @@ export class RestBase<T extends AnyObj> {
 
   // this calls getManyLatestGroupByNameActiveInactive, then filters for active only
   getManyLatestGroupByNameActive(moduleId?) {
-      const params = moduleId ? {moduleId: moduleId} : {};
+    const params = moduleId ? {moduleId} : {};
     return this.callMethod('getManyLatestGroupByNameActive', {}, params);
+  }
+
+  getManyLatestGroupByNameActiveInactive(moduleId?) {
+    const params = moduleId ? {moduleId} : {};
+    return this.callMethod('getManyLatestGroupByNameActiveInactive', {}, params);
   }
 
   // skip/limit required, sort optional, but surely needed to line up in pages. params become find(filter)

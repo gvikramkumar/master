@@ -48,7 +48,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   orgRule: AllocationRule;
   drivers: {name: string, value: string}[];
   periods: {period: string}[];
-  submeasures: Submeasure[] = [];
+  submeasuresInUse: Submeasure[] = [];
   submeasuresAll: Submeasure[] = [];
   usingSubmeasuresNamesTooltip = '';
 
@@ -229,9 +229,9 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   checkIfInUse() {
-    this.submeasures = this.submeasuresAll.filter(sm => _.includes(sm.rules, this.rule.name));
+    this.submeasuresInUse = this.submeasuresAll.filter(sm => _.includes(sm.rules, this.rule.name));
     this.usingSubmeasuresNamesTooltip = 'Rule is in use by the following submeasures: ';
-    this.usingSubmeasuresNamesTooltip += this.submeasures.map(sm => sm.name).join(', ');
+    this.usingSubmeasuresNamesTooltip += this.submeasuresInUse.map(sm => sm.name).join(', ');
   }
 
   hasChanges() {
@@ -565,12 +565,12 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     }
   }
 
-  showInUse() {
-    return this.isApprovedOnce() && this.submeasures.length;
+  isInUse() {
+    return this.isApprovedOnce() && !!this.submeasuresInUse.length;
   }
 
   disableSave() {
-    return this.showInUse() && (this.rule && this.rule.activeStatus === 'A');
+    return this.isInUse() && (this.rule && this.rule.activeStatus === 'A');
   }
 
 }
