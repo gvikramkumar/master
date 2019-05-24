@@ -8,7 +8,17 @@ import Q from 'q';
 // import {take, first} from 'rxjs/operators';
 
 
+/*
+function throwError() {
+  throw new Error('bad');
+  return Promise.resolve();
+}
 
+throwError()
+  .then(() => console.log('success'))
+  .catch(err => console.log('failure', err));
+
+*/
 
 /*
 console.log(toFixed('xx.123456789', 8));

@@ -11,6 +11,7 @@ import _ from 'lodash';
 import {UiUtil} from '../../../../core/services/ui-util';
 import {shUtil} from '../../../../../../../shared/misc/shared-util';
 import {DialogSize, DialogType} from '../../../../core/models/ui-enums';
+import {ruleUtil} from '../../../../../../../shared/misc/rule-util';
 
 @Component({
   selector: 'fin-rule-management',
@@ -115,14 +116,7 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
   }
 
   showDescription(rule) {
-    let html = `<table style='border:none'>`;
-    rule.desc.split('\n')
-      .forEach(x => {
-        const colonIdx = x.indexOf(':');
-        html += `<tr><td>${x.substring(0, colonIdx)}</td><td style="padding-left: 20px;">${x.substring(colonIdx + 1)}</td></tr>`;
-      });
-    html += `</table>`;
-    this.uiUtil.genericDialog(null, html, null, DialogType.ok, DialogSize.large, false);
+    this.uiUtil.genericDialog(null, ruleUtil.getRuleDescription(rule), null, DialogType.ok, DialogSize.large, false);
   }
 
 }

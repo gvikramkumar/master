@@ -68,8 +68,8 @@
 
     legend .tooltip {
       position: absolute;
-      top: 0px;
-      left: -23px;
+      top: -2px;
+      left: -28px;
     }
 
     .rule {
@@ -84,6 +84,9 @@
         }
         &.add {
           right: -56px;
+        }
+        &.desc {
+          left: -28px;
         }
       }
     }

@@ -319,14 +319,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
               const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
               this.ruleService.saveToDraft(this.rule, {saveMode})
                 .subscribe(rule => {
-                  // once saved we need to update, not add, so move mode to edit (uiUtil.getApprovalSaveMode())
-                  this.addMode = false;
-                  this.copyMode = false;
-                  this.editMode = true;
-                  this.rule = rule;
-                  this.orgRule = _.cloneDeep(rule);
-                  this.init();
-                  this.uiUtil.toast('Rule saved to draft.');
+                  history.go(-1);
                 });
             })
             // this to supress the angular error upon seeing a reject. Funny thing is: the one in the outer "then" won't do,
@@ -570,6 +563,14 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     } else {
       return false;
     }
+  }
+
+  showInUse() {
+    return this.isApprovedOnce() && this.submeasures.length;
+  }
+
+  disableSave() {
+    return this.showInUse() && (this.rule && this.rule.activeStatus === 'A');
   }
 
 }

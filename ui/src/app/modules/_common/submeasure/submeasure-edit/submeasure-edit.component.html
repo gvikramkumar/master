@@ -6,9 +6,9 @@
     <button type="button" cuiButton color="secondary" (click)="cancel()">Cancel</button>
   </div>
 
-  <form #form="ngForm" [class.disabled]="viewMode">
+  <form #form="ngForm">
 
-    <div class="row">
+    <div class="row" [class.disabled]="viewMode">
       <div class="col-lg-6">
         <cui-select name="measure" [(ngModel)]="sm.measureId" [items]="measures" label="Measure*" empty="true" [required]="true"
                     optionsKey="name" optionsValue="measureId" (ngModelChange)="measureChange()" [disabled]="isApprovedOnce()"></cui-select>
@@ -25,7 +25,7 @@
 
     <div [class.disabled]="!sm.measureId">
 
-      <div class="row">
+      <div class="row" [class.disabled]="viewMode">
       <div class="col-lg-6">
         <fin-input name="name" [(ngModel)]="sm.name" [disabled]="isApprovedOnce()" type="text" label="Sub-Measure Name" [pattern]="UiUtil.alphanumRegex" [patternMessage]="UiUtil.alphanumMessage"
                    [notInList]="submeasureNames" notInListMessage="Sub-Measure name already exists" [required]="true" (blur)="updateReportingLevel3()"></fin-input>
@@ -119,7 +119,7 @@
 
       <br>
 
-      <div class="row">
+      <div class="row" [class.disabled]="viewMode">
 
         <div class="col-lg-6  ifl-left-side" [class.disabled]="isUnallocatedGroup()">
           <div class="form-group-max-width">
@@ -257,7 +257,7 @@
 
       </div>
 
-      <div class="row" style="margin-top:30px;" [class.disabled]="isUnallocatedGroup()">
+      <div class="row" style="margin-top:30px;" [class.disabled]="isUnallocatedGroup() || viewMode">
         <div class="col-lg-6">
           <fin-input name="startMonth" *ngIf="effectiveMonthNotRequired" [(ngModel)]="startFiscalMonth" label="Effective Month" [disabled]="true"></fin-input>
           <cui-select *ngIf="!effectiveMonthNotRequired" name="startMonth" [(ngModel)]="sm.startFiscalMonth" [items]="yearmos"
@@ -277,28 +277,32 @@
         </div>
       </div>
 
-      <div class="row base-padding-top" [class.disabled]="isUnallocatedGroup()">
+      <div class="row base-padding-top">
         <div class="col-lg-6">
           <fieldset class="rule-assoc">
             <legend>
-        <span class="tooltip" data-balloon="Attach up to 15 rules" data-balloon-pos="up">
+        <span *ngIf="!viewMode" class="tooltip" data-balloon="Attach up to 15 rules" data-balloon-pos="up">
         <i class="icon-info-outline icon-small"></i>
           </span>
               Rule Association
             </legend>
 
             <div class="rule" *ngFor="let rule of arrRules; let idx = index;">
-              <cui-select name="rule{{idx}}" [(ngModel)]="sm.rules[idx]" class="rule-select" [items]="rules" empty="true" dropdownMaxHeight="300"
-                          optionsKey="name" optionsValue="name"></cui-select>
+              <i *ngIf="sm.rules[idx]" class="icon-info-outline icon-small desc" (click)="showDescription(idx)"></i>
+              <div [class.disabled]="isUnallocatedGroup() || viewMode">
+                <cui-select name="rule{{idx}}" [(ngModel)]="sm.rules[idx]" class="rule-select" [items]="rules"
+                            empty="true" dropdownMaxHeight="300"
+                            optionsKey="name" optionsValue="name"></cui-select>
 
-              <i class="delete icon-exit-outline icon-small" [fxShow]="showDeleteRuleIcon()" (click)="removeRule(idx)"></i>
-              <i class="add icon-add-outline icon-small" [fxShow]="showAddRuleIcon()" (click)="addRule(idx)"></i>
+                <i class="delete icon-exit-outline icon-small" [fxShow]="showDeleteRuleIcon()"
+                   (click)="removeRule(idx)"></i>
+                <i class="add icon-add-outline icon-small" [fxShow]="showAddRuleIcon()" (click)="addRule(idx)"></i></div>
             </div>
           </fieldset>
         </div>
       </div>
 
-      <div class="row">
+      <div class="row" [class.disabled]="viewMode">
         <div class="col-12">
           <div class="inline-check-row">
             <div [class.disabled]="isUnallocatedGroup()" style="display:inline-block">
