@@ -1117,6 +1117,9 @@ span[class*="display-"] {
   border-top-right-radius: 2rem;
   border-bottom-right-radius: 2rem;
 }
+button.btn.btn--secondary:hover span {
+  color: #fff;
+}
 
 .comments-modal {
   min-width: 600px;
