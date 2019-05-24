@@ -55,7 +55,8 @@ export class OfferSolutioningComponent implements OnInit {
   offerSolutioningFormGroup: FormGroup;
   groupedQuestionsAndAnswers: Array<any> = [];
   unGroupedQuestionsAndAnswers: Array<any> = [];
-
+  productFamily: string;
+  
   @ViewChild('osForm') osForm: NgForm;
 
 
@@ -457,6 +458,14 @@ export class OfferSolutioningComponent implements OnInit {
     questionAnswer = questionAnswer.filter(nonEmptyAnswer => nonEmptyAnswer['answer']);
     offerSolutioningAnswers['questionAnswer'] = questionAnswer;
 
+    questionAnswer.filter(element => {
+      if(element['questionNo'] == 'Q2'){
+        this.productFamily = element['answer'];
+        this.offersolutioningService.checkStatusOnMaestro(this.offerId, this.productFamily).subscribe(response => {
+        });
+      }
+    });
+   
     // Save Offer Solution Answers
     this.offersolutioningService.saveOfferSolutionAnswers(this.offerId, offerSolutioningAnswers).subscribe();
 
