@@ -308,7 +308,10 @@ export class MenuBarComponent implements OnInit {
 
         debugger;
         this.getCanUncheckCompleteStatus();
-        if( this.canMarkComplete === true || this.canUncheckComplete === true) {
+        if(this.markCompleteStatus == false && this.canMarkComplete === true) {
+            this.showMarkcompletePopup = !this.showMarkcompletePopup;
+        }
+        if( this.markCompleteStatus === true && this.canUncheckComplete === true) {
             this.showMarkcompletePopup = !this.showMarkcompletePopup;
         }
        
