@@ -50,9 +50,7 @@ export class ServiceMappingComponent implements OnInit {
     this.itemCreationService.getOfferDropdownValues(this.offerId).subscribe(data => {
       this.offerDropdownValues = data;
     });
-    this.serviceMappingService.getServiceMappingStatus(this.offerId, this.selectedAto).subscribe(response => {
-      this.productDetails = response.data;
-    });
+    this.getServiceMappingStatus(this.offerId, this.selectedAto);
     this.productColumns = [
       { field: 'product', header: 'ATO\'S' },
       { field: 'newItemStatus', header: 'STATUS' },
@@ -99,15 +97,22 @@ export class ServiceMappingComponent implements OnInit {
     }
 
   }
+
+  private getServiceMappingStatus(offerId, ato) {
+    this.serviceMappingService.getServiceMappingStatus(offerId, ato).subscribe(response => {
+      this.productDetails = response.data;
+    });
+  }
+
   downloadATODetails(productData) {
-    console.log('---------download config sheet---------');
     productData['newItemStatus'] = 'Completed';
     this.serviceMappingService.downloadConfigSheet(this.offerId, productData['product']).subscribe(element => {
-     });
+    });
   }
 
   showSelectedAtoView(dropDownValue: string) {
     this.selectedAto = dropDownValue;
+    this.getServiceMappingStatus(this.offerId, dropDownValue);
   }
 
 }
