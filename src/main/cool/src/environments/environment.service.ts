@@ -409,7 +409,7 @@ export class EnvironmentService {
 
          // --------------------------------------- TERM AND CONTENT MAPPING --------------------------------------------
 
-         this.REST_API_RETRIEVE_TERM_CONTENT_MAPPING_URL = this.baseApiUrl + '/serviceAnnuityPricing/getPricingOfferLevel';
+         this.REST_API_RETRIEVE_TERM_CONTENT_MAPPING_URL = this.baseApiUrl + '/offersetup/getTNCMappingObject';
  
         // -------------------------------------- CSDL --------------------------------------------------------------------------
 
