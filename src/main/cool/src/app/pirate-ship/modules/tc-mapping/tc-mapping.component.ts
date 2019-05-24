@@ -181,7 +181,7 @@ export class TcMappingComponent implements OnInit, OnDestroy {
   goToOfferWorkBench() {
 
     const userId = this.configurationService.startupData.userId;
-    let urlToOpen = 'https://offer-stage.cloudapps.cisco.com/owb/#/subscription';
+    let urlToOpen = this.environmentService.tncOwbUrl;
     // urlToOpen += 'selectedAto=' + this.selectedAto + '&planId=' + this.planId + '&userId=' + userId + '&coolOfferId=' + this.offerId;;
 
     window.open(urlToOpen, '_blank');

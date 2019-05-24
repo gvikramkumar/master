@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 export class EnvironmentService {
 
     owbUrl: string;
+    tncOwbUrl: string;
     baseApiUrl: string;
     baseIdpUrl: string;
     redirectUrl: string;
@@ -204,6 +205,7 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb.cloudapps.cisco.com/owb';
+                this.tncOwbUrl = 'https://offer.cloudapps.cisco.com/owb/#/subscription';
                 break;
             case 'stage':
                 this.baseApiUrl = 'https://cool-srv-stg.cisco.com/coolsrv';
@@ -214,7 +216,8 @@ export class EnvironmentService {
                 this.baseIdpUrl = 'https://idp-stage-api.cisco.com';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
-                this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';                
+                this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
+                this.tncOwbUrl = 'https://offer-stage.cloudapps.cisco.com/owb/#/subscription';                
                 break;
             case 'qualityassurance':
                 this.baseApiUrl = 'https://cool-srv-qa.cisco.com/coolsrv';
@@ -226,6 +229,7 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
+                this.tncOwbUrl = 'https://offer-stage.cloudapps.cisco.com/owb/#/subscription';
                 break;
             case 'development':
                 this.baseApiUrl = 'https://cool-srv-dev.cisco.com/coolsrv';
@@ -237,6 +241,7 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
+                this.tncOwbUrl = 'https://offer-stage.cloudapps.cisco.com/owb/#/subscription';
                 break;
             default:
                 this.baseApiUrl = '/api';
@@ -248,6 +253,7 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
+                this.tncOwbUrl = 'https://offer-stage.cloudapps.cisco.com/owb/#/subscription';
         }
 
         // ----------------------- AUTHENTICATION URLs -----------------------------------------------
