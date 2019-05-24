@@ -151,6 +151,7 @@ export class OfferSetupComponent implements OnInit {
   getAllModuleData() {
     this.offerSetupService.getModuleData(this.offerId, this.selectedAto, this.functionalRole, this.derivedMM ).subscribe(data => {
         this.groupData = {};
+        console.log(this.groupData);
         this.showGroupData = false;
         this.Options = data['listATOs'];
         data['listSetupDetails'].forEach(group => {
@@ -231,23 +232,40 @@ export class OfferSetupComponent implements OnInit {
 
     switch(element.moduleName) {
       case 'Item Creation': {
-        this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.ITEM_CREATION, this.selectedAto]);
+        this.router.navigate([appRoutesNames.PIRATE_SHIP, 
+          this.offerId, this.caseId, 
+          pirateShipRoutesNames.ITEM_CREATION, 
+          this.selectedAto]);
         break;
       }
       case 'Modeling & Design': {
-        this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.MODELLING_DESIGN, this.selectedAto]);
+        this.router.navigate([appRoutesNames.PIRATE_SHIP, 
+          this.offerId, 
+          this.caseId, 
+          pirateShipRoutesNames.MODELLING_DESIGN, 
+          this.selectedAto]);
         break;
       }
       case 'Service Annuity  % Pricing': {
-        this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.SERVICE_ANNUITY_PRICING, this.selectedAto]);
+        this.router.navigate([appRoutesNames.PIRATE_SHIP, 
+          this.offerId, this.caseId, 
+          pirateShipRoutesNames.SERVICE_ANNUITY_PRICING, 
+          this.selectedAto]);
         break;
       }
       case 'CSDL': {
-        this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.CSDL, this.selectedAto]);
+        this.router.navigate([appRoutesNames.PIRATE_SHIP, 
+          this.offerId, 
+          this.caseId, 
+          pirateShipRoutesNames.CSDL, 
+          this.selectedAto]);
         break;
       }
-      case 'T&C Mapping': {
-        this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.TC_MAPPING, this.selectedAto]);
+      case 'Term & Content Mapping': {
+        this.router.navigate([appRoutesNames.PIRATE_SHIP, 
+          this.offerId, this.caseId, 
+          pirateShipRoutesNames.TC_MAPPING, 
+          this.selectedAto]);
         break;
       }
       case 'NPI Licensing': {
