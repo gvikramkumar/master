@@ -483,7 +483,7 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   toggleSelected(attribute) {
-    debugger;
+   
     // In MM Page, toggle select
   if(this.dimensionMode !== true) {
 
@@ -524,7 +524,7 @@ export class MmAssesmentComponent implements OnInit {
 // In dimension Mode,toggle select and other condition check
  
 if (this.dimensionMode === true ) {
-  debugger;
+ 
   if (this.readOnly === false && this.markCompleteStatus === false) {
     this.isChangedAttribute = true;
     if (attribute.type === 2 && attribute.status === -1) {
@@ -824,7 +824,7 @@ if (this.dimensionMode === true ) {
   // --------------------------------------------------------------------------------------------
 
   toNextStep() {
-    debugger;
+   
 
     this.isAllowedtoNextStep = true;
 
@@ -1329,7 +1329,7 @@ if (this.dimensionMode === true ) {
   }
 
   getMarkCompleteStatus(status){
-    debugger;
+ 
   this.markCompleteStatus = status;
   }
 

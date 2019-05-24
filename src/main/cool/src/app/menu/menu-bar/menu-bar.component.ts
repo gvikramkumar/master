@@ -50,7 +50,7 @@ export class MenuBarComponent implements OnInit {
         private activatedRoute: ActivatedRoute,     
         private environmentService: EnvironmentService,
         private monetizationModelService: MonetizationModelService) {
-            debugger;
+         
         this.currentURL = activatedRoute.snapshot['_routerState'].url;
 
         this.showPopup = false;
@@ -99,7 +99,7 @@ export class MenuBarComponent implements OnInit {
     }
 
     ngOnInit() {
-        debugger;
+      
 
         this.items = [
             {
@@ -140,7 +140,7 @@ export class MenuBarComponent implements OnInit {
         ];
         
         this.menuBarService.getDesignReviewStatus(this.offerId).subscribe(data => {
-            debugger;
+         
              this.designReviewRequestApprovalStatus = data['designReviewRequestApproval'];
         })
 
@@ -288,12 +288,12 @@ export class MenuBarComponent implements OnInit {
     }
 
     toggleMarkCompletePopup() {
-        debugger;
+     
         this.showMarkcompletePopup = !this.showMarkcompletePopup;
     }
 
     closeMarkCompletePopup(message) {
-        debugger;
+     
         this.showMarkcompletePopup = false;
         this.markCompleteStatus = !this.markCompleteStatus;
         this.getMarkCompleteStatus.next(this.markCompleteStatus);

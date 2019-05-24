@@ -54,7 +54,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   addDetails;
   productName;
   @Input() questions: any[] = [];
-  @Output() getCanMarkCompleteStatus = new EventEmitter<string>();
+  @Output() getCanMarkCompleteStatus = new EventEmitter<boolean>();
   payLoad = '';
   itemCount;
   nodeToDelete;
@@ -190,12 +190,12 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
    * @param $event
    */
   dropItem() {
-    debugger;
+  
     this.dropItemImpl().then(() => this.checkCanMarkCompleteStatus());
   }
 
   dropItemImpl() {
-    debugger;
+  
     this.initalRowAdded = false;
     if (this.draggedItem['isMajorLineItem']) {
       this.loaderService.startLoading();
@@ -577,6 +577,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       }
     }
     this.deleteNodeFromOfferConstructItems(rowNode);  // remove node from offerconstruct Item
+    this.checkCanMarkCompleteStatus();
   }
 
   /* METHOD: deleteNode
@@ -1078,6 +1079,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       searchPID: new FormControl(null, Validators.required)
     });
 
+
+
     // Check if construct details are availbale in the database for the current offer.
     this.offerConstructService.space.subscribe((val) => {
       this.offerConstructItems.forEach(item => {
@@ -1101,6 +1104,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
         () => { });
 
       this.offerConstructItems = [...this.offerConstructItems];
+     
     }, (err) => {
       this.loaderService.stopLoading();
     }, () => {
@@ -1198,6 +1202,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     ];
 
     this.readOnly = this.configurationService.startupData.readOnly;
+
   }
 
   offerDetailView() {
@@ -1216,6 +1221,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           this.getLicenseDeliveryType(offerDetailRes.additionalCharacteristics);
         }
       }
+      // check if at least one major and one minor item selected, and enable the mark complete button.
+      this.checkCanMarkCompleteStatus();
     }, (err) => {
       console.log(err);
       this.loaderService.stopLoading();
@@ -1469,6 +1476,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       });
     }
     this.removeSelectedNode();  //  remove selected node from offerConstructItems
+    this.checkCanMarkCompleteStatus();
   }
 
   removeSelectedNode() {
@@ -2334,18 +2342,55 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 // check major and mirror status to make mark complete enable
   checkCanMarkCompleteStatus() {
-    debugger;
-    let message = 'false';
-    if (this.offerConstructItems.length === 0) {
-      message = "false";
-    } else {
+  
+  
+    // let message = 'false';
+    // if (this.offerConstructItems.length === 0) {
+    //   message = "false";
+    // } else {
+    //   this.offerConstructItems.forEach(item => {
+    //     if (item.children.length > 0) {
+    //       message = "true";
+    //     }
+    //   })
+    // }
+    // this.getCanMarkCompleteStatus.next(message);
+    const majorItemData = [];
+    const minorItemData = [];
+    
       this.offerConstructItems.forEach(item => {
-        if (item.children.length > 0) {
-          message = "true";
+        if (item.data.isMajorLineItem === true) {
+          majorItemData.push(item);
         }
-      })
-    }
-    this.getCanMarkCompleteStatus.next(message);
+      });
+
+     this.offerConstructItems.forEach(minorItem => {
+        minorItem['children'].forEach(element => {
+          if (element.data.isMajorLineItem === false) {
+            minorItemData.push(element);
+          }
+        });
+      });
+
+     this.offerConstructItems.forEach(majorItem => {
+        majorItem['children'].forEach(ele => {
+          if (ele.data.isGroupNode) {
+            if (ele.children.length > 0) {
+              ele.children.forEach(element => {
+                minorItemData.push(element);
+              });
+            }
+          }
+        });
+      });
+
+      if (majorItemData.length > 0 && minorItemData.length > 0){
+        this.getCanMarkCompleteStatus.next(true);
+
+
+        }else{
+          this.getCanMarkCompleteStatus.next(false);
+        }
   }
 
 }

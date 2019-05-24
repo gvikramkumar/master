@@ -241,13 +241,11 @@ export class OfferConstructComponent implements OnInit, OnDestroy {
     }
   }
 
-  getCanMarkCompleteStatus(message) {
-    debugger;
-    if (message === "true") {
-      this.canMarkComplete = true;
-    } else {
-      this.canMarkComplete = false;
-    }
+  getCanMarkCompleteStatus(status) {
+
+    this.canMarkComplete = status;
+
+    
   }
 
   ngOnDestroy() {
