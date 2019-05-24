@@ -12,13 +12,12 @@
         [selectedATO]="selectedAto">
       </app-taskbar>
 
-      <br><br>
 
       <div class="row">
 
         <div class="leftContent col-sm-12 col-md-9">
 
-          <div class="row flex-center-vertical">
+          <div class="row base-margin-top flex-center-vertical">
             <div class="col-sm-12">
 
               <div class="pull-left" *ngIf="showDesignCanvasButton">
@@ -38,20 +37,20 @@
           </div>
 
           <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer' else selectedAtoView">
-            <br><br>
+
             <app-ato-list [atoList]="atoList"></app-ato-list>
           </div>
 
           <ng-template #selectedAtoView>
 
-            <p>Status: {{atoTask['itemStatus']}}</p>
+            <p class="base-margin-bottom no-margin">Status: {{atoTask['itemStatus']}}</p>
 
-            <br><br>
-            <h3>Modeling</h3>
+
+            <h4>Modeling</h4>
             <app-task-summary [tasks]="atoTask['modelTasks']">/</app-task-summary>
 
-            <br><br>
-            <h3>Provisioning & Mediation</h3>
+
+            <h4>Provisioning & Mediation</h4>
             <app-task-summary [tasks]="atoTask['provisionTasks']">/</app-task-summary>
 
           </ng-template>
