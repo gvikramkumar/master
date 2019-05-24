@@ -2,9 +2,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { LoaderService } from '@app/core/services/loader.service';
+import { EnvironmentService } from '@env/environment.service';
+import { ConfigurationService } from '@app/core/services/configuration.service';
+
 import { RightPanelService } from '@app/services/right-panel.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
-import { ServiceAnnuityPricingService } from '@app/services/service_annuity_pricing.service';
+import { TcMappingService } from '@app/services/tc-mapping.service';
 
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
@@ -31,12 +34,15 @@ export class TcMappingComponent implements OnInit, OnDestroy {
   stakeholders: any;
   stakeHolderData: any;
 
+  showCompleteSubscriptionButton: boolean;
+
   pirateShipModuleName: string;
   isPirateShipSubModule: boolean;
 
   selectedAto: any;
   atoNames: string[] = [];
   atoList: any;
+  selectedObjectAto: any;
 
   paramsSubscription: Subscription;
 
@@ -45,8 +51,10 @@ export class TcMappingComponent implements OnInit, OnDestroy {
     private loaderService: LoaderService,
     private activatedRoute: ActivatedRoute,
     private rightPanelService: RightPanelService,
+    private environmentService: EnvironmentService,
+    private configurationService: ConfigurationService,
     private stakeholderfullService: StakeholderfullService,
-    private serviceAnnuityPricing : ServiceAnnuityPricingService,
+    private tncMapping : TcMappingService,
   ) { 
     this.paramsSubscription = this.activatedRoute.params.subscribe(params => {
       this.caseId = params['caseId'];
@@ -63,6 +71,9 @@ export class TcMappingComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    this.functionalRole = this.configurationService.startupData.functionalRole;
+    this.showCompleteSubscriptionButton = this.selectedAto === 'Overall Offer' ? false : true;
+
     // Retrieve Offer Details
     this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
 
@@ -77,31 +88,65 @@ export class TcMappingComponent implements OnInit, OnDestroy {
 
     });
 
-    this.serviceAnnuityPricing.getOfferDropdownValues(this.offerId).subscribe(atoList => {
-      this.atoNames = atoList;
-    }, error => {
-      console.log('error', error);
-    });
-
-    this.serviceAnnuityPricing.getServiceAnnuityPricing(this.offerId).subscribe(atoList => {
-    }, error => {
-      console.log('error', error);
-    });
     this.atoList = [
       {
-          "itemName": "WS-C3850-48P-E",
-          "itemStatus": "Completed"
+        "itemCategory": "MAJOR",
+        "itemName": "Major1",
+        "itemType": "HYBRID",
+      "itemStatus": "In Progress",
+        "minorPids": [
+          {
+            "itemCategory": "MINOR",
+            "itemName": "License1",
+            "itemType": "LICENSE",
+            "mappingStaus": "Y",
+            "swSubcriptionSkuList": ["CON-SKU-1","CON-SKU-2"]
+          },
+          {
+            "itemCategory": "MINOR",
+            "itemName": "License2",
+            "itemType": "LICENSE",
+            "mappingStaus": "N",
+            "swSubcriptionSkuList": []
+          }
+        ]
       },
       {
-          "itemName": "XaaS 1",
-          "itemStatus": "Completed"
+        "itemCategory": "MAJOR",
+        "itemName": "Major2",
+        "itemType": "LICENSE",
+        "itemStatus": "Complete",
+          "minorPids": [
+            {
+              "itemCategory": "Major",
+              "itemName": "Major2",
+              "itemType": "LICENSE",
+              "mappingStaus": "Y",
+              "swSubcriptionSkuList": ["CON-SKU-2"]
+            }
+          ]
       },
       {
-          "itemName": "Hardware 3",
-          "itemStatus": "Completed"
+            "itemName": "Hardware 1",
+            "itemType": "Hardware",
+            "itemCategory": "Major",
+            "mappingStatus": "Not Required",
+            "minorPids": [],
+            "orderabilityCheckStatus": null,
+            "npiTestOrderFlag": null,
+            "errorOrWarning": null,
+            "ssoStatus": null
+        }
+    ];
+
+    this.tncMapping.getTncMapping(this.offerId).subscribe(atoList => {
+      this.atoNames = ['Overall Offer'];
+      for (let i = 0; i < this.atoList.length; i++) {
+        this.atoNames.push(this.atoList[i].itemName);
       }
-  ];
-   
+    }, error => {
+      console.log('error', error);
+    });   
   }
 
 
@@ -122,11 +167,18 @@ export class TcMappingComponent implements OnInit, OnDestroy {
     if (dropDownValue === 'Overall Offer') {
 
       this.selectedAto = dropDownValue;
+      this.showCompleteSubscriptionButton = true;
 
     } else {
 
       this.selectedAto = dropDownValue;
+      this.showCompleteSubscriptionButton = true;
 
+    }
+    for (let i = 0; i < this.atoList.length; i++) {
+      if (this.atoList[i].itemName === this.selectedAto) {
+        this.selectedObjectAto = this.atoList[i];
+      }
     }
   }
 
@@ -171,5 +223,13 @@ export class TcMappingComponent implements OnInit, OnDestroy {
 
   // -------------------------------------------------------------------------------------------------------------------
 
+  goToOfferWorkBench() {
+
+    const userId = this.configurationService.startupData.userId;
+    let urlToOpen = this.environmentService.owbUrl + '/owb/manage/offer/owbOfferDefinition?';
+    urlToOpen += 'selectedAto=' + this.selectedAto + '&planId=' + this.planId + '&userId=' + userId + '&coolOfferId=' + this.offerId;;
+
+    window.open(urlToOpen, '_blank');
+  }
 
 }
