@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ATOSummaryComponent } from './atosummary.component';
+import { SapAtoSummaryComponent } from './sap-ato-summary.component';
 
-describe('ATOSummaryComponent', () => {
-  let component: ATOSummaryComponent;
-  let fixture: ComponentFixture<ATOSummaryComponent>;
+describe('SapAtoSummaryComponent', () => {
+  let component: SapAtoSummaryComponent;
+  let fixture: ComponentFixture<SapAtoSummaryComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ATOSummaryComponent ]
+      declarations: [ SapAtoSummaryComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ATOSummaryComponent);
+    fixture = TestBed.createComponent(SapAtoSummaryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
