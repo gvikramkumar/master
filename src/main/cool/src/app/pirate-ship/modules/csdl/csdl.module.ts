@@ -10,6 +10,7 @@ import { OfferDetailModule } from '@app/offer-detail/offer-detail.module';
 import { RouterModule } from '@angular/router';
 import { CSDL_ROUTES } from './csdl-routing.module';
 import { CsdlStatusTrackComponent } from './csdl-status-track/csdl-status-track.component';
+import { ConfirmDialogModule } from 'primeng/primeng';
 
 @NgModule({
   declarations: [CsdlPlatformComponent, CsdlStatusTrackComponent],
@@ -20,6 +21,7 @@ import { CsdlStatusTrackComponent } from './csdl-status-track/csdl-status-track.
     MenuBarModule,
     RightPanelModule,
     OfferDetailModule,
+    ConfirmDialogModule,
     RouterModule.forChild(CSDL_ROUTES)
   ], entryComponents: [
     CsdlStatusTrackComponent
