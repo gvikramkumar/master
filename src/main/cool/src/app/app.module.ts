@@ -54,7 +54,7 @@ export function app_init(configService: ConfigurationService) {
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent,
+    DashboardComponent
   ],
   imports: [
     NgbModule,

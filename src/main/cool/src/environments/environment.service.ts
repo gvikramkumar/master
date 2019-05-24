@@ -176,6 +176,11 @@ export class EnvironmentService {
     REST_API_UPDATE_MODULE_STATUS_URL: string;
     REST_API_GET_MODULE_STATUS_URL: string;
 
+    // SERVICE MAPPING
+    REST_API_DOWNLOAD_CONFIG_SHEET: string;
+    REST_API_GET_MAPPING_STATUS: string;
+    REST_CHECK_MAESTRO_PF_STATUS: string;
+    
     constructor() {
         this.setEnvironmentVariables();
     }
@@ -455,5 +460,9 @@ export class EnvironmentService {
         this.REST_API_GET_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module/getPirateshipModuleStatus';
         this.REST_API_UPDATE_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module/addPirateshipModuleStatus';
 
+        // --------------------------------------- SERVICE MAPPING --------------------------------------------
+        this.REST_API_DOWNLOAD_CONFIG_SHEET = this.baseApiUrl + '/serviceMapping/xls';
+        this.REST_API_GET_MAPPING_STATUS = this.baseApiUrl + '/serviceMapping/getStatus';
+        this.REST_CHECK_MAESTRO_PF_STATUS = this.baseApiUrl + '/serviceMapping/pf/status';
     }
 }
