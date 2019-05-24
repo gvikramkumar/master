@@ -53,7 +53,7 @@
               <div class="form-group">
                 <div class="form-group__text">
               <textarea id="input-hint-textarea" class="textarea" rows="5" class="form-control"
-                        [(ngModel)]="cmnt.description" #description="ngModel" name="description" maxlength="1000" (keyup)="checktextstatus()" >
+                        [(ngModel)]="cmnt.description" #description="ngModel" name="description" maxlength="1000">
               </textarea>
                   <label for="input-hint-textarea">Comments: <i>Optional</i>  <span style="color: red">({{1000-cmnt.description.length}} characters left)</span></label>
                 </div>
@@ -63,7 +63,7 @@
           <div class="row base-margin-top">
             <div class="col-md-9" align="right">
               <div class="help-block text-muted">
-                <span><button class="btn btn--small btn--primary" (click)="saveComments()"[disabled]="disablebutton">Submit Comments</button></span>
+                <span><button class="btn btn--small btn--primary" (click)="saveComments()" [disabled]="cmnt.description.length===0">Submit Comments</button></span>
               </div>
             </div>
           </div>
