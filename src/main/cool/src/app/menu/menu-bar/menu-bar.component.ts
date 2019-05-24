@@ -36,6 +36,7 @@ export class MenuBarComponent implements OnInit {
     showMarkcompletePopup: boolean = false;
     showMarkcompleteToggle: boolean = false;
     currentURL: String;
+    canUncheckComplete: boolean;
     currentOfferId: String = '';
     holdStatusValid = true;
     cancelStatusValid = true;
@@ -139,10 +140,6 @@ export class MenuBarComponent implements OnInit {
 
         ];
         
-        this.menuBarService.getDesignReviewStatus(this.offerId).subscribe(data => {
-         
-             this.designReviewRequestApprovalStatus = data['designReviewRequestApproval'];
-        })
 
         this.menuBarService.getMarkCompleteStatus(this.offerId, this.caseId).subscribe(data => {
             if (this.currentURL.includes('offerDimension')) {
@@ -156,6 +153,8 @@ export class MenuBarComponent implements OnInit {
                 this.showMarkcompleteToggle = true;
             }
             this.getMarkCompleteStatus.next(this.markCompleteStatus);
+            debugger;
+            this.getCanUncheckCompleteStatus();
         })
 
         this.monetizationModelService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
@@ -175,6 +174,8 @@ export class MenuBarComponent implements OnInit {
                 this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['secondaryBUList']);
             }
         });
+
+       
 
     }
 
@@ -287,9 +288,30 @@ export class MenuBarComponent implements OnInit {
         this.router.navigate(['/offerDetailView', this.offerId, this.caseId]);
     }
 
+    getCanUncheckCompleteStatus() {
+
+        debugger;
+        this.menuBarService.getDesignReviewStatus(this.offerId).subscribe(data => {
+            debugger;
+              this.designReviewRequestApprovalStatus = data['designReviewRequestApproval'];
+              if (this.markCompleteStatus == true && this.designReviewRequestApprovalStatus == true){
+                this.canUncheckComplete = false;
+            } else {
+                this.canUncheckComplete = true;
+            }
+            console.log('status'+this.canUncheckComplete)
+         })
+      
+    }
+
     toggleMarkCompletePopup() {
-     
-        this.showMarkcompletePopup = !this.showMarkcompletePopup;
+
+        debugger;
+        this.getCanUncheckCompleteStatus();
+        if( this.canMarkComplete === true || this.canUncheckComplete === true) {
+            this.showMarkcompletePopup = !this.showMarkcompletePopup;
+        }
+       
     }
 
     closeMarkCompletePopup(message) {
