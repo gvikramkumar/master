@@ -1,8 +1,8 @@
+<app-menu-bar [offerId]="offerId" [caseId]="caseId" [offerName]="offerName" [stakeData]="stakeData"
+[currentMMModel]="derivedMM" (updateMessage)="updateMessage($event)">
+</app-menu-bar>
 <div class="content">
   <div class="container">
-    <app-menu-bar [offerId]="offerId" [caseId]="caseId" [offerName]="offerName" [stakeData]="stakeData"
-      [currentMMModel]="derivedMM" (updateMessage)="updateMessage($event)">
-    </app-menu-bar>
     <div class="panel-wrapper mt-15">
       <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName"
         [selectedATO]="selectedAto">
@@ -127,7 +127,7 @@
                     <span>Example: Existing SW being used with no new features added. Or if a true SW maintenance release</span>
                   </div><br><br>
                   <div class="form-group task--bar">
-                    <button class="btn btn--primary" type="submit" [disabled]="!notRequiredCsdlForm.valid || isCompleteButtonDisabled" 
+                    <button class="btn btn--primary" type="submit" [disabled]="!notRequiredCsdlForm.valid || isCompleteButtonDisabled"
                     (click)="onComplete()"><span class="icon-check-outline text-success" *ngIf="isCompleteButtonDisabled"></span>  Complete</button>
                   </div>
                 </div>
