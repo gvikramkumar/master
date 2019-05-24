@@ -72,7 +72,7 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
 
     // Initialize TaskBar Params
     this.isPirateShipSubModule = true;
-    this.pirateShipModuleName = 'Modelling & Design';
+    this.pirateShipModuleName = 'Modeling & Design';
 
   }
 

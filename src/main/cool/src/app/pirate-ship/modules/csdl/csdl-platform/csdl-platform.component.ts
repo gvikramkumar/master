@@ -47,6 +47,8 @@ export class CsdlPlatformComponent implements OnInit {
   productFamilyAnswer;
   results;
   selectedProject;
+  businessUnitContact;
+  offerOwnerId;
 
   constructor(
     private router: Router,
@@ -116,6 +118,8 @@ export class CsdlPlatformComponent implements OnInit {
         this.data = this.firstData['stakeholders'];
         this.derivedMM = this.firstData['derivedMM'];
         this.offerName = this.firstData['offerName'];
+        this.businessUnitContact = this.firstData['ownerName'];
+        this.offerOwnerId = this.firstData['offerOwner'];
         if (
           Array.isArray(this.firstData['primaryBEList']) &&
           this.firstData['primaryBEList'].length
@@ -198,9 +202,9 @@ export class CsdlPlatformComponent implements OnInit {
     csdlPayload.coolOfferId = this.currentOfferId;
     csdlPayload.csdlRequired = 'Y';
     csdlPayload.csdlProjectSelected = 'N';
-    csdlPayload.associationStatus = 'Requested';
+    csdlPayload.associationStatus = 'requested';
     csdlPayload.productFamily = this.productFamilyAnswer;
-    // csdlPayload.bUContact = this.bUContact;
+    csdlPayload.bUContact = this.offerOwnerId;
     csdlPayload.csdlMileStoneStatus = 'In Progress';
     this.createCsdlAssociation(csdlPayload);
     // Hide Panels
@@ -310,7 +314,7 @@ export class CsdlPlatformComponent implements OnInit {
     csdlPayload.coolOfferId = this.currentOfferId;
     csdlPayload.csdlRequired = 'Y';
     csdlPayload.csdlProjectSelected = 'Y';
-    csdlPayload.associationStatus = 'Requested';
+    csdlPayload.associationStatus = 'requested';
     csdlPayload.projectId = this.selectedProject.project_id;
     csdlPayload.projectType = this.selectedProject.project_type;
     csdlPayload.productFamily = this.productFamilyAnswer;

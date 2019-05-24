@@ -1,6 +1,7 @@
 <div class="row">
   <div class="col-md-12 task--bar">
-    <button class="btn btn--secondary" type="submit" (click)="refreshStatus()"><span class="icon-refresh">&nbsp;&nbsp;Refresh
+    <button class="btn btn--secondary" type="submit" (click)="refreshStatus()"><span
+        class="icon-refresh">&nbsp;&nbsp;Refresh
         Status</span></button>
   </div>
 </div>
@@ -10,27 +11,68 @@
       <ng-template pTemplate="header">
         <tr>
           <th>CSDL ID</th>
-          <th><span class="icon-info-outline icon-small" pTooltip="Stop Ship Details Lorem ipsum dolor sit amet,
-          consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore"
-              tooltipPosition="top">
-            </span>&nbsp;STOP SHIP</th>
-          <th><span class="icon-info-outline icon-small" pTooltip="Enforcement Details Lorem ipsum dolor sit amet,
-          consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore"
-              tooltipPosition="top">
-            </span>&nbsp;ENFORCEMENT</th>
+          <th><span *ngIf="stopShipStatus == true"><span class="icon-info-outline icon-small" 
+            pTooltip="The associated CSDL project does NOT meet the Security Readiness Criteria
+            and can NOT be released to the customer" tooltipPosition="top">
+              </span></span>
+            <span *ngIf="stopShipStatus == false"><span class="icon-info-outline icon-small" 
+              pTooltip="The associated CSDL project meets the Security Readiness Criteria 
+              and can be released to the customer." tooltipPosition="top">
+              </span></span>&nbsp;STOP SHIP</th>
+          <th><span *ngIf="enforcementType == 'Warning'"><span class="icon-info-outline icon-small" 
+            pTooltip="Warning - The SRC warnings phase could be classified as Soft Enforcement Only. 
+                All aspects of SRC should be in place and operational, 
+                however BUs will receive 'warnings only' if their offering is not SRC compliant. 
+                The entire SRC/SRP process will be required, however an offering will not be release-stopped 
+                if the criteria has not been met" tooltipPosition="top">
+              </span></span>
+            <span *ngIf="enforcementType == 'Enforced'"><span class="icon-info-outline icon-small" 
+              pTooltip="Enforcement - The SRC Enforcement phase is sometimes called Hard Enforcement. 
+                  SRC enforcement took effect for on-prem (product) offerings on February 17, 2019. 
+                  Cloud SRC enforcement will continue in a warnings phase through the remainder of FY19, 
+                  with enforcement beginning in early FY20. The graphic below describes the deployment 
+                  phases of SRC." tooltipPosition="top">
+              </span></span>&nbsp;ENFORCEMENT</th>
           <th>LATEST STATUS UPDATE</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-rowData>
         <tr>
-          <td><span class="text-blue">{{rowData.projectId}}</span></td>
-          <td><span class="text-success">{{rowData.stopShipStatus}}</span></td>
-          <td>{{rowData.enforcementType}}</td>
-          <td>{{rowData.latestUpdatedDate}}
-            <span class="icon-trash icon-small pull-right"></span>
+          <td class=" text-center">
+            <span *ngIf="projectId == '' || projectId == null">
+              <span style="color: orange">Creation in Progress</span>
+            </span>
+            <span>
+              <a (click)="securityInsightsTab()">{{rowData.projectId}}</a>
+            </span>
+          </td>
+          <td class=" text-center">
+            <span *ngIf="rowData.stopShipStatus == true">
+              <span class="text-danger">{{rowData.stopShipStatus}}</span>
+            </span>
+            <span *ngIf="rowData.stopShipStatus == false">
+              <span class="text-success">{{rowData.stopShipStatus}}</span>
+            </span>
+          </td>
+          <td class=" text-center">{{rowData.enforcementType}}</td>
+          <td class=" text-center">{{rowData.latestUpdatedDate}}
+            <span *ngIf="csdlMileStoneStatus == 'In Progress'">
+              <span class="icon-trash icon-small pull-right" (click)="removeAssociationConfirmDailog()"></span>
+            </span>
+            <span *ngIf="csdlMileStoneStatus != 'In Progress'">
+              <span class="icon-trash icon-small pull-right" 
+                pTooltip="You cannot disassociate this CSDL ID as the offer has already passed 
+                the Readiness Review milestone" tooltipPosition="top"></span>
+            </span>
           </td>
         </tr>
       </ng-template>
     </p-table>
+    <p-confirmDialog  #cd header="Removing Association">
+        <p-footer>
+          <button type="button" pButton label="Proceed" (click)="cd.accept()"></button>
+          <button type="button" pButton label="Cancel" (click)="cd.reject()"></button>
+      </p-footer>
+      </p-confirmDialog>
   </div>
 </div>
