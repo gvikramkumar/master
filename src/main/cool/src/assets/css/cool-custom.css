@@ -1734,6 +1734,8 @@ span.icon-collapse.icon-small:hover {
   display: inline-block;
   color:#fff;
   line-height: 24px;
+  text-align: center;
+  vertical-align: bottom;
 }
 /* Available */
 .cool.cui span.available {
