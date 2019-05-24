@@ -1,15 +1,21 @@
-<div class="content">
+<app-menu-bar [caseId]="caseId" [offerId]="offerId" [offerName]="offerName">
+  </app-menu-bar>
+
+  <div class="content">
   <div class="container">
 
-    <app-menu-bar [caseId]="caseId" [offerId]="offerId" [offerName]="offerName">
-    </app-menu-bar>
 
-    <div class="panel panel--indigo panel--compressed task--bar panel-wrapper mt-15">
+
+    <div class="panel panel--compressed task--bar mt-15">
       <div class="row">
         <div class="col-sm-4" *ngIf="moduleName">
-          <h2 class="page--subheading"><button class="btn--back btn btn--icon btn--white"
-                                               (click)="goBackToOfferSetup()"><span class="icon-back"></span></button>
+          <h2 class="page--subheading">
             {{moduleName}}</h2>
+        </div>
+        <div class="col-sm-8 text-right">
+            <button class="btn btn--secondary" (click)="goBackToOfferSetup()">
+                <span class="icon-chevron-left"></span>&nbsp; Back to Offer Setup Workflow
+            </button>
         </div>
       </div>
     </div>
@@ -55,7 +61,7 @@
               <textarea id="input-hint-textarea" class="textarea" rows="5" class="form-control"
                         [(ngModel)]="cmnt.description" #description="ngModel" name="description" maxlength="1000">
               </textarea>
-                  <label for="input-hint-textarea">Comments: <i>Optional</i></label>
+                  <label for="input-hint-textarea">Comments: <i>Optional</i>  <span>(left maximum character:{{1000-cmnt.description.length}})</span></label>
                 </div>
               </div>
             </div>

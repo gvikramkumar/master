@@ -93,6 +93,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   public chargeTypeValue: any;
   public licenseDelivery: any;
+  public beListType: any;
   multiSelectItems: string[] = ['Route-to-Market',
     'Price List Availability',
     'GPL Publication',
@@ -278,7 +279,11 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
             let listOfferQuestions = this.defaultValueServices.setSoftwareLicenseDefault(this.listOfferQuestions);
             obj['itemDetails'] = listOfferQuestions;
           }
-
+          
+          if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS' || obj.productName == 'Billing') {
+            let listOfferQuestions = this.defaultValueServices.nonSoaSkuDefaults(this.listOfferQuestions);
+            obj['itemDetails'] = listOfferQuestions;
+          }
           // if (obj.productName == 'License') {
           //     let listOfferQuestions = this.defaultValueServices.setSoftwareLicenseNSKU(this.listOfferQuestions);
           //     obj['itemDetails'] = listOfferQuestions;
@@ -290,7 +295,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
           obj['itemDetails'] = this.listOfferQuestions;
         } else {
-          let listOfferQuestions = this.defaultValueServices.billingSOADefaultValue(this.listOfferQuestions, this.chargeTypeValue);
+          let listOfferQuestions = this.defaultValueServices.billingSOADefaultValue(this.listOfferQuestions, this.chargeTypeValue, this.beListType);
           obj['itemDetails'] = listOfferQuestions;
         }
         this.offerConstructItems.push(this.itemToTreeNode(obj));
@@ -890,7 +895,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
               obj['itemDetails'] = this.listOfferQuestions;
             } else {
-              let listOfferQuestions = this.defaultValueServices.billingSOADefaultValue(this.listOfferQuestions, this.chargeTypeValue);
+              let listOfferQuestions = this.defaultValueServices.billingSOADefaultValue(this.listOfferQuestions, this.chargeTypeValue, this.beListType);
               obj['itemDetails'] = listOfferQuestions;
             }
             this.setSameAsMajorLine(rowNode, this.listOfferQuestions);
@@ -1198,6 +1203,11 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           this.getChargeTypeAndPricingType(offerDetailRes.solutioningDetails);
         }
       }
+      if (offerDetailRes.primaryBEList !== null && offerDetailRes.primaryBEList !== undefined) {
+        if (offerDetailRes.primaryBEList.length > 0) {
+          this.getprimaryBEListType(offerDetailRes.primaryBEList);
+        }
+      }
       if (offerDetailRes.additionalCharacteristics != null || offerDetailRes.additionalCharacteristics != undefined) {
         if (offerDetailRes.additionalCharacteristics.length > 0) {
           this.getLicenseDeliveryType(offerDetailRes.additionalCharacteristics);
@@ -1251,6 +1261,10 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
         }
       });
     });
+  }
+  
+  getprimaryBEListType(primaryBEList) {
+      this.beListType = primaryBEList[0];
   }
 
   getLicenseDeliveryType(additionalCharacteristics) {

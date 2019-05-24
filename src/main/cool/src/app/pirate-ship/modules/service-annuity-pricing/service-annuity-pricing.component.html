@@ -15,6 +15,7 @@
       <div class="row">
 
         <div class="leftContent col-sm-12 col-md-9">
+
           <div class="row flex-center-vertical">
               <div class="col-sm-12">
                 <div class="pull-right">
@@ -24,6 +25,15 @@
                 </div>
               </div>
           </div>
+
+          <!--
+          <ng-template #atosummary>
+            <div class="row">
+              <app-sap-ato-summary [atoNames]="atoNames" [selectedAto]="selectedAto" [offerId]="offerId"  [caseId] = "caseId"></app-sap-ato-summary>
+            </div>
+          </ng-template> 
+          -->
+
           <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer'">
             <app-ato-list [atoList]="atoList"></app-ato-list>
           </div>

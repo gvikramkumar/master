@@ -1131,6 +1131,9 @@ span[class*="display-"] {
   border-top-right-radius: 2rem;
   border-bottom-right-radius: 2rem;
 }
+button.btn.btn--secondary:hover span {
+  color: #fff;
+}
 
 .comments-modal {
   min-width: 600px;
@@ -1747,7 +1750,9 @@ span.icon-collapse.icon-small:hover {
   border-radius: 24px;
   display: inline-block;
   color:#fff;
-  padding-top: 2px;
+  line-height: 24px;
+  text-align: center;
+  vertical-align: bottom;
 }
 /* Available */
 .cool.cui span.available {
