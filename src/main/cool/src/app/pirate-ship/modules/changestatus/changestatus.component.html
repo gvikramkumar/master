@@ -55,7 +55,7 @@
               <textarea id="input-hint-textarea" class="textarea" rows="5" class="form-control"
                         [(ngModel)]="cmnt.description" #description="ngModel" name="description" maxlength="1000">
               </textarea>
-                  <label for="input-hint-textarea">Comments: <i>Optional</i></label>
+                  <label for="input-hint-textarea">Comments: <i>Optional</i>  <span>(left maximum character:{{1000-cmnt.description.length}})</span></label>
                 </div>
               </div>
             </div>
