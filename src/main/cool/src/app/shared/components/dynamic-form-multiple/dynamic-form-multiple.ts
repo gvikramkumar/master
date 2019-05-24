@@ -543,6 +543,15 @@ export class DynamicFormMultipleComponent implements OnInit {
             }
             
             if (question.question == "Service Type?") {
+                if(question.currentValue == "Service") {
+                    this.defaultValueServices.setTMSNOdeASDefault(questionList);
+                }
+                else{
+                    this.defaultValueServices.setTMSNOdeASDefaultN(questionList);
+                }
+            }
+            
+            if (question.question == "Service Type?") {
                 if(question.currentValue == "Support") {
                     this.defaultValueServices.setTMSNOdeN2(questionList);
                 }
@@ -567,8 +576,36 @@ export class DynamicFormMultipleComponent implements OnInit {
             }
             
             if (question.question == "Service Type?") {
+                if(question.currentValue == "Service") {
+                    this.defaultValueServices.setTMSNOdeTSDefault(questionList);
+                }
+                else{
+                    this.defaultValueServices.setTMSNOdeTSDefaultN(questionList);
+                }
+            }
+            
+            
+            if (question.question == "Service Type?") {
                 if(question.currentValue == "Support") {
                     this.defaultValueServices.setTMSNOdeTSN2(questionList);
+                }
+            }
+            
+            if (question.question == "Service Type?") {
+                if(question.currentValue == "Support") {
+                    this.defaultValueServices.setTMSNOdeASDisable(questionList);
+                }
+            }
+            
+            if (question.question == "Service Type?") {
+                if(question.currentValue == "Service") {
+                    this.defaultValueServices.setTMSNOdeTSDisable(questionList);
+                }
+            }
+            
+            if (question.question == "SOA Pricing") {
+                if(question.currentValue == "Flat") {
+                    this.defaultValueServices.setMonthlySupMin(questionList);
                 }
             }
             // 
