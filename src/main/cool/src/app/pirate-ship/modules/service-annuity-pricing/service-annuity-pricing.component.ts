@@ -90,23 +90,10 @@ export class ServiceAnnuityPricingComponent implements OnInit, OnDestroy {
     });
 
     this.serviceAnnuityPricing.getServiceAnnuityPricing(this.offerId).subscribe(atoList => {
-    }, error => {
+      this.atoList = atoList['majorATOs'];
+        }, error => {
       console.log('error', error);
     });
-    this.atoList = [
-      {
-          "itemName": "WS-C3850-48P-E",
-          "itemStatus": "Completed"
-      },
-      {
-          "itemName": "XaaS 1",
-          "itemStatus": "Completed"
-      },
-      {
-          "itemName": "Hardware 3",
-          "itemStatus": "Completed"
-      }
-  ];
    
   }
 
