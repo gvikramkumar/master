@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SourceMappingComponent } from './source-mapping.component';
 
-describe('SourceMappingComponent', () => {
+xdescribe('SourceMappingComponent', () => {
   let component: SourceMappingComponent;
   let fixture: ComponentFixture<SourceMappingComponent>;
 

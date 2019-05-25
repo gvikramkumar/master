@@ -7,7 +7,7 @@ import { CuiMultiselectComponent } from './cui-multiselect.component';
 import { CuiMultiselectModule } from './cui-multiselect.module';
 import { CommonModule } from '@angular/common';
 
-describe('CuiMultiselectComponent', () => {
+xdescribe('CuiMultiselectComponent', () => {
 	let component: CuiMultiselectComponent;
 	let fixture: ComponentFixture<CuiMultiselectComponent>;
 	let de: DebugElement;

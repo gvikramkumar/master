@@ -1,4 +1,4 @@
-import { $, browser, by, element, protractor } from 'protractor';
+import { browser, by, element, protractor } from 'protractor';
 const EC = protractor.ExpectedConditions;
 export class SourcePO {
   form = element(by.className('edit-form-container'));
@@ -8,8 +8,9 @@ export class SourcePO {
     return browser.get('/admn/source');
   }
 
-   getSourceRange() {
-    return element(by.className(`mat-paginator-range-label`));
+   async getSourcesLoaded() {
+    const range = await element(by.className(`mat-paginator-range-label`)).getText();
+    return Number(range.substr(range.indexOf('f') + 2));
   }
 
    getSearchField() {

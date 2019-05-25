@@ -23,8 +23,7 @@ describe(`Admin - Source Page`, () => {
   });
 
   it(`should load all the sources`, () => {
-    const range = sourcePO.getSourceRange().getText();
-    expect(range).toContain('20');
+    expect(sourcePO.getSourcesLoaded()).toBeGreaterThanOrEqual(20);
   });
 
 
@@ -101,8 +100,7 @@ describe(`Admin - Source Page`, () => {
       sourcePO.getStatusCheckBox().click();
       sourcePO.getSubmitButton().click();
       sourcePO.waitForFormDown();
-      sourcePO.getPaginatorNextButton().click();
-      sourcePO.getPaginatorNextButton().click();
+      sourcePO.getSearchField().sendKeys(newTestSource.name);
       expect(sourcePO.getFirstCellInARow().getText()).toEqual(newTestSource.name);
       expect(sourcePO.getCellRow().get(1).getText()).toEqual(newTestSource.typeCode);
       expect(sourcePO.getCellRow().last().getText()).toEqual(newTestSource.status);
@@ -166,10 +164,7 @@ describe(`Admin - Source Page`, () => {
         description: 'Updated source to inactive',
         status: `Inactive`
       };
-      sourcePO.getPaginatorNextButton().click();
-      sourcePO.getPaginatorNextButton().click();
-      sourcePO.getFirstCellInARow().click();
-      sourcePO.waitForFormUp();
+      sourcePO.loadFormInEditModeForSource(newTestSource.name);
       sourcePO.getFieldName().clear();
       sourcePO.getFieldName().sendKeys(newSourceForUpdate.name);
       sourcePO.getFieldTypeCode().clear();
@@ -179,6 +174,8 @@ describe(`Admin - Source Page`, () => {
       sourcePO.getStatusCheckBox().click();
       sourcePO.getSubmitButton().click();
       sourcePO.waitForFormDown();
+      sourcePO.getSearchField().clear();
+      sourcePO.getSearchField().sendKeys(newSourceForUpdate.name);
       expect(sourcePO.getFirstCellInARow().getText()).toEqual(newSourceForUpdate.name);
       expect(sourcePO.getCellRow().get(1).getText()).toEqual(newSourceForUpdate.typeCode);
       expect(sourcePO.getCellRow().last().getText()).toEqual(newSourceForUpdate.status);

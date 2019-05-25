@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DatabaseSyncComponent } from './database-sync.component';
 
-describe('DatabaseSyncComponent', () => {
+xdescribe('DatabaseSyncComponent', () => {
   let component: DatabaseSyncComponent;
   let fixture: ComponentFixture<DatabaseSyncComponent>;
 

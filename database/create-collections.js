@@ -40,6 +40,7 @@ const collationCollections = [
   'dfa_allocation_rule',
   'dfa_data_source',
   'dfa_lookup',
+  'dfa_job_log',
   'dfa_measure',
   'dfa_module',
   'dfa_module_data_source',
@@ -99,6 +100,8 @@ db.dfa_module_data_source.createIndex({moduleId: 1}, {unique: true});
 db.dfa_lookup.createIndex({key: 1}, {unique: true});// shared
 db.dfa_module_lookup.createIndex({moduleId: 1, key: 1}, {unique: true});// per module
 
+db.dfa_job_log.createIndex({"startDate": -1}, {expireAfterSeconds: 365 * 24 * 60 * 60});
+// expireAfterSeconds takes seconds. So 1 year is 365 * 24 * 60 * 60
 print('>>>>>>>>>>>> create-collections complete');
 // unique constraints
 

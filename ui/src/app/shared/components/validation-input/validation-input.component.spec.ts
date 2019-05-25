@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ValidationInputComponent } from './validation-input.component';
 
-describe('ValidationInputComponent', () => {
+xdescribe('ValidationInputComponent', () => {
   let component: ValidationInputComponent;
   let fixture: ComponentFixture<ValidationInputComponent>;
 

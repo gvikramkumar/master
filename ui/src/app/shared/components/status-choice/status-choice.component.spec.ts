@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { StatusChoiceComponent } from './status-choice.component';
 
-describe('StatusChoiceComponent', () => {
+xdescribe('StatusChoiceComponent', () => {
   let component: StatusChoiceComponent;
   let fixture: ComponentFixture<StatusChoiceComponent>;
 

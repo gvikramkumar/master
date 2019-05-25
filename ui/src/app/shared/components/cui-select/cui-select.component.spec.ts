@@ -7,7 +7,7 @@ import { CuiSelectComponent } from './cui-select.component';
 import { CuiSelectModule } from './cui-select.module';
 import { CommonModule } from '@angular/common';
 
-describe('CuiSelectComponent', () => {
+xdescribe('CuiSelectComponent', () => {
 	let component: CuiSelectComponent;
 	let fixture: ComponentFixture<CuiSelectComponent>;
 	let de: DebugElement;
