@@ -7,7 +7,9 @@
 }
 .cool.cui .header {
   background: #005073;
-  border-bottom: transparent;
+  box-shadow: 0 1px 3px rgba(0,0,0,.15);
+  position: relative;
+  /* border-bottom: solid 1px rgba(0,0,0,.15); */
 }
 .cool.cui .header-heading .page-title {
   color: #fff;
@@ -103,16 +105,25 @@
 } */
 
 .cool.cui .panel.panel--ltgray span.vertical-divider {
-  opacity: .25;
+  opacity: 1;
   display: inline-block;
-  border-left: solid 1px white;
+  border-left: solid 1px #e4e4e4;
   height: 35px;
-  margin: 10px 20px;
+  margin: 0px 20px;
+}
+
+.cui app-dashboard .panel.panel--ltgray h1 span {
+  font-size: 16px;
+  margin-top: 0;
 }
 
 .cui .panel.panel--ltgray h1 > span {
   font-size: 26px;
   margin-right: 20px;
+}
+.cui app-menu-bar .panel.panel--ltgray.panel--compressed {
+  box-shadow: inset 0 -4px 20px rgba(0,0,0,0.045);
+  border-bottom: solid 1px rgba(0,0,0,0.045);
 }
 
 /* buttons */
@@ -280,7 +291,7 @@
   text-transform: uppercase;
   /* width: 10%; */
   text-align: center;
-  border-color: #d6d6d6;
+  border-color: #ebebeb;
 }
 .cool.cui .table th {
   font-weight: normal;
