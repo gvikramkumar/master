@@ -26,11 +26,22 @@ export const svrUtil = {
   toFixed8,
   toFixed,
   getEnvEmail,
-  isProdEnv
+  isProdEnv,
+  getErrorForJson
 };
 
+function getErrorForJson(err) {
+  const obj = {};
+  if (_.isObject(err)) {
+    obj['message'] = err.message;
+    obj['stack'] = err.stack;
+    return obj;
+  } else {
+    return err;
+  }
+}
 function getEnvEmail(email) {
-  if (isLocalEnv() && !isUnitEnv()) {
+  if (isLocalEnv()) {
     return getTestEmail();
   }
   return email;

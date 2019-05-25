@@ -1,15 +1,13 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-
 import {SubmeasureEditComponent} from './submeasure-edit.component';
 import {FormsModule} from '@angular/forms';
 import {SharedModule} from '../../../../shared/shared.module';
 import {AppRoutingModule} from '../../../../app/app-routing.module';
-import {AppStore} from '../../../../app/app-store';
 import {ActivatedRoute} from '@angular/router';
-import {of} from 'rxjs';
+
 
 fdescribe('SubmeasureEditComponent', () => {
-  let component: SubmeasureEditComponent;
+  let comp: SubmeasureEditComponent;
   let fixture: ComponentFixture<SubmeasureEditComponent>;
 
   beforeEach(async(() => {
@@ -47,12 +45,10 @@ fdescribe('SubmeasureEditComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SubmeasureEditComponent);
-    component = fixture.componentInstance;
-    component.addMode = true;
-    fixture.detectChanges();
+    comp = fixture.componentInstance;
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should not call ngOnInit if fixture.detectChanges() is not called', () => {
+    expect(comp.effectiveMonthNotRequired).toBe(true);
   });
 });

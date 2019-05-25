@@ -12,6 +12,7 @@
     "polyfills.ts"
   ],
   "include": [
+    "../spec/init/init.ts",
     "**/*.spec.ts",
     "**/*.d.ts"
   ]

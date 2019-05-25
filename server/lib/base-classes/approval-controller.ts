@@ -282,7 +282,9 @@ export default class ApprovalController extends ControllerBase {
           );
           });
           return Promise.all(promises)
-            .then(calls => `${calls.length} items updated.`);
+            .then(calls => ` ${_.upperFirst(type)}s updated - ${calls.length}`);
+        } else {
+          return Promise.resolve(`No pending ${_.upperFirst(type)}s found`);
         }
       });
   }

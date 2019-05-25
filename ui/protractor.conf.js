@@ -9,7 +9,7 @@ exports.config = {
   allScriptsTimeout: 11000,
   specs: [
     // './e2e/slow-down-tests.ts',
-    './jasmine-matchers.js',
+    './spec/matchers/jasmine-matchers.js',
     './e2e/**/*.e2e-spec.ts'
   ],
   capabilities: {
