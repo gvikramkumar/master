@@ -1,7 +1,7 @@
 <div>
 
   <!-- Offer Phase Steps -->
-  <div class="card card--raised base-margin-top" (click)="showOfferPhaseDailog()">
+  <div class="panel panel--compressed panel--bordered panel--raised-small base-margin-bottom" (click)="showOfferPhaseDailog()">
     <h5 class="half-margin-bottom">Offer Phase
       <a href="javascript:;" class="pull-right" (click)="showOfferPhaseDailog()">
         <span class="icon-pencil"></span> Edit</a>
@@ -40,7 +40,7 @@
   </div>
 
   <!-- Estimated Lead Time -->
-  <div class="card card--raised base-margin-top">
+  <div class="panel panel--compressed panel--bordered panel--raised-small base-margin-bottom">
 
     <h5 class="half-margin-bottom">Estimated Lead Time</h5>
 
@@ -96,7 +96,7 @@
           </div> -->
 
   <!-- People Involved -->
-  <div class="card card--raised base-margin-top stakeholders">
+  <div class="panel panel--compressed panel--bordered panel--raised-small">
 
     <h5>People Involved<a href="javascript:;" class="pull-right" (click)="showStakeHolderDialog()">
         <i class="pi pi-plus"></i> Add</a>
@@ -328,7 +328,7 @@
                           <a><span (click)="navigate(setupData.subMilestone)">{{setupData.subMilestone}}</span></a>
                         </ng-template>
                       </td>
-            
+
                       <td
                         [ngClass]="(setupData.status == 'Completed' || setupData.status == 'Not Applicable')?'text-success':'text-warning'">
                         {{setupData.status}}</td>

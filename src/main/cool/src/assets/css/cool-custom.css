@@ -110,8 +110,9 @@
   margin: 10px 20px;
 }
 
-.cui .panel.panel--ltgray h1 {
+.cui .panel.panel--ltgray h1 > span {
   font-size: 26px;
+  margin-right: 20px;
 }
 
 /* buttons */
@@ -313,12 +314,16 @@
   border-radius: 2px;
   min-height: initial;
 }
+.cool.cui .panel.panel--compressed.panel--bordered {
+  border: 1px solid #ededed;
+}
 
 .cool.cui .card.card--raised,
-.cui a.card.card--raised {
+.cui a.card.card--raised, .cool.cui .panel.panel--compressed.panel--bordered.panel--raised-small {
   -webkit-box-shadow: 0 10px 24px -6px rgba(0, 0, 0, 0.025);
   box-shadow: 0 10px 4px -6px rgba(0, 0, 0, 0.025);
 }
+
 
 .cui .ui-datatable .ui-datatable-thead>tr.tr--th-small>th,
 .cui .ui-table .ui-table-thead>tr.tr--th-small>th {
@@ -924,7 +929,7 @@
   display: inline-block;
   line-height: 1.2;
   position: relative;
-  left: -11px;
+  left: -6px;
   padding-left: 15px;
   height: 30px;
 }
@@ -1011,23 +1016,23 @@ span[class*="display-"] {
   padding-left: 20px;
 }
 
-.cool.cui .card.stakeholders {
+.cool.cui .stakeholders {
   padding: 0;
 }
 
-.cool.cui .card.stakeholders ul li {
+.cool.cui .stakeholders ul li {
   border-bottom: 1px solid #dfdfdf;
 }
 
-.cool.cui .card.stakeholders ul li:last-child {
+.cool.cui .stakeholders ul li:last-child {
   border-bottom: none;
 }
 
-.cool.cui .card.stakeholders .ui-accordion .ui-accordion-header {
+.cool.cui .stakeholders .ui-accordion .ui-accordion-header {
   margin-top: 0;
 }
 
-.cool.cui .card.stakeholders h5 {
+.cool.cui .stakeholders h5 {
   margin: 1em;
 }
 
@@ -1147,6 +1152,7 @@ button.btn.btn--secondary:hover span {
   border: none;
   background: #f6f7f9;
   color: #555555;
+  border-bottom: solid 1px #e8e8e8;
 }
 
 .cui .ui-accordion .ui-accordion-header.ui-state-active {
