@@ -3,6 +3,7 @@
   "spec_files": [
     "spec/init/init-mocks.js",
     "spec/init/init-e2e.js",
+    "spec/matchers/jasmine-matchers.js",
     "server/**/*.e2e-spec.js"
   ],
   "helpers": [

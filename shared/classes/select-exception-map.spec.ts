@@ -142,11 +142,7 @@ describe('SelectExceptionMap tests', () => {
       expect(sut.scmsIdx).toBe(0);
       expect(sut.ibeIdx).toBe(0);
 
-      // isEqual checks object type, so have to convert type to object to compare, or make correct type in expected
-      const arr = sut.sl1Map.map(x => Object.assign({}, x));
-      expect(arr).toEqual([{ selectArr: [ 'IN', 'AMERICAS', 'JAPAN' ], index: 1 }]);
-      expect(sut.sl1Map).toEqual([new SelectExceptionIndexMap([ 'IN', 'AMERICAS', 'JAPAN' ], 1)]);
-
+      (<any>expect(sut.sl1Map)).not.toEqualObj([{ selectArr: [ 'IN', 'AMERICAS', 'JAPAN' ], index: 1 }]);
       expect(sut.sl2Map.length).toBe(0);
       expect(sut.sl3Map.length).toBe(0);
       expect(sut.tgMap.length).toBe(0);
