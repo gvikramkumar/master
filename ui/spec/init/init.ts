@@ -1,12 +1,15 @@
-/*import {AppStore} from '../../src/app/app/app-store';
+/*
+import {AppStore} from '../../src/app/app/app-store';
 import {TestBed} from '@angular/core/testing';
 
-describe(`ui init` , () => {
-  beforeAll(() => {
-    // init guard initialization
-    const appStore = TestBed.get(AppStore);
-    appStore.pubEnv('unit');
-    appStore.pubUser({});
-    appStore.pubModules({});
-  });
-});*/
+// if we do regular angular component tests, that use the injector and call ngOnInit, we'll have to fake our
+// initialization guard store initialization.
+beforeAll(() => {
+  // init guard initialization
+  const appStore = TestBed.get(AppStore);
+  appStore.pubEnv('unit');
+  appStore.pubUser({});
+  appStore.pubModules({});
+});
+
+*/

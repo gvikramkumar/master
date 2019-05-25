@@ -1,0 +1,14 @@
+
+
+describe('ruleUtil tests', () => {
+
+
+
+
+});
+
+
+
+
+
+
