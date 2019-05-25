@@ -9,11 +9,6 @@ import Q from 'q';
 
 
 
-const a = [{"selectArr":["IN","AMERICAS","JAPAN"],"index":1}];
-const b = [{"selectArr":["IN","AMERICAS","JAPAN"],"index":1}]
-
-console.log(_.isEqual(a, b));
-
 
 /*
 const err = new Error('bad thing');
