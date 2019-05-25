@@ -22,7 +22,7 @@ const routes: Routes = [
   },
   {
     path: 'admn',
-    loadChildren: 'app/modules/admn/admn.module#AdmnModule',
+    loadChildren: '../modules/admn/admn.module#AdmnModule',
     data: {
       authorization: 'it administrator'
     },
@@ -30,7 +30,7 @@ const routes: Routes = [
   },
   {
     path: 'prof',
-    loadChildren: 'app/modules/prof/prof.module#ProfModule',
+    loadChildren: '../modules/prof/prof.module#ProfModule',
     data: {
       authorization: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:business user, profitability allocations:end user'
     },

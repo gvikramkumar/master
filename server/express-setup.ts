@@ -32,9 +32,11 @@ import {addGlobalData} from './lib/middleware/add-global-data';
 import {healthcheck} from './lib/middleware/healthcheck';
 import {distiDirectUploadRouter} from './api/prof/disti-direct-upload/router';
 import {timeoutHandler} from './lib/middleware/timeout-handler';
-
+import {runJobRouter} from './api/run-job/router';
 import AnyObj from '../shared/models/any-obj';
 import Q from 'q';
+
+
 
 export default function () {
 
@@ -56,7 +58,7 @@ export default function () {
   const corsOptions = {
     origin: config.corsOrigin,
     credentials: true
-  }
+  };
   app.use(cors(corsOptions));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended: true}));
@@ -79,8 +81,9 @@ export default function () {
   });
 */
 
-  app.use(addSsoUser())
+  app.use(addSsoUser());
   app.use(addGlobalData());
+
   // app.use(siteRestriction());
 
   // need this below security so we can show friendly message on page (instead of an error dialog)
@@ -134,6 +137,7 @@ if (config.env !== 'unit') {
   app.use('/api/open-period', openPeriodRouter);
   app.use('/api/pg-lookup', pgLookupRouter);
   app.use('/api/report', reportRouter);
+  app.use('/api/run-job', runJobRouter);
   app.use('/api/source', sourceRouter);
   app.use('/api/submeasure', submeasureRouter);
   app.use('/api/user', userRouter);

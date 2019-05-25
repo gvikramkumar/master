@@ -3,7 +3,7 @@ import {Router} from 'express';
 import ModuleLookupController from './controller';
 
 
-const ctrl = injector.get(ModuleLookupController)
+const ctrl = injector.get(ModuleLookupController);
 
 export const moduleLookupRouter = Router()
   .get('/', ctrl.handleGetMany.bind(ctrl))
