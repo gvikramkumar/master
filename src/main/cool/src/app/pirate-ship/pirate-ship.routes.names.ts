@@ -6,7 +6,6 @@ export const pirateShipRoutesNames = {
   CHANGE_STATUS: 'change-status',
   SERVICE_MAPPING: 'service-mapping',
   MODELLING_DESIGN: 'modelling-design',
-  ORDERABILITY: 'self-service-orderability',
   SERVICE_ANNUITY_PRICING: 'service-annuity-pricing',
   SELF_SERVICE_ORDERABILITY: 'self-service-orderability'
 

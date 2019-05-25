@@ -326,7 +326,7 @@ export class OfferSetupComponent implements OnInit {
         this.router.navigate([appRoutesNames.PIRATE_SHIP,
         this.offerId,
         this.caseId,
-        pirateShipRoutesNames.ORDERABILITY,
+        pirateShipRoutesNames.SELF_SERVICE_ORDERABILITY,
         this.selectedAto, element.moduleName]);
         break;
       }

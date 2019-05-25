@@ -51,7 +51,7 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
   isPirateShipSubModule: boolean;
 
   showOrderabilitySsoButton: boolean;
-  disableorderabilitySsoButton: boolean;
+  disableOrderabilitySsoButton: boolean;
 
   constructor(
     private loaderService: LoaderService,
@@ -89,7 +89,7 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
 
     this.functionalRole = this.configurationService.startupData.functionalRole;
     this.showOrderabilitySsoButton = this.selectedAto === 'Overall Offer' ? false : true;
-    this.disableorderabilitySsoButton = (this.functionalRole.includes('BUPM') || this.functionalRole.includes('PDT'))
+    this.disableOrderabilitySsoButton = (this.functionalRole.includes('BUPM') || this.functionalRole.includes('PDT'))
       ? false : true;
 
     this.selfServiceOrderabilitySubscription = this.selfServiceOrderabilityService.retieveSsoDetails(this.offerId)
@@ -126,7 +126,7 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.paramsSubscription.unsubscribe();
-    // this.selfServiceOrderabilitySubscription.unsubscribe();
+    this.selfServiceOrderabilitySubscription.unsubscribe();
   }
 
   // -------------------------------------------------------------------------------------------------------------------
