@@ -13,7 +13,6 @@ describe(`Job Run tests`, () => {
   const smRepo = new SubmeasureRepo();
   const ruleRepo = new AllocationRuleRepo();
   beforeAll((done) => {
-    mail.sendHtmlMail = jasmine.createSpy().and.returnValue(Promise.resolve());
     serverPromise.then(_server => {
       server = _server;
       Promise.all([
