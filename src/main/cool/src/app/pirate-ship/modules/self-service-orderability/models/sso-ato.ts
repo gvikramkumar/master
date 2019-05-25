@@ -2,10 +2,12 @@ import { SsoStatus } from './sso-status';
 
 export interface SsoAto {
 
-    'type': string;
-    'productName': string;
+    'itemType': string;
+    'itemName': string;
+
     'organization': string;
     'currentStatus': string;
+
     'errorOrWarning': string;
     'npiTestOrderFlag': string;
     'orderabilityCheckStatus': string;

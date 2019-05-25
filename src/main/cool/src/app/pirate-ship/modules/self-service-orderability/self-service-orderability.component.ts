@@ -51,7 +51,7 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
   isPirateShipSubModule: boolean;
 
   showOrderabilitySsoButton: boolean;
-  disableorderabilitySsoButton: boolean;
+  disableOrderabilitySsoButton: boolean;
 
   constructor(
     private loaderService: LoaderService,
@@ -89,26 +89,24 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
 
     this.functionalRole = this.configurationService.startupData.functionalRole;
     this.showOrderabilitySsoButton = this.selectedAto === 'Overall Offer' ? false : true;
-    this.disableorderabilitySsoButton = (this.functionalRole.includes('BUPM') || this.functionalRole.includes('PDT'))
+    this.disableOrderabilitySsoButton = (this.functionalRole.includes('BUPM') || this.functionalRole.includes('PDT'))
       ? false : true;
 
-    // this.selfServiceOrderabilitySubscription = this.selfServiceOrderabilityService.retrieveAtoList(this.offerId)
-    //   .subscribe((selfServiceOrderabilityResponse: SelfServiceOrderability) => {
+    this.selfServiceOrderabilitySubscription = this.selfServiceOrderabilityService.retieveSsoDetails(this.offerId)
+      .subscribe((selfServiceOrderabilityResponse: SelfServiceOrderability) => {
 
-    // this.selfServiceOrderability = selfServiceOrderabilityResponse;
+        this.selfServiceOrderability = selfServiceOrderabilityResponse;
 
-    this.selfServiceOrderability ={ "planId": "23423234", "coolOfferId": "COOL_123", "planStatus": "INPROGRESS|COMPLETE", "module": "SELF_SERVICE_ORDERABILITY", "ssoTasks": [{ "type": "ATO Model", "productName": "L-WEBEX-TP-JABBER", "organization": "GLO SSO (BGM)", "currentStatus": "ENABLE-MAJ", "errorOrWarning": "Cisco 4200 Series", "npiTestOrderFlag": "On", "orderabilityCheckStatus": "In Progress", "ssoStatus": { "error": ["--"], "hold": ["Pending Price Change"], "warning": ["XaaS Price Approval", "Price List Availability", "Offer Readiness Review"], "completed": ["FCS Date", "Eco Release", "SBP Readiness", "Global Org Active",], "notRequired": ["Global Org Not Active Status"] } }, { "type": "ATO Model", "productName": "L-WEBEX-TP-JABBER", "organization": "GLO SSO (BGM)", "currentStatus": "ENABLE-MAJ", "errorOrWarning": "Cisco 4200 Series", "npiTestOrderFlag": "On", "orderabilityCheckStatus": "Completed", "ssoStatus": { "error": ["--"], "hold": ["Pending Price Change"], "warning": ["XaaS Price Approval", "Price List Availability", "Offer Readiness Review"], "completed": ["FCS Date", "Eco Release", "SBP Readiness", "Global Org Active",], "notRequired": ["Global Org Not Active Status"] } }] };
- 
-    this.ssoList = this.selfServiceOrderability['ssoTasks'] ? this.selfServiceOrderability['ssoTasks'] : [];
+        this.ssoList = this.selfServiceOrderability['data'] ? this.selfServiceOrderability['data'] : [];
 
-    this.ssoList.
-      map(dropDownValue => {
-        this.atoNames.push(dropDownValue.productName);
+        this.ssoList.
+          map(dropDownValue => {
+            this.atoNames.push(dropDownValue.itemName);
+          });
+
+        this.sso = this.ssoList.find(ato => ato.itemName === this.selectedAto);
+
       });
-
-    this.sso = this.ssoList.find(ato => ato.productName === this.selectedAto);
-
-    // });
 
     // Retrieve Offer Details
     this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
@@ -128,18 +126,14 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.paramsSubscription.unsubscribe();
-    // this.selfServiceOrderabilitySubscription.unsubscribe();
+    this.selfServiceOrderabilitySubscription.unsubscribe();
   }
 
   // -------------------------------------------------------------------------------------------------------------------
 
   goToOrderabilitySSO() {
 
-    const userId = this.configurationService.startupData.userId;
-    let urlToOpen = this.environmentService.owbUrl + '/manage/offer/owbOfferDefinition?';
-    urlToOpen += 'selectedAto=' + this.selectedAto + '&planId=' + this.planId + '&userId=' + userId;
-
-    urlToOpen = 'https://www.google.com';
+    const urlToOpen = this.environmentService.ssoUrl;
     window.open(urlToOpen, '_blank');
 
   }
@@ -158,7 +152,7 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
 
       this.selectedAto = dropDownValue;
       this.showOrderabilitySsoButton = true;
-      this.sso = this.ssoList.find(ato => ato.productName === dropDownValue);
+      this.sso = this.ssoList.find(ato => ato.itemName === dropDownValue);
 
     }
 
