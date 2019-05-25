@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 
 
-class SelectExceptionIndexMap {
+export class SelectExceptionIndexMap {
   constructor(public selectArr: string[], public index) {
   }
 }

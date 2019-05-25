@@ -8,6 +8,16 @@ import Q from 'q';
 // import {take, first} from 'rxjs/operators';
 
 
+
+/*
+const err = new Error('bad thing');
+err['stuff'] = 'lala';
+let obj = {};
+Object.keys(err).forEach(key => obj[key] = err[key]);
+obj = Object.assign({message: err.message, stack: err.stack}, obj);
+console.log(obj);
+*/
+
 /*
 function throwError() {
   throw new Error('bad');
