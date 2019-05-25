@@ -2,12 +2,13 @@ import { SsoAto } from './sso-ato';
 
 export interface SelfServiceOrderability {
 
-    'planId': string;
-    'planStatus': string;
 
-    'module': string;
+    'owbPlanId': string;
+
+    'requestId': string;
+
     'coolOfferId': string;
 
-    'ssoTasks': Array<SsoAto>;
+    'data': Array<SsoAto>;
 
 }
