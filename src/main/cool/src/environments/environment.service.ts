@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class EnvironmentService {
 
+    ssoUrl: string;
     owbUrl: string;
     baseApiUrl: string;
     baseIdpUrl: string;
@@ -140,14 +141,13 @@ export class EnvironmentService {
     // TERM AND CONTENT MAPPING URLs
     REST_API_RETRIEVE_TERM_CONTENT_MAPPING_URL: string;
 
-    // -------------------------------------------------------------------------------------------------
     // CSDL URLs
     REST_API_GET_ALL_PROJECTS: string;
     REST_API_POST_CREATE_CSDL_ASSOCIATION: string;
     REST_API_REFRESH_PROJECTS: string;
     REST_API_CSDL_INFO_GET_URL: string;
 
-    //SERVICE FOR BASIC MODULES URLs - NPI
+    // SERVICE FOR BASIC MODULES URLs - NPI
     REST_API_GET_ALL_COMMENTS_NPI_URL: string;
     REST_API_ADD_COMMENT_NPI_URL: string;
 
@@ -174,6 +174,11 @@ export class EnvironmentService {
     // BASIC MODULE STATUS UPDATE API
     REST_API_UPDATE_MODULE_STATUS_URL: string;
     REST_API_GET_MODULE_STATUS_URL: string;
+
+    // SELF SERVICE ORDERABILITYURLs
+    REST_API_GET_SSO_DETAILS_URL: string;
+
+    // -------------------------------------------------------------------------------------------------
 
     constructor() {
         this.setEnvironmentVariables();
@@ -204,6 +209,7 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb.cloudapps.cisco.com/owb';
+                this.ssoUrl = 'https://sso.cloudapps.cisco.com/sso/index.html#/dashboard';
                 break;
             case 'stage':
                 this.baseApiUrl = 'https://cool-srv-stg.cisco.com/coolsrv';
@@ -214,7 +220,8 @@ export class EnvironmentService {
                 this.baseIdpUrl = 'https://idp-stage-api.cisco.com';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
-                this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';                
+                this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
+                this.ssoUrl = 'https://sso.cloudapps.cisco.com/sso/index.html#/dashboard';
                 break;
             case 'qualityassurance':
                 this.baseApiUrl = 'https://cool-srv-qa.cisco.com/coolsrv';
@@ -226,6 +233,7 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
+                this.ssoUrl = 'https://sso.cloudapps.cisco.com/sso/index.html#/dashboard';
                 break;
             case 'development':
                 this.baseApiUrl = 'https://cool-srv-dev.cisco.com/coolsrv';
@@ -237,6 +245,7 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
+                this.ssoUrl = 'https://sso.cloudapps.cisco.com/sso/index.html#/dashboard';
                 break;
             default:
                 this.baseApiUrl = '/api';
@@ -248,6 +257,7 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
+                this.ssoUrl = 'https://sso.cloudapps.cisco.com/sso/index.html#/dashboard';
         }
 
         // ----------------------- AUTHENTICATION URLs -----------------------------------------------
@@ -304,7 +314,7 @@ export class EnvironmentService {
         this.REST_API_SECONDARY_BUSINESS_ENTITY_URL = this.basePdafApiUrl + '/mdm/1.0/hierarchy/getBUhierarchy?business_unit=';
 
         this.PDAF_ISVALID_EGINIE_PID = this.basePdafApiUrl + '/product/1.0/isPIDavailable?pid=';
-        
+
         // --------------------------------OFFER URL's------------------------------------------------------------
 
         this.REST_API_OFFER_STATUS = this.baseApiUrl + '/offer/flags/';
@@ -401,10 +411,10 @@ export class EnvironmentService {
         this.REST_API_RETRIEVE_SERVICE_ATO_LIST_URL = this.baseApiUrl + '/itemcreation/getATOs';
         this.REST_API_RETRIEVE_SERVICE_ANNUITY_PRICING_URL = this.baseApiUrl + '/serviceAnnuityPricing/getPricingOfferLevel';
 
-         // --------------------------------------- TERM AND CONTENT MAPPING --------------------------------------------
+        // --------------------------------------- TERM AND CONTENT MAPPING --------------------------------------------
 
-         this.REST_API_RETRIEVE_TERM_CONTENT_MAPPING_URL = this.baseApiUrl + '/serviceAnnuityPricing/getPricingOfferLevel';
- 
+        this.REST_API_RETRIEVE_TERM_CONTENT_MAPPING_URL = this.baseApiUrl + '/serviceAnnuityPricing/getPricingOfferLevel';
+
         // -------------------------------------- CSDL --------------------------------------------------------------------------
 
         this.REST_API_REFRESH_PROJECTS = this.baseApiUrl + '/csdl/getCsdlDetails';
@@ -448,6 +458,10 @@ export class EnvironmentService {
 
         this.REST_API_GET_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module/getPirateshipModuleStatus';
         this.REST_API_UPDATE_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module/addPirateshipModuleStatus';
+
+        // -------------------------------------- SELF SERVICE ORDERABILITYURLs --------------------------------------
+
+        this.REST_API_GET_SSO_DETAILS_URL = this.baseApiUrl + '/orderability/retrieveSsoDetails/';
 
     }
 }
