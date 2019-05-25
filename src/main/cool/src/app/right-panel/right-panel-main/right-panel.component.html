@@ -96,7 +96,7 @@
           </div> -->
 
   <!-- People Involved -->
-  <div class="panel panel--compressed panel--bordered panel--raised-small">
+  <div class="panel panel--compressed panel--bordered panel--raised-small stakeholders">
 
     <h5>People Involved<a href="javascript:;" class="pull-right" (click)="showStakeHolderDialog()">
         <i class="pi pi-plus"></i> Add</a>
@@ -108,7 +108,7 @@
         <p-accordion>
           <p-accordionTab header="{{key}} ({{stakeData[key].length}})" [selected]="false">
 
-            <div *ngFor="let coOwners of stakeData[key]">
+            <div class="member" *ngFor="let coOwners of stakeData[key]">
               <div class="flex-center-vertical">
 
                 <!-- Team Member Avatar -->
