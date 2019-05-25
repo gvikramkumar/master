@@ -102,28 +102,46 @@ export class OfferConstructDefaultValue {
         if (element.question == "Monthly Amount") {
             if(element.currentValue != "$0") {
                 this.setTMSNOde(listOfferQuestions);
-                this.setTMSNOdeTS(listOfferQuestions);
+                this.setTMSNOdeTSMonthly(listOfferQuestions);
             }
             else{
                 this.setTMSNOdeN(listOfferQuestions);
-                this.setTMSNOdeTSN(listOfferQuestions);
+                this.setTMSNOdeTSN(listOfferQuestions,);
             }
         }
         
-        if (element.question == 'TMS Node TS') {
-          if (beListType == "Collaboration") {
-            element.currentValue = "UC/HVS/SWSS/SUB/TRAN Svc";
-            element.previousValue = "UC/HVS/SWSS/SUB/TRAN Svc";
-          }
-          if (beListType == "Security") {
-            element.currentValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
-            element.previousValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
-          }
-          else {
-            element.currentValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
-            element.previousValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
-          }
+        if (element.question == "SOA Pricing") {
+            if(element.currentValue == "% of Product List") {
+                this.setSoaPricingbasedDefaultsProduct(listOfferQuestions);
+            }
+            else {
+                this.setSoaPricingbasedDefaultsProductN(listOfferQuestions);
+            }
         }
+        
+        if (element.question == "SOA Pricing") {
+            if (element.currentValue == "Flat") {
+                this.setSoaPricingbasedDefaultsFlat(listOfferQuestions);
+            }
+            else {
+                this.setSoaPricingbasedDefaultsFlatN(listOfferQuestions);
+            }
+        }
+        
+        // if (element.question == 'TMS Node TS') {
+        //   if (beListType == "Collaboration") {
+        //     element.currentValue = "UC/HVS/SWSS/SUB/TRAN Svc";
+        //     element.previousValue = "UC/HVS/SWSS/SUB/TRAN Svc";
+        //   }
+        //   if (beListType == "Security") {
+        //     element.currentValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
+        //     element.previousValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
+        //   }
+        //   else {
+        //     element.currentValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
+        //     element.previousValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
+        //   }
+        // }
         
     });
     return listOfferQuestions;
@@ -493,6 +511,12 @@ export class OfferConstructDefaultValue {
           
         }
     });
+    questionList.forEach(question => {
+        if (question.question == "TMS Node TS") {
+          question.rules.isDisabled = true;
+          question.currentValue = "";
+        }
+    });
     return questionList;
   }
   
@@ -518,6 +542,8 @@ export class OfferConstructDefaultValue {
         }
     });
   }
+  
+  
 
   setSoaPricingbasedDefaultsProductN(questionList) {
     questionList.forEach(question => {
@@ -566,6 +592,8 @@ export class OfferConstructDefaultValue {
     questionList.forEach(question => {
         if (question.question == "TMS Node AS") {
           question.rules.isDisabled = true;
+          question.currentValue = "";
+          
         }
     });
   }
@@ -585,6 +613,7 @@ export class OfferConstructDefaultValue {
         }
         else{
             question.rules.isDisabled = true;
+            question.currentValue = "";
         }
       }
     });
@@ -605,6 +634,7 @@ export class OfferConstructDefaultValue {
         }
         else{
             question.rules.isDisabled = true;
+            question.currentValue = "";
         }
       }
     });
@@ -614,6 +644,7 @@ export class OfferConstructDefaultValue {
       questionList.forEach(question => {
           if (question.question == "TMS Node AS") {
             question.rules.isDisabled = true;
+            question.currentValue = "";
           }
       });
   }
@@ -622,6 +653,7 @@ export class OfferConstructDefaultValue {
       questionList.forEach(question => {
           if (question.question == "TMS Node AS") {
             question.rules.isDisabled = true;
+            question.currentValue = "";
           }
       });
   }
@@ -630,12 +662,36 @@ export class OfferConstructDefaultValue {
       questionList.forEach(question => {
           if (question.question == "TMS Node AS") {
             question.rules.isDisabled = true;
+            question.currentValue = "";
           }
       });
   }
   
   
-  setTMSNOdeTS(questionList) {
+  setTMSNOdeTS(questionList, beListType) {
+    questionList.forEach(question => {
+        if (question.question == "TMS Node TS") {
+          question.rules.isDisabled = false;
+          question.rules.isMandatoryOptional = "Optional";
+          if (question.question == 'TMS Node TS') {
+            if (beListType == "Collaboration") {
+              question.currentValue = "UC/HVS/SWSS/SUB/TRAN Svc";
+              question.previousValue = "UC/HVS/SWSS/SUB/TRAN Svc";
+            }
+            if (beListType == "Security") {
+              question.currentValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
+              question.previousValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
+            }
+            else {
+              question.currentValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
+              question.previousValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
+            }
+          }
+        }
+    });
+  }
+  
+  setTMSNOdeTSMonthly(questionList) {
     questionList.forEach(question => {
         if (question.question == "TMS Node TS") {
           question.rules.isDisabled = false;
@@ -648,11 +704,12 @@ export class OfferConstructDefaultValue {
     questionList.forEach(question => {
         if (question.question == "TMS Node TS") {
           question.rules.isDisabled = true;
+          question.currentValue = "";
         }
     });
   }
   
-  setTMSNOdeTS1(questionList) {
+  setTMSNOdeTS1(questionList, beListType) {
     let tmsDefault;
     questionList.forEach(question => {
         if (question.question == "Service Type?") {
@@ -664,15 +721,28 @@ export class OfferConstructDefaultValue {
         if(tmsDefault == "Support"){
             question.rules.isDisabled = false;
             question.rules.isMandatoryOptional = "Optional";
+            if (beListType == "Collaboration") {
+              question.currentValue = "UC/HVS/SWSS/SUB/TRAN Svc";
+              question.previousValue = "UC/HVS/SWSS/SUB/TRAN Svc";
+            }
+            if (beListType == "Security") {
+              question.currentValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
+              question.previousValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
+            }
+            else {
+              question.currentValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
+              question.previousValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
+            }
         }
         else{
             question.rules.isDisabled = true;
+            question.currentValue = "";
         }
       }
     });
   }
   
-  setTMSNOdeTSDefault(questionList) {
+  setTMSNOdeTSDefault(questionList, beListType) {
     let tmsTsDefault;
     questionList.forEach(question => {
         if (question.question == "Percentage Amount") {
@@ -683,35 +753,50 @@ export class OfferConstructDefaultValue {
       if (question.question == "TMS Node TS") {
         if(tmsTsDefault != "blank" || tmsTsDefault != ""){
             question.rules.isDisabled = false;
-            question.rules.isMandatoryOptional = "Optional";
+            if (beListType == "Collaboration") {
+              question.currentValue = "UC/HVS/SWSS/SUB/TRAN Svc";
+              question.previousValue = "UC/HVS/SWSS/SUB/TRAN Svc";
+            }
+            if (beListType == "Security") {
+              question.currentValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
+              question.previousValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
+            }
+            else {
+              question.currentValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
+              question.previousValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
+            }
         }
         else{
             question.rules.isDisabled = true;
+            question.currentValue = "";
         }
       }
     });
   }
   
-  setTMSNOdeTSN1(questionList) {
+  setTMSNOdeTSN1(questionList, beListType) {
       questionList.forEach(question => {
           if (question.question == "TMS Node TS") {
             question.rules.isDisabled = true;
+            question.currentValue = "";
           }
       });
   }
   
-  setTMSNOdeTSDefaultN(questionList) {
+  setTMSNOdeTSDefaultN(questionList, beListType) {
       questionList.forEach(question => {
           if (question.question == "TMS Node TS") {
             question.rules.isDisabled = true;
+            question.currentValue = "";
           }
       });
   }
   
-  setTMSNOdeTSDisable(questionList) {
+  setTMSNOdeTSDisable(questionList, beListType) {
       questionList.forEach(question => {
           if (question.question == "TMS Node TS") {
             question.rules.isDisabled = true;
+            question.currentValue = "";
           }
       });
   }
@@ -720,14 +805,27 @@ export class OfferConstructDefaultValue {
        questionList.forEach(question => {
            if (question.question == "TMS Node AS") {
              question.rules.isDisabled = true;
+             question.currentValue = "";
            }
        });
    }
   
-  setTMSNOdeTSN2(questionList) {
+  setTMSNOdeTSN2(questionList, beListType) {
       questionList.forEach(question => {
           if (question.question == "TMS Node TS") {
             question.rules.isDisabled = false;
+            if (beListType == "Collaboration") {
+              question.currentValue = "UC/HVS/SWSS/SUB/TRAN Svc";
+              question.previousValue = "UC/HVS/SWSS/SUB/TRAN Svc";
+            }
+            if (beListType == "Security") {
+              question.currentValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
+              question.previousValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
+            }
+            else {
+              question.currentValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
+              question.previousValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
+            }
           }
       });
   }
@@ -736,6 +834,7 @@ export class OfferConstructDefaultValue {
       questionList.forEach(question => {
           if (question.question == "Monthly Support Pricing Minimum Value") {
             question.rules.isDisabled = true;
+            question.currentValue = "";
           }
       });
   }
