@@ -66,6 +66,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   sources: Source[];
   measureSources: Source[] = [];
   rules: AllocationRule[] = [];
+  rulesAI: AllocationRule[] = [];
   errs: string[] = [];
   yearmos: { fiscalMonthName: string, fiscalMonth: number }[];
   disableReportingLevels = [];
@@ -228,7 +229,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.yearmos = shUtil.getFiscalMonthListFromDate(new Date(), 6);
     const promises: Promise<any>[] = [
       this.measureService.getManyActive().toPromise(),
-      this.ruleService.getManyLatestGroupByNameActive().toPromise(),
+      this.ruleService.getManyLatestGroupByNameActiveInactive().toPromise(),
       this.sourceService.getMany().toPromise(),
       this.submeasureService.getDistinct('name', {moduleId: this.store.module.moduleId}).toPromise(),
       this.pgLookupService.callRepoMethod('getSubmeasurePNLNodes', null, {moduleId: this.store.module.moduleId}).toPromise(),
@@ -240,7 +241,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     Promise.all(promises)
       .then(results => {
         this.measures = _.sortBy(results[0], 'name');
-        this.rules = _.sortBy(results[1], 'name');
+        this.rules = _.sortBy(results[1].filter(x => x.status === 'A'), 'name');
+        this.rulesAI = results[1];
         this.sources = _.sortBy(results[2], 'name');
         this.submeasureNames = results[3];
         this.pnlNodesAll = results[4];
@@ -1181,7 +1183,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   showDescription(idx) {
     let html;
     const name = this.sm.rules[idx];
-    const rule = _.find(this.rules, {name});
+    const rule = _.find(this.rulesAI, {name});
     if (!rule) {
       html = `Rule ${name} doesn't exist.`;
     } else {
