@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 export class EnvironmentService {
 
     owbUrl: string;
+    tncOwbUrl: string;
     baseApiUrl: string;
     baseIdpUrl: string;
     redirectUrl: string;
@@ -175,6 +176,11 @@ export class EnvironmentService {
     REST_API_UPDATE_MODULE_STATUS_URL: string;
     REST_API_GET_MODULE_STATUS_URL: string;
 
+    // SERVICE MAPPING
+    REST_API_DOWNLOAD_CONFIG_SHEET: string;
+    REST_API_GET_MAPPING_STATUS: string;
+    REST_CHECK_MAESTRO_PF_STATUS: string;
+    
     constructor() {
         this.setEnvironmentVariables();
     }
@@ -204,6 +210,7 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb.cloudapps.cisco.com/owb';
+                this.tncOwbUrl = 'https://offer.cloudapps.cisco.com/owb/#/subscription';
                 break;
             case 'stage':
                 this.baseApiUrl = 'https://cool-srv-stg.cisco.com/coolsrv';
@@ -214,7 +221,8 @@ export class EnvironmentService {
                 this.baseIdpUrl = 'https://idp-stage-api.cisco.com';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
-                this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';                
+                this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
+                this.tncOwbUrl = 'https://offer-stage.cloudapps.cisco.com/owb/#/subscription';                
                 break;
             case 'qualityassurance':
                 this.baseApiUrl = 'https://cool-srv-qa.cisco.com/coolsrv';
@@ -226,6 +234,7 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
+                this.tncOwbUrl = 'https://offer-stage.cloudapps.cisco.com/owb/#/subscription';
                 break;
             case 'development':
                 this.baseApiUrl = 'https://cool-srv-dev.cisco.com/coolsrv';
@@ -237,6 +246,7 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
+                this.tncOwbUrl = 'https://offer-stage.cloudapps.cisco.com/owb/#/subscription';
                 break;
             default:
                 this.baseApiUrl = '/api';
@@ -248,6 +258,7 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
+                this.tncOwbUrl = 'https://offer-stage.cloudapps.cisco.com/owb/#/subscription';
         }
 
         // ----------------------- AUTHENTICATION URLs -----------------------------------------------
@@ -403,7 +414,7 @@ export class EnvironmentService {
 
          // --------------------------------------- TERM AND CONTENT MAPPING --------------------------------------------
 
-         this.REST_API_RETRIEVE_TERM_CONTENT_MAPPING_URL = this.baseApiUrl + '/serviceAnnuityPricing/getPricingOfferLevel';
+         this.REST_API_RETRIEVE_TERM_CONTENT_MAPPING_URL = this.baseApiUrl + '/offersetup/getTNCMappingObject';
  
         // -------------------------------------- CSDL --------------------------------------------------------------------------
 
@@ -449,5 +460,9 @@ export class EnvironmentService {
         this.REST_API_GET_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module/getPirateshipModuleStatus';
         this.REST_API_UPDATE_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module/addPirateshipModuleStatus';
 
+        // --------------------------------------- SERVICE MAPPING --------------------------------------------
+        this.REST_API_DOWNLOAD_CONFIG_SHEET = this.baseApiUrl + '/serviceMapping/xls';
+        this.REST_API_GET_MAPPING_STATUS = this.baseApiUrl + '/serviceMapping/getStatus';
+        this.REST_CHECK_MAESTRO_PF_STATUS = this.baseApiUrl + '/serviceMapping/pf/status';
     }
 }

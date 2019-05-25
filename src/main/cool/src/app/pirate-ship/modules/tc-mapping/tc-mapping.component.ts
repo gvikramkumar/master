@@ -43,6 +43,7 @@ export class TcMappingComponent implements OnInit, OnDestroy {
   atoNames: string[] = [];
   atoList: any;
   selectedObjectAto: any;
+  selectedIndex: any;
 
   paramsSubscription: Subscription;
 
@@ -87,62 +88,16 @@ export class TcMappingComponent implements OnInit, OnDestroy {
       this.getLeadTimeCalculation();
 
     });
-
-    this.atoList = [
-      {
-        "itemCategory": "MAJOR",
-        "itemName": "Major1",
-        "itemType": "HYBRID",
-      "itemStatus": "In Progress",
-        "minorPids": [
-          {
-            "itemCategory": "MINOR",
-            "itemName": "License1",
-            "itemType": "LICENSE",
-            "mappingStaus": "Y",
-            "swSubcriptionSkuList": ["CON-SKU-1","CON-SKU-2"]
-          },
-          {
-            "itemCategory": "MINOR",
-            "itemName": "License2",
-            "itemType": "LICENSE",
-            "mappingStaus": "N",
-            "swSubcriptionSkuList": []
-          }
-        ]
-      },
-      {
-        "itemCategory": "MAJOR",
-        "itemName": "Major2",
-        "itemType": "LICENSE",
-        "itemStatus": "Complete",
-          "minorPids": [
-            {
-              "itemCategory": "Major",
-              "itemName": "Major2",
-              "itemType": "LICENSE",
-              "mappingStaus": "Y",
-              "swSubcriptionSkuList": ["CON-SKU-2"]
-            }
-          ]
-      },
-      {
-            "itemName": "Hardware 1",
-            "itemType": "Hardware",
-            "itemCategory": "Major",
-            "mappingStatus": "Not Required",
-            "minorPids": [],
-            "orderabilityCheckStatus": null,
-            "npiTestOrderFlag": null,
-            "errorOrWarning": null,
-            "ssoStatus": null
-        }
-    ];
-
+    this.atoList = [];
     this.tncMapping.getTncMapping(this.offerId).subscribe(atoList => {
       this.atoNames = ['Overall Offer'];
+      this.selectedIndex = 0;
+      this.atoList = atoList.data;
       for (let i = 0; i < this.atoList.length; i++) {
         this.atoNames.push(this.atoList[i].itemName);
+        if (!this.atoList[i].hasOwnProperty('itemStatus') && this.atoList[i].hasOwnProperty('mappingStatus')) {
+          this.atoList[i].itemStatus = this.atoList[i].mappingStatus;
+        }
       }
     }, error => {
       console.log('error', error);
@@ -162,21 +117,21 @@ export class TcMappingComponent implements OnInit, OnDestroy {
 
   // -------------------------------------------------------------------------------------------------------------------
 
-  showSelectedAtoView(dropDownValue: string) {
+  showSelectedAtoView(dropDownValue: any) {
 
-    if (dropDownValue === 'Overall Offer') {
+    if (dropDownValue === 'Overall Offer' || dropDownValue === 0) {
 
-      this.selectedAto = dropDownValue;
+      this.selectedAto = this.atoNames[dropDownValue];
       this.showCompleteSubscriptionButton = true;
 
     } else {
 
-      this.selectedAto = dropDownValue;
+      this.selectedAto = this.atoNames[dropDownValue];
       this.showCompleteSubscriptionButton = true;
 
     }
     for (let i = 0; i < this.atoList.length; i++) {
-      if (this.atoList[i].itemName === this.selectedAto) {
+      if (this.atoList[i].itemName === this.selectedAto && i === dropDownValue - 1) {
         this.selectedObjectAto = this.atoList[i];
       }
     }
@@ -226,8 +181,8 @@ export class TcMappingComponent implements OnInit, OnDestroy {
   goToOfferWorkBench() {
 
     const userId = this.configurationService.startupData.userId;
-    let urlToOpen = this.environmentService.owbUrl + '/owb/manage/offer/owbOfferDefinition?';
-    urlToOpen += 'selectedAto=' + this.selectedAto + '&planId=' + this.planId + '&userId=' + userId + '&coolOfferId=' + this.offerId;;
+    let urlToOpen = this.environmentService.tncOwbUrl;
+    // urlToOpen += 'selectedAto=' + this.selectedAto + '&planId=' + this.planId + '&userId=' + userId + '&coolOfferId=' + this.offerId;;
 
     window.open(urlToOpen, '_blank');
   }

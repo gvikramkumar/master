@@ -26,9 +26,17 @@
               </div>
 
               <div class="pull-right">
-                <app-view-offer [atoNames]="atoNames" [selectedAto]="selectedAto"
-                  (atoSelection)="showSelectedAtoView($event)">
-                </app-view-offer>
+
+                <div class="form-group dropdown label--inline ">
+                    <div class="form-group__text select">
+                      <label>Viewing</label>
+                      <select #dropDown="ngModel" [(ngModel)]="selectedIndex" (change)="showSelectedAtoView(dropDown.value)">
+                        <option *ngFor=" let ato of atoNames; let i = index;" [value]="i">
+                          {{ato}}</option>
+                      </select>
+                    </div>
+                  </div>
+
               </div>
 
             </div>
@@ -40,7 +48,7 @@
           </div>
 
           <ng-template #selectedAtoView>
-
+            <br><br>
             <p-accordion>   
                 <p-accordionTab header="{{selectedAto}}" [selected]="true">
                   <div *ngFor="let eachElement of selectedObjectAto?.minorPids">
