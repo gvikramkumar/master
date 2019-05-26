@@ -15,12 +15,20 @@ export class MarkCompletePopupComponent implements OnInit {
   @Input() currentURL;
   @Output() closeMarkCompletePopup = new EventEmitter<string>();
   @Output() confirmMarkComplete = new EventEmitter<string>();
+  content1: String;
+  content2: String;
+  content3: String;
+  confirmButtonname: String;
   
 
   constructor(private menuBarService: MenuBarService) { }
 
   ngOnInit() {
 
+  }
+
+  ngOnChanges(){
+    this.choosePopUp();
   }
 
   close() {
@@ -42,6 +50,21 @@ export class MarkCompletePopupComponent implements OnInit {
       this.confirmMarkComplete.next('');
     });
    
+  }
+
+  choosePopUp() {
+    if(this.markCompleteStatus === true) {
+      this.content1 = "Marking pages as complete will lock the page for edits.";
+      this.content2 = "Mark as Complete tool can be unchecked as long as Design Review approvals have not been requested.";
+      this.content3 = "Please confirm if you would like to continue.";
+      this.confirmButtonname = "Mark Complete"
+      
+    } else{
+      this.content1 = "Do you want to uncheck the Mark As Complete Tool?";
+      this.content2 = "";
+      this.content3 = "";
+      this.confirmButtonname ="Uncheck"
+    }
   }
 
 
