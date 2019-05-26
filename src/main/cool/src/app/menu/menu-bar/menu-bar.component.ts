@@ -37,6 +37,7 @@ export class MenuBarComponent implements OnInit {
     showMarkcompleteToggle: boolean = false;
     currentURL: String;
     canUncheckComplete: boolean;
+    shouldDisable: boolean = false;
     currentOfferId: String = '';
     holdStatusValid = true;
     cancelStatusValid = true;
@@ -155,6 +156,8 @@ export class MenuBarComponent implements OnInit {
             this.getMarkCompleteStatus.next(this.markCompleteStatus);
             debugger;
             this.getCanUncheckCompleteStatus();
+         
+         
         })
 
         this.monetizationModelService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
@@ -294,41 +297,47 @@ export class MenuBarComponent implements OnInit {
         this.menuBarService.getDesignReviewStatus(this.offerId).subscribe(data => {
             debugger;
               this.designReviewRequestApprovalStatus = data['designReviewRequestApproval'];
-              if (this.markCompleteStatus == true && this.designReviewRequestApprovalStatus == true){
+              if (this.designReviewRequestApprovalStatus == true){
                 this.canUncheckComplete = false;
             } else {
                 this.canUncheckComplete = true;
             }
-            console.log('status'+this.canUncheckComplete)
+            this.disableMarkCompleteToggle();
          })
       
     }
 
     toggleMarkCompletePopup() {
-
-        debugger;
-        this.getCanUncheckCompleteStatus();
-        if(this.markCompleteStatus == false && this.canMarkComplete === true) {
-            this.showMarkcompletePopup = !this.showMarkcompletePopup;
-        }
-        if( this.markCompleteStatus === true && this.canUncheckComplete === true) {
-            this.showMarkcompletePopup = !this.showMarkcompletePopup;
-        }
-       
+       debugger;
+       this.showMarkcompletePopup = !this.showMarkcompletePopup;
     }
 
     closeMarkCompletePopup(message) {
-     
+     debugger;
         this.showMarkcompletePopup = false;
         this.markCompleteStatus = !this.markCompleteStatus;
         this.getMarkCompleteStatus.next(this.markCompleteStatus);
+        this.disableMarkCompleteToggle();
     }
 
     confirmMarkComplete(message) {
+        debugger;
         this.showMarkcompletePopup = false;
         this.getMarkCompleteStatus.next(this.markCompleteStatus);
+        this.disableMarkCompleteToggle();
     }
+    
+    disableMarkCompleteToggle() {
+        debugger;
 
+        if(this.markCompleteStatus === false && this.canMarkComplete === false) {
+           this.shouldDisable = true;
+        }
+         if(this.markCompleteStatus === true && this.canUncheckComplete === false) {
+            this.shouldDisable = true;
+         }
+         console.log('111:'+ this.shouldDisable)
+    }
 }
 
 
