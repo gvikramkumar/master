@@ -11,8 +11,8 @@ export class TcMappingService {
 
   constructor(private httpClient: HttpClient, private environmentService: EnvironmentService) { }
 
-  getTncMapping(offerId): Observable<any>{
-    const url = `${this.environmentService.REST_API_RETRIEVE_TERM_CONTENT_MAPPING_URL}/${offerId}`;
+  getTncMapping(offerId: string): Observable<any> {
+    const url = this.environmentService.REST_API_RETRIEVE_TERM_CONTENT_MAPPING_URL + '?offerId=' + offerId;
     return this.httpClient.get(url, { withCredentials: true });
   }
 

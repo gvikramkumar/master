@@ -1,9 +1,10 @@
 <div class="form-group dropdown label--inline ">
   <div class="form-group__text select">
     <label>Viewing</label>
-    <select #dropDown="ngModel" [(ngModel)]="selectedAto" (change)="onClick(dropDown.value)">
+    <select [(ngModel)]="selectedAto" (ngModelChange)="onClick($event)">
       <option *ngFor=" let ato of atoNames" [value]="ato">
         {{ato}}</option>
     </select>
   </div>
 </div>
+
