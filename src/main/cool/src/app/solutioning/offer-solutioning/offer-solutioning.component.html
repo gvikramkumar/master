@@ -1,5 +1,5 @@
 <app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="offerId" [offerName]="offerName"
-  [stakeData]="stakeData" [canMarkComplete]="osForm.valid" (updateMessage)="updateMessage($event)" (onProceedToNext)="proceedToOfferComponents($event)"
+  [stakeData]="stakeData" [canMarkComplete]="osForm.valid" (getMarkCompleteStatus)="getMarkCompleteStatus($event)" (updateMessage)="updateMessage($event)" (onProceedToNext)="proceedToOfferComponents($event)"
   [showSave]="true"> </app-menu-bar>
 
 <div class="content solutioning">
@@ -39,8 +39,11 @@
                 </div>
               </div>
               <div class="divider"></div>
-              <app-offersolutioning-card-one [selectedGroupData]="groupedQuestionsAndAnswers[osGroup]"
-                [groupData]="groupedQuestionsAndAnswers" [unGroupData]="unGroupedQuestionsAndAnswers">
+              <app-offersolutioning-card-one 
+              [selectedGroupData]="groupedQuestionsAndAnswers[osGroup]"
+              [groupData]="groupedQuestionsAndAnswers" 
+              [unGroupData]="unGroupedQuestionsAndAnswers"
+              [markCompleteStatus]="markCompleteStatus">
               </app-offersolutioning-card-one>
             </div>
 
