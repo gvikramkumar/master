@@ -54,6 +54,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   addDetails;
   productName;
   @Input() questions: any[] = [];
+  @Input() markCompleteStatus;
   @Output() getCanMarkCompleteStatus = new EventEmitter<boolean>();
   payLoad = '';
   itemCount;
@@ -522,67 +523,70 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   // remove node from offerConstructService.singleMultipleFormInfo
 
   deleteNode(rowNode) {
-    if (rowNode.parent == null) {
-      // If parent not present which means its a Major Item and may contains children.
-      // Therefore we have to remove complete element from offer array where uniquekey = rowData.uniqueKey
-      this.offerConstructItems.forEach((element) => {
-        if (element.data.uniqueKey == rowNode.node.data.uniqueKey) {
-          this.deleteItemToNode(element.data.uniqueKey, element.data.isMajorLineItem);
-          element.children.forEach((childElement) => {
-            console.log("childElement", childElement);
-            if (childElement.data.isGroupNode) {
-              childElement.children.forEach((child) => {
-                this.deleteItemToNode(child.data.uniqueKey, child.data.isMajorLineItem);
-              })
-            }
-            if (!childElement.data.isGroupNode) {
-              this.deleteItemToNode(childElement.data.uniqueKey, childElement.data.isMajorLineItem);
-            }
-          });
-        }
-      });
-    } else {
-      console.log("element");
-      this.offerConstructItems.forEach((element) => {
-        console.log(element);
-
-        if (element.data.uniqueKey == rowNode.parent.data.uniqueKey) {
-          // Loop through of all childrens of matched Parent data from Offer array
-          element.children.forEach((childElement) => {
-            if (childElement.data.isGroupNode) {
-              childElement.children.forEach((child) => {
-                this.deleteItemToNode(child.data.uniqueKey, child.data.isMajorLineItem);
-              })
-            } else {
-              if (childElement.data.uniqueKey == rowNode.node.data.uniqueKey) {
-                this.checkNodeUniqueKeyAndPatchQuestion(rowNode, false);
-                // Removed the child element from Parent Array of Offer construct Array
-              }
-            }
-          });
-        }
-      });
-      // Check if parent is a group Node.
-      if (rowNode.parent.data.isGroupNode) {
-        console.log("isGroupNode", rowNode.parent.data.isGroupNode);
-
+    if (this.markCompleteStatus === false) {
+      if (rowNode.parent == null) {
+        // If parent not present which means its a Major Item and may contains children.
+        // Therefore we have to remove complete element from offer array where uniquekey = rowData.uniqueKey
         this.offerConstructItems.forEach((element) => {
-          element.children.forEach((childElement) => {
-            // if (childElement.data.uniqueKey == rowNode.parent.data.uniqueKey) {
-            // Removed the child element from Parent Array of Offer construct Array
-            childElement.children.forEach((innerChildElement) => {
-              if (innerChildElement.data.uniqueKey == rowNode.node.data.uniqueKey) {
-                this.checkNodeUniqueKeyAndPatchQuestion(rowNode, false);
-                // Removed the child element from Parent Array of Offer construct Array
+          if (element.data.uniqueKey == rowNode.node.data.uniqueKey) {
+            this.deleteItemToNode(element.data.uniqueKey, element.data.isMajorLineItem);
+            element.children.forEach((childElement) => {
+              console.log("childElement", childElement);
+              if (childElement.data.isGroupNode) {
+                childElement.children.forEach((child) => {
+                  this.deleteItemToNode(child.data.uniqueKey, child.data.isMajorLineItem);
+                })
+              }
+              if (!childElement.data.isGroupNode) {
+                this.deleteItemToNode(childElement.data.uniqueKey, childElement.data.isMajorLineItem);
               }
             });
-            // }
-          });
+          }
         });
+      } else {
+        console.log("element");
+        this.offerConstructItems.forEach((element) => {
+          console.log(element);
+  
+          if (element.data.uniqueKey == rowNode.parent.data.uniqueKey) {
+            // Loop through of all childrens of matched Parent data from Offer array
+            element.children.forEach((childElement) => {
+              if (childElement.data.isGroupNode) {
+                childElement.children.forEach((child) => {
+                  this.deleteItemToNode(child.data.uniqueKey, child.data.isMajorLineItem);
+                })
+              } else {
+                if (childElement.data.uniqueKey == rowNode.node.data.uniqueKey) {
+                  this.checkNodeUniqueKeyAndPatchQuestion(rowNode, false);
+                  // Removed the child element from Parent Array of Offer construct Array
+                }
+              }
+            });
+          }
+        });
+        // Check if parent is a group Node.
+        if (rowNode.parent.data.isGroupNode) {
+          console.log("isGroupNode", rowNode.parent.data.isGroupNode);
+  
+          this.offerConstructItems.forEach((element) => {
+            element.children.forEach((childElement) => {
+              // if (childElement.data.uniqueKey == rowNode.parent.data.uniqueKey) {
+              // Removed the child element from Parent Array of Offer construct Array
+              childElement.children.forEach((innerChildElement) => {
+                if (innerChildElement.data.uniqueKey == rowNode.node.data.uniqueKey) {
+                  this.checkNodeUniqueKeyAndPatchQuestion(rowNode, false);
+                  // Removed the child element from Parent Array of Offer construct Array
+                }
+              });
+              // }
+            });
+          });
+        }
       }
+      this.deleteNodeFromOfferConstructItems(rowNode);  // remove node from offerconstruct Item
+      this.checkCanMarkCompleteStatus();
     }
-    this.deleteNodeFromOfferConstructItems(rowNode);  // remove node from offerconstruct Item
-    this.checkCanMarkCompleteStatus();
+   
   }
 
   /* METHOD: deleteNode
@@ -592,50 +596,53 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     */
 
   deleteNodeFromOfferConstructItems(rowNode) {
-    if (rowNode.parent == null) {
-      // If parent not present which means its a Major Item and may contains children.
-      // Therefore we have to remove complete element from offer array where uniquekey = rowData.uniqueKey
-      this.offerConstructItems.forEach((element, index) => {
-        if (element.data.uniqueKey == rowNode.node.data.uniqueKey) {
-          this.offerConstructItems.splice(index, 1);
-        }
-      });
-    } else {
-      // Means Remove event occurs on child elements of any parent.
-      // Here we will loop through all offer array and find parent index key then
-      // Another loop of children & find d we have to remove only that children whose uniquekey = rowData.uniqueKey
-      // Loop through All available offers construct items array
-      this.offerConstructItems.forEach((element) => {
-        if (element.data.uniqueKey == rowNode.parent.data.uniqueKey) {
-          // Loop through of all childrens of matched Parent data from Offer array
-          element.children.forEach((childElement, childIndex) => {
-            if (childElement.data.uniqueKey == rowNode.node.data.uniqueKey) {
-              element.children.splice(childIndex, 1);
-              // Removed the child element from Parent Array of Offer construct Array
-            }
-          });
-        }
-      });
-      // Check if parent is a group Node.
-      if (rowNode.parent.data.isGroupNode) {
-        this.offerConstructItems.forEach((element) => {
-          element.children.forEach((childElement) => {
-            if (childElement.data.uniqueKey == rowNode.parent.data.uniqueKey) {
-              // Removed the child element from Parent Array of Offer construct Array
-              childElement.children.forEach((innerChildElement, innerChildIndex) => {
-                if (innerChildElement.data.uniqueKey == rowNode.node.data.uniqueKey) {
-                  childElement.children.splice(innerChildIndex, 1);
-                  // Removed the child element from Parent Array of Offer construct Array
-                }
-              });
-            }
-          });
+    if (this.markCompleteStatus === false) {
+      if (rowNode.parent == null) {
+        // If parent not present which means its a Major Item and may contains children.
+        // Therefore we have to remove complete element from offer array where uniquekey = rowData.uniqueKey
+        this.offerConstructItems.forEach((element, index) => {
+          if (element.data.uniqueKey == rowNode.node.data.uniqueKey) {
+            this.offerConstructItems.splice(index, 1);
+          }
         });
+      } else {
+        // Means Remove event occurs on child elements of any parent.
+        // Here we will loop through all offer array and find parent index key then
+        // Another loop of children & find d we have to remove only that children whose uniquekey = rowData.uniqueKey
+        // Loop through All available offers construct items array
+        this.offerConstructItems.forEach((element) => {
+          if (element.data.uniqueKey == rowNode.parent.data.uniqueKey) {
+            // Loop through of all childrens of matched Parent data from Offer array
+            element.children.forEach((childElement, childIndex) => {
+              if (childElement.data.uniqueKey == rowNode.node.data.uniqueKey) {
+                element.children.splice(childIndex, 1);
+                // Removed the child element from Parent Array of Offer construct Array
+              }
+            });
+          }
+        });
+        // Check if parent is a group Node.
+        if (rowNode.parent.data.isGroupNode) {
+          this.offerConstructItems.forEach((element) => {
+            element.children.forEach((childElement) => {
+              if (childElement.data.uniqueKey == rowNode.parent.data.uniqueKey) {
+                // Removed the child element from Parent Array of Offer construct Array
+                childElement.children.forEach((innerChildElement, innerChildIndex) => {
+                  if (innerChildElement.data.uniqueKey == rowNode.node.data.uniqueKey) {
+                    childElement.children.splice(innerChildIndex, 1);
+                    // Removed the child element from Parent Array of Offer construct Array
+                  }
+                });
+              }
+            });
+          });
+        }
       }
+      this.offerConstructItems = [...this.offerConstructItems];
+      this.removeEginieMajorItemFromListofAlreadyAddedItems(rowNode.node.data.title);
+      this.updateChildCount();
     }
-    this.offerConstructItems = [...this.offerConstructItems];
-    this.removeEginieMajorItemFromListofAlreadyAddedItems(rowNode.node.data.title);
-    this.updateChildCount();
+    
   }
 
   enableEdit() {
@@ -1406,7 +1413,9 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 
   dragStartRow(item) {
-    if (this.readOnly === false) {
+    debugger;
+    if (this.readOnly === false && this.markCompleteStatus === false) {
+     
       this.draggedItem = item.node;
       this.selected = [...this.selected];
     }
@@ -1414,7 +1423,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 
   dragStart(item: any) {
-    if (this.readOnly === false) {
+    debugger;
+    if (this.readOnly === false && this.markCompleteStatus === false) {
       this.draggedItem = item;
     }
     this.isDisabledView = true;
@@ -1445,52 +1455,55 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   // }
 
   removeSelected() {
-    if (this.selected.length) {
-      this.selected.forEach((selectedItem) => {
-        if (selectedItem.parent == null) {
-          this.offerConstructItems.forEach((element) => {
-            this.removeEginieMajorItemFromListofAlreadyAddedItems(element.data.title);
-            if (element.data.uniqueKey == selectedItem.data.uniqueKey) {
-
-              // remove list form global variable
-              this.deleteQuestionToNode(selectedItem.data.uniqueKey, selectedItem.data.isMajorLineItem);
-            }
-          });
-        } else {
-          this.offerConstructItems.forEach((element) => {
-            if (element.data.uniqueKey == selectedItem.parent.data.uniqueKey) {
-              // Loop through of all childrens of matched Parent data from Offer array
-              element.children.forEach((childElement) => {
-                if (childElement.data.uniqueKey == selectedItem.data.uniqueKey) {
-                  // remove list form global variable
-                  this.deleteQuestionToNode(selectedItem.data.uniqueKey, selectedItem.data.isMajorLineItem);
-                }
-              });
-            }
-
-            // Check if parent is a group Node.
-            if (selectedItem.parent.data.isGroupNode) {
-              this.offerConstructItems.forEach((element) => {
+    if (this.markCompleteStatus === false) {
+      if (this.selected.length) {
+        this.selected.forEach((selectedItem) => {
+          if (selectedItem.parent == null) {
+            this.offerConstructItems.forEach((element) => {
+              this.removeEginieMajorItemFromListofAlreadyAddedItems(element.data.title);
+              if (element.data.uniqueKey == selectedItem.data.uniqueKey) {
+  
+                // remove list form global variable
+                this.deleteQuestionToNode(selectedItem.data.uniqueKey, selectedItem.data.isMajorLineItem);
+              }
+            });
+          } else {
+            this.offerConstructItems.forEach((element) => {
+              if (element.data.uniqueKey == selectedItem.parent.data.uniqueKey) {
+                // Loop through of all childrens of matched Parent data from Offer array
                 element.children.forEach((childElement) => {
-                  if (childElement.data.uniqueKey == selectedItem.parent.data.uniqueKey) {
-                    // Removed the child element from Parent Array of Offer construct Array
-                    childElement.children.forEach((innerChildElement) => {
-                      if (innerChildElement.data.uniqueKey == selectedItem.data.uniqueKey) {
-                        // remove list form global variable
-                        this.deleteQuestionToNode(selectedItem.data.uniqueKey, selectedItem.data.isMajorLineItem);
-                        // childElement.children.splice(innerChildIndex, 1);
-                      }
-                    });
+                  if (childElement.data.uniqueKey == selectedItem.data.uniqueKey) {
+                    // remove list form global variable
+                    this.deleteQuestionToNode(selectedItem.data.uniqueKey, selectedItem.data.isMajorLineItem);
                   }
                 });
-              });
-            }
-          });
-        }
-      });
+              }
+  
+              // Check if parent is a group Node.
+              if (selectedItem.parent.data.isGroupNode) {
+                this.offerConstructItems.forEach((element) => {
+                  element.children.forEach((childElement) => {
+                    if (childElement.data.uniqueKey == selectedItem.parent.data.uniqueKey) {
+                      // Removed the child element from Parent Array of Offer construct Array
+                      childElement.children.forEach((innerChildElement) => {
+                        if (innerChildElement.data.uniqueKey == selectedItem.data.uniqueKey) {
+                          // remove list form global variable
+                          this.deleteQuestionToNode(selectedItem.data.uniqueKey, selectedItem.data.isMajorLineItem);
+                          // childElement.children.splice(innerChildIndex, 1);
+                        }
+                      });
+                    }
+                  });
+                });
+              }
+            });
+          }
+        });
+      }
+      this.removeSelectedNode();  //  remove selected node from offerConstructItems
+      this.checkCanMarkCompleteStatus();
     }
-    this.removeSelectedNode();  //  remove selected node from offerConstructItems
-    this.checkCanMarkCompleteStatus();
+   
   }
 
   removeSelectedNode() {

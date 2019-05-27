@@ -19,6 +19,7 @@ export class MarkCompletePopupComponent implements OnInit {
   content2: String;
   content3: String;
   confirmButtonname: String;
+  title: String;
   
 
   constructor(private menuBarService: MenuBarService) { }
@@ -54,16 +55,19 @@ export class MarkCompletePopupComponent implements OnInit {
 
   choosePopUp() {
     if(this.markCompleteStatus === true) {
+      this.title = "Mark Complete";
       this.content1 = "Marking pages as complete will lock the page for edits.";
       this.content2 = "Mark as Complete tool can be unchecked as long as Design Review approvals have not been requested.";
       this.content3 = "Please confirm if you would like to continue.";
-      this.confirmButtonname = "Mark Complete"
+      this.confirmButtonname = "Mark Complete";
+
       
     } else{
+      this.title = "Uncheck Complete";
       this.content1 = "Do you want to uncheck the Mark As Complete Tool?";
       this.content2 = "";
       this.content3 = "";
-      this.confirmButtonname ="Uncheck"
+      this.confirmButtonname ="Uncheck";
     }
   }
 

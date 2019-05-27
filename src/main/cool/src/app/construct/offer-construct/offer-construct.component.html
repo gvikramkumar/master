@@ -1,5 +1,5 @@
 <app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId" [offerName]="offerName"
-  [stakeData]="stakeData" [canMarkComplete]="canMarkComplete" (updateMessage)="updateMessage($event)">
+  [stakeData]="stakeData" [canMarkComplete]="canMarkComplete" (updateMessage)="updateMessage($event)" (getMarkCompleteStatus)="getMarkCompleteStatus($event)">
 </app-menu-bar>
 
 <div class="content">
@@ -26,7 +26,7 @@
           </div>
           <div class="row base-margin-top">
             <div class="col-md-12">
-              <app-offerconstruct-canvas (getCanMarkCompleteStatus)="getCanMarkCompleteStatus($event)"></app-offerconstruct-canvas>
+              <app-offerconstruct-canvas [markCompleteStatus]="markCompleteStatus" (getCanMarkCompleteStatus)="getCanMarkCompleteStatus($event)"></app-offerconstruct-canvas>
             </div>
           </div>
         </div>

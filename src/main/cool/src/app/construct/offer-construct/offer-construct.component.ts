@@ -45,6 +45,7 @@ export class OfferConstructComponent implements OnInit, OnDestroy {
   proceedButtonStatusValid = true;
   subscription: Subscription;
   canMarkComplete: boolean = false;
+  markCompleteStatus: boolean;
 
   constructor(private router: Router,
     private stakeholderfullService: StakeholderfullService,
@@ -244,8 +245,12 @@ export class OfferConstructComponent implements OnInit, OnDestroy {
   getCanMarkCompleteStatus(status) {
 
     this.canMarkComplete = status;
+ 
+  }
 
-    
+  getMarkCompleteStatus(status) {
+    debugger;
+    this.markCompleteStatus = status;
   }
 
   ngOnDestroy() {
