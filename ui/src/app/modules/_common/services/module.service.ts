@@ -7,6 +7,7 @@ import {environment} from '../../../../environments/environment';
 import {AppStore} from '../../../app/app-store';
 import {RestBase} from '../../../core/base-classes/rest-base';
 import _ from 'lodash';
+import {UserService} from '../../../core/services/user.service';
 
 const apiUrl = environment.apiUrl;
 
@@ -15,13 +16,17 @@ const apiUrl = environment.apiUrl;
 })
 export class ModuleService extends RestBase<DfaModule> {
 
-  constructor(httpClient: HttpClient, store: AppStore) {
+  constructor(httpClient: HttpClient, store: AppStore, private userService: UserService) {
     super('module', httpClient, store);
   }
-
-  refreshStore(): Promise<DfaModule[]> {
-    return this.callMethod('getActiveSortedByDisplayOrder').toPromise()
-      .then(modules => {
+  // The user has its own modules, so it must be refreshed at the same time
+  refreshStoreModulesAndUser(): Promise<DfaModule[]> {
+    return Promise.all([
+      this.callMethod('getActiveSortedByDisplayOrder').toPromise(),
+      this.userService.refreshUser()
+    ])
+      .then(results => {
+        const modules = results[0];
         this.store.pubModules(modules);
         return modules;
       });

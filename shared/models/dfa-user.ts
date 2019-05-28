@@ -5,7 +5,7 @@ import {DfaModule} from '../../ui/src/app/modules/_common/models/module';
 import {shUtil} from '../misc/shared-util';
 
 export default class DfaUser {
-  moduleId?: number;
+  _moduleId?: number;
   store?: AnyObj;
   genericRoles = ['itadmin', 'biz-admin', 'super-user', 'biz-user', 'end-user'];
 
@@ -146,7 +146,7 @@ export default class DfaUser {
       throw new Error(`getRolesFromGenericRoles: all roles must be generic or actual.`);
     }
     const rtn = [];
-    if (shUtil.isAdminModuleId(this.getModuleId())) {
+    if (shUtil.isAdminModuleId(this.moduleId)) {
       return [];
     }
     roles.forEach(role => {
@@ -185,7 +185,7 @@ export default class DfaUser {
       throw new Error(`getRolesFromGenericRoles: all roles must be generic or actual.`);
     }
     const rtn = [];
-    if (shUtil.isAdminModuleId(this.getModuleId())) {
+    if (shUtil.isAdminModuleId(this.moduleId)) {
       return [];
     }
     roles.forEach(role => {
@@ -225,7 +225,7 @@ export default class DfaUser {
   getModuleAdminRole() {
     const roles = this.getModuleRoles().filter(this.isAdminRoleType.bind(this));
     if (roles.length !== 1) {
-      throw new Error(`getModuleAdminRole: no admin role for moduleId: ${this.getModuleId()}`);
+      throw new Error(`getModuleAdminRole: no admin role for moduleId: ${this.moduleId}`);
     }
     return roles[0];
   }
@@ -233,7 +233,7 @@ export default class DfaUser {
   getModuleSuperUserRole() {
     const roles = this.getModuleRoles().filter(this.isSuperUserRoleType.bind(this));
     if (roles.length !== 1) {
-      throw new Error(`getModuleSuperUserRole: no super user role for moduleId: ${this.getModuleId()}`);
+      throw new Error(`getModuleSuperUserRole: no super user role for moduleId: ${this.moduleId}`);
     }
     return roles[0];
   }
@@ -241,7 +241,7 @@ export default class DfaUser {
   getModuleBusinessUserRole() {
     const roles = this.getModuleRoles().filter(this.isBusinessUserRoleType.bind(this));
     if (roles.length !== 1) {
-      throw new Error(`getModuleEndUserRole: no business user role for moduleId: ${this.getModuleId()}`);
+      throw new Error(`getModuleEndUserRole: no business user role for moduleId: ${this.moduleId}`);
     }
     return roles[0];
   }
@@ -249,13 +249,13 @@ export default class DfaUser {
   getModuleEndUserRole() {
     const roles = this.getModuleRoles().filter(this.isEndUserRoleType.bind(this));
     if (roles.length !== 1) {
-      throw new Error(`getModuleEndUserRole: no end user role for moduleId: ${this.getModuleId()}`);
+      throw new Error(`getModuleEndUserRole: no end user role for moduleId: ${this.moduleId}`);
     }
     return roles[0];
   }
 
   getModuleRoles(): string[] {
-    const moduleId = this.getModuleId();
+    const moduleId = this.moduleId;
     const module = _.find<DfaModule>(this.modules, {moduleId});
     if (!module || !module.roles.length) {
       throw new Error(`getModuleRoles: no roles for moduleId: ${moduleId}`);
@@ -263,14 +263,17 @@ export default class DfaUser {
     return shUtil.stringToArray(module.roles);
   }
 
-  // we use this from the api which needs to set DfaUser.moduleId before calling any functions that require it.
-  // we use it from the ui which needs to set DfaUser.store before calling any functions that use it.
-  getModuleId(_moduleId?) {
-    const moduleId = _moduleId || _.get(this.store, 'module.moduleId');
+  get moduleId() {
+    // api gets moduleId from req.dfa, ui gets moduleId from store
+    const moduleId = this._moduleId || _.get(this.store, 'module.moduleId');
     if (!moduleId) {
-      throw new Error('getModuleId: no moduleId or store.module.moduleId');
+      throw new Error('DfaUser.moduleId: no req.dfa moduleId or store.module.moduleId');
     }
     return moduleId;
+  }
+
+  set moduleId(moduleId) {
+   this._moduleId = moduleId;
   }
 
   hasUserId(_allowedUserIds) {

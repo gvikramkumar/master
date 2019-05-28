@@ -88,9 +88,17 @@ export function addGlobalData() {
         const lookups = results[0];
         const modules = results[1];
         const openPeriods = results[2];
-        modules.forEach(mod => mod.fiscalMonth = _.find(openPeriods, {moduleId: mod.moduleId}).fiscalMonth);
+        modules.forEach(mod => {
+          if (mod.status === 'A') {
+            mod.fiscalMonth = _.find(openPeriods, {moduleId: mod.moduleId}).fiscalMonth;
+          }
+        });
         const fiscalMonths: AnyObj = {};
-        modules.forEach(mod => fiscalMonths[mod.abbrev] = mod.fiscalMonth);
+        modules.forEach(mod => {
+          if (mod.status === 'A') {
+            fiscalMonths[mod.abbrev] = mod.fiscalMonth;
+          }
+        });
 
         const dfa = new ApiDfaData({
           req: req,
@@ -104,6 +112,7 @@ export function addGlobalData() {
         });
         const moduleId = req.query.moduleId || req.body.moduleId;
         if (moduleId) {
+          req.user.moduleId = moduleId;
           dfa.module = _.find(modules, {moduleId: Number(moduleId)});
         }
         req.dfa = dfa;

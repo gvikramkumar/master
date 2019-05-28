@@ -331,16 +331,21 @@ export default class ControllerBase {
 
   // delete /:id
   remove(req, res, next) {
-    this.repo.remove(req.params.id)
+    this.removeOnePromise(req, res, next)
+      .then(item => res.json(item))
+      .catch(next);
+  }
+
+  removeOnePromise(req, res, next) {
+    return this.repo.remove(req.params.id)
       .then(item => {
         if (this.pgRepo && this.isMirrorRepo) {
           this.pgRepo.removeOne(req.query.postgresIdProp)
-            .then(() => res.json(item));
+            .then(() => item);
         } else {
-          res.json(item);
+          return item;
         }
-      })
-      .catch(next);
+      });
   }
 
   // delete /query-one
@@ -352,7 +357,7 @@ export default class ControllerBase {
           this.pgRepo.removeQueryOne(filter)
             .then(() => res.json(item));
         } else {
-          res.json(item);
+          res.json(item); // returns {recordCount: xxx}
         }
       })
       .catch(next);
