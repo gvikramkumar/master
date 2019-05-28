@@ -1,3 +1,7 @@
+app-menu-bar .panel.panel--ltgray.panel--compressed {
+  box-shadow: inset 0 -4px 20px rgba(0,0,0,0.045);
+  border-bottom: solid 1px #ededed;
+}
 button#flyOut {
   background: transparent;
   color: #666;

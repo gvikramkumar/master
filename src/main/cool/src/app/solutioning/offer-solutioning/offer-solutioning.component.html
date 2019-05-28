@@ -11,10 +11,10 @@
       <app-taskbar (onProceedToNext)="proceedToOfferComponents($event)">
       </app-taskbar>
 
-      <div class="row">
+      <div class="row base-margin-top">
         <div class="leftContent col-sm-12 col-md-9">
 
-          <ul class="list list--highlight base-margin-top">
+          <ul class="list">
             <li>
               <div class="panel panel--bordered"><span class="text-success"><span
                     class="icon-check-outline icon-medium"></span>
@@ -25,7 +25,7 @@
           <!-- Note -->
 
           <div class="col-lg-6 col-xl-3">
-            <br><span *ngIf="!osForm.valid" class="text-danger">* Please answer mandatory questions</span><br>
+            <span *ngIf="!osForm.valid" class="text-danger">* Please answer mandatory questions</span>
           </div>
 
           <!-- OS Group -->
@@ -34,11 +34,11 @@
 
             <div *ngFor="let osGroup of Object.keys(groupedQuestionsAndAnswers), let i = index">
               <div class="row">
-                <div class="col-md-12 base-padding-top text-large">
+                <div class="col-md-12 base-margin-top base-padding-top text-large">
                   <h3>{{osGroup}}</h3>
                 </div>
               </div>
-              <div class="divider"></div>
+
               <app-offersolutioning-card-one [selectedGroupData]="groupedQuestionsAndAnswers[osGroup]"
                 [groupData]="groupedQuestionsAndAnswers" [unGroupData]="unGroupedQuestionsAndAnswers">
               </app-offersolutioning-card-one>
