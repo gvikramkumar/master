@@ -3,13 +3,13 @@ import {AllocationRule} from '../models/allocation-rule';
 import {ruleUtil} from '../misc/rule-util';
 
 /*
+test coverage:
 *getslectarray
 *getselectstring
-parserules
+*parserules
 *getselectarrayfromrule
 *verifyentryinmaparray
 *findSelectInMapArray
-
  */
 describe('SelectExceptionMap tests', () => {
   let sut, one, two, three;
@@ -452,7 +452,7 @@ describe('SelectExceptionMap tests', () => {
       expect(() => sut.parseRules(rules)).toThrowError(`SelectExceptionMap.parseRules: bad prefix, exception: SL1XE1, rule name: DONT-MATTER-SL1XE1`);
     });
 
-    it('exception: bad index value', () => {
+    it('should skip entries with bad index values', () => {
       const rules = [
         {
           name: 'DONT-MATTER-SL1EX',
@@ -461,7 +461,7 @@ describe('SelectExceptionMap tests', () => {
       ];
       rules.forEach(rule => ruleUtil.createSelectArrays(rule));
       sut.parseRules(rules);
-      expect(sut.sl1Idx).toBe(0); // skips it if not E\d+
+      expect(sut.sl1Idx).toBe(0); // skips it if not E\d+, should never happen, but need to test for in name creation to make sure
     });
 
 
