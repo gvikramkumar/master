@@ -1,8 +1,8 @@
+<app-menu-bar [offerId]="offerId" [caseId]="caseId" [offerName]="offerName" [stakeData]="stakeData"
+[currentMMModel]="derivedMM" (updateMessage)="updateMessage($event)">
+</app-menu-bar>
 <div class="content">
   <div class="container">
-    <app-menu-bar [offerId]="offerId" [caseId]="caseId" [offerName]="offerName" [stakeData]="stakeData"
-      [currentMMModel]="derivedMM" (updateMessage)="updateMessage($event)">
-    </app-menu-bar>
     <div class="panel-wrapper mt-15">
       <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName"
         [selectedATO]="selectedAto">
@@ -12,50 +12,38 @@
         <div class="leftContent">
           <section *ngIf="isCsdlRequired">
             <div class="row">
-              <div class="col-md-12">
-                <h3 style="color: mediumblue">Is CSDL Required?</h3>
-                <p>Cisco products and solutions are in the majority of enterprise,<br>
-                  service provider, government, and commercial entities around the world.<br>
-                  This means Cisco offerings are consistent targets for miscreant hackers and nation-state attacks as
-                  well.<br>
-                  Employing the processes and tools of CSDL helps Cisco reduce security risks,<br>
-                  mitigate key vulnerabilities, and better meet customer demands for a more-secure product.<br>
-                  To learn more about CSDL, <a (click)="onOpenCsdlTab()">click here.</a></p>
+              <div class="col-md-6">
+                <h3 style="color: mediumblue">Is CSDL Required? <span class="icon-lock" *ngIf="isLocked"></span></h3>
+                <br>
+                <div style="text-align: justify;
+                text-justify: inter-word;">Cisco products and solutions are in the majority of enterprise,
+                  service provider, government, and commercial entities around the world.
+                  This means Cisco offerings are consistent targets for miscreant hackers and nation-state attacks as well. 
+                  Employing the processes and tools of CSDL helps Cisco reduce security risks, mitigate key vulnerabilities, 
+                  and better meet customer demands for a more-secure product. To learn more about CSDL, 
+                  <a (click)="onOpenCsdlTab()">click here.</a></div>
+                  <br>
               </div>
             </div>
             <div class="row">
-              <div class="col-md-12" *ngIf="derivedMM !== 'MM6'">
-                <div class="form-group form-group--inline">
-                  <label class="radio">
-                    <input type="radio" name="inline-regular-radio" (change)="onCsdlRequired($event)">
-                    <span class="radio__input"></span>
-                    <span class="radio__label">Yes</span>
-                  </label>
-                </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <div class="form-group form-group--inline">
-                  <label class="radio">
-                    <input type="radio" name="inline-regular-radio" (change)="onCsdlNotRequired($event)">
-                    <span class="radio__input"></span>
-                    <span class="radio__label">No</span>
-                  </label>
+                <div class="col-md-12">
+                  <div class="form-group form-group--inline">
+                    <label class="radio">
+                      <input type="radio" name="inline-regular-radio" (change)="onCsdlRequired($event)" [value]="true"
+                        [ngModel]="derivedMM == 'MM6'" [disabled]="isLocked">
+                      <span class="radio__input"></span>
+                      <span class="radio__label">Yes</span>
+                    </label>
+                  </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <div class="form-group form-group--inline">
+                    <label class="radio">
+                      <input type="radio" name="inline-regular-radio" (change)="onCsdlNotRequired($event)" [value]="false"
+                       [disabled]="derivedMM == 'MM6'">
+                      <span class="radio__input"></span>
+                      <span class="radio__label">No</span>
+                    </label>
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-12" *ngIf="derivedMM === 'MM6'">
-                <div class="form-group form-group--inline">
-                  <label class="radio">
-                    <input type="radio" name="inline-regular-radio" checked>
-                    <span class="radio__input"></span>
-                    <span class="radio__label">Yes</span>
-                  </label>
-                </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <div class="form-group form-group--inline">
-                  <label class="radio disabled">
-                    <input type="radio" name="inline-regular-radio">
-                    <span class="radio__input"></span>
-                    <span class="radio__label">No</span>
-                  </label>
-                </div>
-              </div>
             </div><br>
             <div class="divider divider--compressed"></div><br>
             <div class="row" *ngIf="derivedMM === 'MM6' || csdlRequired">
@@ -67,17 +55,20 @@
                         <div class="col-md-6">
                           <div class="form-group half-margin-bottom">
                             <div class="form-group__text">
-                              <p-autoComplete formControlName="csdlId" [(ngModel)]="selectedProject" class="form-control" [size]="100" field="csdlId"
-                                [minLength]="3" scrollHeight="150px" placeholder="Search by CSDL ID or Project Name" [suggestions]="results" (completeMethod)="searchProjectNames($event)" field="project_id"
-                                required>
+                              <p-autoComplete formControlName="csdlId" [(ngModel)]="selectedProject" class="form-control" [size]="100" 
+                                field="csdlId" [minLength]="3" scrollHeight="150px" placeholder="Search by CSDL ID or Project Name" 
+                                [suggestions]="results" (completeMethod)="searchProjectNames($event)" field="project_id" required>
                                 <ng-template pTemplate="body" let-item>
                                   <tbody>
                                     <tr>
-                                      <td>
+                                      <td style="padding-right: 50px;">
                                         {{item.project_id}}
                                       </td>
-                                      <td>
+                                      <td style="padding-right: 50px;">
                                         {{item.project_name}}
+                                      </td>
+                                      <td>
+                                        {{item.project_type}}
                                       </td>
                                     </tr>
                                   </tbody>
@@ -86,7 +77,10 @@
                             </div>
                           </div><br>
                           <span>ID or Project not showing up?</span>&nbsp;&nbsp;
-                          <span class="icon-refresh" (click)="refreshProjectList()">Refresh Latest Search Data</span>
+                          <a (click)="refreshProjectList()">
+                            <span class="icon-refresh"></span>
+                            Refresh Latest Search Data
+                          </a>
                         </div>
                         <div class="col-md-2 task--bar">
                           <button class="btn btn--primary" type="submit" [disabled]="!csdlForm.valid" (click)="submitCoolToCsdl()">Submit</button>
@@ -94,9 +88,12 @@
                         <div class="col-md-4 task--bar">
                           <button class="btn btn--primary" type="submit" (click)="createNewCsdlIdDailog()">Create New
                             ID</button><br><br>
-                          <span class="icon-info-outline icon-small" pTooltip="Creating a New ID will notify and create Loorem ipsum dolor sit amet, consectetur
-                          adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore" tooltipPosition="top">
-                            I don't have an ID, create one for me</span>
+                          <div style="text-align: justify;
+                          text-justify: inter-word;">
+                            If you know a CSDL project does not exist representing this offering, choose this option. 
+                            This option will automatically create a placeholder CSDL project in Security Insights. 
+                            To view list of registered project please visit Security Insights at wwwin-si.cisco.com.
+                          </div>
                         </div>
                       </div>
                     </form>
@@ -107,11 +104,11 @@
             <div class="row" *ngIf="csdlNotRequired">
               <form [formGroup]="notRequiredCsdlForm">
                 <div class="col-md-12">
-                  <div class="subheader" style="color: midnightblue">Why is CSDL not Required?</div>
+                  <div class="subheader" style="color: midnightblue">Why is CSDL not Required? <span class="icon-lock" *ngIf="isLocked"></span></div>
                   <div class="form-group">
                     <label class="radio">
                       <input type="radio" name="stacked-radio" value="noCode" formControlName="noCode" name="noCode"
-                        class="form-control">
+                        class="form-control" [attr.disabled]="isLocked ? 'disabled' : null">
                       <span class="radio__input"></span>&nbsp;&nbsp;
                       <span class="radio__label">No code executed</span>
                     </label>&nbsp;&nbsp;
@@ -120,15 +117,26 @@
                   <div class="form-group">
                     <label class="radio">
                       <input type="radio" name="stacked-radio" value="noNewCode" formControlName="noCode" name="noCode"
-                        class="form-control">
+                        class="form-control" [attr.disabled]="isLocked ? 'disabled' : null">
                       <span class="radio__input"></span>&nbsp;&nbsp;
                       <span class="radio__label">No new code</span>
                     </label>&nbsp;&nbsp;
                     <span>Example: Existing SW being used with no new features added. Or if a true SW maintenance release</span>
-                  </div><br><br>
-                  <div class="form-group task--bar">
-                    <button class="btn btn--primary" type="submit" [disabled]="!notRequiredCsdlForm.valid || isCompleteButtonDisabled" 
-                    (click)="onComplete()"><span class="icon-check-outline text-success" *ngIf="isCompleteButtonDisabled"></span>  Complete</button>
+                  </div>
+                </div>
+                <div class="row" style="margin-top: 4%">
+                  <div class="col-md-4 task--bar">
+                    <button class="btn btn--secondary" type="submit" [disabled]="!notRequiredCsdlForm.valid || isCompleteButtonDisabled"
+                      (click)="onComplete()"><span class="icon-check-outline text-success" *ngIf="isCompleteButtonDisabled"></span>
+                      Complete</button>
+                  </div>
+                  <div class="col-md-8 task--bar">
+                    <button class="btn btn--secondary" type="submit" (click)="restartModule()" [disabled]="disableRestartModule">Restart Module <span
+                        class="icon-redial"></span></button>
+                    <div style="text-align: justify;
+                        text-justify: inter-word;"><br>
+                      <a>Restart module</a> to undo CSDL Not Required
+                    </div>
                   </div>
                 </div>
               </form>
@@ -144,8 +152,9 @@
         </div>
       </div>
     </div>
-    <p-dialog [showHeader]="false" [responsive]="true" [(visible)]="displayNewCsdlIdDailog" [width]="600" [height]="450"
-      [minWidth]="600" [minHeight]="450">
+
+    <p-dialog [showHeader]="false" [(visible)]="displayNewCsdlIdDailog" [responsive]="true" [width]="600" [height]="500"
+      [minWidth]="600" [minHeight]="500">
       <div class="row">
         <div class="col-md-12">
           <div class="pull-right">
@@ -153,57 +162,112 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-12 text-center">
-          <h2>Create a New CSDL ID</h2>
-        </div>
-      </div>
-      <div class="row" style="margin-top: 30px">
-        <div class="col-md-12 text-center">
-          <h5>A new project will be created leveraging the following information</h5>
-        </div>
-      </div>
-      <div class="row" style="margin-top: 30px">
-        <div class="col-md-12 text-center">
-          <div class="row">
-            <span>Product Family: {{ productFamilyAnswer }}</span>
-          </div>
-          <div class="row">
-            <span>Offer Name: {{ offerName }}</span>
-          </div>
-          <div class="row">
-            <span>Business Unit contact: John Smith</span>
+      <div *ngIf="displayProjectType">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <h2>What type of project would you like to create?</h2>
           </div>
         </div>
+        <div class="row" style="margin-top: 30px">
+          <div class="col-md-12 text-center">
+            <div style="text-align: justify;
+                        text-justify: inter-word;">
+              Select the deployment model to be used for this project. i.e. How will this product be offered to customers.
+              Select ‘On Premise Offering’, if the offer is hosted on customer premise by the customer.
+              Select ‘Cloud Offering’ if the offer is for a Cisco hosted offering in the cloud, requires CATO.
+              Select 'Solution' if the offer is a grouping of multiple projects either ‘On-Premise Offering’,
+              ‘Cloud Offering’, or a combination of them.
+            </div>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 30px">
+          <div class="col-md-12">
+            <select id="selected" class="form-control" [(ngModel)]="selectedDropValue" style="width: 100%">
+              <option value="cloud">Cloud Offering - Cisco hosted in the cloud, CATO</option>
+              <option value="on-premise">On-Premise Offering</option>
+              <option value="solution">Solution Offering - Grouping of offering types</option>
+            </select>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 75px">
+          <div class="col-md-12 text-center task--bar">
+            <button class="btn btn--primary" type="button" (click)="nextCsdlAssociation()">Next</button>
+          </div>
+        </div>
       </div>
-      <div class="row" style="margin-top: 75px">
-        <div class="col-md-12 text-center task--bar">
-          <button class="btn btn--primary" type="submit" (click)="submitCsdlAssociation()">Submit</button>
+      <div *ngIf="displayNewCsdl">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <h2>Create a New CSDL ID</h2>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 30px">
+          <div class="col-md-12 text-center">
+            <h5>A new project will be created leveraging the following information</h5>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 30px">
+          <div class="col-md-12 text-center">
+            <div class="row">
+              <span>Product Family: {{ productFamilyAnswer }}</span>
+            </div>
+            <div class="row">
+              <span>Offer Name: {{ offerName }}</span>
+            </div>
+            <div class="row">
+              <span>Business Unit contact: {{businessUnitContact}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 75px">
+          <div class="col-md-12 text-center task--bar">
+            <button class="btn btn--primary" type="submit" (click)="submitCsdlToContinue()">Submit</button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="displayContinueInfo">
+        <div class="row" style="margin-top: 30px">
+          <div class="col-md-12 text-center">
+            <h2>ID Creation In Progress</h2>
+          </div>
+        </div><br><br>
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <h5>A new ID is being created in CSDL please return here in 24 hours to confirm creation</h5>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 75px">
+          <div class="col-md-12 text-center task--bar">
+            <button class="btn btn--primary" type="submit" (click)="onContinue()">Continue</button>
+          </div>
         </div>
       </div>
     </p-dialog>
-    <p-dialog [showHeader]="false" [responsive]="true" [(visible)]="displayIdCreationDailog" [width]="600"
-      [height]="400" [minWidth]="600" [minHeight]="400">
+
+    <p-dialog [showHeader]="false" [responsive]="true" [(visible)]="displayRestartModuleDailog" [width]="500"
+      [height]="400" [minWidth]="500" [minHeight]="400">
       <div class="row">
         <div class="col-md-12">
           <div class="pull-right">
-            <span class="icon-close" (click)="closeCreateNewCsdlIdDailog()"></span>
+            <span class="icon-close" (click)="closeRestartModuleDailog()"></span>
           </div>
         </div>
       </div>
       <div class="row" style="margin-top: 30px">
         <div class="col-md-12 text-center">
-          <h2>ID Creation In Progress</h2>
+          <h2>Restart Module</h2>
         </div>
       </div><br><br>
       <div class="row">
         <div class="col-md-12 text-center">
-          <h5>A new ID is being created in CSDL please return here in 24 hours to confirm creation</h5>
+          <h5>You're about to restart this module and will be taken to 
+            beginning of the CSDL sequence</h5>
         </div>
       </div>
       <div class="row" style="margin-top: 75px">
         <div class="col-md-12 text-center task--bar">
-          <button class="btn btn--primary" type="submit" (click)="onContinue()">Continue</button>
+          <button class="btn btn--secondary" type="submit" (click)="closeRestartModuleDailog()">Cancel</button>
+          <button class="btn btn--primary" type="submit" (click)="restartModuleConfirm()">Restart Module</button>
         </div>
       </div>
     </p-dialog>

@@ -8,6 +8,8 @@ import * as moment from 'moment';
 import { OfferconstructCanvasService } from './../../../construct/offer-construct-canvas/service/offerconstruct-canvas.service';
 import { OfferConstructDefaultValue } from './../../../construct/offer-construct-canvas/service/offer-construct-defaultvalue-services';
 import {ConfirmationService} from 'primeng/api';
+import { OfferDetailViewService } from '@app/services/offer-detail-view.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'dynamic-form-multiple',
@@ -26,11 +28,13 @@ export class DynamicFormMultipleComponent implements OnInit {
     public majorLineItemsActive: Boolean = false;
     public copyAttributeResults: any;
     public results: any;
+    public beListType: any;
     public selectedProduct: any = [];
     public selectedTab: string;
     public itemsData: any;
     public itemsList: any = [];
     public lengthList: any;
+    currentOfferId;
     public currenntHeaderName: any;
     @Output() valueChange = new EventEmitter();
     @Output() clkDownloadZip = new EventEmitter();
@@ -52,8 +56,13 @@ export class DynamicFormMultipleComponent implements OnInit {
         private offerConstructCanvasService: OfferconstructCanvasService,
         private loaderService: LoaderService,
         private datePipe: DatePipe,
+        private activatedRoute: ActivatedRoute,
         private defaultValueServices: OfferConstructDefaultValue,
+        private offerDetailViewService: OfferDetailViewService,
         private confirmationService: ConfirmationService) {
+            this.activatedRoute.params.subscribe(params => {
+              this.currentOfferId = params['offerId'];
+            });
     }
 
     ngOnInit() {
@@ -65,6 +74,7 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.tableShowCondition = true;
         this.selectedTab = 'major';
         this.createObjectForSearch();
+        this.offerDetailView();
 
         console.log(this.offerInfo);
 
@@ -99,6 +109,25 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.majorLineItemsActive = false;
         this.minorLineItemsActive = true;
         this.selectedTab = 'minor';
+    }
+    getprimaryBEListType(primaryBEList) {
+        this.beListType = primaryBEList[0];
+    }
+    
+    offerDetailView() {
+      // Check if construct details are availbale in the database for the current offer.
+      this.offerDetailViewService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetailRes => {
+        if (offerDetailRes.primaryBEList !== null && offerDetailRes.primaryBEList !== undefined) {
+          if (offerDetailRes.primaryBEList.length > 0) {
+            this.getprimaryBEListType(offerDetailRes.primaryBEList);
+          }
+        }
+      }, (err) => {
+        console.log(err);
+        this.loaderService.stopLoading();
+      }, () => {
+        this.loaderService.stopLoading();
+      });
     }
 
     onHideViewDetailsModal() {
@@ -496,6 +525,127 @@ export class DynamicFormMultipleComponent implements OnInit {
                 }
 
             }
+            
+            if (question.question == "SOA Pricing") {
+                if (question.currentValue == "Flat") {
+                    this.defaultValueServices.setSoaPricingbasedDefaultsFlat(questionList);
+                }
+                else {
+                    this.defaultValueServices.setSoaPricingbasedDefaultsFlatN(questionList);
+                }
+            }
+            
+            if (question.question == "SOA Pricing") {
+                if(question.currentValue == "% of Product List") {
+                    this.defaultValueServices.setSoaPricingbasedDefaultsProduct(questionList);
+                }
+                else {
+                    this.defaultValueServices.setSoaPricingbasedDefaultsProductN(questionList);
+                }
+            }
+            
+            if (question.question == "Support Pricing Minimum (monthly) ") {
+                if(question.currentValue == "Yes") {
+                    this.defaultValueServices.setMonthlySupportPricingProduct(questionList);
+                }
+                else {
+                    this.defaultValueServices.setMonthlySupportPricingProductN(questionList);
+                }
+            }
+            
+            if (question.question == "Monthly Amount") {
+                if(question.currentValue != "$0") {
+                    this.defaultValueServices.setTMSNOde(questionList);
+                }
+                else{
+                    this.defaultValueServices.setTMSNOdeN(questionList);
+                }
+            }
+            
+            if (question.question == "Percentage Amount") {
+                if(question.currentValue != "blank" || question.currentValue != "") {
+                    this.defaultValueServices.setTMSNOde1(questionList);
+                }
+                else{
+                    this.defaultValueServices.setTMSNOdeN1(questionList);
+                }
+            }
+            
+            if (question.question == "Service Type?") {
+                if(question.currentValue == "Service") {
+                    this.defaultValueServices.setTMSNOdeASDefault(questionList);
+                }
+                else{
+                    this.defaultValueServices.setTMSNOdeASDefaultN(questionList);
+                }
+            }
+            
+            if (question.question == "Service Type?") {
+                if(question.currentValue == "Support") {
+                    this.defaultValueServices.setTMSNOdeN2(questionList);
+                }
+            }
+            
+            if (question.question == "Monthly Amount") {
+                if(question.currentValue != "$0") {
+                    this.defaultValueServices.setTMSNOdeTS(questionList,this.beListType);
+                }
+                else{
+                    this.defaultValueServices.setTMSNOdeTSN(questionList);
+                }
+            }
+            
+            if (question.question == "Percentage Amount") {
+                if(question.currentValue != "blank" || question.currentValue != "") {
+                    this.defaultValueServices.setTMSNOdeTS1(questionList,this.beListType);
+                }
+                else{
+                    this.defaultValueServices.setTMSNOdeTSN1(questionList,this.beListType);
+                }
+            }
+            
+            if (question.question == "Service Type?") {
+                if(question.currentValue == "Service") {
+                    this.defaultValueServices.setTMSNOdeTSDefault(questionList,this.beListType);
+                }
+                else{
+                    this.defaultValueServices.setTMSNOdeTSDefaultN(questionList,this.beListType);
+                }
+            }
+            
+            
+            if (question.question == "Service Type?") {
+                if(question.currentValue == "Support") {
+                    this.defaultValueServices.setTMSNOdeTSN2(questionList,this.beListType);
+                }
+            }
+            
+            if (question.question == "Service Type?") {
+                if(question.currentValue == "Support") {
+                    this.defaultValueServices.setTMSNOdeASDisable(questionList);
+                }
+            }
+            
+            if (question.question == "Service Type?") {
+                if(question.currentValue == "Service") {
+                    this.defaultValueServices.setTMSNOdeTSDisable(questionList,this.beListType);
+                }
+            }
+            
+            if (question.question == "SOA Pricing") {
+                if(question.currentValue == "Flat") {
+                    this.defaultValueServices.setMonthlySupMin(questionList);
+                }
+            }
+            // 
+            // if (question.question == "Service Type?") {
+            //     if(question.currentValue != "Service") {
+            //         this.defaultValueServices.setTMSNOde(questionList);
+            //     }
+            //     else{
+            //         this.defaultValueServices.setTMSNOdeN(questionList);
+            //     }
+            // }
 
         }
         var validatorPattern = '';

@@ -51,4 +51,21 @@ export class MenuBarService {
       return this.httpClient.post(this.environmentService.REST_API_EMAIL_NOTIFICATION, data, httpOptions );
     }
 
+    getDesignReviewStatus(offerId) {
+      let url = this.environmentService.REST_API_OFFER_STATUS;
+      url += offerId;
+      return this.httpClient.get(url, { withCredentials: true });
+    }
+
+    getMarkCompleteStatus(offerId, caseId) {
+      let url = this.environmentService.REST_API_GET_MARK_COMPLETE_STATUS_URL;
+      url += offerId + '/' + caseId;
+      return this.httpClient.get(url, { withCredentials: true });
+    }
+
+    updateMarkCompleteStatus(data:object) {
+      let url = this.environmentService.REST_API_UPDATE_MARK_COMPLETE_STATUS_URL; 
+      return this.httpClient.post(url,data, { withCredentials: true });
+    }
+
 }

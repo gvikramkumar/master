@@ -1,5 +1,7 @@
 export const pirateShipRoutesNames = {
 
+    NO: 'N',
+    YES: 'Y',
     REOPEN: 'REOPEN',
     COMPLETED: 'COMPLETED',
     IN_PROGRESS: 'IN PROGRESS',
@@ -7,4 +9,5 @@ export const pirateShipRoutesNames = {
     OFFER_NOT_PRESENT: 'OFFER NOT PRESENT',
     OFFER_WORKFLOW_NOT_SETUP: 'OFFER WORKFLOW NOT SETUP'
 
-}
+};
+

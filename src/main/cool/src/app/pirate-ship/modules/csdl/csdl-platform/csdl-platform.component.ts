@@ -38,15 +38,24 @@ export class CsdlPlatformComponent implements OnInit {
   stakeHolders = {};
   csdlRequired: Boolean = false;
   csdlNotRequired: Boolean = false;
-  displayNewCsdlIdDailog: Boolean = false;
-  displayIdCreationDailog: Boolean = false;
-  isCsdlRequired: Boolean = true;
+  displayProjectType: Boolean = false;
+  displayNewCsdl: Boolean = false;
+  isCsdlRequired: Boolean = false;
   isCompleteButtonDisabled: Boolean = false;
+  displayRestartModuleDailog: Boolean = false;
+  displayNewCsdlIdDailog: Boolean = false;
   cols: any[];
   selectedAto: any;
   productFamilyAnswer;
   results;
   selectedProject;
+  businessUnitContact;
+  offerOwnerId;
+  isLocked: Boolean = false;
+  disableRestartModule: Boolean = true;
+  mileStoneStatus;
+  displayContinueInfo: Boolean = false;
+  selectedDropValue: string;
 
   constructor(
     private router: Router,
@@ -78,12 +87,19 @@ export class CsdlPlatformComponent implements OnInit {
 
     // load status tracking component in the below conditions.
     // 2. When csdlMileStone is in 'In progress'
-    this.csdlIntegrationService.getCsdlInfo(this.currentOfferId).subscribe((data) => {
-      this.isCsdlRequired = false;
+    this.csdlIntegrationService.getCsdlInfo(this.currentOfferId).subscribe(data => {
+      this.mileStoneStatus = data.csdlMileStoneStatus;
+      if (data.csdlMileStoneStatus === 'Complete' && data.csdlRequired === 'N') {
+        this.disableRestartModule = false;
+        this.isCsdlRequired = false;
+      }
       if (data.csdlMileStoneStatus === 'In Progress') {
+        this.isCsdlRequired = false;
         this.showComponent();
       } else if (data.csdlMileStoneStatus === 'Complete') {
         // When user selected CDSL Not Required and pressed complete button.
+        this.isLocked = true;
+        this.isCsdlRequired = true;
       } else {
         this.isCsdlRequired = true;
       }
@@ -116,6 +132,8 @@ export class CsdlPlatformComponent implements OnInit {
         this.data = this.firstData['stakeholders'];
         this.derivedMM = this.firstData['derivedMM'];
         this.offerName = this.firstData['offerName'];
+        this.businessUnitContact = this.firstData['ownerName'];
+        this.offerOwnerId = this.firstData['offerOwner'];
         if (
           Array.isArray(this.firstData['primaryBEList']) &&
           this.firstData['primaryBEList'].length
@@ -193,23 +211,19 @@ export class CsdlPlatformComponent implements OnInit {
   /**
    * When user click on Create New Id and when user click submit button
    */
-  submitCsdlAssociation() {
-    const csdlPayload = new CsdlPayload();
-    csdlPayload.coolOfferId = this.currentOfferId;
-    csdlPayload.csdlRequired = 'Y';
-    csdlPayload.csdlProjectSelected = 'N';
-    csdlPayload.associationStatus = 'Requested';
-    csdlPayload.productFamily = this.productFamilyAnswer;
-    // csdlPayload.bUContact = this.bUContact;
-    csdlPayload.csdlMileStoneStatus = 'In Progress';
-    this.createCsdlAssociation(csdlPayload);
+
+  nextCsdlAssociation() {
     // Hide Panels
-    this.displayNewCsdlIdDailog = false;
-    this.displayIdCreationDailog = true;
+    this.displayNewCsdl = true;
+    this.displayProjectType = false;
+    this.displayContinueInfo = false;
   }
 
-  createCsdlAssociation(csdlPayload) {
+  createCsdlAssociation(csdlPayload, isSearchItem) {
     this.csdlIntegrationService.createCsdlAssociation(csdlPayload).subscribe(data => {
+      if(isSearchItem){
+        this.showComponent();
+      }
       },
       err => {
         console.log(err);
@@ -218,8 +232,8 @@ export class CsdlPlatformComponent implements OnInit {
   }
 
   onContinue() {
+    this.displayNewCsdlIdDailog = false;
     this.isCsdlRequired = false;
-    this.displayIdCreationDailog = false;
     this.showComponent();
   }
 
@@ -233,15 +247,46 @@ export class CsdlPlatformComponent implements OnInit {
    * When user select is Csdl Not required 'No' radio button and upon clicking complete button
    */
   onComplete() {
+    this.disableRestartModule = false;
     const csdlPayload = new CsdlPayload();
     csdlPayload.coolOfferId = this.currentOfferId;
-    // csdlPayload.offerName = this.offerName;
+    csdlPayload.offerName = this.offerName;
     csdlPayload.csdlProjectSelected = 'N';
     csdlPayload.csdlRequired = 'N';
     csdlPayload.csdlMileStoneStatus = 'Complete';
+    csdlPayload.associationStatus = 'nan';
+    csdlPayload.projectId = null;
     this.csdlIntegrationService.createCsdlAssociation(csdlPayload).subscribe(
       data => {
         this.isCompleteButtonDisabled = true;
+        this.isLocked = true;
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
+
+  restartModule() {
+    this.displayRestartModuleDailog = true;
+  }
+
+  restartModuleConfirm() {
+    this.isCsdlRequired = true;
+    this.isLocked = false;
+    this.csdlNotRequired = false;
+    this.isCompleteButtonDisabled = false;
+    this.displayRestartModuleDailog = false;
+    this.disableRestartModule = true;
+    let csdlPayloadArray : any = [];
+    const csdlPayload = new CsdlPayload();
+    csdlPayload.coolOfferId = this.currentOfferId;
+    csdlPayload.csdlProjectSelected = 'N';
+    csdlPayload.csdlRequired = 'N';
+    csdlPayload.csdlMileStoneStatus = 'Available';
+    csdlPayloadArray.push(csdlPayload);
+    this.csdlIntegrationService.restartCsdlAssociation(csdlPayloadArray).subscribe(
+      data => {
       },
       err => {
         console.log(err);
@@ -278,11 +323,33 @@ export class CsdlPlatformComponent implements OnInit {
 
   createNewCsdlIdDailog() {
     this.displayNewCsdlIdDailog = true;
+    this.displayProjectType = true;
+    this.displayNewCsdl = false;
+    this.displayContinueInfo = false;
   }
 
   closeCreateNewCsdlIdDailog() {
-    this.displayNewCsdlIdDailog = false;
-    this.displayIdCreationDailog = false;
+   this.displayNewCsdlIdDailog = false;
+  }
+
+  submitCsdlToContinue() {
+    const csdlPayload = new CsdlPayload();
+    csdlPayload.coolOfferId = this.currentOfferId;
+    csdlPayload.csdlRequired = 'Y';
+    csdlPayload.csdlProjectSelected = 'N';
+    csdlPayload.associationStatus = 'requested';
+    csdlPayload.productFamily = this.productFamilyAnswer;
+    csdlPayload.bUContact = this.offerOwnerId;
+    csdlPayload.csdlMileStoneStatus = 'In Progress';
+    csdlPayload.projectType = this.selectedDropValue;
+    this.createCsdlAssociation(csdlPayload, false);
+    this.displayContinueInfo = true;
+    this.displayProjectType = false;
+    this.displayNewCsdl = false;
+  }
+
+  closeRestartModuleDailog() {
+    this.displayRestartModuleDailog = false;
   }
 
   /**
@@ -310,17 +377,16 @@ export class CsdlPlatformComponent implements OnInit {
     csdlPayload.coolOfferId = this.currentOfferId;
     csdlPayload.csdlRequired = 'Y';
     csdlPayload.csdlProjectSelected = 'Y';
-    csdlPayload.associationStatus = 'Requested';
+    csdlPayload.associationStatus = 'requested';
     csdlPayload.projectId = this.selectedProject.project_id;
     csdlPayload.projectType = this.selectedProject.project_type;
     csdlPayload.productFamily = this.productFamilyAnswer;
     csdlPayload.csdlMileStoneStatus = 'In Progress';
     // csdlPayload.bUContact = this.bUContact;
-    this.createCsdlAssociation(csdlPayload);
-    this.showComponent();
+    this.createCsdlAssociation(csdlPayload, true);
+    //this.showComponent();
     // Hide Panels
     this.isCsdlRequired = false;
-    this.displayIdCreationDailog = false;
   }
 
   /**
