@@ -61,7 +61,8 @@ export class MenuBarPopupComponent implements OnInit {
     this.closePopup.next('');
     this.reason = '';
   }
-
+  
+  
   submit() {
     let holdData = {};
     holdData['taskId'] = '';

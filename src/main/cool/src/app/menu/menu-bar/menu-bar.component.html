@@ -70,9 +70,17 @@
 
       <div class="col-md-6 text-right">
         <button class="menu-btn" (click)="saveCurrentState()" *ngIf="showSave">
-          <span class="ico-save-offer"></span>
-          Save
+            <span class="ico-save-offer"></span>
+            Save
         </button>
+
+        <label class="menu-btn switch switch—large" *ngIf="showMarkcompleteToggle">
+            <input type="checkbox" [(ngModel)]="markCompleteStatus" (change)="toggleMarkCompletePopup()"
+            [disabled]="(markCompleteStatus==false&&canMarkComplete==false)||(markCompleteStatus==true&&canUncheckComplete==false)"/>
+            <span class="switch__input"></span>
+            <span class="switch__label">Mark Complete</span>
+        </label>
+
         <button class="menu-btn" (click)="gotoOfferviewDetails()">
           <span class="ico-offer-details"></span>
           Offer Details
@@ -88,3 +96,11 @@
 </p-overlayPanel>
 
 <app-menu-bar-popup [show]="showPopup" [popupType]="popupType" (closePopup)="closePopup($event)"></app-menu-bar-popup>
+<app-mark-complete-popup 
+[offerId]="currentOfferId"
+[caseId]="caseId"
+[show]="showMarkcompletePopup"  
+[currentURL]="currentURL"
+[markCompleteStatus]="markCompleteStatus" 
+(closeMarkCompletePopup)="closeMarkCompletePopup($event)" 
+(confirmMarkComplete)="confirmMarkComplete($event)"></app-mark-complete-popup>
