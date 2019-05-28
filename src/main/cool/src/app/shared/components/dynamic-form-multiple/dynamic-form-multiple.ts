@@ -605,7 +605,7 @@ export class DynamicFormMultipleComponent implements OnInit {
             }
             
             if (question.question == "Service Type?") {
-                if(question.currentValue == "Service") {
+                if(question.currentValue == "Support") {
                     this.defaultValueServices.setTMSNOdeTSDefault(questionList,this.beListType);
                 }
                 else{
@@ -613,13 +613,13 @@ export class DynamicFormMultipleComponent implements OnInit {
                 }
             }
             
-            
-            if (question.question == "Service Type?") {
-                if(question.currentValue == "Support") {
-                    this.defaultValueServices.setTMSNOdeTSN2(questionList,this.beListType);
-                }
-            }
-            
+            // 
+            // if (question.question == "Service Type?") {
+            //     if(question.currentValue == "Support") {
+            //         this.defaultValueServices.setTMSNOdeTSN2(questionList,this.beListType);
+            //     }
+            // }
+            // 
             if (question.question == "Service Type?") {
                 if(question.currentValue == "Support") {
                     this.defaultValueServices.setTMSNOdeASDisable(questionList);
