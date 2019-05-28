@@ -154,7 +154,6 @@ export class MenuBarComponent implements OnInit {
                 this.showMarkcompleteToggle = true;
             }
             this.getMarkCompleteStatus.next(this.markCompleteStatus);
-            debugger;
             this.getCanUncheckCompleteStatus();
          
          
@@ -293,9 +292,7 @@ export class MenuBarComponent implements OnInit {
 
     getCanUncheckCompleteStatus() {
 
-        debugger;
         this.menuBarService.getDesignReviewStatus(this.offerId).subscribe(data => {
-            debugger;
               this.designReviewRequestApprovalStatus = data['designReviewRequestApproval'];
               if (this.designReviewRequestApprovalStatus == true){
                 this.canUncheckComplete = false;
@@ -308,12 +305,10 @@ export class MenuBarComponent implements OnInit {
     }
 
     toggleMarkCompletePopup() {
-       debugger;
        this.showMarkcompletePopup = !this.showMarkcompletePopup;
     }
 
     closeMarkCompletePopup(message) {
-     debugger;
         this.showMarkcompletePopup = false;
         this.markCompleteStatus = !this.markCompleteStatus;
         this.getMarkCompleteStatus.next(this.markCompleteStatus);
@@ -321,14 +316,12 @@ export class MenuBarComponent implements OnInit {
     }
 
     confirmMarkComplete(message) {
-        debugger;
         this.showMarkcompletePopup = false;
         this.getMarkCompleteStatus.next(this.markCompleteStatus);
         this.disableMarkCompleteToggle();
     }
     
     disableMarkCompleteToggle() {
-        debugger;
 
         if(this.markCompleteStatus === false && this.canMarkComplete === false) {
            this.shouldDisable = true;

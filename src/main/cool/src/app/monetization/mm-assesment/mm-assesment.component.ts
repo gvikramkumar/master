@@ -259,7 +259,6 @@ export class MmAssesmentComponent implements OnInit {
         }
 
         if (this.dimensionMode === true) {
-          debugger;
           // dimension page, remove the first tab
           this.dimensionFirstGroupData = this.groupData[0];
           this.dimensionFirstGroupName = this.groupNames[0];
@@ -1294,7 +1293,6 @@ if (this.dimensionMode === true ) {
   // Check Dimension at least select one attribute in each subGroup
   checkDimensionSubGroup(){
     //  In Dimension Mode, Set Condition To Enable The Mark Complete Button
-debugger;
     let next = 0;
     let subGroupLength = 0;
     this.groupData.forEach(groupObj => {
