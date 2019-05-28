@@ -55,7 +55,7 @@
               <textarea id="input-hint-textarea" class="textarea" rows="5" class="form-control"
                         [(ngModel)]="cmnt.description" #description="ngModel" name="description" maxlength="1000">
               </textarea>
-                  <label for="input-hint-textarea">Comments: <i>Optional</i>  <span style="color: red">({{1000-cmnt.description.length}} characters left)</span></label>
+                  <label for="input-hint-textarea">Comments: <i>Optional</i>  <span style="color: red">&nbsp;&nbsp;({{1000-cmnt.description.length}} characters left)</span></label>
                 </div>
               </div>
             </div>
@@ -106,7 +106,7 @@
                   <div>
                     <span class="icon-comment message-box">&nbsp;</span>
                     <span>{{comment.createdBy}}&nbsp;&nbsp;</span>
-                    <span>{{comment.timestamp | date:"d-MMM-y h:mm"}}&nbsp;PST</span>
+                    <span>{{comment.timestamp | date:"d-MMM-y h:mm a"| lowercase }}&nbsp;PST</span>
                   </div>
                   <div style="white-space:normal;word-break:break-all;padding-left:20px;">
                     <span class="text-small">{{comment.description}}</span>
