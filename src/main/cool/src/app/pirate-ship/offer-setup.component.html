@@ -12,11 +12,11 @@
       <app-taskbar [isValidToProceed]="proceedToreadinessreview" (onProceedToNext)="onProceedToNext()"></app-taskbar>
 
       <!-- left Panel -->
-      <div class="row half-margin-top">
+      <div class="row">
         <div class="leftContent col-sm-12 col-md-9">
 
           <!-- Message bar -->
-          <ul class="list">
+          <ul class="list base-margin-top">
             <li>
               <div *ngIf="showMM" class="panel panel--bordered">
                 <span class="text-success">
@@ -90,13 +90,13 @@
                         </button>
                         <!-- Not Yet Available -->
                         <button *ngIf="element['status']=='Not Yet Available'"
-                                class="btn btn--small btn--gray-ghost base-margin-bottom" placement="top"  (click)="getElementDetails(element)"><span
+                                class="btn btn--small btn--gray-ghost base-margin-bottom" placement="top"><span
                           class="milestone pull-left"></span>&nbsp;
                           {{element["moduleName"]}}
                         </button>
                         <!-- Not Required -->
                         <button *ngIf="element['status']=='Not Required'"
-                                class="btn btn--small btn--default base-margin-bottom disabled" placement="top"  (click)="getElementDetails(element)"><span
+                                class="btn btn--small btn--default base-margin-bottom disabled" placement="top"><span
                           class="milestone pull-left"></span>&nbsp;
                           {{element["moduleName"]}}
                         </button>
@@ -131,12 +131,12 @@
                         </button>
                         <!-- Not Yet Available -->
                         <button *ngIf="element['status']=='Not Yet Available'"
-                                class="btn btn--small btn--gray-ghost base-margin-bottom" placement="top"  (click)="getElementDetails(element)">
+                                class="btn btn--small btn--gray-ghost base-margin-bottom" placement="top">
                           {{element["moduleName"]}}
                         </button>
                         <!-- Not Required -->
                         <button *ngIf="element['status']=='Not Required'"
-                                class="btn btn--small btn--default base-margin-bottom disabled" placement="top"  (click)="getElementDetails(element)">
+                                class="btn btn--small btn--default base-margin-bottom disabled" placement="top">
                           {{element["moduleName"]}}
                         </button>
 
@@ -181,12 +181,12 @@
                               </button>
                               <!-- Not Yet Available -->
                               <button *ngIf="element['status']=='Not Yet Available'"
-                                      class="btn btn--small btn--gray-ghost base-margin-bottom" placement="top"  (click)="getElementDetails(element)">
+                                      class="btn btn--small btn--gray-ghost base-margin-bottom" placement="top">
                                 {{element["moduleName"]}}
                               </button>
                               <!-- Not Required -->
                               <button *ngIf="element['status']=='Not Required'"
-                                      class="btn btn--small btn--default base-margin-bottom disabled" placement="top"  (click)="getElementDetails(element)">
+                                      class="btn btn--small btn--default base-margin-bottom disabled" placement="top">
                                 {{element["moduleName"]}}
                               </button>
 
@@ -222,12 +222,12 @@
                               </button>
                               <!-- Not Yet Available -->
                               <button *ngIf="element['status']=='Not Yet Available'"
-                                      class="btn btn--small btn--gray-ghost base-margin-bottom" placement="top"  (click)="getElementDetails(element)">
+                                      class="btn btn--small btn--gray-ghost base-margin-bottom" placement="top">
                                 {{element["moduleName"]}}
                               </button>
                               <!-- Not Required -->
                               <button *ngIf="element['status']=='Not Required'"
-                                      class="btn btn--small btn--default base-margin-bottom disabled" placement="top"  (click)="getElementDetails(element)">
+                                      class="btn btn--small btn--default base-margin-bottom disabled" placement="top">
                                 {{element["moduleName"]}}
                               </button>
 
@@ -275,7 +275,7 @@
                               </button>
                               <!-- Not Required -->
                               <button *ngIf="element['status']=='Not Required'"
-                                      class="btn btn--small btn--default base-margin-bottom disabled" placement="top"  (click)="getElementDetails(element)">
+                                      class="btn btn--small btn--default base-margin-bottom disabled" placement="top">
                                 {{element["moduleName"]}}
                               </button>
 
@@ -318,12 +318,12 @@
                               </button>
                               <!-- Not Yet Available -->
                               <button *ngIf="element['status']=='Not Yet Available'"
-                                      class="btn btn--small btn--gray-ghost base-margin-bottom" placement="top"   (click)="getElementDetails(element)">
+                                      class="btn btn--small btn--gray-ghost base-margin-bottom" placement="top">
                                 {{element["moduleName"]}}
                               </button>
                               <!-- Not Required -->
                               <button *ngIf="element['status']=='Not Required'"
-                                      class="btn btn--small btn--default base-margin-bottom disabled" placement="top"  (click)="getElementDetails(element)">
+                                      class="btn btn--small btn--default base-margin-bottom disabled" placement="top">
                                 {{element["moduleName"]}}
                               </button>
 
@@ -367,12 +367,12 @@
                         </button>
                         <!-- Not Yet Available -->
                         <button *ngIf="element['status']=='Not Yet Available'"
-                                class="btn btn--small btn--gray-ghost half-margin-top" placement="top"  (click)="getElementDetails(element)">
+                                class="btn btn--small btn--gray-ghost half-margin-top" placement="top">
                           {{element["moduleName"]}}
                         </button>
                         <!-- Not Required -->
                         <button *ngIf="element['status']=='Not Required'"
-                                class="btn btn--small btn--default half-margin-top disabled" placement="top"  (click)="getElementDetails(element)">
+                                class="btn btn--small btn--default half-margin-top disabled" placement="top">
                           {{element["moduleName"]}}
                         </button>
                       </li>
@@ -413,7 +413,7 @@
                         </button>
                         <!-- Not Required -->
                         <button *ngIf="element['status']=='Not Required'"
-                                class="btn btn--small btn--default half-margin-top disabled" placement="top"  (click)="getElementDetails(element)"><span
+                                class="btn btn--small btn--default half-margin-top disabled" placement="top"><span
                           class="milestone pull-left"></span>&nbsp;
                           {{element["moduleName"]}}
                         </button>
@@ -443,12 +443,12 @@
                         </button>
                         <!-- Not Yet Available -->
                         <button *ngIf="element['status']=='Not Yet Available'"
-                                class="btn btn--small btn--gray-ghost base-margin-bottom" placement="top"  (click)="getElementDetails(element)">
+                                class="btn btn--small btn--gray-ghost base-margin-bottom" placement="top">
                           {{element["moduleName"]}}
                         </button>
                         <!-- Not Required -->
                         <button *ngIf="element['status']=='Not Required'"
-                                class="btn btn--small btn--default base-margin-bottom disabled" placement="top"  (click)="getElementDetails(element)">
+                                class="btn btn--small btn--default base-margin-bottom disabled" placement="top">
                           {{element["moduleName"]}}
                         </button>
                       </li>
