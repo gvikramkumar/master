@@ -249,7 +249,6 @@ export class OfferConstructComponent implements OnInit, OnDestroy {
   }
 
   getMarkCompleteStatus(status) {
-    debugger;
     this.markCompleteStatus = status;
   }
 
