@@ -215,8 +215,10 @@ export class MmAssesmentComponent implements OnInit {
       // Retrieve Offer Dimensions Attributes
       this.monetizationModelService.retrieveOfferDimensionAttributes().subscribe(offerData => {
 
-        this.offerData = offerData;
-        offerData['groups'].forEach(group => {
+        this.offerData = offerData;        
+        this.offerData['groups'] = _.isEmpty(this.offerData['groups']) ? [] : this.offerData['groups'];
+
+        this.offerData['groups'].forEach(group => {
           this.getGroupData(group, selectedCharacteristics);
         });
 
