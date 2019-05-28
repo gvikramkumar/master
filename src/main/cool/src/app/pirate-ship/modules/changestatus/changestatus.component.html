@@ -105,8 +105,8 @@
                 <div class="panel panel--bordered-bottom" *ngFor="let comment of comments">
                   <div>
                     <span class="icon-comment message-box">&nbsp;</span>
-                    <span>{{comment.createdBy}}&nbsp;&nbsp;</span>
-                    <span>{{comment.timestamp | date:"d-MMM-y h:mm a"| lowercase }}&nbsp;PST</span>
+                    <span>{{comment.createdBy}}&nbsp;&nbsp;</span><span>&nbsp;({{comment.userid}})&nbsp;&nbsp;</span>
+                    <span>{{comment.timestamp | date:"d-MMM-y h:mm a"}}&nbsp;PST</span>
                   </div>
                   <div style="white-space:normal;word-break:break-all;padding-left:20px;">
                     <span class="text-small">{{comment.description}}</span>

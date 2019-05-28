@@ -49,7 +49,7 @@ export class ChangestatusComponent implements OnInit {
   groupData = {};
   showGroupData:boolean = false;
   Options: any[] = [];
-  isReadOnly: boolean = false;
+  isReadOnly: boolean = true;
 
   ishide: boolean = true;
   isBtnNeeded: boolean = false;
@@ -106,7 +106,8 @@ export class ChangestatusComponent implements OnInit {
   }
 
   findFunctionRoles(moduleName: string, pirateShipSharedService: PirateShipSharedService) {
-    //console.log('pirateShipSharedService : ', pirateShipSharedService.getRole());
+    debugger;
+    console.log('pirateShipSharedService : ', pirateShipSharedService.getRole());
     switch (moduleName) {
       case 'NPI Licensing': {
         this.infohelp = this.basicmodule_hint.NPI_Licensing;
@@ -114,6 +115,7 @@ export class ChangestatusComponent implements OnInit {
           pirateShipSharedService.getRole()
           &&
           pirateShipSharedService.getRole() === 'SW Licensing') {
+
           this.isReadOnly = false;
         }
         break;
@@ -244,7 +246,7 @@ export class ChangestatusComponent implements OnInit {
     payload = {
       "offerId": this.offerId,
       "moduleName": this.moduleName,
-      "createdBy": this.pirateShipSharedService.getUserName()+' ('+this.pirateShipSharedService.getUserId()+')',
+      "createdBy": this.pirateShipSharedService.getUserName(),
       "description": this.cmnt.description,
       "timestamp": Number(date),
       "userid": this.pirateShipSharedService.getUserId()
