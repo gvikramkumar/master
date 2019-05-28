@@ -13,10 +13,9 @@ export class SelfServiceOrderabilityService {
 
   constructor(private httpClient: HttpClient, private environmentService: EnvironmentService) { }
 
-  retrieveAtoList(offerId: string): Observable<SelfServiceOrderability> {
-    const url = this.environmentService.REST_API_RETRIEVE_ATO_LIST_URL + '?offerId=' + offerId;
-    return null;
-    // this.httpClient.get<SelfServiceOrderability>(url).pipe(retry(1));
+  retieveSsoDetails(offerId: string): Observable<SelfServiceOrderability> {
+    const url = this.environmentService.REST_API_GET_SSO_DETAILS_URL + offerId;
+    return this.httpClient.get<SelfServiceOrderability>(url).pipe(retry(1));
   }
 
 }
