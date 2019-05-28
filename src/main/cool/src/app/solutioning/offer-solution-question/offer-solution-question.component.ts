@@ -18,6 +18,7 @@ export class OfferSolutionQuestionComponent implements OnInit {
   @Input() groupData: Array<any>;
   @Input() unGroupData: Array<any>;
   @Input() questionGroup: FormGroup;
+  @Input() markCompleteStatus;
 
   minDate: Date;
   caseId: string;
