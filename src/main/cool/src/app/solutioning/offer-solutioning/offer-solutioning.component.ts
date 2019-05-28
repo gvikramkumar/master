@@ -56,6 +56,7 @@ export class OfferSolutioningComponent implements OnInit {
   groupedQuestionsAndAnswers: Array<any> = [];
   unGroupedQuestionsAndAnswers: Array<any> = [];
   productFamily: string;
+  markCompleteStatus: boolean;
   
   @ViewChild('osForm') osForm: NgForm;
 
@@ -561,6 +562,8 @@ export class OfferSolutioningComponent implements OnInit {
   }
 
   // -----------------------------------------------------------------------------------------------------------------------------
-
+  getMarkCompleteStatus(status) {
+    this.markCompleteStatus = status;
+  }
 }
 

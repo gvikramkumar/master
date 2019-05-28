@@ -63,4 +63,9 @@ export class MenuBarService {
       return this.httpClient.get(url, { withCredentials: true });
     }
 
+    updateMarkCompleteStatus(data:object) {
+      let url = this.environmentService.REST_API_UPDATE_MARK_COMPLETE_STATUS_URL; 
+      return this.httpClient.post(url,data, { withCredentials: true });
+    }
+
 }
