@@ -184,7 +184,7 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
     }
 
     // Check If Valid User Is Logged In
-    userRoleCheck = (this.functionalRole.includes('BUPM') || this.functionalRole.includes('PDT'))
+    userRoleCheck = (this.functionalRole.includes('NPPM') || this.functionalRole.includes('PDT'))
       ? true : false;
 
     return (statusCheck && userRoleCheck);
