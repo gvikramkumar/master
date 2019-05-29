@@ -107,11 +107,11 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
             this.atoNames.push(dropDownValue.itemName);
           });
 
-        this.postPirateShipDashBoardNotification();
-
-        this.sso = this.ssoList.find(ato => ato.itemName === this.selectedAto);
-        const currentAtoStatus = _.isEmpty(this.sso.orderabilityCheckStatus) ? '' : this.sso.orderabilityCheckStatus;
+        this.sso = _.find(this.ssoList, ['orderabilityCheckStatus', this.selectedAto]);
+        const currentAtoStatus = _.isEmpty(this.sso) ? '' : this.sso.orderabilityCheckStatus;
         this.disableOrderabilityButton = this.disableOrderabilityButton ? this.orderabilityButtonStatus(currentAtoStatus) : false;
+
+        this.postPirateShipDashBoardNotification();
 
       });
 
@@ -144,7 +144,6 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
     window.open(urlToOpen, '_blank');
 
   }
-
 
   // -------------------------------------------------------------------------------------------------------------------
 
@@ -184,7 +183,7 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
     }
 
     // Check If Valid User Is Logged In
-    userRoleCheck = (this.functionalRole.includes('BUPM') || this.functionalRole.includes('PDT'))
+    userRoleCheck = (this.functionalRole.includes('NPPM') || this.functionalRole.includes('PDT'))
       ? true : false;
 
     return (statusCheck && userRoleCheck);
