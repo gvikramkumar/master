@@ -11,7 +11,7 @@
       <div class="leftContent col-sm-12 col-md-9">
         <div class="row base-margin-top">
           <div class="col-md-9">
-            Read Only <span class="icon-lock icon-small"></span>
+            <em>Read Only </em><span class="icon-lock icon-small"></span>
             Download config sheet for offline analysis
           </div>
           <div class="col-md-3">
@@ -24,7 +24,7 @@
           </div>
         </div>
         <div class="row col-md-12 base-margin-top">
-          <p-treeTable [value]="productDetails" [columns]="productColumns"
+          <p-treeTable class="service-mapping" [value]="productDetails" [columns]="productColumns"
             [resizableColumns]="true">
             <ng-template pTemplate="header" let-columns>
               <tr>
