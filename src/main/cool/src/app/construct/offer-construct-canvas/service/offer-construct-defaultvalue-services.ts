@@ -73,17 +73,17 @@ export class OfferConstructDefaultValue {
           element.previousValue = '30';
         }
       }
-      
+
       if (element.question == 'Service Type?') {
           element.currentValue = 'Support';
           element.previousValue = 'Support';
           element.rules.isDisabled = false;
       }
-      
+
       if (element.question == 'SOA Pricing') {
           element.rules.isDisabled = false;
       }
-      
+
       if (element.question === 'Service Type?') {
         // set pre define value according to service type
           this.serviceTypeValue = element.currentValue;
@@ -98,7 +98,7 @@ export class OfferConstructDefaultValue {
                 this.setMonthlySupportPricingProductN(listOfferQuestions);
             }
         }
-        
+
         if (element.question == "Monthly Amount") {
             if(element.currentValue != "$0") {
                 this.setTMSNOde(listOfferQuestions);
@@ -109,7 +109,7 @@ export class OfferConstructDefaultValue {
                 this.setTMSNOdeTSN(listOfferQuestions,);
             }
         }
-        
+
         if (element.question == "SOA Pricing") {
             if(element.currentValue == "% of Product List") {
                 this.setSoaPricingbasedDefaultsProduct(listOfferQuestions);
@@ -118,7 +118,7 @@ export class OfferConstructDefaultValue {
                 this.setSoaPricingbasedDefaultsProductN(listOfferQuestions);
             }
         }
-        
+
         if (element.question == "SOA Pricing") {
             if (element.currentValue == "Flat") {
                 this.setSoaPricingbasedDefaultsFlat(listOfferQuestions);
@@ -127,7 +127,7 @@ export class OfferConstructDefaultValue {
                 this.setSoaPricingbasedDefaultsFlatN(listOfferQuestions);
             }
         }
-        
+
         // if (element.question == 'TMS Node TS') {
         //   if (beListType == "Collaboration") {
         //     element.currentValue = "UC/HVS/SWSS/SUB/TRAN Svc";
@@ -142,7 +142,7 @@ export class OfferConstructDefaultValue {
         //     element.previousValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
         //   }
         // }
-        
+
     });
     return listOfferQuestions;
   }
@@ -484,31 +484,33 @@ export class OfferConstructDefaultValue {
     questionList.forEach(question => {
         if (question.question == 'Service Type?') {
             question.rules.isDisabled = true;
-        } 
+        }
         if (question.question == 'SOA Pricing') {
             question.rules.isDisabled = true;
         }
     });
     return questionList;
   }
-  
-  
+
+
   nonSoaSkuDefaults(questionList) {
     questionList.forEach(question => {
-      if (question.question == "Service Type?" || question.question == "SOA Pricing" || question.question == "Monthly Amount" 
+      if (question.question == "Service Type?" || question.question == "SOA Pricing" || question.question == "Monthly Amount"
       || question.question == "Percentage Amount" || question.question == "Support Pricing Minimum (monthly) " || question.question == "Monthly Support Pricing Minimum Value") {
         question.rules.isDisabled = true;
+        question.rules.isMandatoryOptional = "Optional";
       }
     });
     return questionList;
   }
-  
+
   setSoaPricingbasedDefaultsFlat(questionList) {
     questionList.forEach(question => {
         if (question.question == "Monthly Amount") {
           question.rules.isDisabled = false;
           question.currentValue = '$0';
-          
+          question.rules.isMandatoryOptional = "Mandatory";
+
         }
     });
     questionList.forEach(question => {
@@ -519,7 +521,7 @@ export class OfferConstructDefaultValue {
     });
     return questionList;
   }
-  
+
   setSoaPricingbasedDefaultsFlatN(questionList) {
     questionList.forEach(question => {
         if (question.question == "Monthly Amount") {
@@ -529,21 +531,23 @@ export class OfferConstructDefaultValue {
         }
     });
   }
-  
+
   setSoaPricingbasedDefaultsProduct(questionList) {
     questionList.forEach(question => {
         if (question.question == "Percentage Amount") {
           question.rules.isDisabled = false;
+          question.rules.isMandatoryOptional = "Mandatory";
         }
         if (question.question == "Support Pricing Minimum (monthly) ") {
           question.rules.isDisabled = false;
           question.currentValue = 'No';
+          question.rules.isMandatoryOptional = "Mandatory";
           this.setMonthlySupportPricingProductN(questionList);
         }
     });
   }
-  
-  
+
+
 
   setSoaPricingbasedDefaultsProductN(questionList) {
     questionList.forEach(question => {
@@ -551,7 +555,7 @@ export class OfferConstructDefaultValue {
           question.rules.isDisabled = true;
           question.rules.isMandatoryOptional = "Optional";
         }
-        
+
         if (question.question == "Support Pricing Minimum (monthly) ") {
           question.rules.isDisabled = true;
           question.currentValue = '';
@@ -560,11 +564,12 @@ export class OfferConstructDefaultValue {
     });
     return questionList;
   }
-  
+
   setMonthlySupportPricingProduct(questionList) {
     questionList.forEach(question => {
         if (question.question == "Monthly Support Pricing Minimum Value") {
           question.rules.isDisabled = false;
+          question.rules.isMandatoryOptional = "Mandatory";
         }
     });
   }
@@ -578,7 +583,7 @@ export class OfferConstructDefaultValue {
     });
     return questionList;
   }
-  
+
   setTMSNOde(questionList) {
     questionList.forEach(question => {
         if (question.question == "TMS Node AS") {
@@ -587,17 +592,17 @@ export class OfferConstructDefaultValue {
         }
     });
   }
-  
+
   setTMSNOdeN(questionList) {
     questionList.forEach(question => {
         if (question.question == "TMS Node AS") {
           question.rules.isDisabled = true;
           question.currentValue = "";
-          
+
         }
     });
   }
-  
+
   setTMSNOde1(questionList) {
     let tmsDefault;
     questionList.forEach(question => {
@@ -618,7 +623,7 @@ export class OfferConstructDefaultValue {
       }
     });
   }
-  
+
   setTMSNOdeASDefault(questionList) {
     let tmsAsDefault;
     questionList.forEach(question => {
@@ -639,7 +644,7 @@ export class OfferConstructDefaultValue {
       }
     });
   }
-  
+
   setTMSNOdeN1(questionList) {
       questionList.forEach(question => {
           if (question.question == "TMS Node AS") {
@@ -648,7 +653,7 @@ export class OfferConstructDefaultValue {
           }
       });
   }
-  
+
   setTMSNOdeASDefaultN(questionList) {
       questionList.forEach(question => {
           if (question.question == "TMS Node AS") {
@@ -657,7 +662,7 @@ export class OfferConstructDefaultValue {
           }
       });
   }
-  
+
   setTMSNOdeN2(questionList) {
       questionList.forEach(question => {
           if (question.question == "TMS Node AS") {
@@ -666,8 +671,8 @@ export class OfferConstructDefaultValue {
           }
       });
   }
-  
-  
+
+
   setTMSNOdeTS(questionList, beListType) {
     questionList.forEach(question => {
         if (question.question == "TMS Node TS") {
@@ -690,7 +695,7 @@ export class OfferConstructDefaultValue {
         }
     });
   }
-  
+
   setTMSNOdeTSMonthly(questionList) {
     questionList.forEach(question => {
         if (question.question == "TMS Node TS") {
@@ -699,7 +704,7 @@ export class OfferConstructDefaultValue {
         }
     });
   }
-  
+
   setTMSNOdeTSN(questionList) {
     questionList.forEach(question => {
         if (question.question == "TMS Node TS") {
@@ -708,7 +713,7 @@ export class OfferConstructDefaultValue {
         }
     });
   }
-  
+
   setTMSNOdeTS1(questionList, beListType) {
     let tmsDefault;
     questionList.forEach(question => {
@@ -741,7 +746,7 @@ export class OfferConstructDefaultValue {
       }
     });
   }
-  
+
   setTMSNOdeTSDefault(questionList, beListType) {
     let tmsTsDefault;
     questionList.forEach(question => {
@@ -773,7 +778,7 @@ export class OfferConstructDefaultValue {
       }
     });
   }
-  
+
   setTMSNOdeTSN1(questionList, beListType) {
       questionList.forEach(question => {
           if (question.question == "TMS Node TS") {
@@ -782,7 +787,7 @@ export class OfferConstructDefaultValue {
           }
       });
   }
-  
+
   setTMSNOdeTSDefaultN(questionList, beListType) {
       questionList.forEach(question => {
           if (question.question == "TMS Node TS") {
@@ -791,7 +796,7 @@ export class OfferConstructDefaultValue {
           }
       });
   }
-  
+
   setTMSNOdeTSDisable(questionList, beListType) {
       questionList.forEach(question => {
           if (question.question == "TMS Node TS") {
@@ -800,7 +805,7 @@ export class OfferConstructDefaultValue {
           }
       });
   }
-  
+
   setTMSNOdeASDisable(questionList) {
        questionList.forEach(question => {
            if (question.question == "TMS Node AS") {
@@ -809,7 +814,7 @@ export class OfferConstructDefaultValue {
            }
        });
    }
-  
+
   setTMSNOdeTSN2(questionList, beListType) {
       questionList.forEach(question => {
           if (question.question == "TMS Node TS") {
@@ -829,16 +834,17 @@ export class OfferConstructDefaultValue {
           }
       });
   }
-  
+
   setMonthlySupMin(questionList) {
       questionList.forEach(question => {
           if (question.question == "Monthly Support Pricing Minimum Value") {
             question.rules.isDisabled = true;
+            question.rules.isMandatoryOptional = "Optional";
             question.currentValue = "";
           }
       });
   }
-  
+
   // setSoftwareLicenseNSKU(questionList) {
   //     questionList.forEach(question => {
   //         if (question.question == "UPG Family"  || question.question == "UPG Group" || question.question == "UPG Type" ) {
