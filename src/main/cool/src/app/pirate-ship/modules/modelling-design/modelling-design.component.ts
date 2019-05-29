@@ -98,7 +98,7 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
           });
 
         this.atoTask = _.find(this.atoList, ['itemName', this.selectedAto]);
-        const currentAtoStatus = _.isEmpty(this.atoTask) && _.isEmpty(this.atoTask.itemStatus) ? '' : this.atoTask.itemStatus;
+        const currentAtoStatus = _.isEmpty(this.atoTask) ? '' : this.atoTask.itemStatus;
         this.disableDesignCanvasButton = this.showDesignCanvasButton ? this.designCanvasButtonStatus(currentAtoStatus) : false;
 
       });
