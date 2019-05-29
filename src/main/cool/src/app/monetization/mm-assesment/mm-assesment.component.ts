@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MonetizationModelService } from '../../services/monetization-model.service';
 import { OfferPhaseService } from '../../services/offer-phase.service';
-import {MenuBarService} from '../../services/menu-bar.service';
+import { MenuBarService } from '../../services/menu-bar.service';
 import { OfferDetailViewService } from '../../services/offer-detail-view.service';
 import { OffersolutioningService } from '../../services/offersolutioning.service';
 import { RightPanelService } from '../../services/right-panel.service';
@@ -103,7 +103,7 @@ export class MmAssesmentComponent implements OnInit {
     }
 
     this.readOnly = this.configurationService.startupData.readOnly;
-  
+
 
     // Retrieve Offer Details
     // Get Attributes Of Each Group
@@ -215,7 +215,7 @@ export class MmAssesmentComponent implements OnInit {
       // Retrieve Offer Dimensions Attributes
       this.monetizationModelService.retrieveOfferDimensionAttributes().subscribe(offerData => {
 
-        this.offerData = offerData;        
+        this.offerData = offerData;
         this.offerData['groups'] = _.isEmpty(this.offerData['groups']) ? [] : this.offerData['groups'];
 
         this.offerData['groups'].forEach(group => {
@@ -266,7 +266,7 @@ export class MmAssesmentComponent implements OnInit {
           this.dimensionFirstGroupName = this.groupNames[0];
           this.groupData.shift();
           this.groupNames.shift();
-       
+
         }
 
         if (offerBuilderdata['derivedMM'] !== null && offerBuilderdata['derivedMM'] !== '') {
@@ -286,7 +286,7 @@ export class MmAssesmentComponent implements OnInit {
 
   }
 
-  
+
   // --------------------------------------------------------------------------------------------
 
   getGroupData(group, selectedCharacteristics, toNextSetpFlag = false) {
@@ -470,63 +470,63 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   toggleSelected(attribute) {
-   
+
     // In MM Page, toggle select
-  if(this.dimensionMode !== true) {
+    if (this.dimensionMode !== true) {
 
-    if (this.readOnly === false) {
-      this.isChangedAttribute = true;
-      if (attribute.type === 2 && attribute.status === -1) {
-       attribute.type = 0;
-      this.canClickNextStep = false;
-    }
-    attribute.status = -attribute.status;
-  // In MM page, Set Condition To Enable Next Step Button
-    if (this.activeTabIndex === 0 && this.dimensionMode !== true) {
-      if (this.groupData[0]['Offer Components'].includes(attribute)) {
-        this.changeSubGroupType(this.groupData[0]);
-      }
+      if (this.readOnly === false) {
+        this.isChangedAttribute = true;
+        if (attribute.type === 2 && attribute.status === -1) {
+          attribute.type = 0;
+          this.canClickNextStep = false;
+        }
+        attribute.status = -attribute.status;
+        // In MM page, Set Condition To Enable Next Step Button
+        if (this.activeTabIndex === 0 && this.dimensionMode !== true) {
+          if (this.groupData[0]['Offer Components'].includes(attribute)) {
+            this.changeSubGroupType(this.groupData[0]);
+          }
 
-      let next = 0;
-      const groupKeys = this.getGroupKeys(this.groupData[this.activeTabIndex]);
-      groupKeys.forEach(key => {
-        for (const attr of this.groupData[0][key]) {
-          if (attr.status === 1 || attr.type === 2) {
-            next += 1;
-            break;
+          let next = 0;
+          const groupKeys = this.getGroupKeys(this.groupData[this.activeTabIndex]);
+          groupKeys.forEach(key => {
+            for (const attr of this.groupData[0][key]) {
+              if (attr.status === 1 || attr.type === 2) {
+                next += 1;
+                break;
+              }
+            }
+          });
+          if (next === groupKeys.length) {
+            this.canClickNextStep = true;
+          } else {
+            this.canClickNextStep = false;
           }
         }
-      });
-      if (next === groupKeys.length) {
-        this.canClickNextStep = true;
-      } else {
-        this.canClickNextStep = false;
+        this.selectedGroupData = this.groupData;
+
       }
     }
-    this.selectedGroupData = this.groupData;
- 
-  }
-}
- 
-// In dimension Mode,toggle select and other condition check
- 
-if (this.dimensionMode === true ) {
- 
-  if (this.readOnly === false && this.markCompleteStatus === false) {
-    this.isChangedAttribute = true;
-    if (attribute.type === 2 && attribute.status === -1) {
-     attribute.type = 0;
-    this.canClickNextStep = false;
-  }
-  attribute.status = -attribute.status;
 
-  this.checkDimensionSubGroup();
-  
+    // In dimension Mode,toggle select and other condition check
 
-  this.selectedGroupData = this.groupData;
+    if (this.dimensionMode === true) {
 
-}
-}
+      if (this.readOnly === false && this.markCompleteStatus === false) {
+        this.isChangedAttribute = true;
+        if (attribute.type === 2 && attribute.status === -1) {
+          attribute.type = 0;
+          this.canClickNextStep = false;
+        }
+        attribute.status = -attribute.status;
+
+        this.checkDimensionSubGroup();
+
+
+        this.selectedGroupData = this.groupData;
+
+      }
+    }
 
   }
 
@@ -565,7 +565,7 @@ if (this.dimensionMode === true ) {
     }
   }
 
- 
+
 
   changeTab(index) {
     if (this.canClickNextStep === true) {
@@ -814,7 +814,7 @@ if (this.dimensionMode === true ) {
   // --------------------------------------------------------------------------------------------
 
   toNextStep() {
-   
+
 
     this.isAllowedtoNextStep = true;
 
@@ -1293,7 +1293,7 @@ if (this.dimensionMode === true ) {
 
   // --------------------------------------------------------------------------------------------
   // Check Dimension at least select one attribute in each subGroup
-  checkDimensionSubGroup(){
+  checkDimensionSubGroup() {
     //  In Dimension Mode, Set Condition To Enable The Mark Complete Button
     let next = 0;
     let subGroupLength = 0;
@@ -1310,17 +1310,17 @@ if (this.dimensionMode === true ) {
       });
     })
     if (next === subGroupLength) {
-        this.canMarkComplete = true;
-      
+      this.canMarkComplete = true;
+
     } else {
       this.canMarkComplete = false;
     }
   }
 
-  getMarkCompleteStatus(status){
- 
-  this.markCompleteStatus = status;
+  getMarkCompleteStatus(status) {
+
+    this.markCompleteStatus = status;
   }
 
- 
+
 }

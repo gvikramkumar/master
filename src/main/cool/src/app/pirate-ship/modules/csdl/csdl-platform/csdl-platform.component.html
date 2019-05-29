@@ -38,7 +38,7 @@
                   <div class="form-group form-group--inline">
                     <label class="radio">
                       <input type="radio" name="inline-regular-radio" (change)="onCsdlNotRequired($event)" [value]="false"
-                       [disabled]="derivedMM == 'MM6'">
+                        [ngModel]="derivedMM == 'MM6'" [disabled]="derivedMM == 'MM6'">
                       <span class="radio__input"></span>
                       <span class="radio__label">No</span>
                     </label>

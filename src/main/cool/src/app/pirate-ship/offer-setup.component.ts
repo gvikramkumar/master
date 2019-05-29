@@ -82,6 +82,7 @@ export class OfferSetupComponent implements OnInit {
         }
       });
     });
+
     // Get Offer Details
     this.getOfferDetails();
 
@@ -98,6 +99,7 @@ export class OfferSetupComponent implements OnInit {
   // Get offer Details
 
   getOfferDetails() {
+
     this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
 
       this.offerBuilderdata = offerDetails;
@@ -119,6 +121,7 @@ export class OfferSetupComponent implements OnInit {
       this.derivedMM = offerDetails['derivedMM'];
       this.offerName = offerDetails['offerName'];
       this.stakeHolderData = offerDetails['stakeholders'];
+
       // Get Module Name and Status
       this.getAllModuleData();
 
@@ -149,14 +152,15 @@ export class OfferSetupComponent implements OnInit {
 
   // Get All the ModuleName and place in order
   getAllModuleData() {
+
     this.offerSetupService.getModuleData(this.offerId, this.selectedAto, this.functionalRole, this.derivedMM).subscribe(data => {
+
       this.groupData = {};
-      console.log(this.groupData);
       this.showGroupData = false;
       this.Options = data['listATOs'];
       data['listSetupDetails'].forEach(group => {
 
-        let groupName = group['groupName']
+        const groupName = group['groupName']
         if (this.groupData[groupName] == null) {
           this.groupData[groupName] = { 'left': [], 'right': [] };
         }
@@ -205,6 +209,7 @@ export class OfferSetupComponent implements OnInit {
       });
     }
   }
+  
   // update message for humburger
   updateMessage(message) {
     if (message != null && message !== '') {
