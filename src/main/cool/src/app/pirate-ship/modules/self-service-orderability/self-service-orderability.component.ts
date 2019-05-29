@@ -12,7 +12,11 @@ import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 
 import { SsoAto } from './models/sso-ato';
+import { DashboardService } from '@shared/services';
+import { pirateShipRoutesNames } from '@shared/constants/pirateShipStatus';
 import { SelfServiceOrderability } from './models/self-service-orderability';
+
+
 
 
 @Component({
@@ -56,6 +60,7 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
   constructor(
     private loaderService: LoaderService,
     private activatedRoute: ActivatedRoute,
+    private dashBoardService: DashboardService,
     private rightPanelService: RightPanelService,
     private environmentService: EnvironmentService,
     private configurationService: ConfigurationService,
@@ -102,9 +107,11 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
             this.atoNames.push(dropDownValue.itemName);
           });
 
-        this.sso = this.ssoList.find(ato => ato.itemName === this.selectedAto);
-        const currentAtoStatus = _.isEmpty(this.sso.orderabilityCheckStatus) ? '' : this.sso.orderabilityCheckStatus;
+        this.sso = _.find(this.ssoList, ['orderabilityCheckStatus', this.selectedAto]);
+        const currentAtoStatus = _.isEmpty(this.sso) ? '' : this.sso.orderabilityCheckStatus;
         this.disableOrderabilityButton = this.disableOrderabilityButton ? this.orderabilityButtonStatus(currentAtoStatus) : false;
+
+        this.postPirateShipDashBoardNotification();
 
       });
 
@@ -137,7 +144,6 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
     window.open(urlToOpen, '_blank');
 
   }
-
 
   // -------------------------------------------------------------------------------------------------------------------
 
@@ -181,6 +187,21 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
       ? true : false;
 
     return (statusCheck && userRoleCheck);
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+
+  private postPirateShipDashBoardNotification() {
+
+    const existingAtoCount = this.ssoList.length;
+    const validAtoCount = this.ssoList
+      .filter(sso => sso.orderabilityCheckStatus === pirateShipRoutesNames.YES)
+      .length;
+
+    if (validAtoCount === existingAtoCount) {
+      this.dashBoardService.postPirateShipDashBoardNotification(this.offerId, 'Orderability').subscribe();
+    }
+
   }
 
   // -------------------------------------------------------------------------------------------------------------------

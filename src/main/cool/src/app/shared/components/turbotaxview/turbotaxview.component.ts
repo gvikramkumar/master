@@ -1,6 +1,8 @@
-import { Component, Input, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges, SimpleChange, OnInit} from '@angular/core';
 import { Router} from '@angular/router';
 import { TurbotaxService } from '@shared/services';
+import {HttpClient} from '@angular/common/http';
+import {EnvironmentService} from '@env/environment.service';
 
 
 @Component({
@@ -30,7 +32,8 @@ export class TurbotaxviewComponent implements OnChanges {
 
     constructor(
         private turbotax: TurbotaxService,
-        private router: Router
+        private router: Router,
+
     ) { }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -55,10 +58,11 @@ export class TurbotaxviewComponent implements OnChanges {
 
         this.turbotax.getRubboTaxMenu(caseId).subscribe(resOfferPhases => {
             if (resOfferPhases) {
-                console.log('response offer phases '+JSON.stringify(resOfferPhases));
+
                 this.offerPhaseDetailsList = resOfferPhases;
 
-                this.ideateCount = resOfferPhases.ideate ? resOfferPhases.ideate.length : 0;
+
+              this.ideateCount = resOfferPhases.ideate ? resOfferPhases.ideate.length : 0;
                 this.ideateCompletedCount = resOfferPhases.ideate ? resOfferPhases.ideate.filter(this.isMilestoneCompleted()).length : 0;
 
                 this.planCount = resOfferPhases.plan ? resOfferPhases.plan.length : 0;
@@ -115,4 +119,5 @@ export class TurbotaxviewComponent implements OnChanges {
             this.router.navigate(this.navigateHash[value]);
         }
     }
+
 }
