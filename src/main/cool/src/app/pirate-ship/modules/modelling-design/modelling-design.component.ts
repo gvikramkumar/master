@@ -1,4 +1,4 @@
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { Ato } from './model/ato';
@@ -97,8 +97,8 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
             this.atoNames.push(dropDownValue.itemName);
           });
 
-        this.atoTask = this.atoList.find(ato => ato.itemName === this.selectedAto);
-        const currentAtoStatus = _.isEmpty(this.atoTask.itemStatus) ? '' : this.atoTask.itemStatus;
+        this.atoTask = _.find(this.atoList, ['itemName', this.selectedAto]);
+        const currentAtoStatus = _.isEmpty(this.atoTask) ? '' : this.atoTask.itemStatus;
         this.disableDesignCanvasButton = this.showDesignCanvasButton ? this.designCanvasButtonStatus(currentAtoStatus) : false;
 
       });
@@ -153,7 +153,7 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
       this.showDesignCanvasButton = true;
       this.atoTask = this.atoList.find(ato => ato.itemName === dropDownValue);
 
-      const currentAtoStatus = _.isEmpty(this.atoTask.itemStatus) ? '' : this.atoTask.itemStatus;
+      const currentAtoStatus = _.isEmpty(this.atoTask) ? '' : this.atoTask.itemStatus;
       this.disableDesignCanvasButton = this.designCanvasButtonStatus(currentAtoStatus);
 
     }
