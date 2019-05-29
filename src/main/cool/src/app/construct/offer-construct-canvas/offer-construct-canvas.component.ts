@@ -1413,7 +1413,6 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 
   dragStartRow(item) {
-    debugger;
     if (this.readOnly === false && this.markCompleteStatus === false) {
      
       this.draggedItem = item.node;
@@ -1423,7 +1422,6 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 
   dragStart(item: any) {
-    debugger;
     if (this.readOnly === false && this.markCompleteStatus === false) {
       this.draggedItem = item;
     }

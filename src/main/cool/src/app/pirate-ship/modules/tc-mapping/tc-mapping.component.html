@@ -20,7 +20,7 @@
 
               <div class="pull-left" >
                 <button class="btn btn--primary btn--cool btn--small tooltip" placement="top"
-                  (click)="goToOfferWorkBench()">
+                  (click)="goToOfferWorkBench()" [disabled]="checkLicenseExist()">
                   Complete Subscription Mapping <i class="icon-popout"></i>
                 </button>
               </div>
@@ -53,7 +53,7 @@
                 <p-accordionTab header="{{selectedAto}}" [selected]="true">
                   <div *ngFor="let eachElement of selectedObjectAto?.minorPids">
                       <table class="table" >
-                          <thead>
+                          <thead *ngIf="checkObject(eachElement)">
                               <tr>
                                  <th> {{eachElement?.itemName}}</th>
                               </tr>

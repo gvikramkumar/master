@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef, ComponentFactoryResolver, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 import { RightPanelService } from '@app/services/right-panel.service';
@@ -7,14 +7,15 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CsdlIntegrationService } from '@app/services/csdl-integration.service';
 import { CsdlPayload } from '../model/csdl-payload';
 import { CsdlStatusTrackComponent } from '../csdl-status-track/csdl-status-track.component';
-import { error } from 'util';
+import { MessageService } from '@app/services/message.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-csdl-platform',
   templateUrl: './csdl-platform.component.html',
   styleUrls: ['./csdl-platform.component.scss']
 })
-export class CsdlPlatformComponent implements OnInit {
+export class CsdlPlatformComponent implements OnInit, OnDestroy {
   @ViewChild('refreshStatus', {read: ViewContainerRef}) vcr: ViewContainerRef;
   csdlForm: FormGroup;
   notRequiredCsdlForm: FormGroup;
@@ -56,6 +57,8 @@ export class CsdlPlatformComponent implements OnInit {
   mileStoneStatus;
   displayContinueInfo: Boolean = false;
   selectedDropValue: string;
+  subscription: Subscription;
+  components = [];
 
   constructor(
     private router: Router,
@@ -64,7 +67,8 @@ export class CsdlPlatformComponent implements OnInit {
     private rightPanelService: RightPanelService,
     private dashboardService: DashboardService,
     private csdlIntegrationService: CsdlIntegrationService,
-    private componentFactoryResolver: ComponentFactoryResolver
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private messageService: MessageService
   ) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['offerId'];
@@ -77,6 +81,7 @@ export class CsdlPlatformComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.csdlForm = new FormGroup({
       csdlId: new FormControl(null, Validators.required)
     });
@@ -86,12 +91,14 @@ export class CsdlPlatformComponent implements OnInit {
     });
 
     // load status tracking component in the below conditions.
+    // 1. When csdlMileStone is in 'Complete'
     // 2. When csdlMileStone is in 'In progress'
     this.csdlIntegrationService.getCsdlInfo(this.currentOfferId).subscribe(data => {
       this.mileStoneStatus = data.csdlMileStoneStatus;
-      if (data.csdlMileStoneStatus === 'Complete' && data.csdlRequired === 'N') {
+      if (data.csdlMileStoneStatus === 'Complete') {
         this.disableRestartModule = false;
         this.isCsdlRequired = false;
+        this.csdlNotRequired = true;
       }
       if (data.csdlMileStoneStatus === 'In Progress') {
         this.isCsdlRequired = false;
@@ -106,6 +113,11 @@ export class CsdlPlatformComponent implements OnInit {
     },
     (error) => {
       this.isCsdlRequired = true;
+      console.log("data error");
+    });
+
+    this.subscription = this.messageService.getMessage().subscribe(() => {
+      this.afterDeAssociation();
     });
 
     this.dashboardService.getMyOffersList().subscribe(resOffers => {
@@ -211,7 +223,6 @@ export class CsdlPlatformComponent implements OnInit {
   /**
    * When user click on Create New Id and when user click submit button
    */
-
   nextCsdlAssociation() {
     // Hide Panels
     this.displayNewCsdl = true;
@@ -231,16 +242,38 @@ export class CsdlPlatformComponent implements OnInit {
     );
   }
 
+  /**
+   * When user click on Continue button on p-dailogue.
+   */
   onContinue() {
     this.displayNewCsdlIdDailog = false;
     this.isCsdlRequired = false;
     this.showComponent();
   }
 
+  afterDeAssociation() {
+    this.isCsdlRequired = true;
+    this.csdlRequired = false;
+    // Find the component
+    const component = this.components.find((component) => component.instance instanceof CsdlStatusTrackComponent);
+    const componentIndex = this.components.indexOf(component);
+
+    if (componentIndex !== -1) {
+      // Remove component from both view and array
+      this.vcr.remove(this.vcr.indexOf(component));
+      this.components.splice(componentIndex, 1);
+    }
+  }
+
+  /**
+   * Dynamically creating status stracking component and loading when it's required.
+   */
   showComponent() {
     // Create component dynamically inside the ng-template
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(CsdlStatusTrackComponent);
     const component = this.vcr.createComponent(componentFactory);
+    // Push the component so that we can keep track of which components are created
+    this.components.push(component);
   }
 
   /**
@@ -248,6 +281,41 @@ export class CsdlPlatformComponent implements OnInit {
    */
   onComplete() {
     this.disableRestartModule = false;
+    this.csdlIntegrationService.getCsdlInfo(this.currentOfferId).subscribe(data => {
+      this.existingComplete();
+    }, (err) => {
+      this.newComplete();
+    }, () => {
+
+    });
+  }
+
+  /**
+   * When user select No and updating the existing document in the collection
+   */
+  existingComplete() {
+    const csdlPayload = new CsdlPayload();
+    let csdlPayloadArray: any = [];
+    csdlPayload.coolOfferId = this.currentOfferId;
+    csdlPayload.csdlProjectSelected = 'N';
+    csdlPayload.csdlRequired = 'N';
+    csdlPayload.csdlMileStoneStatus = 'Complete';
+    csdlPayload.associationStatus = 'deassociate';
+    csdlPayloadArray.push(csdlPayload);
+    this.csdlIntegrationService.restartCsdlAssociation(csdlPayloadArray).subscribe(data => {
+      this.isCompleteButtonDisabled = true;
+      this.isLocked = true;
+    },
+      err => {
+        console.log(err);
+      }
+    );
+  }
+
+  /**
+   * When user select No and creating new document in the collection
+   */
+  newComplete() {
     const csdlPayload = new CsdlPayload();
     csdlPayload.coolOfferId = this.currentOfferId;
     csdlPayload.offerName = this.offerName;
@@ -271,6 +339,9 @@ export class CsdlPlatformComponent implements OnInit {
     this.displayRestartModuleDailog = true;
   }
 
+  /**
+   * When user select No and restarting module updating the existing document in the collection
+   */
   restartModuleConfirm() {
     this.isCsdlRequired = true;
     this.isLocked = false;
@@ -321,6 +392,9 @@ export class CsdlPlatformComponent implements OnInit {
   }
   // --------------------------------------------------------------------------------------------------------------------------------
 
+  /**
+   * When user click on Create New CSDL ID button on p-dailogue.
+   */
   createNewCsdlIdDailog() {
     this.displayNewCsdlIdDailog = true;
     this.displayProjectType = true;
@@ -328,11 +402,51 @@ export class CsdlPlatformComponent implements OnInit {
     this.displayContinueInfo = false;
   }
 
+  /**
+   * Closing for Create CSDL ID p-dailogue.
+   */
   closeCreateNewCsdlIdDailog() {
    this.displayNewCsdlIdDailog = false;
   }
 
+  /**
+   * When user click on submit button after the create new CSDL ID button p-dailogue .
+   */
   submitCsdlToContinue() {
+    this.csdlIntegrationService.getCsdlInfo(this.currentOfferId).subscribe(data => {
+      this.existingCsdlSubmit();
+    }, (err) => {
+      this.newCsdlSubmit();
+    }, () => {
+
+    });
+  }
+
+  existingCsdlSubmit() {
+    let csdlPayloadArray : any = [];
+    const csdlPayload = new CsdlPayload();
+    csdlPayload.coolOfferId = this.currentOfferId;
+    csdlPayload.csdlRequired = 'Y';
+    csdlPayload.csdlProjectSelected = 'N';
+    csdlPayload.associationStatus = 'requested';
+    csdlPayload.productFamily = this.productFamilyAnswer;
+    csdlPayload.bUContact = this.offerOwnerId;
+    csdlPayload.csdlMileStoneStatus = 'In Progress';
+    csdlPayload.projectType = this.selectedDropValue;
+    csdlPayloadArray.push(csdlPayload);
+    this.csdlIntegrationService.restartCsdlAssociation(csdlPayloadArray).subscribe(
+      data => {
+      },
+      err => {
+        console.log(err);
+      }
+    );
+    this.displayContinueInfo = true;
+    this.displayProjectType = false;
+    this.displayNewCsdl = false;
+  }
+
+  newCsdlSubmit() {
     const csdlPayload = new CsdlPayload();
     csdlPayload.coolOfferId = this.currentOfferId;
     csdlPayload.csdlRequired = 'Y';
@@ -348,6 +462,9 @@ export class CsdlPlatformComponent implements OnInit {
     this.displayNewCsdl = false;
   }
 
+  /**
+   * Clsocing restart module dailogue.
+   */
   closeRestartModuleDailog() {
     this.displayRestartModuleDailog = false;
   }
@@ -372,7 +489,17 @@ export class CsdlPlatformComponent implements OnInit {
    * redirects to status tracking page.
    */
   submitCoolToCsdl() {
-    console.log(this.selectedProject);
+    this.csdlIntegrationService.getCsdlInfo(this.currentOfferId).subscribe(data => {
+      this.existingSearchSubmit();
+    }, (err) => {
+      this.newSearchSubmit();
+    }, () => {
+
+    });
+  }
+
+  existingSearchSubmit() {
+    let csdlPayloadArray : any = [];
     const csdlPayload = new CsdlPayload();
     csdlPayload.coolOfferId = this.currentOfferId;
     csdlPayload.csdlRequired = 'Y';
@@ -382,11 +509,33 @@ export class CsdlPlatformComponent implements OnInit {
     csdlPayload.projectType = this.selectedProject.project_type;
     csdlPayload.productFamily = this.productFamilyAnswer;
     csdlPayload.csdlMileStoneStatus = 'In Progress';
-    // csdlPayload.bUContact = this.bUContact;
+    csdlPayloadArray.push(csdlPayload);
+    this.csdlIntegrationService.restartCsdlAssociation(csdlPayloadArray).subscribe(
+      data => {
+        this.showComponent();
+        this.isCsdlRequired = false;
+      },
+      err => {
+        console.log(err);
+      }
+    );
+    this.csdlForm.reset();
+  }
+
+  newSearchSubmit() {
+    const csdlPayload = new CsdlPayload();
+    csdlPayload.coolOfferId = this.currentOfferId;
+    csdlPayload.csdlRequired = 'Y';
+    csdlPayload.csdlProjectSelected = 'Y';
+    csdlPayload.associationStatus = 'requested';
+    csdlPayload.projectId = this.selectedProject.project_id;
+    csdlPayload.projectType = this.selectedProject.project_type;
+    csdlPayload.productFamily = this.productFamilyAnswer;
+    csdlPayload.csdlMileStoneStatus = 'In Progress';
     this.createCsdlAssociation(csdlPayload, true);
-    //this.showComponent();
     // Hide Panels
     this.isCsdlRequired = false;
+    this.csdlForm.reset();
   }
 
   /**
@@ -397,4 +546,9 @@ export class CsdlPlatformComponent implements OnInit {
       .refreshProjects()
       .subscribe(response => {}, () => {});
   }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
 }

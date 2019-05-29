@@ -50,8 +50,8 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
   pirateShipModuleName: string;
   isPirateShipSubModule: boolean;
 
-  showOrderabilitySsoButton: boolean;
-  disableOrderabilitySsoButton: boolean;
+  showOrderabilityButton: boolean;
+  disableOrderabilityButton: boolean;
 
   constructor(
     private loaderService: LoaderService,
@@ -88,9 +88,7 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
     this.atoNames.push('Overall Offer');
 
     this.functionalRole = this.configurationService.startupData.functionalRole;
-    this.showOrderabilitySsoButton = this.selectedAto === 'Overall Offer' ? false : true;
-    this.disableOrderabilitySsoButton = (this.functionalRole.includes('BUPM') || this.functionalRole.includes('PDT'))
-      ? false : true;
+    this.showOrderabilityButton = this.selectedAto === 'Overall Offer' ? false : true;
 
     this.selfServiceOrderabilitySubscription = this.selfServiceOrderabilityService.retieveSsoDetails(this.offerId)
       .subscribe((selfServiceOrderabilityResponse: SelfServiceOrderability) => {
@@ -105,6 +103,8 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
           });
 
         this.sso = this.ssoList.find(ato => ato.itemName === this.selectedAto);
+        const currentAtoStatus = _.isEmpty(this.sso.orderabilityCheckStatus) ? '' : this.sso.orderabilityCheckStatus;
+        this.disableOrderabilityButton = this.disableOrderabilityButton ? this.orderabilityButtonStatus(currentAtoStatus) : false;
 
       });
 
@@ -146,16 +146,41 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
     if (dropDownValue === 'Overall Offer') {
 
       this.selectedAto = dropDownValue;
-      this.showOrderabilitySsoButton = false;
+      this.showOrderabilityButton = false;
 
     } else {
 
       this.selectedAto = dropDownValue;
-      this.showOrderabilitySsoButton = true;
+      this.showOrderabilityButton = true;
+
       this.sso = this.ssoList.find(ato => ato.itemName === dropDownValue);
+      const currentAtoStatus = _.isEmpty(this.sso.orderabilityCheckStatus) ? '' : this.sso.orderabilityCheckStatus;
+      this.disableOrderabilityButton = this.showOrderabilityButton ? this.orderabilityButtonStatus(currentAtoStatus) : false;
 
     }
 
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+
+  orderabilityButtonStatus(currentStatus: string): boolean {
+
+    let statusCheck = false;
+    let userRoleCheck = false;
+
+    // Check If ATO has Valid Status
+    const statusList = ['Y', 'N'];
+    if (statusList.some(status => currentStatus.includes(status))) {
+      statusCheck = true;
+    } else {
+      statusCheck = false;
+    }
+
+    // Check If Valid User Is Logged In
+    userRoleCheck = (this.functionalRole.includes('NPPM') || this.functionalRole.includes('PDT'))
+      ? true : false;
+
+    return (statusCheck && userRoleCheck);
   }
 
   // -------------------------------------------------------------------------------------------------------------------
