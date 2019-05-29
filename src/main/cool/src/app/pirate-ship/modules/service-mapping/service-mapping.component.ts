@@ -6,6 +6,7 @@ import { ServiceMappingService } from '@app/services/service-mapping.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 import { RightPanelService } from '@app/services/right-panel.service';
 import { LoaderService } from '@app/core/services/loader.service';
+import { ConfigurationService } from '@app/core/services/configuration.service';
 
 @Component({
   selector: 'app-service-mapping',
@@ -30,10 +31,12 @@ export class ServiceMappingComponent implements OnInit {
   stakeholders: any;
   isPirateShipSubModule: Boolean;
   pirateShipModuleName: string;
+  functionalRole: Array<String>;
+  permission: Boolean = false;
   constructor(private itemCreationService: ItemCreationService,
     private activatedRoute: ActivatedRoute, private serviceMappingService: ServiceMappingService,
     private stakeholderfullService: StakeholderfullService, private rightPanelService: RightPanelService,
-    private loaderService: LoaderService) {
+    private loaderService: LoaderService, private configurationService: ConfigurationService) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['offerId'];
       this.offerId = params['offerId'];
@@ -46,7 +49,10 @@ export class ServiceMappingComponent implements OnInit {
     // Initialize TaskBar Parameters
     this.isPirateShipSubModule = true;
     this.pirateShipModuleName = 'Service Mapping Dashboard';
-
+    this.functionalRole = this.configurationService.startupData.functionalRole;
+    if (this.functionalRole.includes('CXPM')) {
+      this.permission = true;
+    }
     this.itemCreationService.getOfferDropdownValues(this.offerId).subscribe(data => {
       this.offerDropdownValues = data;
     });
