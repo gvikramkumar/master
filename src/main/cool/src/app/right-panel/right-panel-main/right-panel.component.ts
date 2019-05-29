@@ -143,27 +143,6 @@ export class RightPanelComponent implements OnInit {
     this.navigateHash['Offer Components'] = ['/offerConstruct', this.currentOfferId, this.caseId];
     this.navigateHash['Design Review'] = ['/designReview', this.currentOfferId, this.caseId];
     this.navigateHash['Offer Setup Workflow'] = ['/offerSetup', this.currentOfferId, this.caseId];
-    // debugger;
-    // var ToggleStatus = new FormData();
-    //     ToggleStatus.set('offerId', this.currentOfferId);
-    //   ToggleStatus.append('caseId', this.caseId);
-    //   ToggleStatus.append('offerDimension_toggleStatus', this.offerPhaseDetailsList['plan'][0]);
-    //   ToggleStatus.append('offerComponent_toggleStatus', this.offerPhaseDetailsList['plan'][2]);
-    //   ToggleStatus.append('offerSolutioning_toggleStatus', this.offerPhaseDetailsList['plan'][1]);
-    //
-    // console.log(ToggleStatus);
-    var ToggleStatus  = {
-      "offerId": this.currentOfferId,
-      "caseId": this.caseId,
-      "offerDimension_toggleStatus": this.offerPhaseDetailsList['plan'][0].status === 'Complete' ? true : false,
-      "offerComponent_toggleStatus": this.offerPhaseDetailsList['plan'][2].status === 'Complete' ? true : false,
-      "offerSolutioning_toggleStatus": this.offerPhaseDetailsList['plan'][1].status === 'Complete' ? true : false
-    };
-
-    const url = `${this._envService.REST_API_UPDATE_MARK_COMPLETE_STATUS_URL}`;
-
-    this.httpClinet.post(url, ToggleStatus).subscribe((response) => {
-    });
 
     this.ideateCount = this.offerPhaseDetailsList['ideate'].length;
     this.planCount = this.offerPhaseDetailsList['plan'].length;
