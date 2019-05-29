@@ -68,7 +68,7 @@
                   </span>
                   <button
                     *ngIf="col.field == 'download' && (rowData['newItemStatus'] == 'Available' || rowData['newItemStatus'] == 'Completed' || rowData['newItemStatus'] == 'In Progress')"
-                    class="btn btn--secondary btn--cool" (click)="downloadATODetails(rowData)">
+                    class="btn btn--secondary btn--cool" (click)="downloadATODetails(rowData)" [disabled]="!permission">
                     <span class="icon-download icon-small qtr-padding-right"></span>Download ATO Details
                   </button>
                 </td>
