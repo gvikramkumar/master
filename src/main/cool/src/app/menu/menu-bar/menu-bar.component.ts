@@ -18,10 +18,13 @@ export class MenuBarComponent implements OnInit {
     @Input() offerName: string;
     @Input() stakeData: object;
     @Input() currentMMModel: string;
-
+    @Input() canMarkComplete: boolean;
     @Input() showSave = false;
     @Output() onProceedToNext = new EventEmitter();
     @Output() updateMessage = new EventEmitter<string>();
+    @Output() getMarkCompleteStatus= new EventEmitter<boolean>();
+
+
 
 
     items: MenuItem[];
@@ -30,19 +33,27 @@ export class MenuBarComponent implements OnInit {
     itemShow: Object = {};
     offerBuilderdata = {};
     navigateHash: Object = {};
-
+    showMarkcompletePopup: boolean = false;
+    showMarkcompleteToggle: boolean = false;
+    currentURL: String;
+    canUncheckComplete: boolean;
+    shouldDisable: boolean = false;
     currentOfferId: String = '';
     holdStatusValid = true;
     cancelStatusValid = true;
     currentUsername: any;
+    designReviewRequestApprovalStatus: boolean;
+    markCompleteStatus:boolean;
 
     constructor(
         private router: Router,
         private userService: UserService,
         private menuBarService: MenuBarService,
-        private activatedRoute: ActivatedRoute,
+        private activatedRoute: ActivatedRoute,     
         private environmentService: EnvironmentService,
         private monetizationModelService: MonetizationModelService) {
+         
+        this.currentURL = activatedRoute.snapshot['_routerState'].url;
 
         this.showPopup = false;
 
@@ -90,6 +101,7 @@ export class MenuBarComponent implements OnInit {
     }
 
     ngOnInit() {
+      
 
         this.items = [
             {
@@ -128,7 +140,24 @@ export class MenuBarComponent implements OnInit {
             },
 
         ];
+        
 
+        this.menuBarService.getMarkCompleteStatus(this.offerId, this.caseId).subscribe(data => {
+            if (this.currentURL.includes('offerDimension')) {
+                this.markCompleteStatus = data['offerDimension_toggleStatus'];
+                this.showMarkcompleteToggle = true;
+            } else if(this.currentURL.includes('offerSolutioning')){
+                this.markCompleteStatus = data['offerSolutioning_toggleStatus'];
+                this.showMarkcompleteToggle = true;
+            } else if (this.currentURL.includes('offerConstruct')){
+                this.markCompleteStatus = data['offerComponent_toggleStatus'];
+                this.showMarkcompleteToggle = true;
+            }
+            this.getMarkCompleteStatus.next(this.markCompleteStatus);
+            this.getCanUncheckCompleteStatus();
+         
+         
+        })
 
         this.monetizationModelService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
             this.offerBuilderdata = data;
@@ -147,6 +176,8 @@ export class MenuBarComponent implements OnInit {
                 this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['secondaryBUList']);
             }
         });
+
+       
 
     }
 
@@ -259,6 +290,47 @@ export class MenuBarComponent implements OnInit {
         this.router.navigate(['/offerDetailView', this.offerId, this.caseId]);
     }
 
+    getCanUncheckCompleteStatus() {
+
+        this.menuBarService.getDesignReviewStatus(this.offerId).subscribe(data => {
+              this.designReviewRequestApprovalStatus = data['designReviewRequestApproval'];
+              if (this.designReviewRequestApprovalStatus == true){
+                this.canUncheckComplete = false;
+            } else {
+                this.canUncheckComplete = true;
+            }
+            this.disableMarkCompleteToggle();
+         })
+      
+    }
+
+    toggleMarkCompletePopup() {
+       this.showMarkcompletePopup = !this.showMarkcompletePopup;
+    }
+
+    closeMarkCompletePopup(message) {
+        this.showMarkcompletePopup = false;
+        this.markCompleteStatus = !this.markCompleteStatus;
+        this.getMarkCompleteStatus.next(this.markCompleteStatus);
+        this.disableMarkCompleteToggle();
+    }
+
+    confirmMarkComplete(message) {
+        this.showMarkcompletePopup = false;
+        this.getMarkCompleteStatus.next(this.markCompleteStatus);
+        this.disableMarkCompleteToggle();
+    }
+    
+    disableMarkCompleteToggle() {
+
+        if(this.markCompleteStatus === false && this.canMarkComplete === false) {
+           this.shouldDisable = true;
+        }
+         if(this.markCompleteStatus === true && this.canUncheckComplete === false) {
+            this.shouldDisable = true;
+         }
+         console.log('111:'+ this.shouldDisable)
+    }
 }
 
 

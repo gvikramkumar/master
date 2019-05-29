@@ -149,26 +149,22 @@ export class EnvironmentService {
     REST_API_CSDL_INFO_GET_URL: string;
     REST_API_CSDL_PUBLISH_INFO_PUT_URL: string;
 
-    // SERVICE FOR BASIC MODULES URLs - NPI
+    //SERVICE FOR BASIC MODULES URLs - NPI
     REST_API_GET_ALL_COMMENTS_NPI_URL: string;
     REST_API_ADD_COMMENT_NPI_URL: string;
 
-    // SERVICE FOR BASIC MODULES URLs - Royal Setup
+    //SERVICE FOR BASIC MODULES URLs - Royal Setup
     REST_API_GET_ALL_COMMENTS_ROYALTY_SETUP: string;
     REST_API_ADD_COMMENT_ROYALTY: string;
-
-    // SERVICE FOR BASIC MODULES URLs - Offer Attribution
+    //SERVICE FOR BASIC MODULES URLs - Offer Attribution
     REST_API_GET_ALL_COMMENTS_OFFER_ATTRIBUTION: string;
     REST_API_ADD_COMMENT_OFFER_ATTRIBUTION: string;
-
-    // SERVICE FOR BASIC MODULES URLs - Export Compliance
+    //SERVICE FOR BASIC MODULES URLs - Export Compliance
     REST_API_GET_ALL_COMMENTS_EXPORT_COMPLIANCE: string;
     REST_API_ADD_COMMENT_EXPORT_COMPLIANCE: string;
-
     // SERVICE FOR BASIC MODULES URLs - Testing
     REST_API_GET_ALL_COMMENTS_TESTING: string;
     REST_API_ADD_COMMENT_TESTING: string;
-
     // SERVICE FOR BASIC MODULES URLs - Pricing Uplift
     REST_API_GET_ALL_COMMENTS_PRICING_UPLIFT: string;
     REST_API_ADD_COMMENT_PRICING_UPLIFT: string;
@@ -176,6 +172,9 @@ export class EnvironmentService {
     // BASIC MODULE STATUS UPDATE API
     REST_API_UPDATE_MODULE_STATUS_URL: string;
     REST_API_GET_MODULE_STATUS_URL: string;
+    // MARK COMPLETE STATUS URLs
+    REST_API_GET_MARK_COMPLETE_STATUS_URL: string;
+    REST_API_UPDATE_MARK_COMPLETE_STATUS_URL: string;
 
     // SELF SERVICE ORDERABILITYURLs
     REST_API_GET_SSO_DETAILS_URL: string;
@@ -472,6 +471,9 @@ export class EnvironmentService {
 
         this.REST_API_GET_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module/getPirateshipModuleStatus';
         this.REST_API_UPDATE_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module/addPirateshipModuleStatus';
+        // ------------------------------------MARK COMPLETE STATUS URLs-------------------------------------------------------------------
+        this.REST_API_GET_MARK_COMPLETE_STATUS_URL = this.baseApiUrl + '/offersetup/getTogglesStatus/';
+        this.REST_API_UPDATE_MARK_COMPLETE_STATUS_URL = this.baseApiUrl + '/offersetup/UpdateOrAddTogglesStatus';
 
         // -------------------------------------- SELF SERVICE ORDERABILITYURLs --------------------------------------
 

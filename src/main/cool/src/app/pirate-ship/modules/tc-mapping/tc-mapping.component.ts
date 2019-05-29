@@ -99,6 +99,11 @@ export class TcMappingComponent implements OnInit, OnDestroy {
           this.atoList[i].itemStatus = this.atoList[i].mappingStatus;
         }
       }
+      for (let j = 0; j < this.atoNames.length; j++) {
+        if (this.atoNames[j] === this.selectedAto) {
+          this.selectedIndex = j;
+        }
+      }
     }, error => {
       console.log('error', error);
     });   
@@ -185,6 +190,31 @@ export class TcMappingComponent implements OnInit, OnDestroy {
     // urlToOpen += 'selectedAto=' + this.selectedAto + '&planId=' + this.planId + '&userId=' + userId + '&coolOfferId=' + this.offerId;;
 
     window.open(urlToOpen, '_blank');
+  }
+
+  checkObject(element) {
+    if (this.selectedObjectAto && this.selectedObjectAto.itemType === element.itemType && element.itemType === 'License') {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  checkLicenseExist() {
+    let licenseExist = true;
+    if ((this.selectedObjectAto && this.selectedObjectAto.itemType === 'License') || this.selectedAto === 'Overall Offer') {
+      licenseExist = true;
+    } else {
+      licenseExist = false;
+    }
+    if (this.selectedObjectAto && this.selectedObjectAto.minorPids && this.selectedObjectAto.minorPids.length > 0) {
+      for (let i = 0; i < this.selectedObjectAto.minorPids.length; i++) {
+        if (this.selectedObjectAto.minorPids[i].itemType === 'License') {
+          licenseExist = true;
+        }
+      }
+    }
+    return !licenseExist;
   }
 
 }

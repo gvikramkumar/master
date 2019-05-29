@@ -3,5 +3,6 @@ export class comment {
     moduleName: string;
     createdBy: string;
     description: string;
+    userId: string;
     timeStamp: string;
 }
