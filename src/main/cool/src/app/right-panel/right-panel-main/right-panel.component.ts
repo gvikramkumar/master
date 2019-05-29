@@ -8,6 +8,8 @@ import * as moment from 'moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 import * as _ from 'lodash';
+import {HttpClient} from '@angular/common/http';
+import {EnvironmentService} from '@env/environment.service';
 
 @Component({
   selector: 'app-right-panel',
@@ -73,7 +75,6 @@ export class RightPanelComponent implements OnInit {
 
   @Input() events: Observable<string>;
   @Output() updateStakeData = new EventEmitter<string>();
-
   editIdeateTargetDate: Boolean = false;
   editPlanTargetDate: Boolean = false;
   editSetUpTargetDate: Boolean = false;
@@ -110,7 +111,10 @@ export class RightPanelComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private offerPhaseService: OfferPhaseService,
     private rightPanelService: RightPanelService,
-    private stakeHolderService: StakeholderfullService) {
+    private stakeHolderService: StakeholderfullService,
+    private httpClinet: HttpClient,
+    private _envService: EnvironmentService
+    ) {
 
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['offerId'];
@@ -139,10 +143,33 @@ export class RightPanelComponent implements OnInit {
     this.navigateHash['Offer Components'] = ['/offerConstruct', this.currentOfferId, this.caseId];
     this.navigateHash['Design Review'] = ['/designReview', this.currentOfferId, this.caseId];
     this.navigateHash['Offer Setup Workflow'] = ['/offerSetup', this.currentOfferId, this.caseId];
+    // debugger;
+    // var ToggleStatus = new FormData();
+    //     ToggleStatus.set('offerId', this.currentOfferId);
+    //   ToggleStatus.append('caseId', this.caseId);
+    //   ToggleStatus.append('offerDimension_toggleStatus', this.offerPhaseDetailsList['plan'][0]);
+    //   ToggleStatus.append('offerComponent_toggleStatus', this.offerPhaseDetailsList['plan'][2]);
+    //   ToggleStatus.append('offerSolutioning_toggleStatus', this.offerPhaseDetailsList['plan'][1]);
+    //
+    // console.log(ToggleStatus);
+    var ToggleStatus  = {
+      "offerId": this.currentOfferId,
+      "caseId": this.caseId,
+      "offerDimension_toggleStatus": this.offerPhaseDetailsList['plan'][0].status === 'Complete' ? true : false,
+      "offerComponent_toggleStatus": this.offerPhaseDetailsList['plan'][2].status === 'Complete' ? true : false,
+      "offerSolutioning_toggleStatus": this.offerPhaseDetailsList['plan'][1].status === 'Complete' ? true : false
+    };
+
+    const url = `${this._envService.REST_API_UPDATE_MARK_COMPLETE_STATUS_URL}`;
+
+    this.httpClinet.post(url, ToggleStatus).subscribe((response) => {
+    });
 
     this.ideateCount = this.offerPhaseDetailsList['ideate'].length;
     this.planCount = this.offerPhaseDetailsList['plan'].length;
     this.setupCount = this.offerPhaseDetailsList['setup'].length;
+
+    console.log(this.offerPhaseDetailsList['plan']);
 
     this.offerPhaseDetailsList.ideate.forEach(element => {
       if (element.status === 'Completed') {
