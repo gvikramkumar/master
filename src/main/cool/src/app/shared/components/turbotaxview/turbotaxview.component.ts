@@ -33,8 +33,7 @@ export class TurbotaxviewComponent implements OnChanges {
     constructor(
         private turbotax: TurbotaxService,
         private router: Router,
-        private httpClinet: HttpClient,
-        private _envService: EnvironmentService
+
     ) { }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -61,18 +60,6 @@ export class TurbotaxviewComponent implements OnChanges {
             if (resOfferPhases) {
 
                 this.offerPhaseDetailsList = resOfferPhases;
-              // var ToggleStatus  = {
-              //   "offerId": offerId,
-              //   "caseId": caseId,
-              //   "offerDimension_toggleStatus": this.offerPhaseDetailsList.plan[0].status === 'Completed' ? true : false,
-              //   "offerComponent_toggleStatus": this.offerPhaseDetailsList.plan[2].status === 'Completed' ? true : false,
-              //   "offerSolutioning_toggleStatus": this.offerPhaseDetailsList.plan[1].status === 'Completed' ? true : false
-              // };
-              //
-              // const url = `${this._envService.REST_API_UPDATE_MARK_COMPLETE_STATUS_URL}`;
-              //
-              // this.httpClinet.post(url, ToggleStatus).subscribe((response) => {
-              // });
 
 
               this.ideateCount = resOfferPhases.ideate ? resOfferPhases.ideate.length : 0;

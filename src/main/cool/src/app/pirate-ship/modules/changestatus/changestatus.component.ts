@@ -250,9 +250,11 @@ export class ChangestatusComponent implements OnInit {
       "timestamp": Number(date),
       "userid": this.pirateShipSharedService.getUserId()
     }
-    if(this.cmnt.description) {
+    if (this.cmnt.description) {
+
       this.changestatusService.addComment(payload).subscribe(responsePayload => {
         this.comments = responsePayload;
+
       });
     }
     this.cmnt.description = '';
