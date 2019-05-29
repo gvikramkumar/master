@@ -514,7 +514,19 @@ export class OfferConstructDefaultValue {
         }
     });
     questionList.forEach(question => {
+    if (question.question == "Percentage Amount") {
+      question.rules.isDisabled = false;
+      question.currentValue = '';
+    }
+    });
+    questionList.forEach(question => {
         if (question.question == "TMS Node TS") {
+          question.rules.isDisabled = true;
+          question.currentValue = "";
+        }
+    });
+    questionList.forEach(question => {
+        if (question.question == "TMS Node AS") {
           question.rules.isDisabled = true;
           question.currentValue = "";
         }
@@ -633,7 +645,7 @@ export class OfferConstructDefaultValue {
     });
     questionList.forEach(question => {
       if (question.question == "TMS Node AS") {
-        if(tmsAsDefault != "blank" || tmsAsDefault != ""){
+        if(tmsAsDefault != "blank" && tmsAsDefault != ""){
             question.rules.isDisabled = false;
             question.rules.isMandatoryOptional = "Optional";
         }
@@ -679,18 +691,16 @@ export class OfferConstructDefaultValue {
           question.rules.isDisabled = false;
           question.rules.isMandatoryOptional = "Optional";
           if (question.question == 'TMS Node TS') {
-            if (beListType == "Collaboration") {
-              question.currentValue = "UC/HVS/SWSS/SUB/TRAN Svc";
-              question.previousValue = "UC/HVS/SWSS/SUB/TRAN Svc";
-            }
-            if (beListType == "Security") {
-              question.currentValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
-              question.previousValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
-            }
-            else {
-              question.currentValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
-              question.previousValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
-            }
+              if (beListType == "Collaboration") {
+
+                question.currentValue = "UC/HVS/SWSS/SUB/TRAN Svc";
+              }
+              if (beListType == "Security") {
+                question.currentValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
+              }
+             if (beListType != "Collaboration" && beListType != "Security") {
+                question.currentValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
+              }
           }
         }
     });
@@ -727,16 +737,15 @@ export class OfferConstructDefaultValue {
             question.rules.isDisabled = false;
             question.rules.isMandatoryOptional = "Optional";
             if (beListType == "Collaboration") {
+
               question.currentValue = "UC/HVS/SWSS/SUB/TRAN Svc";
-              question.previousValue = "UC/HVS/SWSS/SUB/TRAN Svc";
             }
+
             if (beListType == "Security") {
               question.currentValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
-              question.previousValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
             }
-            else {
+            if (beListType != "Collaboration" && beListType != "Security") {
               question.currentValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
-              question.previousValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
             }
         }
         else{
@@ -756,19 +765,17 @@ export class OfferConstructDefaultValue {
     });
     questionList.forEach(question => {
       if (question.question == "TMS Node TS") {
-        if(tmsTsDefault != "blank" || tmsTsDefault != ""){
+        if(tmsTsDefault != "blank" && tmsTsDefault != ""){
             question.rules.isDisabled = false;
             if (beListType == "Collaboration") {
+
               question.currentValue = "UC/HVS/SWSS/SUB/TRAN Svc";
-              question.previousValue = "UC/HVS/SWSS/SUB/TRAN Svc";
             }
             if (beListType == "Security") {
               question.currentValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
-              question.previousValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
             }
-            else {
+            if (beListType != "Collaboration" && beListType != "Security") {
               question.currentValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
-              question.previousValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
             }
         }
         else{
@@ -820,16 +827,14 @@ export class OfferConstructDefaultValue {
           if (question.question == "TMS Node TS") {
             question.rules.isDisabled = false;
             if (beListType == "Collaboration") {
+
               question.currentValue = "UC/HVS/SWSS/SUB/TRAN Svc";
-              question.previousValue = "UC/HVS/SWSS/SUB/TRAN Svc";
             }
             if (beListType == "Security") {
               question.currentValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
-              question.previousValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
             }
-            else {
+            if (beListType != "Collaboration" && beListType != "Security") {
               question.currentValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
-              question.previousValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
             }
           }
       });
@@ -844,6 +849,17 @@ export class OfferConstructDefaultValue {
           }
       });
   }
+
+  // setTASNOdeTSDefault(questionList, beListType) {
+  //   let tasTsDefault;
+  //   questionList.forEach(question => {
+  //       if (question.question == "Percentage Amount") {
+  //         tasTsDefault = question.currentValue;
+  //       }
+  //   });
+  //   questionList.forEach(question => {
+  //     if (question.question == "TMS Node TS") {
+  //       if(tasTsDefault != "blank" && tasTsDefault != ""){
 
   // setSoftwareLicenseNSKU(questionList) {
   //     questionList.forEach(question => {

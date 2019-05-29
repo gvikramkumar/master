@@ -36,4 +36,12 @@ export class CsdlIntegrationService {
     const url = this.environmentService.REST_API_CSDL_INFO_GET_URL + offerId;
     return this._http.get(url, { withCredentials: true });
   }
+
+  restartCsdlAssociation(csdlPayload: CsdlPayload): Observable<any> {
+    return this._http.post(
+      this.environmentService.REST_API_CSDL_PUBLISH_INFO_PUT_URL,
+      csdlPayload,
+      { withCredentials: true }
+    );
+  }
 }

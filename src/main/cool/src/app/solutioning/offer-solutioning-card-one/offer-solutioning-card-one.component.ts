@@ -14,6 +14,7 @@ export class OffersolutioningCardOneComponent implements OnInit {
   @Input() groupData: Array<any>;
   @Input() unGroupData: Array<any>;
   @Input() selectedGroupData: Object;
+  @Input() markCompleteStatus;
 
   constructor() { }
 
