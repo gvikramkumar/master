@@ -498,7 +498,6 @@ export class OfferConstructDefaultValue {
       if (question.question == "Service Type?" || question.question == "SOA Pricing" || question.question == "Monthly Amount"
       || question.question == "Percentage Amount" || question.question == "Support Pricing Minimum (monthly) " || question.question == "Monthly Support Pricing Minimum Value") {
         question.rules.isDisabled = true;
-        question.rules.isMandatoryOptional = "Optional";
       }
     });
     return questionList;
@@ -509,7 +508,6 @@ export class OfferConstructDefaultValue {
         if (question.question == "Monthly Amount") {
           question.rules.isDisabled = false;
           question.currentValue = '$0';
-          question.rules.isMandatoryOptional = "Mandatory";
 
         }
     });
@@ -539,7 +537,6 @@ export class OfferConstructDefaultValue {
         if (question.question == "Monthly Amount") {
           question.rules.isDisabled = true;
           question.currentValue = '';
-          question.rules.isMandatoryOptional = "Optional";
         }
     });
   }
@@ -548,12 +545,10 @@ export class OfferConstructDefaultValue {
     questionList.forEach(question => {
         if (question.question == "Percentage Amount") {
           question.rules.isDisabled = false;
-          question.rules.isMandatoryOptional = "Mandatory";
         }
         if (question.question == "Support Pricing Minimum (monthly) ") {
           question.rules.isDisabled = false;
           question.currentValue = 'No';
-          question.rules.isMandatoryOptional = "Mandatory";
           this.setMonthlySupportPricingProductN(questionList);
         }
     });
@@ -565,13 +560,11 @@ export class OfferConstructDefaultValue {
     questionList.forEach(question => {
         if (question.question == "Percentage Amount") {
           question.rules.isDisabled = true;
-          question.rules.isMandatoryOptional = "Optional";
         }
 
         if (question.question == "Support Pricing Minimum (monthly) ") {
           question.rules.isDisabled = true;
           question.currentValue = '';
-          question.rules.isMandatoryOptional = "Optional";
         }
     });
     return questionList;
@@ -581,7 +574,6 @@ export class OfferConstructDefaultValue {
     questionList.forEach(question => {
         if (question.question == "Monthly Support Pricing Minimum Value") {
           question.rules.isDisabled = false;
-          question.rules.isMandatoryOptional = "Mandatory";
         }
     });
   }
@@ -590,7 +582,6 @@ export class OfferConstructDefaultValue {
     questionList.forEach(question => {
         if (question.question == "Monthly Support Pricing Minimum Value") {
           question.rules.isDisabled = true;
-          question.rules.isMandatoryOptional = "Optional";
         }
     });
     return questionList;
@@ -600,7 +591,6 @@ export class OfferConstructDefaultValue {
     questionList.forEach(question => {
         if (question.question == "TMS Node AS") {
           question.rules.isDisabled = false;
-          question.rules.isMandatoryOptional = "Optional";
         }
     });
   }
@@ -626,7 +616,6 @@ export class OfferConstructDefaultValue {
       if (question.question == "TMS Node AS") {
         if(tmsDefault == "Service"){
             question.rules.isDisabled = false;
-            question.rules.isMandatoryOptional = "Optional";
         }
         else{
             question.rules.isDisabled = true;
@@ -647,7 +636,6 @@ export class OfferConstructDefaultValue {
       if (question.question == "TMS Node AS") {
         if(tmsAsDefault != "blank" && tmsAsDefault != ""){
             question.rules.isDisabled = false;
-            question.rules.isMandatoryOptional = "Optional";
         }
         else{
             question.rules.isDisabled = true;
@@ -689,7 +677,6 @@ export class OfferConstructDefaultValue {
     questionList.forEach(question => {
         if (question.question == "TMS Node TS") {
           question.rules.isDisabled = false;
-          question.rules.isMandatoryOptional = "Optional";
           if (question.question == 'TMS Node TS') {
               if (beListType == "Collaboration") {
 
@@ -710,7 +697,6 @@ export class OfferConstructDefaultValue {
     questionList.forEach(question => {
         if (question.question == "TMS Node TS") {
           question.rules.isDisabled = false;
-          question.rules.isMandatoryOptional = "Optional";
         }
     });
   }
@@ -735,7 +721,6 @@ export class OfferConstructDefaultValue {
       if (question.question == "TMS Node TS") {
         if(tmsDefault == "Support"){
             question.rules.isDisabled = false;
-            question.rules.isMandatoryOptional = "Optional";
             if (beListType == "Collaboration") {
 
               question.currentValue = "UC/HVS/SWSS/SUB/TRAN Svc";
@@ -844,7 +829,6 @@ export class OfferConstructDefaultValue {
       questionList.forEach(question => {
           if (question.question == "Monthly Support Pricing Minimum Value") {
             question.rules.isDisabled = true;
-            question.rules.isMandatoryOptional = "Optional";
             question.currentValue = "";
           }
       });
