@@ -687,10 +687,16 @@ export class OfferConstructDefaultValue {
 
 
   setTMSNOdeTS(questionList, beListType) {
+    let tmsAsDefault;
     questionList.forEach(question => {
-        if (question.question == "TMS Node TS") {
+        if (question.question == "Service Type?") {
+          tmsAsDefault = question.currentValue;
+        }
+    });
+    questionList.forEach(question => {
+      if (question.question == "TMS Node TS") {
+        if(tmsAsDefault == "Support"){
           question.rules.isDisabled = false;
-          if (question.question == 'TMS Node TS') {
               if (beListType == "Collaboration") {
 
                 question.currentValue = "UC/HVS/SWSS/SUB/TRAN Svc";
