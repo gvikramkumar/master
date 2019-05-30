@@ -586,7 +586,6 @@ export class OfferConstructDefaultValue {
     });
     return questionList;
   }
-///checked////
 
 
   setTMSNOde(questionList) {
@@ -618,7 +617,7 @@ export class OfferConstructDefaultValue {
         }
     });
   }
-//////checked///
+
   setTMSNOde1(questionList) {
     let tmsDefault;
     questionList.forEach(question => {
@@ -638,7 +637,7 @@ export class OfferConstructDefaultValue {
       }
     });
   }
-/////checked////////
+
   setTMSNOdeASDefault(questionList) {
     let tmsAsDefault;
     questionList.forEach(question => {
@@ -658,7 +657,7 @@ export class OfferConstructDefaultValue {
       }
     });
   }
-//////checked///
+
   setTMSNOdeN1(questionList) {
       questionList.forEach(question => {
           if (question.question == "TMS Node AS") {
@@ -667,7 +666,7 @@ export class OfferConstructDefaultValue {
           }
       });
   }
-/////checked///
+
   setTMSNOdeASDefaultN(questionList) {
       questionList.forEach(question => {
           if (question.question == "TMS Node AS") {
@@ -676,7 +675,7 @@ export class OfferConstructDefaultValue {
           }
       });
   }
-//////checked
+
   setTMSNOdeN2(questionList) {
       questionList.forEach(question => {
           if (question.question == "TMS Node AS") {
@@ -686,7 +685,7 @@ export class OfferConstructDefaultValue {
       });
   }
 
-/////checked
+
   setTMSNOdeTS(questionList, beListType) {
     questionList.forEach(question => {
         if (question.question == "TMS Node TS") {
