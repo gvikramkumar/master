@@ -2,16 +2,17 @@ import request from 'supertest';
 import {serverPromise} from '../../../server';
 import OpenPeriodRepo from '../open-period/repo';
 import _ from 'lodash';
+import {ModuleRepo} from './repo';
 
 describe('Module endpoint tests', () => {
   let server, openPeriodRepo;
   const endpoint = `/api/module`;
   const testModule = {
-    displayOrder : 13,
-    abbrev : 'test',
-    name : 'Test Revenue Allocations',
-    desc : 'Enables the detailed level allocations required to report holistic view of Product & Service Test Revenue for better predictability of test revenue growth and manage/support any new business models.',
-    status : 'A'
+    displayOrder: 13,
+    abbrev: 'test',
+    name: 'Test Revenue Allocations',
+    desc: 'Enables the detailed level allocations required to report holistic view of Product & Service Test Revenue for better predictability of test revenue growth and manage/support any new business models.',
+    status: 'A'
   };
   let returnFromAddModule;
   beforeAll(function (done) {
@@ -23,26 +24,18 @@ describe('Module endpoint tests', () => {
   });
 
   it('should get many', (done) => {
-    request(server)
-      .get(endpoint)
-      .expect(200)
-      .expect((res) => {
-        const modules = res.body;
-        expect(modules.map(module => module.name)).toEqual([
-          'Administration',
-          'TSS COGS Triangulation',
-          'Bookings Misc Allocations',
-          'Profitability Allocations',
-          'AS COGS Allocations',
-          'CIS COGS Allocations',
-          'Bookings IR Allocations',
-          'Service Triangulation',
-          'Recurring Revenue',
-          'OpEx Allocations',
-          'Deferred Revenue Allocations',
-          'Gross Unbilled Revenue']);
-      })
-      .end(done);
+    const moduleRepo = new ModuleRepo();
+    moduleRepo.getMany()
+      .then(modules => {
+        request(server)
+          .get(endpoint)
+          .expect(200)
+          .expect((res) => {
+            expect(_.sortBy(res.body.map(x => ({abbrev: x.abbrev, roleCount: x.roles.length})), 'abbrev'))
+              .toEqual(_.sortBy(modules.map(x => ({abbrev: x.abbrev, roleCount: x.roles.length})), 'abbrev'));
+          })
+          .end(done);
+      });
   });
 
   it(`should add one and add the open period`, (done) => {
@@ -51,13 +44,17 @@ describe('Module endpoint tests', () => {
       .send(testModule)
       .expect(200)
       .expect((res) => {
-        expect(res.body).toBeDefined();
-        Object.keys(testModule).forEach(key => expect(res.body[key]).toEqual(testModule[key]));
-        openPeriodRepo.getOneByQuery({moduleId: res.body.moduleId})
-          .then(item => expect(item.moduleId).toEqual(res.body.moduleId));
         returnFromAddModule = res.body;
+        expect(returnFromAddModule).toBeDefined();
+        Object.keys(testModule).forEach(key => expect(returnFromAddModule[key]).toEqual(testModule[key]));
       })
-      .end(done);
+      .end(() => {
+        openPeriodRepo.getOneByQuery({moduleId: returnFromAddModule.moduleId})
+          .then(item => {
+            expect(item.moduleId).toEqual(returnFromAddModule.moduleId);
+            done();
+          });
+      });
   });
 
   it(`should get one`, (done) => {
@@ -80,10 +77,14 @@ describe('Module endpoint tests', () => {
         expect(res.body.updatedDate).not.toEqual(returnFromAddModule.updatedDate);
         returnFromAddModule.updatedDate = res.body.updatedDate;
         expect(res.body).toEqual(returnFromAddModule);
-        openPeriodRepo.getMany({})
-          .then(openPeriods => expect(_.find(openPeriods, {moduleId: returnFromAddModule.moduleId})).not.toBeDefined());
       })
-      .end(done);
+      .end(() => {
+        openPeriodRepo.getMany({})
+          .then(openPeriods => {
+            expect(_.find(openPeriods, {moduleId: returnFromAddModule.moduleId})).not.toBeDefined();
+            done();
+          });
+      });
   });
 
   it('should get all active modules only sorted by display order', (done) => {
@@ -115,20 +116,27 @@ describe('Module endpoint tests', () => {
         expect(res.body.updatedDate).not.toEqual(returnFromAddModule.updatedDate);
         returnFromAddModule.updatedDate = res.body.updatedDate;
         expect(res.body).toEqual(returnFromAddModule);
-        openPeriodRepo.getOneByQuery({moduleId: res.body.moduleId})
-          .then(item => expect(item.moduleId).toEqual(res.body.moduleId));
       })
-      .end(done);
+      .end((err, res) => {
+        openPeriodRepo.getOneByQuery({moduleId: res.body.moduleId})
+          .then(item => {
+            expect(item.moduleId).toEqual(res.body.moduleId);
+            done();
+          });
+      });
   });
 
   it(`should delete one and delete open period if the module state is active`, (done) => {
     request(server)
       .delete(`${endpoint}/${returnFromAddModule.id}`)
       .expect(200)
-      .expect((res) => {
+      .end(() => {
         openPeriodRepo.getMany({})
-          .then(openPeriods => expect(_.find(openPeriods, {moduleId: returnFromAddModule.moduleId})).not.toBeDefined());
-      }).end(done);
+          .then(openPeriods => {
+            expect(_.find(openPeriods, {moduleId: returnFromAddModule.moduleId})).not.toBeDefined();
+            done();
+          });
+      });
   });
 
   it(`should return 404 not found`, (done) => {

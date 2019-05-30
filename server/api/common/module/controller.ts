@@ -28,13 +28,13 @@ export default class ModuleController extends ControllerBase {
     const data = req.body;
     this.updatePromise(req, res, next)
       .then(item => {
-        const promises = [];
+        let promise;
         if (item.status === 'A') {
-          promises.push(this.addOpenPeriod(data.moduleId, req.user.id));
+          promise = this.addOpenPeriod(data.moduleId, req.user.id);
         } else {
-          promises.push(this.removeOpenPeriod(data.moduleId));
+          promise = this.removeOpenPeriod(data.moduleId);
         }
-        Promise.all(promises)
+        promise
           .then(() => res.json(item));
       })
       .catch(next);

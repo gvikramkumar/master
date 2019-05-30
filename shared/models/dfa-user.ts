@@ -272,6 +272,7 @@ export default class DfaUser {
     return moduleId;
   }
 
+  // api sets moduleId in addGlobalData middlewhere, ui sets it in the store
   set moduleId(moduleId) {
    this._moduleId = moduleId;
   }

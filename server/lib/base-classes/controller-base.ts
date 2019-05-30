@@ -94,7 +94,7 @@ export default class ControllerBase {
     return this.repo.addOne(data, req.user.id)
       .then(item => {
         if (this.pgRepo && this.isMirrorRepo) {
-          this.pgRepo.addOne(_.clone(item), req.user.id)
+          return this.pgRepo.addOne(_.clone(item), req.user.id)
             .then(() => item);
         } else {
           return item;
@@ -314,7 +314,7 @@ export default class ControllerBase {
           // we have to clone item as prRepo will change the updatedDate and we'll fail concurrency check
           // we need the same mongo updatedDate to pass concurrency check. We turn off pg's concurrency
           // check as we can't have both.
-          this.pgRepo.updateOneById(_.clone(item), req.user.id, false)
+          return this.pgRepo.updateOneById(_.clone(item), req.user.id, false)
             .then(() => item);
         } else {
           return item;
@@ -340,7 +340,7 @@ export default class ControllerBase {
     return this.repo.remove(req.params.id)
       .then(item => {
         if (this.pgRepo && this.isMirrorRepo) {
-          this.pgRepo.removeOne(req.query.postgresIdProp)
+          return this.pgRepo.removeOne(req.query.postgresIdProp)
             .then(() => item);
         } else {
           return item;

@@ -42,15 +42,7 @@ export class ModuleRepo extends RepoBase {
   }
 
   getAutoIncrementValue() {
-    return this.Model.find({[this.autoIncrementField]: {$ne: 99}})
-      .sort({[this.autoIncrementField]: -1}).limit(1).exec()
-      .then(docs => {
-        if (docs.length) {
-          return docs[0][this.autoIncrementField] + 1;
-        } else {
-          return 1;
-        }
-      });
+    return super.getAutoIncrementValue({[this.autoIncrementField]: {$ne: 99}});
   }
 
   addRoles(modules) {

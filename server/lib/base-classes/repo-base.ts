@@ -591,8 +591,8 @@ export default class RepoBase {
     }
   }
 
-  getAutoIncrementValue() {
-    return this.Model.find({})
+  getAutoIncrementValue(filter = {}) {
+    return this.Model.find(filter)
       .sort({[this.autoIncrementField]: -1}).limit(1).exec()
       .then(docs => {
         if (docs.length) {

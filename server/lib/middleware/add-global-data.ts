@@ -112,6 +112,7 @@ export function addGlobalData() {
         });
         const moduleId = req.query.moduleId || req.body.moduleId;
         if (moduleId) {
+          // this is where the moduleId is set for DfaUser
           req.user.moduleId = moduleId;
           dfa.module = _.find(modules, {moduleId: Number(moduleId)});
         }
