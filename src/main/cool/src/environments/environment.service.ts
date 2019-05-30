@@ -495,7 +495,7 @@ export class EnvironmentService {
 
         // --------------------------------------- PIRATE SHIP DASHBOARD URLs --------------------------------------------
 
-        this.REST_API_PIRATE_SHIP_DASHBOARD_NOTIFICATION_URL = this.baseApiUrl + '/dashboard/notification';
+        this.REST_API_PIRATE_SHIP_DASHBOARD_NOTIFICATION_URL = this.baseApiUrl + '/dashboard/notification/generate';
 
     }
 }
