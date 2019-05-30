@@ -10,6 +10,11 @@
       <br><br>
       <div class="contentBox mt-10">
         <div class="leftContent">
+          <div class="row">
+            <div class="col-md-12">
+              <span class="leftContentWidth"></span>
+            </div>
+          </div>
           <section *ngIf="isCsdlRequired">
             <div class="row">
               <div class="col-md-6">
@@ -38,7 +43,7 @@
                   <div class="form-group form-group--inline">
                     <label class="radio">
                       <input type="radio" name="inline-regular-radio" (change)="onCsdlNotRequired($event)" [value]="false"
-                        [ngModel]="derivedMM == 'MM6'" [disabled]="derivedMM == 'MM6'">
+                        [ngModel]="!isLocked" [disabled]="derivedMM == 'MM6'">
                       <span class="radio__input"></span>
                       <span class="radio__label">No</span>
                     </label>
@@ -153,8 +158,8 @@
       </div>
     </div>
 
-    <p-dialog [showHeader]="false" [(visible)]="displayNewCsdlIdDailog" [responsive]="true" [width]="600" [height]="500"
-      [minWidth]="600" [minHeight]="500">
+    <p-dialog [showHeader]="false" [(visible)]="displayNewCsdlIdDailog" [responsive]="true" [width]="500" [height]="400"
+      [minWidth]="500" [minHeight]="400">
       <div class="row">
         <div class="col-md-12">
           <div class="pull-right">
@@ -163,35 +168,45 @@
         </div>
       </div>
       <div *ngIf="displayProjectType">
-        <div class="row">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <h2>Create a New CSDL ID</h2>
+        </div>
+      </div>
+        <div class="row" style="margin-top: 30px">
           <div class="col-md-12 text-center">
-            <h2>What type of project would you like to create?</h2>
+            <h5>What type of project would you like to create?</h5>
           </div>
         </div>
         <div class="row" style="margin-top: 30px">
           <div class="col-md-12 text-center">
-            <div style="text-align: justify;
-                        text-justify: inter-word;">
-              Select the deployment model to be used for this project. i.e. How will this product be offered to customers.
+            <span class="text-blue">Learn More <span class="icon-info-outline icon-small" 
+              pTooltip="Select the deployment model to be used for this project. i.e. How will this product be offered to customers.
               Select ‘On Premise Offering’, if the offer is hosted on customer premise by the customer.
               Select ‘Cloud Offering’ if the offer is for a Cisco hosted offering in the cloud, requires CATO.
               Select 'Solution' if the offer is a grouping of multiple projects either ‘On-Premise Offering’,
-              ‘Cloud Offering’, or a combination of them.
-            </div>
+              ‘Cloud Offering’, or a combination of them." tooltipPosition="top">
+            </span></span>
           </div>
         </div>
         <div class="row" style="margin-top: 30px">
           <div class="col-md-12">
-            <select id="selected" class="form-control" [(ngModel)]="selectedDropValue" style="width: 100%">
-              <option value="cloud">Cloud Offering - Cisco hosted in the cloud, CATO</option>
-              <option value="on-premise">On-Premise Offering</option>
-              <option value="solution">Solution Offering - Grouping of offering types</option>
-            </select>
+            <div class="form-group dropdown">
+              <div class="form-group__text select">
+                <label for="select-state-default">Select Project Type</label>
+                <select id="selected" class="form-control" [(ngModel)]="selectedDropValue"
+                  style="width: 100%">
+                  <option value="cloud">Cloud Offering - Cisco hosted in the cloud, CATO</option>
+                  <option value="on-premise">On-Premise Offering</option>
+                  <option value="solution">Solution Offering - Grouping of offering types</option>
+                </select>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="row" style="margin-top: 75px">
+        <div class="row" style="margin-top: 65px">
           <div class="col-md-12 text-center task--bar">
-            <button class="btn btn--primary" type="button" (click)="nextCsdlAssociation()">Next</button>
+            <button class="btn btn--primary" type="button" (click)="nextCsdlAssociation()">Continue</button>
           </div>
         </div>
       </div>
@@ -206,20 +221,26 @@
             <h5>A new project will be created leveraging the following information</h5>
           </div>
         </div>
-        <div class="row" style="margin-top: 30px">
-          <div class="col-md-12 text-center">
+        <div class="row text-center" style="margin-top: 30px">
+          <div class="col-md-12">
             <div class="row">
-              <span>Product Family: {{ productFamilyAnswer }}</span>
+              <div class="col-md-12">
+                <span>Product Family:  {{ productFamilyAnswer }}</span>
+              </div>
             </div>
-            <div class="row">
-              <span>Offer Name: {{ offerName }}</span>
+            <div class="row" style="margin-top: 15px">
+              <div class="col-md-12">
+                <span>Offer Name:  {{ offerName }}</span>
+              </div>
             </div>
-            <div class="row">
-              <span>Business Unit contact: {{businessUnitContact}}</span>
+            <div class="row" style="margin-top: 15px">
+              <div class="col-md-12">
+                <span>Business Unit contact:  {{businessUnitContact}}</span>
+              </div>
             </div>
           </div>
         </div>
-        <div class="row" style="margin-top: 75px">
+        <div class="row" style="margin-top: 65px">
           <div class="col-md-12 text-center task--bar">
             <button class="btn btn--primary" type="submit" (click)="submitCsdlToContinue()">Submit</button>
           </div>

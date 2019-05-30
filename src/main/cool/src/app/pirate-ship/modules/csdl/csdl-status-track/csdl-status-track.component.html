@@ -20,8 +20,9 @@
               pTooltip="The associated CSDL project meets the Security Readiness Criteria 
               and can be released to the customer." tooltipPosition="top">
               </span></span>&nbsp;STOP SHIP</th>
-          <th><span *ngIf="enforcementType == 'Warning'"><span class="icon-info-outline icon-small" 
-            pTooltip="Warning - The SRC warnings phase could be classified as Soft Enforcement Only. 
+          <th><span *ngIf="enforcementType == ''"><span class="icon-info-outline icon-small"></span></span>
+            <span *ngIf="enforcementType == 'Warning'"><span class="icon-info-outline icon-small" 
+                pTooltip="Warning - The SRC warnings phase could be classified as Soft Enforcement Only. 
                 All aspects of SRC should be in place and operational, 
                 however BUs will receive 'warnings only' if their offering is not SRC compliant. 
                 The entire SRC/SRP process will be required, however an offering will not be release-stopped 
@@ -55,7 +56,11 @@
               <span class="text-success">{{rowData.stopShipStatus}}</span>
             </span>
           </td>
-          <td class=" text-center">{{rowData.enforcementType}}</td>
+          <td class=" text-center">
+            <span *ngIf="enforcementType == '' || enforcementType == null">
+              <span>--</span>
+            </span>
+            <span>{{rowData.enforcementType}}</span></td>
           <td class=" text-center">{{rowData.latestUpdatedDate}}
             <span *ngIf="csdlMileStoneStatus == 'In Progress'">
               <span class="icon-trash icon-small pull-right" (click)="removeAssociationConfirmDailog()"></span>
