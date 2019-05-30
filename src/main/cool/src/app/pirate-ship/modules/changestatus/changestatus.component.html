@@ -26,7 +26,7 @@
           <div class="row base-margin-top">
 
               <div class="col-md-6" *ngIf="!mStatus">
-                <button class="btn btn--small btn--primary" [disabled]="isReadOnly" (click)="markAsCompleteModal()">Mark as Complete</button>
+                <button class="btn btn--small btn--cool btn--primary" [disabled]="isReadOnly" (click)="markAsCompleteModal()">Mark as Complete</button>
               </div>
 
 
@@ -41,13 +41,13 @@
             <div class="col-md-9">
               <div class="text-medium">If all required activities for {{moduleName}} are finished press complete</div>
               <br/>
-              <div class="text-medium"><a style="color: #0E748E;" (click)="changemodalstatus()"><span class="icon-info-outline">&nbsp;</span>How do you know when I am complete with my activities?</a></div>
+              <div class="text-medium"><a class="text-info" (click)="changemodalstatus()"><span class="icon-info-outline">&nbsp;</span>How do you know when I am complete with my activities?</a></div>
               <app-share-modal [ishide]="ishide" (changestatus)="changemodalstatus()" >
                 <div modalbody>
                   <!--{{infohelp}}-->
                   <div style="white-space: normal; text-align: left;" [innerHTML]="infohelp"></div>
                   <div *ngIf="isBtnNeeded">
-                    <button class="btn btn--small btn--primary" (click)="markAsComplete()" (changestatus)="changemodalstatus()">Continue</button>
+                    <button class="btn btn--small btn--primary btn--cool" (click)="markAsComplete()" (changestatus)="changemodalstatus()">Continue</button>
                   </div>
                 </div>
               </app-share-modal>
@@ -69,7 +69,7 @@
           <div class="row base-margin-top">
             <div class="col-md-9" align="right">
               <div class="help-block text-muted">
-                <span><button class="btn btn--small btn--primary" (click)="saveComments()" [disabled]="cmnt.description.length===0">Submit Comments</button></span>
+                <span><button class="btn btn--small btn--primary btn--cool" (click)="saveComments()" [disabled]="cmnt.description.trim().length===0">Submit Comments</button></span>
               </div>
             </div>
           </div>
