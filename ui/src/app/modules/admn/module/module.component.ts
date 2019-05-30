@@ -113,8 +113,8 @@ export class ModuleComponent extends RoutingComponentBase implements OnInit {
       }
       obs.subscribe(() => {
         this.refresh();
-        this.moduleService.refreshStore();
-        this.uiUtil.toast('Module saved.')
+        this.moduleService.refreshStoreModulesAndUser();
+        this.uiUtil.toast('Module saved.');
       });
     }
   }

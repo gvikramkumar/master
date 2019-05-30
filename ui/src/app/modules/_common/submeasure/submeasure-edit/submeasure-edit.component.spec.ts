@@ -1,54 +1,49 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {SubmeasureEditComponent} from './submeasure-edit.component';
-import {FormsModule} from '@angular/forms';
-import {SharedModule} from '../../../../shared/shared.module';
-import {AppRoutingModule} from '../../../../app/app-routing.module';
-import {ActivatedRoute} from '@angular/router';
-
+import _ from 'lodash';
+import {ActivatedRouteMock} from '../../../../../../spec/mocks/activated-route';
+import {AppStore} from '../../../../app/app-store';
 
 fdescribe('SubmeasureEditComponent', () => {
   let comp: SubmeasureEditComponent;
-  let fixture: ComponentFixture<SubmeasureEditComponent>;
-
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        FormsModule,
-        SharedModule,
-        AppRoutingModule
-      ],
-      declarations: [SubmeasureEditComponent],
-      providers: [
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              params: {
-                mode: 'add'
-              },
-              data: {
-                authorization: 'profitability allocations:business admin, profitability allocations:super user',
-                hero: {
-                  title: 'Add a New Sub-Measure',
-                  desc: 'Add new sub-measure'
-                },
-                breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Sub-Measure', routerUrl: '/prof/submeasure'}, {label: 'Add New'}]
-
-              }
-            }
-          }
-        }
-      ]
-    })
-      .compileComponents();
-  }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SubmeasureEditComponent);
-    comp = fixture.componentInstance;
+    const activatedRouteMock = new ActivatedRouteMock()
+      .setParams({mode: 'add'})
+      .setAuthorization(`profitability allocations:business admin, profitability allocations:super user`)
+      .setHero({
+        title: 'Update Sub-Measure',
+        desc: 'Update the selected sub-measure'
+      })
+      .setBreadcrumbs([{label: 'Home', routerUrl: '/'}, {label: 'Sub-Measure', routerUrl: '/prof/submeasure'}, {label: 'Update'}]);
+    comp = new SubmeasureEditComponent(
+      <any>activatedRouteMock,
+      <any>{},
+      <any>{},
+      <any>{},
+      new AppStore(),
+      <any>{},
+      <any>{},
+      <any>{},
+      <any>{},
+      <any>{},
+      <any>{},
+      <any>{}
+      );
+   });
+
+  it('should cleanup empty rules', () => {
+    comp.sm.rules = [];
+    comp.arrRules = _.cloneDeep(comp.sm.rules);
+    comp.cleanupRules();
+    expect(comp.sm.rules.length).toBe(0);
+    comp.sm.rules = ['', '  '];
+    comp.arrRules = _.cloneDeep(comp.sm.rules);
+    comp.cleanupRules();
+    expect(comp.sm.rules.length).toBe(0);
+    comp.sm.rules = ['', 'ONE-TWO-THREE', '  ', 'FOUR-FIVE-SIX'];
+    comp.arrRules = _.cloneDeep(comp.sm.rules);
+    comp.cleanupRules();
+    expect(comp.sm.rules).toEqual(['ONE-TWO-THREE', 'FOUR-FIVE-SIX']);
   });
 
-  it('should not call ngOnInit if fixture.detectChanges() is not called', () => {
-    expect(comp.effectiveMonthNotRequired).toBe(true);
-  });
 });

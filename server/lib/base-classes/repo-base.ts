@@ -409,15 +409,19 @@ export default class RepoBase {
       });
   }
 
-  removeQueryOne(filter) {
+  removeQueryOne(filter, concurrencyCheck = true) {
     return this.getMany(filter)
       .then(items => {
         if (items.length > 1) {
           throw new ApiError('removeQueryOne multiple items.', null, 400);
-        } else if (!items.length) {
+        } else if (concurrencyCheck && !items.length) {
           throw new ApiError('Item not found, please refresh your data.', null, 400);
         }
-        return items[0].remove();
+        if (items.length) {
+          return items[0].remove();
+        } else {
+          return {deletedCount: 0};
+        }
       });
   }
 
@@ -587,8 +591,8 @@ export default class RepoBase {
     }
   }
 
-  getAutoIncrementValue() {
-    return this.Model.find({})
+  getAutoIncrementValue(filter = {}) {
+    return this.Model.find(filter)
       .sort({[this.autoIncrementField]: -1}).limit(1).exec()
       .then(docs => {
         if (docs.length) {

@@ -159,7 +159,7 @@ export default class PgControllerBase {
   removeQueryOne(req, res, next) {
     const filter = req.query;
     this.repo.removeQueryOne(filter)
-      .then(item => res.json(item))
+      .then(item => res.status(item ? 200 : 204).json(item))
       .catch(next);
   }
 

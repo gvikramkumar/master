@@ -221,7 +221,7 @@ export class PgRepoBase {
       });
   }
 
-  removeQueryOne(filter) {
+  removeQueryOne(filter, concurrencyCheck = true) {
     if (Object.keys(filter).length === 0) {
       throw new ApiError('removeQueryOne called with no filter.', null, 400);
     }
@@ -229,15 +229,17 @@ export class PgRepoBase {
       .then(items => {
         if (items.length > 1) {
           throw new ApiError('removeQueryOne multiple items.', null, 400);
-        } else if (!items.length) {
+        } else if (concurrencyCheck && !items.length) {
           throw new ApiError('Item not found, please refresh your data.', null, 400);
         }
-        let sql = `delete from ${this.table} `;
-        const keys = Object.keys(filter);
-        sql += this.buildParameterizedWhereClause(keys, 0, true);
-        sql += ' returning *'
-        return pgc.pgdb.query(sql, this.getFilterValues(keys, filter))
-          .then(resp => this.orm.recordToObject(resp.rows[0]));
+        if (items.length) {
+          let sql = `delete from ${this.table} `;
+          const keys = Object.keys(filter);
+          sql += this.buildParameterizedWhereClause(keys, 0, true);
+          sql += ' returning *'
+          return pgc.pgdb.query(sql, this.getFilterValues(keys, filter))
+            .then(resp => this.orm.recordToObject(resp.rows[0]));
+        }
       });
   }
 

@@ -1,6 +1,5 @@
 import {Router} from 'express';
 import {injector} from '../../../lib/common/inversify.config';
-import {authorize} from '../../../lib/middleware/authorize';
 import {OpenPeriodController} from './controller';
 
 const ctrl = injector.get(OpenPeriodController);

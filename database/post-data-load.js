@@ -23,7 +23,7 @@ db.getCollection('dfa_allocation_rule').updateMany({glSegmentsMatch: ''}, {$set:
 db.dfa_lookup.insertMany([
   {
     key: 'database-version',
-    value: 19
+    value: 20
   },
   {
     key: 'build-number',

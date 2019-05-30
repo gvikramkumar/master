@@ -22,10 +22,6 @@ export function notInListValidator(_list: string[], upper = true): ValidatorFn {
     } else {
       const list = _list;
       const value = isNumberList ? Number(control.value) : control.value;
-      if (isNaN(value)) {
-        console.error('notInList: value is not a number', control.value);
-        return {'notInList': {value: control.value}};
-      }
       if (list.indexOf(value) !== -1) {
         return {'notInList': {value: control.value}};
       } else {
