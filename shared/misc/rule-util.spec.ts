@@ -529,16 +529,52 @@ describe('ruleUtil tests', () => {
         rule.oldName = 'OLD-NAME';
         sut.test.addDescription(rule, {name: 'DRIVER'}, {period: 'PERIOD'});
         expect(rule.desc).toBe('Name:  TEST-NAME\nOld Name:  OLD-NAME\nDriver:  DRIVER\nPeriod:  PERIOD');
+        expect(rule.descQ).toBe(`"Name:  TEST-NAME\nOld Name:  OLD-NAME\nDriver:  DRIVER\nPeriod:  PERIOD"`);
       });
 
-      /*
-                  fit('should have NO driver/period but one addition', () => {
-                    rule.desc = 'TEST-NAME';
-                    rule.salesMatch = 'SL1';
-                    sut.test.addDescription(rule, {name: 'DRIVER'}, {period: 'PERIOD'});
-                    expect(rule.desc).toBe('Name: TEST-NAME\nDriver: ');
-                  });
-            */
+      fit('should have every field', () => {
+        rule.name = 'TEST-NAME';
+        rule.oldName = 'OLD-NAME';
+        rule.salesMatch = 'salesMatch val';
+          rule.productMatch = 'productMatch val';
+          rule.scmsMatch = 'scmsMatch val';
+          rule.legalEntityMatch = 'legalEntityMatch val';
+          rule.beMatch = 'beMatch val';
+          rule.countryMatch = 'countryMatch val';
+          rule.extTheaterMatch = 'extTheaterMatch val';
+          rule.glSegmentsMatch = ['Account', 'SUB ACCOUNT', 'COMPANY'];
+        rule.sl1Select = 'sl1Select val';
+          rule.sl2Select = 'sl2Select val';
+          rule.sl3Select = 'sl3Select val';
+          rule.prodPFSelect = 'prodPFSelect val';
+          rule.prodBUSelect = 'prodBUSelect val';
+          rule.prodTGSelect = 'prodTGSelect val';
+          rule.scmsSelect = 'scmsSelect val';
+          rule.beSelect = 'beSelect val';
+          sut.test.addDescription(rule, {name: 'DRIVER'}, {period: 'PERIOD'});
+          const expected = 'Name:  TEST-NAME\n' +
+            'Old Name:  OLD-NAME\n' +
+            'Driver:  DRIVER\n' +
+            'Period:  PERIOD\n' +
+            'Sales:  salesMatch val\n' +
+            'Product:  productMatch val\n' +
+            'SCMS:  scmsMatch val\n' +
+            'Internal Business Entity:  beMatch val\n' +
+            'Legal Entity:  legalEntityMatch val\n' +
+            'Country:  countryMatch val\n' +
+            'External Theater:  extTheaterMatch val\n' +
+            'GL Segments:  Account,SUB ACCOUNT,COMPANY\n' +
+            'SL1 Select:  sl1Select val\n' +
+            'SL2 Select:  sl2Select val\n' +
+            'SL3 Select:  sl3Select val\n' +
+            'TG Select:  prodTGSelect val\n' +
+            'BU Select:  prodBUSelect val\n' +
+            'PF Select:  prodPFSelect val\n' +
+            'SCMS Select:  scmsSelect val\n' +
+            'IBE Select:  beSelect val';
+        expect(rule.desc).toBe(expected);
+        expect(rule.descQ).toBe(`"${expected}"`);
+      });
 
     });
 
