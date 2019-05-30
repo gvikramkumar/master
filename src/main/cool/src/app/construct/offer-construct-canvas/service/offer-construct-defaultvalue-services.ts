@@ -909,7 +909,7 @@ settmsAsValue(questionList, beListType) {
   });
 }
 
-setTmsASTmsTS(questionList, beListType) {
+setTmsASTmsTS(questionList) {
   let percentageDefault;
   questionList.forEach(question => {
       if (question.question == "Percentage Amount") {
