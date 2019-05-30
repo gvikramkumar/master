@@ -423,6 +423,18 @@
   width:15%;
 }
 
+/* Service Mapping */
+.cool.cui .service-mapping .ui-treetable .ui-treetable-tbody>tr>td:first-child div.text-center {
+  text-align: left!important;
+  line-height: 1.25;
+  padding-top: 3px;
+}
+.cool.cui .service-mapping .ui-treetable .ui-treetable-tbody>tr>td:last-child {
+  text-align: right!important;
+}
+.cool.cui .service-mapping .ui-treetable .ui-treetable-thead>tr>th:first-child div.text-center {
+  text-align: left!important;
+}
 /* Custom 3-segment Progress Bar */
 .cui .td--progress-fitted .row.no-gutters {
   padding: 0 20px;

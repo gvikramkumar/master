@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { pirateShipRoutesNames } from '../../constants/pirateShipStatus';
 
+import * as _ from 'lodash';
+
 @Component({
   selector: 'app-status',
   templateUrl: './status.component.html',
@@ -15,7 +17,7 @@ export class StatusComponent implements OnInit {
 
   ngOnInit() {
 
-    this.status = this.status.toUpperCase();
+    this.status = _.isEmpty(this.status) ? '' : this.status.toUpperCase();
 
     if (this.status === pirateShipRoutesNames.YES || this.status === pirateShipRoutesNames.COMPLETED) {
       this.finalStatus = 'complete';
