@@ -44,9 +44,11 @@ describe(`Admin - Source Page`, () => {
       expect(sourcePO.getFieldTypeCode().getAttribute('value')).toEqual(``);
       expect(sourcePO.getFieldDescription().getAttribute('value')).toEqual(``);
       expect(sourcePO.getStatusCheckBox().isEnabled()).toBeTruthy();
-      expect(sourcePO.isCheckBoxDisabled()).toBeFalsy();
+      expect(sourcePO.isCheckBoxDisabled()).toBe(false);
       expect(sourcePO.getCheckBoxLabel().getText()).toEqual(`Active`);
       expect(sourcePO.checkIfSourceIsUsed()).toBeFalsy();
+      expect(sourcePO.getSubmitButton().isPresent()).toBe(true);
+      expect(sourcePO.getCancelButton().isPresent()).toBe(true);
     });
 
     it(`should close form on clicking cancel`, () => {
@@ -114,10 +116,10 @@ describe(`Admin - Source Page`, () => {
       expect(sourcePO.getFieldName().getAttribute('value')).toEqual(existingSourceInDb.name);
       expect(sourcePO.getFieldTypeCode().getAttribute('value')).toEqual(existingSourceInDb.typeCode);
       expect(sourcePO.getFieldDescription().getAttribute('value')).toEqual(existingSourceInDb.description);
-      expect(sourcePO.getStatusCheckBox().isEnabled()).toBeTruthy();
-      expect(sourcePO.isCheckBoxDisabled()).toBeTruthy();
+      expect(sourcePO.getStatusCheckBox().isEnabled()).toBe(true);
+      expect(sourcePO.isCheckBoxDisabled()).toBe(true);
       expect(sourcePO.getCheckBoxLabel().getText()).toEqual(existingSourceInDb.status);
-      expect(sourcePO.checkIfSourceIsUsed()).toBeTruthy();
+      expect(sourcePO.checkIfSourceIsUsed()).toBe(true);
     });
 
     it(`should not allow the user to submit the form when updating source with mandatory fields empty`, () => {

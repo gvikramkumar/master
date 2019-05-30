@@ -72,8 +72,7 @@ export class InitializationGuard implements CanActivate {
       this.store.env = results1[0];
 
       return Promise.all([
-        this.moduleService.refreshStore(),
-        this.userService.refreshUser(),
+        this.moduleService.refreshStoreModulesAndUser()
       ])
         .then(results2 => {
           this.afterInit();

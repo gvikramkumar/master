@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {RoutingComponentBase} from '../../../core/base-classes/routing-component-base';
 import {AppStore} from '../../../app/app-store';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -17,7 +17,7 @@ import {OpenPeriod} from '../../_common/models/open-period';
   templateUrl: './open-period.component.html',
   styleUrls: ['./open-period.component.scss']
 })
-export class OpenPeriodComponent  extends RoutingComponentBase {
+export class OpenPeriodComponent  extends RoutingComponentBase implements OnInit {
 
   modules: DfaModule[];
   fiscalMonths: FiscalMonth[] = [];

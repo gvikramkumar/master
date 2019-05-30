@@ -697,7 +697,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   cleanupRules() {
     // the list size is governed by arrRules, BUT, the values are in sm.rules
     this.syncRuleValues();
-    this.arrRules = this.arrRules.filter(r => !!r);
+    this.arrRules = this.arrRules.filter(r => !!r.trim());
     this.sm.rules = _.cloneDeep(this.arrRules);
     if (this.arrRules.length === 0) {
       this.arrRules[0] = '';

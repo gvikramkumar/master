@@ -41,6 +41,10 @@ export class ModuleRepo extends RepoBase {
     return this.getMany({moduleId: {$ne: 99}, setSort: 'displayOrder'});
   }
 
+  getAutoIncrementValue() {
+    return super.getAutoIncrementValue({[this.autoIncrementField]: {$ne: 99}});
+  }
+
   addRoles(modules) {
     return modules.map(module => {
       const mod = module.toObject ? module.toObject() : module;
