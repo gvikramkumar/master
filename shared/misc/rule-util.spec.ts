@@ -10,13 +10,6 @@ test coverage:
 * parseSelect,
 * createSelect,
 addRuleNameAndDescription,
-* getRuleDescription
-
-  // exported
-* createSelectArrays,
-* parseSelect,
-* createSelect,
-addRuleNameAndDescription,
 * getRuleDescription,
 
 // for testing only
@@ -24,7 +17,7 @@ addRuleNameAndDescription,
 * getMatchTextArray,
 * addMatches,
 * addSelects,
-addDescription
+* addDescription
 */
 
 describe('ruleUtil tests', () => {
