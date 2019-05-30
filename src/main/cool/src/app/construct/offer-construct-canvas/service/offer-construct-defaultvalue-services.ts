@@ -106,7 +106,7 @@ export class OfferConstructDefaultValue {
             }
             else{
                 this.setTMSNOdeN(listOfferQuestions);
-                this.setTMSNOdeTSN(listOfferQuestions,);
+                this.setTMSNOdeTSN(listOfferQuestions);
             }
         }
 
@@ -586,12 +586,26 @@ export class OfferConstructDefaultValue {
     });
     return questionList;
   }
+///checked////
+
 
   setTMSNOde(questionList) {
+    let tmsAsDefault;
     questionList.forEach(question => {
-        if (question.question == "TMS Node AS") {
-          question.rules.isDisabled = false;
+        if (question.question == "Service Type?") {
+          tmsAsDefault = question.currentValue;
         }
+    });
+    questionList.forEach(question => {
+      if (question.question == "TMS Node AS") {
+        if(tmsAsDefault == "Service"){
+            question.rules.isDisabled = false;
+        }
+        else{
+            question.rules.isDisabled = true;
+            question.currentValue = "";
+        }
+      }
     });
   }
 
@@ -604,7 +618,7 @@ export class OfferConstructDefaultValue {
         }
     });
   }
-
+//////checked///
   setTMSNOde1(questionList) {
     let tmsDefault;
     questionList.forEach(question => {
@@ -624,7 +638,7 @@ export class OfferConstructDefaultValue {
       }
     });
   }
-
+/////checked////////
   setTMSNOdeASDefault(questionList) {
     let tmsAsDefault;
     questionList.forEach(question => {
@@ -644,7 +658,7 @@ export class OfferConstructDefaultValue {
       }
     });
   }
-
+//////checked///
   setTMSNOdeN1(questionList) {
       questionList.forEach(question => {
           if (question.question == "TMS Node AS") {
@@ -653,7 +667,7 @@ export class OfferConstructDefaultValue {
           }
       });
   }
-
+/////checked///
   setTMSNOdeASDefaultN(questionList) {
       questionList.forEach(question => {
           if (question.question == "TMS Node AS") {
@@ -662,7 +676,7 @@ export class OfferConstructDefaultValue {
           }
       });
   }
-
+//////checked
   setTMSNOdeN2(questionList) {
       questionList.forEach(question => {
           if (question.question == "TMS Node AS") {
@@ -672,7 +686,7 @@ export class OfferConstructDefaultValue {
       });
   }
 
-
+/////checked
   setTMSNOdeTS(questionList, beListType) {
     questionList.forEach(question => {
         if (question.question == "TMS Node TS") {
@@ -694,10 +708,22 @@ export class OfferConstructDefaultValue {
   }
 
   setTMSNOdeTSMonthly(questionList) {
+    let tmsAsDefault;
     questionList.forEach(question => {
-        if (question.question == "TMS Node TS") {
-          question.rules.isDisabled = false;
+        if (question.question == "Service Type?") {
+          tmsAsDefault = question.currentValue;
         }
+    });
+    questionList.forEach(question => {
+      if (question.question == "TMS Node TS") {
+        if(tmsAsDefault == "Support"){
+            question.rules.isDisabled = false;
+        }
+        else{
+            question.rules.isDisabled = true;
+            question.currentValue = "";
+        }
+      }
     });
   }
 
@@ -833,6 +859,84 @@ export class OfferConstructDefaultValue {
           }
       });
   }
+settmsTsValue(questionList, beListType) {
+  let monDefault;
+  questionList.forEach(question => {
+      if (question.question == "Monthly Amount") {
+        monDefault = question.currentValue;
+      }
+  });
+  questionList.forEach(question => {
+    if (question.question == "TMS Node TS") {
+      if(monDefault != "$0"){
+          question.rules.isDisabled = false;
+          if (beListType == "Collaboration") {
+
+            question.currentValue = "UC/HVS/SWSS/SUB/TRAN Svc";
+          }
+
+          if (beListType == "Security") {
+            question.currentValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
+          }
+          if (beListType != "Collaboration" && beListType != "Security") {
+            question.currentValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
+          }
+      }
+      else{
+          question.rules.isDisabled = true;
+          question.currentValue = "";
+      }
+    }
+  });
+}
+
+settmsAsValue(questionList, beListType) {
+  let monAsDefault;
+  questionList.forEach(question => {
+      if (question.question == "Monthly Amount") {
+        monAsDefault = question.currentValue;
+      }
+  });
+  questionList.forEach(question => {
+    if (question.question == "TMS Node AS") {
+      if(monAsDefault != "$0"){
+          question.rules.isDisabled = false;
+      }
+      else{
+          question.rules.isDisabled = true;
+          question.currentValue = "";
+      }
+    }
+  });
+}
+
+setTmsASTmsTS(questionList, beListType) {
+  let percentageDefault;
+  questionList.forEach(question => {
+      if (question.question == "Percentage Amount") {
+        percentageDefault = question.currentValue;
+      }
+  });
+  questionList.forEach(question => {
+    if (question.question == "TMS Node AS") {
+      if(percentageDefault == "blank" || percentageDefault == ""){
+          question.rules.isDisabled = true;
+      }
+
+    }
+  });
+  questionList.forEach(question => {
+    if (question.question == "TMS Node TS") {
+      if(percentageDefault == "blank" || percentageDefault == ""){
+          question.rules.isDisabled = true;
+          question.currentValue = "";
+      }
+
+    }
+  });
+}
+
+
 
   // setTASNOdeTSDefault(questionList, beListType) {
   //   let tasTsDefault;
