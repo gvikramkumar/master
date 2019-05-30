@@ -8,6 +8,8 @@ import * as moment from 'moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 import * as _ from 'lodash';
+import {HttpClient} from '@angular/common/http';
+import {EnvironmentService} from '@env/environment.service';
 
 @Component({
   selector: 'app-right-panel',
@@ -73,7 +75,6 @@ export class RightPanelComponent implements OnInit {
 
   @Input() events: Observable<string>;
   @Output() updateStakeData = new EventEmitter<string>();
-
   editIdeateTargetDate: Boolean = false;
   editPlanTargetDate: Boolean = false;
   editSetUpTargetDate: Boolean = false;
@@ -110,7 +111,10 @@ export class RightPanelComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private offerPhaseService: OfferPhaseService,
     private rightPanelService: RightPanelService,
-    private stakeHolderService: StakeholderfullService) {
+    private stakeHolderService: StakeholderfullService,
+    private httpClinet: HttpClient,
+    private _envService: EnvironmentService
+    ) {
 
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['offerId'];
@@ -143,6 +147,8 @@ export class RightPanelComponent implements OnInit {
     this.ideateCount = this.offerPhaseDetailsList['ideate'].length;
     this.planCount = this.offerPhaseDetailsList['plan'].length;
     this.setupCount = this.offerPhaseDetailsList['setup'].length;
+
+    console.log(this.offerPhaseDetailsList['plan']);
 
     this.offerPhaseDetailsList.ideate.forEach(element => {
       if (element.status === 'Completed') {
