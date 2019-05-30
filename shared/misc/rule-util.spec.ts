@@ -1,6 +1,7 @@
 import {ruleUtil} from './rule-util';
 import _ from 'lodash';
 import {AllocationRule} from '../models/allocation-rule';
+import {SelectExceptionMap} from '../classes/select-exception-map';
 
 
 /*
@@ -19,10 +20,10 @@ addRuleNameAndDescription,
 * getRuleDescription,
 
 // for testing only
-getMatchText,
-getMatchTextArray,
-addMatches,
-addSelects,
+* getMatchText,
+* getMatchTextArray,
+* addMatches,
+* addSelects,
 addDescription
 */
 
@@ -268,7 +269,7 @@ describe('ruleUtil tests', () => {
 
   });
 
-  fdescribe('getMatchText tests', () => {
+  describe('getMatchText tests', () => {
     const salesMatches = [{match: 'SL1'}, {match: 'SL2'}, {match: 'SL3'}, {match: 'SL4'}, {match: 'SL5'}, {match: 'SL6'}];
     const productMatches = [{match: 'BU'}, {match: 'PF'}, {match: 'TG'}]; // no PID
     const scmsMatches = [{match: 'SCMS'}];
@@ -312,8 +313,8 @@ describe('ruleUtil tests', () => {
       expect(sut.test.getMatchText(beMatches, 'match', 'Sub BE')).toBe('ISBE');
     });
 
+  });
 
-/*
     describe('getMatchTextArray tests', () => {
       const glSegmentsMatchesProp = [{name: 'Account', value: 'ACCOUNT', abbrev: 'ACT'}, {name: 'Sub Account', value: 'SUB ACCOUNT', abbrev: 'SUBACT'},
         {name: 'Company', value: 'COMPANY', abbrev: 'COMP'}];
@@ -322,25 +323,224 @@ describe('ruleUtil tests', () => {
 
     // str += rule.glSegmentsMatch.length ? getMatchTextArray(glSegmentsMatches, 'value', rule.glSegmentsMatch) : '';
 
-      it('should handle undefined', () => {
-        expect(sut.test.getMatchTextArray(glSegmentsMatchesProp, 'value', undefined)).toBe('');
+      it('should return empty string if no array, empty array, array with empty strings with or without spaces', () => {
+        expect(sut.test.getMatchTextArray([], '', undefined)).toBe('');
+        expect(sut.test.getMatchTextArray([], '', [])).toBe('');
+        expect(sut.test.getMatchTextArray([], '', ['', '   '])).toBe('');
       });
 
-      it('should handle empty array', () => {
-        expect(sut.test.getMatchTextArray(glSegmentsMatchesProp, 'value', [])).toBe('');
+      it('should handle one or multiple choices', () => {
+        expect(sut.test.getMatchTextArray(glSegmentsMatchesProp, 'value', ['ACCOUNT'])).toBe('ACT');
+        expect(sut.test.getMatchTextArray(glSegmentsMatchesProp, 'value', ['ACCOUNT', 'COMPANY'])).toBe('ACTCOMP');
+        expect(sut.test.getMatchTextArray(glSegmentsMatchesProp, 'value', ['ACCOUNT', 'SUB ACCOUNT', 'COMPANY'])).toBe('ACTSUBACTCOMP');
       });
 
     });
-*/
 
+    describe('addMatches tests', () => {
+      let rule: AllocationRule;
+      beforeEach(() => {
+        rule = new AllocationRule();
+        rule.name = '';
+      });
 
-    /*
-        it('should return empty string if empty string', () => {
-          expect(sut.test.getMatchText('')).toBe('');
-        });
-    */
+      it ('should handle previous text, NO matches', () => {
+        rule.name = 'DRIVER-PERIOD';
+        sut.test.addMatches(rule);
+        expect(rule.name).toBe('DRIVER-PERIOD');
+      });
 
-  });
+      it ('should handle NO previous text, NO matches', () => {
+        sut.test.addMatches(rule);
+        expect(rule.name).toBe('');
+      });
+
+      it ('should handle previous text, one match', () => {
+        rule.name = 'DRIVER';
+        rule.salesMatch = 'SL3';
+        sut.test.addMatches(rule);
+        expect(rule.name).toBe('DRIVER-SL3');
+        rule.name = 'DRIVER-PERIOD';
+        rule.salesMatch = 'SL3';
+        sut.test.addMatches(rule);
+        expect(rule.name).toBe('DRIVER-PERIOD-SL3');
+      });
+
+      it ('should handle NO previous text, one match', () => {
+        rule.salesMatch = 'SL3';
+        sut.test.addMatches(rule);
+        expect(rule.name).toBe('-SL3');
+      });
+
+      it ('should handle multiple matches', () => {
+        rule.name = 'DRIVER-PERIOD';
+        rule.salesMatch = 'SL1';
+        rule.productMatch = 'TG';
+        rule.scmsMatch = 'SCMS';
+        rule.beMatch = 'Sub BE';
+        rule.legalEntityMatch = 'Business Entity';
+        rule.countryMatch = 'sales_country_name';
+        rule.extTheaterMatch = 'ext_theater_name';
+        rule.glSegmentsMatch = ['ACCOUNT', 'SUB ACCOUNT', 'COMPANY'];
+        sut.test.addMatches(rule);
+        expect(rule.name).toBe('DRIVER-PERIOD-SL1TGSCMSISBELECNTEXTTHACTSUBACTCOMP');
+      });
+
+    });
+
+    describe('addSelects tests', () => {
+      let rule: AllocationRule, map;
+      beforeEach(() => {
+        rule = new AllocationRule();
+        map = new SelectExceptionMap();
+        rule.name = '';
+      });
+
+      it ('should handle previous text, NO matches', () => {
+        rule.name = 'DRIVER-PERIOD';
+        sut.createSelectArrays(rule);
+        sut.test.addSelects(rule, map);
+        expect(rule.name).toBe('DRIVER-PERIOD');
+      });
+
+      it ('should handle NO previous text, NO matches', () => {
+        sut.createSelectArrays(rule);
+        sut.test.addSelects(rule, map);
+        expect(rule.name).toBe('');
+      });
+
+      it ('should handle previous text, one select', () => {
+        rule.name = 'DRIVER-PERIOD';
+        rule.sl1Select = `NOT IN ('one', 'Two', 'THREE')`;
+        sut.createSelectArrays(rule);
+        sut.test.addSelects(rule, map);
+        expect(rule.name).toBe('DRIVER-PERIOD-SL1E1');
+      });
+
+      it ('should handle NO previous text, one select', () => {
+        rule.sl1Select = `NOT IN ('one', 'Two', 'THREE')`;
+        sut.createSelectArrays(rule);
+        sut.test.addSelects(rule, map);
+        expect(rule.name).toBe('-SL1E1');
+      });
+
+      it ('should handle multiple selects', () => {
+        const rules = [
+          {
+            name: 'DONT-MATTER-SL1E1-SL2E1-SL3E1-TGE1-BUE1-PFE1-SCMSE1-IBEE1',
+            sl1Select: `IN ('AMERICAS1')`,
+            sl2Select: `IN ('AMERICAS2')`,
+            sl3Select: `IN ('AMERICAS3')`,
+            prodTGSelect: `IN ('AMERICAS4')`,
+            prodBUSelect: `IN ('AMERICAS5')`,
+            prodPFSelect: `IN ('AMERICAS6')`,
+            scmsSelect: `IN ('AMERICAS7')`,
+            beSelect: `IN ('AMERICAS8')`
+          },
+        ];
+        rules.forEach(r => ruleUtil.createSelectArrays(r));
+        map.parseRules(rules);
+        rule = <AllocationRule>{
+          name: 'DRIVER-PERIOD',
+          sl1Select: `IN ('AMERICAS1', 'JAPAN')`,
+          sl2Select: `IN ('AMERICAS2', 'JAPAN')`,
+          sl3Select: `IN ('AMERICAS3', 'JAPAN')`,
+          prodTGSelect: `IN ('AMERICAS4', 'JAPAN')`,
+          prodBUSelect: `IN ('AMERICAS5', 'JAPAN')`,
+          prodPFSelect: `IN ('AMERICAS6', 'JAPAN')`,
+          scmsSelect: `IN ('AMERICAS7', 'JAPAN')`,
+          beSelect: `IN ('AMERICAS8', 'JAPAN')`
+        };
+        sut.createSelectArrays(rule);
+        sut.test.addSelects(rule, map);
+        expect(rule.name).toBe('DRIVER-PERIOD-SL1E2-SL2E2-SL3E2-TGE2-BUE2-PFE2-SCMSE2-IBEE2');
+      });
+
+    });
+
+    fdescribe('addDescription tests', () => {
+      let rule: AllocationRule;
+      beforeEach(() => {
+        rule = new AllocationRule();
+      });
+
+      it('should have an empty description', () => {
+        sut.test.addDescription(rule, undefined, undefined);
+        expect(rule.desc).toBe('Name:  ');
+      });
+
+      it('should have Name', () => {
+        rule.name = 'TEST-NAME';
+        sut.test.addDescription(rule, undefined, undefined);
+        expect(rule.desc).toBe('Name:  TEST-NAME');
+      });
+
+      it('should have Old Name', () => {
+        rule.name = 'TEST-NAME';
+        rule.oldName = 'OLD-NAME';
+        sut.test.addDescription(rule, undefined, undefined);
+        expect(rule.desc).toBe('Name:  TEST-NAME\nOld Name:  OLD-NAME');
+      });
+
+      it('should have driver', () => {
+        sut.test.addDescription(rule, {name: 'DRIVER'}, undefined);
+        expect(rule.desc).toBe('Name:  \nDriver:  DRIVER');
+      });
+
+      it('should have period', () => {
+        sut.test.addDescription(rule, undefined, {period: 'PERIOD'});
+        expect(rule.desc).toBe('Name:  \nPeriod:  PERIOD');
+      });
+
+      it('should have name/driver', () => {
+        rule.name = 'TEST-NAME';
+        sut.test.addDescription(rule, {name: 'DRIVER'}, undefined);
+        expect(rule.desc).toBe('Name:  TEST-NAME\nDriver:  DRIVER');
+      });
+
+      it('should have name/oldName/driver', () => {
+        rule.name = 'TEST-NAME';
+        rule.oldName = 'OLD-NAME';
+        sut.test.addDescription(rule, {name: 'DRIVER'}, undefined);
+        expect(rule.desc).toBe('Name:  TEST-NAME\nOld Name:  OLD-NAME\nDriver:  DRIVER');
+      });
+
+      it('should have name/period', () => {
+        rule.name = 'TEST-NAME';
+        sut.test.addDescription(rule, undefined, {period: 'PERIOD'});
+        expect(rule.desc).toBe('Name:  TEST-NAME\nPeriod:  PERIOD');
+      });
+
+      it('should have name/oldName/period', () => {
+        rule.name = 'TEST-NAME';
+        rule.oldName = 'OLD-NAME';
+        sut.test.addDescription(rule, undefined, {period: 'PERIOD'});
+        expect(rule.desc).toBe('Name:  TEST-NAME\nOld Name:  OLD-NAME\nPeriod:  PERIOD');
+      });
+
+      it('should have name/driver/period', () => {
+        rule.name = 'TEST-NAME';
+        sut.test.addDescription(rule, {name: 'DRIVER'}, {period: 'PERIOD'});
+        expect(rule.desc).toBe('Name:  TEST-NAME\nDriver:  DRIVER\nPeriod:  PERIOD');
+      });
+
+      it('should have name/oldName/driver/period', () => {
+        rule.name = 'TEST-NAME';
+        rule.oldName = 'OLD-NAME';
+        sut.test.addDescription(rule, {name: 'DRIVER'}, {period: 'PERIOD'});
+        expect(rule.desc).toBe('Name:  TEST-NAME\nOld Name:  OLD-NAME\nDriver:  DRIVER\nPeriod:  PERIOD');
+      });
+
+      /*
+                  fit('should have NO driver/period but one addition', () => {
+                    rule.desc = 'TEST-NAME';
+                    rule.salesMatch = 'SL1';
+                    sut.test.addDescription(rule, {name: 'DRIVER'}, {period: 'PERIOD'});
+                    expect(rule.desc).toBe('Name: TEST-NAME\nDriver: ');
+                  });
+            */
+
+    });
 
 });
 

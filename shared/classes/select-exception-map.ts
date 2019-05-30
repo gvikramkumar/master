@@ -33,7 +33,7 @@ export class SelectExceptionMap {
     const mapArr = this[`${prop}Map`];
     const prefix = prop.toUpperCase();
     if (!cond || !choices.length) {
-      return;
+      return '';
     }
     const selectArr = ([cond].concat(choices)).map(x => x.toUpperCase());
     if (!selectArr.length || selectArr.length === 1) {

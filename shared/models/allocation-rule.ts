@@ -3,6 +3,7 @@ export class AllocationRule {
   id?: string;
   moduleId?: number;
   name: string;
+  oldName?: string;
   desc?: string;
   period: string;
   driverName: string;

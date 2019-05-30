@@ -52,6 +52,7 @@ function addRuleNameAndDescription(rule, selectMap, drivers, periods) {
   rule.name += period ? `-${period.abbrev || period.period}` : '';
   addMatches(rule);
   addSelects(rule, selectMap);
+  rule.name = rule.name.toUpperCase(); // just in case, shouldn't need this, but can't hurt
   addDescription(rule, driver, period);
 }
 
@@ -67,7 +68,11 @@ function getMatchText(values, prop, _value = '') {
   return val.abbrev || val[prop];
 }
 
-function getMatchTextArray(values, prop, arr) {
+function getMatchTextArray(values, prop, _arr) {
+  const arr = _arr && _arr.map(x => x.trim()).filter(x => !!x);
+  if (!arr || !arr.length) {
+    return '';
+  }
   const rtn = [];
   arr.forEach(aval => {
     const val = _.find(values, {[prop]: aval});
@@ -82,8 +87,8 @@ function getMatchTextArray(values, prop, arr) {
 const salesMatches = [{match: 'SL1'}, {match: 'SL2'}, {match: 'SL3'}, {match: 'SL4'}, {match: 'SL5'}, {match: 'SL6'}];
 const productMatches = [{match: 'BU'}, {match: 'PF'}, {match: 'TG'}]; // no PID
 const scmsMatches = [{match: 'SCMS'}];
-const legalEntityMatches = [{match: 'Business Entity', abbrev: 'LE'}];
 const beMatches = [{match: 'BE', abbrev: 'IBE'}, {match: 'Sub BE', abbrev: 'ISBE'}];
+const legalEntityMatches = [{match: 'Business Entity', abbrev: 'LE'}];
 const countryMatches = [{name: 'Sales Country Name', value: 'sales_country_name', abbrev: 'CNT'}];
 const extTheaterMatches = [{name: 'External Theater Name', value: 'ext_theater_name', abbrev: 'EXTTH'}];
 const glSegmentsMatches = [{name: 'Account', value: 'ACCOUNT', abbrev: 'ACT'}, {name: 'Sub Account', value: 'SUB ACCOUNT', abbrev: 'SUBACT'},
@@ -133,8 +138,8 @@ function addSelects(rule, selectMap) {
   }
 }
 
-function addDescription(rule, driver, period) {
-  let desc = `Name:  ${rule.name}`;
+function  addDescription(rule, driver, period) {
+  let desc = `Name:  ${rule.name ? rule.name : ''}`;
   desc += rule.oldName ? `\nOld Name:  ${rule.oldName}` : '';
   desc += driver ? `\nDriver:  ${driver.name}` : '';
   desc += period ? `\nPeriod:  ${period.period}` : '';
