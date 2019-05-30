@@ -1,5 +1,5 @@
 <app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId" [offerName]="offerName"
-  [stakeData]="stakeData" (updateMessage)="updateMessage($event)">
+  [stakeData]="stakeData" [canMarkComplete]="canMarkComplete" (updateMessage)="updateMessage($event)" (getMarkCompleteStatus)="getMarkCompleteStatus($event)">
 </app-menu-bar>
 
 <div class="content">
@@ -8,8 +8,7 @@
       <app-taskbar (onProceedToNext)="onProceedToNext($event)"></app-taskbar>
       <div class="contentBox mt-10">
         <div class="leftContent">
-          <app-offer-create-detail></app-offer-create-detail>
-          <ul class="list list--highlight base-margin-top">
+          <ul class="list">
             <li>
               <div class="panel panel--bordered">
                 <span class="text-success"><span class="icon-check-outline icon-medium"></span>
@@ -27,7 +26,7 @@
           </div>
           <div class="row base-margin-top">
             <div class="col-md-12">
-              <app-offerconstruct-canvas></app-offerconstruct-canvas>
+              <app-offerconstruct-canvas [markCompleteStatus]="markCompleteStatus" (getCanMarkCompleteStatus)="getCanMarkCompleteStatus($event)"></app-offerconstruct-canvas>
             </div>
           </div>
         </div>

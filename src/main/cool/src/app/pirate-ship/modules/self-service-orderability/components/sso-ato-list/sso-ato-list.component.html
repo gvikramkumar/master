@@ -3,56 +3,56 @@
   <p-dataTable [value]="ssoList" scrollable="true" [rows]="10" [paginator]="true" scrollHeight="350px"
     [resizableColumns]="true" expandableRows="true">
 
-    <p-column field="productName" expander="true" header="PRODUCT NAME">
-      <ng-template let-col let-task="rowData" pTemplate="body">
-        <span>{{task['productName']}}<br /></span>
+    <p-column field="itemName" expander="true" header="PRODUCT NAME">
+      <ng-template let-col let-sso="rowData" pTemplate="body">
+        <span><a (click)="onClick(sso['itemName'])">{{sso['itemName']}}</a><br /></span>
       </ng-template>
     </p-column>
 
-    <p-column field="type" header="ITEM TYPE" >
-      <ng-template let-col let-task="rowData" pTemplate="body">
+    <p-column field="itemType" header="ITEM TYPE">
+      <ng-template let-col let-sso="rowData" pTemplate="body">
         <div class="text-center">
-          <span>{{task['type']}}<br /></span>
+          <span>{{sso['itemType']}}<br /></span>
         </div>
       </ng-template>
     </p-column>
 
-    <p-column field="organization" header="ORGANIZATION" >
-      <ng-template let-col let-task="rowData" pTemplate="body">
+    <p-column field="organization" header="ORGANIZATION">
+      <ng-template let-col let-sso="rowData" pTemplate="body">
         <div class="text-center">
-          <span>{{task['organization']}}<br /></span>
+          <span>{{sso['organization']}}<br /></span>
         </div>
       </ng-template>
     </p-column>
 
-    <p-column field="currentStatus" header="CURRENT STATUS" >
-      <ng-template let-col let-task="rowData" pTemplate="body">
+    <p-column field="currentStatus" header="CURRENT STATUS">
+      <ng-template let-col let-sso="rowData" pTemplate="body">
         <div class="text-center">
-          <span>{{task['currentStatus']}}<br /></span>
+          <span>{{sso['currentStatus']}}<br /></span>
         </div>
       </ng-template>
     </p-column>
 
-    <p-column field="npiTestOrderFlag" header="NPI TEST ORDER FLAG" >
-      <ng-template let-col let-task="rowData" pTemplate="body">
+    <p-column field="npiTestOrderFlag" header="NPI TEST ORDER FLAG">
+      <ng-template let-col let-sso="rowData" pTemplate="body">
         <div class="text-center">
-          <span>{{task['npiTestOrderFlag']}}<br /></span>
+          <span>{{sso['npiTestOrderFlag']}}<br /></span>
         </div>
       </ng-template>
     </p-column>
 
-    <p-column field="orderabilityCheckStatus" header="ORDERABILITY CHECK STATUS" >
-      <ng-template let-col let-task="rowData" pTemplate="body">
+    <p-column field="orderabilityCheckStatus" header="ORDERABILITY CHECK STATUS">
+      <ng-template let-col let-sso="rowData" pTemplate="body">
         <div class="text-center">
-          <app-status [status]="task['orderabilityCheckStatus']"></app-status>
+          <app-status [status]="sso['orderabilityCheckStatus']"></app-status>
         </div>
       </ng-template>
     </p-column>
 
-    <p-column field="errorOrWarning" header="ERROR WARNING" >
-      <ng-template let-col let-task="rowData" pTemplate="body">
+    <p-column field="errorOrWarning" header="ERROR WARNING">
+      <ng-template let-col let-sso="rowData" pTemplate="body">
         <div class="text-center">
-          <span>{{task['errorOrWarning']}}<br /></span>
+          <span>{{sso['errorOrWarning']}}<br /></span>
         </div>
       </ng-template>
     </p-column>

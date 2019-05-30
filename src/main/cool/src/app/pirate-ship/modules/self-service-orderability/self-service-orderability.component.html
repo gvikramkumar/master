@@ -1,7 +1,7 @@
 <app-menu-bar [caseId]="caseId" [offerId]="offerId" [offerName]="offerName" [currentMMModel]="derivedMM">
-  </app-menu-bar>
+</app-menu-bar>
 
-  <div class="content">
+<div class="content">
   <div class="container">
 
 
@@ -21,9 +21,12 @@
           <div class="row flex-center-vertical base-margin-top">
             <div class="col-sm-12">
 
-              <button class="btn btn--primary btn--cool btn--small tooltip" placement="top"
-                (click)="goToOrderabilitySSO()">Update Orderability In SSO <i class="icon-popout"></i>
-              </button>
+              <div class="pull-left" *ngIf="showOrderabilityButton">
+                <button class="btn btn--primary btn--cool btn--small tooltip" placement="top"
+                  (click)="goToOrderabilitySSO()" [disabled]="!disableOrderabilityButton">Update Orderability In SSO
+                  <i class="icon-popout"></i>
+                </button>
+              </div>
 
               <div class="pull-right">
                 <app-view-offer [atoNames]="atoNames" [selectedAto]="selectedAto"
@@ -35,16 +38,12 @@
           </div>
 
           <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer' else selectedAtoView">
-            <app-sso-ato-list [ssoList]="ssoList"></app-sso-ato-list>
+            <app-sso-ato-list [ssoList]="ssoList" (atoSelection)="showSelectedAtoView($event)"></app-sso-ato-list>
           </div>
 
           <ng-template #selectedAtoView>
-
-
             <app-sso-ato-summary [sso]="sso"></app-sso-ato-summary>
-
           </ng-template>
-
 
           <app-pirate-ship-legend></app-pirate-ship-legend>
 

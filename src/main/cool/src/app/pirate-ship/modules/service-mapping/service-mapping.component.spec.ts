@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ATOSummaryComponent } from './atosummary.component';
+import { ServiceMappingComponent } from './service-mapping.component';
 
-describe('ATOSummaryComponent', () => {
-  let component: ATOSummaryComponent;
-  let fixture: ComponentFixture<ATOSummaryComponent>;
+describe('ServiceMappingComponent', () => {
+  let component: ServiceMappingComponent;
+  let fixture: ComponentFixture<ServiceMappingComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ATOSummaryComponent ]
+      declarations: [ ServiceMappingComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ATOSummaryComponent);
+    fixture = TestBed.createComponent(ServiceMappingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

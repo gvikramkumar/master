@@ -1,4 +1,4 @@
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { Ato } from './model/ato';
@@ -72,7 +72,7 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
 
     // Initialize TaskBar Params
     this.isPirateShipSubModule = true;
-    this.pirateShipModuleName = 'Modelling & Design';
+    this.pirateShipModuleName = 'Modeling & Design';
 
   }
 
@@ -85,8 +85,6 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
 
     this.functionalRole = this.configurationService.startupData.functionalRole;
     this.showDesignCanvasButton = this.selectedAto === 'Overall Offer' ? false : true;
-    this.disableDesignCanvasButton = (this.functionalRole.includes('BUPM') || this.functionalRole.includes('PDT'))
-      ? false : true;
 
     this.modellingDesignSubscription = this.modellingDesignService.retrieveAtoList(this.offerId)
       .subscribe((modellingDesignResponse: ModellingDesign) => {
@@ -99,7 +97,9 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
             this.atoNames.push(dropDownValue.itemName);
           });
 
-        this.atoTask = this.atoList.find(ato => ato.itemName === this.selectedAto);
+        this.atoTask = _.find(this.atoList, ['itemName', this.selectedAto]);
+        const currentAtoStatus = _.isEmpty(this.atoTask) ? '' : this.atoTask.itemStatus;
+        this.disableDesignCanvasButton = this.showDesignCanvasButton ? this.designCanvasButtonStatus(currentAtoStatus) : false;
 
       });
 
@@ -153,7 +153,30 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
       this.showDesignCanvasButton = true;
       this.atoTask = this.atoList.find(ato => ato.itemName === dropDownValue);
 
+      const currentAtoStatus = _.isEmpty(this.atoTask) ? '' : this.atoTask.itemStatus;
+      this.disableDesignCanvasButton = this.designCanvasButtonStatus(currentAtoStatus);
+
     }
+  }
+
+  designCanvasButtonStatus(currentStatus: string): boolean {
+
+    let statusCheck = false;
+    let userRoleCheck = false;
+
+    // Check If ATO has Valid Status
+    const statusList = ['Completed', 'In Progress', 'Reopen', 'Not Started'];
+    if (statusList.some(status => currentStatus.includes(status))) {
+      statusCheck = true;
+    } else {
+      statusCheck = false;
+    }
+
+    // Check If Valid User Is Logged In
+    userRoleCheck = (this.functionalRole.includes('BUPM') || this.functionalRole.includes('PDT'))
+      ? true : false;
+
+    return (statusCheck && userRoleCheck);
   }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -199,4 +222,5 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
 
 
 }
+
 

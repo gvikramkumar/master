@@ -45,6 +45,7 @@ import { OfferDetailModule } from './offer-detail/offer-detail.module';
 import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from './reducers';
 import { CalendarModule } from 'primeng/calendar';
+import { CsdlIntegrationService } from './services/csdl-integration.service';
 
 export function app_init(configService: ConfigurationService) {
   return () => configService.init();
@@ -53,7 +54,7 @@ export function app_init(configService: ConfigurationService) {
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent,
+    DashboardComponent
   ],
   imports: [
     NgbModule,
@@ -97,6 +98,7 @@ export function app_init(configService: ConfigurationService) {
       MenuBarService,
       DatePipe,
       RightPanelService,
+      CsdlIntegrationService,
       OffersolutioningService,
       {
         provide: APP_INITIALIZER,

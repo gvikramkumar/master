@@ -12,7 +12,11 @@ import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 
 import { SsoAto } from './models/sso-ato';
+import { DashboardService } from '@shared/services';
+import { pirateShipRoutesNames } from '@shared/constants/pirateShipStatus';
 import { SelfServiceOrderability } from './models/self-service-orderability';
+
+
 
 
 @Component({
@@ -50,12 +54,13 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
   pirateShipModuleName: string;
   isPirateShipSubModule: boolean;
 
-  showOrderabilitySsoButton: boolean;
-  disableorderabilitySsoButton: boolean;
+  showOrderabilityButton: boolean;
+  disableOrderabilityButton: boolean;
 
   constructor(
     private loaderService: LoaderService,
     private activatedRoute: ActivatedRoute,
+    private dashBoardService: DashboardService,
     private rightPanelService: RightPanelService,
     private environmentService: EnvironmentService,
     private configurationService: ConfigurationService,
@@ -88,27 +93,27 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
     this.atoNames.push('Overall Offer');
 
     this.functionalRole = this.configurationService.startupData.functionalRole;
-    this.showOrderabilitySsoButton = this.selectedAto === 'Overall Offer' ? false : true;
-    this.disableorderabilitySsoButton = (this.functionalRole.includes('BUPM') || this.functionalRole.includes('PDT'))
-      ? false : true;
+    this.showOrderabilityButton = this.selectedAto === 'Overall Offer' ? false : true;
 
-    // this.selfServiceOrderabilitySubscription = this.selfServiceOrderabilityService.retrieveAtoList(this.offerId)
-    //   .subscribe((selfServiceOrderabilityResponse: SelfServiceOrderability) => {
+    this.selfServiceOrderabilitySubscription = this.selfServiceOrderabilityService.retieveSsoDetails(this.offerId)
+      .subscribe((selfServiceOrderabilityResponse: SelfServiceOrderability) => {
 
-    // this.selfServiceOrderability = selfServiceOrderabilityResponse;
+        this.selfServiceOrderability = selfServiceOrderabilityResponse;
 
-    this.selfServiceOrderability = { "planId": "23423234", "coolOfferId": "COOL_123", "planStatus": "INPROGRESS|COMPLETE", "module": "SELF_SERVICE_ORDERABILITY", "ssoTasks": [{ "type": "ATO Model", "productName": "L-WEBEX-TP-JABBER", "organization": "GLO SSO (BGM)", "currentStatus": "ENABLE-MAJ", "errorOrWarning": "Cisco 4200 Series", "npiTestOrderFlag": "On", "orderabilityCheckStatus": "In Progress", "ssoStatus": { "error": ["--"], "hold": ["Pending Price Change"], "warning": ["XaaS Price Approval", "Price List Availability", "Offer Readiness Review"], "completed": ["FCS Date", "Eco Release", "SBP Readiness", "Global Org Active",], "notRequired": ["Global Org Not Active Status"] } }, { "type": "ATO Model", "productName": "L-WEBEX-TP-JABBER", "organization": "GLO SSO (BGM)", "currentStatus": "ENABLE-MAJ", "errorOrWarning": "Cisco 4200 Series", "npiTestOrderFlag": "On", "orderabilityCheckStatus": "Completed", "ssoStatus": { "error": ["--"], "hold": ["Pending Price Change"], "warning": ["XaaS Price Approval", "Price List Availability", "Offer Readiness Review"], "completed": ["FCS Date", "Eco Release", "SBP Readiness", "Global Org Active",], "notRequired": ["Global Org Not Active Status"] } }] };
+        this.ssoList = this.selfServiceOrderability['data'] ? this.selfServiceOrderability['data'] : [];
 
-    this.ssoList = this.selfServiceOrderability['ssoTasks'] ? this.selfServiceOrderability['ssoTasks'] : [];
+        this.ssoList.
+          map(dropDownValue => {
+            this.atoNames.push(dropDownValue.itemName);
+          });
 
-    this.ssoList.
-      map(dropDownValue => {
-        this.atoNames.push(dropDownValue.productName);
+        this.sso = _.find(this.ssoList, ['orderabilityCheckStatus', this.selectedAto]);
+        const currentAtoStatus = _.isEmpty(this.sso) ? '' : this.sso.orderabilityCheckStatus;
+        this.disableOrderabilityButton = this.disableOrderabilityButton ? this.orderabilityButtonStatus(currentAtoStatus) : false;
+
+        this.postPirateShipDashBoardNotification();
+
       });
-
-    this.sso = this.ssoList.find(ato => ato.productName === this.selectedAto);
-
-    // });
 
     // Retrieve Offer Details
     this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
@@ -128,22 +133,17 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.paramsSubscription.unsubscribe();
-    // this.selfServiceOrderabilitySubscription.unsubscribe();
+    this.selfServiceOrderabilitySubscription.unsubscribe();
   }
 
   // -------------------------------------------------------------------------------------------------------------------
 
   goToOrderabilitySSO() {
 
-    const userId = this.configurationService.startupData.userId;
-    let urlToOpen = this.environmentService.owbUrl + '/manage/offer/owbOfferDefinition?';
-    urlToOpen += 'selectedAto=' + this.selectedAto + '&planId=' + this.planId + '&userId=' + userId;
-
-    urlToOpen = 'https://www.google.com';
+    const urlToOpen = this.environmentService.ssoUrl;
     window.open(urlToOpen, '_blank');
 
   }
-
 
   // -------------------------------------------------------------------------------------------------------------------
 
@@ -152,14 +152,54 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
     if (dropDownValue === 'Overall Offer') {
 
       this.selectedAto = dropDownValue;
-      this.showOrderabilitySsoButton = false;
+      this.showOrderabilityButton = false;
 
     } else {
 
       this.selectedAto = dropDownValue;
-      this.showOrderabilitySsoButton = true;
-      this.sso = this.ssoList.find(ato => ato.productName === dropDownValue);
+      this.showOrderabilityButton = true;
 
+      this.sso = this.ssoList.find(ato => ato.itemName === dropDownValue);
+      const currentAtoStatus = _.isEmpty(this.sso.orderabilityCheckStatus) ? '' : this.sso.orderabilityCheckStatus;
+      this.disableOrderabilityButton = this.showOrderabilityButton ? this.orderabilityButtonStatus(currentAtoStatus) : false;
+
+    }
+
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+
+  orderabilityButtonStatus(currentStatus: string): boolean {
+
+    let statusCheck = false;
+    let userRoleCheck = false;
+
+    // Check If ATO has Valid Status
+    const statusList = ['Y', 'N'];
+    if (statusList.some(status => currentStatus.includes(status))) {
+      statusCheck = true;
+    } else {
+      statusCheck = false;
+    }
+
+    // Check If Valid User Is Logged In
+    userRoleCheck = (this.functionalRole.includes('NPPM') || this.functionalRole.includes('PDT'))
+      ? true : false;
+
+    return (statusCheck && userRoleCheck);
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+
+  private postPirateShipDashBoardNotification() {
+
+    const existingAtoCount = this.ssoList.length;
+    const validAtoCount = this.ssoList
+      .filter(sso => sso.orderabilityCheckStatus === pirateShipRoutesNames.YES)
+      .length;
+
+    if (validAtoCount === existingAtoCount) {
+      this.dashBoardService.postPirateShipDashBoardNotification(this.offerId, 'Orderability').subscribe();
     }
 
   }

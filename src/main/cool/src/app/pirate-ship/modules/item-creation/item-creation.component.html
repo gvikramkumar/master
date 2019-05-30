@@ -4,14 +4,10 @@
   <div class="content">
   <div class="container">
 
-    <div class="panel panel--indigo panel--compressed task--bar panel-wrapper mt-15">
-      <div class="row">
-        <div class="col-sm-4">
-          <h2 class="page--subheading"><button class="btn--back btn btn--icon btn--white"
-              (click)="goBackToOfferSetup()"><span class="icon-back"></span></button>
-            Item Creation</h2>
-        </div>
-      </div>
+    <div class="panel panel--compressed task--bar">
+      <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName"
+      [selectedATO]="selectedAto">
+      </app-taskbar>
     </div>
     <div class="row">
       <div class="leftContent col-sm-12 col-md-9">
@@ -85,6 +81,7 @@
             Remove
           </button>
         </div>
+        <app-pirate-ship-legend></app-pirate-ship-legend>
       </div>
       <div class="rightContent col-sm-12 col-md-3">
         <app-right-panel [stakeData]="stakeholders" [offerName]="offerName" [derivedMM]="derivedMM"

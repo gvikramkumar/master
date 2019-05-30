@@ -4,6 +4,7 @@ import { MenuBarService } from '@app/services/menu-bar.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EnvironmentService } from '@env/environment.service';
 import { UserService } from '@app/core/services';
+import { MonetizationModelService } from '@app/services/monetization-model.service';
 
 @Component({
     selector: 'app-menu-bar',
@@ -17,27 +18,42 @@ export class MenuBarComponent implements OnInit {
     @Input() offerName: string;
     @Input() stakeData: object;
     @Input() currentMMModel: string;
-
+    @Input() canMarkComplete: boolean;
     @Input() showSave = false;
     @Output() onProceedToNext = new EventEmitter();
     @Output() updateMessage = new EventEmitter<string>();
+    @Output() getMarkCompleteStatus= new EventEmitter<boolean>();
+
+
 
 
     items: MenuItem[];
     showPopup: boolean;
     popupType: String = '';
     itemShow: Object = {};
+    offerBuilderdata = {};
     navigateHash: Object = {};
+    showMarkcompletePopup: boolean = false;
+    showMarkcompleteToggle: boolean = false;
+    currentURL: String;
+    canUncheckComplete: boolean;
+    shouldDisable: boolean = false;
     currentOfferId: String = '';
     holdStatusValid = true;
     cancelStatusValid = true;
     currentUsername: any;
+    designReviewRequestApprovalStatus: boolean;
+    markCompleteStatus:boolean;
 
-    constructor(private menuBarService: MenuBarService,
-        private userService: UserService,
+    constructor(
         private router: Router,
-        private activatedRoute: ActivatedRoute,
-        private environmentService: EnvironmentService) {
+        private userService: UserService,
+        private menuBarService: MenuBarService,
+        private activatedRoute: ActivatedRoute,     
+        private environmentService: EnvironmentService,
+        private monetizationModelService: MonetizationModelService) {
+         
+        this.currentURL = activatedRoute.snapshot['_routerState'].url;
 
         this.showPopup = false;
 
@@ -61,18 +77,18 @@ export class MenuBarComponent implements OnInit {
                             }
                         });
                     }
-                    /* Uncomment below code for Sprint 5 */
-                    // if (data['execute'] != null) {
-                    //     data['execute'].forEach(element => {
-                    //         if (element['enable'] === true) {
-                    //             this.itemShow[element['subMilestone']] = true;
-                    //         }
-                    //     });
-                    // }
+                    if (data['setup'] != null) {
+                        data['setup'].forEach(element => {
+                            if (element['enable'] === true) {
+                                this.itemShow[element['subMilestone']] = true;
+                            }
+                        });
+                    }
                 }
             }
 
         });
+
         this.navigateHash['Offer Creation'] = ['/coolOffer', this.currentOfferId, this.caseId];
         this.navigateHash['Offer Model Evaluation'] = ['/mmassesment', this.currentOfferId, this.caseId];
         this.navigateHash['Stakeholder Identification'] = ['/stakeholderFull', this.currentOfferId, this.caseId];
@@ -81,11 +97,12 @@ export class MenuBarComponent implements OnInit {
         this.navigateHash['Offer Solutioning'] = ['/offerSolutioning', this.currentOfferId, this.caseId];
         this.navigateHash['Offer Components'] = ['/offerConstruct', this.currentOfferId, this.caseId];
         this.navigateHash['Design Review'] = ['/designReview', this.currentOfferId, this.caseId];
-        /* Uncomment the below code for Sprint 5 */
-        //this.navigateHash['Modular Workflow Completion'] = ['/offerSetup', this.currentOfferId, this.caseId];
+        this.navigateHash['Offer Setup Workflow'] = ['/offerSetup', this.currentOfferId, this.caseId];
     }
 
     ngOnInit() {
+      
+
         this.items = [
             {
                 label: 'Ideate',
@@ -106,13 +123,13 @@ export class MenuBarComponent implements OnInit {
                 ]
             },
             {
-                label: 'Execute',
+                label: 'Set Up',
                 items: [
-                    { label: 'Modular Workflow Completion' },
-                    { label: 'PID & SKU Creation' },
-                    { label: 'Offer Set Up and Design' },
-                    { label: 'NPI Testing' },
-                    { label: 'Readiness Review' }
+                    { label: 'Offer Setup Workflow' },
+                    { label: 'Completion Index' },
+                    { label: 'Final Operational Assessment' },
+                    { label: 'Readiness Review' },
+                    { label: 'Orderability' }
                 ]
             },
             {
@@ -123,6 +140,44 @@ export class MenuBarComponent implements OnInit {
             },
 
         ];
+        
+
+        this.menuBarService.getMarkCompleteStatus(this.offerId, this.caseId).subscribe(data => {
+            if (this.currentURL.includes('offerDimension')) {
+                this.markCompleteStatus = data['offerDimension_toggleStatus'];
+                this.showMarkcompleteToggle = true;
+            } else if(this.currentURL.includes('offerSolutioning')){
+                this.markCompleteStatus = data['offerSolutioning_toggleStatus'];
+                this.showMarkcompleteToggle = true;
+            } else if (this.currentURL.includes('offerConstruct')){
+                this.markCompleteStatus = data['offerComponent_toggleStatus'];
+                this.showMarkcompleteToggle = true;
+            }
+            this.getMarkCompleteStatus.next(this.markCompleteStatus);
+            this.getCanUncheckCompleteStatus();
+         
+         
+        })
+
+        this.monetizationModelService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
+            this.offerBuilderdata = data;
+            this.offerBuilderdata['BEList'] = [];
+            this.offerBuilderdata['BUList'] = [];
+            if (this.offerBuilderdata['primaryBEList'] != null) {
+                this.offerBuilderdata['BEList'] = this.offerBuilderdata['BEList'].concat(this.offerBuilderdata['primaryBEList']);
+            }
+            if (this.offerBuilderdata['secondaryBEList'] != null) {
+                this.offerBuilderdata['BEList'] = this.offerBuilderdata['BEList'].concat(this.offerBuilderdata['secondaryBEList']);
+            }
+            if (this.offerBuilderdata['primaryBUList'] != null) {
+                this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['primaryBUList']);
+            }
+            if (this.offerBuilderdata['secondaryBUList'] != null) {
+                this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['secondaryBUList']);
+            }
+        });
+
+       
 
     }
 
@@ -145,19 +200,19 @@ export class MenuBarComponent implements OnInit {
                 this.cancelStatusValid = false;
                 this.currentUsername = this.userService.getName();
 
-                let textValue = document.createElement('a');
+                const textValue = document.createElement('a');
                 textValue.innerText = 'here';
                 textValue.href = this.environmentService.redirectUrl;
 
 
-                let emailSubject = `${this.offerName} (${this.offerId}) has been on hold by ${this.userService.getUserId()}`;
-                let emailBody = `Hello All,
+                const emailSubject = `${this.offerName} (${this.offerId}) has been on hold by ${this.userService.getUserId()}`;
+                const emailBody = `Hello All,
                 ${this.offerName}(${this.offerId}) has been on hold by ${this.userService.getName()}.
                 All related actions have been disabled.
                 Click ${textValue.href} to view on hold offer in COOL.
                 You are receiving this email because you have been identified as a stakeholder for ${this.offerName}.`;
-                let stakeHolders = [];
-                for (let prop in this.stakeData) {
+                const stakeHolders = [];
+                for (const prop in this.stakeData) {
                     this.stakeData[prop].forEach(stakeholder => {
                         if (stakeholder['emailId'] != null) {
                             stakeHolders.push(stakeholder['emailId']);
@@ -182,18 +237,18 @@ export class MenuBarComponent implements OnInit {
                 this.cancelStatusValid = false;
                 this.currentUsername = this.userService.getName();
 
-                let textValue = document.createElement('a');
+                const textValue = document.createElement('a');
                 textValue.innerText = 'here';
                 textValue.href = this.environmentService.redirectUrl;
 
-                let emailSubject = `${this.offerName}(${this.offerId}) has been canceled by ${this.userService.getUserId()}`;
-                let emailBody = `Hello All,
+                const emailSubject = `${this.offerName}(${this.offerId}) has been canceled by ${this.userService.getUserId()}`;
+                const emailBody = `Hello All,
                 ${this.offerName}(${this.offerId}) has been canceled by ${this.userService.getName()}.
                 All related actions have been disabled.
                 Click ${textValue} to view canceled offer in COOL.
                 You are receiving this email because you have been identified as a stakeholder for ${this.offerName}.`;
-                let stakeHolders = [];
-                for (let prop in this.stakeData) {
+                const stakeHolders = [];
+                for (const prop in this.stakeData) {
                     this.stakeData[prop].forEach(stakeholder => {
                         if (stakeholder['emailId'] != null) {
                             stakeHolders.push(stakeholder['emailId']);
@@ -235,6 +290,47 @@ export class MenuBarComponent implements OnInit {
         this.router.navigate(['/offerDetailView', this.offerId, this.caseId]);
     }
 
+    getCanUncheckCompleteStatus() {
+
+        this.menuBarService.getDesignReviewStatus(this.offerId).subscribe(data => {
+              this.designReviewRequestApprovalStatus = data['designReviewRequestApproval'];
+              if (this.designReviewRequestApprovalStatus == true){
+                this.canUncheckComplete = false;
+            } else {
+                this.canUncheckComplete = true;
+            }
+            this.disableMarkCompleteToggle();
+         })
+      
+    }
+
+    toggleMarkCompletePopup() {
+       this.showMarkcompletePopup = !this.showMarkcompletePopup;
+    }
+
+    closeMarkCompletePopup(message) {
+        this.showMarkcompletePopup = false;
+        this.markCompleteStatus = !this.markCompleteStatus;
+        this.getMarkCompleteStatus.next(this.markCompleteStatus);
+        this.disableMarkCompleteToggle();
+    }
+
+    confirmMarkComplete(message) {
+        this.showMarkcompletePopup = false;
+        this.getMarkCompleteStatus.next(this.markCompleteStatus);
+        this.disableMarkCompleteToggle();
+    }
+    
+    disableMarkCompleteToggle() {
+
+        if(this.markCompleteStatus === false && this.canMarkComplete === false) {
+           this.shouldDisable = true;
+        }
+         if(this.markCompleteStatus === true && this.canUncheckComplete === false) {
+            this.shouldDisable = true;
+         }
+         console.log('111:'+ this.shouldDisable)
+    }
 }
 
 

@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output } from '@angular/core';
 import { SsoAto } from '../../models/sso-ato';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-sso-ato-list',
@@ -9,10 +10,15 @@ import { SsoAto } from '../../models/sso-ato';
 export class SsoAtoListComponent implements OnInit {
 
   @Input() ssoList: Array<SsoAto>;
+  @Output() atoSelection = new Subject<string>();
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  onClick(selectedAto: string) {
+    this.atoSelection.next(selectedAto);
   }
 
 }

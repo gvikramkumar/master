@@ -8,6 +8,8 @@ import * as moment from 'moment';
 import { OfferconstructCanvasService } from './../../../construct/offer-construct-canvas/service/offerconstruct-canvas.service';
 import { OfferConstructDefaultValue } from './../../../construct/offer-construct-canvas/service/offer-construct-defaultvalue-services';
 import {ConfirmationService} from 'primeng/api';
+import { OfferDetailViewService } from '@app/services/offer-detail-view.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'dynamic-form-multiple',
@@ -26,11 +28,13 @@ export class DynamicFormMultipleComponent implements OnInit {
     public majorLineItemsActive: Boolean = false;
     public copyAttributeResults: any;
     public results: any;
+    public beListType: any;
     public selectedProduct: any = [];
     public selectedTab: string;
     public itemsData: any;
     public itemsList: any = [];
     public lengthList: any;
+    currentOfferId;
     public currenntHeaderName: any;
     @Output() valueChange = new EventEmitter();
     @Output() clkDownloadZip = new EventEmitter();
@@ -46,13 +50,19 @@ export class DynamicFormMultipleComponent implements OnInit {
     @Input() indexVal;
     @Input() isItemCreation: boolean;
     eGenieAlert:boolean;
-
+    createdeGenie:boolean;
+    itemNameInvalid: Boolean = false;
     constructor(public offerConstructService: OfferConstructService,
         private offerConstructCanvasService: OfferconstructCanvasService,
         private loaderService: LoaderService,
         private datePipe: DatePipe,
+        private activatedRoute: ActivatedRoute,
         private defaultValueServices: OfferConstructDefaultValue,
+        private offerDetailViewService: OfferDetailViewService,
         private confirmationService: ConfirmationService) {
+            this.activatedRoute.params.subscribe(params => {
+              this.currentOfferId = params['offerId'];
+            });
     }
 
     ngOnInit() {
@@ -64,6 +74,7 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.tableShowCondition = true;
         this.selectedTab = 'major';
         this.createObjectForSearch();
+        this.offerDetailView();
 
         console.log(this.offerInfo);
 
@@ -99,6 +110,25 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.minorLineItemsActive = true;
         this.selectedTab = 'minor';
     }
+    getprimaryBEListType(primaryBEList) {
+        this.beListType = primaryBEList[0];
+    }
+
+    offerDetailView() {
+      // Check if construct details are availbale in the database for the current offer.
+      this.offerDetailViewService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetailRes => {
+        if (offerDetailRes.primaryBEList !== null && offerDetailRes.primaryBEList !== undefined) {
+          if (offerDetailRes.primaryBEList.length > 0) {
+            this.getprimaryBEListType(offerDetailRes.primaryBEList);
+          }
+        }
+      }, (err) => {
+        console.log(err);
+        this.loaderService.stopLoading();
+      }, () => {
+        this.loaderService.stopLoading();
+      });
+    }
 
     onHideViewDetailsModal() {
         console.log("test");
@@ -131,6 +161,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     }
     eGenieDefault(q){
         if(q.value.eGenieFlag){this.eGenieAlert = true}
+        if(q.value.newItemEGenieStatus){this.createdeGenie = true}
     }
     onShowDialog(){
         this.closeDialogAction = 1;
@@ -441,22 +472,22 @@ export class DynamicFormMultipleComponent implements OnInit {
                     this.defaultValueServices.setSubscriptionType(questionList, this.defaultValueServices.serviceTypeValue);
                 }
             }
-            
+
             if (question.question == "Description") {
                     this.defaultValueServices.setLongDescription(questionList);
                 }
-                
+
             if (question.question == "Default True Up Term") {
                     this.defaultValueServices.setDefaultTrueupTerm(questionList);
                 }
             if (question.question == "Default Initial Term") {
                     this.defaultValueServices.setDefIniTerm(questionList);
                 }
-                
+
             if (question.question == "Default Initial Term") {
                     this.defaultValueServices.setDefaultInitialTerm(questionList);
                 }
-                
+
             if (question.question == "STD AUTO RENEWAL TERM") {
                     this.defaultValueServices.setDefaultAutoRenewalTerm(questionList);
                 }
@@ -470,7 +501,7 @@ export class DynamicFormMultipleComponent implements OnInit {
                 }
 
             }
-            
+
             if (question.question == "Is The PID Product Based?") {
                 if (question.currentValue == "Yes") {
                     this.defaultValueServices.setPricingFormula(questionList);
@@ -529,13 +560,13 @@ export class DynamicFormMultipleComponent implements OnInit {
                 }
 
             }
-            
+
             // if (question.question == "Product Reliability Class") {
             //     if (question.currentValue == "Yes") {
             //         this.defaultValueServices.setSubscriptionOffset(questionList);
             //     }
             // }
-            
+
             if (question.question == "Enablement") {
                 if (question.currentValue == "Y") {
                     this.defaultValueServices.setEnablementFileType(questionList);
@@ -544,7 +575,7 @@ export class DynamicFormMultipleComponent implements OnInit {
                     this.defaultValueServices.setEnablementFileTypeN(questionList);
                 }
             }
-            
+
             if (question.question == "Enablement File Type") {
                 if (question.currentValue == "EMM" || question.currentValue == "Hybrid") {
                     this.defaultValueServices.setConditionalAccess(questionList);
@@ -553,6 +584,153 @@ export class DynamicFormMultipleComponent implements OnInit {
                     this.defaultValueServices.setConditionalAccessN(questionList);
                 }
             }
+
+            if (question.question == "SOA Pricing") {
+                if (question.currentValue == "Flat") {
+                    this.defaultValueServices.setSoaPricingbasedDefaultsFlat(questionList);
+                }
+                else {
+                    this.defaultValueServices.setSoaPricingbasedDefaultsFlatN(questionList);
+                }
+            }
+
+            if (question.question == "SOA Pricing") {
+                if(question.currentValue == "% of Product List") {
+                    this.defaultValueServices.setSoaPricingbasedDefaultsProduct(questionList);
+                }
+                else {
+                    this.defaultValueServices.setSoaPricingbasedDefaultsProductN(questionList);
+                }
+            }
+
+            if (question.question == "Support Pricing Minimum (monthly) ") {
+                if(question.currentValue == "Yes") {
+                    this.defaultValueServices.setMonthlySupportPricingProduct(questionList);
+                }
+                else {
+                    this.defaultValueServices.setMonthlySupportPricingProductN(questionList);
+                }
+            }
+
+            if (question.question == "Monthly Amount") {
+                if(question.currentValue != "$0") {
+                    this.defaultValueServices.setTMSNOde(questionList);
+                }
+                else{
+                    this.defaultValueServices.setTMSNOdeN(questionList);
+                }
+            }
+
+            if (question.question == "Percentage Amount") {
+                if(question.currentValue != "blank" || question.currentValue != "") {
+                    this.defaultValueServices.setTMSNOde1(questionList);
+                }
+                else{
+                    this.defaultValueServices.setTMSNOdeN1(questionList);
+                }
+            }
+
+            if (question.question == "Service Type?") {
+                if(question.currentValue == "Service") {
+                    this.defaultValueServices.setTMSNOdeASDefault(questionList);
+                }
+                if(question.currentValue == "Support") {
+                    this.defaultValueServices.setTMSNOdeASDefaultN(questionList);
+                }
+            }
+
+            if (question.question == "Service Type?") {
+                if(question.currentValue == "Support") {
+                    this.defaultValueServices.setTMSNOdeN2(questionList);
+                }
+            }
+
+            if (question.question == "Monthly Amount") {
+                if(question.currentValue != "$0") {
+                    this.defaultValueServices.setTMSNOdeTS(questionList,this.beListType);
+                }
+                else{
+                    this.defaultValueServices.setTMSNOdeTSN(questionList);
+                }
+            }
+
+            if (question.question == "Percentage Amount") {
+                if(question.currentValue != "blank" || question.currentValue != "") {
+                    this.defaultValueServices.setTMSNOdeTS1(questionList,this.beListType);
+                }
+                else{
+                    this.defaultValueServices.setTMSNOdeTSN1(questionList,this.beListType);
+                }
+            }
+
+            if (question.question == "Service Type?") {
+                if(question.currentValue == "Support") {
+                    this.defaultValueServices.setTMSNOdeTSDefault(questionList,this.beListType);
+                }
+                else{
+                    this.defaultValueServices.setTMSNOdeTSDefaultN(questionList,this.beListType);
+                }
+            }
+
+            //
+            // if (question.question == "Service Type?") {
+            //     if(question.currentValue == "Support") {
+            //         this.defaultValueServices.setTMSNOdeTSN2(questionList,this.beListType);
+            //     }
+            // }
+            //
+            if (question.question == "Service Type?") {
+                if(question.currentValue == "Support") {
+                    this.defaultValueServices.setTMSNOdeASDisable(questionList);
+                }
+            }
+
+            if (question.question == "Service Type?") {
+                if(question.currentValue == "Service") {
+                    this.defaultValueServices.setTMSNOdeTSDisable(questionList,this.beListType);
+                }
+            }
+
+            if (question.question == "SOA Pricing") {
+                if(question.currentValue == "Flat") {
+                    this.defaultValueServices.setMonthlySupMin(questionList);
+                }
+            }
+
+            if (question.question == "Service Type?") {
+                if(question.currentValue == "Support") {
+                    this.defaultValueServices.settmsTsValue(questionList,this.beListType);
+                }
+
+            }
+            if (question.question == "Service Type?") {
+                if(question.currentValue == "Service") {
+                    this.defaultValueServices.settmsAsValue(questionList,this.beListType);
+                }
+
+            }
+
+            if (question.question == "Service Type?") {
+                if(question.currentValue == "Service") {
+                    this.defaultValueServices.settmsAsValue(questionList,this.beListType);
+                }
+
+            }
+
+            if (question.question == "SOA Pricing") {
+                if(question.currentValue == "% of Product List") {
+                    this.defaultValueServices.setTmsASTmsTS(questionList);
+                }
+              }
+            //
+            // if (question.question == "Service Type?") {
+            //     if(question.currentValue != "Service") {
+            //         this.defaultValueServices.setTMSNOde(questionList);
+            //     }
+            //     else{
+            //         this.defaultValueServices.setTMSNOdeN(questionList);
+            //     }
+            // }
 
         }
         var validatorPattern = '';
@@ -600,7 +778,6 @@ export class DynamicFormMultipleComponent implements OnInit {
                 }
             }
             if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "First letter Caps, No special characters allowed and max of 60 characters") {
-                // validatorPattern = "^[A-Z][A-Za-z0-9\\s]*$";
                 if (!(/^[A-Z][A-Za-z0-9\s]*$/.test(question.currentValue))) {
                     question.rules.validationMessage = question.egineAttribue + " should be in " + question.rules.textcase;
                     question.rules.isvalid = false;
@@ -631,7 +808,7 @@ export class DynamicFormMultipleComponent implements OnInit {
                 }
             }
             if (question.egineAttribue == 'NON STD INITIAL TERM') {
-                if (!(/^0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120)$/.test(question.currentValue))) {
+                if (!(/^(0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120))(-(0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120)))$/.test(question.currentValue))) {
                     question.rules.validationMessage = "Value should be a numeric range where 1 is min and 120 is max (example: 1-12)";
                     question.rules.isvalid = false;
                 }
@@ -651,7 +828,7 @@ export class DynamicFormMultipleComponent implements OnInit {
                 }
             }
             if (question.egineAttribue == 'NON STD AUTO RENEWAL TERM') {
-                if (!(/^0*([1-9]|1[0-2])$/.test(question.currentValue))) {
+                if (!(/^(0*([1-9]|1[0-2]))(-(0*([1-9]|1[0-2])))$/.test(question.currentValue))) {
                     question.rules.validationMessage = question.egineAttribue + "Value should be a numeric range where 1 is min and 12 is max";
                     question.rules.isvalid = false;
                 }
@@ -670,10 +847,37 @@ export class DynamicFormMultipleComponent implements OnInit {
                     question.rules.isvalid = true;
                 }
             }
+            if (question.egineAttribue == 'Non Standard True Up Term') {
+                if (!(/^(0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120))(-(0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120)))$/.test(question.currentValue))) {
+                    question.rules.validationMessage = "Value should be a numeric range (ex. 2-6)";
+                    question.rules.isvalid = false;
+                }
+                else {
+                    question.rules.validationMessage = "";
+                    question.rules.isvalid = true;
+                }
+            }
+        }else{
+            this.itemNameInvalid = true;
+            this.offerConstructCanvasService.validatePID(question.currentValue).subscribe((data) => {
+                if(data.length > 0){
+                    question.rules.validationMessage = "Item name already exists, please remove this item if no longer needed and add the correct new or existing item";
+                    question.rules.isvalid = false;
+                    this.itemNameInvalid = true;
+                }else{
+                    question.rules.validationMessage = "";
+                    question.rules.isvalid = true;
+                    this.itemNameInvalid = false;
+                }
+            });
+
         }
 
     }
     downloadZip() {
         this.clkDownloadZip.emit()
+    }
+    trimSpaces(obj, $event) {
+        obj.currentValue = $event.target.value.trim();
     }
 }

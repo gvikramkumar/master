@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OfferCreateDetailComponent } from './offer-create-detail.component';
+import { CsdlPlatformComponent } from './csdl-platform.component';
 
-describe('OfferCreateDetailComponent', () => {
-  let component: OfferCreateDetailComponent;
-  let fixture: ComponentFixture<OfferCreateDetailComponent>;
+describe('CsdlPlatformComponent', () => {
+  let component: CsdlPlatformComponent;
+  let fixture: ComponentFixture<CsdlPlatformComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ OfferCreateDetailComponent ]
+      declarations: [ CsdlPlatformComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OfferCreateDetailComponent);
+    fixture = TestBed.createComponent(CsdlPlatformComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

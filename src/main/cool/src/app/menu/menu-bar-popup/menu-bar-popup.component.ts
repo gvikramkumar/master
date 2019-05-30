@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { MenuBarService } from '@app/services/menu-bar.service';
+
+import { ActivatedRoute } from '@angular/router';
 import { UserService } from '@app/core/services';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-
+import { MenuBarService } from '@app/services/menu-bar.service';
 
 @Component({
   selector: 'app-menu-bar-popup',
@@ -11,11 +11,11 @@ import { UserService } from '@app/core/services';
   styleUrls: ['./menu-bar-popup.component.css']
 })
 export class MenuBarPopupComponent implements OnInit {
-  
+
   @Input() show = false;
   @Input() popupType: String = '';
   @Output() closePopup = new EventEmitter<string>();
-  
+
   caseId: String;
   reason: String = '';
   currentOfferId: String;
@@ -61,7 +61,8 @@ export class MenuBarPopupComponent implements OnInit {
     this.closePopup.next('');
     this.reason = '';
   }
-
+  
+  
   submit() {
     let holdData = {};
     holdData['taskId'] = '';
@@ -82,11 +83,11 @@ export class MenuBarPopupComponent implements OnInit {
     cancelData['comment'] = this.reason;
 
     if (this.popupType === 'hold') {
-      this.menuBarService.holdOffer(holdData).subscribe(res => {
+      this.menuBarService.holdOffer(holdData).subscribe(() => {
         this.closePopup.next('hold');
       });
     } else if (this.popupType === 'cancel') {
-      this.menuBarService.cancelOffer(cancelData).subscribe(res => {
+      this.menuBarService.cancelOffer(cancelData).subscribe(() => {
         this.closePopup.next('cancel');
       });
     }

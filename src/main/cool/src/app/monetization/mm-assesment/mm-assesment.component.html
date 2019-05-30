@@ -1,11 +1,11 @@
 <app-menu-bar *ngIf="dimensionMode" [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId"
-  [offerName]="offerBuilderdata['offerName']" [stakeData]="stakeholders" (updateMessage)="updateMessage($event)"
-  [showSave]="true" (onProceedToNext)="proceedToOfferSolution($event)">
+  [offerName]="offerBuilderdata['offerName']" [stakeData]="stakeholders"  [canMarkComplete]="canMarkComplete" (updateMessage)="updateMessage($event)"
+  [showSave]="true"   (getMarkCompleteStatus)="getMarkCompleteStatus($event)" (onProceedToNext)="proceedToOfferSolution($event)">
 </app-menu-bar>
 
 <app-menu-bar *ngIf="!dimensionMode" [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId"
   [offerName]="offerBuilderdata['offerName']" [stakeData]="stakeholders" (updateMessage)="updateMessage($event)"
-  [showSave]="false">
+  [showSave]="false"> 
 </app-menu-bar>
 
 <div class="content">
@@ -23,11 +23,7 @@
 
           <div class="leftContent col-sm-12 col-md-9">
 
-            <div class="panel-wrapper">
-              <app-offer-create-detail></app-offer-create-detail>
-            </div>
-
-            <div class="alert base-margin-top half-margin-bottom"
+            <div class="alert half-margin-bottom"
               [ngClass]="{'alert--info':message['color']==='black','alert--success': message['color']==='green','alert--danger': message['color']==='red','alert--warning': message['color']==='yellow'}">
               <div class="alert__icon mm-alert-icon"
                 [ngClass]="{'icon-info-outline': message['color']==='black','icon-error-outline': message['color']==='red','icon-check-outline': message['color']==='green', 'icon-warning-outline': message['color']==='yellow'}">
@@ -47,7 +43,7 @@
                 </li>
               </ul>
 
-              <div class="card card--raised">
+              <div class="panel panel--compressed panel--bordered panel--raised-small">
                 <h4>{{ groupNames[activeTabIndex] }}</h4>
                 <div class="panel">
 
@@ -77,7 +73,7 @@
                     </div>
                   </div>
 
-                  <!-- <p-dialog name="events" [(visible)]="showDialog" width="500">
+                  <p-dialog name="events" [(visible)]="showDialog" width="500">
                     <h3 class="text-center">
                       <span class="pi pi-exclamation-triangle text-warning"></span>
                     </h3>
@@ -105,7 +101,7 @@
                           (click)="showErrorDialog=false;" label="Ok"></button>
                       </div>
                     </p-footer>
-                  </p-dialog> -->
+                  </p-dialog>
 
                   <div class="panel-footer base-margin-top">
                     <div class="btn-group btn-group--wide" style="margin: auto;width: 100%;">

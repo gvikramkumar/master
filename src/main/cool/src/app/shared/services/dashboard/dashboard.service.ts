@@ -43,4 +43,11 @@ export class DashboardService {
   postActionForNapprove(data) {
     return this.http.post(this.environmentService.REST_API_CREATE_MANUAL_ACTION_POST_URL, data);
   }
+
+  postPirateShipDashBoardNotification(offerId: string, moduleName: string) {
+    return this.http.get(this.environmentService.REST_API_PIRATE_SHIP_DASHBOARD_NOTIFICATION_URL + '/' + offerId + '/' + moduleName);
+  }
+
+
+
 }

@@ -2,9 +2,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { LoaderService } from '@app/core/services/loader.service';
+import { EnvironmentService } from '@env/environment.service';
+import { ConfigurationService } from '@app/core/services/configuration.service';
+
 import { RightPanelService } from '@app/services/right-panel.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
-import { ServiceAnnuityPricingService } from '@app/services/service_annuity_pricing.service';
+import { TcMappingService } from '@app/services/tc-mapping.service';
 
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
@@ -31,12 +34,16 @@ export class TcMappingComponent implements OnInit, OnDestroy {
   stakeholders: any;
   stakeHolderData: any;
 
+  showCompleteSubscriptionButton: boolean;
+
   pirateShipModuleName: string;
   isPirateShipSubModule: boolean;
 
   selectedAto: any;
   atoNames: string[] = [];
   atoList: any;
+  selectedObjectAto: any;
+  selectedIndex: any;
 
   paramsSubscription: Subscription;
 
@@ -45,8 +52,10 @@ export class TcMappingComponent implements OnInit, OnDestroy {
     private loaderService: LoaderService,
     private activatedRoute: ActivatedRoute,
     private rightPanelService: RightPanelService,
+    private environmentService: EnvironmentService,
+    private configurationService: ConfigurationService,
     private stakeholderfullService: StakeholderfullService,
-    private serviceAnnuityPricing : ServiceAnnuityPricingService,
+    private tncMapping : TcMappingService,
   ) { 
     this.paramsSubscription = this.activatedRoute.params.subscribe(params => {
       this.caseId = params['caseId'];
@@ -63,6 +72,9 @@ export class TcMappingComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    this.functionalRole = this.configurationService.startupData.functionalRole;
+    this.showCompleteSubscriptionButton = this.selectedAto === 'Overall Offer' ? false : true;
+
     // Retrieve Offer Details
     this.stakeholderfullService.retrieveOfferDetails(this.offerId).subscribe(offerDetails => {
 
@@ -76,32 +88,25 @@ export class TcMappingComponent implements OnInit, OnDestroy {
       this.getLeadTimeCalculation();
 
     });
-
-    this.serviceAnnuityPricing.getOfferDropdownValues(this.offerId).subscribe(atoList => {
-      this.atoNames = atoList;
-    }, error => {
-      console.log('error', error);
-    });
-
-    this.serviceAnnuityPricing.getServiceAnnuityPricing(this.offerId).subscribe(atoList => {
-    }, error => {
-      console.log('error', error);
-    });
-    this.atoList = [
-      {
-          "itemName": "WS-C3850-48P-E",
-          "itemStatus": "Completed"
-      },
-      {
-          "itemName": "XaaS 1",
-          "itemStatus": "Completed"
-      },
-      {
-          "itemName": "Hardware 3",
-          "itemStatus": "Completed"
+    this.atoList = [];
+    this.tncMapping.getTncMapping(this.offerId).subscribe(atoList => {
+      this.atoNames = ['Overall Offer'];
+      this.selectedIndex = 0;
+      this.atoList = atoList.data;
+      for (let i = 0; i < this.atoList.length; i++) {
+        this.atoNames.push(this.atoList[i].itemName);
+        if (!this.atoList[i].hasOwnProperty('itemStatus') && this.atoList[i].hasOwnProperty('mappingStatus')) {
+          this.atoList[i].itemStatus = this.atoList[i].mappingStatus;
+        }
       }
-  ];
-   
+      for (let j = 0; j < this.atoNames.length; j++) {
+        if (this.atoNames[j] === this.selectedAto) {
+          this.selectedIndex = j;
+        }
+      }
+    }, error => {
+      console.log('error', error);
+    });   
   }
 
 
@@ -117,16 +122,23 @@ export class TcMappingComponent implements OnInit, OnDestroy {
 
   // -------------------------------------------------------------------------------------------------------------------
 
-  showSelectedAtoView(dropDownValue: string) {
+  showSelectedAtoView(dropDownValue: any) {
 
-    if (dropDownValue === 'Overall Offer') {
+    if (dropDownValue === 'Overall Offer' || dropDownValue === 0) {
 
-      this.selectedAto = dropDownValue;
+      this.selectedAto = this.atoNames[dropDownValue];
+      this.showCompleteSubscriptionButton = true;
 
     } else {
 
-      this.selectedAto = dropDownValue;
+      this.selectedAto = this.atoNames[dropDownValue];
+      this.showCompleteSubscriptionButton = true;
 
+    }
+    for (let i = 0; i < this.atoList.length; i++) {
+      if (this.atoList[i].itemName === this.selectedAto && i === dropDownValue - 1) {
+        this.selectedObjectAto = this.atoList[i];
+      }
     }
   }
 
@@ -171,5 +183,38 @@ export class TcMappingComponent implements OnInit, OnDestroy {
 
   // -------------------------------------------------------------------------------------------------------------------
 
+  goToOfferWorkBench() {
+
+    const userId = this.configurationService.startupData.userId;
+    let urlToOpen = this.environmentService.tncOwbUrl;
+    // urlToOpen += 'selectedAto=' + this.selectedAto + '&planId=' + this.planId + '&userId=' + userId + '&coolOfferId=' + this.offerId;;
+
+    window.open(urlToOpen, '_blank');
+  }
+
+  checkObject(element) {
+    if (this.selectedObjectAto && this.selectedObjectAto.itemType === element.itemType && element.itemType === 'License') {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  checkLicenseExist() {
+    let licenseExist = true;
+    if ((this.selectedObjectAto && this.selectedObjectAto.itemType === 'License') || this.selectedAto === 'Overall Offer') {
+      licenseExist = true;
+    } else {
+      licenseExist = false;
+    }
+    if (this.selectedObjectAto && this.selectedObjectAto.minorPids && this.selectedObjectAto.minorPids.length > 0) {
+      for (let i = 0; i < this.selectedObjectAto.minorPids.length; i++) {
+        if (this.selectedObjectAto.minorPids[i].itemType === 'License') {
+          licenseExist = true;
+        }
+      }
+    }
+    return !licenseExist;
+  }
 
 }

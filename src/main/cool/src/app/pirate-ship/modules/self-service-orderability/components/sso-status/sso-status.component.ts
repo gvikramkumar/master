@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { SsoStatus } from '../../models/sso-status';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-sso-status',
@@ -13,6 +14,7 @@ export class SsoStatusComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+
   }
 
 }

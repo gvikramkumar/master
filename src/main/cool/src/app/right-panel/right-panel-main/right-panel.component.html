@@ -1,7 +1,7 @@
 <div>
 
   <!-- Offer Phase Steps -->
-  <div class="card card--raised base-margin-top" (click)="showOfferPhaseDailog()">
+  <div class="panel panel--compressed panel--bordered panel--raised-small base-margin-bottom" (click)="showOfferPhaseDailog()">
     <h5 class="half-margin-bottom">Offer Phase
       <a href="javascript:;" class="pull-right" (click)="showOfferPhaseDailog()">
         <span class="icon-pencil"></span> Edit</a>
@@ -27,7 +27,7 @@
           <span class="icon-check" *ngIf="mileStoneStatus[2].status === 'visited'"></span>
           <span *ngIf="mileStoneStatus[2].status !== 'visited'">3</span>
         </div>
-        <div class="step__label">Execute</div>
+        <div class="step__label">Set Up</div>
       </div>
       <div class="ui-step {{mileStoneStatus[3].status}}">
         <div class="step__icon">
@@ -40,7 +40,7 @@
   </div>
 
   <!-- Estimated Lead Time -->
-  <div class="card card--raised base-margin-top">
+  <div class="panel panel--compressed panel--bordered panel--raised-small base-margin-bottom">
 
     <h5 class="half-margin-bottom">Estimated Lead Time</h5>
 
@@ -96,9 +96,9 @@
           </div> -->
 
   <!-- People Involved -->
-  <div class="card card--raised base-margin-top stakeholders">
+  <div class="panel panel--compressed panel--bordered panel--raised-small stakeholders">
 
-    <h5>People Involved<a href="javascript:;" class="pull-right" (click)="showStakeHolderDialog()">
+    <h5 class="half-margin-bottom">People Involved<a href="javascript:;" class="pull-right" (click)="showStakeHolderDialog()">
         <i class="pi pi-plus"></i> Add</a>
     </h5>
 
@@ -108,7 +108,7 @@
         <p-accordion>
           <p-accordionTab header="{{key}} ({{stakeData[key].length}})" [selected]="false">
 
-            <div *ngFor="let coOwners of stakeData[key]">
+            <div class="member" *ngFor="let coOwners of stakeData[key]">
               <div class="flex-center-vertical">
 
                 <!-- Team Member Avatar -->
@@ -179,7 +179,7 @@
                   <span class="icon-check" *ngIf="mileStoneStatus[2].status === 'visited'"></span>
                   <span *ngIf="mileStoneStatus[2].status !== 'visited'">3</span>
                 </div>
-                <div class="step__label">Execute</div>
+                <div class="step__label">Set Up</div>
               </div>
               <div class="ui-step {{mileStoneStatus[3].status}}">
                 <div class="step__icon">
@@ -305,56 +305,49 @@
                 </table>
               </div>
             </p-accordionTab>
-            <!-- Uncomment the below code for Sprint 5 -->
-            <!-- <p-accordionTab header="Execute">
+            <p-accordionTab header="Set Up">
               <div class="responsive-table">
                 <table class="table table--hover table--compressed table--nostripes">
                   <thead>
                     <tr>
-                      <th>Execute - <span class="text-success"> {{executeCompletedCount}} of
-                          {{executeCount}} <span class="icon-check-outline icon-medium"></span></span></th>
+                      <th>Set Up - <span class="text-success"> {{setupCompletedCount}} of
+                          {{setupCount}} <span class="icon-check-outline icon-medium"></span></span></th>
                       <th>STATUS</th>
                       <th>TARGET DATE</th>
                       <th>COMPLETION DATE</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let executeData of offerPhaseDetailsList.execute">
+                    <tr *ngFor="let setupData of offerPhaseDetailsList.setup">
                       <td>
-                        <div *ngIf="!executeData.enable; else enableOfferPhase">
+                        <div *ngIf="!setupData.enable; else enableOfferPhase">
                           <span class="text-muted" pTooltip="Dependent activities are not yet satisfied"
-                            tooltipPosition="top">{{executeData.subMilestone}}</span>
+                            tooltipPosition="top">{{setupData.subMilestone}}</span>
                         </div>
                         <ng-template #enableOfferPhase>
-                          <a><span (click)="navigate(executeData.subMilestone)">{{executeData.subMilestone}}</span></a>
+                          <a><span (click)="navigate(setupData.subMilestone)">{{setupData.subMilestone}}</span></a>
                         </ng-template>
                       </td>
 
                       <td
-                        [ngClass]="(executeData.status == 'Completed' || executeData.status == 'Not Applicable')?'text-success':'text-warning'">
-                        {{executeData.status}}</td>
+                        [ngClass]="(setupData.status == 'Completed' || setupData.status == 'Not Applicable')?'text-success':'text-warning'">
+                        {{setupData.status}}</td>
                       <td>
-                        <span *ngIf="!editPlanTargetDate">
-                          {{executeData.targetDate | date: "dd-MMM-y"}}
+                        <span *ngIf="!editSetUpTargetDate">
+                          {{setupData.targetDate | date: "dd-MMM-y"}}
                         </span>
-                        <span *ngIf="editPlanTargetDate && executeData.subMilestone === 'Readiness Review'">
+                        <span *ngIf="editSetUpTargetDate && setupData.subMilestone === 'Readiness Review'">
                           <input type="text" class="form-control" #dp="bsDatepicker" bsDatepicker [minDate]="minDate"
-                            [bsConfig]="dpConfig" (bsValueChange)="onValueChange('execute',$event)"
-                            [value]='executeData.targetDate | date: "dd-MMM-y"' placement="top">
+                            [bsConfig]="dpConfig" (bsValueChange)="onValueChange('setup',$event)"
+                            [value]='setupData.targetDate | date: "dd-MMM-y"' placement="top">
                         </span>
-                        <span *ngIf="executeData.subMilestone === 'Readiness Review'">
-                          <a (click)="editDate('plan')"><span class="icon-pencil"></span>Edit</a>
+                        <span *ngIf="setupData.subMilestone === 'Readiness Review'">
+                          <a (click)="editDate('setup')"><span class="icon-pencil"></span>Edit</a>
                         </span>
                       </td>
-                      <td>{{executeData.completionDate | date: "dd-MMM-y"}}</td>
+                      <td>{{setupData.completionDate | date: "dd-MMM-y"}}</td>
                     </tr>
                   </tbody>
-                </table>
-              </div>
-            </p-accordionTab> -->
-            <p-accordionTab header="Execute">
-              <div class="responsive-table">
-                <table class="table table--hover table--compressed table--nostripes">
                 </table>
               </div>
             </p-accordionTab>
