@@ -710,12 +710,12 @@ export class DynamicFormMultipleComponent implements OnInit {
 
             }
 
-            if (question.question == "Service Type?") {
-                if(question.currentValue == "Service") {
-                    this.defaultValueServices.settmsAsValue(questionList,this.beListType);
-                }
-
-            }
+            // if (question.question == "Service Type?") {
+            //     if(question.currentValue == "Service") {
+            //         this.defaultValueServices.settmsAsValue(questionList,this.beListType);
+            //     }
+            //
+            // }
 
             if (question.question == "SOA Pricing") {
                 if(question.currentValue == "% of Product List") {

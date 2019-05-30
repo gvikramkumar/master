@@ -1016,7 +1016,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
                 obj['itemDetails'] = listOfferQuestions;
               }
 
-              if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS' || obj.productName == 'Billing') {
+              if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS'
+              || obj.productName == 'Billing') {
                 let listOfferQuestions = this.defaultValueServices.setCreateDefault(this.listOfferQuestions);
                 obj['itemDetails'] = listOfferQuestions;
               }
@@ -1052,12 +1053,9 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
               obj['itemDetails'] = this.listOfferQuestions;
             } else {
-              let listOfferQuestions = this.defaultValueServices.billingSOADefaultValue(this.listOfferQuestions, this.chargeTypeValue);
+              let listOfferQuestions = this.defaultValueServices.billingSOADefaultValue(this.listOfferQuestions, this.chargeTypeValue, this.beListType);
 
               obj['itemDetails'] = this.listOfferQuestions;
-            } else {
-              let listOfferQuestions = this.defaultValueServices.billingSOADefaultValue(this.listOfferQuestions, this.chargeTypeValue, this.beListType);
-              obj['itemDetails'] = listOfferQuestions;
             }
             this.setSameAsMajorLine(rowNode, this.listOfferQuestions);
             rowNode.node.children.push(this.itemToTreeNode(obj));
@@ -1389,7 +1387,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           this.getCreateSpareType(offerDetailRes.solutioningDetails);
         }
       }
-      
+
       // check if at least one major and one minor item selected, and enable the mark complete button.
       this.checkCanMarkCompleteStatus();
     }, (err) => {

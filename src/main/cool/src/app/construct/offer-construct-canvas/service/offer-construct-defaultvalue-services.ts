@@ -946,10 +946,16 @@ export class OfferConstructDefaultValue {
 
 
   setTMSNOdeTS(questionList, beListType) {
+    let tmsAsDefault;
     questionList.forEach(question => {
-        if (question.question == "TMS Node TS") {
+        if (question.question == "Service Type?") {
+          tmsAsDefault = question.currentValue;
+        }
+    });
+    questionList.forEach(question => {
+      if (question.question == "TMS Node TS") {
+        if(tmsAsDefault == "Support"){
           question.rules.isDisabled = false;
-          if (question.question == 'TMS Node TS') {
               if (beListType == "Collaboration") {
 
                 question.currentValue = "UC/HVS/SWSS/SUB/TRAN Svc";
@@ -1091,23 +1097,23 @@ export class OfferConstructDefaultValue {
        });
    }
 
-  setTMSNOdeTSN2(questionList, beListType) {
-      questionList.forEach(question => {
-          if (question.question == "TMS Node TS") {
-            question.rules.isDisabled = false;
-            if (beListType == "Collaboration") {
-
-              question.currentValue = "UC/HVS/SWSS/SUB/TRAN Svc";
-            }
-            if (beListType == "Security") {
-              question.currentValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
-            }
-            if (beListType != "Collaboration" && beListType != "Security") {
-              question.currentValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
-            }
-          }
-      });
-  }
+  // setTMSNOdeTSN2(questionList, beListType) {
+  //     questionList.forEach(question => {
+  //         if (question.question == "TMS Node TS") {
+  //           question.rules.isDisabled = false;
+  //           if (beListType == "Collaboration") {
+  //
+  //             question.currentValue = "UC/HVS/SWSS/SUB/TRAN Svc";
+  //           }
+  //           if (beListType == "Security") {
+  //             question.currentValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
+  //           }
+  //           if (beListType != "Collaboration" && beListType != "Security") {
+  //             question.currentValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
+  //           }
+  //         }
+  //     });
+  // }
 
   setMonthlySupMin(questionList) {
       questionList.forEach(question => {
