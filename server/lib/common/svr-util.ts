@@ -27,7 +27,8 @@ export const svrUtil = {
   toFixed,
   getEnvEmail,
   isProdEnv,
-  getErrorForJson
+  getErrorForJson,
+  docToObjectWithISODate
 };
 
 function getErrorForJson(err) {
@@ -214,6 +215,17 @@ function checkParams(obj, arrProps, next) {
     return true;
   }
   return false;
+}
+
+function docToObjectWithISODate(doc) {
+  const obj = docToObject(doc);
+  Object.keys(obj).forEach(key => {
+    const val = obj[key];
+    if (obj[key] instanceof Date) {
+      obj[key] = val.toISOString();
+    }
+  });
+  return obj;
 }
 
 
