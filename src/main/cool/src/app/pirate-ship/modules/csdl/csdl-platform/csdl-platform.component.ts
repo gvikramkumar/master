@@ -300,7 +300,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
     csdlPayload.csdlProjectSelected = 'N';
     csdlPayload.csdlRequired = 'N';
     csdlPayload.csdlMileStoneStatus = 'Complete';
-    csdlPayload.associationStatus = 'deassociate';
+    csdlPayload.associationStatus = 'disassociate';
     csdlPayloadArray.push(csdlPayload);
     this.csdlIntegrationService.restartCsdlAssociation(csdlPayloadArray).subscribe(data => {
       this.isCompleteButtonDisabled = true;
