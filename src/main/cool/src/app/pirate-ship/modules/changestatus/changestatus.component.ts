@@ -9,7 +9,6 @@ import { PirateShipSharedService } from '../../../services/pirate-ship-shared.se
 import { OfferSetupService } from '../../../services/offer-setup.service';
 import { RightPanelService } from '@app/services/right-panel.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
-import {OffersolutioningService} from '@app/services/offersolutioning.service';
 
 
 @Component({
@@ -65,7 +64,7 @@ export class ChangestatusComponent implements OnInit {
     "Export Compliance": "<ol><li>BUPMs must complete the <a href=\"https://pepd.cloudapps.cisco.com/legal/export/pepd/EPReviewForm.do?method=showEPRForm#!/\" target=\"_blank\">Export Product Review Form: </a> </li><li>Once the BUPM has completed the form, they will receive an email notification with the results, as well as an EPR number.</li><li>Offer Leads or BUPMs should document the case number as it may be required for creation of new PIDs.</li><li>Offer Leads or BUPMs should reach out to the GET Team to schedule a due diligence review. The following three points are important to note before the due diligence review:<br/>a. The BUPM will need to explain the correlation between PID and the product the customer receives.<br/> b. Any SW associated with the SBP offering needs an export compliance due diligence review.<br/>  c. If the SW requires a formal US government review, the formal government review may potentially take up to 2-3 months.</li><li>Once the compliance due diligence review is complete, an email will be sent from the GET Team (exportclass@cisco.com) stating the PIDs are compliant.</li><li>If emails need to be sent to the GET Team (exportclass@cisco.com) requesting confirmation that export compliance due diligence is complete, please be sure to reference the EPR # in the subject line of the email.</li></ol>"
   };
 
-  
+
 
 
   constructor(private sharedataService: SharedataService,
@@ -98,7 +97,6 @@ export class ChangestatusComponent implements OnInit {
 
   ngOnInit() {
 
-
     this.changestatusService.getAllComments(this.moduleName, this.offerId).subscribe(data=>{
       this.comments = data;
     });
@@ -108,7 +106,7 @@ export class ChangestatusComponent implements OnInit {
   }
 
   findFunctionRoles(moduleName: string, pirateShipSharedService: PirateShipSharedService) {
-
+    console.log('pirateShipSharedService : ', pirateShipSharedService.getRole());
     switch (moduleName) {
       case 'NPI Licensing': {
         this.infohelp = this.basicmodule_hint.NPI_Licensing;
@@ -206,9 +204,7 @@ export class ChangestatusComponent implements OnInit {
         if ( pirateShipSharedService &&
           pirateShipSharedService.getRole()
           &&
-          pirateShipSharedService.getRole() === 'BUPM'
-          
-        ) {
+          pirateShipSharedService.getRole() === 'BUPM') {
           this.isReadOnly = false;
         }
         break;
@@ -218,7 +214,22 @@ export class ChangestatusComponent implements OnInit {
   }
 
 
-  s
+  markAsComplete() {
+    //console.log('MaskAsComplete');
+    let data = {
+      "offerId":this.offerId,
+      "caseId":this.caseId,
+      "moduleName":this.moduleName,
+      "status":"Complete"
+    }
+
+    this.changestatusService.updateStatus(data).subscribe(obj => {
+      this.moduleOfStatus = obj;
+      this.mStatus = obj;
+    });
+    this.ishide = !this.ishide;
+    //this.mStatus.status = 'Complete';
+  }
 
   /**
    * Saving the comments.
@@ -399,6 +410,7 @@ export class ChangestatusComponent implements OnInit {
   }
 
   markAsCompleteModal(labelName: string) {
+    //console.log('complete' , labelName);
     this.isBtnNeeded = true;
     this.infohelp = '<div style="text-align: center ! important;">Are you sure you would like to mark this as complete? Once completing a module, you will not be able to move it back to \"In-progress\" </div>';
     this.ishide = !this.ishide;
