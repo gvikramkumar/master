@@ -9,6 +9,7 @@ import { PirateShipSharedService } from '../../../services/pirate-ship-shared.se
 import { OfferSetupService } from '../../../services/offer-setup.service';
 import { RightPanelService } from '@app/services/right-panel.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
+import {OffersolutioningService} from '@app/services/offersolutioning.service';
 
 
 @Component({
@@ -97,6 +98,7 @@ export class ChangestatusComponent implements OnInit {
 
   ngOnInit() {
 
+
     this.changestatusService.getAllComments(this.moduleName, this.offerId).subscribe(data=>{
       this.comments = data;
     });
@@ -106,7 +108,7 @@ export class ChangestatusComponent implements OnInit {
   }
 
   findFunctionRoles(moduleName: string, pirateShipSharedService: PirateShipSharedService) {
-    console.log('pirateShipSharedService : ', pirateShipSharedService.getRole());
+
     switch (moduleName) {
       case 'NPI Licensing': {
         this.infohelp = this.basicmodule_hint.NPI_Licensing;
@@ -204,7 +206,9 @@ export class ChangestatusComponent implements OnInit {
         if ( pirateShipSharedService &&
           pirateShipSharedService.getRole()
           &&
-          pirateShipSharedService.getRole() === 'BUPM') {
+          pirateShipSharedService.getRole() === 'BUPM'
+          
+        ) {
           this.isReadOnly = false;
         }
         break;
@@ -214,22 +218,7 @@ export class ChangestatusComponent implements OnInit {
   }
 
 
-  markAsComplete() {
-    //console.log('MaskAsComplete');
-    let data = {
-      "offerId":this.offerId,
-      "caseId":this.caseId,
-      "moduleName":this.moduleName,
-      "status":"Complete"
-    }
-
-    this.changestatusService.updateStatus(data).subscribe(obj => {
-      this.moduleOfStatus = obj;
-      this.mStatus = obj;
-    });
-    this.ishide = !this.ishide;
-    //this.mStatus.status = 'Complete';
-  }
+  s
 
   /**
    * Saving the comments.
@@ -410,7 +399,6 @@ export class ChangestatusComponent implements OnInit {
   }
 
   markAsCompleteModal(labelName: string) {
-    //console.log('complete' , labelName);
     this.isBtnNeeded = true;
     this.infohelp = '<div style="text-align: center ! important;">Are you sure you would like to mark this as complete? Once completing a module, you will not be able to move it back to \"In-progress\" </div>';
     this.ishide = !this.ishide;
