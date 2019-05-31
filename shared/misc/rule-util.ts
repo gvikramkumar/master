@@ -8,15 +8,24 @@ export const ruleUtil = {
   parseSelect,
   createSelect,
   addRuleNameAndDescription,
-  getRuleDescription
+  getRuleDescription,
+
+  test: {
+    getMatchText,
+    getMatchTextArray,
+    addMatches,
+    addSelects,
+    addDescription
+  }
 };
 
 function getRuleDescription(rule) {
+  const desc = (rule.desc || '').trim();
   let html = `<table style='border:none'>`;
-  rule.desc.split('\n')
+  desc.split('\n')
     .forEach(x => {
       const colonIdx = x.indexOf(':');
-      html += `<tr><td>${x.substring(0, colonIdx)}</td><td style="padding-left: 20px;">${x.substring(colonIdx + 1)}</td></tr>`;
+      html += `<tr><td>${x.substring(0, colonIdx).trim()}</td><td style="padding-left: 20px;">${x.substring(colonIdx + 1).trim()}</td></tr>`;
     });
   html += `</table>`;
   return html;
@@ -43,10 +52,15 @@ function addRuleNameAndDescription(rule, selectMap, drivers, periods) {
   rule.name += period ? `-${period.abbrev || period.period}` : '';
   addMatches(rule);
   addSelects(rule, selectMap);
+  rule.name = rule.name.toUpperCase(); // just in case, shouldn't need this, but can't hurt
   addDescription(rule, driver, period);
 }
 
-function getMatchText(values, prop, value) {
+function getMatchText(values, prop, _value = '') {
+  const value = _value.trim();
+  if (!value) { // handle just spaces
+    return '';
+  }
   const val = _.find(values, {[prop]: value});
   if (!val) {
     throw new Error(`getMatchText couldn't find: ${value} in prop: ${prop} of values: ${values}`);
@@ -54,7 +68,11 @@ function getMatchText(values, prop, value) {
   return val.abbrev || val[prop];
 }
 
-function getMatchTextArray(values, prop, arr) {
+function getMatchTextArray(values, prop, _arr) {
+  const arr = _arr && _arr.map(x => x.trim()).filter(x => !!x);
+  if (!arr || !arr.length) {
+    return '';
+  }
   const rtn = [];
   arr.forEach(aval => {
     const val = _.find(values, {[prop]: aval});
@@ -69,8 +87,8 @@ function getMatchTextArray(values, prop, arr) {
 const salesMatches = [{match: 'SL1'}, {match: 'SL2'}, {match: 'SL3'}, {match: 'SL4'}, {match: 'SL5'}, {match: 'SL6'}];
 const productMatches = [{match: 'BU'}, {match: 'PF'}, {match: 'TG'}]; // no PID
 const scmsMatches = [{match: 'SCMS'}];
-const legalEntityMatches = [{match: 'Business Entity', abbrev: 'LE'}];
 const beMatches = [{match: 'BE', abbrev: 'IBE'}, {match: 'Sub BE', abbrev: 'ISBE'}];
+const legalEntityMatches = [{match: 'Business Entity', abbrev: 'LE'}];
 const countryMatches = [{name: 'Sales Country Name', value: 'sales_country_name', abbrev: 'CNT'}];
 const extTheaterMatches = [{name: 'External Theater Name', value: 'ext_theater_name', abbrev: 'EXTTH'}];
 const glSegmentsMatches = [{name: 'Account', value: 'ACCOUNT', abbrev: 'ACT'}, {name: 'Sub Account', value: 'SUB ACCOUNT', abbrev: 'SUBACT'},
@@ -120,8 +138,8 @@ function addSelects(rule, selectMap) {
   }
 }
 
-function addDescription(rule, driver, period) {
-  let desc = `Name:  ${rule.name}`;
+function  addDescription(rule, driver, period) {
+  let desc = `Name:  ${rule.name ? rule.name : ''}`;
   desc += rule.oldName ? `\nOld Name:  ${rule.oldName}` : '';
   desc += driver ? `\nDriver:  ${driver.name}` : '';
   desc += period ? `\nPeriod:  ${period.period}` : '';
@@ -181,21 +199,32 @@ function createSelectArrays(rule) {
   rule.beCritChoices = parse.arr;
 }
 
-function parseSelect(str) {
+function parseSelect(_str) {
+  const noStringRtn = {cond: undefined, arr: []};
+  const str = _str ? _str.trim() : _str;
   // we need to not only parse but also clear off if reset
-  if (!str || !str.trim().length) {
-    return {cond: undefined, arr: []};
+  if (!str || !str.trim().length || str.indexOf('(') === -1) {
+    return noStringRtn;
   }
   const rtn: AnyObj = {};
   const idx = str.indexOf('(');
-  rtn.cond = str.substr(0, idx).trim();
+  rtn.cond = str.substr(0, idx).trim().split(' ').map(x => x && x.trim()).filter(x => !!x).join(' ');
   rtn.arr = str.substr(idx).replace(/(\(|\)|'|")/g, '').trim().split(',');
-  rtn.arr = rtn.arr.map(x => x.trim());
+  rtn.arr = rtn.arr.map(x => x.trim()).filter(x => !!x);
+  if (!rtn.cond || !rtn.arr || rtn.arr.length === 0) {
+    throw new Error(`ruleUtil.parseSelect missing conditional or array values: ${str}`);
+  }
   return rtn;
 }
 
-function createSelect(cond, _choices) {
-  const choices = _.uniq(_choices);
+function createSelect(_cond, _choices = []) {
+  const cond = _cond && _cond.trim();
+  const choices = _.uniq(_choices.map(x => x && x.trim()).filter(x => !!x));
+  if (!cond && !choices.length) {
+    return '';
+  } else if ((cond && !choices.length) || (!cond && choices.length) ) {
+    throw new Error(`ruleUtil.createSelect: missing cond or choices, cond: ${cond}, choices: ${choices.join(', ')}`);
+  }
   let sql = ` ${cond} ( `;
   choices.forEach((choice, idx) => {
     sql += `'${choice.trim()}'`;

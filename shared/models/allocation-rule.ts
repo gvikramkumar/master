@@ -3,7 +3,9 @@ export class AllocationRule {
   id?: string;
   moduleId?: number;
   name: string;
+  oldName?: string;
   desc?: string;
+  descQ?: string;
   period: string;
   driverName: string;
   salesMatch?: string;
