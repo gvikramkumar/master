@@ -1,4 +1,5 @@
 import {injector} from './lib/common/inversify.config';
+
 const inj = injector; // required to import reflect-metadata before any injection
 import config from './config/get-config';
 import process from 'process';
@@ -9,8 +10,8 @@ import fs from 'fs';
 import mg from 'mongoose';
 import {mgc} from './lib/database/mongoose-conn';
 import {pgc} from './lib/database/postgres-conn';
-import expressSetup from './express-setup';
 import {databaseUpdate} from './database-update';
+import {app, initializeExpress} from './express-setup';
 
 
 process.on('unhandledRejection', (reason, p) => {
@@ -23,9 +24,9 @@ export const serverPromise = Promise.all([mgc.promise, pgc.promise])
   .then(databaseUpdate)
   .then(() => {
 
-    const app = expressSetup();
+      initializeExpress();
 
-    const port = process.env.NODE_ENV === 'unit' ? '3001' : process.env.PORT || config.port;
+      const port = process.env.NODE_ENV === 'unit' ? '3001' : process.env.PORT || config.port;
       let server, protocol;
       if (config.ssl) {
         try {
@@ -66,6 +67,10 @@ export const serverPromise = Promise.all([mgc.promise, pgc.promise])
         }
         console.log('BUILD_NUMBER:', process.env.BUILD_NUMBER);
         console.log(`${protocol} server listening on ${port}`);
+        const addr = server.address();
+        const serverUrl = `${protocol}://${addr.address === '::' ? 'localhost' : addr.address}:${addr.port}`;
+        app.set('serverUrl', serverUrl);
+        console.log('svrurl', app.get('serverUrl'));
       });
     }
   )
@@ -78,6 +83,5 @@ export const serverPromise = Promise.all([mgc.promise, pgc.promise])
     }
     process.exit(0);
   });
-
 
 
