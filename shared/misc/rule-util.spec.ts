@@ -451,7 +451,7 @@ describe('ruleUtil tests', () => {
 
     });
 
-    fdescribe('addDescription tests', () => {
+    describe('addDescription tests', () => {
       let rule: AllocationRule;
       beforeEach(() => {
         rule = new AllocationRule();
@@ -525,7 +525,7 @@ describe('ruleUtil tests', () => {
         expect(rule.descQ).toBe(`"Name:  TEST-NAME\nOld Name:  OLD-NAME\nDriver:  DRIVER\nPeriod:  PERIOD"`);
       });
 
-      fit('should have every field', () => {
+      it('should have every field', () => {
         rule.name = 'TEST-NAME';
         rule.oldName = 'OLD-NAME';
         rule.salesMatch = 'salesMatch val';
@@ -570,6 +570,125 @@ describe('ruleUtil tests', () => {
       });
 
     });
+
+    fdescribe('addRuleNameAndDescription tests', () => {
+      let rule, selectMap;
+      const drivers = [
+        {name: 'Driver One', value: 'DRIVER_ONE', abbrev: 'DRO'},
+        {name: 'Driver Two', value: 'DRIVER_TWO', abbrev: 'DRT'},
+      ];
+      const periods = [
+        {period: 'PERIOD_ONE', abbrev: 'PRO'},
+        {period: 'PERIOD_TWO', abbrev: 'PRT'},
+      ];
+
+      beforeEach(() => {
+        rule = new AllocationRule();
+        selectMap = new SelectExceptionMap();
+      });
+
+      it('should have no name or desc', () => {
+        sut.addRuleNameAndDescription(rule, selectMap, drivers, periods);
+        expect(rule.name).toBe('');
+        expect(rule.desc).toBe('Name:  ');
+      });
+
+      it('should throw if driver and driver not found', () => {
+        rule.driverName = 'notThere';
+        expect(() => sut.addRuleNameAndDescription(rule, selectMap, drivers, periods)).toThrowError('Missing driver: notThere');
+      });
+
+      it('should throw if period and period not found', () => {
+        rule.period = 'notThere';
+        expect(() => sut.addRuleNameAndDescription(rule, selectMap, drivers, periods)).toThrowError('Missing period: notThere');
+      });
+
+      it('should show driver only', () => {
+        rule.driverName = 'DRIVER_ONE';
+        sut.addRuleNameAndDescription(rule, selectMap, drivers, periods);
+        expect(rule.name).toBe('DRO');
+        expect(rule.desc).toBe('Name:  DRO\n' +
+          'Driver:  Driver One');
+      });
+
+      it('should show period only', () => {
+        rule.period = 'PERIOD_TWO';
+        sut.addRuleNameAndDescription(rule, selectMap, drivers, periods);
+        expect(rule.name).toBe('-PRT');
+        expect(rule.desc).toBe('Name:  -PRT\n' +
+          'Period:  PERIOD_TWO');
+      });
+
+      it('should use driver and period abbrev if available', () => {
+        rule.driverName = 'DRIVER_ONE';
+        rule.period = 'PERIOD_TWO';
+        sut.addRuleNameAndDescription(rule, selectMap, drivers, periods);
+        expect(rule.name).toBe('DRO-PRT');
+        expect(rule.desc).toBe('Name:  DRO-PRT\n' +
+          'Driver:  Driver One\n' +
+          'Period:  PERIOD_TWO');
+      });
+
+      it('should NOT use abbev if not there', () => {
+        const drivers1 = _.cloneDeep(drivers);
+        delete drivers1[0].abbrev;
+        const periods1 = _.cloneDeep(periods);
+        delete periods1[1].abbrev;
+        rule.driverName = 'DRIVER_ONE';
+        rule.period = 'PERIOD_TWO';
+        sut.addRuleNameAndDescription(rule, selectMap, drivers1, periods1);
+        expect(rule.name).toBe('DRIVER_ONE-PERIOD_TWO');
+        expect(rule.desc).toBe('Name:  DRIVER_ONE-PERIOD_TWO\n' +
+          'Driver:  Driver One\n' +
+          'Period:  PERIOD_TWO');
+      });
+
+      fit('should show many fields', () => {
+        rule.driverName = 'DRIVER_ONE';
+        rule.period = 'PERIOD_TWO';
+        rule.salesMatch = 'SL1';
+        rule.productMatch = 'TG';
+        rule.scmsMatch = 'SCMS';
+        rule.beMatch = 'Sub BE';
+        rule.legalEntityMatch = 'Business Entity';
+        rule.countryMatch = 'sales_country_name';
+        rule.extTheaterMatch = 'ext_theater_name';
+        rule.glSegmentsMatch = ['ACCOUNT', 'SUB ACCOUNT', 'COMPANY'];
+        rule.sl1Select = `IN ('AMERICAS1', 'JAPAN')`;
+        rule.sl2Select = `IN ('AMERICAS2', 'JAPAN')`;
+        rule.sl3Select = `IN ('AMERICAS3', 'JAPAN')`;
+        rule.prodTGSelect = `IN ('AMERICAS4', 'JAPAN')`;
+        rule.prodBUSelect = `IN ('AMERICAS5', 'JAPAN')`;
+        rule.prodPFSelect = `IN ('AMERICAS6', 'JAPAN')`;
+        rule.scmsSelect = `IN ('AMERICAS7', 'JAPAN')`;
+        rule.beSelect = `IN ('AMERICAS8', 'JAPAN')`;
+        sut.createSelectArrays(rule);
+        sut.addRuleNameAndDescription(rule, selectMap, drivers, periods);
+        expect(rule.name).toBe('DRO-PRT-SL1TGSCMSISBELECNTEXTTHACTSUBACTCOMP-SL1E1-SL2E1-SL3E1-TGE1-BUE1-PFE1-SCMSE1-IBEE1');
+        expect(rule.desc).toBe('Name:  DRO-PRT-SL1TGSCMSISBELECNTEXTTHACTSUBACTCOMP-SL1E1-SL2E1-SL3E1-TGE1-BUE1-PFE1-SCMSE1-IBEE1\n' +
+          'Driver:  Driver One\n' +
+          'Period:  PERIOD_TWO\n' +
+          'Sales:  SL1\n' +
+          'Product:  TG\n' +
+          'SCMS:  SCMS\n' +
+          'Internal Business Entity:  Sub BE\n' +
+          'Legal Entity:  Business Entity\n' +
+          'Country:  sales_country_name\n' +
+          'External Theater:  ext_theater_name\n' +
+          'GL Segments:  ACCOUNT,SUB ACCOUNT,COMPANY\n' +
+          'SL1 Select:  IN (\'AMERICAS1\', \'JAPAN\')\n' +
+          'SL2 Select:  IN (\'AMERICAS2\', \'JAPAN\')\n' +
+          'SL3 Select:  IN (\'AMERICAS3\', \'JAPAN\')\n' +
+          'TG Select:  IN (\'AMERICAS4\', \'JAPAN\')\n' +
+          'BU Select:  IN (\'AMERICAS5\', \'JAPAN\')\n' +
+          'PF Select:  IN (\'AMERICAS6\', \'JAPAN\')\n' +
+          'SCMS Select:  IN (\'AMERICAS7\', \'JAPAN\')\n' +
+          'IBE Select:  IN (\'AMERICAS8\', \'JAPAN\')');
+      });
+
+    });
+
+
 
 });
 

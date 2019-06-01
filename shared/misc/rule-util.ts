@@ -31,8 +31,6 @@ function getRuleDescription(rule) {
   return html;
 }
 
-
-
 function addRuleNameAndDescription(rule, selectMap, drivers, periods) {
   let driver, period;
 
