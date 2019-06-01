@@ -37,12 +37,9 @@ import AnyObj from '../shared/models/any-obj';
 import Q from 'q';
 
 
+export const app = express();
 
-export default function () {
-
-  // start express
-  const app = express();
-  module.exports = app;
+export function initializeExpress() {
 
 /*
   app.use(function tap(req, res, next) {
@@ -72,6 +69,7 @@ export default function () {
 */
 
   app.get('/healthcheck', healthcheck());
+  app.get('/ping', (req, res) => res.send());
 
 /*
   app.get('/timeout/:delay', function (req: AnyObj, res, next) {
