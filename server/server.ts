@@ -66,11 +66,10 @@ export const serverPromise = Promise.all([mgc.promise, pgc.promise])
           }
           throw(err);
         }
-        console.log('BUILD_NUMBER:', process.env.BUILD_NUMBER);
-        console.log(`${protocol} server listening on ${port}`);
         const serverUrl = `${protocol}://${os.hostname()}:${port}`;
         app.set('serverUrl', serverUrl);
-        console.log('svrurl', app.get('serverUrl'));
+        console.log('BUILD_NUMBER:', process.env.BUILD_NUMBER);
+        console.log(`server listening on ${serverUrl}`);
       });
     }
   )
