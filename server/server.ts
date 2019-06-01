@@ -12,6 +12,7 @@ import {mgc} from './lib/database/mongoose-conn';
 import {pgc} from './lib/database/postgres-conn';
 import {databaseUpdate} from './database-update';
 import {app, initializeExpress} from './express-setup';
+import os from 'os';
 
 
 process.on('unhandledRejection', (reason, p) => {
@@ -67,8 +68,7 @@ export const serverPromise = Promise.all([mgc.promise, pgc.promise])
         }
         console.log('BUILD_NUMBER:', process.env.BUILD_NUMBER);
         console.log(`${protocol} server listening on ${port}`);
-        const addr = server.address();
-        const serverUrl = `${protocol}://${addr.address === '::' ? 'localhost' : addr.address}:${addr.port}`;
+        const serverUrl = `${protocol}://${os.hostname()}:${port}`;
         app.set('serverUrl', serverUrl);
         console.log('svrurl', app.get('serverUrl'));
       });
@@ -83,5 +83,4 @@ export const serverPromise = Promise.all([mgc.promise, pgc.promise])
     }
     process.exit(0);
   });
-
 
