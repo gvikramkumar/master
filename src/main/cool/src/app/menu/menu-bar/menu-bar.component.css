@@ -14,6 +14,7 @@ button#flyOut:hover {
     text-transform: uppercase;
     color: #666666;
     font-size: 18px;
+    cursor: default !important;
 }
 
 .offerName {

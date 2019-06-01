@@ -89,6 +89,7 @@ export class CreateOfferCoolComponent implements OnInit {
 
   subject: Subject<any> = new Subject();
   validFlag: boolean = true;
+  disabledIDPID: boolean = false;
 
   constructor(
     private createOfferService: CreateOfferService,
@@ -134,14 +135,18 @@ export class CreateOfferCoolComponent implements OnInit {
         if (this.primaryBusinessUnitsValue) {
           this.enableOfferbuild = false;
         }
+
+        //disable IDP ID if offer id is prsent
+        this.disabledIDPID = true;
       }
-    });
+    });  
   } // constructor ends
 
   loadPrimaryBe() {
     // Get Primary BE (hard code 'all')
     this.createOfferService.getDistinctBE().subscribe(data => {
-      const primaryBeArry = [{ label: 'All', value: 'All' }];
+       const primaryBeArry = [{ label: 'All', value: 'All' }];
+       const secondaryBeArry = [];
       const dataArray = data as Array<any>;
       dataArray.forEach(element => {
         if (element['BE'] !== null) {
@@ -149,8 +154,15 @@ export class CreateOfferCoolComponent implements OnInit {
         }
       });
 
+      // for secondaryBusinessEntities 
+      dataArray.forEach(element => {
+        if (element['BE'] !== null) {
+          secondaryBeArry.push({ label: element['BE'], value: element['BE'] });
+        }
+      });
+
       this.primaryBusinessEntities = primaryBeArry;
-      this.secondaryBusinessEntities = primaryBeArry;
+      this.secondaryBusinessEntities = secondaryBeArry;
       this.loaderService.stopLoading();
       // This if condition executes only when user moves back from mm page to offer creation page.
       if (this.offerId !== undefined) {

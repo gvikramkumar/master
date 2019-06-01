@@ -21,8 +21,10 @@ export class CsdlStatusTrackComponent implements OnInit {
   enforcement;
   latestStatusUpdate;
   stopShipStatus;
-  enforcementType;
+  enforcementLabel;
   csdlMileStoneStatus;
+  associationStatusError;
+  associationMessage;
 
   constructor(private activatedRoute: ActivatedRoute,
     private csdlIntegrationService: CsdlIntegrationService,
@@ -44,11 +46,13 @@ export class CsdlStatusTrackComponent implements OnInit {
    */
   getUpdatedStatus() {
     this.csdlIntegrationService.getCsdlInfo(this.currentOfferId).subscribe(data => {
+      this.associationStatusError = data.associationStatus;
+      this.associationMessage = data.associationMessage;
       this.csdlData = [];
       this.csdlData.push(data);
       this.projectId = data['projectId'];
       this.stopShipStatus = data['stopShipStatus'];
-      this.enforcementType = data['enforcementType'];
+      this.enforcementLabel = data['enforcementLabel'];
       this.csdlMileStoneStatus = data['csdlMileStoneStatus'];
     });
   }
@@ -107,7 +111,7 @@ export class CsdlStatusTrackComponent implements OnInit {
     csdlPayload.csdlRequired = 'Y';
     csdlPayload.csdlMileStoneStatus = 'Available';
     csdlPayload.associationStatus = 'nan';
-    csdlPayload.projectId = '';
+    csdlPayload.projectId = Number('-1');
     csdlPayload.projectType = '';
     csdlPayloadArray.push(csdlPayload);
     this.csdlIntegrationService.restartCsdlAssociation(csdlPayloadArray).subscribe(data => {
