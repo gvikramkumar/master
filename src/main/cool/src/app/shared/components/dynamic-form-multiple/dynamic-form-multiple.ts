@@ -710,27 +710,22 @@ export class DynamicFormMultipleComponent implements OnInit {
 
             }
 
-            // if (question.question == "Service Type?") {
-            //     if(question.currentValue == "Service") {
-            //         this.defaultValueServices.settmsAsValue(questionList,this.beListType);
-            //     }
-            //
-            // }
 
             if (question.question == "SOA Pricing") {
                 if(question.currentValue == "% of Product List") {
                     this.defaultValueServices.setTmsASTmsTS(questionList);
                 }
               }
-            //
-            // if (question.question == "Service Type?") {
-            //     if(question.currentValue != "Service") {
-            //         this.defaultValueServices.setTMSNOde(questionList);
-            //     }
-            //     else{
-            //         this.defaultValueServices.setTMSNOdeN(questionList);
-            //     }
-            // }
+
+            if (question.question == "UDI Value") {
+                if(question.currentValue == "Full UDI Compliance" || question.currentValue == "Will implement Physical visibility only"
+                || question.currentValue == "Will implement Electronic visibility only") {
+                    this.defaultValueServices.setBasePID(questionList);
+                }
+              else{
+                    this.defaultValueServices.setBasePIDN(questionList);
+                }
+            }
 
         }
         var validatorPattern = '';

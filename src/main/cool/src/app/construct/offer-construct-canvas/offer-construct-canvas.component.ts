@@ -294,7 +294,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
             obj['itemDetails'] = listOfferQuestions;
           }
 
-          if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS' || obj.productName == 'Billing') {
+          if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS'
+          || obj.productName == 'Billing' || obj.productName == 'SW Subscription Mapped SKU') {
             let listOfferQuestions = this.defaultValueServices.getChargeTypeValidationValues(this.listOfferQuestions, this.chargeTypeValue);
             obj['itemDetails'] = listOfferQuestions;
           }
@@ -317,7 +318,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
             obj['itemDetails'] = listOfferQuestions;
           }
 
-          if (obj.productName == 'License') {
+          if (obj.productName == 'License' || obj.productName == 'SW Subscription Mapped SKU') {
             let listOfferQuestions = this.defaultValueServices.setSoftwareLicense(this.listOfferQuestions);
             obj['itemDetails'] = listOfferQuestions;
           }
@@ -326,7 +327,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
             obj['itemDetails'] = listOfferQuestions;
           }
 
-          if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS' || obj.productName == 'Billing') {
+          if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'XaaS'
+          || obj.productName == 'Billing' || obj.productName == 'SW Subscription Mapped SKU') {
             let listOfferQuestions = this.defaultValueServices.setCreateDefault(this.listOfferQuestions);
             obj['itemDetails'] = listOfferQuestions;
           }
@@ -340,6 +342,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
             let listOfferQuestions = this.defaultValueServices.setTaxCategory(this.listOfferQuestions);
             obj['itemDetails'] = listOfferQuestions;
           }
+
+          ///ADd Non IOS
           if (obj.productName == 'License') {
               let listOfferQuestions = this.defaultValueServices.setSoftwareLicenseNSKU(this.listOfferQuestions);
               obj['itemDetails'] = listOfferQuestions;

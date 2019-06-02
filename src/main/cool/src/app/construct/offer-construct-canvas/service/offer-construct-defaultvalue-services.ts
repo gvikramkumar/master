@@ -1200,7 +1200,20 @@ setTmsASTmsTS(questionList) {
   });
 }
 
-
+setBasePID(questionList) {
+       questionList.forEach(question => {
+           if (question.question == "Base PID") {
+             question.rules.isDisabled = false;
+           }
+       });
+   }
+ setBasePIDN(questionList) {
+        questionList.forEach(question => {
+            if (question.question == "Base PID") {
+              question.rules.isDisabled = true;
+            }
+        });
+    }
 
   // setTASNOdeTSDefault(questionList, beListType) {
   //   let tasTsDefault;
