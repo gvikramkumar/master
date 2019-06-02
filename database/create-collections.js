@@ -40,6 +40,7 @@ const collationCollections = [
   'dfa_allocation_rule',
   'dfa_data_source',
   'dfa_lookup',
+  'dfa_job',
   'dfa_job_log',
   'dfa_measure',
   'dfa_module',
@@ -56,6 +57,7 @@ const collationCollections = [
   'dfa_prof_scms_triang_corpadj_map_upld',
   'dfa_prof_service_map_upld',
   'dfa_prof_service_trngsplit_pctmap_upld',
+  'dfa_server',
   'dfa_submeasure',
   'dfa_user'
 ];
@@ -80,6 +82,8 @@ fileCollections.forEach(coll => {
 db.dfa_module.createIndex({moduleId: -1}, {unique: true});
 db.dfa_measure.createIndex({measureId: 1}, {unique: true});
 db.dfa_data_source.createIndex({sourceId: -1}, {unique: true});
+db.dfa_job.createIndex({name: 1}, {unique: true});
+db.dfa_server.createIndex({url: 1}, {unique: true});
 
 db.getCollection('fs.files').createIndex({'metadata.directory': 1});
 db.dfa_allocation_rule.createIndex({name: 1, updatedDate: -1});

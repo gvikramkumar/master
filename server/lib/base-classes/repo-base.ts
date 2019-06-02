@@ -425,6 +425,27 @@ export default class RepoBase {
       });
   }
 
+  // ****** this hasn't been tested yet, and is not being used. Needs to be tested before use
+  // give a set of properties and a datafield, find duplicates within the properties and keep the latest one
+  removeDuplicatesByPropertiesAndDate(filter, props: string[], dateField) {
+    return this.getMany(filter)
+      .then(docs => {
+        docs = _.orderBy(docs, ...props, dateField)
+        const obj = {};
+        const path = props.join('.');
+        const idsToRemove = [];
+        docs.forEach(_doc => {
+          const doc = _doc.toObject();
+          if (_.get(obj, path)) {
+            idsToRemove.push(doc.id);
+          } else {
+            _.set(obj, path, doc.id);
+          }
+        });
+        return this.removeMany({_id: {$in: idsToRemove}});
+      });
+  }
+
   /*
   sync methods:
   these allow multiple ways to sync records in a table with a set being sent up. Can be the whole table

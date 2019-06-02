@@ -1,5 +1,5 @@
 import {injectable} from 'inversify';
-import JobLogRepo from './repo';
+import JobLogRepo from '../../lib/job/job-log-repo';
 import SubmeasureController from '../common/submeasure/controller';
 import {injector} from '../../lib/common/inversify.config';
 import AllocationRuleController from '../common/allocation-rule/controller';
@@ -35,7 +35,7 @@ export default class RunJobController {
         const status = 'success';
         const message = results.join(', ');
         const data = this.getResultObject(jobName, req.user.id, status, startDate, message);
-        this.repo.add(data)
+        this.repo.addOne(data, req.user.id)
           .then(() => {
             res.json(data);
           });
@@ -44,7 +44,7 @@ export default class RunJobController {
         const status = 'failure';
         const errorObject = svrUtil.getErrorForJson(err);
         const data = this.getResultObject(jobName, req.user.id, status, startDate, errorObject);
-        this.repo.add(data)
+        this.repo.addOne(data, req.user.id)
           .then(() => res.json(data));
       });
   }

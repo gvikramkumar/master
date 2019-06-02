@@ -41,12 +41,12 @@ export const app = express();
 
 export function initializeExpress() {
 
-/*
-  app.use(function tap(req, res, next) {
-    console.log(req.method, req.url);
-    next();
-  })
-*/
+  /*
+    app.use(function tap(req, res, next) {
+      console.log(req.method, req.url);
+      next();
+    })
+  */
 
   app.use(timeoutHandler());
 
@@ -61,23 +61,23 @@ export function initializeExpress() {
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(cookieParser());
 
-/*
-    app.use((req, res, next) => {
-      console.log(`${new Date().toISOString()} ${req.method} ${req.url}`);
-      next();
-    });
-*/
+  /*
+      app.use((req, res, next) => {
+        console.log(`${new Date().toISOString()} ${req.method} ${req.url}`);
+        next();
+      });
+  */
 
-  app.get('/healthcheck', healthcheck());
   app.get('/ping', (req, res) => res.send());
+  app.get('/healthcheck', healthcheck());
 
-/*
-  app.get('/timeout/:delay', function (req: AnyObj, res, next) {
-    const delay = Number(req.params.delay);
-    Q().delay(delay)
-      .then(() => res.json({delay}));
-  });
-*/
+  /*
+    app.get('/timeout/:delay', function (req: AnyObj, res, next) {
+      const delay = Number(req.params.delay);
+      Q().delay(delay)
+        .then(() => res.json({delay}));
+    });
+  */
 
   app.use(addSsoUser());
   app.use(addGlobalData());
@@ -90,39 +90,39 @@ export function initializeExpress() {
     // console.log('>>>>>> served index.html');
     res.sendFile(path.resolve(__dirname, '../../ui/dist/index.html'));
   });
-if (config.env !== 'unit') {
-  app.use(morgan(function (tokens, req, res) {
-    return [
-      new Date().toISOString(),
-      req.user.id,
-      tokens.method(req, res),
-      tokens.url(req, res),
-      tokens.status(req, res),
-      tokens.res(req, res, 'content-length'), '-',
-      tokens['response-time'](req, res), 'ms'
-    ].join(' ');
-  }));
-}
+  if (config.env !== 'unit') {
+    app.use(morgan(function (tokens, req, res) {
+      return [
+        new Date().toISOString(),
+        req.user.id,
+        tokens.method(req, res),
+        tokens.url(req, res),
+        tokens.status(req, res),
+        tokens.res(req, res, 'content-length'), '-',
+        tokens['response-time'](req, res), 'ms'
+      ].join(' ');
+    }));
+  }
 
 
-/*
-  app.get('/cause-error', function (req, res, next) {
-    if (svrUtil.isLocalEnv()) {
-      const err = new NamedApiError('CauseError', 'api error with data');
-      throw err;
-    } else {
-      next();
-    }
-  })
-
-    app.get('/crash-site', function (req, res, next) {
+  /*
+    app.get('/cause-error', function (req, res, next) {
       if (svrUtil.isLocalEnv()) {
-        process.exit(666);
+        const err = new NamedApiError('CauseError', 'api error with data');
+        throw err;
       } else {
         next();
       }
     })
-*/
+
+      app.get('/crash-site', function (req, res, next) {
+        if (svrUtil.isLocalEnv()) {
+          process.exit(666);
+        } else {
+          next();
+        }
+      })
+  */
 
   app.use('/api/allocation-rule', allocationRuleRouter);
   app.use('/api/database', databaseRouter);

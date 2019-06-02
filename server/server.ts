@@ -1,5 +1,4 @@
 import {injector} from './lib/common/inversify.config';
-
 const inj = injector; // required to import reflect-metadata before any injection
 import config from './config/get-config';
 import process from 'process';
@@ -13,6 +12,7 @@ import {pgc} from './lib/database/postgres-conn';
 import {databaseUpdate} from './database-update';
 import {app, initializeExpress} from './express-setup';
 import os from 'os';
+import {JobManager} from './lib/job/job-manager';
 
 
 process.on('unhandledRejection', (reason, p) => {
@@ -26,7 +26,7 @@ export const serverPromise = Promise.all([mgc.promise, pgc.promise])
   .then(() => {
 
       initializeExpress();
-
+      const jobManager = injector.get(JobManager);
       const port = process.env.NODE_ENV === 'unit' ? '3001' : process.env.PORT || config.port;
       let server, protocol;
       if (config.ssl) {
@@ -70,6 +70,7 @@ export const serverPromise = Promise.all([mgc.promise, pgc.promise])
         app.set('serverUrl', serverUrl);
         console.log('BUILD_NUMBER:', process.env.BUILD_NUMBER);
         console.log(`server listening on ${serverUrl}`);
+        jobManager.serverStartup();
       });
     }
   )

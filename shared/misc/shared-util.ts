@@ -27,8 +27,17 @@ export const shUtil = {
   isManualMix,
   convertToPSTTime,
   findDuplicatesByProperty,
-  catchDisregardHandler
+  catchDisregardHandler,
+  promiseChain
 };
+
+function promiseChain(_promise) {
+  const promise = (_.isArray(_promise) ? Promise.all(_promise) : _promise) || Promise.resolve();
+  return Promise.resolve()
+    .then(() => {
+      return promise;
+    });
+}
 
 function findDuplicatesByProperty(arr, prop) {
   const obj = {};

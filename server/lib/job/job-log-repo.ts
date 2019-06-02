@@ -1,6 +1,6 @@
 import {injectable} from 'inversify';
 import {model, Model, Schema} from 'mongoose';
-import RepoBase from '../../lib/base-classes/repo-base';
+import RepoBase from '../base-classes/repo-base';
 
 const schema = new Schema(
   {
@@ -16,16 +16,10 @@ const schema = new Schema(
 );
 
 @injectable()
-export default class JobLogRepo {
-  Model: Model<any>;
+export default class JobLogRepo extends RepoBase {
 
   constructor() {
-    this.Model = model('JobLog', schema);
-  }
-
-  add(data) {
-    const item = new this.Model(data);
-    return item.save();
+    super(schema, 'JobLog');
   }
 
 }
