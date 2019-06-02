@@ -209,18 +209,17 @@ export class JobManager {
       });
   }
 
-  /*
-
-   */
+  // checks startTime jobs (primary on primary server as well) for last run and start time, then runs and updates runtime in express app global or db???
   checkStartTimeJobsJob() {
   }
 
+  // periodic jobs (15 min or so) that copies mongo data to postgres
   databaseSyncJob(syncMap) {
 
   }
 
+  // startTime job that runs once a day to update cache after nightly data updates
   cacheRefreshJob() {
-
   }
 
   approvelEmailReminderJob() {
