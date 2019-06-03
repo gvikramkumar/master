@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserIdleService } from 'angular-user-idle';
 import { EnvironmentService } from '../environments/environment.service';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,7 @@ export class AppComponent implements OnInit {
   timeStart = false;
   seconds = 600;
   clientX = 0;
+
   clientY = 0;
 
   constructor(private router: Router, private userIdle: UserIdleService,
@@ -26,6 +28,11 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+
+
+
+
+
     // Start watching for user inactivity.
     this.userIdle.startWatching();
 
@@ -73,5 +80,7 @@ export class AppComponent implements OnInit {
   @HostListener('mouseover') onMouseOver() {
     this.restart();
 }
+
+
 
 }
