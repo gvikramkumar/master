@@ -175,7 +175,7 @@ export class ChangestatusComponent implements OnInit {
             ||
             pirateShipSharedService.getRole() === 'PDT'
           )) {
-          this.isReadOnly = true;
+          this.isReadOnly = false;
         }
         break;
       }
