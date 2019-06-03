@@ -46,4 +46,13 @@ fdescribe('SubmeasureEditComponent', () => {
     expect(comp.sm.rules).toEqual(['ONE-TWO-THREE', 'FOUR-FIVE-SIX']);
   });
 
+  it('getExistingArrRules tests', () => {
+    expect(comp.getExistingArrRules()).toEqual([]);
+    comp.arrRules = ['', '  '];
+    expect(comp.getExistingArrRules()).toEqual([]);
+    comp.arrRules = ['', '  ', 'RULE-ONE', 'RULE-TWO', '', '  '];
+    expect(comp.getExistingArrRules()).toEqual(['RULE-ONE', 'RULE-TWO']);
+  });
+
+
 });
