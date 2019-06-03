@@ -53,11 +53,13 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   usingSubmeasuresNamesTooltip = '';
 
   conditionalOperators = [{operator: 'IN'}, {operator: 'NOT IN'}];
-  salesMatches = [{match: 'SL1'}, {match: 'SL2'}, {match: 'SL3'}, {match: 'SL4'}, {match: 'SL5'}, {match: 'SL6'}];
-  productMatches = [{match: 'BU'}, {match: 'PF'}, {match: 'TG'}]; // no PID
+  salesMatches = [{name: 'Level 1', value: 'SL1'}, {name: 'Level 2', value: 'SL2'}, {name: 'Level 3', value: 'SL3'},
+    {name: 'Level 4', value: 'SL4'}, {name: 'Level 5', value: 'SL5'}, {name: 'Level 6', value: 'SL6'}];
+  productMatches = [{name: 'Business Unit', value: 'BU'}, {name: 'Product Family', value: 'PF'}, {name: 'Technology Group',
+    value: 'TG'}, {name: 'Product ID', value: 'PID'}];
   scmsMatches = [{match: 'SCMS'}];
   legalEntityMatches = [{match: 'Business Entity', abbrev: 'LE'}];
-  beMatches = [{match: 'BE'}, {match: 'Sub BE', abbrev: 'SubBE'}];
+  beMatches = [{name: 'Internal BE', value: 'BE', abbrev: 'IBE'}, {name: 'Internal Sub BE', value: 'Sub BE', abbrev: 'ISBE'}];
   countryMatches = [{name: 'Sales Country Name', value: 'sales_country_name', abbrev: 'CNT'}];
   extTheaterMatches = [{name: 'External Theater Name', value: 'ext_theater_name', abbrev: 'EXT'}];
   glSegmentMatches = [{name: 'Account', value: 'ACCOUNT', abbrev: 'ACCT'}, {name: 'Sub Account', value: 'SUB ACCOUNT', abbrev: 'SUBACCT'},
