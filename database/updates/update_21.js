@@ -5,11 +5,20 @@ const conn = new Mongo(host + ':' + port);
 const db = conn.getDB(_db);
 db.auth(username, password);
 
+// recreate dfa_job_log and index for case-insensitive
 db.getCollection('dfa_job_log').drop();
 db.createCollection('dfa_job_log', {collation: {locale: 'en_US', strength: 1, numericOrdering: true}});
 db.dfa_job_log.createIndex({startDate: -1}, {expireAfterSeconds: 365 * 24 * 60 * 60});
-db.createCollection('dfa_job', {collation: {locale: 'en_US', strength: 1, numericOrdering: true}});
+
+// new collections
+db.createCollection('dfa_job_config', {collation: {locale: 'en_US', strength: 1, numericOrdering: true}});
+db.createCollection('dfa_job_run', {collation: {locale: 'en_US', strength: 1, numericOrdering: true}});
 db.createCollection('dfa_server', {collation: {locale: 'en_US', strength: 1, numericOrdering: true}});
+
+// new indexes
+db.dfa_job_config.createIndex({name: 1}, {unique: true});
+db.dfa_job_run.createIndex({name: 1, serverUrl: 1}, {unique: true});
+db.dfa_server.createIndex({url: 1}, {unique: true});
 
 db.dfa_job.insertMany([
   {

@@ -82,7 +82,8 @@ fileCollections.forEach(coll => {
 db.dfa_module.createIndex({moduleId: -1}, {unique: true});
 db.dfa_measure.createIndex({measureId: 1}, {unique: true});
 db.dfa_data_source.createIndex({sourceId: -1}, {unique: true});
-db.dfa_job.createIndex({name: 1}, {unique: true});
+db.dfa_job_config.createIndex({name: 1}, {unique: true});
+db.dfa_job_run.createIndex({name: 1, serverUrl: 1}, {unique: true});
 db.dfa_server.createIndex({url: 1}, {unique: true});
 
 db.getCollection('fs.files').createIndex({'metadata.directory': 1});

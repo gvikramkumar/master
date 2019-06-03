@@ -10,23 +10,15 @@ const schema = new Schema(
     runOnStartup: {type: Boolean, required: true},
     primary: {type: Boolean, required: true}, // only runs on primary server
     primaryServerUrl: String, // identify server running primary job
-
-    userId: {type: String, required: true},
-    startDate: {type: Date, required: true},
-    endDate: {type: Date, required: true},
-    duration: {type: String, required: true},
-    active: {type: Boolean, default: false},
-    status: {type: String, required: true},
-    data: Object
   },
-  {collection: 'dfa_job'}
+  {collection: 'dfa_job-config'}
 );
 
 @injectable()
-export default class JobRepo extends RepoBase {
+export default class JobConfigRepo extends RepoBase {
 
   constructor() {
-    super(schema, 'Job');
+    super(schema, 'JobConfig');
   }
 
 }

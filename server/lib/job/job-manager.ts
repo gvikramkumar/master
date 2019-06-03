@@ -1,4 +1,4 @@
-import JobRepo from './job-repo';
+import JobConfigRepo from './job-config-repo';
 import ServerRepo from './server-repo';
 import {app} from '../../express-setup';
 import AnyObj from '../../../shared/models/any-obj';
@@ -19,8 +19,9 @@ class DfaJob {
   runOnStartup: boolean;
   primary: boolean;
   primaryServerUrl: string;
+}
 
-  // run properties
+class DfaJobRunner {
   userId: string;
   startDate: Date;
   endDate: Date;
@@ -42,7 +43,7 @@ export class JobManager {
   serverUrl: string;
 
   constructor(
-    private jobRepo: JobRepo,
+    private jobRepo: JobConfigRepo,
     private serverRepo: ServerRepo,
     private submeasureController: SubmeasureController,
     private ruleController: AllocationRuleController
@@ -54,7 +55,9 @@ export class JobManager {
     this.jobRepo.getMany({})
       .then(_jobs => {
         const nonPrimaryPeriodicJobs = _jobs.filter(x => !x.primary && x.period);
+        const nonPrimaryStartupStartTimeJobs = _jobs.filter(x => !x.primary && x.startTime && x.runOnStartup);
         nonPrimaryPeriodicJobs.forEach(job => this.startPeriodicJob(job));
+        nonPrimaryStartupStartTimeJobs.forEach(job => this.runStartTimeJob(job));
       });
   }
 
@@ -80,12 +83,28 @@ export class JobManager {
     return fcn;
   }
 
+  /*
+   * handle running of all jobs, so one common place to check for:
+   * isRunning, active, update runDate, etc
+   */
+  getRunJobFunction(job: DfaJob) {
+    return ((data, startup) => {
+      // do all that junk
+      const fcn = this.getJobFcnFromName(job.name);
+    }).bind(this);
+
+  }
+
   startPeriodicJob(job: DfaJob) {
-    const fcn = this.getJobFcnFromName(job.name);
-    setInterval(fcn, job.period);
+    setInterval(this.getRunJobFunction(job), job.period);
     if (job.runOnStartup) {
-      fcn(null, true);
+      this.getRunJobFunction(job)(null, true);
     }
+  }
+
+  runStartTimeJob(job: DfaJob) {
+    const fcn = this.getJobFcnFromName(job.name);
+    fcn(null, true);
   }
 
   primaryDeterminationJob(serverInit: boolean) {

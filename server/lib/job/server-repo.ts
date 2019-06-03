@@ -4,7 +4,6 @@ import RepoBase from '../../lib/base-classes/repo-base';
 
 const schema = new Schema(
   {
-    name: {type: String, required: true},
     url: {type: String, required: true},
     primary: {type: Boolean, required: true},
     updatedDate: {type: Boolean, required: true}
