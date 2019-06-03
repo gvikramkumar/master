@@ -70,7 +70,7 @@ export class DynamicFormMultipleComponent implements OnInit {
         this.offerInfo = this.offerConstructService.singleMultipleFormInfo;
         this.majorOfferInfo = this.offerInfo.major;
         this.minorOfferInfo = this.offerInfo.minor;
-        
+
         this.tableShowCondition = true;
         this.selectedTab = 'major';
         this.createObjectForSearch();
@@ -113,7 +113,7 @@ export class DynamicFormMultipleComponent implements OnInit {
     getprimaryBEListType(primaryBEList) {
         this.beListType = primaryBEList[0];
     }
-    
+
     offerDetailView() {
       // Check if construct details are availbale in the database for the current offer.
       this.offerDetailViewService.retrieveOfferDetails(this.currentOfferId).subscribe(offerDetailRes => {
@@ -437,7 +437,7 @@ export class DynamicFormMultipleComponent implements OnInit {
 
 
     addAllDetailsValidationsonChange(e, question, questionList?, groupName?) {
-        this.closeDialogAction = 0;
+       this.closeDialogAction = 0;
         // set base price value according to billing_soa SOA Pricing selection type && questionList == this.billing_soa
         if (questionList !== undefined) {
             if (groupName == this.billing_soa) {
@@ -466,6 +466,31 @@ export class DynamicFormMultipleComponent implements OnInit {
                     }
                 }
             }
+            if (question.question === 'Service Type?') {
+                if (question.currentValue === 'N/A') {
+                    this.defaultValueServices.serviceTypeValue = 'Support';
+                    this.defaultValueServices.setSubscriptionType(questionList, this.defaultValueServices.serviceTypeValue);
+                }
+            }
+
+            if (question.question == "Description") {
+                    this.defaultValueServices.setLongDescription(questionList);
+                }
+
+            if (question.question == "Default True Up Term") {
+                    this.defaultValueServices.setDefaultTrueupTerm(questionList);
+                }
+            if (question.question == "Default Initial Term") {
+                    this.defaultValueServices.setDefIniTerm(questionList);
+                }
+
+            if (question.question == "Default Initial Term") {
+                    this.defaultValueServices.setDefaultInitialTerm(questionList);
+                }
+
+            if (question.question == "STD AUTO RENEWAL TERM") {
+                    this.defaultValueServices.setDefaultAutoRenewalTerm(questionList);
+                }
 
             if (question.question == "Smart Licensing Enabled") {
                 if (question.currentValue == "Yes") {
@@ -473,6 +498,16 @@ export class DynamicFormMultipleComponent implements OnInit {
                 }
                 if (question.currentValue == "No") {
                     this.defaultValueServices.setSmartAccountForSmartLicensingEnabledNo(questionList);
+                }
+
+            }
+
+            if (question.question == "Is The PID Product Based?") {
+                if (question.currentValue == "Yes") {
+                    this.defaultValueServices.setPricingFormula(questionList);
+                }
+                if (question.currentValue == "No") {
+                    this.defaultValueServices.setPricingFormulaNo(questionList);
                 }
 
             }
@@ -525,7 +560,31 @@ export class DynamicFormMultipleComponent implements OnInit {
                 }
 
             }
-            
+
+            // if (question.question == "Product Reliability Class") {
+            //     if (question.currentValue == "Yes") {
+            //         this.defaultValueServices.setSubscriptionOffset(questionList);
+            //     }
+            // }
+
+            if (question.question == "Enablement") {
+                if (question.currentValue == "Y") {
+                    this.defaultValueServices.setEnablementFileType(questionList);
+                }
+                else{
+                    this.defaultValueServices.setEnablementFileTypeN(questionList);
+                }
+            }
+
+            if (question.question == "Enablement File Type") {
+                if (question.currentValue == "EMM" || question.currentValue == "Hybrid") {
+                    this.defaultValueServices.setConditionalAccess(questionList);
+                }
+                else{
+                    this.defaultValueServices.setConditionalAccessN(questionList);
+                }
+            }
+
             if (question.question == "SOA Pricing") {
                 if (question.currentValue == "Flat") {
                     this.defaultValueServices.setSoaPricingbasedDefaultsFlat(questionList);
@@ -534,7 +593,7 @@ export class DynamicFormMultipleComponent implements OnInit {
                     this.defaultValueServices.setSoaPricingbasedDefaultsFlatN(questionList);
                 }
             }
-            
+
             if (question.question == "SOA Pricing") {
                 if(question.currentValue == "% of Product List") {
                     this.defaultValueServices.setSoaPricingbasedDefaultsProduct(questionList);
@@ -543,7 +602,7 @@ export class DynamicFormMultipleComponent implements OnInit {
                     this.defaultValueServices.setSoaPricingbasedDefaultsProductN(questionList);
                 }
             }
-            
+
             if (question.question == "Support Pricing Minimum (monthly) ") {
                 if(question.currentValue == "Yes") {
                     this.defaultValueServices.setMonthlySupportPricingProduct(questionList);
@@ -552,7 +611,7 @@ export class DynamicFormMultipleComponent implements OnInit {
                     this.defaultValueServices.setMonthlySupportPricingProductN(questionList);
                 }
             }
-            
+
             if (question.question == "Monthly Amount") {
                 if(question.currentValue != "$0") {
                     this.defaultValueServices.setTMSNOde(questionList);
@@ -561,7 +620,7 @@ export class DynamicFormMultipleComponent implements OnInit {
                     this.defaultValueServices.setTMSNOdeN(questionList);
                 }
             }
-            
+
             if (question.question == "Percentage Amount") {
                 if(question.currentValue != "blank" || question.currentValue != "") {
                     this.defaultValueServices.setTMSNOde1(questionList);
@@ -570,22 +629,22 @@ export class DynamicFormMultipleComponent implements OnInit {
                     this.defaultValueServices.setTMSNOdeN1(questionList);
                 }
             }
-            
+
             if (question.question == "Service Type?") {
                 if(question.currentValue == "Service") {
                     this.defaultValueServices.setTMSNOdeASDefault(questionList);
                 }
-                else{
+                if(question.currentValue == "Support") {
                     this.defaultValueServices.setTMSNOdeASDefaultN(questionList);
                 }
             }
-            
+
             if (question.question == "Service Type?") {
                 if(question.currentValue == "Support") {
                     this.defaultValueServices.setTMSNOdeN2(questionList);
                 }
             }
-            
+
             if (question.question == "Monthly Amount") {
                 if(question.currentValue != "$0") {
                     this.defaultValueServices.setTMSNOdeTS(questionList,this.beListType);
@@ -594,7 +653,7 @@ export class DynamicFormMultipleComponent implements OnInit {
                     this.defaultValueServices.setTMSNOdeTSN(questionList);
                 }
             }
-            
+
             if (question.question == "Percentage Amount") {
                 if(question.currentValue != "blank" || question.currentValue != "") {
                     this.defaultValueServices.setTMSNOdeTS1(questionList,this.beListType);
@@ -603,7 +662,7 @@ export class DynamicFormMultipleComponent implements OnInit {
                     this.defaultValueServices.setTMSNOdeTSN1(questionList,this.beListType);
                 }
             }
-            
+
             if (question.question == "Service Type?") {
                 if(question.currentValue == "Support") {
                     this.defaultValueServices.setTMSNOdeTSDefault(questionList,this.beListType);
@@ -612,45 +671,66 @@ export class DynamicFormMultipleComponent implements OnInit {
                     this.defaultValueServices.setTMSNOdeTSDefaultN(questionList,this.beListType);
                 }
             }
-            
-            // 
+
+            //
             // if (question.question == "Service Type?") {
             //     if(question.currentValue == "Support") {
             //         this.defaultValueServices.setTMSNOdeTSN2(questionList,this.beListType);
             //     }
             // }
-            // 
+            //
             if (question.question == "Service Type?") {
                 if(question.currentValue == "Support") {
                     this.defaultValueServices.setTMSNOdeASDisable(questionList);
                 }
             }
-            
+
             if (question.question == "Service Type?") {
                 if(question.currentValue == "Service") {
                     this.defaultValueServices.setTMSNOdeTSDisable(questionList,this.beListType);
                 }
             }
-            
+
             if (question.question == "SOA Pricing") {
                 if(question.currentValue == "Flat") {
                     this.defaultValueServices.setMonthlySupMin(questionList);
                 }
             }
-            // 
-            // if (question.question == "Service Type?") {
-            //     if(question.currentValue != "Service") {
-            //         this.defaultValueServices.setTMSNOde(questionList);
-            //     }
-            //     else{
-            //         this.defaultValueServices.setTMSNOdeN(questionList);
-            //     }
-            // }
+
+            if (question.question == "Service Type?") {
+                if(question.currentValue == "Support") {
+                    this.defaultValueServices.settmsTsValue(questionList,this.beListType);
+                }
+
+            }
+            if (question.question == "Service Type?") {
+                if(question.currentValue == "Service") {
+                    this.defaultValueServices.settmsAsValue(questionList,this.beListType);
+                }
+
+            }
+
+
+            if (question.question == "SOA Pricing") {
+                if(question.currentValue == "% of Product List") {
+                    this.defaultValueServices.setTmsASTmsTS(questionList);
+                }
+              }
+
+            if (question.question == "UDI Value") {
+                if(question.currentValue == "Full UDI Compliance" || question.currentValue == "Will implement Physical visibility only"
+                || question.currentValue == "Will implement Electronic visibility only") {
+                    this.defaultValueServices.setBasePID(questionList);
+                }
+              else{
+                    this.defaultValueServices.setBasePIDN(questionList);
+                }
+            }
 
         }
         var validatorPattern = '';
         if (question.egineAttribue !== "Item Name (PID)") {
-            if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "numeric") {
+            if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "numeric" && question.question != "Default Initial Term") {
                 if (!(/^[0-9]*$/.test(question.currentValue))) {
                     question.rules.validationMessage = question.egineAttribue + " should be in " + question.rules.textcase;
                     question.rules.isvalid = false;
@@ -774,18 +854,25 @@ export class DynamicFormMultipleComponent implements OnInit {
             }
         }else{
             this.itemNameInvalid = true;
+
             this.offerConstructCanvasService.validatePID(question.currentValue).subscribe((data) => {
                 if(data.length > 0){
-                    question.rules.validationMessage = "Item name already exists, please remove this item if no longer needed and add the correct new or existing item";
+                    question.rules.validationMessage = "Item Name already exists, please type another name";
                     question.rules.isvalid = false;
                     this.itemNameInvalid = true;
-                }else{
+                }
+                if (!(/^[^\/\.\+\-\@\&\#\%\$\!\*\<\>\:\;\,\\\'\[\]\|\?\^\{\}\=\<\>a-z][^\@\&\#\%\$\!\*\<\>\:\;\,\\\'\[\]\|\?\^\{\}\=\<\>a-z]*$/.test(question.currentValue))) {
+                    question.rules.validationMessage = "All caps required and maximum of 18 characters";
+                    question.rules.isvalid = false;
+                    this.itemNameInvalid = true;
+                }
+                else{
                     question.rules.validationMessage = "";
                     question.rules.isvalid = true;
                     this.itemNameInvalid = false;
                 }
             });
-           
+
         }
 
     }

@@ -128,7 +128,8 @@ export class EnvironmentService {
     REST_API_RETRIEVE_ATO_LIST_URL: string;
     REST_API_OFFER_SETUP_MODULE_GET_URL: string;
     REST_API_OFFER_MODULE_STATUS_GET_URL: string;
-
+    REST_API_LOCK_API_FOR_OWB: string;
+    
     // ITEM CREATION URLs
     REST_API_GET_ITEM_DETAILS: string;
     REST_API_GET_OFFER_DROPDOWN: string;
@@ -418,7 +419,8 @@ export class EnvironmentService {
 
         this.REST_API_RETRIEVE_ATO_LIST_URL = this.baseApiUrl + '/offersetup/getOWBModelObject/';
         this.REST_API_OFFER_SETUP_MODULE_GET_URL = this.baseApiUrl + '/offersetup/getAllModuleStatus/';
-
+        this.REST_API_LOCK_API_FOR_OWB = this.baseApiUrl + '/owb/lockAPI/';
+       
         // --------------------------------------- ITEM CREATION --------------------------------------------
 
         this.REST_API_GET_OFFER_DROPDOWN = this.baseApiUrl + '/itemcreation/getATOs';
@@ -495,7 +497,7 @@ export class EnvironmentService {
 
         // --------------------------------------- PIRATE SHIP DASHBOARD URLs --------------------------------------------
 
-        this.REST_API_PIRATE_SHIP_DASHBOARD_NOTIFICATION_URL = this.baseApiUrl + '/dashboard/notification';
+        this.REST_API_PIRATE_SHIP_DASHBOARD_NOTIFICATION_URL = this.baseApiUrl + '/dashboard/notification/generate';
 
     }
 }
