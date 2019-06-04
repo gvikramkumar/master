@@ -45,5 +45,10 @@ export const PIRATE_SHIP_ROUTES = [
         path: pirateShipRoutesNames.SERVICE_MAPPING + '/:selectedAto',
         loadChildren: './modules/service-mapping/service-mapping.module#ServiceMappingModule',
         resolve: { offerData: OfferOverViewResolver }
+    },
+    {
+        path: pirateShipRoutesNames.SELF_SERVICE_ORDERABILITY + '/:selectedAto',
+        loadChildren: './modules/self-service-orderability/self-service-orderability.module#SelfServiceOrderabilityModule',
+        resolve: { offerData: OfferOverViewResolver }
     }
 ]
