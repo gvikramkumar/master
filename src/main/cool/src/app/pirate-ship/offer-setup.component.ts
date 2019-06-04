@@ -333,7 +333,7 @@ export class OfferSetupComponent implements OnInit {
         this.offerId,
         this.caseId,
         pirateShipRoutesNames.SELF_SERVICE_ORDERABILITY,
-        this.selectedAto, element.moduleName]);
+        this.selectedAto]);
         break;
       }
     }
