@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { EnvironmentService } from '../../environments/environment.service';
+import { EnvironmentService } from '@env/environment.service';
 import { CsdlPayload } from '@app/pirate-ship/modules/csdl/model/csdl-payload';
 
 @Injectable({
@@ -49,6 +49,6 @@ export class CsdlIntegrationService {
     let url = this.environmentService.REST_API_SEND_DASHBOARD_NOTIFICATION_CSDL_POST_URL;
     url += offerId;
     url += '/' + 'csdl';
-    return this._http.post(url, null, { withCredentials: true });
+    return this._http.get(url, { withCredentials: true });
   }
 }

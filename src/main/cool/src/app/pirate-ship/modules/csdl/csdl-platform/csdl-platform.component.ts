@@ -9,7 +9,6 @@ import { CsdlPayload } from '../model/csdl-payload';
 import { CsdlStatusTrackComponent } from '../csdl-status-track/csdl-status-track.component';
 import { MessageService } from '@app/services/message.service';
 import { Subscription } from 'rxjs';
-import { element } from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-csdl-platform',
@@ -60,6 +59,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
   selectedDropValue: string;
   subscription: Subscription;
   components = [];
+  bupmList = [];
 
   constructor(
     private router: Router,
@@ -112,7 +112,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
         this.isCsdlRequired = true;
       }
     },
-    (error) => {
+    () => {
       this.isCsdlRequired = true;
     });
 
@@ -191,6 +191,12 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
             }
           });
         });
+
+        this.firstData['stakeholders'].forEach(element => {
+          if (element['functionalRole'] === 'BUPM') {
+            this.bupmList.push(element._id);
+          }
+        });
       });
   }
 
@@ -198,7 +204,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
    * When user click click here hyper link
    */
   onOpenCsdlTab() {
-    let urlToOpen = 'https://csdl.cisco.com';
+    const urlToOpen = 'https://csdl.cisco.com';
     window.open(urlToOpen, '_blank');
   }
 
@@ -206,7 +212,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
    * When user select is Csdl Required 'Yes' radio button
    * @ param event
    */
-  onCsdlRequired(event) {
+  onCsdlRequired() {
     this.csdlRequired = true;
     this.csdlNotRequired = false;
   }
@@ -215,7 +221,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
    * When user select is Csdl Required 'No' radio button 
    * @ param event
    */
-  onCsdlNotRequired(event) {
+  onCsdlNotRequired() {
     this.csdlNotRequired = true;
     this.csdlRequired = false;
   }
@@ -231,7 +237,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
   }
 
   createCsdlAssociation(csdlPayload, isSearchItem) {
-    this.csdlIntegrationService.createCsdlAssociation(csdlPayload).subscribe(data => {
+    this.csdlIntegrationService.createCsdlAssociation(csdlPayload).subscribe(() => {
       if(isSearchItem){
         this.showComponent();
       }
@@ -255,7 +261,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
     this.isCsdlRequired = true;
     this.csdlRequired = false;
     // Find the component
-    const component = this.components.find((component) => component.instance instanceof CsdlStatusTrackComponent);
+    const component = this.components.find((_component) => _component.instance instanceof CsdlStatusTrackComponent);
     const componentIndex = this.components.indexOf(component);
 
     if (componentIndex !== -1) {
@@ -283,12 +289,12 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
     this.disableRestartModule = false;
     this.firstData['stakeholders'].forEach(ele => {
       if (ele['functionalRole'] === 'Security Compliance') {
-          this.csdlIntegrationService.dashboardNotification(this.currentOfferId).subscribe(data => {
+          this.csdlIntegrationService.dashboardNotification(this.currentOfferId).subscribe(() => {
         });
       }
     });
 
-    this.csdlIntegrationService.getCsdlInfo(this.currentOfferId).subscribe(data => {
+    this.csdlIntegrationService.getCsdlInfo(this.currentOfferId).subscribe(() => {
       this.existingComplete();
     }, (err) => {
       this.newComplete();
@@ -302,14 +308,14 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
    */
   existingComplete() {
     const csdlPayload = new CsdlPayload();
-    let csdlPayloadArray: any = [];
+    const csdlPayloadArray: any = [];
     csdlPayload.coolOfferId = this.currentOfferId;
     csdlPayload.csdlProjectSelected = 'N';
     csdlPayload.csdlRequired = 'N';
     csdlPayload.csdlMileStoneStatus = 'Complete';
     csdlPayload.associationStatus = 'disassociate';
     csdlPayloadArray.push(csdlPayload);
-    this.csdlIntegrationService.restartCsdlAssociation(csdlPayloadArray).subscribe(data => {
+    this.csdlIntegrationService.restartCsdlAssociation(csdlPayloadArray).subscribe(() => {
       this.isCompleteButtonDisabled = true;
       this.isLocked = true;
     },
@@ -332,7 +338,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
     csdlPayload.associationStatus = 'nan';
     csdlPayload.projectId = null;
     this.csdlIntegrationService.createCsdlAssociation(csdlPayload).subscribe(
-      data => {
+      () => {
         this.isCompleteButtonDisabled = true;
         this.isLocked = true;
       },
@@ -356,7 +362,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
     this.isCompleteButtonDisabled = false;
     this.displayRestartModuleDailog = false;
     this.disableRestartModule = true;
-    let csdlPayloadArray : any = [];
+    const csdlPayloadArray: any = [];
     const csdlPayload = new CsdlPayload();
     csdlPayload.coolOfferId = this.currentOfferId;
     csdlPayload.csdlProjectSelected = 'N';
@@ -365,7 +371,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
     csdlPayload.associationStatus = 'nan';
     csdlPayloadArray.push(csdlPayload);
     this.csdlIntegrationService.restartCsdlAssociation(csdlPayloadArray).subscribe(
-      data => {
+      () => {
       },
       err => {
         console.log(err);
@@ -421,9 +427,9 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
    * When user click on submit button after the create new CSDL ID button p-dailogue .
    */
   submitCsdlToContinue() {
-    this.csdlIntegrationService.getCsdlInfo(this.currentOfferId).subscribe(data => {
+    this.csdlIntegrationService.getCsdlInfo(this.currentOfferId).subscribe(() => {
       this.existingCsdlSubmit();
-    }, (err) => {
+    }, () => {
       this.newCsdlSubmit();
     }, () => {
 
@@ -431,19 +437,20 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
   }
 
   existingCsdlSubmit() {
-    let csdlPayloadArray : any = [];
+    const csdlPayloadArray: any = [];
     const csdlPayload = new CsdlPayload();
     csdlPayload.coolOfferId = this.currentOfferId;
     csdlPayload.csdlRequired = 'Y';
     csdlPayload.csdlProjectSelected = 'N';
     csdlPayload.associationStatus = 'requested';
     csdlPayload.productFamily = this.productFamilyAnswer;
-    csdlPayload.bUContact = this.offerOwnerId;
+    csdlPayload.bUContact = this.bupmList;
+    csdlPayload.offerManagerInformation = this.offerOwnerId;
     csdlPayload.csdlMileStoneStatus = 'In Progress';
     csdlPayload.projectType = this.selectedDropValue;
     csdlPayloadArray.push(csdlPayload);
     this.csdlIntegrationService.restartCsdlAssociation(csdlPayloadArray).subscribe(
-      data => {
+      () => {
       },
       err => {
         console.log(err);
@@ -461,7 +468,8 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
     csdlPayload.csdlProjectSelected = 'N';
     csdlPayload.associationStatus = 'requested';
     csdlPayload.productFamily = this.productFamilyAnswer;
-    csdlPayload.bUContact = this.offerOwnerId;
+    csdlPayload.bUContact = this.bupmList;
+    csdlPayload.offerManagerInformation = this.offerOwnerId;
     csdlPayload.csdlMileStoneStatus = 'In Progress';
     csdlPayload.projectType = this.selectedDropValue;
     this.createCsdlAssociation(csdlPayload, false);
@@ -479,7 +487,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
 
   /**
    * Search CSDL Projects with CSDL Id or Project Name or Project Type
-   * @param event
+   * @param event search project name data
    */
   searchProjectNames(event) {
     const searchString = event.query;
@@ -499,7 +507,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
   submitCoolToCsdl() {
     this.csdlIntegrationService.getCsdlInfo(this.currentOfferId).subscribe(data => {
       this.existingSearchSubmit();
-    }, (err) => {
+    }, () => {
       this.newSearchSubmit();
     }, () => {
 
@@ -507,7 +515,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
   }
 
   existingSearchSubmit() {
-    let csdlPayloadArray : any = [];
+    const csdlPayloadArray: any = [];
     const csdlPayload = new CsdlPayload();
     csdlPayload.coolOfferId = this.currentOfferId;
     csdlPayload.csdlRequired = 'Y';
@@ -518,9 +526,11 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
     csdlPayload.productFamily = this.productFamilyAnswer;
     csdlPayload.csdlMileStoneStatus = 'In Progress';
     csdlPayload.projectName = this.selectedProject.project_name;
+    csdlPayload.bUContact = this.bupmList;
+    csdlPayload.offerManagerInformation = this.offerOwnerId;
     csdlPayloadArray.push(csdlPayload);
     this.csdlIntegrationService.restartCsdlAssociation(csdlPayloadArray).subscribe(
-      data => {
+      () => {
         this.showComponent();
         this.isCsdlRequired = false;
       },
@@ -542,6 +552,8 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
     csdlPayload.productFamily = this.productFamilyAnswer;
     csdlPayload.csdlMileStoneStatus = 'In Progress';
     csdlPayload.projectName = this.selectedProject.project_name;
+    csdlPayload.bUContact = this.bupmList;
+    csdlPayload.offerManagerInformation = this.offerOwnerId;
     this.createCsdlAssociation(csdlPayload, true);
     // Hide Panels
     this.isCsdlRequired = false;
@@ -552,9 +564,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
    * Refresh CSDL Project List when triggered manually.
    */
   refreshProjectList() {
-    this.csdlIntegrationService
-      .refreshProjects()
-      .subscribe(response => {}, () => {});
+    this.csdlIntegrationService.refreshProjects();
   }
 
   ngOnDestroy() {

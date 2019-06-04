@@ -68,17 +68,17 @@
               <span style="color: red">Creation Rejected</span>
             </span>
             <span *ngIf="associationStatusError != '' && associationStatusError != 'error' && projectId != -1">
-              <a (click)="securityInsightsTab()">{{rowData.projectName}}({{rowData.projectId}})</a>
+              <a (click)="securityInsightsTab()">{{rowData?.projectName}}({{rowData?.projectId}})</a>
             </span>
           </td>
           <td class=" text-center">
-            <span *ngIf="rowData.stopShipStatus == 'True'">
-              <span class="text-danger">{{rowData.stopShipStatus}}</span>
+            <span *ngIf="rowData?.stopShipStatus == 'True'">
+              <span class="text-danger">{{rowData?.stopShipStatus}}</span>
             </span>
-            <span *ngIf="rowData.stopShipStatus == 'False'">
-              <span class="text-success">{{rowData.stopShipStatus}}</span>
+            <span *ngIf="rowData?.stopShipStatus == 'False'">
+              <span class="text-success">{{rowData?.stopShipStatus}}</span>
             </span>
-            <span *ngIf="rowData.stopShipStatus == ''">
+            <span *ngIf="rowData?.stopShipStatus == ''">
               <span>--</span>
             </span>
           </td>
@@ -86,8 +86,8 @@
             <span *ngIf="enforcementLabel == '' || enforcementLabel == null">
               <span>--</span>
             </span>
-            <span>{{rowData.enforcementLabel}}</span></td>
-          <td class=" text-center">{{rowData.latestUpdatedDate}}
+            <span>{{rowData?.enforcementLabel}}</span></td>
+          <td class=" text-center">{{rowData?.latestUpdatedDate}}
             <span *ngIf="csdlMileStoneStatus == 'In Progress' && associationStatusError != '' && associationStatusError != 'error'">
               <span class="icon-trash icon-small pull-right" (click)="removeAssociationConfirmDailog()"></span>
             </span>
