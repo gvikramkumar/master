@@ -1,5 +1,5 @@
 <div>
-  <div class="row" *ngIf="associationStatusError != 'error'">
+  <div class="row" *ngIf="projectId != -1 && associationStatusError != 'error'">
     <div class="col-md-12 task--bar">
       <button class="btn btn--secondary" type="submit" (click)="refreshStatus()"><span
           class="icon-refresh">&nbsp;&nbsp;Refresh
@@ -102,12 +102,13 @@
         </tr>
       </ng-template>
     </p-table>
-    <p-confirmDialog  #cd header="Removing Association">
-        <p-footer>
-          <button type="button" pButton label="Proceed" (click)="cd.accept()"></button>
-          <button type="button" pButton label="Cancel" (click)="cd.reject()"></button>
+    <p-confirmDialog #cd header="Removing Association" title="The original ID associated with this offer will remain on this screen until a new ID is associated or created. 
+        If CSDL is no longer applicable, the selection of 'Not Required' will also remove the association on this page">
+      <p-footer>
+        <button type="button" pButton label="Proceed" (click)="cd.accept()"></button>
+        <button type="button" pButton label="Cancel" (click)="cd.reject()"></button>
       </p-footer>
-      </p-confirmDialog>
-  </div>
+    </p-confirmDialog>
+    </div>
 </div>
 </div>
