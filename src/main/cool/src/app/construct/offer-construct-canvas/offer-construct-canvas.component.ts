@@ -1587,7 +1587,8 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 
   dragStartRow(item) {
-    if (this.readOnly === false && this.markCompleteStatus === false) {
+    if (this.readOnly === false) {
+      console.log(item)
 
       this.draggedItem = item.node;
       this.selected = [...this.selected];
@@ -1596,7 +1597,9 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 
   dragStart(item: any) {
-    if (this.readOnly === false && this.markCompleteStatus === false) {
+    if (this.readOnly === false) {
+      console.log(item)
+
       this.draggedItem = item;
     }
     this.isDisabledView = true;
