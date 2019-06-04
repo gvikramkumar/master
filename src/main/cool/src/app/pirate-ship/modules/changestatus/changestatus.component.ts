@@ -199,7 +199,7 @@ export class ChangestatusComponent implements OnInit {
         }
         break;
       }
-      case 'Pricing Uplift': {
+      case 'Pricing Uplift Setup': {
         this.infohelp = this.basicmodule_hint.Pricing_Uplift_Setup;
         if ( pirateShipSharedService &&
           pirateShipSharedService.getRole()
@@ -320,7 +320,7 @@ export class ChangestatusComponent implements OnInit {
 
   // Get All the ModuleName and place in order
   getAllModuleData() {
-    this.offerSetupService.getModuleData(this.offerId, this.selectedAto, this.functionalRole, this.derivedMM ).subscribe(data => {
+    this.offerSetupService.getModuleData(this.offerId, this.selectedAto, this.functionalRole ).subscribe(data => {
         this.groupData = {};
         this.showGroupData = false;
         this.Options = data['listATOs'];
