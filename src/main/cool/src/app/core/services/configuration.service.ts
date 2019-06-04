@@ -130,7 +130,7 @@ export class ConfigurationService {
 
           return this.httpClient.post(this.urlGetUserInfo, { userId: user }).toPromise().then((resUserInfo: any) => {
             this.userService.setName(resUserInfo[0].cn);
-          })
+          });
         })
         .then((response) => resolve(true))
         .catch(this.handleError());

@@ -15,11 +15,7 @@ export class CsdlStatusTrackComponent implements OnInit {
   caseId: string;
   selectedAto: any;
   csdlData: any[] = [];
-  csdlId;
   projectId;
-  stopShip;
-  enforcement;
-  latestStatusUpdate;
   stopShipStatus;
   enforcementLabel;
   csdlMileStoneStatus;
@@ -68,7 +64,9 @@ export class CsdlStatusTrackComponent implements OnInit {
    * When user click on csdl id or project name it will open the new tab with below url.
    */
   securityInsightsTab() {
-    const urlToOpen = 'https://wwwin-si.cisco.com/projects/[CSDL_ID]/?tab=Vital+Signs';
+    let urlToOpen = 'https://wwwin-si.cisco.com/projects/';
+    urlToOpen +=  this.projectId;
+    urlToOpen += '/?tab=Vital+Signs';
     window.open(urlToOpen, '_blank');
   }
 
@@ -78,7 +76,8 @@ export class CsdlStatusTrackComponent implements OnInit {
   removeAssociationConfirmDailog() {
     this.confirmationService.confirm({
       message: `Are you sure you want to proceed? After removing this association you
-                will need to identify another CSDL project in order to proceed`,
+                will need to identify another CSDL project in order to proceed.`,
+      icon: 'pi pi-info-circle',
       accept: () => {
         this.deAssociation();
       },
@@ -91,7 +90,7 @@ export class CsdlStatusTrackComponent implements OnInit {
    * When user click on trash button and it will ask to confirm proceed to deassciation
    */
   deAssociation() {
-    this.csdlIntegrationService.getCsdlInfo(this.currentOfferId).subscribe(data => {
+    this.csdlIntegrationService.getCsdlInfo(this.currentOfferId).subscribe(() => {
       this.setDeAssociation();
     }, (err) => {
 
@@ -105,7 +104,7 @@ export class CsdlStatusTrackComponent implements OnInit {
    */
   setDeAssociation() {
     const csdlPayload = new CsdlPayload();
-    let csdlPayloadArray : any = [];
+    const csdlPayloadArray: any = [];
     csdlPayload.coolOfferId = this.currentOfferId;
     csdlPayload.csdlProjectSelected = 'N';
     csdlPayload.csdlRequired = 'Y';
@@ -114,7 +113,7 @@ export class CsdlStatusTrackComponent implements OnInit {
     csdlPayload.projectId = Number('-1');
     csdlPayload.projectType = '';
     csdlPayloadArray.push(csdlPayload);
-    this.csdlIntegrationService.restartCsdlAssociation(csdlPayloadArray).subscribe(data => {
+    this.csdlIntegrationService.restartCsdlAssociation(csdlPayloadArray).subscribe(() => {
       this.messageService.sendMessage('De Association');
       },
       err => {
