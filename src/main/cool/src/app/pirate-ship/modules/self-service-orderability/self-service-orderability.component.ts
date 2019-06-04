@@ -107,7 +107,7 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
             this.atoNames.push(dropDownValue.itemName);
           });
 
-        this.sso = _.find(this.ssoList, ['orderabilityCheckStatus', this.selectedAto]);
+        this.sso = _.find(this.ssoList, ['itemName', this.selectedAto]);
         const currentAtoStatus = _.isEmpty(this.sso) ? '' : this.sso.orderabilityCheckStatus;
         this.disableOrderabilityButton = this.disableOrderabilityButton ? this.orderabilityButtonStatus(currentAtoStatus) : false;
 
