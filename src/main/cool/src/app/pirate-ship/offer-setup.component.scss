@@ -1,8 +1,11 @@
 .osw-module--btns button {
   min-width:100%;
-  padding-left: 3px;
   z-index: 9;
   position: relative;
+}
+.osw-module--btns button span {
+  position: absolute;
+  left: 3px;
 }
 .osw-module--btns button.btn.btn--small.btn--warning {
   color: #fff;
