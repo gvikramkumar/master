@@ -7,7 +7,7 @@ export class CsdlPayload {
   associationStatus: string;
   associationMessage: string;
   productFamily: string;
-  bUContact: string;
+  bUContact: string[];
   offerManagerInformation: string;
   monetizationModel: string;
   projectId: Number;
