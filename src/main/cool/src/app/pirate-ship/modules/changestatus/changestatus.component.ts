@@ -174,7 +174,8 @@ export class ChangestatusComponent implements OnInit {
             pirateShipSharedService.getRole() === 'NPPM'
             ||
             pirateShipSharedService.getRole() === 'PDT'
-            || pirateShipSharedService.getRole() === 'Legal'
+            ||
+            pirateShipSharedService.getRole() === 'Legal'
           )) {
           this.isReadOnly = false;
         }
