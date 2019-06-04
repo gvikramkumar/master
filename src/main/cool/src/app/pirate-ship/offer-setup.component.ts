@@ -73,7 +73,8 @@ export class OfferSetupComponent implements OnInit {
     //  =======================================================================================
     this.functionalRole = this.userService.getFunctionalRole();
 
-
+    this.offerSetupService.lockAPIForOWB(this.offerId).subscribe(res=> {
+    });
     // Check design review status for enabling Item Creation Module
     this.actionsService.getMilestones(this.caseId).subscribe(data => {
       data['plan'].forEach(element => {
@@ -332,7 +333,7 @@ export class OfferSetupComponent implements OnInit {
         this.offerId,
         this.caseId,
         pirateShipRoutesNames.SELF_SERVICE_ORDERABILITY,
-        this.selectedAto, element.moduleName]);
+        this.selectedAto]);
         break;
       }
     }

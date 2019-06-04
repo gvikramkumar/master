@@ -355,6 +355,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
     csdlPayload.csdlProjectSelected = 'N';
     csdlPayload.csdlRequired = 'N';
     csdlPayload.csdlMileStoneStatus = 'Available';
+    csdlPayload.associationStatus = 'nan';
     csdlPayloadArray.push(csdlPayload);
     this.csdlIntegrationService.restartCsdlAssociation(csdlPayloadArray).subscribe(
       data => {
@@ -509,6 +510,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
     csdlPayload.projectType = this.selectedProject.project_type;
     csdlPayload.productFamily = this.productFamilyAnswer;
     csdlPayload.csdlMileStoneStatus = 'In Progress';
+    csdlPayload.projectName = this.selectedProject.project_name;
     csdlPayloadArray.push(csdlPayload);
     this.csdlIntegrationService.restartCsdlAssociation(csdlPayloadArray).subscribe(
       data => {
@@ -532,6 +534,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
     csdlPayload.projectType = this.selectedProject.project_type;
     csdlPayload.productFamily = this.productFamilyAnswer;
     csdlPayload.csdlMileStoneStatus = 'In Progress';
+    csdlPayload.projectName = this.selectedProject.project_name;
     this.createCsdlAssociation(csdlPayload, true);
     // Hide Panels
     this.isCsdlRequired = false;

@@ -10,7 +10,7 @@ export class CsdlPayload {
   bUContact: string;
   offerManagerInformation: string;
   monetizationModel: string;
-  projectId: string;
+  projectId: Number;
   projectType: string;
   reasonForNotRequired: string;
   csdlMileStoneStatus: string;
@@ -19,6 +19,9 @@ export class CsdlPayload {
   latestStatusUpdate: string;
   csdlOverAllstatus: string;
   history: string;
+  associationErrorCode: string;
+  projectName: string;
+  enforcementLabel: string;
 
   constructor() {
   }
