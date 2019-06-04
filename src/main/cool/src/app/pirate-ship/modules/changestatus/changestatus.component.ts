@@ -199,7 +199,7 @@ export class ChangestatusComponent implements OnInit {
         }
         break;
       }
-      case 'Pricing Uplift': {
+      case 'Pricing Uplift Setup': {
         this.infohelp = this.basicmodule_hint.Pricing_Uplift_Setup;
         if ( pirateShipSharedService &&
           pirateShipSharedService.getRole()

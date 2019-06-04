@@ -64,7 +64,9 @@ export class CsdlStatusTrackComponent implements OnInit {
    * When user click on csdl id or project name it will open the new tab with below url.
    */
   securityInsightsTab() {
-    const urlToOpen = 'https://wwwin-si.cisco.com/projects/[CSDL_ID]/?tab=Vital+Signs';
+    let urlToOpen = 'https://wwwin-si.cisco.com/projects/';
+    urlToOpen +=  this.projectId;
+    urlToOpen += '/?tab=Vital+Signs';
     window.open(urlToOpen, '_blank');
   }
 
@@ -74,7 +76,8 @@ export class CsdlStatusTrackComponent implements OnInit {
   removeAssociationConfirmDailog() {
     this.confirmationService.confirm({
       message: `Are you sure you want to proceed? After removing this association you
-                will need to identify another CSDL project in order to proceed`,
+                will need to identify another CSDL project in order to proceed.`,
+      icon: 'pi pi-info-circle',
       accept: () => {
         this.deAssociation();
       },
