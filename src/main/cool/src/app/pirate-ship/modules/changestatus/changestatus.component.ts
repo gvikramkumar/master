@@ -205,7 +205,19 @@ export class ChangestatusComponent implements OnInit {
         if ( pirateShipSharedService &&
           pirateShipSharedService.getRole()
           &&
-          pirateShipSharedService.getRole() === 'BUPM') {
+          (pirateShipSharedService.getRole() === 'BUPM'
+            ||
+            pirateShipSharedService.getRole() === 'NPPM'
+            ||
+            pirateShipSharedService.getRole() === 'PLPM'
+            ||
+            pirateShipSharedService.getRole() === 'CXPM'
+            ||
+            pirateShipSharedService.getRole() === 'OLE'
+            ||
+            pirateShipSharedService.getRole() === 'SOE'
+
+          )) {
           this.isReadOnly = false;
         }
         break;
