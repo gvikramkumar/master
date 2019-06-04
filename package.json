@@ -21,7 +21,7 @@
     "seedsh": "cd database && ./seed.sh localhost 27017 fin-dfa",
     "seedbatlocal": "cd database && seed-local.bat localhost 27017 fin-dfa",
     "seedshlocal": "cd database && ./seed-local.sh localhost 27017 fin-dfa",
-    "seedbatunit": "cd database && seed-unit.bat localhost 27017 fin-dfa-unit",
+    "seedbatunit": "cd database && seed-unit.bat localhost 27017 fin-dfa",
     "seedshunit": "cd database && ./seed-unit.sh localhost 27017 fin-dfa-unit"
   },
   "dependencies": {

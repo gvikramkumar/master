@@ -9,7 +9,6 @@ mongoimport --host %1 --port %2 --db %3 --collection dfa_measure --file data/mea
 echo database load complete
 
 mongo --nodb  --eval "var host='%1', port='%2', _db='%3'" post-data-load.js
-mongo --nodb  --eval "var host='%1', port='%2', _db='%3'" post-data-load-unit.js
 rem mongo --nodb  --eval "var host='%1', port='%2', _db='%3'" post-data-load-dank.js
 rem mongo --nodb  --eval "var host='%1', port='%2', _db='%3'" post-data-load-khizer.js
 
