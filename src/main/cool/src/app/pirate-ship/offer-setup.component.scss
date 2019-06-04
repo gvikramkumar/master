@@ -47,7 +47,7 @@
 .osw-module--btns .btn.btn--small.btn--gray-ghost {
   background-color: #fff;
   color: #58585b;
-  box-shadow: inset 0 0 0 1px #626469;
+  box-shadow: inset 0 0 0 1px rgba(76, 76, 76, 0.1);
 }
 .osw-module--btns .btn.btn--small.btn--gray-ghost:hover {
   background-color: #58585b;
@@ -63,10 +63,10 @@
   position: absolute;
   display: block;
   width: 50%;
-  height: 280px;
+  height: 255px;
   z-index: 0;
   left: 15%;
-  top: 15%;
+  top: 65px;
 }
 .osw-module--btns .last li:last-child button:before {
   content: '';
