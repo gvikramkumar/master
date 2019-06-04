@@ -142,15 +142,16 @@ export class MenuBarComponent implements OnInit {
         ];
         
 
-        this.menuBarService.getMarkCompleteStatus(this.offerId, this.caseId).subscribe(data => {
+        this.menuBarService.getRubboTaxMenu(this.caseId).subscribe(data => {
             if (this.currentURL.includes('offerDimension')) {
-                this.markCompleteStatus = data['offerDimension_toggleStatus'];
+                debugger;
+                this.markCompleteStatus = data['plan'][0]['status'];
                 this.showMarkcompleteToggle = true;
             } else if(this.currentURL.includes('offerSolutioning')){
-                this.markCompleteStatus = data['offerSolutioning_toggleStatus'];
+                this.markCompleteStatus = data['plan'][1]['status'];
                 this.showMarkcompleteToggle = true;
             } else if (this.currentURL.includes('offerConstruct')){
-                this.markCompleteStatus = data['offerComponent_toggleStatus'];
+                this.markCompleteStatus = data['plan'][2]['status'];
                 this.showMarkcompleteToggle = true;
             }
             this.getMarkCompleteStatus.next(this.markCompleteStatus);
