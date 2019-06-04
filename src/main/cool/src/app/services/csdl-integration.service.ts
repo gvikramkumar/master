@@ -1,6 +1,6 @@
-import { Injectable, EventEmitter } from '@angular/core';
-import { Observable, Subject, BehaviorSubject } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { EnvironmentService } from '../../environments/environment.service';
 import { CsdlPayload } from '@app/pirate-ship/modules/csdl/model/csdl-payload';
 
@@ -43,5 +43,12 @@ export class CsdlIntegrationService {
       csdlPayload,
       { withCredentials: true }
     );
+  }
+
+  dashboardNotification(offerId) {
+    let url = this.environmentService.REST_API_SEND_DASHBOARD_NOTIFICATION_CSDL_POST_URL;
+    url += offerId;
+    url += '/' + 'csdl';
+    return this._http.post(url, null, { withCredentials: true });
   }
 }

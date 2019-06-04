@@ -61,10 +61,13 @@
             <span *ngIf="projectId == '' && associationStatusError != '' && associationStatusError != 'error'">
               <span style="color: orange">Creation in Progress</span>
             </span>
+            <span *ngIf="projectId == -1 && associationStatusError != '' && associationStatusError != 'error'">
+              <span style="color: orange">Creation in Progress</span>
+            </span>
             <span *ngIf="associationStatusError == 'error'">
               <span style="color: red">Creation Rejected</span>
             </span>
-            <span *ngIf="associationStatusError != '' && associationStatusError != 'error'">
+            <span *ngIf="associationStatusError != '' && associationStatusError != 'error' && projectId != -1">
               <a (click)="securityInsightsTab()">{{rowData.projectName}}({{rowData.projectId}})</a>
             </span>
           </td>

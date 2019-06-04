@@ -9,6 +9,7 @@ import { CsdlPayload } from '../model/csdl-payload';
 import { CsdlStatusTrackComponent } from '../csdl-status-track/csdl-status-track.component';
 import { MessageService } from '@app/services/message.service';
 import { Subscription } from 'rxjs';
+import { element } from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-csdl-platform',
@@ -113,7 +114,6 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
     },
     (error) => {
       this.isCsdlRequired = true;
-      console.log("data error");
     });
 
     this.subscription = this.messageService.getMessage().subscribe(() => {
@@ -281,6 +281,13 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
    */
   onComplete() {
     this.disableRestartModule = false;
+    this.firstData['stakeholders'].forEach(ele => {
+      if (ele['functionalRole'] === 'Security Compliance') {
+          this.csdlIntegrationService.dashboardNotification(this.currentOfferId).subscribe(data => {
+        });
+      }
+    });
+
     this.csdlIntegrationService.getCsdlInfo(this.currentOfferId).subscribe(data => {
       this.existingComplete();
     }, (err) => {

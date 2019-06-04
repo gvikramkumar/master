@@ -92,6 +92,7 @@ export class EnvironmentService {
     //  EMAIL URLs
     REST_API_EMAIL_NOTIFICATION: string;
     REST_API_SEND_EMAIL_NOTIFICATION_POST_URL: string;
+    REST_API_SEND_DASHBOARD_NOTIFICATION_CSDL_POST_URL: string;
 
     // ACCESS MANAGEMENT URLs
     REST_API_CREATE_NEW_USER_URL: string;
@@ -378,6 +379,7 @@ export class EnvironmentService {
 
         this.REST_API_EMAIL_NOTIFICATION = this.baseApiUrl + '/emailNotification/send';
         this.REST_API_SEND_EMAIL_NOTIFICATION_POST_URL = this.baseApiUrl + '/emailNotification/sendEmailNotification/';
+        this.REST_API_SEND_DASHBOARD_NOTIFICATION_CSDL_POST_URL = this.baseApiUrl + '/dashboard/notification/generate/';
 
         // ------------------------------- ACCESS MANAGEMENT URLs---------------------------------------------------
 
