@@ -27,8 +27,17 @@ export const shUtil = {
   isManualMix,
   convertToPSTTime,
   findDuplicatesByProperty,
-  catchDisregardHandler
+  catchDisregardHandler,
+  arrayFilterUndefinedAndEmptyStrings
 };
+
+// filter out any array elements that are undefined, empty strings or strings with just spaces in them
+function arrayFilterUndefinedAndEmptyStrings(arr) {
+  if (!arr) {
+    return arr;
+  }
+  return arr.map(x => x && x.trim ? x.trim() : x).filter(x => !!x);
+}
 
 function findDuplicatesByProperty(arr, prop) {
   const obj = {};

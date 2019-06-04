@@ -9,7 +9,7 @@ import {AppStore} from '../../../../app/app-store';
 import _ from 'lodash';
 import {DialogInputType, DialogType} from '../../../../core/models/ui-enums';
 import {UiUtil} from '../../../../core/services/ui-util';
-import {AbstractControl, AsyncValidatorFn, NgForm, ValidationErrors} from '@angular/forms';
+import {AbstractControl, AsyncValidatorFn, NgForm, ValidationErrors, ValidatorFn} from '@angular/forms';
 import {ValidationInputOptions} from '../../../../shared/components/validation-input/validation-input.component';
 import {map} from 'rxjs/operators';
 import {LookupService} from '../../services/lookup.service';
@@ -46,8 +46,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   copyMode = false;
   rule = new AllocationRule();
   orgRule: AllocationRule;
-  drivers: {name: string, value: string}[];
-  periods: {period: string}[];
+  drivers: { name: string, value: string }[];
+  periods: { period: string }[];
   submeasuresInUse: Submeasure[] = [];
   submeasuresAll: Submeasure[] = [];
   usingSubmeasuresNamesTooltip = '';
@@ -55,16 +55,28 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   conditionalOperators = [{operator: 'IN'}, {operator: 'NOT IN'}];
   salesMatches = [{name: 'Level 1', value: 'SL1'}, {name: 'Level 2', value: 'SL2'}, {name: 'Level 3', value: 'SL3'},
     {name: 'Level 4', value: 'SL4'}, {name: 'Level 5', value: 'SL5'}, {name: 'Level 6', value: 'SL6'}];
-  productMatches = [{name: 'Business Unit', value: 'BU'}, {name: 'Product Family', value: 'PF'}, {name: 'Technology Group',
-    value: 'TG'}, {name: 'Product ID', value: 'PID'}];
+  productMatches = [{name: 'Business Unit', value: 'BU'}, {name: 'Product Family', value: 'PF'}, {
+    name: 'Technology Group',
+    value: 'TG'
+  }, {name: 'Product ID', value: 'PID'}];
   scmsMatches = [{match: 'SCMS'}];
   legalEntityMatches = [{match: 'Business Entity', abbrev: 'LE'}];
-  beMatches = [{name: 'Internal BE', value: 'BE', abbrev: 'IBE'}, {name: 'Internal Sub BE', value: 'Sub BE', abbrev: 'ISBE'}];
+  beMatches = [{name: 'Internal BE', value: 'BE', abbrev: 'IBE'}, {
+    name: 'Internal Sub BE',
+    value: 'Sub BE',
+    abbrev: 'ISBE'
+  }];
   countryMatches = [{name: 'Sales Country Name', value: 'sales_country_name', abbrev: 'CNT'}];
   extTheaterMatches = [{name: 'External Theater Name', value: 'ext_theater_name', abbrev: 'EXT'}];
-  glSegmentMatches = [{name: 'Account', value: 'ACCOUNT', abbrev: 'ACCT'}, {name: 'Sub Account', value: 'SUB ACCOUNT', abbrev: 'SUBACCT'},
+  glSegmentMatches = [{name: 'Account', value: 'ACCOUNT', abbrev: 'ACCT'}, {
+    name: 'Sub Account',
+    value: 'SUB ACCOUNT',
+    abbrev: 'SUBACCT'
+  },
     {name: 'Company', value: 'COMPANY', abbrev: 'COMP'}];
   // SELECT options to be taken from Postgres
+  sl1Sl2Sl3NameCodes: { sl1: string, sl2: string, sl3: string }[] = [];
+  tgBuPfProductIds: { tg: string, bu: string, pf: string }[] = [];
   salesSL1Choices: { name: string }[] = [];
   prodTgChoices: { name: string }[] = [];
   scmsChoices: { name: string }[] = [];
@@ -93,8 +105,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   public ngOnInit(): void {
     const promises: Promise<any>[] = [
-      this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l1_sales_territory_name_code').toPromise(),
-      this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_products', 'technology_group_id').toPromise(),
+      this.pgLookupService.callRepoMethod('getDistinctSL1SL2SL3NameCodeFromSalesHierarchy').toPromise(),
+      this.pgLookupService.callRepoMethod('getDistincTGBUPFIdsFromProductHierarchy').toPromise(),
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_coverage_code').toPromise(),
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_be_hierarchy', 'business_entity_descr').toPromise(),
       this.lookupService.getValues(['drivers', 'periods']).toPromise()
@@ -109,8 +121,10 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       .then(results => {
         // assign to your local arrays here, then:
         // map result string arrays to object arrays for use in dropdowns
-        this.salesSL1Choices = results[0].map(x => ({name: x}));
-        this.prodTgChoices = results[1].map(x => ({name: x}));
+        this.sl1Sl2Sl3NameCodes = results[0];
+        this.salesSL1Choices = this.sl1Sl2Sl3NameCodes.map(x => ({name: x.sl1}));
+        this.tgBuPfProductIds = results[1];
+        this.prodTgChoices = this.tgBuPfProductIds.map(x => ({name: x.tg}));
         this.scmsChoices = results[2].map(x => ({name: x}));
         this.internalBeChoices = results[3].map(x => ({name: x}));
         this.drivers = _.sortBy(results[4][0], 'name');
@@ -145,7 +159,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         }
 
         this.salesSL2ChoiceOptions = {
-          asyncValidations: [
+          validations: [
             {
               name: 'salesSL2Choices',
               message: 'Some sales SL2 select fields don\'t exist',
@@ -155,7 +169,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         };
 
         this.salesSL3ChoiceOptions = {
-          asyncValidations: [
+          validations: [
             {
               name: 'salesSL3Choices',
               message: 'Some sales SL3 select fields don\'t exist',
@@ -165,7 +179,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         };
 
         this.prodPFChoiceOptions = {
-          asyncValidations: [
+          validations: [
             {
               name: 'prodPFChoices',
               message: 'Some product PF select fields don\'t exist',
@@ -175,7 +189,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         };
 
         this.prodBUChoiceOptions = {
-          asyncValidations: [
+          validations: [
             {
               name: 'prodBUChoices',
               message: 'Some product BU select fields don\'t exist',
@@ -276,12 +290,12 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   validate() {
     const errors = [];
 
-/*
-    if (something wrong) {
-      errors.push('some message');
-    }
-*/
-  return errors.length ? errors : null;
+    /*
+        if (something wrong) {
+          errors.push('some message');
+        }
+    */
+    return errors.length ? errors : null;
   }
 
   validateNameAndSelectmap() {
@@ -290,7 +304,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     // rule select exceptions, so we check right before save (grrr, this isn't right before save), still have that dialog to put up and down
     // for submit... so we'll have to validate after as well then
     return this.getRulesAndRuleNamesAndGenerateSelectMap()
-      .then (() => {
+      .then(() => {
         const oldName = this.rule.name;
         // generate a new name considering the latest approved rules
         const ruleNameExists = this.valueChange();
@@ -307,29 +321,25 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   saveToDraft() {
     UiUtil.triggerBlur('.fin-container form');
-    UiUtil.waitForAsyncValidations(this.form)
-      .then(() => {
-        if (this.form.valid) {
-          this.cleanUp();
-          const errors = this.validate();
-          if (errors) {
-            this.uiUtil.validationErrorsDialog(errors);
-            return Promise.reject('disregard');
-          }
-          this.validateNameAndSelectmap()
-            .then(() => {
-              const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
-              this.ruleService.saveToDraft(this.rule, {saveMode})
-                .subscribe(rule => {
-                  history.go(-1);
-                });
-            })
-            // this to supress the angular error upon seeing a reject. Funny thing is: the one in the outer "then" won't do,
-            // have to catch it in here to catch the validateNameAndSelectmap rejects
-            .catch(shUtil.catchDisregardHandler);
-        }
-      })
-      .catch(shUtil.catchDisregardHandler);
+    if (this.form.valid) {
+      this.cleanUp();
+      const errors = this.validate();
+      if (errors) {
+        this.uiUtil.validationErrorsDialog(errors);
+        return Promise.reject('disregard');
+      }
+      this.validateNameAndSelectmap()
+        .then(() => {
+          const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
+          this.ruleService.saveToDraft(this.rule, {saveMode})
+            .subscribe(rule => {
+              history.go(-1);
+            });
+        })
+        // this to supress the angular error upon seeing a reject. Funny thing is: the one in the outer "then" won't do,
+        // have to catch it in here to catch the validateNameAndSelectmap rejects
+        .catch(shUtil.catchDisregardHandler);
+    }
   }
 
   canApprove() {
@@ -377,56 +387,70 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   submitForApproval() {
     UiUtil.triggerBlur('.fin-container form');
-    UiUtil.waitForAsyncValidations(this.form)
-      .then(() => {
-        if (this.form.valid) {
-          this.cleanUp();
-          const errors = this.validate();
-          if (errors) {
-            this.uiUtil.validationErrorsDialog(errors);
-          } else {
-            this.uiUtil.confirmSubmitForApproval().toPromise()
-              .then(result => {
-                if (result) {
-                  // we cannot under any circumstance allow these select exceptions to be compromised.
-                  // we cannot afford to do it "before" the confirmation dialog, we have to do it right before save, so has its own validation function
-                  // that gets called after confirmation goes down
-                  this.validateNameAndSelectmap()
-                    .then(() => {
-                      const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
-                      this.ruleService.submitForApproval(this.rule, {saveMode, type: 'rule-management'})
-                        .subscribe(() => {
-                          history.go(-1);
-                        });
-                    })
-                    // this to supress the angular error upon seeing a reject. Funny thing is: the one in the outer "then" won't do,
-                    // have to catch it in here to catch the validateNameAndSelectmap rejects
-                    .catch(shUtil.catchDisregardHandler);
-                }
-              });
-          }
-        }
-      })
-      .catch(shUtil.catchDisregardHandler);
+    if (this.form.valid) {
+      this.cleanUp();
+      const errors = this.validate();
+      if (errors) {
+        this.uiUtil.validationErrorsDialog(errors);
+      } else {
+        this.uiUtil.confirmSubmitForApproval().toPromise()
+          .then(result => {
+            if (result) {
+              // we cannot under any circumstance allow these select exceptions to be compromised.
+              // we cannot afford to do it "before" the confirmation dialog, we have to do it right before save, so has its own validation function
+              // that gets called after confirmation goes down
+              this.validateNameAndSelectmap()
+                .then(() => {
+                  const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
+                  this.ruleService.submitForApproval(this.rule, {saveMode, type: 'rule-management'})
+                    .subscribe(() => {
+                      history.go(-1);
+                    });
+                })
+                // this to supress the angular error upon seeing a reject. Funny thing is: the one in the outer "then" won't do,
+                // have to catch it in here to catch the validateNameAndSelectmap rejects
+                .catch(shUtil.catchDisregardHandler);
+            }
+          });
+      }
+    }
   }
 
-  salesSL2ChoicesValidator(): AsyncValidatorFn {
-    return ((control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
+  salesSL2ChoicesValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value || !control.value.length) {
-        return Promise.resolve(null);
+        return null;
       }
-      return this.ruleService.validateSalesSL2CritChoices(control.value)
-        .pipe(map(results => {
-          if (!results.exist) {
-            return {salesSL2Choices: {value: control.value}};
-          } else {
-            if (!_.isEqual(this.rule.salesSL2CritChoices, results.values)) {
-              this.rule.salesSL2CritChoices = results.values;
-            }
-            return null;
-          }
-        }));
-    });
+      const selections = shUtil.arrayFilterUndefinedAndEmptyStrings(control.value.split(',')).map(x => x.toUpperCase());
+      const parentSelections = this.rule.salesSL1CritChoices.map(x => x.toUpperCase());
+      let available
+      if (this.rule.salesSL1CritChoices.length && this.rule.salesSL1CritCond === 'IN') {
+        available = this.sl1Sl2Sl3NameCodes.filter(x => _.includes(parentSelections, x.sl1.toUpperCase()));
+      } else if (this.rule.salesSL1CritChoices.length && this.rule.salesSL1CritCond === 'NOT IN') {
+        available = this.sl1Sl2Sl3NameCodes.filter(x => !_.includes(parentSelections, x.sl1.toUpperCase()));
+      } else {
+        available = this.sl1Sl2Sl3NameCodes;
+      }
+      const actuals = [];
+      const notFound = [];
+      selections.forEach(sel => {
+        const found = _.find(available, x => sel.toUpperCase() === x.sl2.toUpperCase());
+        if (found) {
+          actuals.push(found.sl2);
+        } else {
+          notFound.push(sel);
+        }
+      });
+      if (notFound.length) {
+        return {salesSL2Choices: {value: notFound.join(', ')}};
+      } else {
+        // no need updating unless case has changed
+        if (!_.isEqual(this.rule.salesSL2CritChoices, actuals)) {
+          this.rule.salesSL2CritChoices = actuals;
+        }
+        return null;
+      }
+    };
   }
 
   salesSL3ChoicesValidator(): AsyncValidatorFn {
