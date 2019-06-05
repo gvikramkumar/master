@@ -14,7 +14,6 @@ export const shUtil = {
   getUpdateTable,
   getObjectChanges,
   isAdminModuleId,
-  stringToArray,
   isManualUploadSource,
   getFiscalMonthListFromDate,
   getFiscalMonthListForCurYearAndLast,
@@ -28,6 +27,7 @@ export const shUtil = {
   convertToPSTTime,
   findDuplicatesByProperty,
   catchDisregardHandler,
+  stringToArray,
   arrayFilterUndefinedAndEmptyStrings
 };
 
@@ -37,6 +37,14 @@ function arrayFilterUndefinedAndEmptyStrings(arr) {
     return arr;
   }
   return arr.map(x => x && x.trim ? x.trim() : x).filter(x => !!x);
+}
+
+function stringToArray(str, type?) {
+  let arr = str && str.trim && str.trim() ? arrayFilterUndefinedAndEmptyStrings(str.split(',')) : [];
+  if (type === 'number') {
+    arr = arr.map(x => Number(x));
+  }
+  return arr;
 }
 
 function findDuplicatesByProperty(arr, prop) {
@@ -165,14 +173,6 @@ function getHtmlForLargeSingleMessage(msg) {
 
 function isManualUploadSource(sourceId: number) {
   return sourceId === 4; // Manual Upload
-}
-
-function stringToArray(str, type?) {
-  let arr = str && str.trim() ? str.split(',').map(x => x.trim()).filter(x => !!x) : [];
-  if (type === 'number') {
-    arr = arr.map(x => Number(x));
-  }
-  return arr;
 }
 
 function isAdminModuleId(moduleId) {

@@ -123,9 +123,9 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         // assign to your local arrays here, then:
         // map result string arrays to object arrays for use in dropdowns
         this.sl1Sl2Sl3NameCodes = results[0];
-        this.salesSL1Choices = this.sl1Sl2Sl3NameCodes.map(x => ({name: x.sl1}));
+        this.salesSL1Choices = _.uniq(this.sl1Sl2Sl3NameCodes.map(x => x.sl1)).map(x => ({name: x}));
         this.tgBuPfProductIds = results[1];
-        this.prodTgChoices = this.tgBuPfProductIds.map(x => ({name: x.tg}));
+        this.prodTgChoices = _.uniq(this.tgBuPfProductIds.map(x => x.tg)).map(x => ({name: x}));
         this.scmsChoices = results[2].map(x => ({name: x}));
         this.internalBeChoices = results[3].map(x => ({name: x}));
         this.drivers = _.sortBy(results[4][0], 'name');
@@ -417,21 +417,24 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     }
   }
 
+  getSl1Sl2Sl3NameCodesFilteredForSl1() {
+    const sl1Selections = this.rule.salesSL1CritChoices.map(x => x.toUpperCase());
+    if (this.rule.salesSL1CritChoices.length && this.rule.salesSL1CritCond === 'IN') {
+      return this.sl1Sl2Sl3NameCodes.filter(x => _.includes(sl1Selections, x.sl1.toUpperCase()));
+    } else if (this.rule.salesSL1CritChoices.length && this.rule.salesSL1CritCond === 'NOT IN') {
+      return this.sl1Sl2Sl3NameCodes.filter(x => !_.includes(sl1Selections, x.sl1.toUpperCase()));
+    } else {
+      return this.sl1Sl2Sl3NameCodes;
+    }
+  }
+
   salesSL2ChoicesValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
+    const fcn = (control: AbstractControl): ValidationErrors | null => {
       if (!control.value || !control.value.length) {
         return null;
       }
       const selections = shUtil.arrayFilterUndefinedAndEmptyStrings(control.value);
-      const parentSelections = this.rule.salesSL1CritChoices.map(x => x.toUpperCase());
-      let available
-      if (this.rule.salesSL1CritChoices.length && this.rule.salesSL1CritCond === 'IN') {
-        available = this.sl1Sl2Sl3NameCodes.filter(x => _.includes(parentSelections, x.sl1.toUpperCase()));
-      } else if (this.rule.salesSL1CritChoices.length && this.rule.salesSL1CritCond === 'NOT IN') {
-        available = this.sl1Sl2Sl3NameCodes.filter(x => !_.includes(parentSelections, x.sl1.toUpperCase()));
-      } else {
-        available = this.sl1Sl2Sl3NameCodes;
-      }
+      const available = this.getSl1Sl2Sl3NameCodesFilteredForSl1();
       const actuals = [];
       const notFound = [];
       selections.forEach(sel => {
@@ -455,65 +458,145 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         return null;
       }
     };
+    // if in control and hit save button (which calls triggerBlur(), we'll get double hits on this, shut that down
+    return _.throttle(fcn.bind(this), 400, {trailing: false});
   }
 
-  salesSL3ChoicesValidator(): AsyncValidatorFn {
-    return ((control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
+  salesSL3ChoicesValidator(): ValidatorFn {
+    const fcn = (control: AbstractControl): ValidationErrors | null => {
       if (!control.value || !control.value.length) {
-        return Promise.resolve(null);
+        return null;
       }
-      return this.ruleService.validateSalesSL3CritChoices(control.value)
-        .pipe(map(results => {
-          if (!results.exist) {
-            return {salesSL3Choices: {value: control.value}};
-          } else {
-            if (!_.isEqual(this.rule.salesSL3CritChoices, results.values)) {
-              this.rule.salesSL3CritChoices = results.values;
-            }
-            return null;
-          }
-        }));
-    });
+
+      const selections = shUtil.arrayFilterUndefinedAndEmptyStrings(control.value);
+      let available;
+      const sl2Selections = this.rule.salesSL2CritChoices.map(x => x.toUpperCase());
+      if (this.rule.salesSL2CritChoices.length && this.rule.salesSL2CritCond === 'IN') {
+        available = this.sl1Sl2Sl3NameCodes.filter(x => _.includes(sl2Selections, x.sl2.toUpperCase()));
+      } else if (this.rule.salesSL2CritChoices.length && this.rule.salesSL2CritCond === 'NOT IN') {
+        available = this.getSl1Sl2Sl3NameCodesFilteredForSl1();
+        available = available.filter(x => !_.includes(sl2Selections, x.sl2.toUpperCase()));
+      } else {
+        available = this.getSl1Sl2Sl3NameCodesFilteredForSl1();
+      }
+
+      const actuals = [];
+      const notFound = [];
+      selections.forEach(sel => {
+        const found = _.find(available, x => sel.toUpperCase() === x.sl3.toUpperCase());
+        if (found) {
+          actuals.push(found.sl3);
+        } else {
+          notFound.push(sel);
+        }
+      });
+      if (notFound.length) {
+        return {salesSL3Choices: {value: notFound.join(', ')}};
+      } else {
+        // no need updating unless case has changed, if you pull this out, angualar will freeze with the circulare detectChanges?
+        // bug: was all caps, then you changed to first letter lowercase, but acutals all caps again so no change so doesn't update value,
+        // it's for that reason you had to add the part after the OR looking at selections as well
+        if (!_.isEqual(this.rule.salesSL3CritChoices, actuals) || !_.isEqual(this.rule.salesSL3CritChoices, selections)) {
+          this.rule.salesSL3CritChoices = actuals;
+          this.changeDetectorRef.detectChanges();
+        }
+        return null;
+      }
+    };
+    // if in control and hit save button (which calls triggerBlur(), we'll get double hits on this, shut that down
+    return _.throttle(fcn.bind(this), 400, {trailing: false});
   }
 
-  prodPFChoicesValidator(): AsyncValidatorFn {
-    return ((control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
+  getTgBuPfProductIdsFilteredForTg() {
+    const tgSelections = this.rule.prodTGCritChoices.map(x => x.toUpperCase());
+    if (this.rule.prodTGCritChoices.length && this.rule.prodTGCritCond === 'IN') {
+      return this.tgBuPfProductIds.filter(x => _.includes(tgSelections, x.tg.toUpperCase()));
+    } else if (this.rule.prodTGCritChoices.length && this.rule.prodTGCritCond === 'NOT IN') {
+      return this.tgBuPfProductIds.filter(x => !_.includes(tgSelections, x.tg.toUpperCase()));
+    } else {
+      return this.tgBuPfProductIds;
+    }
+  }
+  
+  prodBUChoicesValidator(): ValidatorFn {
+    const fcn = (control: AbstractControl): ValidationErrors | null => {
       if (!control.value || !control.value.length) {
-        return Promise.resolve(null);
+        return null;
       }
-      return this.ruleService.validateProdPFCritChoices(control.value)
-        .pipe(map(results => {
-          if (!results.exist) {
-            return {prodPFChoices: {value: control.value}};
-          } else {
-            if (!_.isEqual(this.rule.prodPFCritChoices, results.values)) {
-              this.rule.prodPFCritChoices = results.values;
-            }
-            return null;
-          }
-        }));
-    });
+      const selections = shUtil.arrayFilterUndefinedAndEmptyStrings(control.value);
+      const available = this.getTgBuPfProductIdsFilteredForTg();
+      const actuals = [];
+      const notFound = [];
+      selections.forEach(sel => {
+        const found = _.find(available, x => sel.toUpperCase() === x.bu.toUpperCase());
+        if (found) {
+          actuals.push(found.bu);
+        } else {
+          notFound.push(sel);
+        }
+      });
+      if (notFound.length) {
+        return {prodBUChoices: {value: notFound.join(', ')}};
+      } else {
+        // no need updating unless case has changed, if you pull this out, angualar will freeze with the circulare detectChanges?
+        // bug: was all caps, then you changed to first letter lowercase, but acutals all caps again so no change so doesn't update value,
+        // it's for that reason you had to add the part after the OR looking at selections as well
+        if (!_.isEqual(this.rule.prodBUCritChoices, actuals) || !_.isEqual(this.rule.prodBUCritChoices, selections)) {
+          this.rule.prodBUCritChoices = actuals;
+          this.changeDetectorRef.detectChanges();
+        }
+        return null;
+      }
+    };
+    // if in control and hit save button (which calls triggerBlur(), we'll get double hits on this, shut that down
+    return _.throttle(fcn.bind(this), 400, {trailing: false});
   }
 
-  prodBUChoicesValidator(): AsyncValidatorFn {
-    return ((control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
+  prodPFChoicesValidator(): ValidatorFn {
+    const fcn = (control: AbstractControl): ValidationErrors | null => {
       if (!control.value || !control.value.length) {
-        return Promise.resolve(null);
+        return null;
       }
-      return this.ruleService.validateProdBUCritChoices(control.value)
-        .pipe(map(results => {
-          if (!results.exist) {
-            return {prodBUChoices: {value: control.value}};
-          } else {
-            if (!_.isEqual(this.rule.prodBUCritChoices, results.values)) {
-              this.rule.prodBUCritChoices = results.values;
-            }
-            return null;
-          }
-        }));
-    });
-  }
 
+      const selections = shUtil.arrayFilterUndefinedAndEmptyStrings(control.value);
+      let available;
+      const buSelections = this.rule.prodBUCritChoices.map(x => x.toUpperCase());
+      if (this.rule.prodBUCritChoices.length && this.rule.prodBUCritCond === 'IN') {
+        available = this.tgBuPfProductIds.filter(x => _.includes(buSelections, x.bu.toUpperCase()));
+      } else if (this.rule.prodBUCritChoices.length && this.rule.prodBUCritCond === 'NOT IN') {
+        available = this.getTgBuPfProductIdsFilteredForTg();
+        available = available.filter(x => !_.includes(buSelections, x.bu.toUpperCase()));
+      } else {
+        available = this.getTgBuPfProductIdsFilteredForTg();
+      }
+
+      const actuals = [];
+      const notFound = [];
+      selections.forEach(sel => {
+        const found = _.find(available, x => sel.toUpperCase() === x.pf.toUpperCase());
+        if (found) {
+          actuals.push(found.pf);
+        } else {
+          notFound.push(sel);
+        }
+      });
+      if (notFound.length) {
+        return {prodPFChoices: {value: notFound.join(', ')}};
+      } else {
+        // no need updating unless case has changed, if you pull this out, angualar will freeze with the circulare detectChanges?
+        // bug: was all caps, then you changed to first letter lowercase, but acutals all caps again so no change so doesn't update value,
+        // it's for that reason you had to add the part after the OR looking at selections as well
+        if (!_.isEqual(this.rule.prodPFCritChoices, actuals) || !_.isEqual(this.rule.prodPFCritChoices, selections)) {
+          this.rule.prodPFCritChoices = actuals;
+          this.changeDetectorRef.detectChanges();
+        }
+        return null;
+      }
+    };
+    // if in control and hit save button (which calls triggerBlur(), we'll get double hits on this, shut that down
+    return _.throttle(fcn.bind(this), 400, {trailing: false});
+  }
+  
   updateSelectStatements() {
     if (this.rule.salesSL1CritCond && this.rule.salesSL1CritChoices.length) {
       this.rule.sl1Select = ruleUtil.createSelect(this.rule.salesSL1CritCond, this.rule.salesSL1CritChoices);
