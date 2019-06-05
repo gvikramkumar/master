@@ -445,8 +445,10 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       if (notFound.length) {
         return {salesSL2Choices: {value: notFound.join(', ')}};
       } else {
-        // no need updating unless case has changed
-        if (!_.isEqual(this.rule.salesSL2CritChoices, actuals)) {
+        // no need updating unless case has changed, if you pull this out, angualar will freeze with the circulare detectChanges?
+        // bug: was all caps, then you changed to first letter lowercase, but acutals all caps again so no change so doesn't update value,
+        // it's for that reason you had to add the part after the OR looking at selections as well
+        if (!_.isEqual(this.rule.salesSL2CritChoices, actuals) || !_.isEqual(this.rule.salesSL2CritChoices, selections)) {
           this.rule.salesSL2CritChoices = actuals;
           this.changeDetectorRef.detectChanges();
         }
