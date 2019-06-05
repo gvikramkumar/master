@@ -589,7 +589,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   // remove node from offerConstructService.singleMultipleFormInfo
 
   deleteNode(rowNode) {
-    if (this.markCompleteStatus === false) {
+    //if (this.markCompleteStatus === false) {
       if (rowNode.parent == null) {
         // If parent not present which means its a Major Item and may contains children.
         // Therefore we have to remove complete element from offer array where uniquekey = rowData.uniqueKey
@@ -651,7 +651,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       }
       this.deleteNodeFromOfferConstructItems(rowNode);  // remove node from offerconstruct Item
       this.checkCanMarkCompleteStatus();
-    }
+  //}
 
   }
 
@@ -662,7 +662,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     */
 
   deleteNodeFromOfferConstructItems(rowNode) {
-    if (this.markCompleteStatus === false) {
+    //if (this.markCompleteStatus === false) {
       if (rowNode.parent == null) {
         // If parent not present which means its a Major Item and may contains children.
         // Therefore we have to remove complete element from offer array where uniquekey = rowData.uniqueKey
@@ -707,7 +707,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       this.offerConstructItems = [...this.offerConstructItems];
       this.removeEginieMajorItemFromListofAlreadyAddedItems(rowNode.node.data.title);
       this.updateChildCount();
-    }
+    //}
 
   }
 
@@ -1630,7 +1630,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   // }
 
   removeSelected() {
-    if (this.markCompleteStatus === false) {
+    //if (this.markCompleteStatus === false) {
       if (this.selected.length) {
         this.selected.forEach((selectedItem) => {
           if (selectedItem.parent == null) {
@@ -1677,7 +1677,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       }
       this.removeSelectedNode();  //  remove selected node from offerConstructItems
       this.checkCanMarkCompleteStatus();
-    }
+   // }
 
   }
 
