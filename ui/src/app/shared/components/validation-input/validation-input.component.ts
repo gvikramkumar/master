@@ -167,6 +167,15 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
     this.blur.emit();
   }
 
+  blurInput() {
+    if (this.textarea) {
+      this.textareaElem.nativeElement.dispatchEvent(new Event('blur'));
+    } else {
+      // can't just call blur()? appears to work (onBlur gets called), BUT doesn't call ngModelChanges, the whole point of this
+      this.inputElem.nativeElement.dispatchEvent(new Event('blur'));
+    }
+  }
+
   init() {
     if (!this.name) {
       console.error('fin-input: name is required');

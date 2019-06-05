@@ -103,11 +103,11 @@
                   </div>
                   <div class="col-8">
                     <cui-multiselect name="sl1SalesChoice" [(ngModel)]="rule.salesSL1CritChoices" [items]="salesSL1Choices" class="replace-label-space" optionsKey="name" optionsValue="name"
-                                     empty="true" (ngModelChange)="valueChange()" [required]="!!rule.salesSL1CritCond"></cui-multiselect>
-                    <fin-input name="sl2SalesChoice" [(ngModel)]="rule.salesSL2CritChoices" [ngModelOptions]="{updateOn: 'blur'}"
+                                     empty="true" (ngModelChange)="valueChange();sl2Select.blurInput();" [required]="!!rule.salesSL1CritCond"></cui-multiselect>
+                    <fin-input #sl2Select name="sl2SalesChoice" [(ngModel)]="rule.salesSL2CritChoices" [ngModelOptions]="{updateOn: 'blur'}"
                                class="replace-label-space" placeholder="comma separated values"
-                               [stringToArray]="true" [options]="salesSL2ChoiceOptions" (ngModelChange)="valueChange()" [required]="!!rule.salesSL2CritCond"></fin-input>
-                    <fin-input name="sl3SalesChoice" [(ngModel)]="rule.salesSL3CritChoices" [ngModelOptions]="{updateOn: 'blur'}"
+                               [stringToArray]="true" [options]="salesSL2ChoiceOptions" (ngModelChange)="valueChange();sl3Select.blurInput();" [required]="!!rule.salesSL2CritCond"></fin-input>
+                    <fin-input #sl3Select name="sl3SalesChoice" [(ngModel)]="rule.salesSL3CritChoices" [ngModelOptions]="{updateOn: 'blur'}"
                                class="replace-label-space" placeholder="comma separated values"
                                [stringToArray]="true" [options]="salesSL3ChoiceOptions" (ngModelChange)="valueChange()" [required]="!!rule.salesSL3CritCond"></fin-input>
                     <cui-multiselect name="prodTGChoice" [(ngModel)]="rule.prodTGCritChoices" [items]="prodTgChoices" optionsKey="name"
