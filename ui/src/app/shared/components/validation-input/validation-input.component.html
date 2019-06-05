@@ -37,11 +37,11 @@
   <div *ngIf="ngc.errors" class="help-block text-danger" role="alert">
     <div *ngFor="let v of validations">
       <span *ngIf="ngc.errors && ngc.errors[v.name] && v.message && (form.submitted || ngc.touched || ngc.dirty)">
-        {{v.message}}</span>
+        {{getMessage(v.message, ngc.errors[v.name].value)}}</span>
     </div>
     <div *ngFor="let av of opts.asyncValidations">
       <span *ngIf="ngc.errors && ngc.errors[av.name] && av.message && (form.submitted || ngc.touched || ngc.dirty)">
-        {{av.message}}</span>
+        {{getMessage(av.message, ngc.errors[av.name].value)}}</span>
     </div>
   </div>
 

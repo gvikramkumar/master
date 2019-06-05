@@ -701,7 +701,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   cleanupRules() {
     // the list size is governed by arrRules, BUT, the values are in sm.rules
     this.syncRuleValues();
-    this.arrRules = this.getExistingArrRules();
+    this.arrRules = shUtil.arrayFilterUndefinedAndEmptyStrings(this.arrRules);
     this.sm.rules = _.cloneDeep(this.arrRules);
     if (this.arrRules.length === 0) {
       this.arrRules[0] = '';
@@ -710,7 +710,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   verifyRulesExist() {
     this.syncRuleValues();
-    return this.getExistingArrRules().length;
+    return shUtil.arrayFilterUndefinedAndEmptyStrings(this.arrRules).length;
   }
 
   syncRuleValues() {
@@ -1175,7 +1175,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
     const activeRules = this.rules.map(rule => rule.name);
     // clear out the empty string rules, then filter for inactive
-    const inactiveRules = this.getExistingArrRules().filter(ruleName => !_.includes(activeRules, ruleName));
+    const inactiveRules = shUtil.arrayFilterUndefinedAndEmptyStrings(this.arrRules).filter(ruleName => !_.includes(activeRules, ruleName));
     if (inactiveRules.length) {
       if (revertCheck && this.sm.status === 'I' && this.sm.activeStatus === 'A') {
         setTimeout(() => this.sm.activeStatus = 'I');

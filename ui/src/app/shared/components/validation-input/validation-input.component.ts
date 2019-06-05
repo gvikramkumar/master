@@ -1,20 +1,22 @@
 import {
   ChangeDetectorRef,
   Component,
-  ElementRef, EventEmitter,
+  ElementRef,
+  EventEmitter,
   Input,
   OnChanges,
-  Optional, Output,
+  Optional,
+  Output,
   Renderer2,
   Self,
   ViewChild
 } from '@angular/core';
 import {AsyncValidatorFn, ControlValueAccessor, NgControl, NgForm, ValidatorFn, Validators} from '@angular/forms';
-import {UiUtil} from '../../../core/services/ui-util';
 import {inListValidator} from '../../validators/in-list.validator';
 import {notInListValidator} from '../../validators/not-in-list.validator';
 import {numberValidator} from '../../validators/number.validator';
 import {shUtil} from '../../../../../../shared/misc/shared-util';
+import _ from 'lodash';
 
 export interface InputValidation {
   name: string;
@@ -167,6 +169,15 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
     this.blur.emit();
   }
 
+  blurInput() {
+    if (this.textarea) {
+      this.textareaElem.nativeElement.dispatchEvent(new Event('blur'));
+    } else {
+      // can't just call blur()? appears to work (onBlur gets called), BUT doesn't call ngModelChanges, the whole point of this
+      this.inputElem.nativeElement.dispatchEvent(new Event('blur'));
+    }
+  }
+
   init() {
     if (!this.name) {
       console.error('fin-input: name is required');
@@ -295,6 +306,14 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
     }
     if (this.delayedSetDisabledState !== undefined) {
       this.setDisabledState(this.delayedSetDisabledState);
+    }
+  }
+
+  getMessage(message, value) {
+    if (message.indexOf('%s') !== -1 && value !== undefined) {
+      return message.replace('%s', _.isArray(value) ? value.join(', ') : value);
+    } else {
+      return message;
     }
   }
 
