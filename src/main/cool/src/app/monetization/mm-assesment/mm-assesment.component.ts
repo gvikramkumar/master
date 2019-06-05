@@ -1319,7 +1319,7 @@ export class MmAssesmentComponent implements OnInit {
 
   getMarkCompleteStatus(status) {
 
-    this.markCompleteStatus = status;
+    this.markCompleteStatus = false;
   }
 
 

@@ -27,7 +27,7 @@ export class ConfigurationService {
     //   const url = this.environmentService.REST_API_GENERATE_AUTH_TOKEN_URL;
     //   window.location.replace(url);
     // }
-      return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       console.log(window.location + "------------this is the window location url------------");
       console.log(window.location.hash + "------------this is the window location url hash------------");
       console.log(window.location.hash.indexOf('access_token') + "------------this is the window location indexof('access_token') the right one should be 1------------");
@@ -85,7 +85,7 @@ export class ConfigurationService {
       }
     });
   }
-   private login_to_dash() {
+  private login_to_dash() {
 
     return new Promise((resolve, reject) => {
       console.log(window.location + "------------this is the window location url------------");
@@ -130,7 +130,7 @@ export class ConfigurationService {
 
           return this.httpClient.post(this.urlGetUserInfo, { userId: user }).toPromise().then((resUserInfo: any) => {
             this.userService.setName(resUserInfo[0].cn);
-          })
+          });
         })
         .then((response) => resolve(true))
         .catch(this.handleError());

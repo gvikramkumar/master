@@ -92,8 +92,9 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
     this.sso = {} as SsoAto;
     this.atoNames.push('Overall Offer');
 
+    this.showOrderabilityButton = true;
     this.functionalRole = this.configurationService.startupData.functionalRole;
-    this.showOrderabilityButton = this.selectedAto === 'Overall Offer' ? false : true;
+    // this.showOrderabilityButton = this.selectedAto === 'Overall Offer' ? true : true;
 
     this.selfServiceOrderabilitySubscription = this.selfServiceOrderabilityService.retieveSsoDetails(this.offerId)
       .subscribe((selfServiceOrderabilityResponse: SelfServiceOrderability) => {
@@ -107,9 +108,9 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
             this.atoNames.push(dropDownValue.itemName);
           });
 
-        this.sso = _.find(this.ssoList, ['orderabilityCheckStatus', this.selectedAto]);
+        this.sso = _.find(this.ssoList, ['itemName', this.selectedAto]);
         const currentAtoStatus = _.isEmpty(this.sso) ? '' : this.sso.orderabilityCheckStatus;
-        this.disableOrderabilityButton = this.disableOrderabilityButton ? this.orderabilityButtonStatus(currentAtoStatus) : false;
+        this.disableOrderabilityButton = this.showOrderabilityButton ? true : this.orderabilityButtonStatus(currentAtoStatus);
 
         this.postPirateShipDashBoardNotification();
 
@@ -195,7 +196,7 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
 
     const existingAtoCount = this.ssoList.length;
     const validAtoCount = this.ssoList
-      .filter(sso => sso.orderabilityCheckStatus === pirateShipRoutesNames.YES)
+      .filter(sso => sso.orderabilityCheckStatus === pirateShipRoutesNames.Y)
       .length;
 
     if (validAtoCount === existingAtoCount) {

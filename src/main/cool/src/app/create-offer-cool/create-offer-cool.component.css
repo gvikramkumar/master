@@ -19,6 +19,9 @@
     background-color: #f2f2f2;
 }
 
+.color-white{
+    color: #ffffff !important;
+}
 .disable-button{
     pointer-events: none;
    
