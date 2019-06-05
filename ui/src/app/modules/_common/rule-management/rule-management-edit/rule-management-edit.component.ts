@@ -91,7 +91,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     private store: AppStore,
     public uiUtil: UiUtil,
     private lookupService: LookupService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
     super(store, route);
     if (!this.route.snapshot.params.mode) {
@@ -162,7 +163,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           validations: [
             {
               name: 'salesSL2Choices',
-              message: 'Some sales SL2 select fields don\'t exist',
+              message: 'Some sales SL2 select fields don\'t exist: %s',
               fcn: this.salesSL2ChoicesValidator()
             }
           ]
@@ -172,7 +173,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           validations: [
             {
               name: 'salesSL3Choices',
-              message: 'Some sales SL3 select fields don\'t exist',
+              message: 'Some sales SL3 select fields don\'t exist: %s',
               fcn: this.salesSL3ChoicesValidator()
             }
           ]
@@ -182,7 +183,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           validations: [
             {
               name: 'prodPFChoices',
-              message: 'Some product PF select fields don\'t exist',
+              message: 'Some product PF select fields don\'t exist: %s',
               fcn: this.prodPFChoicesValidator()
             }
           ]
@@ -192,7 +193,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           validations: [
             {
               name: 'prodBUChoices',
-              message: 'Some product BU select fields don\'t exist',
+              message: 'Some product BU select fields don\'t exist: %s',
               fcn: this.prodBUChoicesValidator()
             }
           ]
@@ -421,7 +422,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       if (!control.value || !control.value.length) {
         return null;
       }
-      const selections = shUtil.arrayFilterUndefinedAndEmptyStrings(control.value.split(',')).map(x => x.toUpperCase());
+      const selections = shUtil.arrayFilterUndefinedAndEmptyStrings(control.value);
       const parentSelections = this.rule.salesSL1CritChoices.map(x => x.toUpperCase());
       let available
       if (this.rule.salesSL1CritChoices.length && this.rule.salesSL1CritCond === 'IN') {
@@ -447,6 +448,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         // no need updating unless case has changed
         if (!_.isEqual(this.rule.salesSL2CritChoices, actuals)) {
           this.rule.salesSL2CritChoices = actuals;
+          this.changeDetectorRef.detectChanges();
         }
         return null;
       }
