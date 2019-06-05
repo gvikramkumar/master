@@ -307,4 +307,12 @@ export class ValidationInputComponent implements OnChanges, ControlValueAccessor
     }
   }
 
+  getMessage(message, value) {
+    if (message.indexOf('%s') !== -1 && value !== undefined) {
+      return message.replace('%s', value.toString());
+    } else {
+      return message;
+    }
+  }
+
 }
