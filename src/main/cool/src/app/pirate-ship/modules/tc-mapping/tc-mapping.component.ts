@@ -193,10 +193,10 @@ export class TcMappingComponent implements OnInit, OnDestroy {
   }
 
   checkObject(element) {
-    if (this.selectedObjectAto && this.selectedObjectAto.itemType === element.itemType && element.itemType === 'License') {
-      return false;
-    } else {
+    if (this.selectedObjectAto && this.selectedObjectAto.itemType === element.itemType && element.itemType === 'License' && element.itemCategory !== this.selectedObjectAto.itemCategory) {
       return true;
+    } else {
+      return false;
     }
   }
 
@@ -225,7 +225,7 @@ export class TcMappingComponent implements OnInit, OnDestroy {
         }
       }
     }
-    return !licenseExist && !userRoleCheck;
+    return !licenseExist || !userRoleCheck;
 
   }
 
