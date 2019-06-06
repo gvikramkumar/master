@@ -1,7 +1,8 @@
 export default {
+  port: 3001,
   mongo: {
-    uri: 'mongodb://findp-dev-01.cisco.com/fin-dfa',
-    host: 'findp-dev-01.cisco.com',
+    uri: 'mongodb://localhost/fin-dfa',
+    host: 'localhost',
     port: 27017,
     db: 'fin-dfa'
   },

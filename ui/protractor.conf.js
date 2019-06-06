@@ -2,7 +2,7 @@
 // https://github.com/angular/protractor/blob/master/lib/config.ts
 
 const { SpecReporter } = require('jasmine-spec-reporter');
-const {serverPromise} = require('../dist/server/server');
+// const {serverPromise} = require('../dist/server/server');
 
 let server;
 exports.config = {
@@ -37,14 +37,16 @@ exports.config = {
     });
     jasmine.getEnv().addReporter(new SpecReporter({spec: {displayStacktrace: true}}));
 
+/*
     console.log('onPrepare nodeenv: ', process.env.NODE_ENV);
     return serverPromise.then((_server) => {
       server = _server;
       server.on('close', () => console.log('server closed'));
     });
+*/
   },
   onComplete: () => {
-    server.close();
+    // server.close();
   },
 
   /**
