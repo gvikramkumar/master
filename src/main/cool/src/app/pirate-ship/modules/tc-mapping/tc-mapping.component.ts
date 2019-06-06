@@ -193,15 +193,26 @@ export class TcMappingComponent implements OnInit, OnDestroy {
   }
 
   checkObject(element) {
-    if (this.selectedObjectAto && this.selectedObjectAto.itemType === element.itemType && element.itemType === 'License') {
-      return false;
-    } else {
+    if (this.selectedObjectAto && this.selectedObjectAto.itemType === element.itemType && element.itemType === 'License' && element.itemCategory !== this.selectedObjectAto.itemCategory) {
       return true;
+    } else {
+      return false;
     }
   }
 
   checkLicenseExist() {
+    let userRoleCheck = false;
     let licenseExist = true;
+
+     // Check If Valid User Is Logged In
+     userRoleCheck = (this.functionalRole.includes('BUPM') || 
+                      this.functionalRole.includes('NPPM')|| 
+                      this.functionalRole.includes('PLPM') || 
+                      this.functionalRole.includes('CXPM') || 
+                      this.functionalRole.includes('OLE')|| 
+                      this.functionalRole.includes('PDT')|| 
+                      this.functionalRole.includes('SOE')) ? true : false;
+
     if ((this.selectedObjectAto && this.selectedObjectAto.itemType === 'License') || this.selectedAto === 'Overall Offer') {
       licenseExist = true;
     } else {
@@ -214,7 +225,8 @@ export class TcMappingComponent implements OnInit, OnDestroy {
         }
       }
     }
-    return !licenseExist;
+    return !licenseExist || !userRoleCheck;
+
   }
 
 }

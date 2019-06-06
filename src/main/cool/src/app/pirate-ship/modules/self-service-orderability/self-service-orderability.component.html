@@ -21,12 +21,12 @@
           <div class="row flex-center-vertical base-margin-top">
             <div class="col-sm-12">
 
-              <div class="pull-left" *ngIf="showOrderabilityButton">
+              <!-- <div class="pull-left" *ngIf="showOrderabilityButton"> -->
                 <button class="btn btn--primary btn--cool btn--small tooltip" placement="top"
                   (click)="goToOrderabilitySSO()" [disabled]="!disableOrderabilityButton">Update Orderability In SSO
                   <i class="icon-popout"></i>
                 </button>
-              </div>
+              <!-- </div> -->
 
               <div class="pull-right">
                 <app-view-offer [atoNames]="atoNames" [selectedAto]="selectedAto"
