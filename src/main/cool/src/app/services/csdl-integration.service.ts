@@ -48,7 +48,7 @@ export class CsdlIntegrationService {
   dashboardNotification(offerId) {
     let url = this.environmentService.REST_API_SEND_DASHBOARD_NOTIFICATION_CSDL_POST_URL;
     url += offerId;
-    url += '/' + 'csdl';
+    url += '/' + 'CSDL';
     return this._http.get(url, { withCredentials: true });
   }
 }
