@@ -727,6 +727,10 @@ export class DynamicFormMultipleComponent implements OnInit {
                 }
             }
 
+            if (question.question == "Country Specific Association" || question.question == "ROHS") {
+                    this.defaultValueServices.getCountryNameValues(questionList);
+                }
+
         }
         var validatorPattern = '';
         if (question.egineAttribue !== "Item Name (PID)") {
