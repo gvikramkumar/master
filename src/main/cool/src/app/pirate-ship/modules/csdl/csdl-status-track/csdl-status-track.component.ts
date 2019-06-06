@@ -4,6 +4,7 @@ import { CsdlIntegrationService } from '@app/services/csdl-integration.service';
 import { ConfirmationService } from 'primeng/api';
 import { CsdlPayload } from '../model/csdl-payload';
 import { MessageService } from '@app/services/message.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-csdl-status-track',
@@ -21,6 +22,7 @@ export class CsdlStatusTrackComponent implements OnInit {
   csdlMileStoneStatus;
   associationStatusError;
   associationMessage;
+  latestUpdatedFormatDate;
 
   constructor(private activatedRoute: ActivatedRoute,
     private csdlIntegrationService: CsdlIntegrationService,
@@ -50,6 +52,7 @@ export class CsdlStatusTrackComponent implements OnInit {
       this.stopShipStatus = data['stopShipStatus'];
       this.enforcementLabel = data['enforcementLabel'];
       this.csdlMileStoneStatus = data['csdlMileStoneStatus'];
+      this.latestUpdatedFormatDate = moment(data.latestUpdatedDate).format('DD-MMM-YYYY, h:mma');
     });
   }
 
