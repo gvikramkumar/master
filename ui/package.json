@@ -8,9 +8,9 @@
     "build-prod": "ng build --prod",
     "build-devstage": "ng build --configuration=devstage",
     "test": "ng test --reporters=spec --environment=unit",
-    "test-progress": "ng test --reporters=progress --configuration=unit",
-    "e2edevstage": "ng e2e --port=4201 --protractorConfig=protractor.conf.devstage.js",
-    "e2e": "ng e2e --port=4201",
+    "test-progress": "ng test --reporters=progress --environment=unit",
+    "e2e": "ng e2e --port=4201  --devServerTarget=ui:serve:unit",
+    "e2edevstage": "ng e2e --port=4201 --protractorConfig=protractor.conf.devstage.js --devServerTarget=ui:serve:devstageunit",
     "lint": "ng lint"
   },
   "private": true,

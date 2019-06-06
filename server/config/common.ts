@@ -1,7 +1,7 @@
 export default {
   port: 3002,
   ssl: false,
-  corsOrigin: [],
+  corsOrigin: ['http://localhost:4200', 'http://localhost:4201'],
   showStack: true,
   expressTimeout: 1000 * (55 + 60),
   submitForApprovalReminderInterval: 5 * (60 * 1000),
@@ -18,12 +18,6 @@ export default {
     host: 'mail.cisco.com',
     secure: false,
     port: 25
-  },
-  mongo: {
-    uri: 'mongodb://localhost/fin-dfa',
-    host: 'localhost',
-    port: 27017,
-    db: 'fin-dfa'
   }
   /*
   ssl: {

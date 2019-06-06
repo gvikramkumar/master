@@ -38,11 +38,13 @@ exports.config = {
     });
     jasmine.getEnv().addReporter(new SpecReporter({spec: {displayStacktrace: true}}));
 
+/*
     console.log('onPrepare nodeenv: ', process.env.NODE_ENV);
     return serverPromise.then((_server) => {
       server = _server;
       server.on('close', () => console.log('server closed'));
     });
+*/
   },
   onComplete: () => {
     server.close();

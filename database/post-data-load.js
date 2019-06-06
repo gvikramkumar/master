@@ -192,6 +192,21 @@ db.dfa_lookup.insertMany([
   }
 ]);
 
+const collectionsWithStatus = [
+  'dfa_allocation_rule',
+  'dfa_measure',
+  'dfa_module',
+  'dfa_submeasure'
+];
+
+collectionsWithStatus.forEach(coll => {
+  db.getCollection(coll).updateMany({}, {
+    $set: {
+      status: 'A'
+    }
+  });
+});
+
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
 const collectionsWithCreatedUpdated = [
   // 'dfa_allocation_rule',

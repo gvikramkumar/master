@@ -5,20 +5,18 @@ import ldevConfig from './ldev';
 import prodConfig from './prod';
 import stageConfig from './stage';
 import sdevConfig from './sdev';
+import unitConfig from './unit';
 import unitsdevConfig from './unitsdev';
 import unitstageConfig from './unitstage';
-import unitdevConfig from './unit';
 
-const configs = {devConfig, ldevConfig, prodConfig, stageConfig, sdevConfig, unitdevConfig, unitsdevConfig, unitstageConfig};
+const configs = {devConfig, ldevConfig, prodConfig, stageConfig, sdevConfig, unitConfig, unitsdevConfig, unitstageConfig};
 
 const node_env = process.env.NODE_ENV || 'development';
 let env;
 const envs = [
   {re: /^dev/, env: 'dev'}, // local machine dev
   {re: /^ldev/, env: 'ldev'}, // local dev with local pg
-  {re: /^unitdev/, env: 'unitdev'},
-  {re: /^unitsdev/, env: 'unitsdev'},
-  {re: /^unitstage/, env: 'unitstage'},
+  {re: /^unit/, env: 'unit'},
   {re: /^sdev/, env: 'sdev'}, // shared server dev
   {re: /^stage/, env: 'stage'},
   {re: /^prod/, env: 'prod'}
