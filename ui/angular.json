@@ -85,6 +85,9 @@
             },
             "devstage": {
               "browserTarget": "ui:build:devstage"
+            },
+            "devstageunit": {
+              "browserTarget": "ui:build:devstage"
             }
           }
         },
