@@ -6,8 +6,10 @@ import prodConfig from './prod';
 import stageConfig from './stage';
 import sdevConfig from './sdev';
 import unitConfig from './unit';
+import unitsdevConfig from './unitsdev';
+import unitstageConfig from './unitstage';
 
-const configs = {devConfig, ldevConfig, prodConfig, stageConfig, sdevConfig, unitConfig};
+const configs = {devConfig, ldevConfig, prodConfig, stageConfig, sdevConfig, unitConfig, unitsdevConfig, unitstageConfig};
 
 const node_env = process.env.NODE_ENV || 'development';
 let env;

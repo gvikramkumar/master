@@ -86,7 +86,7 @@ function base64ToAscii(base64) {
 }
 
 function isLocalEnv() {
-  return !process.env.NODE_ENV || _.includes(['dev', 'ldev', 'unit'], process.env.NODE_ENV);
+  return !process.env.NODE_ENV || _.includes(['dev', 'ldev', 'unit', 'unitsdev', 'unitstage'], process.env.NODE_ENV);
 }
 
 function isUnitEnv() {
