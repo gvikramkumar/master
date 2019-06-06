@@ -4,6 +4,7 @@ import {ApiError} from '../common/api-error';
 import AnyObj from '../../../shared/models/any-obj';
 import {DisregardError} from '../common/disregard-error';
 import config from '../../config/get-config';
+import {svrUtil} from '../common/svr-util';
 
 /**
  * errorHandler
@@ -61,7 +62,7 @@ export function errorHandler (options) {
         obj.data = Object.assign(data, obj.data);
       }
     }
-    if (config.env !== 'unit') {
+    if (!svrUtil.isUnitEnv()) {
       console.error(obj);
     }
     if (!res.headersSent) {
