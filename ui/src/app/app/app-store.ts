@@ -8,7 +8,6 @@ import {DfaModule} from '../modules/_common/models/module';
 import DfaUser from '../../../../shared/models/dfa-user';
 import {shUtil} from '../../../../shared/misc/shared-util';
 import {Location} from '@angular/common';
-import config from '../../../../server/config/get-config';
 
 /* tslint:disable:member-ordering*/
 
@@ -27,10 +26,7 @@ export class AppStore extends StoreBase {
   location: Location;
 
   isLocalEnv() {
-    return _.includes(['dev', 'ldev'], this.env) || this.isUnitEnv();
-  }
-  isUnitEnv() {
-    return _.includes(['unitdev', 'unitsdev', 'unitstage'], this.env);
+    return _.includes(['dev', 'ldev', 'unit'], this.env);
   }
   isDevEnv() {
     return this.env === 'sdev';
