@@ -1,14 +1,12 @@
-
-// print(`host: ${host}, port: ${port}, db: ${_db}, user: ${user}`);
-print(`host: ${host}, port: ${port}, db: ${_db}`);
+print(`host: ${host}, port: ${port}, db: ${_db}, user: ${user}, pass: ${pass}`);
 
 let uri;
-// to run with user/pass:
-// uri = `mongodb://${user}:${pass}@${host}:${port}/${_db}`;
-// to run without user/pass:
-uri = `mongodb://${host}:${port}/${_db}`;
-print(uri);
-
+if (user && pass) {
+  uri = `mongodb://${user}:${pass}@${host}:${port}/${_db}`;
+} else {
+  uri = `mongodb://${host}:${port}/${_db}`;
+}
+// print(uri);
 db = connect(uri);
 
 /*
