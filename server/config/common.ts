@@ -1,7 +1,7 @@
 export default {
   port: 3002,
   ssl: false,
-  corsOrigin: ['http://localhost:4200, http://localhost:4201'],
+  corsOrigin: ['http://localhost:4200', 'http://localhost:4201'],
   showStack: true,
   expressTimeout: 1000 * (55 + 60),
   submitForApprovalReminderInterval: 5 * (60 * 1000),

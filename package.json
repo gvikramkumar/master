@@ -19,7 +19,9 @@
     "seed": "cd database && seed.bat localhost 27017 fin-dfa",
     "seedsh": "cd database && ./seed.sh localhost 27017 fin-dfa",
     "loadtestdata": "cd database && load-test-data.bat localhost 27017 fin-dfa",
-    "loadtestdatash": "cd database && ./load-test-data.sh localhost 27017 fin-dfa"
+    "loadtestdatash": "cd database && ./load-test-data.sh localhost 27017 fin-dfa",
+    "removetestdata": "cd database && remove-test-data.bat localhost 27017 fin-dfa",
+    "removetestdatash": "cd database && ./remove-test-data.sh localhost 27017 fin-dfa"
   },
   "dependencies": {
     "body-parser": "^1.18.2",

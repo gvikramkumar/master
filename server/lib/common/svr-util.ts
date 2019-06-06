@@ -94,7 +94,7 @@ function isUnitEnv() {
 }
 
 function getTestEmail() {
-  return process.env.TEST_EMAIL;
+  return process.env.TEST_EMAIL || 'jodoe@cisco.com';
 }
 
 function sortedListNotExists(values, value) {
