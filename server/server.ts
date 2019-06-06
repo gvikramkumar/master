@@ -27,7 +27,7 @@ export const serverPromise = Promise.all([mgc.promise, pgc.promise])
 
       initializeExpress();
 
-      const port = process.env.NODE_ENV === 'unit' ? '3001' : process.env.PORT || config.port;
+      const port = config.port;
       let server, protocol;
       if (config.ssl) {
         try {

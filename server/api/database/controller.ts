@@ -65,7 +65,7 @@ export default class DatabaseController {
       .then(results => {
         const submeasureCount = results[0];
 
-        // this is to make sure we don't accidentally sync to pg with local or unit mongo database. Those will only have a handful of test submeasures
+        // this is to make sure we don't accidentally sync to pg with local mongo database. Those will only have a handful of test submeasures
         // it would be disasterous to accidentally wipe out all postgres submeasures and replace with these test ones.
         if (syncMap.dfa_sub_measure) {
           if (submeasureCount < 100) {
