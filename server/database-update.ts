@@ -17,7 +17,7 @@ const lookupRepo = new LookupRepo();
 const build_number = process.env.BUILD_NUMBER;
 
 export function databaseUpdate() {
-  if (svrUtil.isUnitEnv()) {
+  if (process.env.NODE_ENV === 'unit') {
     return Promise.resolve();
   }
 
