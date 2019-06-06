@@ -3,7 +3,7 @@ import {SourcePO} from './source.po';
 describe(`Admin - Source Page`, () => {
   const sourcePO = new SourcePO();
   const newTestSource = {
-    name: `Active Test Source`,
+    name: `Active Test Source - E2ETEST`,
     typeCode: 'ATEST',
     description: `Adding a new active test source`,
     status: 'Active'
@@ -14,6 +14,13 @@ describe(`Admin - Source Page`, () => {
     typeCode: 'RRR',
     description: `Rapid Revenue Reporting Source`,
     status: 'Active'
+  };
+
+  const newSourceForUpdate = {
+    name: 'Inactive Test Source - E2ETEST',
+    typeCode: 'ITEST',
+    description: 'Updated source to inactive',
+    status: `Inactive`
   };
 
 
@@ -160,12 +167,6 @@ describe(`Admin - Source Page`, () => {
     });
 
     it(`should update an existing source`, () => {
-      const newSourceForUpdate = {
-        name: 'Inactive Test Source',
-        typeCode: 'ITEST',
-        description: 'Updated source to inactive',
-        status: `Inactive`
-      };
       sourcePO.loadFormInEditModeForSource(newTestSource.name);
       sourcePO.getFieldName().clear();
       sourcePO.getFieldName().sendKeys(newSourceForUpdate.name);
