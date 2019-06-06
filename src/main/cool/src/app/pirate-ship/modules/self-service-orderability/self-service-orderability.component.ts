@@ -110,7 +110,7 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
 
         this.sso = _.find(this.ssoList, ['itemName', this.selectedAto]);
         const currentAtoStatus = _.isEmpty(this.sso) ? '' : this.sso.orderabilityCheckStatus;
-        this.disableOrderabilityButton = this.showOrderabilityButton ? true : this.orderabilityButtonStatus(currentAtoStatus);
+        this.disableOrderabilityButton = this.orderabilityButtonStatus(currentAtoStatus);
 
         this.postPirateShipDashBoardNotification();
 
@@ -162,7 +162,7 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
 
       this.sso = this.ssoList.find(ato => ato.itemName === dropDownValue);
       const currentAtoStatus = _.isEmpty(this.sso.orderabilityCheckStatus) ? '' : this.sso.orderabilityCheckStatus;
-      this.disableOrderabilityButton = this.showOrderabilityButton ? this.orderabilityButtonStatus(currentAtoStatus) : false;
+      this.disableOrderabilityButton = this.orderabilityButtonStatus(currentAtoStatus);
 
     }
 
@@ -176,7 +176,7 @@ export class SelfServiceOrderabilityComponent implements OnInit, OnDestroy {
     let userRoleCheck = false;
 
     // Check If ATO has Valid Status
-    const statusList = ['Y', 'N'];
+    const statusList = ['Y', 'N', ''];
     if (statusList.some(status => currentStatus.includes(status))) {
       statusCheck = true;
     } else {
