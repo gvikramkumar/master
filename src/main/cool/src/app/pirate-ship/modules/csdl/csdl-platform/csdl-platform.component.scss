@@ -1,27 +1,5 @@
-.contentBox {
-    display: inline-block;
-    width: 100%;
-  }
-
-  .leftContent,
-  .rightContent {
-    float: left;
-  }
-
-  .leftContent {
-    width: calc(100% - 400px);
-    padding-right: 15px;
-  }
-
-  .rightContent {
-    width: 400px;
-  }
-
-  .leftContentWidth {
-    width: 100%;
-  }
-
-
-
-
+.subheader.text-indigo {
+  font-size:18px;
+  font-weight:bold;
+}
 
