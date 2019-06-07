@@ -56,7 +56,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
   disableRestartModule: Boolean = true;
   mileStoneStatus;
   displayContinueInfo: Boolean = false;
-  selectedDropValue: string;
+  selectedDropValue: string = 'cloud';
   subscription: Subscription;
   components = [];
   bupmList = [];
