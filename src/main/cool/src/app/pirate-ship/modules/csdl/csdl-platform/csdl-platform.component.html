@@ -158,8 +158,8 @@
       </div>
     </div>
 
-    <p-dialog [showHeader]="false" [(visible)]="displayNewCsdlIdDailog" [responsive]="true" [width]="500" [height]="400"
-      [minWidth]="500" [minHeight]="400">
+    <p-dialog [showHeader]="false" [(visible)]="displayNewCsdlIdDailog" [responsive]="true" [width]="550" [height]="450"
+      [minWidth]="550" [minHeight]="450">
       <div class="row">
         <div class="col-md-12">
           <div class="pull-right">
@@ -221,21 +221,38 @@
             <h5>A new project will be created leveraging the following information</h5>
           </div>
         </div>
-        <div class="row text-center" style="margin-top: 30px">
+        <div class="row text-left" style="margin-top: 30px">
           <div class="col-md-12">
             <div class="row">
-              <div class="col-md-12">
-                <span>Product Family:  {{ productFamilyAnswer }}</span>
+              <div class="col-md-4">
+                <span><b>Product Family:</b></span>
+              </div>
+              <div class="col-md-8">
+                <span>{{ productFamilyAnswer }}</span>
               </div>
             </div>
-            <div class="row" style="margin-top: 15px">
-              <div class="col-md-12">
-                <span>Offer Name:  {{ offerName }}</span>
+            <div class="row" style="margin-top: 10px">
+              <div class="col-md-4">
+                <span><b>Offer Name:</b></span>
+              </div>
+              <div class="col-md-8">
+                <span>{{ offerName }}</span>
               </div>
             </div>
-            <div class="row" style="margin-top: 15px">
-              <div class="col-md-12">
-                <span>Business Unit contact:  {{businessUnitContact}}</span>
+            <div class="row" style="margin-top: 10px">
+              <div class="col-md-4">
+                <span><b>Business Unit contact:</b></span>
+              </div>
+              <div class="col-md-8">
+                <span>{{ businessUnitContact }}</span>
+              </div>
+            </div>
+            <div class="row" style="margin-top: 10px">
+              <div class="col-md-4">
+                <span><b>Project Type:</b></span>
+              </div>
+              <div class="col-md-8">
+                <span>{{ projectType }}</span>
               </div>
             </div>
           </div>

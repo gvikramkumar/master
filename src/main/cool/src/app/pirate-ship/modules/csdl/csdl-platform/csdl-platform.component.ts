@@ -60,6 +60,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   components = [];
   bupmList = [];
+  projectType;
 
   constructor(
     private router: Router,
@@ -230,6 +231,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
    * When user click on Create New Id and when user click submit button
    */
   nextCsdlAssociation() {
+    this.projectType = this.selectedDropValue;
     // Hide Panels
     this.displayNewCsdl = true;
     this.displayProjectType = false;

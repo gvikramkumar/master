@@ -59,13 +59,13 @@
         <tr>
           <td class=" text-center">
             <span *ngIf="projectId == '' && associationStatusError != '' && associationStatusError != 'error'">
-              <span style="color: orange">Creation in Progress</span>
+              <span class="creation-in-progress">Creation in Progress</span>
             </span>
             <span *ngIf="projectId == -1 && associationStatusError != '' && associationStatusError != 'error'">
-              <span style="color: orange">Creation in Progress</span>
+              <span class="creation-in-progress">Creation in Progress</span>
             </span>
             <span *ngIf="associationStatusError == 'error'">
-              <span style="color: red">Creation Rejected</span>
+              <span class="creation-rejected">Creation Rejected</span>
             </span>
             <span *ngIf="associationStatusError != '' && associationStatusError != 'error' && projectId != -1">
               <a (click)="securityInsightsTab()">{{ rowData?.projectName }}({{ rowData?.projectId }})</a>
@@ -92,7 +92,7 @@
               <span class="icon-trash icon-small pull-right" (click)="removeAssociationConfirmDailog()"></span>
             </span>
             <span *ngIf="csdlMileStoneStatus != 'In Progress' && associationStatusError != '' && associationStatusError != 'error'">
-              <span class="icon-trash icon-small pull-right" 
+              <span class="icon-trash icon-small pull-right trash-icon-color"
                 pTooltip="You cannot disassociate this CSDL ID as the offer has already passed 
                 the Readiness Review milestone" tooltipPosition="top"></span>
             </span>
