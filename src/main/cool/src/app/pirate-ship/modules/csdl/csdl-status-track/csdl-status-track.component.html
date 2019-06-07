@@ -96,8 +96,8 @@
               <span class="icon-trash icon-small pull-right" (click)="removeAssociationConfirmDailog()"></span>
             </span>
             <span *ngIf="csdlMileStoneStatus != 'In Progress' && associationStatusError != '' && associationStatusError != 'error'">
-              <span class="icon-trash icon-small pull-right"
-                pTooltip="You cannot disassociate this CSDL ID as the offer has already passed
+              <span class="icon-trash icon-small pull-right trash-icon-color"
+                pTooltip="You cannot disassociate this CSDL ID as the offer has already passed 
                 the Readiness Review milestone" tooltipPosition="top"></span>
             </span>
             <span *ngIf="associationStatusError == 'error'">

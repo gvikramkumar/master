@@ -160,89 +160,105 @@
       </div>
     </div>
 
-    <p-dialog [showHeader]="false" [(visible)]="displayNewCsdlIdDailog" [responsive]="true" [width]="500" [height]="400"
-      [minWidth]="500" [minHeight]="400">
+    <p-dialog [showHeader]="false" [(visible)]="displayNewCsdlIdDailog" [responsive]="true" [width]="600" [height]="400"
+      [minWidth]="600" [minHeight]="400" class="overflow-x-hidden">
       <div class="modal__content">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="pull-right">
-            <span class="icon-close" (click)="closeCreateNewCsdlIdDailog()"></span>
-          </div>
-        </div>
-      </div>
-      <div *ngIf="displayProjectType">
-        <div class="modal__header">
-        <h1 class="modal__title">Create a New CSDL ID</h1> </div>
-        <p class="text-center">What type of project would you like to create?</p>
-
-        <div class="row">
-          <div class="col-md-12 text-center">
-            <span class="text-blue">Learn More <span class="icon-info-outline icon-small"
-              pTooltip="Select the deployment model to be used for this project. i.e. How will this product be offered to customers.
-              Select ‘On Premise Offering’, if the offer is hosted on customer premise by the customer.
-              Select ‘Cloud Offering’ if the offer is for a Cisco hosted offering in the cloud, requires CATO.
-              Select 'Solution' if the offer is a grouping of multiple projects either ‘On-Premise Offering’,
-              ‘Cloud Offering’, or a combination of them." tooltipPosition="top">
-            </span></span>
-          </div>
-        </div>
         <div class="row">
           <div class="col-md-12">
-            <div class="form-group dropdown">
-              <div class="form-group__text select">
-                <label for="select-state-default">Select Project Type</label>
-                <select id="select-state-default" class="form-control" [(ngModel)]="selectedDropValue"
-                  style="width: 100%">
-                  <option value="cloud">Cloud Offering - Cisco hosted in the cloud, CATO</option>
-                  <option value="on-premise">On-Premise Offering</option>
-                  <option value="solution">Solution Offering - Grouping of offering types</option>
-                </select>
-              </div>
+            <div class="pull-right">
+              <span class="icon-close" (click)="closeCreateNewCsdlIdDailog()"></span>
             </div>
           </div>
         </div>
-        <div class="modal__footer base-margin-top">
+        <div *ngIf="displayProjectType">
+          <div class="modal__header">
+            <h1 class="modal__title">Create a New CSDL ID</h1>
+          </div>
+          <p class="text-center">What type of project would you like to create?</p>
+          <div class="row">
+            <div class="col-md-12 text-center">
+              <span class="text-blue">Learn More <span class="icon-info-outline icon-small" pTooltip="Select the deployment model to be used for this project. i.e. How will this product be offered to customers.
+                  Select ‘On Premise Offering’, if the offer is hosted on customer premise by the customer.
+                  Select ‘Cloud Offering’ if the offer is for a Cisco hosted offering in the cloud, requires CATO.
+                  Select 'Solution' if the offer is a grouping of multiple projects either ‘On-Premise Offering’,
+                  ‘Cloud Offering’, or a combination of them." tooltipPosition="top">
+                </span></span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group dropdown">
+                <div class="form-group__text select">
+                  <label for="select-state-default">Select Project Type</label>
+                  <select id="select-state-default" class="form-control" [(ngModel)]="selectedDropValue"
+                    style="width: 100%">
+                    <option value="cloud">Cloud Offering - Cisco hosted in the cloud, CATO</option>
+                    <option value="on-premise">On-Premise Offering</option>
+                    <option value="solution">Solution Offering - Grouping of offering types</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal__footer base-margin-top">
             <button class="btn btn--cool btn--primary" type="button" (click)="nextCsdlAssociation()">Continue</button>
+          </div>
         </div>
-      </div>
-      <div *ngIf="displayNewCsdl">
-        <div class="modal__header"><h1 class="modal__title">Create a New CSDL ID</h1></div>
-        <p class="text-center">A new project will be created leveraging the following information</p>
-
-        <div class="row text-center">
-          <div class="col-md-12 text-left base-margin-left">
-            <div class="row">
-              <div class="col-md-12">
-                <span><strong>Product Family:</strong>  {{ productFamilyAnswer }}</span>
+        <div *ngIf="displayNewCsdl">
+          <div class="modal__header">
+            <h1 class="modal__title">Create a New CSDL ID</h1>
+          </div>
+          <p class="text-center">A new project will be created leveraging the following information</p>
+          <div class="row text-center">
+            <div class="col-md-12 text-left base-margin-left">
+              <div class="row">
+                <div class="col-md-4">
+                  <span><strong>Product Family:</strong></span>
+                </div>
+                <div class="col-md-8">
+                  <span> {{ productFamilyAnswer }}</span>
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <span><strong>Offer Name:</strong>  {{ offerName }}</span>
+              <div class="row">
+                <div class="col-md-4">
+                  <span><strong>Offer Name:</strong></span>
+                </div>
+                <div class="col-md-8">
+                  <span> {{ offerName }}</span>
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <span><strong>Business Unit contact:</strong>  {{businessUnitContact}}</span>
+              <div class="row">
+                <div class="col-md-4">
+                  <span><strong>Business Unit contact:</strong></span>
+                </div>
+                <div class="col-md-8">
+                  <span> {{ businessUnitContact }}</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <span><strong>Project Type:</strong></span>
+                </div>
+                <div class="col-md-8">
+                  <span> {{ projectType }}</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="modal__footer base-margin-top">
-
+          <div class="modal__footer base-margin-top">
             <button class="btn btn--cool btn--primary" type="submit" (click)="submitCsdlToContinue()">Submit</button>
-
+          </div>
         </div>
-      </div>
-      <div *ngIf="displayContinueInfo">
-        <h2 class="text-center">ID Creation In Progress</h2>
-        <p class="text-center">A new CSDL ID is being created in Security Insights. Please return in 24 hrs to confirm creation</p>
-        <div class="modal__footer base-margin-top">
-
+        <div *ngIf="displayContinueInfo">
+          <h2 class="text-center">ID Creation In Progress</h2>
+          <p class="text-center">A new CSDL ID is being created in Security Insights. Please return in 24 hrs to confirm
+            creation</p>
+          <div class="modal__footer base-margin-top">
+    
             <button class="btn btn--cool btn--primary" type="submit" (click)="onContinue()">Continue</button>
-
+    
+          </div>
         </div>
-      </div>
       </div>
     </p-dialog>
 
