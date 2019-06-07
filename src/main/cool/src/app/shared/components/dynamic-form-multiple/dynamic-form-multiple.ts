@@ -777,8 +777,8 @@ export class DynamicFormMultipleComponent implements OnInit {
                 }
             }
 
-            if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "comma seperated no spaces") {
-                if (!(/^[[A-Z][a-z]]+(,[A-Z][a-z]+)*$/.test(question.currentValue))) {
+            if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "comma separated no spaces") {
+                if ((/^\s{1,}[\,]|[\,]\s{1,}$/.test(question.currentValue))) {
                     question.rules.validationMessage = "Entry of a comma separated list with no spaces";
                     question.rules.isvalid = false;
                 }
