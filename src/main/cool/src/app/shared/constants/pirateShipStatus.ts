@@ -5,7 +5,7 @@ export const pirateShipRoutesNames = {
     NO: 'NO',
     YES: 'YES',
     REOPEN: 'REOPEN',
-    COMPLETED: 'COMPLETED',
+    COMPLETE: 'COMPLETE',
     AVAILABLE: 'AVAILABLE',
     IN_PROGRESS: 'IN PROGRESS',
     NOT_STARTED: 'NOT STARTED',
