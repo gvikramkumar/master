@@ -20,13 +20,12 @@
     "seedsh": "cd database && ./seed.sh localhost 27017 fin-dfa",
     "loadtestdata": "cd database && load-test-data.bat localhost 27017 fin-dfa",
     "loadtestdatash": "cd database && ./load-test-data.sh localhost 27017 fin-dfa",
-    "loadtestdatadev": "cd database && ./load-test-data.sh findp-dev-01 27017 fin-dfa",
-    "loadtestdatastage": "cd database && ./load-test-data.sh findp-stg-01 27017 fin-dfa",
+    "loadtestdatadev": "cd database && ./load-test-data.sh findp-dev-01 27017 fin-dfa mongodfa",
+    "loadtestdatastage": "cd database && ./load-test-data.sh findp-stg-01 27017 fin-dfa mongodfa",
     "removetestdata": "cd database && remove-test-data.bat localhost 27017 fin-dfa",
     "removetestdatash": "cd database && ./remove-test-data.sh localhost 27017 fin-dfa",
-    "removetestdatadev": "cd database && remove-test-data.bat findp-dev-01 27017 fin-dfa",
-    "removetestdatadevsh": "cd database && ./remove-test-data.sh findp-dev-01 27017 fin-dfa",
-    "removetestdatastage": "cd database && ./remove-test-data.sh findp-stg-01 27017 fin-dfa"
+    "removetestdatadev": "cd database && ./remove-test-data.sh findp-dev-01 27017 fin-dfa mongodfa",
+    "removetestdatastage": "cd database && ./remove-test-data.sh findp-stg-01 27017 fin-dfa mongodfa"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
