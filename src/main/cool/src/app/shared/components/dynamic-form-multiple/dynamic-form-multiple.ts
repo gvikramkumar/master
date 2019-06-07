@@ -776,6 +776,18 @@ export class DynamicFormMultipleComponent implements OnInit {
                     question.rules.isvalid = true;
                 }
             }
+
+            if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "comma seperated no spaces") {
+                if (!(/^[[A-Z][a-z]]+(,[A-Z][a-z]+)*$/.test(question.currentValue))) {
+                    question.rules.validationMessage = "Entry of a comma separated list with no spaces";
+                    question.rules.isvalid = false;
+                }
+                else {
+                    question.rules.validationMessage = "";
+                    question.rules.isvalid = true;
+                }
+            }
+
             if (typeof question.rules.textcase != 'undefined' && question.rules.textcase === "First letter Caps, No special characters allowed and max of 60 characters") {
                 if (!(/^[A-Z][A-Za-z0-9\s]*$/.test(question.currentValue))) {
                     question.rules.validationMessage = question.egineAttribue + " should be in " + question.rules.textcase;
