@@ -872,13 +872,13 @@ export class DynamicFormMultipleComponent implements OnInit {
             this.itemNameInvalid = true;
 
             this.offerConstructCanvasService.validatePID(question.currentValue).subscribe((data) => {
-                if(data.length > 0){
-                    question.rules.validationMessage = "Item Name already exists, please type another name";
+                if (!(/^[^\/\.\+\-\@\&\#\%\$\!\*\<\>\:\;\,\\\'\[\]\|\?\^\{\}\=\<\>a-z][^\@\&\#\%\$\!\*\<\>\:\;\,\\\'\[\]\|\?\^\{\}\=\<\>a-z]*$/.test(question.currentValue))) {
+                    question.rules.validationMessage = "All caps required and maximum of 18 characters";
                     question.rules.isvalid = false;
                     this.itemNameInvalid = true;
                 }
-                if (!(/^[^\/\.\+\-\@\&\#\%\$\!\*\<\>\:\;\,\\\'\[\]\|\?\^\{\}\=\<\>a-z][^\@\&\#\%\$\!\*\<\>\:\;\,\\\'\[\]\|\?\^\{\}\=\<\>a-z]*$/.test(question.currentValue))) {
-                    question.rules.validationMessage = "All caps required and maximum of 18 characters";
+                else if(data.length > 0){
+                    question.rules.validationMessage = "Item Name already exists, please type another name";
                     question.rules.isvalid = false;
                     this.itemNameInvalid = true;
                 }

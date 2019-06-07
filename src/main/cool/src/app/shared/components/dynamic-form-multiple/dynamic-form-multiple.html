@@ -160,14 +160,10 @@
                               <div class="form-group input--compressed" *ngIf="i == 0">
                                 <div class="form-group__text">
                                     <input  *ngIf="!(ques.value['eGenieFlag'])" [ngClass]="pInfo.currentValue !='' && (pInfo.rules.isvalid == false || (pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen)) && (itemName.dirty || itemName.touched) ? 'validaionStyles' : 'validaionStylesValid'"
-                                      [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'
+                                      [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'  maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [(ngModel)]="ques.value['title']=pInfo.currentValue" value="{{pInfo.currentValue}}"
-                                      (blur)="trimSpaces(pInfo, $event)"
+                                      (blur)="trimSpaces(pInfo, $event)"  [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
-                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']" #itemName="ngModel">
-                                      <input  *ngIf="(ques.value['eGenieFlag'])" [ngClass]="pInfo.currentValue !='' && (pInfo.rules.isvalid == false || (pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen)) && (itemName.dirty || itemName.touched) ? 'validaionStyles' : 'validaionStylesValid'"
-                                      [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'
-                                      [(ngModel)]="pInfo.currentValue" value="{{pInfo.currentValue}}"
                                       [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']" #itemName="ngModel">
                                   </div>
                                   <div class="tool-tip  slideIn"
