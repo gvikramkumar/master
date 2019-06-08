@@ -163,7 +163,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           validations: [
             {
               name: 'salesSL2Choices',
-              message: 'Some sales SL2 select fields don\'t exist: %s',
+              message: 'Invalid SL2 values: %s',
               fcn: this.salesSL2ChoicesValidator()
             }
           ]
@@ -173,18 +173,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           validations: [
             {
               name: 'salesSL3Choices',
-              message: 'Some sales SL3 select fields don\'t exist: %s',
+              message: 'Invalid SL3 values: %s',
               fcn: this.salesSL3ChoicesValidator()
-            }
-          ]
-        };
-
-        this.prodPFChoiceOptions = {
-          validations: [
-            {
-              name: 'prodPFChoices',
-              message: 'Some product PF select fields don\'t exist: %s',
-              fcn: this.prodPFChoicesValidator()
             }
           ]
         };
@@ -193,8 +183,18 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
           validations: [
             {
               name: 'prodBUChoices',
-              message: 'Some product BU select fields don\'t exist: %s',
+              message: 'Invalid BU values: %s',
               fcn: this.prodBUChoicesValidator()
+            }
+          ]
+        };
+
+        this.prodPFChoiceOptions = {
+          validations: [
+            {
+              name: 'prodPFChoices',
+              message: 'Invalid PF values: %s',
+              fcn: this.prodPFChoicesValidator()
             }
           ]
         };
@@ -418,7 +418,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   getSl1Sl2Sl3NameCodesFilteredForSl1() {
-    console.log('getSl1Sl2Sl3NameCodesFilteredForSl1');
     const sl1Selections = this.rule.salesSL1CritChoices.map(x => x.toUpperCase());
     if (this.rule.salesSL1CritChoices.length && this.rule.salesSL1CritCond === 'IN') {
       return this.sl1Sl2Sl3NameCodes.filter(x => _.includes(sl1Selections, x.sl1.toUpperCase()));
@@ -430,7 +429,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   getSl1Sl2Sl3NameCodesFilteredForSl2() {
-    console.log('getSl1Sl2Sl3NameCodesFilteredForSl2');
     const sl2Selections = this.rule.salesSL2CritChoices.map(x => x.toUpperCase());
     if (this.rule.salesSL2CritChoices.length && this.rule.salesSL2CritCond === 'IN') {
       return this.sl1Sl2Sl3NameCodes.filter(x => _.includes(sl2Selections, x.sl2.toUpperCase()));
@@ -446,7 +444,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   salesSL2ChoicesValidator(): ValidatorFn {
     const fcn = (control: AbstractControl): ValidationErrors | null => {
-      console.log('salesSL2ChoicesValidator');
       if (!control.value || !control.value.length) {
         return null;
       }
@@ -481,37 +478,36 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   salesSL3ChoicesValidator(): ValidatorFn {
     const fcn = (control: AbstractControl): ValidationErrors | null => {
-      console.log('salesSL3ChoicesValidator');
       if (!control.value || !control.value.length) {
         return null;
       }
 
       const selections = shUtil.arrayFilterUndefinedAndEmptyStrings(control.value);
+      let actuals = [], notFound = [];
       let available;
-      // we need to consider both SL1 and SL2 if they both exist, otherwise we risk showing it valid when actually invalid with one or the other
       if ((this.rule.salesSL2CritChoices.length && this.rule.salesSL2CritCond) && (this.rule.salesSL1CritChoices.length && this.rule.salesSL1CritCond)) {
-        // available = _.intersectionWith(this.getSl1Sl2Sl3NameCodesFilteredForSl1(), this.getSl1Sl2Sl3NameCodesFilteredForSl2(), _.isEqual);
-        available = _.intersectionWith(this.getSl1Sl2Sl3NameCodesFilteredForSl1(), this.getSl1Sl2Sl3NameCodesFilteredForSl2(),
-          (x, y) => x.sl1 === y.sl1 && x.sl2 === y.sl2 && x.sl3 === y.sl3);
-      } else if (this.rule.salesSL1CritChoices.length && this.rule.salesSL1CritCond) {
         available = this.getSl1Sl2Sl3NameCodesFilteredForSl1();
-      } else if (this.rule.salesSL2CritChoices.length && this.rule.salesSL2CritCond) {
-        available = this.getSl1Sl2Sl3NameCodesFilteredForSl2();
-      } else {
-        available = this.sl1Sl2Sl3NameCodes;
-      }
-
-      const actuals = [];
-      const notFound = [];
-      selections.forEach(sel => {
-        const found = _.find(available, x => sel.toUpperCase() === x.sl3.toUpperCase());
-        if (found) {
-          actuals.push(found.sl3);
-        } else {
-          notFound.push(sel);
+        let results = findSl3InAvailable(selections, available);
+        actuals = results.actuals;
+        notFound = results.notFound;
+        if (!notFound.length) {
+          available = this.getSl1Sl2Sl3NameCodesFilteredForSl2();
+          results = findSl3InAvailable(selections, available);
+          actuals = results.actuals;
+          notFound = results.notFound;
         }
-      });
-
+      } else {
+        if (this.rule.salesSL1CritChoices.length && this.rule.salesSL1CritCond) {
+          available = this.getSl1Sl2Sl3NameCodesFilteredForSl1();
+        } else if (this.rule.salesSL2CritChoices.length && this.rule.salesSL2CritCond) {
+          available = this.getSl1Sl2Sl3NameCodesFilteredForSl2();
+        } else {
+          available = this.sl1Sl2Sl3NameCodes;
+        }
+        const results = findSl3InAvailable(selections, available);
+        actuals = results.actuals;
+        notFound = results.notFound;
+      }
       if (notFound.length) {
         return {salesSL3Choices: {value: notFound.join(', ')}};
       } else {
@@ -528,61 +524,41 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     // if in control and hit save button (which calls triggerBlur(), we'll get double hits on this, shut that down
     return _.throttle(fcn.bind(this), 400, {trailing: false});
 
+    function findSl3InAvailable(selections, available) {
+      const actuals = [];
+      const notFound = [];
+      selections.forEach(sel => {
+        const found = _.find(available, x => sel.toUpperCase() === x.sl3.toUpperCase());
+        if (found) {
+          actuals.push(found.sl3);
+        } else {
+          notFound.push(sel);
+        }
+      });
+      return ({actuals, notFound});
+    }
   }
 
-  /*
-    salesSL3ChoicesValidator(): ValidatorFn {
-      const fcn = (control: AbstractControl): ValidationErrors | null => {
-        if (!control.value || !control.value.length) {
-          return null;
-        }
-
-        const selections = shUtil.arrayFilterUndefinedAndEmptyStrings(control.value);
-        let available;
-        const sl2Selections = this.rule.salesSL2CritChoices.map(x => x.toUpperCase());
-        if (this.rule.salesSL2CritChoices.length && this.rule.salesSL2CritCond === 'IN') {
-          available = this.sl1Sl2Sl3NameCodes.filter(x => _.includes(sl2Selections, x.sl2.toUpperCase()));
-        } else if (this.rule.salesSL2CritChoices.length && this.rule.salesSL2CritCond === 'NOT IN') {
-          available = this.getSl1Sl2Sl3NameCodesFilteredForSl1();
-          available = available.filter(x => !_.includes(sl2Selections, x.sl2.toUpperCase()));
-        } else {
-          available = this.getSl1Sl2Sl3NameCodesFilteredForSl1();
-        }
-
-        const actuals = [];
-        const notFound = [];
-        selections.forEach(sel => {
-          const found = _.find(available, x => sel.toUpperCase() === x.sl3.toUpperCase());
-          if (found) {
-            actuals.push(found.sl3);
-          } else {
-            notFound.push(sel);
-          }
-        });
-        if (notFound.length) {
-          return {salesSL3Choices: {value: notFound.join(', ')}};
-        } else {
-          // no need updating unless case has changed, if you pull this out, angualar will freeze with the circulare detectChanges?
-          // bug: was all caps, then you changed to first letter lowercase, but acutals all caps again so no change so doesn't update value,
-          // it's for that reason you had to add the part after the OR looking at selections as well
-          if (!_.isEqual(this.rule.salesSL3CritChoices, actuals) || !_.isEqual(this.rule.salesSL3CritChoices, selections)) {
-            this.rule.salesSL3CritChoices = actuals;
-            this.changeDetectorRef.detectChanges();
-          }
-          return null;
-        }
-      };
-      // if in control and hit save button (which calls triggerBlur(), we'll get double hits on this, shut that down
-      return _.throttle(fcn.bind(this), 400, {trailing: false});
-    }
-
-  */
   getTgBuPfProductIdsFilteredForTg() {
     const tgSelections = this.rule.prodTGCritChoices.map(x => x.toUpperCase());
     if (this.rule.prodTGCritChoices.length && this.rule.prodTGCritCond === 'IN') {
       return this.tgBuPfProductIds.filter(x => _.includes(tgSelections, x.tg.toUpperCase()));
     } else if (this.rule.prodTGCritChoices.length && this.rule.prodTGCritCond === 'NOT IN') {
       return this.tgBuPfProductIds.filter(x => !_.includes(tgSelections, x.tg.toUpperCase()));
+    } else {
+      return this.tgBuPfProductIds;
+    }
+  }
+
+  getTgBuPfProductIdsFilteredForBu() {
+    const buSelections = this.rule.prodBUCritChoices.map(x => x.toUpperCase());
+    if (this.rule.prodBUCritChoices.length && this.rule.prodBUCritCond === 'IN') {
+      return this.tgBuPfProductIds.filter(x => _.includes(buSelections, x.bu.toUpperCase()));
+    } else if (this.rule.prodBUCritChoices.length && this.rule.prodBUCritCond === 'NOT IN') {
+      let available;
+      available = this.getTgBuPfProductIdsFilteredForTg();
+      available = available.filter(x => !_.includes(buSelections, x.bu.toUpperCase()));
+      return available;
     } else {
       return this.tgBuPfProductIds;
     }
@@ -629,6 +605,70 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       }
 
       const selections = shUtil.arrayFilterUndefinedAndEmptyStrings(control.value);
+      let actuals = [], notFound = [];
+      let available;
+      if ((this.rule.prodBUCritChoices.length && this.rule.prodBUCritCond) && (this.rule.prodTGCritChoices.length && this.rule.prodTGCritCond)) {
+        available = this.getTgBuPfProductIdsFilteredForTg();
+        let results = findPfInAvailable(selections, available);
+        actuals = results.actuals;
+        notFound = results.notFound;
+        if (!notFound.length) {
+          available = this.getTgBuPfProductIdsFilteredForBu();
+          results = findPfInAvailable(selections, available);
+          actuals = results.actuals;
+          notFound = results.notFound;
+        }
+      } else {
+        if (this.rule.prodTGCritChoices.length && this.rule.prodTGCritCond) {
+          available = this.getTgBuPfProductIdsFilteredForTg();
+        } else if (this.rule.prodBUCritChoices.length && this.rule.prodBUCritCond) {
+          available = this.getTgBuPfProductIdsFilteredForBu();
+        } else {
+          available = this.tgBuPfProductIds;
+        }
+        const results = findPfInAvailable(selections, available);
+        actuals = results.actuals;
+        notFound = results.notFound;
+      }
+      if (notFound.length) {
+        return {prodPFChoices: {value: notFound.join(', ')}};
+      } else {
+        // no need updating unless case has changed, if you pull this out, angualar will freeze with the circulare detectChanges?
+        // bug: was all caps, then you changed to first letter lowercase, but acutals all caps again so no change so doesn't update value,
+        // it's for that reason you had to add the part after the OR looking at selections as well
+        if (!_.isEqual(this.rule.prodPFCritChoices, actuals) || !_.isEqual(this.rule.prodPFCritChoices, selections)) {
+          this.rule.prodPFCritChoices = actuals;
+          this.changeDetectorRef.detectChanges();
+        }
+        return null;
+      }
+    };
+    // if in control and hit save button (which calls triggerBlur(), we'll get double hits on this, shut that down
+    return _.throttle(fcn.bind(this), 400, {trailing: false});
+
+    function findPfInAvailable(selections, available) {
+      const actuals = [];
+      const notFound = [];
+      selections.forEach(sel => {
+        const found = _.find(available, x => sel.toUpperCase() === x.pf.toUpperCase());
+        if (found) {
+          actuals.push(found.pf);
+        } else {
+          notFound.push(sel);
+        }
+      });
+      return ({actuals, notFound});
+    }
+  }
+
+/*
+  prodPFChoicesValidator(): ValidatorFn {
+    const fcn = (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value || !control.value.length) {
+        return null;
+      }
+
+      const selections = shUtil.arrayFilterUndefinedAndEmptyStrings(control.value);
       let available;
       const buSelections = this.rule.prodBUCritChoices.map(x => x.toUpperCase());
       if (this.rule.prodBUCritChoices.length && this.rule.prodBUCritCond === 'IN') {
@@ -666,6 +706,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     // if in control and hit save button (which calls triggerBlur(), we'll get double hits on this, shut that down
     return _.throttle(fcn.bind(this), 400, {trailing: false});
   }
+*/
 
   updateSelectStatements() {
     if (this.rule.salesSL1CritCond && this.rule.salesSL1CritChoices.length) {
