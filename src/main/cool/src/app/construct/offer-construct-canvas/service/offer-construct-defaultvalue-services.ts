@@ -128,6 +128,10 @@ export class OfferConstructDefaultValue {
             }
         }
 
+        if (element.question == 'Pricing Approval Required') {
+          element.currentValue = 'No';
+          element.previousValue = 'No';
+        }
         // if (element.question == 'TMS Node TS') {
         //   if (beListType == "Collaboration") {
         //     element.currentValue = "UC/HVS/SWSS/SUB/TRAN Svc";
@@ -736,6 +740,7 @@ export class OfferConstructDefaultValue {
     questionList.forEach(question => {
       if (question.question == "Enablement File Type") {
           question.rules.isDisabled = true;
+          question.rules.currentValue = '';
           question.rules.isMandatoryOptional = "Optional";
       }
     });
@@ -1261,4 +1266,63 @@ getCountryNameValues(questionList) {
        }
      });
    }
+
+   setConditionalAccessDefault(questionList) {
+     let conditionalAccessDefault;
+     questionList.forEach(question => {
+         if (question.question == "Enablement File Type") {
+           conditionalAccessDefault = question.currentValue;
+         }
+     });
+     questionList.forEach(question => {
+       if (question.question == "Conditional Access"){
+         if(conditionalAccessDefault == "EMM" || conditionalAccessDefault == "Hybrid"){
+             question.rules.isDisabled = false;
+         }
+         else{
+             question.rules.isDisabled = true;
+             question.currentValue = "";
+         }
+       }
+     });
+   }
+
+ setEnablementFileTypeDefault(questionList) {
+   let enablementFileType;
+   questionList.forEach(question => {
+       if (question.question == "Enablement") {
+         enablementFileType = question.currentValue;
+       }
+   });
+   questionList.forEach(question => {
+     if (question.question == "Enablement File Type"){
+       if(enablementFileType == "Y"){
+           question.rules.isDisabled = false;
+       }
+       else{
+           question.rules.isDisabled = true;
+           question.currentValue = "";
+       }
+     }
+   });
+ }
+
+ setItemTypeXassDefault(questionList) {
+      questionList.forEach(question => {
+          if (question.question == "Item Type") {
+            question.rules.isDisabled = true;
+            question.currentValue = "ATO MODEL";
+          }
+      });
+  }
+
+setItemTypeBillingDefault(questionList) {
+     questionList.forEach(question => {
+         if (question.question == "Item Type") {
+           question.rules.isDisabled = true;
+           question.currentValue = "PRODUCT LIST>$0";
+         }
+     });
+ }
+
 }
