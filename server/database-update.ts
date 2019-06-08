@@ -71,7 +71,7 @@ export function databaseUpdate() {
           .catch(err => Promise.reject(err));
         return chain;
       } else {
-        console.log(`Database already on latest version: ${databaseVersion}`);
+        console.log(`database already on latest version: ${databaseVersion}`);
         return updateBuildNumber();
       }
     });

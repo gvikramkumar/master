@@ -31,7 +31,7 @@ envs.forEach(x => {
 if (!env) {
   throw new Error('Bad NODE_ENV value');
 }
-console.log('NODE_ENV:', env);
+console.log('env:', env);
 
 const envConfig = configs[env + 'Config'] || {};
 const config = _.merge({}, commonConfig, envConfig);
