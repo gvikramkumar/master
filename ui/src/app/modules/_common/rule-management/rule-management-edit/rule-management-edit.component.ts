@@ -661,53 +661,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     }
   }
 
-/*
-  prodPFChoicesValidator(): ValidatorFn {
-    const fcn = (control: AbstractControl): ValidationErrors | null => {
-      if (!control.value || !control.value.length) {
-        return null;
-      }
-
-      const selections = shUtil.arrayFilterUndefinedAndEmptyStrings(control.value);
-      let available;
-      const buSelections = this.rule.prodBUCritChoices.map(x => x.toUpperCase());
-      if (this.rule.prodBUCritChoices.length && this.rule.prodBUCritCond === 'IN') {
-        available = this.tgBuPfProductIds.filter(x => _.includes(buSelections, x.bu.toUpperCase()));
-      } else if (this.rule.prodBUCritChoices.length && this.rule.prodBUCritCond === 'NOT IN') {
-        available = this.getTgBuPfProductIdsFilteredForTg();
-        available = available.filter(x => !_.includes(buSelections, x.bu.toUpperCase()));
-      } else {
-        available = this.getTgBuPfProductIdsFilteredForTg();
-      }
-
-      const actuals = [];
-      const notFound = [];
-      selections.forEach(sel => {
-        const found = _.find(available, x => sel.toUpperCase() === x.pf.toUpperCase());
-        if (found) {
-          actuals.push(found.pf);
-        } else {
-          notFound.push(sel);
-        }
-      });
-      if (notFound.length) {
-        return {prodPFChoices: {value: notFound.join(', ')}};
-      } else {
-        // no need updating unless case has changed, if you pull this out, angualar will freeze with the circulare detectChanges?
-        // bug: was all caps, then you changed to first letter lowercase, but acutals all caps again so no change so doesn't update value,
-        // it's for that reason you had to add the part after the OR looking at selections as well
-        if (!_.isEqual(this.rule.prodPFCritChoices, actuals) || !_.isEqual(this.rule.prodPFCritChoices, selections)) {
-          this.rule.prodPFCritChoices = actuals;
-          this.changeDetectorRef.detectChanges();
-        }
-        return null;
-      }
-    };
-    // if in control and hit save button (which calls triggerBlur(), we'll get double hits on this, shut that down
-    return _.throttle(fcn.bind(this), 400, {trailing: false});
-  }
-*/
-
   updateSelectStatements() {
     if (this.rule.salesSL1CritCond && this.rule.salesSL1CritChoices.length) {
       this.rule.sl1Select = ruleUtil.createSelect(this.rule.salesSL1CritCond, this.rule.salesSL1CritChoices);
