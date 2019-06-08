@@ -20,7 +20,7 @@ export class StatusComponent implements OnInit {
     this.status = _.isEmpty(this.status) ? '' : this.status.toUpperCase();
 
     if (this.status === pirateShipRoutesNames.Y || this.status === pirateShipRoutesNames.YES ||
-      this.status === pirateShipRoutesNames.COMPLETED) {
+      this.status === pirateShipRoutesNames.COMPLETE) {
       this.finalStatus = 'complete';
     } else if (this.status === pirateShipRoutesNames.N || this.status === pirateShipRoutesNames.NO ||
       this.status === pirateShipRoutesNames.IN_PROGRESS
