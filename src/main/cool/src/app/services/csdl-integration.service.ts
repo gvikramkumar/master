@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { EnvironmentService } from '@env/environment.service';
-import { CsdlPayload } from '@app/pirate-ship/modules/csdl/model/csdl-payload';
+import { CsdlPayload } from '@app/feature/pirate-ship/modules/csdl/model/csdl-payload';
 
 @Injectable({
   providedIn: 'root'

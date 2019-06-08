@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { EnvironmentService } from '@env/environment.service';
-import { ModellingDesign } from '@app/pirate-ship/modules/modelling-design/model/modelling-design';
+import { ModellingDesign } from '@app/feature/pirate-ship/modules/modelling-design/model/modelling-design';
 import { Observable } from 'rxjs';
 import { retry } from 'rxjs/operators';
 

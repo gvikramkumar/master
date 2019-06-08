@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { EnvironmentService } from '@env/environment.service';
-import { ServiceAnnuityDesign } from '@app/pirate-ship/modules/service-annuity-pricing/model/service-annuity-design';
+import { ServiceAnnuityDesign } from '@app/feature/pirate-ship/modules/service-annuity-pricing/model/service-annuity-design';
 import { Observable } from 'rxjs';
 import { retry } from 'rxjs/operators';
 
