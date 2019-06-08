@@ -490,8 +490,9 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       let available;
       // we need to consider both SL1 and SL2 if they both exist, otherwise we risk showing it valid when actually invalid with one or the other
       if ((this.rule.salesSL2CritChoices.length && this.rule.salesSL2CritCond) && (this.rule.salesSL1CritChoices.length && this.rule.salesSL1CritCond)) {
-        const sl1Available = this.getSl1Sl2Sl3NameCodesFilteredForSl1();
-        available = _.intersectionWith(sl1Available, this.getSl1Sl2Sl3NameCodesFilteredForSl2(), _.isEqual);
+        // available = _.intersectionWith(this.getSl1Sl2Sl3NameCodesFilteredForSl1(), this.getSl1Sl2Sl3NameCodesFilteredForSl2(), _.isEqual);
+        available = _.intersectionWith(this.getSl1Sl2Sl3NameCodesFilteredForSl1(), this.getSl1Sl2Sl3NameCodesFilteredForSl2(),
+          (x, y) => x.sl1 === y.sl1 && x.sl2 === y.sl2 && x.sl3 === y.sl3);
       } else if (this.rule.salesSL1CritChoices.length && this.rule.salesSL1CritCond) {
         available = this.getSl1Sl2Sl3NameCodesFilteredForSl1();
       } else if (this.rule.salesSL2CritChoices.length && this.rule.salesSL2CritCond) {
