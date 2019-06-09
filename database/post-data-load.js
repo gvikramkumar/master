@@ -1,5 +1,13 @@
-const conn = new Mongo(host + ':' + port);
-const db = conn.getDB(_db);
+print(`host: ${host}, port: ${port}, db: ${_db}, user: ${user}, pass: ${pass}`);
+
+let uri;
+if (user && pass) {
+  uri = `mongodb://${user}:${pass}@${host}:${port}/${_db}`;
+} else {
+  uri = `mongodb://${host}:${port}/${_db}`;
+}
+// print(uri);
+db = connect(uri);
 
 
 db.dfa_open_period.insertMany([
@@ -191,6 +199,21 @@ db.dfa_lookup.insertMany([
     ]
   }
 ]);
+
+const collectionsWithStatus = [
+  'dfa_allocation_rule',
+  'dfa_measure',
+  'dfa_module',
+  'dfa_submeasure'
+];
+
+collectionsWithStatus.forEach(coll => {
+  db.getCollection(coll).updateMany({}, {
+    $set: {
+      status: 'A'
+    }
+  });
+});
 
 // MAKE THIS BE LAST SO ALL TIMESTAMPED COLLECTIONS GET UPDATED
 const collectionsWithCreatedUpdated = [

@@ -928,6 +928,40 @@ export default class PgLookupRepo {
       });
   }
 
+  getDistinctSL1SL2SL3NameCodeFromSalesHierarchy() {
+    const sql = `
+      select distinct 
+      l1_sales_territory_name_code as sl1, 
+      l2_sales_territory_name_code as sl2, 
+      l3_sales_territory_name_code as sl3 
+      from fpacon.vw_fpa_sales_hierarchy
+      where 
+      l1_sales_territory_name_code is not null and  
+      l2_sales_territory_name_code is not null and  
+      l3_sales_territory_name_code is not null 
+      order by sl1, sl2, sl3;
+      `;
+    return pgc.pgdb.query(sql)
+      .then(results => results.rows);
+  }
+
+  getDistincTGBUPFIdsFromProductHierarchy() {
+    const sql = `
+      select distinct 
+      technology_group_id as tg, 
+      business_unit_id as bu, 
+      product_family_id as pf
+      from fpacon.vw_fpa_products  
+      where 
+      technology_group_id is not null and  
+      business_unit_id is not null and  
+      product_family_id is not null 
+      order by tg, bu, pf;
+      `;
+    return pgc.pgdb.query(sql)
+      .then(results => results.rows);
+  }
+
   verifyProperties(data, arr) {
     const missingProps = [];
     arr.forEach(prop => {

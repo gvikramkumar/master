@@ -7,7 +7,7 @@ import {TestBed} from '@angular/core/testing';
 beforeAll(() => {
   // init guard initialization
   const appStore = TestBed.get(AppStore);
-  appStore.pubEnv('unit');
+  appStore.pubEnv('unitdev');
   appStore.pubUser({});
   appStore.pubModules({});
 });

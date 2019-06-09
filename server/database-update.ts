@@ -17,7 +17,7 @@ const lookupRepo = new LookupRepo();
 const build_number = process.env.BUILD_NUMBER;
 
 export function databaseUpdate() {
-  if (process.env.NODE_ENV === 'unit') {
+  if (svrUtil.isUnitEnv()) {
     return Promise.resolve();
   }
 
@@ -71,7 +71,7 @@ export function databaseUpdate() {
           .catch(err => Promise.reject(err));
         return chain;
       } else {
-        console.log(`Database already on latest version: ${databaseVersion}`);
+        console.log(`database already on latest version: ${databaseVersion}`);
         return updateBuildNumber();
       }
     });

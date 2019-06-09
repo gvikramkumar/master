@@ -5,9 +5,9 @@ import ldevConfig from './ldev';
 import prodConfig from './prod';
 import stageConfig from './stage';
 import sdevConfig from './sdev';
+import unitdevConfig from './unitdev';
 import unitsdevConfig from './unitsdev';
 import unitstageConfig from './unitstage';
-import unitdevConfig from './unit';
 
 const configs = {devConfig, ldevConfig, prodConfig, stageConfig, sdevConfig, unitdevConfig, unitsdevConfig, unitstageConfig};
 
@@ -31,7 +31,7 @@ envs.forEach(x => {
 if (!env) {
   throw new Error('Bad NODE_ENV value');
 }
-console.log('NODE_ENV:', env);
+console.log('env:', env);
 
 const envConfig = configs[env + 'Config'] || {};
 const config = _.merge({}, commonConfig, envConfig);

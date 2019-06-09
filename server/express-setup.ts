@@ -35,6 +35,7 @@ import {timeoutHandler} from './lib/middleware/timeout-handler';
 import {runJobRouter} from './api/run-job/router';
 import AnyObj from '../shared/models/any-obj';
 import Q from 'q';
+import {svrUtil} from './lib/common/svr-util';
 
 
 export const app = express();
@@ -90,19 +91,19 @@ export function initializeExpress() {
     // console.log('>>>>>> served index.html');
     res.sendFile(path.resolve(__dirname, '../../ui/dist/index.html'));
   });
-  if (config.env !== 'unit') {
-    app.use(morgan(function (tokens, req, res) {
-      return [
-        new Date().toISOString(),
-        req.user.id,
-        tokens.method(req, res),
-        tokens.url(req, res),
-        tokens.status(req, res),
-        tokens.res(req, res, 'content-length'), '-',
-        tokens['response-time'](req, res), 'ms'
-      ].join(' ');
-    }));
-  }
+if (!svrUtil.isUnitEnv()) {
+  app.use(morgan(function (tokens, req, res) {
+    return [
+      new Date().toISOString(),
+      req.user.id,
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.status(req, res),
+      tokens.res(req, res, 'content-length'), '-',
+      tokens['response-time'](req, res), 'ms'
+    ].join(' ');
+  }));
+}
 
 
   /*

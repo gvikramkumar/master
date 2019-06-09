@@ -12,6 +12,7 @@ import {pgc} from './lib/database/postgres-conn';
 import {databaseUpdate} from './database-update';
 import {app, initializeExpress} from './express-setup';
 import os from 'os';
+import {svrUtil} from './lib/common/svr-util';
 import {JobManager} from './lib/job/job-manager';
 
 
@@ -27,7 +28,7 @@ export const serverPromise = Promise.all([mgc.promise, pgc.promise])
 
       initializeExpress();
       const jobManager = injector.get(JobManager);
-      const port = process.env.NODE_ENV === 'unit' ? '3001' : process.env.PORT || config.port;
+      const port = config.port;
       let server, protocol;
       if (config.ssl) {
         try {
@@ -68,9 +69,10 @@ export const serverPromise = Promise.all([mgc.promise, pgc.promise])
         }
         const serverUrl = `${protocol}://${os.hostname()}:${port}`;
         app.set('serverUrl', serverUrl);
-        console.log('BUILD_NUMBER:', process.env.BUILD_NUMBER);
+        if (!svrUtil.isLocalEnv()) {
+          console.log('build:', process.env.BUILD_NUMBER);
+        }
         console.log(`server listening on ${serverUrl}`);
-        jobManager.serverStartup();
       });
     }
   )

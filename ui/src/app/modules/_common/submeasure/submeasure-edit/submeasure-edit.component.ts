@@ -693,11 +693,15 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       delete this.sm.manualMapping.scmsLevel;
     }
   }
+// we need to remove undefined, empty string or string with spaces
+  getExistingArrRules() {
+    return this.arrRules.filter(r => !!(r && r.trim()));
+  }
 
   cleanupRules() {
     // the list size is governed by arrRules, BUT, the values are in sm.rules
     this.syncRuleValues();
-    this.arrRules = this.arrRules.filter(r => !!r.trim());
+    this.arrRules = shUtil.arrayFilterUndefinedAndEmptyStrings(this.arrRules);
     this.sm.rules = _.cloneDeep(this.arrRules);
     if (this.arrRules.length === 0) {
       this.arrRules[0] = '';
@@ -706,7 +710,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   verifyRulesExist() {
     this.syncRuleValues();
-    return this.arrRules.filter(r => !!r).length;
+    return shUtil.arrayFilterUndefinedAndEmptyStrings(this.arrRules).length;
   }
 
   syncRuleValues() {
@@ -1171,7 +1175,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
     const activeRules = this.rules.map(rule => rule.name);
     // clear out the empty string rules, then filter for inactive
-    const inactiveRules = this.arrRules.filter(x => !!x).filter(ruleName => !_.includes(activeRules, ruleName));
+    const inactiveRules = shUtil.arrayFilterUndefinedAndEmptyStrings(this.arrRules).filter(ruleName => !_.includes(activeRules, ruleName));
     if (inactiveRules.length) {
       if (revertCheck && this.sm.status === 'I' && this.sm.activeStatus === 'A') {
         setTimeout(() => this.sm.activeStatus = 'I');

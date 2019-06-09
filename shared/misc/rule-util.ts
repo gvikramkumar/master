@@ -75,17 +75,19 @@ function getMatchTextArray(values, prop, _arr) {
   arr.forEach(aval => {
     const val = _.find(values, {[prop]: aval});
     if (!val) {
-      throw new Error(`getMatchText couldn't find: ${aval} in prop: ${prop} of values: ${values.map(x => x[prop])}`);
+      throw new Error(`getMatchTextArray couldn't find: ${aval} in prop: ${prop} of values: ${values.map(x => x[prop])}`);
     }
     rtn.push(val.abbrev || val[prop]);
   });
   return rtn.join('');
 }
 
-const salesMatches = [{match: 'SL1'}, {match: 'SL2'}, {match: 'SL3'}, {match: 'SL4'}, {match: 'SL5'}, {match: 'SL6'}];
-const productMatches = [{match: 'BU'}, {match: 'PF'}, {match: 'TG'}]; // no PID
+const salesMatches = [{name: 'Level 1', value: 'SL1'}, {name: 'Level 2', value: 'SL2'}, {name: 'Level 3', value: 'SL3'},
+  {name: 'Level 4', value: 'SL4'}, {name: 'Level 5', value: 'SL5'}, {name: 'Level 6', value: 'SL6'}];
+const productMatches = [{name: 'Business Unit', value: 'BU'}, {name: 'Product Family', value: 'PF'}, {name: 'Technology Group',
+  value: 'TG'}, {name: 'Product ID', value: 'PID'}];
 const scmsMatches = [{match: 'SCMS'}];
-const beMatches = [{match: 'BE', abbrev: 'IBE'}, {match: 'Sub BE', abbrev: 'ISBE'}];
+const beMatches = [{name: 'Internal BE', value: 'BE', abbrev: 'IBE'}, {name: 'Internal Sub BE', value: 'Sub BE', abbrev: 'ISBE'}];
 const legalEntityMatches = [{match: 'Business Entity', abbrev: 'LE'}];
 const countryMatches = [{name: 'Sales Country Name', value: 'sales_country_name', abbrev: 'CNT'}];
 const extTheaterMatches = [{name: 'External Theater Name', value: 'ext_theater_name', abbrev: 'EXTTH'}];
@@ -95,10 +97,10 @@ const glSegmentsMatches = [{name: 'Account', value: 'ACCOUNT', abbrev: 'ACT'}, {
 function addMatches(rule) {
   let str = '';
 
-  str += rule.salesMatch ? getMatchText(salesMatches, 'match', rule.salesMatch) : '';
-  str += rule.productMatch ? getMatchText(productMatches, 'match', rule.productMatch) : '';
+  str += rule.salesMatch ? getMatchText(salesMatches, 'value', rule.salesMatch) : '';
+  str += rule.productMatch ? getMatchText(productMatches, 'value', rule.productMatch) : '';
   str += rule.scmsMatch ? getMatchText(scmsMatches, 'match', rule.scmsMatch) : '';
-  str += rule.beMatch ? getMatchText(beMatches, 'match', rule.beMatch) : '';
+  str += rule.beMatch ? getMatchText(beMatches, 'value', rule.beMatch) : '';
   str += rule.legalEntityMatch ? getMatchText(legalEntityMatches, 'match', rule.legalEntityMatch) : '';
   str += rule.countryMatch ? getMatchText(countryMatches, 'value', rule.countryMatch) : '';
   str += rule.extTheaterMatch ? getMatchText(extTheaterMatches, 'value', rule.extTheaterMatch) : '';

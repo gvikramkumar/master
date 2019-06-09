@@ -9,7 +9,7 @@ import {AppStore} from '../../../../app/app-store';
 import _ from 'lodash';
 import {DialogInputType, DialogType} from '../../../../core/models/ui-enums';
 import {UiUtil} from '../../../../core/services/ui-util';
-import {AbstractControl, AsyncValidatorFn, NgForm, ValidationErrors} from '@angular/forms';
+import {AbstractControl, AsyncValidatorFn, NgForm, ValidationErrors, ValidatorFn} from '@angular/forms';
 import {ValidationInputOptions} from '../../../../shared/components/validation-input/validation-input.component';
 import {map} from 'rxjs/operators';
 import {LookupService} from '../../services/lookup.service';
@@ -46,23 +46,37 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   copyMode = false;
   rule = new AllocationRule();
   orgRule: AllocationRule;
-  drivers: {name: string, value: string}[];
-  periods: {period: string}[];
+  drivers: { name: string, value: string }[];
+  periods: { period: string }[];
   submeasuresInUse: Submeasure[] = [];
   submeasuresAll: Submeasure[] = [];
   usingSubmeasuresNamesTooltip = '';
 
   conditionalOperators = [{operator: 'IN'}, {operator: 'NOT IN'}];
-  salesMatches = [{match: 'SL1'}, {match: 'SL2'}, {match: 'SL3'}, {match: 'SL4'}, {match: 'SL5'}, {match: 'SL6'}];
-  productMatches = [{match: 'BU'}, {match: 'PF'}, {match: 'TG'}]; // no PID
+  salesMatches = [{name: 'Level 1', value: 'SL1'}, {name: 'Level 2', value: 'SL2'}, {name: 'Level 3', value: 'SL3'},
+    {name: 'Level 4', value: 'SL4'}, {name: 'Level 5', value: 'SL5'}, {name: 'Level 6', value: 'SL6'}];
+  productMatches = [{name: 'Business Unit', value: 'BU'}, {name: 'Product Family', value: 'PF'}, {
+    name: 'Technology Group',
+    value: 'TG'
+  }, {name: 'Product ID', value: 'PID'}];
   scmsMatches = [{match: 'SCMS'}];
   legalEntityMatches = [{match: 'Business Entity', abbrev: 'LE'}];
-  beMatches = [{match: 'BE'}, {match: 'Sub BE', abbrev: 'SubBE'}];
+  beMatches = [{name: 'Internal BE', value: 'BE', abbrev: 'IBE'}, {
+    name: 'Internal Sub BE',
+    value: 'Sub BE',
+    abbrev: 'ISBE'
+  }];
   countryMatches = [{name: 'Sales Country Name', value: 'sales_country_name', abbrev: 'CNT'}];
   extTheaterMatches = [{name: 'External Theater Name', value: 'ext_theater_name', abbrev: 'EXT'}];
-  glSegmentMatches = [{name: 'Account', value: 'ACCOUNT', abbrev: 'ACCT'}, {name: 'Sub Account', value: 'SUB ACCOUNT', abbrev: 'SUBACCT'},
+  glSegmentMatches = [{name: 'Account', value: 'ACCOUNT', abbrev: 'ACCT'}, {
+    name: 'Sub Account',
+    value: 'SUB ACCOUNT',
+    abbrev: 'SUBACCT'
+  },
     {name: 'Company', value: 'COMPANY', abbrev: 'COMP'}];
   // SELECT options to be taken from Postgres
+  sl1Sl2Sl3NameCodes: { sl1: string, sl2: string, sl3: string }[] = [];
+  tgBuPfProductIds: { tg: string, bu: string, pf: string }[] = [];
   salesSL1Choices: { name: string }[] = [];
   prodTgChoices: { name: string }[] = [];
   scmsChoices: { name: string }[] = [];
@@ -77,7 +91,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     private store: AppStore,
     public uiUtil: UiUtil,
     private lookupService: LookupService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
     super(store, route);
     if (!this.route.snapshot.params.mode) {
@@ -91,8 +106,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   public ngOnInit(): void {
     const promises: Promise<any>[] = [
-      this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l1_sales_territory_name_code').toPromise(),
-      this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_products', 'technology_group_id').toPromise(),
+      this.pgLookupService.callRepoMethod('getDistinctSL1SL2SL3NameCodeFromSalesHierarchy').toPromise(),
+      this.pgLookupService.callRepoMethod('getDistincTGBUPFIdsFromProductHierarchy').toPromise(),
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_coverage_code').toPromise(),
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_be_hierarchy', 'business_entity_descr').toPromise(),
       this.lookupService.getValues(['drivers', 'periods']).toPromise()
@@ -107,8 +122,10 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       .then(results => {
         // assign to your local arrays here, then:
         // map result string arrays to object arrays for use in dropdowns
-        this.salesSL1Choices = results[0].map(x => ({name: x}));
-        this.prodTgChoices = results[1].map(x => ({name: x}));
+        this.sl1Sl2Sl3NameCodes = results[0];
+        this.salesSL1Choices = _.uniq(this.sl1Sl2Sl3NameCodes.map(x => x.sl1)).map(x => ({name: x}));
+        this.tgBuPfProductIds = results[1];
+        this.prodTgChoices = _.uniq(this.tgBuPfProductIds.map(x => x.tg)).map(x => ({name: x}));
         this.scmsChoices = results[2].map(x => ({name: x}));
         this.internalBeChoices = results[3].map(x => ({name: x}));
         this.drivers = _.sortBy(results[4][0], 'name');
@@ -143,41 +160,41 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         }
 
         this.salesSL2ChoiceOptions = {
-          asyncValidations: [
+          validations: [
             {
               name: 'salesSL2Choices',
-              message: 'Some sales SL2 select fields don\'t exist',
+              message: 'Invalid SL2 values: %s',
               fcn: this.salesSL2ChoicesValidator()
             }
           ]
         };
 
         this.salesSL3ChoiceOptions = {
-          asyncValidations: [
+          validations: [
             {
               name: 'salesSL3Choices',
-              message: 'Some sales SL3 select fields don\'t exist',
+              message: 'Invalid SL3 values: %s',
               fcn: this.salesSL3ChoicesValidator()
             }
           ]
         };
 
-        this.prodPFChoiceOptions = {
-          asyncValidations: [
+        this.prodBUChoiceOptions = {
+          validations: [
             {
-              name: 'prodPFChoices',
-              message: 'Some product PF select fields don\'t exist',
-              fcn: this.prodPFChoicesValidator()
+              name: 'prodBUChoices',
+              message: 'Invalid BU values: %s',
+              fcn: this.prodBUChoicesValidator()
             }
           ]
         };
 
-        this.prodBUChoiceOptions = {
-          asyncValidations: [
+        this.prodPFChoiceOptions = {
+          validations: [
             {
-              name: 'prodBUChoices',
-              message: 'Some product BU select fields don\'t exist',
-              fcn: this.prodBUChoicesValidator()
+              name: 'prodPFChoices',
+              message: 'Invalid PF values: %s',
+              fcn: this.prodPFChoicesValidator()
             }
           ]
         };
@@ -274,12 +291,12 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   validate() {
     const errors = [];
 
-/*
-    if (something wrong) {
-      errors.push('some message');
-    }
-*/
-  return errors.length ? errors : null;
+    /*
+        if (something wrong) {
+          errors.push('some message');
+        }
+    */
+    return errors.length ? errors : null;
   }
 
   validateNameAndSelectmap() {
@@ -288,7 +305,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     // rule select exceptions, so we check right before save (grrr, this isn't right before save), still have that dialog to put up and down
     // for submit... so we'll have to validate after as well then
     return this.getRulesAndRuleNamesAndGenerateSelectMap()
-      .then (() => {
+      .then(() => {
         const oldName = this.rule.name;
         // generate a new name considering the latest approved rules
         const ruleNameExists = this.valueChange();
@@ -305,29 +322,25 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   saveToDraft() {
     UiUtil.triggerBlur('.fin-container form');
-    UiUtil.waitForAsyncValidations(this.form)
-      .then(() => {
-        if (this.form.valid) {
-          this.cleanUp();
-          const errors = this.validate();
-          if (errors) {
-            this.uiUtil.validationErrorsDialog(errors);
-            return Promise.reject('disregard');
-          }
-          this.validateNameAndSelectmap()
-            .then(() => {
-              const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
-              this.ruleService.saveToDraft(this.rule, {saveMode})
-                .subscribe(rule => {
-                  history.go(-1);
-                });
-            })
-            // this to supress the angular error upon seeing a reject. Funny thing is: the one in the outer "then" won't do,
-            // have to catch it in here to catch the validateNameAndSelectmap rejects
-            .catch(shUtil.catchDisregardHandler);
-        }
-      })
-      .catch(shUtil.catchDisregardHandler);
+    if (this.form.valid) {
+      this.cleanUp();
+      const errors = this.validate();
+      if (errors) {
+        this.uiUtil.validationErrorsDialog(errors);
+        return Promise.reject('disregard');
+      }
+      this.validateNameAndSelectmap()
+        .then(() => {
+          const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
+          this.ruleService.saveToDraft(this.rule, {saveMode})
+            .subscribe(rule => {
+              history.go(-1);
+            });
+        })
+        // this to supress the angular error upon seeing a reject. Funny thing is: the one in the outer "then" won't do,
+        // have to catch it in here to catch the validateNameAndSelectmap rejects
+        .catch(shUtil.catchDisregardHandler);
+    }
   }
 
   canApprove() {
@@ -375,113 +388,277 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
 
   submitForApproval() {
     UiUtil.triggerBlur('.fin-container form');
-    UiUtil.waitForAsyncValidations(this.form)
-      .then(() => {
-        if (this.form.valid) {
-          this.cleanUp();
-          const errors = this.validate();
-          if (errors) {
-            this.uiUtil.validationErrorsDialog(errors);
-          } else {
-            this.uiUtil.confirmSubmitForApproval().toPromise()
-              .then(result => {
-                if (result) {
-                  // we cannot under any circumstance allow these select exceptions to be compromised.
-                  // we cannot afford to do it "before" the confirmation dialog, we have to do it right before save, so has its own validation function
-                  // that gets called after confirmation goes down
-                  this.validateNameAndSelectmap()
-                    .then(() => {
-                      const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
-                      this.ruleService.submitForApproval(this.rule, {saveMode, type: 'rule-management'})
-                        .subscribe(() => {
-                          history.go(-1);
-                        });
-                    })
-                    // this to supress the angular error upon seeing a reject. Funny thing is: the one in the outer "then" won't do,
-                    // have to catch it in here to catch the validateNameAndSelectmap rejects
-                    .catch(shUtil.catchDisregardHandler);
-                }
-              });
-          }
+    if (this.form.valid) {
+      this.cleanUp();
+      const errors = this.validate();
+      if (errors) {
+        this.uiUtil.validationErrorsDialog(errors);
+      } else {
+        this.uiUtil.confirmSubmitForApproval().toPromise()
+          .then(result => {
+            if (result) {
+              // we cannot under any circumstance allow these select exceptions to be compromised.
+              // we cannot afford to do it "before" the confirmation dialog, we have to do it right before save, so has its own validation function
+              // that gets called after confirmation goes down
+              this.validateNameAndSelectmap()
+                .then(() => {
+                  const saveMode = UiUtil.getApprovalSaveMode(this.rule.status, this.addMode, this.editMode, this.copyMode);
+                  this.ruleService.submitForApproval(this.rule, {saveMode, type: 'rule-management'})
+                    .subscribe(() => {
+                      history.go(-1);
+                    });
+                })
+                // this to supress the angular error upon seeing a reject. Funny thing is: the one in the outer "then" won't do,
+                // have to catch it in here to catch the validateNameAndSelectmap rejects
+                .catch(shUtil.catchDisregardHandler);
+            }
+          });
+      }
+    }
+  }
+
+  getSl1Sl2Sl3NameCodesFilteredForSl1() {
+    const sl1Selections = this.rule.salesSL1CritChoices.map(x => x.toUpperCase());
+    if (this.rule.salesSL1CritChoices.length && this.rule.salesSL1CritCond === 'IN') {
+      return this.sl1Sl2Sl3NameCodes.filter(x => _.includes(sl1Selections, x.sl1.toUpperCase()));
+    } else if (this.rule.salesSL1CritChoices.length && this.rule.salesSL1CritCond === 'NOT IN') {
+      return this.sl1Sl2Sl3NameCodes.filter(x => !_.includes(sl1Selections, x.sl1.toUpperCase()));
+    } else {
+      return this.sl1Sl2Sl3NameCodes;
+    }
+  }
+
+  getSl1Sl2Sl3NameCodesFilteredForSl2() {
+    const sl2Selections = this.rule.salesSL2CritChoices.map(x => x.toUpperCase());
+    if (this.rule.salesSL2CritChoices.length && this.rule.salesSL2CritCond === 'IN') {
+      return this.sl1Sl2Sl3NameCodes.filter(x => _.includes(sl2Selections, x.sl2.toUpperCase()));
+    } else if (this.rule.salesSL2CritChoices.length && this.rule.salesSL2CritCond === 'NOT IN') {
+      let available;
+      available = this.getSl1Sl2Sl3NameCodesFilteredForSl1();
+      available = available.filter(x => !_.includes(sl2Selections, x.sl2.toUpperCase()));
+      return available;
+    } else {
+      return this.sl1Sl2Sl3NameCodes;
+    }
+  }
+
+  salesSL2ChoicesValidator(): ValidatorFn {
+    const fcn = (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value || !control.value.length) {
+        return null;
+      }
+      const selections = shUtil.arrayFilterUndefinedAndEmptyStrings(control.value);
+      const available = this.getSl1Sl2Sl3NameCodesFilteredForSl1();
+      const actuals = [];
+      const notFound = [];
+      selections.forEach(sel => {
+        const found = _.find(available, x => sel.toUpperCase() === x.sl2.toUpperCase());
+        if (found) {
+          actuals.push(found.sl2);
+        } else {
+          notFound.push(sel);
         }
-      })
-      .catch(shUtil.catchDisregardHandler);
+      });
+      if (notFound.length) {
+        return {salesSL2Choices: {value: notFound.join(', ')}};
+      } else {
+        // no need updating unless case has changed, if you pull this out, angualar will freeze with the circulare detectChanges?
+        // bug: was all caps, then you changed to first letter lowercase, but acutals all caps again so no change so doesn't update value,
+        // it's for that reason you had to add the part after the OR looking at selections as well
+        if (!_.isEqual(this.rule.salesSL2CritChoices, actuals) || !_.isEqual(this.rule.salesSL2CritChoices, selections)) {
+          this.rule.salesSL2CritChoices = actuals;
+          this.changeDetectorRef.detectChanges();
+        }
+        return null;
+      }
+    };
+    // if in control and hit save button (which calls triggerBlur(), we'll get double hits on this, shut that down
+    return _.throttle(fcn.bind(this), 400, {trailing: false});
   }
 
-  salesSL2ChoicesValidator(): AsyncValidatorFn {
-    return ((control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
+  salesSL3ChoicesValidator(): ValidatorFn {
+    const fcn = (control: AbstractControl): ValidationErrors | null => {
       if (!control.value || !control.value.length) {
-        return Promise.resolve(null);
+        return null;
       }
-      return this.ruleService.validateSalesSL2CritChoices(control.value)
-        .pipe(map(results => {
-          if (!results.exist) {
-            return {salesSL2Choices: {value: control.value}};
-          } else {
-            if (!_.isEqual(this.rule.salesSL2CritChoices, results.values)) {
-              this.rule.salesSL2CritChoices = results.values;
-            }
-            return null;
-          }
-        }));
-    });
+
+      const selections = shUtil.arrayFilterUndefinedAndEmptyStrings(control.value);
+      let actuals = [], notFound = [];
+      let available;
+      if ((this.rule.salesSL2CritChoices.length && this.rule.salesSL2CritCond) && (this.rule.salesSL1CritChoices.length && this.rule.salesSL1CritCond)) {
+        available = this.getSl1Sl2Sl3NameCodesFilteredForSl1();
+        let results = findSl3InAvailable(selections, available);
+        actuals = results.actuals;
+        notFound = results.notFound;
+        if (!notFound.length) {
+          available = this.getSl1Sl2Sl3NameCodesFilteredForSl2();
+          results = findSl3InAvailable(selections, available);
+          actuals = results.actuals;
+          notFound = results.notFound;
+        }
+      } else {
+        if (this.rule.salesSL1CritChoices.length && this.rule.salesSL1CritCond) {
+          available = this.getSl1Sl2Sl3NameCodesFilteredForSl1();
+        } else if (this.rule.salesSL2CritChoices.length && this.rule.salesSL2CritCond) {
+          available = this.getSl1Sl2Sl3NameCodesFilteredForSl2();
+        } else {
+          available = this.sl1Sl2Sl3NameCodes;
+        }
+        const results = findSl3InAvailable(selections, available);
+        actuals = results.actuals;
+        notFound = results.notFound;
+      }
+      if (notFound.length) {
+        return {salesSL3Choices: {value: notFound.join(', ')}};
+      } else {
+        // no need updating unless case has changed, if you pull this out, angualar will freeze with the circulare detectChanges?
+        // bug: was all caps, then you changed to first letter lowercase, but acutals all caps again so no change so doesn't update value,
+        // it's for that reason you had to add the part after the OR looking at selections as well
+        if (!_.isEqual(this.rule.salesSL3CritChoices, actuals) || !_.isEqual(this.rule.salesSL3CritChoices, selections)) {
+          this.rule.salesSL3CritChoices = actuals;
+          this.changeDetectorRef.detectChanges();
+        }
+        return null;
+      }
+    };
+    // if in control and hit save button (which calls triggerBlur(), we'll get double hits on this, shut that down
+    return _.throttle(fcn.bind(this), 400, {trailing: false});
+
+    function findSl3InAvailable(selections, available) {
+      const actuals = [];
+      const notFound = [];
+      selections.forEach(sel => {
+        const found = _.find(available, x => sel.toUpperCase() === x.sl3.toUpperCase());
+        if (found) {
+          actuals.push(found.sl3);
+        } else {
+          notFound.push(sel);
+        }
+      });
+      return ({actuals, notFound});
+    }
   }
 
-  salesSL3ChoicesValidator(): AsyncValidatorFn {
-    return ((control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
-      if (!control.value || !control.value.length) {
-        return Promise.resolve(null);
-      }
-      return this.ruleService.validateSalesSL3CritChoices(control.value)
-        .pipe(map(results => {
-          if (!results.exist) {
-            return {salesSL3Choices: {value: control.value}};
-          } else {
-            if (!_.isEqual(this.rule.salesSL3CritChoices, results.values)) {
-              this.rule.salesSL3CritChoices = results.values;
-            }
-            return null;
-          }
-        }));
-    });
+  getTgBuPfProductIdsFilteredForTg() {
+    const tgSelections = this.rule.prodTGCritChoices.map(x => x.toUpperCase());
+    if (this.rule.prodTGCritChoices.length && this.rule.prodTGCritCond === 'IN') {
+      return this.tgBuPfProductIds.filter(x => _.includes(tgSelections, x.tg.toUpperCase()));
+    } else if (this.rule.prodTGCritChoices.length && this.rule.prodTGCritCond === 'NOT IN') {
+      return this.tgBuPfProductIds.filter(x => !_.includes(tgSelections, x.tg.toUpperCase()));
+    } else {
+      return this.tgBuPfProductIds;
+    }
   }
 
-  prodPFChoicesValidator(): AsyncValidatorFn {
-    return ((control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
-      if (!control.value || !control.value.length) {
-        return Promise.resolve(null);
-      }
-      return this.ruleService.validateProdPFCritChoices(control.value)
-        .pipe(map(results => {
-          if (!results.exist) {
-            return {prodPFChoices: {value: control.value}};
-          } else {
-            if (!_.isEqual(this.rule.prodPFCritChoices, results.values)) {
-              this.rule.prodPFCritChoices = results.values;
-            }
-            return null;
-          }
-        }));
-    });
+  getTgBuPfProductIdsFilteredForBu() {
+    const buSelections = this.rule.prodBUCritChoices.map(x => x.toUpperCase());
+    if (this.rule.prodBUCritChoices.length && this.rule.prodBUCritCond === 'IN') {
+      return this.tgBuPfProductIds.filter(x => _.includes(buSelections, x.bu.toUpperCase()));
+    } else if (this.rule.prodBUCritChoices.length && this.rule.prodBUCritCond === 'NOT IN') {
+      let available;
+      available = this.getTgBuPfProductIdsFilteredForTg();
+      available = available.filter(x => !_.includes(buSelections, x.bu.toUpperCase()));
+      return available;
+    } else {
+      return this.tgBuPfProductIds;
+    }
   }
 
-  prodBUChoicesValidator(): AsyncValidatorFn {
-    return ((control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
+  prodBUChoicesValidator(): ValidatorFn {
+    const fcn = (control: AbstractControl): ValidationErrors | null => {
       if (!control.value || !control.value.length) {
-        return Promise.resolve(null);
+        return null;
       }
-      return this.ruleService.validateProdBUCritChoices(control.value)
-        .pipe(map(results => {
-          if (!results.exist) {
-            return {prodBUChoices: {value: control.value}};
-          } else {
-            if (!_.isEqual(this.rule.prodBUCritChoices, results.values)) {
-              this.rule.prodBUCritChoices = results.values;
-            }
-            return null;
-          }
-        }));
-    });
+      const selections = shUtil.arrayFilterUndefinedAndEmptyStrings(control.value);
+      const available = this.getTgBuPfProductIdsFilteredForTg();
+      const actuals = [];
+      const notFound = [];
+      selections.forEach(sel => {
+        const found = _.find(available, x => sel.toUpperCase() === x.bu.toUpperCase());
+        if (found) {
+          actuals.push(found.bu);
+        } else {
+          notFound.push(sel);
+        }
+      });
+      if (notFound.length) {
+        return {prodBUChoices: {value: notFound.join(', ')}};
+      } else {
+        // no need updating unless case has changed, if you pull this out, angualar will freeze with the circulare detectChanges?
+        // bug: was all caps, then you changed to first letter lowercase, but acutals all caps again so no change so doesn't update value,
+        // it's for that reason you had to add the part after the OR looking at selections as well
+        if (!_.isEqual(this.rule.prodBUCritChoices, actuals) || !_.isEqual(this.rule.prodBUCritChoices, selections)) {
+          this.rule.prodBUCritChoices = actuals;
+          this.changeDetectorRef.detectChanges();
+        }
+        return null;
+      }
+    };
+    // if in control and hit save button (which calls triggerBlur(), we'll get double hits on this, shut that down
+    return _.throttle(fcn.bind(this), 400, {trailing: false});
+  }
+
+  prodPFChoicesValidator(): ValidatorFn {
+    const fcn = (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value || !control.value.length) {
+        return null;
+      }
+
+      const selections = shUtil.arrayFilterUndefinedAndEmptyStrings(control.value);
+      let actuals = [], notFound = [];
+      let available;
+      if ((this.rule.prodBUCritChoices.length && this.rule.prodBUCritCond) && (this.rule.prodTGCritChoices.length && this.rule.prodTGCritCond)) {
+        available = this.getTgBuPfProductIdsFilteredForTg();
+        let results = findPfInAvailable(selections, available);
+        actuals = results.actuals;
+        notFound = results.notFound;
+        if (!notFound.length) {
+          available = this.getTgBuPfProductIdsFilteredForBu();
+          results = findPfInAvailable(selections, available);
+          actuals = results.actuals;
+          notFound = results.notFound;
+        }
+      } else {
+        if (this.rule.prodTGCritChoices.length && this.rule.prodTGCritCond) {
+          available = this.getTgBuPfProductIdsFilteredForTg();
+        } else if (this.rule.prodBUCritChoices.length && this.rule.prodBUCritCond) {
+          available = this.getTgBuPfProductIdsFilteredForBu();
+        } else {
+          available = this.tgBuPfProductIds;
+        }
+        const results = findPfInAvailable(selections, available);
+        actuals = results.actuals;
+        notFound = results.notFound;
+      }
+      if (notFound.length) {
+        return {prodPFChoices: {value: notFound.join(', ')}};
+      } else {
+        // no need updating unless case has changed, if you pull this out, angualar will freeze with the circulare detectChanges?
+        // bug: was all caps, then you changed to first letter lowercase, but acutals all caps again so no change so doesn't update value,
+        // it's for that reason you had to add the part after the OR looking at selections as well
+        if (!_.isEqual(this.rule.prodPFCritChoices, actuals) || !_.isEqual(this.rule.prodPFCritChoices, selections)) {
+          this.rule.prodPFCritChoices = actuals;
+          this.changeDetectorRef.detectChanges();
+        }
+        return null;
+      }
+    };
+    // if in control and hit save button (which calls triggerBlur(), we'll get double hits on this, shut that down
+    return _.throttle(fcn.bind(this), 400, {trailing: false});
+
+    function findPfInAvailable(selections, available) {
+      const actuals = [];
+      const notFound = [];
+      selections.forEach(sel => {
+        const found = _.find(available, x => sel.toUpperCase() === x.pf.toUpperCase());
+        if (found) {
+          actuals.push(found.pf);
+        } else {
+          notFound.push(sel);
+        }
+      });
+      return ({actuals, notFound});
+    }
   }
 
   updateSelectStatements() {

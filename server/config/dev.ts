@@ -1,7 +1,12 @@
 export default {
-  corsOrigin: ['http://localhost:4200'],
   showStack: true,
   autoSyncOn: false,
+  mongo: {
+    uri: 'mongodb://localhost/fin-dfa',
+    host: 'localhost',
+    port: 27017,
+    db: 'fin-dfa'
+  },
   postgres: {
     host: 'finpg-dev-01',
     port: 5432,

@@ -20,7 +20,7 @@ export const mgc: { promise: Promise<AnyObj>, db: AnyObj, mongo: AnyObj } = <any
 mgc.promise = Promise.resolve()
   .then(() => mg.connect(config.uri, options))
   .then(() => {
-    console.log(`mongoose connected on: ${config.uri}`);
+    console.log(`mongodb connected on: ${config.uri}`);
     mg.connection.on('disconnected', () => console.log('mongoose disconnected'));
     mgc.db = mg.connection.db;
     mgc.mongo = mg.mongo;

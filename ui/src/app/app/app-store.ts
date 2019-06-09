@@ -26,7 +26,10 @@ export class AppStore extends StoreBase {
   location: Location;
 
   isLocalEnv() {
-    return _.includes(['dev', 'ldev', 'unit'], this.env);
+    return _.includes(['dev', 'ldev'], this.env) || this.isUnitEnv();
+  }
+  isUnitEnv() {
+    return _.includes(['unitdev', 'unitsdev', 'unitstage'], this.env);
   }
   isDevEnv() {
     return this.env === 'sdev';

@@ -263,11 +263,15 @@ describe('ruleUtil tests', () => {
   });
 
   describe('getMatchText tests', () => {
-    const salesMatches = [{match: 'SL1'}, {match: 'SL2'}, {match: 'SL3'}, {match: 'SL4'}, {match: 'SL5'}, {match: 'SL6'}];
-    const productMatches = [{match: 'BU'}, {match: 'PF'}, {match: 'TG'}]; // no PID
+/*    const salesMatches = [{match: 'SL1'}, {match: 'SL2'}, {match: 'SL3'}, {match: 'SL4'}, {match: 'SL5'}, {match: 'SL6'}];
+    const productMatches = [{match: 'BU'}, {match: 'PF'}, {match: 'TG'}]; // no PID*/
+    const salesMatches = [{name: 'Level 1', value: 'SL1'}, {name: 'Level 2', value: 'SL2'}, {name: 'Level 3', value: 'SL3'},
+      {name: 'Level 4', value: 'SL4'}, {name: 'Level 5', value: 'SL5'}, {name: 'Level 6', value: 'SL6'}];
+    const productMatches = [{name: 'Business Unit', value: 'BU'}, {name: 'Product Family', value: 'PF'}, {name: 'Technology Group',
+      value: 'TG'}, {name: 'Product ID', value: 'PID'}];
     const scmsMatches = [{match: 'SCMS'}];
     const legalEntityMatches = [{match: 'Business Entity', abbrev: 'LE'}];
-    const beMatches = [{match: 'BE', abbrev: 'IBE'}, {match: 'Sub BE', abbrev: 'ISBE'}];
+    const beMatches = [{name: 'Internal BE', value: 'BE', abbrev: 'IBE'}, {name: 'Internal Sub BE', value: 'Sub BE', abbrev: 'ISBE'}];
     const countryMatches = [{name: 'Sales Country Name', value: 'sales_country_name', abbrev: 'CNT'}];
     const extTheaterMatches = [{name: 'External Theater Name', value: 'ext_theater_name', abbrev: 'EXTTH'}];
 
@@ -278,24 +282,25 @@ describe('ruleUtil tests', () => {
     });
 
     it('should find item per prop and return that prop', () => {
-      expect(sut.test.getMatchText(salesMatches, 'match', 'SL1')).toBe('SL1');
-      expect(sut.test.getMatchText(salesMatches, 'match', ' SL1 ')).toBe('SL1'); // spaces
-      expect(sut.test.getMatchText(salesMatches, 'match', 'SL2')).toBe('SL2');
-      expect(sut.test.getMatchText(salesMatches, 'match', 'SL3')).toBe('SL3');
-      expect(sut.test.getMatchText(salesMatches, 'match', 'SL4')).toBe('SL4');
-      expect(sut.test.getMatchText(salesMatches, 'match', 'SL5')).toBe('SL5');
-      expect(sut.test.getMatchText(salesMatches, 'match', 'SL6')).toBe('SL6');
+      expect(sut.test.getMatchText(salesMatches, 'value', 'SL1')).toBe('SL1');
+      expect(sut.test.getMatchText(salesMatches, 'value', ' SL1 ')).toBe('SL1'); // spaces
+      expect(sut.test.getMatchText(salesMatches, 'value', 'SL2')).toBe('SL2');
+      expect(sut.test.getMatchText(salesMatches, 'value', 'SL3')).toBe('SL3');
+      expect(sut.test.getMatchText(salesMatches, 'value', 'SL4')).toBe('SL4');
+      expect(sut.test.getMatchText(salesMatches, 'value', 'SL5')).toBe('SL5');
+      expect(sut.test.getMatchText(salesMatches, 'value', 'SL6')).toBe('SL6');
 
-      expect(sut.test.getMatchText(productMatches, 'match', 'TG')).toBe('TG');
-      expect(sut.test.getMatchText(productMatches, 'match', 'BU')).toBe('BU');
-      expect(sut.test.getMatchText(productMatches, 'match', 'PF')).toBe('PF');
+      expect(sut.test.getMatchText(productMatches, 'value', 'TG')).toBe('TG');
+      expect(sut.test.getMatchText(productMatches, 'value', 'BU')).toBe('BU');
+      expect(sut.test.getMatchText(productMatches, 'value', 'PF')).toBe('PF');
+      expect(sut.test.getMatchText(productMatches, 'value', 'PID')).toBe('PID');
 
       expect(sut.test.getMatchText(scmsMatches, 'match', 'SCMS')).toBe('SCMS');
 
       expect(sut.test.getMatchText(legalEntityMatches, 'match', 'Business Entity')).toBe('LE');
 
-      expect(sut.test.getMatchText(beMatches, 'match', 'BE')).toBe('IBE');
-      expect(sut.test.getMatchText(beMatches, 'match', 'Sub BE')).toBe('ISBE');
+      expect(sut.test.getMatchText(beMatches, 'value', 'BE')).toBe('IBE');
+      expect(sut.test.getMatchText(beMatches, 'value', 'Sub BE')).toBe('ISBE');
 
       expect(sut.test.getMatchText(countryMatches, 'value', 'sales_country_name')).toBe('CNT');
 
@@ -571,7 +576,7 @@ describe('ruleUtil tests', () => {
 
     });
 
-    fdescribe('addRuleNameAndDescription tests', () => {
+    describe('addRuleNameAndDescription tests', () => {
       let rule, selectMap;
       const drivers = [
         {name: 'Driver One', value: 'DRIVER_ONE', abbrev: 'DRO'},
@@ -643,7 +648,7 @@ describe('ruleUtil tests', () => {
           'Period:  PERIOD_TWO');
       });
 
-      fit('should show many fields', () => {
+      it('should show many fields', () => {
         rule.driverName = 'DRIVER_ONE';
         rule.period = 'PERIOD_TWO';
         rule.salesMatch = 'SL1';

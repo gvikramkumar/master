@@ -7,6 +7,8 @@ import config from '../../config/get-config';
 
 export const svrUtil = {
   isLocalEnv,
+  isUnitEnv,
+  isProdEnv,
   trimStringProperties,
   getMemoryUsage,
   cleanCsv,
@@ -26,7 +28,6 @@ export const svrUtil = {
   toFixed8,
   toFixed,
   getEnvEmail,
-  isProdEnv,
   getErrorForJson,
   docToObjectWithISODate
 };
@@ -46,10 +47,6 @@ function getEnvEmail(email) {
     return getTestEmail();
   }
   return email;
-}
-
-function isProdEnv() {
-  return config.env === 'prod';
 }
 
 function toFixed8(val) {
@@ -86,15 +83,19 @@ function base64ToAscii(base64) {
 }
 
 function isLocalEnv() {
-  return !process.env.NODE_ENV || _.includes(['dev', 'ldev', 'unit'], process.env.NODE_ENV);
+  return _.includes(['dev', 'ldev'], config.env) || isUnitEnv();
 }
 
 function isUnitEnv() {
-  return process.env.NODE_ENV === 'unit';
+  return _.includes(['unitdev', 'unitsdev', 'unitstage'], config.env);
+}
+
+function isProdEnv() {
+  return config.env === 'prod';
 }
 
 function getTestEmail() {
-  return process.env.TEST_EMAIL;
+  return process.env.TEST_EMAIL || 'jodoe@cisco.com';
 }
 
 function sortedListNotExists(values, value) {

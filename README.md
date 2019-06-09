@@ -23,7 +23,7 @@ assume site root unless specified otherwise
 server config is located in: /server/config, it includes config.json (common to all environment) merged with the environment specific file (dev/sdev/qa/prod/unit.json) which can overwrite or add values to config.json). Dev environment is run by default, the code looks for NODE_ENV that starts with: dev|sdev|qa|prod|unit and uses that config file. For postgres the POSTGRES_USER, POSTGRES_PASSWORD environment variables need to be set as well. If postgres is down, you can set NO_POSTGRES environment variable to "true" to bypass the postgres initialization. 
   
 **ui config:**  
-ui config is located in /ui/src/environment directory, with dev (default) in environment.ts and all other environments in environment.prod.ts. unit test environment is environment.unit.ts. There will be no difference for sdev/qa/prod as all three will have built the application which runs it out of /ui/dist directory. All 3 will run a single server for api and ui, so all the same then.
+ui config is located in /ui/src/environment directory, with dev (default) in environment.ts and all other environments in environment.prod.ts. unit test environment is environment.unitdev.ts. There will be no difference for sdev/qa/prod as all three will have built the application which runs it out of /ui/dist directory. All 3 will run a single server for api and ui, so all the same then.
   
 #### database setup
 You can either use an existing database:  

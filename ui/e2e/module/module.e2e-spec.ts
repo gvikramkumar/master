@@ -5,7 +5,7 @@ describe(`Admin - Module Page`, () => {
   const newTestModuleActive = {
     displayOrder : '12',
     abbrev : 'atst',
-    name : 'New Active Test Module',
+    name : 'New Active Test Module - E2ETEST',
     desc : `This module is added during testing.`,
     status : 'Active'
   };
@@ -13,7 +13,7 @@ describe(`Admin - Module Page`, () => {
   const newTestModuleInactive = {
     displayOrder : '13',
     abbrev : 'itst',
-    name : 'New Inactive Test Module',
+    name : 'New Inactive Test Module - E2ETEST',
     desc : `This module is added during testing.`,
     status : 'Inactive'
   };
