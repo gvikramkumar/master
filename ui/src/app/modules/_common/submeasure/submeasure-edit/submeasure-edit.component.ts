@@ -809,8 +809,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
 
     if (this.isManualMix() && !this.isAllocatedGroup()) {
-      this.sm.manualMixHw = this.manualMixHw;
-      this.sm.manualMixSw = this.manualMixSw;
+      this.sm.manualMixHw = Number(this.manualMixHw);
+      this.sm.manualMixSw = Number(this.manualMixSw);
     }
 
     if (this.isDeptUpload() && this.sm.indicators.deptAcct === 'N') {
@@ -961,18 +961,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.errs.push('Duplicate rules entered');
     }
 
-    if (this.isManualMix()) {
-      const hw = Number(this.sm.manualMixHw);
-      const sw = Number(this.sm.manualMixSw);
-      if (isNaN(hw)) {
-        this.errs.push(`Manual Mix HW value, not a number: ${this.sm.manualMixHw}`);
-      }
-      if (isNaN(sw)) {
-        this.errs.push(`Manual Mix SW value, not a number: ${this.sm.manualMixSw}`);
-      }
-      if (!isNaN(hw) && !isNaN(sw) && hw + sw !== 100.0) {
-        this.errs.push(`Manual Mix HW/SW values do not add up to 100`);
-      }
+    if (this.isManualMix() && this.sm.manualMixHw + this.sm.manualMixSw !== 100.0) {
+      this.errs.push(`Manual Mix HW/SW values do not add up to 100`);
     }
 
     if (this.isDeptUpload() && !this.isApprovedOnce() && this.sm.indicators.deptAcct !== 'A') {
