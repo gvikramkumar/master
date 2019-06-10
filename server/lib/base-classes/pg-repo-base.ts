@@ -352,8 +352,19 @@ export class PgRepoBase {
   }
 
   syncRecordsReplaceAllWhere(removeWhere, records, userId, bypassCreatedUpdated?) {
-    const sql = `delete from ${this.table} where ${removeWhere}`;
-    return pgc.pgdb.query(sql)
+    let promise = Promise.resolve();
+    // we have "where in (x,y,z)" where clauses that may not have any values, in that case we pass in undefined,
+    // so have to bypass the delete then as a delete with empty parenthesis throws an error
+    if (removeWhere) {
+      // if they pass in an "in ()" where clause with no values in parenthesis, it will cause a postgres error,
+      // they need to pass in undefined in that case instead
+      if (/ in \(\)/.test(removeWhere)) {
+        throw new ApiError(`repoBase.syncRecordsReplaceAllWhere: "in ()" where clause with no values`);
+      }
+      const sql = `delete from ${this.table} where ${removeWhere}`;
+      promise = pgc.pgdb.query(sql);
+    }
+    return promise
       .then(() => this.addMany(records, userId, bypassCreatedUpdated))
       .then(() => ({recordCount: records.length}));
   }

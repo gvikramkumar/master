@@ -35,7 +35,12 @@ export default class ProductClassUploadController extends ControllerBase {
 
   mongoToPgSyncRecords(pgRemoveFilter, objs, userId, dfa) {
     const keys = _.uniq(objs.map(sm => sm.submeasureKey));
-    const where = `fiscal_month_id = ${dfa.fiscalMonths.prof} and sub_measure_key in (${keys})`;
+    let where;
+    // if we pass this where clause with "no keys", i.e. empty parenthesis, postgres throws an error,
+    // so pass an undefined where to syncRecordsReplaceAllWhere which will then ignore the delete statement
+    if (keys.length) {
+      where = `fiscal_month_id = ${dfa.fiscalMonths.prof} and sub_measure_key in (${keys})`;
+    }
     return this.pgRepo.syncRecordsReplaceAllWhere(where, objs, userId, true)
       .then(results => results.recordCount);
   }
