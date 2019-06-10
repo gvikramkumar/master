@@ -205,7 +205,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
    * When user click click here hyper link
    */
   onOpenCsdlTab() {
-    const urlToOpen = 'https://csdl.cisco.com';
+    const urlToOpen = 'http://csdl.cisco.com';
     window.open(urlToOpen, '_blank');
   }
 
@@ -219,7 +219,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * When user select is Csdl Required 'No' radio button 
+   * When user select is Csdl Required 'No' radio button
    * @ param event
    */
   onCsdlNotRequired() {
