@@ -5,12 +5,13 @@ import _ from 'lodash';
 import {ModuleRepo} from './repo';
 
 describe('Module endpoint tests', () => {
-  let server, openPeriodRepo;
+  let server;
+  const openPeriodRepo = new OpenPeriodRepo();
   const endpoint = `/api/module`;
   const testModule = {
-    displayOrder: 13,
+    displayOrder: 12,
     abbrev: 'test',
-    name: 'Test Revenue Allocations',
+    name: 'Test Revenue Allocations - E2ETEST',
     desc: 'Enables the detailed level allocations required to report holistic view of Product & Service Test Revenue for better predictability of test revenue growth and manage/support any new business models.',
     status: 'A'
   };
@@ -18,7 +19,6 @@ describe('Module endpoint tests', () => {
   beforeAll(function (done) {
     serverPromise.then(function (_server) {
       server = _server;
-      openPeriodRepo = new OpenPeriodRepo();
       done();
     });
   });
@@ -107,7 +107,7 @@ describe('Module endpoint tests', () => {
 
   it(`should update one to active and add the open period`, (done) => {
     returnFromAddModule.abbrev = 'atest';
-    returnFromAddModule.name = 'Updated Test Revenue Allocations to active';
+    returnFromAddModule.name = 'Updated Test Revenue Allocations to active - E2ETEST';
     returnFromAddModule.status = 'A';
     request(server)
       .put(`${endpoint}/${returnFromAddModule.id}`)
@@ -128,7 +128,8 @@ describe('Module endpoint tests', () => {
 
   it(`should delete one and delete open period if the module state is active`, (done) => {
     request(server)
-      .delete(`${endpoint}/${returnFromAddModule.id}`)
+      .delete(`${endpoint}/query-one`)
+      .query({name: returnFromAddModule.name})
       .expect(200)
       .end(() => {
         openPeriodRepo.getMany({})

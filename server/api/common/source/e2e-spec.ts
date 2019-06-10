@@ -6,6 +6,12 @@ import SourceRepo from './repo';
 describe(`Source endpoint tests`, () => {
   const endpoint = '/api/source';
   let server, addSourceReturn, updateSourceReturn;
+  const newSource = {
+    name : 'Test - E2ETEST',
+    desc : 'Test Source',
+    typeCode : 'TEST',
+    status : 'A'
+  };
   beforeAll((done) => {
     serverPromise.then(_server => {
       server = _server;
@@ -25,13 +31,6 @@ describe(`Source endpoint tests`, () => {
   });
 
   it(`should add one`, (done) => {
-    const newSource = {
-      name : 'Test',
-      desc : 'Test Source',
-      typeCode : 'TEST',
-      status : 'A'
-    };
-
     request(server)
       .post(`${endpoint}`)
       .send(newSource)
@@ -54,7 +53,7 @@ describe(`Source endpoint tests`, () => {
 
   it(`should update one`, (done) => {
     const updatedSource = _.cloneDeep(addSourceReturn);
-    updatedSource.name = 'Updated Test';
+    updatedSource.name = 'Updated Test - E2ETEST';
     request(server)
       .put(`${endpoint}/${addSourceReturn.id}`)
       .send(updatedSource)
@@ -80,7 +79,8 @@ describe(`Source endpoint tests`, () => {
 
   it(`should get one by query`, (done) => {
     request(server)
-      .get(`${endpoint}/query-one?sourceId=${addSourceReturn.sourceId}`)
+      .get(`${endpoint}/query-one`)
+      .query({sourceId: updateSourceReturn.sourceId})
       .expect((res) => {
         expect(res.body.id).toEqual(addSourceReturn.id);
       })
@@ -89,7 +89,8 @@ describe(`Source endpoint tests`, () => {
 
   it(`should delete one`, (done) => {
     request(server)
-      .delete(`${endpoint}/${addSourceReturn.id}`)
+      .delete(`${endpoint}/query-one`)
+      .query({name: updateSourceReturn.name})
       .expect(200)
       .end(done);
   });

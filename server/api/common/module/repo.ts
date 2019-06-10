@@ -2,6 +2,7 @@ import {injectable} from 'inversify';
 import {Schema} from 'mongoose';
 import RepoBase from '../../../lib/base-classes/repo-base';
 import AnyObj from '../../../../shared/models/any-obj';
+import {ApiError} from '../../../lib/common/api-error';
 
 
 const schema = new Schema(
@@ -33,6 +34,17 @@ export class ModuleRepo extends RepoBase {
       .then(modules => this.addRoles(modules));
   }
 
+  removeQueryOne(filter) {
+    return super.getOneByQuery(filter)
+      .then(item => {
+        if (item) {
+          return item.remove();
+        } else {
+          throw new ApiError('Item not found.', null, 400);
+        }
+      });
+  }
+
   getActiveSortedByDisplayOrder() {
     return this.getMany({status: 'A', setSort: 'displayOrder'});
   }
@@ -51,6 +63,5 @@ export class ModuleRepo extends RepoBase {
       mod.roles = `${module.name}:Business Admin, ${module.name}:Super User, ${module.name}:Business User, ${module.name}:End User`.toLowerCase();
       return mod;
     });
-
   }
 }

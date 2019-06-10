@@ -1,13 +1,10 @@
-import {browser, by, element, protractor} from 'protractor';
-const EC = protractor.ExpectedConditions;
-export class OpenPeriodPO {
-  container = element(by.className(`fin-container`));
-  navigateTo() {
-    return browser.get('/admn/open-period');
-  }
+import {browser, by, element} from 'protractor';
+import {CommonPO} from '../common.po';
 
-  waitForPageToLoad() {
-    browser.wait(EC.presenceOf(this.container));
+export class OpenPeriodPO extends CommonPO {
+
+  navigateTo() {
+    return super.navigateTo('/admn/open-period');
   }
 
   getActiveModules() {
@@ -18,15 +15,11 @@ export class OpenPeriodPO {
     return element.all(by.className('dropdown-chevron icon-chevron-down')).get(index);
   }
 
-  waitForSelectDropdownToShow() {
-    browser.wait(EC.presenceOf(element(by.className('dropdown active'))));
-  }
-
-  waitForSelectDropdowntoDisappear() {
-    element(by.className('cui-virtual-scroll-content-wrapper')).all(by.tagName('div')).first().click();
+  mouseDownOnElement(_element) {
+    browser.actions().mouseDown(_element).perform();
   }
 
   getDropdownOption(index) {
-    return element(by.className('cui-virtual-scroll-content-wrapper')).all(by.tagName('div')).get(index);
+    return element(by.className('cui-virtual-scroll-content-wrapper')).all(by.tagName('div')).get(index).element(by.tagName(`a`));
   }
 }

@@ -1,56 +1,104 @@
 import {$, $$, browser, element, by, ElementFinder, protractor} from 'protractor';
 import * as _ from 'lodash';
 import * as cp from 'child_process';
+import * as request from 'request';
+import * as os from 'os';
 
 export class CommonPO {
-  rootUrl = 'http://localhost:4201/';
-  selectOptions = $$('mat-option');
-
-
-  clickAutoCompleteOption(val) {
-    $(`mat-option[ng-reflect-value="${val}"]`).click();
-  }
-
-  clickSelectOption(val) {
-    $(`mat-option[value="${val}"]`).click();
-  }
-
-  isActiveElement(elem) {
-    return elem.equals(browser.driver.switchTo().activeElement());
-  }
-
-  resizeWindow(width, height?) {
-    browser.driver.manage().window().setSize(width, height || 1024);
-  }
-
-  refreshDbAndPage() {
-    browser.call(this.initDatabase);
-    browser.refresh();
-  }
-
-  refreshDbAndSetPage(url) {
-    browser.call(this.initDatabase);
-    browser.get(url);
-  }
-
-  initDatabase(): Promise<string> {
+  container = element(by.className(`fin-container`));
+  EC = protractor.ExpectedConditions;
+  finJsonRequest(_url, method, json, _options = {}) {
+    const options = {
+      url: `http://${os.hostname()}:3001${_url}`,
+      method,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      json
+    };
+    Object.assign(options, _options);
     return new Promise((resolve, reject) => {
-      const child = cp.exec('./initdbunit.sh', {cwd: '../contacts-be'}, (error, stdout, stderr) => {
-        if (error) {
-          reject(error);
+      request(options, (err, resp, body) => {
+        if (err) {
+          reject(new Error('Request error.'));
         }
-        console.log(stdout);
-        resolve(stdout);
+        resolve({resp, body});
       });
-
     });
   }
 
-  hasClass(elem, cls) {
-    return elem.getAttribute('class').then(function (classes) {
-      return classes.split(' ').indexOf(cls) !== -1;
-    });
+  navigateTo(page) {
+    return browser.get(page);
   }
+
+  waitForPageToLoad() {
+    browser.wait(this.EC.presenceOf(this.container));
+  }
+
+  // Form Buttons
+  getAddButton() {
+    return element(by.buttonText(`Add New`));
+  }
+
+  getSubmitButton() {
+    return element(by.buttonText(`Submit`));
+  }
+
+  getCancelButton() {
+    return element(by.buttonText(`Cancel`));
+  }
+
+
+
+
+  /* rootUrl = 'http://localhost:4201/';
+   selectOptions = $$('mat-option');
+
+
+   clickAutoCompleteOption(val) {
+     $(`mat-option[ng-reflect-value="${val}"]`).click();
+   }
+
+   clickSelectOption(val) {
+     $(`mat-option[value="${val}"]`).click();
+   }
+
+   isActiveElement(elem) {
+     return elem.equals(browser.driver.switchTo().activeElement());
+   }
+
+   resizeWindow(width, height?) {
+     browser.driver.manage().window().setSize(width, height || 1024);
+   }
+
+   refreshDbAndPage() {
+     browser.call(this.initDatabase);
+     browser.refresh();
+   }
+
+   refreshDbAndSetPage(url) {
+     browser.call(this.initDatabase);
+     browser.get(url);
+   }
+
+   initDatabase(): Promise<string> {
+     return new Promise((resolve, reject) => {
+       const child = cp.exec('./initdbunit.sh', {cwd: '../contacts-be'}, (error, stdout, stderr) => {
+         if (error) {
+           reject(error);
+         }
+         console.log(stdout);
+         resolve(stdout);
+       });
+
+     });
+   }
+
+   hasClass(elem, cls) {
+     return elem.getAttribute('class').then(function (classes) {
+       return classes.split(' ').indexOf(cls) !== -1;
+     });
+   }*/
 
   /*
 

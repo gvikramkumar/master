@@ -62,7 +62,7 @@ describe('Approval Controller Tests', () => {
     describe(`approvalEmailReminder - Submeasure`, () => {
       let orgSms = [];
       beforeAll((done) => {
-        smRepo.getMany({moduleId: -1})
+        smRepo.getMany({moduleId: -1, name: /E2ETEST/})
           .then(sms => {
             orgSms = sms;
             spyOn(approvalControllerForSubmeasure, 'sendReminderEmail');
@@ -152,7 +152,7 @@ describe('Approval Controller Tests', () => {
     describe(`approvalEmailReminder - Rule`, () => {
       let orgRules = [];
       beforeAll((done) => {
-        ruleRepo.getMany({moduleId: -1})
+        ruleRepo.getMany({moduleId: -1, name: /E2ETEST/})
           .then(rules => {
             orgRules = rules;
             spyOn(approvalControllerForRule, 'sendReminderEmail');

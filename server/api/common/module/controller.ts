@@ -40,11 +40,12 @@ export default class ModuleController extends ControllerBase {
       .catch(next);
   }
 
-  remove(req, res, next) {
-    this.removeOnePromise(req, res, next)
+  removeQueryOne(req, res, next) {
+    const filter = req.query;
+    this.repo.removeQueryOne(filter)
       .then(item => {
         if (item.status === 'A') {
-          this.removeOpenPeriod(item.moduleId)
+          return this.removeOpenPeriod(item.moduleId)
             .then(() => res.json(item));
         } else {
           res.json(item);

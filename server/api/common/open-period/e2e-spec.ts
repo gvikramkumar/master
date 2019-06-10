@@ -8,12 +8,22 @@ describe(`Open Period endpoint tests`, () => {
   const endpoint = `/api/open-period`;
   const openPeriodRepo = new OpenPeriodRepo();
   let server;
+  let testOpenPeriod = {
+    moduleId: 12,
+    fiscalMonth: 201909,
+    openFlag: 'Y'
+  };
 
   beforeAll(done => {
     serverPromise.then(_server => {
       server = _server;
       done();
     });
+  });
+
+  afterAll(done => {
+    openPeriodRepo.removeQueryOne({moduleId: 12})
+      .then(() => done());
   });
 
   it(`should get many`, (done) => {
@@ -29,12 +39,8 @@ describe(`Open Period endpoint tests`, () => {
       });
   });
 
-  it(`should update an open period, if the open period doesn't exist then it should add one`, (done) => {
-    let testOpenPeriod = {
-      moduleId: 12,
-      fiscalMonth: 201909,
-      openFlag: 'Y'
-    };
+  it(`should add an open period if the open period doesnt exist; else update open period if it exists`, (done) => {
+     // adds first as the open period doesn't exist for moduleId - 12
     request(server)
       .post(`${endpoint}/upsert`)
       .send(testOpenPeriod)
@@ -45,7 +51,11 @@ describe(`Open Period endpoint tests`, () => {
           .then(openPeriodsAfterAdd => {
             const openPeriodAdded = _.find(openPeriodsAfterAdd, {moduleId: testOpenPeriod.moduleId});
             expect(testOpenPeriod).toEqual(svrUtil.docToObjectWithISODate(openPeriodAdded));
+
+            // change the fiscalMonth
             testOpenPeriod.fiscalMonth = 201908;
+
+            // It updates the open period now as we created it above
             request(server)
               .post(`${endpoint}/upsert`)
               .send(testOpenPeriod)

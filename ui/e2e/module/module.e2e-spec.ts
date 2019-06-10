@@ -26,6 +26,14 @@ describe(`Admin - Module Page`, () => {
     status : 'Active'
   };
 
+  afterAll(done => {
+    const url = '/api/module/query-one';
+    Promise.all([
+      modulePO.finJsonRequest(url, 'DELETE', undefined, {qs: {name: newTestModuleActive.name}}),
+      modulePO.finJsonRequest(url, 'DELETE', undefined, {qs: {name: newTestModuleInactive.name}})
+    ]).then(() => done());
+  });
+
   beforeEach(() => {
     modulePO.navigateTo();
     modulePO.waitForModulesToLoad();
