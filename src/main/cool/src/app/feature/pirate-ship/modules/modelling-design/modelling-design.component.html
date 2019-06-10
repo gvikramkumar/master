@@ -1,0 +1,67 @@
+<app-menu-bar [caseId]="caseId" [offerId]="offerId" [offerName]="offerName" [currentMMModel]="derivedMM">
+</app-menu-bar>
+
+<div class="content">
+  <div class="container">
+
+
+
+    <div class="panel-wrapper mt-15">
+
+      <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName"
+        [selectedATO]="selectedAto">
+      </app-taskbar>
+
+
+      <div class="row">
+
+        <div class="leftContent col-sm-12 col-md-9">
+
+          <div class="row base-margin-top flex-center-vertical">
+            <div class="col-sm-12">
+
+              <div class="pull-left" *ngIf="showDesignCanvasButton">
+                <button class="btn btn--primary btn--cool btn--small tooltip" placement="top"
+                  (click)="goToDesignCanvas()" [disabled]="!disableDesignCanvasButton">
+                  Go To Design Canvas <i class="icon-popout"></i>
+                </button>
+              </div>
+
+              <div class="pull-right">
+                <app-view-offer [atoNames]="atoNames" [selectedAto]="selectedAto"
+                  (atoSelection)="showSelectedAtoView($event)">
+                </app-view-offer>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer' else selectedAtoView">
+            <app-ato-list [atoList]="atoList"></app-ato-list>
+          </div>
+
+          <ng-template #selectedAtoView>
+
+            <p class="base-margin-bottom no-margin">Status: {{atoTask['itemStatus']}}</p>
+
+
+            <h4>Modeling</h4>
+            <app-task-summary [tasks]="atoTask['modelTasks']">/</app-task-summary>
+
+          </ng-template>
+          
+          <app-pirate-ship-legend></app-pirate-ship-legend>
+
+        </div>
+
+        <div class="rightContent col-sm-12 col-md-3">
+          <app-right-panel [stakeData]="stakeholders" [offerName]="offerName" [derivedMM]="derivedMM"
+            [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference">
+          </app-right-panel>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
