@@ -357,7 +357,7 @@ export class OfferConstructDefaultValue {
   ImageSigningForXaas(questionList) {
     questionList.forEach(question => {
       if (question.question == "Image Signing") {
-        question.currentValue = "No Image signing (Digital Software Signatures) is not supported";
+        question.currentValue = "No, Image signing (Digital Software Signatures) is not supported";
       }
     });
     return questionList;
@@ -366,7 +366,7 @@ export class OfferConstructDefaultValue {
   ImageSigningForHardware(questionList) {
     questionList.forEach(question => {
       if (question.question == "Image Signing") {
-        question.currentValue = "Yes Image signing (Digital Software Signatures) is supported";
+        question.currentValue = "Yes, Image signing (Digital Software Signatures) is supported";
       }
     });
     return questionList;
@@ -533,7 +533,7 @@ export class OfferConstructDefaultValue {
   setSoftwareLicense(questionList) {
     questionList.forEach(question => {
       if (question.question == "Software License" || question.question == "Entitlement Term") {
-        question.rules.isDisabled = true;
+        question.rules.isDisabled = false;
       }
     });
 
@@ -541,13 +541,11 @@ export class OfferConstructDefaultValue {
   }
   setSoftwareLicenseDefault(questionList) {
     questionList.forEach(question => {
-        if (question.question == 'Service Type?') {
-            question.rules.isDisabled = true;
-        }
-        if (question.question == 'SOA Pricing') {
-            question.rules.isDisabled = true;
-        }
+      if (question.question == "Software License" || question.question == "Entitlement Term") {
+        question.rules.isDisabled = true;
+      }
     });
+
     return questionList;
   }
 
@@ -649,8 +647,6 @@ export class OfferConstructDefaultValue {
     });
   }
 
-
-  //////////////////// Test ///////////////////////////
 
   setDefaultInitialTerm(questionList) {
       let initialTermDefault;
