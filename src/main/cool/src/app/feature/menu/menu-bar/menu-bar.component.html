@@ -56,9 +56,7 @@
           </ng-template>
 
           <ng-template #oldOffer>
-            <span> {{offerName}}&nbsp;
-              <span class="offerID">(Offer ID {{currentOfferId}})</span>
-            </span>
+            <span> {{offerName}}</span>
             <button class="btn btn--icon btn--transparent">
               <span class="icon-more" (click)="basicOfferInfo.toggle($event)">
               </span>
@@ -70,10 +68,10 @@
 
       <div class="col-md-6 text-right">
         <button class="menu-btn" (click)="saveCurrentState()" *ngIf="showSave">
-            <span class="ico-save-offer"></span>
-            Save
+          <span class="ico-save-offer"></span>
+          Save
         </button>
-<!-- 
+        <!-- 
         <label class="menu-btn switch switch—large" *ngIf="showMarkcompleteToggle">
             <input type="checkbox" [(ngModel)]="markCompleteStatus" (change)="toggleMarkCompletePopup()"
             [disabled]="(markCompleteStatus==false&&canMarkComplete==false)||(markCompleteStatus==true&&canUncheckComplete==false)"/>
@@ -96,11 +94,7 @@
 </p-overlayPanel>
 
 <app-menu-bar-popup [show]="showPopup" [popupType]="popupType" (closePopup)="closePopup($event)"></app-menu-bar-popup>
-<app-mark-complete-popup 
-[offerId]="currentOfferId"
-[caseId]="caseId"
-[show]="showMarkcompletePopup"  
-[currentURL]="currentURL"
-[markCompleteStatus]="markCompleteStatus" 
-(closeMarkCompletePopup)="closeMarkCompletePopup($event)" 
-(confirmMarkComplete)="confirmMarkComplete($event)"></app-mark-complete-popup>
+<app-mark-complete-popup [offerId]="currentOfferId" [caseId]="caseId" [show]="showMarkcompletePopup"
+  [currentURL]="currentURL" [markCompleteStatus]="markCompleteStatus"
+  (closeMarkCompletePopup)="closeMarkCompletePopup($event)" (confirmMarkComplete)="confirmMarkComplete($event)">
+</app-mark-complete-popup>
