@@ -9,7 +9,7 @@ import { NgModule, APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core
 
 
 import { AppComponent } from './app.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { DashboardComponent } from '@app/feature/dashboard/dashboard.component';
 
 import { ActionsService } from './services/actions.service';
 import { MenuBarService } from './services/menu-bar.service';
@@ -38,10 +38,11 @@ import { CoreModule } from '@core/core.module';
 import { SharedModule } from '@shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
 
-import { MenuBarModule } from './menu/menu-bar.module';
-import { TaskBarModule } from './taskbar/task-bar.module';
-import { RightPanelModule } from './right-panel/right-panel.module';
-import { OfferDetailModule } from './offer-detail/offer-detail.module';
+import { MenuBarModule } from '@app/feature/menu/menu-bar.module';
+import { TaskBarModule } from '@app/feature/taskbar/task-bar.module';
+import { RightPanelModule } from '@app/feature/right-panel/right-panel.module';
+import { OfferDetailModule } from '@app/feature/offer-detail/offer-detail.module';
+
 import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from './reducers';
 import { CalendarModule } from 'primeng/calendar';
