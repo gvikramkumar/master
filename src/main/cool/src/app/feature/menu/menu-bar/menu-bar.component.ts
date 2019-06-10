@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { EnvironmentService } from '@env/environment.service';
 import { UserService } from '@app/core/services';
 import { MonetizationModelService } from '@app/services/monetization-model.service';
+import { Location } from '@angular/common';
 
 @Component({
     selector: 'app-menu-bar',
@@ -22,7 +23,7 @@ export class MenuBarComponent implements OnInit {
     @Input() showSave = false;
     @Output() onProceedToNext = new EventEmitter();
     @Output() updateMessage = new EventEmitter<string>();
-    @Output() getMarkCompleteStatus= new EventEmitter<boolean>();
+    @Output() getMarkCompleteStatus = new EventEmitter<boolean>();
 
 
 
@@ -43,16 +44,17 @@ export class MenuBarComponent implements OnInit {
     cancelStatusValid = true;
     currentUsername: any;
     designReviewRequestApprovalStatus: boolean;
-    markCompleteStatus:boolean;
+    markCompleteStatus: boolean;
 
     constructor(
         private router: Router,
+        private _location: Location,
         private userService: UserService,
         private menuBarService: MenuBarService,
-        private activatedRoute: ActivatedRoute,     
+        private activatedRoute: ActivatedRoute,
         private environmentService: EnvironmentService,
         private monetizationModelService: MonetizationModelService) {
-         
+
         this.currentURL = activatedRoute.snapshot['_routerState'].url;
 
         this.showPopup = false;
@@ -101,7 +103,7 @@ export class MenuBarComponent implements OnInit {
     }
 
     ngOnInit() {
-      
+
 
         this.items = [
             {
@@ -140,24 +142,24 @@ export class MenuBarComponent implements OnInit {
             },
 
         ];
-        
+
 
         this.menuBarService.getRubboTaxMenu(this.caseId).subscribe(data => {
             if (this.currentURL.includes('offerDimension')) {
                 debugger;
                 this.markCompleteStatus = data['plan'][0]['status'];
                 this.showMarkcompleteToggle = true;
-            } else if(this.currentURL.includes('offerSolutioning')){
+            } else if (this.currentURL.includes('offerSolutioning')) {
                 this.markCompleteStatus = data['plan'][1]['status'];
                 this.showMarkcompleteToggle = true;
-            } else if (this.currentURL.includes('offerConstruct')){
+            } else if (this.currentURL.includes('offerConstruct')) {
                 this.markCompleteStatus = data['plan'][2]['status'];
                 this.showMarkcompleteToggle = true;
             }
             this.getMarkCompleteStatus.next(this.markCompleteStatus);
             this.getCanUncheckCompleteStatus();
-         
-         
+
+
         })
 
         this.monetizationModelService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
@@ -178,7 +180,7 @@ export class MenuBarComponent implements OnInit {
             }
         });
 
-       
+
 
     }
 
@@ -287,6 +289,10 @@ export class MenuBarComponent implements OnInit {
         this.onProceedToNext.emit('false');
     }
 
+    goBack() {
+        this._location.back();
+    }
+
     gotoOfferviewDetails() {
         this.router.navigate(['/offerDetailView', this.offerId, this.caseId]);
     }
@@ -294,19 +300,19 @@ export class MenuBarComponent implements OnInit {
     getCanUncheckCompleteStatus() {
 
         this.menuBarService.getDesignReviewStatus(this.offerId).subscribe(data => {
-              this.designReviewRequestApprovalStatus = data['designReviewRequestApproval'];
-              if (this.designReviewRequestApprovalStatus == true){
+            this.designReviewRequestApprovalStatus = data['designReviewRequestApproval'];
+            if (this.designReviewRequestApprovalStatus == true) {
                 this.canUncheckComplete = false;
             } else {
                 this.canUncheckComplete = true;
             }
             this.disableMarkCompleteToggle();
-         })
-      
+        })
+
     }
 
     toggleMarkCompletePopup() {
-       this.showMarkcompletePopup = !this.showMarkcompletePopup;
+        this.showMarkcompletePopup = !this.showMarkcompletePopup;
     }
 
     closeMarkCompletePopup(message) {
@@ -321,16 +327,16 @@ export class MenuBarComponent implements OnInit {
         this.getMarkCompleteStatus.next(this.markCompleteStatus);
         this.disableMarkCompleteToggle();
     }
-    
+
     disableMarkCompleteToggle() {
 
-        if(this.markCompleteStatus === false && this.canMarkComplete === false) {
-           this.shouldDisable = true;
-        }
-         if(this.markCompleteStatus === true && this.canUncheckComplete === false) {
+        if (this.markCompleteStatus === false && this.canMarkComplete === false) {
             this.shouldDisable = true;
-         }
-         console.log('111:'+ this.shouldDisable)
+        }
+        if (this.markCompleteStatus === true && this.canUncheckComplete === false) {
+            this.shouldDisable = true;
+        }
+        console.log('111:' + this.shouldDisable)
     }
 }
 

@@ -67,10 +67,12 @@
       </div>
 
       <div class="col-md-6 text-right">
+
         <button class="menu-btn" (click)="saveCurrentState()" *ngIf="showSave">
           <span class="ico-save-offer"></span>
           Save
         </button>
+
         <!-- 
         <label class="menu-btn switch switch—large" *ngIf="showMarkcompleteToggle">
             <input type="checkbox" [(ngModel)]="markCompleteStatus" (change)="toggleMarkCompletePopup()"
@@ -79,10 +81,19 @@
             <span class="switch__label">Mark Complete</span>
         </label> -->
 
-        <button class="menu-btn" (click)="gotoOfferviewDetails()">
-          <span class="ico-offer-details"></span>
-          Offer Details
-        </button>
+        <div *ngIf="!currentOfferId">
+          <button (click)="goBack()" class="menu-btn">
+            <span class="icon-close"></span> Cancel
+          </button>
+        </div>
+
+        <div *ngIf="currentOfferId">
+          <button class="menu-btn" (click)="gotoOfferviewDetails()">
+            <span class="ico-offer-details"></span>
+            Offer Details
+          </button>
+        </div>
+
       </div>
 
     </div>

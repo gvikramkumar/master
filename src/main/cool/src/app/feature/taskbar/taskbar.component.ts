@@ -4,6 +4,7 @@ import { offerBuilderStepsEnum } from '@shared/enums';
 import { taskBarNavConstant } from '@shared/constants/taskBarNav.constants';
 import { SharedService } from '@shared/services/common/shared-service.service';
 import { ActionsService } from '@app/services/actions.service';
+import { ConfigurationService } from '../../core/services/configuration.service';
 @Component({
   selector: 'app-taskbar',
   templateUrl: './taskbar.component.html',
@@ -25,6 +26,7 @@ export class TaskbarComponent implements OnInit {
   offerId: string;
   selectedAto: string;
 
+  userName: string;
   userRole: boolean;
   isLastStep: boolean;
   currentStepIndex = 0;
@@ -39,7 +41,8 @@ export class TaskbarComponent implements OnInit {
     private router: Router,
     private sharedService: SharedService,
     private activatedRoute: ActivatedRoute,
-    private actionsService: ActionsService
+    private actionsService: ActionsService,
+    private configService: ConfigurationService
   ) { }
 
 
@@ -56,7 +59,8 @@ export class TaskbarComponent implements OnInit {
       this.sharedService.userFunctionalRole = role;
     });
 
-    
+    this.userName = this.configService.startupData.userName.split(' ')[0];
+
 
   }
 
@@ -70,20 +74,20 @@ export class TaskbarComponent implements OnInit {
       this.isLastStep = this.currentStepIndex < Object.keys(offerBuilderStepsEnum).length - 1 ? false : true;
     }
 
-     if (this.taskBarNavSteps[this.currentStepIndex].nxtBtnTitle === 'Offer Setup Workflow') {
+    if (this.taskBarNavSteps[this.currentStepIndex].nxtBtnTitle === 'Offer Setup Workflow') {
       this.actionsService.getMilestones(this.caseId).subscribe(data => {
         //Enable offer setup only when Strategy Review is Complete
         data['ideate'].forEach(element => {
-          if(element['subMilestone'] === 'Strategy Review' && element['status'] === 'Completed'){
+          if (element['subMilestone'] === 'Strategy Review' && element['status'] === 'Completed') {
             this.proceedToOfferSetup = false;
           }
         });
       });
-    }else{
+    } else {
       this.proceedToOfferSetup = false;
     }
 
-    if(this.taskBarNavSteps[this.currentStepIndex].nxtBtnTitle === 'Readiness Review') {
+    if (this.taskBarNavSteps[this.currentStepIndex].nxtBtnTitle === 'Readiness Review') {
       this.proceedToOfferSetup = true;
     }
   }
