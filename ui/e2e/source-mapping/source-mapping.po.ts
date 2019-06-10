@@ -11,12 +11,23 @@ export class SourceMappingPO extends CommonPO {
     return element.all(by.className('module-name'));
   }
 
-  getSelectCheckbox() {
-    return element(by.tagName('a')).element(by.className('checkbox')).element(by.className('checkbox__input'));
+  getSelectOption() {
+    return element(by.className('cui-virtual-scroll-content-wrapper')).element(by.tagName('div')).element(by.tagName('a')).element(by.tagName('label'));
   }
 
-  getSelectForModule(index) {
-    // return element.all(by.className('dropdown-chevron icon-chevron-down')).get(index);
+  getSelectCheckbox() {
+    return this.getSelectOption().element(by.className('checkbox__input'));
+  }
+
+  getSelectInputForModule(index) {
     return element.all(by.className('form-group__text')).get(index).element(by.tagName('input'));
+  }
+
+  checkIfCheckboxIsChecked() {
+    return this.getSelectOption().element(by.tagName('input')).getAttribute('checked');
+  }
+
+  waitForDropdownToShow() {
+    browser.wait(this.EC.presenceOf(element(by.className('dropdown active'))));
   }
 }

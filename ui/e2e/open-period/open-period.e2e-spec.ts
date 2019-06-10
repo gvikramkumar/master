@@ -11,7 +11,7 @@ describe(`Admin - Open period page`, () => {
   };
   beforeAll((done) => {
     // open-periods are tied to modules, so need to add a module to test its open-period
-    openPeriodPO.finJsonRequest('/api/module', 'POST', testModule)
+    openPeriodPO.finJsonRequest('/api/module', 'POST', testModule, undefined)
       .then(() => {
         openPeriodPO.navigateTo();
         openPeriodPO.waitForPageToLoad();
@@ -20,7 +20,7 @@ describe(`Admin - Open period page`, () => {
   });
 
   afterAll(done => {
-    openPeriodPO.finJsonRequest('/api/module/query-one', 'DELETE', undefined, {qs: {name: testModule.name}})
+    openPeriodPO.finJsonRequest('/api/module/query-one', 'DELETE', undefined, {name: testModule.name})
       .then(() => done());
   });
 

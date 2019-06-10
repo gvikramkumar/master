@@ -24,7 +24,7 @@ describe(`Admin - Source Page`, () => {
   };
 
   afterAll(done => {
-    sourcePO.finJsonRequest('/api/source/query-one', 'DELETE', undefined, {qs: {name: newSourceForUpdate.name}})
+    sourcePO.finJsonRequest('/api/source/query-one', 'DELETE', undefined, {name: newSourceForUpdate.name})
       .then(() => done());
   });
 

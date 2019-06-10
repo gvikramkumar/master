@@ -12,6 +12,7 @@ const schema = new Schema(
     abbrev: {type: String, required: true},
     name: {type: String, required: true},
     desc: String,
+    roles: String,
     status: {type: String, enum: ['A', 'I'], required: true},
     createdBy: {type: String, required: true},
     createdDate: {type: Date, required: true},
@@ -34,17 +35,6 @@ export class ModuleRepo extends RepoBase {
       .then(modules => this.addRoles(modules));
   }
 
-  removeQueryOne(filter) {
-    return super.getOneByQuery(filter)
-      .then(item => {
-        if (item) {
-          return item.remove();
-        } else {
-          throw new ApiError('Item not found.', null, 400);
-        }
-      });
-  }
-
   getActiveSortedByDisplayOrder() {
     return this.getMany({status: 'A', setSort: 'displayOrder'});
   }
@@ -59,9 +49,8 @@ export class ModuleRepo extends RepoBase {
 
   addRoles(modules) {
     return modules.map(module => {
-      const mod = module.toObject ? module.toObject() : module;
-      mod.roles = `${module.name}:Business Admin, ${module.name}:Super User, ${module.name}:Business User, ${module.name}:End User`.toLowerCase();
-      return mod;
+      module.set('roles', `${module.name}:Business Admin, ${module.name}:Super User, ${module.name}:Business User, ${module.name}:End User`.toLowerCase());
+      return module;
     });
   }
 }

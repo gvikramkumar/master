@@ -29,8 +29,8 @@ describe(`Admin - Module Page`, () => {
   afterAll(done => {
     const url = '/api/module/query-one';
     Promise.all([
-      modulePO.finJsonRequest(url, 'DELETE', undefined, {qs: {name: newTestModuleActive.name}}),
-      modulePO.finJsonRequest(url, 'DELETE', undefined, {qs: {name: newTestModuleInactive.name}})
+      modulePO.finJsonRequest(url, 'DELETE', undefined, {name: newTestModuleActive.name}),
+      modulePO.finJsonRequest(url, 'DELETE', undefined, {name: newTestModuleInactive.name})
     ]).then(() => done());
   });
 

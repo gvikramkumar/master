@@ -7,14 +7,16 @@ import * as os from 'os';
 export class CommonPO {
   container = element(by.className(`fin-container`));
   EC = protractor.ExpectedConditions;
-  finJsonRequest(_url, method, json, _options = {}) {
+
+  finJsonRequest(_url, method, json, queryString, _options = {}) {
     const options = {
       url: `http://${os.hostname()}:3001${_url}`,
       method,
       headers: {
         'Content-Type': 'application/json'
       },
-      json
+      json,
+      qs: queryString || {}
     };
     Object.assign(options, _options);
     return new Promise((resolve, reject) => {

@@ -26,6 +26,9 @@ export default class ModuleController extends ControllerBase {
 
   update(req, res, next) {
     const data = req.body;
+    // we don't want roles in the database but we needed them in the schema
+    // to make the query-one methods work after repo.addroles which had been calling toObject
+    delete data.roles;
     this.updatePromise(req, res, next)
       .then(item => {
         let promise;
