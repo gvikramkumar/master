@@ -66,15 +66,6 @@ export class HeaderComponent implements OnInit {
     });
 
     this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
-      // this.functionalRole = data.userMappings[0].functionalRole;
-      // this._pirshipService.setRole(this.functionalRole);
-      // this.userService.setFunctionalRole( this.functionalRole);
-      // if (this.functionalRole === 'BUPM' || this.functionalRole === 'CXPM') {
-      //   this.isBupmUser = true;
-      //   this.sharedService.userEventEmit.next(true);
-      // } else {
-      //   this.sharedService.userEventEmit.next(false);
-      // }
       if (data.userMappings[0].functionalRole.substring(0, 7) === "COOL - ") {
         this.functionalRole = data.userMappings[0].functionalRole.substring(7);
       } else {

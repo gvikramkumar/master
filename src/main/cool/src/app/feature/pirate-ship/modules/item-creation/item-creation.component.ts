@@ -81,7 +81,7 @@ export class ItemCreationComponent implements OnInit {
 
   ngOnInit() {
     this.functionalRole = this.configurationService.startupData.functionalRole;
-    if (this.functionalRole.includes('BUPM') || this.functionalRole.includes('SOE')) {
+    if (this.functionalRole.includes('Business Unit Product Manager (BUPM)') || this.functionalRole.includes('SOE')) {
       this.permission = true;
     }
     this.isPirateShipSubModule = true;

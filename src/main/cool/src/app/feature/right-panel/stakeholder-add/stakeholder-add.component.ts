@@ -147,7 +147,7 @@ export class StakeholderAddComponent implements OnInit {
             'stakeholderDefaults': false,
             'businessEntity': user['userMappings'][0]['businessEntity'],
             'functionalRole': user['userMappings'][0]['functionalRole'],
-            'offerRole': user['userMappings'][0]['functionalRole'] === 'BUPM' && user['_id'] === this.offerOwner
+            'offerRole': user['userMappings'][0]['functionalRole'] === 'Business Unit Product Manager (BUPM)' && user['_id'] === this.offerOwner
               ? 'Owner' : user['userMappings'][0]['functionalRole'],
             appRoleList: user['userMappings'][0]['appRoleList'] == null ?
               [] : user['userMappings'][0]['appRoleList'],
@@ -213,7 +213,7 @@ export class StakeholderAddComponent implements OnInit {
       '_id': user['userId'],
       'businessEntity': user['userMapping'][0]['businessEntity'],
       'functionalRole': user['userMapping'][0]['functionalRole'],
-      'offerRole': user['userMapping'][0]['functionalRole'] === 'BUPM' && user['userId'] === this.offerOwner
+      'offerRole': user['userMapping'][0]['functionalRole'] === 'Business Unit Product Manager (BUPM)' && user['userId'] === this.offerOwner
         ? 'Owner' : user['userMapping'][0]['functionalRole'],
       'stakeholderDefaults': true,
       'name': user['userName']
@@ -239,7 +239,7 @@ export class StakeholderAddComponent implements OnInit {
       '_id': user['_id'],
       'businessEntity': user['userMappings'][0]['businessEntity'],
       'functionalRole': user['userMappings'][0]['functionalRole'],
-      'offerRole': user['userMappings'][0]['functionalRole'] === 'BUPM' && user['_id'] === this.offerOwner
+      'offerRole': user['userMappings'][0]['functionalRole'] === 'Business Unit Product Manager (BUPM)' && user['_id'] === this.offerOwner
         ? 'Owner' : user['userMappings'][0]['functionalRole'],
       'stakeholderDefaults': user['stakeholderDefaults'] ? user['stakeholderDefaults'] : false,
       'name': user['userName']
