@@ -7,7 +7,7 @@ if (user && pass) {
   uri = `mongodb://${host}:${port}/${_db}`;
 }
 print(uri);
-// db = connect(uri);
+db = connect(uri);
 
 db.dfa_lookup.findOneAndUpdate({key: 'drivers'}, {$pull: {value: {name: /E2ETEST/}}});
 db.dfa_lookup.findOneAndUpdate({key: 'periods'}, {$pull: {value: {period: /E2ETEST/}}});
