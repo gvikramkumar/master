@@ -7,7 +7,6 @@ import { EnvironmentService } from '@env/environment.service';
 export class SharedService {
 
     userFunctionalRole: boolean;
-    userEventEmit = new EventEmitter();
     businessEntityUrl: string = this.environmentService.PDAF_API + '?columns=BE&distinct=true';
 
     constructor(

@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { EnvironmentService } from '@env/environment.service';
 import { UserService } from '@app/core/services';
 import { MonetizationModelService } from '@app/services/monetization-model.service';
+import { AccessManagementService } from '@app/services/access-management.service';
 
 @Component({
     selector: 'app-menu-bar',
@@ -44,6 +45,7 @@ export class MenuBarComponent implements OnInit {
     currentUsername: any;
     designReviewRequestApprovalStatus: boolean;
     markCompleteStatus:boolean;
+    public dispValue = true;
 
     constructor(
         private router: Router,
@@ -51,7 +53,8 @@ export class MenuBarComponent implements OnInit {
         private menuBarService: MenuBarService,
         private activatedRoute: ActivatedRoute,     
         private environmentService: EnvironmentService,
-        private monetizationModelService: MonetizationModelService) {
+        private monetizationModelService: MonetizationModelService,
+        private accessMgmtService: AccessManagementService) {
          
         this.currentURL = activatedRoute.snapshot['_routerState'].url;
 
@@ -102,6 +105,11 @@ export class MenuBarComponent implements OnInit {
 
     ngOnInit() {
       
+        this.accessMgmtService.modalSubject.subscribe((value: boolean) => {
+            setTimeout(() => {
+                this.dispValue = value;
+            }, 0)
+        })
 
         this.items = [
             {

@@ -7,6 +7,7 @@ import { HeaderService } from '../../services/header.service';
 import { UserService } from '../../services/user.service';
 import { ConfigurationService } from '../../services/configuration.service';
 import {PirateShipSharedService} from '@app/services/pirate-ship-shared.service';
+import { AccessManagementService } from '@app/services/access-management.service';
 
 
 
@@ -28,6 +29,11 @@ export class HeaderComponent implements OnInit {
   isBupmUser: Boolean = false;
   hasAdminAccess = false;
   selectedValues;
+  public userRole;
+  public rolesCollection = [];
+  public hideListElm = false;
+  public allowNavigate: boolean;
+  public addArrowClass = false;
 
   ngOnInit() {
 
@@ -64,10 +70,17 @@ export class HeaderComponent implements OnInit {
     private _pirshipService: PirateShipSharedService,
     private userService: UserService,
     private createOfferService: CreateOfferService,
-    private startupService: ConfigurationService, private sharedService: SharedService) {
+    private startupService: ConfigurationService, private sharedService: SharedService,
+    private accessMgmtServ: AccessManagementService) {
 
     this.headerService.getCurrentUser().subscribe((user: any) => {
       this.userId = user;
+      this.accessMgmtServ.sendFromUserRegistration
+      .subscribe((user:any)=> {
+        if(user.userId === this.userId) {
+          this.functionalRole = user.userMapping[0].functionalRole;
+        }
+      })
       this._pirshipService.setUserId(this.userId);
       this.headerService.getUserInfo(user).subscribe((data: any) => {
         this.userName = data[0].cn;
@@ -79,15 +92,23 @@ export class HeaderComponent implements OnInit {
     });
 
     this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
-      this.functionalRole = data.userMappings[0].functionalRole;
-      this._pirshipService.setRole(this.functionalRole);
-      this.userService.setFunctionalRole( this.functionalRole);
-      if (this.functionalRole === 'BUPM' || this.functionalRole === 'CXPM') {
-        this.isBupmUser = true;
-        this.sharedService.userEventEmit.next(true);
+      // this.functionalRole = data.userMappings[0].functionalRole;
+      // this._pirshipService.setRole(this.functionalRole);
+      // this.userService.setFunctionalRole( this.functionalRole);
+      // if (this.functionalRole === 'BUPM' || this.functionalRole === 'CXPM') {
+      //   this.isBupmUser = true;
+      //   this.sharedService.userEventEmit.next(true);
+      // } else {
+      //   this.sharedService.userEventEmit.next(false);
+      // }
+      if(data.userMappings[0].functionalRole.substring(0,7)==="COOL - ") {
+        this.functionalRole = data.userMappings[0].functionalRole.substring(7);
       } else {
-        this.sharedService.userEventEmit.next(false);
+        this.functionalRole = data.userMappings[0].functionalRole;
       }
+      this.accessMgmtServ.sendfunctionalRolRaw.next(data.userMappings[0].functionalRole);
+      this._pirshipService.setRole(this.functionalRole);
+      this.userService.setFunctionalRole(this.functionalRole);
     });
 
   }

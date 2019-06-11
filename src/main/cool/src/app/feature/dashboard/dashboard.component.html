@@ -192,7 +192,7 @@
                     <tr class="tr--th-small">
                       <th colspan="1">
                         <div class="row">
-                          <div class="col">
+                          <div appReadonly [DirectiveValue]="'Offer Launch'" class="col">
                             PRE-LAUNCH
                           </div>
                           <div class="col">
@@ -327,7 +327,7 @@
                         </div>
                         <div *ngIf="offerData.status !== null && offerData.status['offerMilestone'] == 'EOL'"
                           class="row no-gutters">
-                          <div class="col-md-12">
+                          <div  appReadonly [DirectiveValue]="'EOL'" class="col-md-12">
                             <div class="progressbar__label progressbarLabel-warning inMarketStyle">EOL</div>
                           </div>
                           <div class="progressbar progressbar--success" data-percentage="100">

@@ -28,6 +28,9 @@ import {
 
 import { CustomMinValidatorDirective } from './validators/custom-min-validator.directive';
 import { CustomRangeValidatorDirective } from './validators/custom-range-validator.directive';
+import { HiddenelemDirective } from './components/directives/hiddenelem.directive';
+import { ReadonlyDirective } from './components/directives/readonly.directive';
+import { ErrorpageComponent } from './components/errorpage/errorpage.component';
 
 
 @NgModule({
@@ -42,6 +45,9 @@ import { CustomRangeValidatorDirective } from './validators/custom-range-validat
     DynamicFormMultipleComponent,
     CustomMinValidatorDirective,
     CustomRangeValidatorDirective,
+    HiddenelemDirective,
+    ReadonlyDirective,
+    ErrorpageComponent,
   ],
   imports: [
     FormsModule,
@@ -89,6 +95,8 @@ import { CustomRangeValidatorDirective } from './validators/custom-range-validat
     TurbotaxviewComponent,
     PirateShipLegendComponent,
     DynamicFormMultipleComponent,
+    HiddenelemDirective,
+    ReadonlyDirective,
   ]
 })
 export class SharedModule { }

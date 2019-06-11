@@ -14,7 +14,7 @@
                 Immediate Action</span></h1>
           </div>
         </div>
-        <div class="col-md-6 text-right" *ngIf="userRole">
+        <div appHiddenelem [DirectiveValue]="'Create New Offer'" class="col-md-6 text-right">
           <button (click)="newBtnClick.next()" class="btn btn--white btn--cool">
             <span class="icon-add"></span>
             New Offer</button>
