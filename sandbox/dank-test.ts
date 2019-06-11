@@ -9,6 +9,9 @@ import Q from 'q';
 
 
 
+console.log(parseFloat(' 45.1 '));
+
+
 
 /*
 const err = new Error('bad thing');

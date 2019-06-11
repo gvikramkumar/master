@@ -970,7 +970,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       if (isNaN(sw)) {
         this.errs.push(`Manual Mix SW value, not a number: ${this.sm.manualMixSw}`);
       }
-      if (!isNaN(hw) && !isNaN(sw) && hw + sw !== 100.0) {
+      if (hw + sw !== 100.0) {
         this.errs.push(`Manual Mix HW/SW values do not add up to 100`);
       }
     }

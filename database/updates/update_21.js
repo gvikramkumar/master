@@ -23,7 +23,7 @@ db.dfa_server.createIndex({url: 1}, {unique: true});
 db.dfa_job.insertMany([
   {
     name: 'primary-determination',
-    period: 60 * 1000,
+    period: 5 * 1000,
     startTime: '',
     runOnStartup: true, // needs to run before start-primary-jobs to initialize from last settings
     primary: false,
@@ -31,12 +31,12 @@ db.dfa_job.insertMany([
   {
     name: 'start-primary-jobs',
     period: 5 * 1000,
-    runOnStartup: false, // need to let primary determination run once at startup to clear things out
+    runOnStartup: false, // need to let primary determination run once at startup to clear things out, so we'll not run on startup for this one
     primary: false,
   },
   {
     name: 'check-start-time-jobs',
-    period: 60 * 1000,
+    period: 5 * 1000,
     runOnStartup: false,
     primary: false,
   },

@@ -23,6 +23,8 @@ import DistiDirectUploadController from '../prof/disti-direct-upload/controller'
 import config from '../../config/get-config';
 import ServiceMapUploadController from '../prof/service-map-upload/controller';
 import ServiceTrainingUploadController from '../prof/service-training-upload/controller';
+import Q from 'q';
+import {handleQAllSettled} from '../../lib/common/q-allSettled';
 
 @injectable()
 export default class DatabaseController {
@@ -50,7 +52,7 @@ export default class DatabaseController {
     private distiDirectUploadController: DistiDirectUploadController,
     private serviceMapUploadController: ServiceMapUploadController,
     private serviceTrainingUploadController: ServiceTrainingUploadController
-    ) {
+  ) {
   }
 
   mongoToPgSyncPromise(dfa: ApiDfaData, syncMap: SyncMap, userId: string) {
@@ -127,13 +129,14 @@ export default class DatabaseController {
             {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}));
         }
         if (syncMap.dfa_prof_service_trngsplit_pctmap_upld) {
-          const fiscalYear = shUtil.fiscalYearFromFiscalMonth( dfa.fiscalMonths.prof);
+          const fiscalYear = shUtil.fiscalYearFromFiscalMonth(dfa.fiscalMonths.prof);
           promises.push(this.serviceTrainingUploadController.mongoToPgSync('dfa_prof_service_trngsplit_pctmap_upld', userId, log, elog,
             {fiscalYear}, {fiscalYear}));
         }
       })
       .then(() => {
-        return Promise.all(promises)
+        return Q.allSettled(promises)
+          .then(results => handleQAllSettled(null, 'qAllReject'))
           .then(() => {
             if (elog.length) {
               throw new ApiError('MongoToPgSync Errors.', {success: log, errors: elog});
@@ -143,7 +146,7 @@ export default class DatabaseController {
           })
           .catch(err => {
             const data = {success: log, errors: elog};
-            throw new ApiError(err.message, {error: err, syncResults: data});
+            throw new ApiError('Database sync error(s)', {error: err, syncResults: data});
             return;
             // this is how we'd not stop for errors (below) along with try/catch in controllerBase.mongoToPgSync()
             // but if we do this, we don't get stack trace from error. Need that stack trace to find the issue
@@ -161,7 +164,7 @@ export default class DatabaseController {
     this.mongoToPgSyncPromise(req.dfa, syncMap, req.user.id)
       .then(log => {
         res.json({success: log});
-    })
+      })
       .catch(next);
 
   }

@@ -6,7 +6,7 @@ const schema = new Schema(
   {
     url: {type: String, required: true},
     primary: {type: Boolean, required: true},
-    updatedDate: {type: Boolean, required: true}
+    heartbeat: {type: Date, required: true},
   },
   {collection: 'dfa_server'}
 );

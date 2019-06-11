@@ -4,13 +4,13 @@ import RepoBase from '../base-classes/repo-base';
 
 const schema = new Schema(
   {
+    serverUrl: {type: String, required: true},
     jobName: {type: String, required: true},
     userId: {type: String, required: true},
-    startDate: {type: Date, required: true},
-    endDate: {type: Date, required: true},
-    duration: {type: String, required: true},
-    status: {type: String, required: true},
-    data: Schema.Types.Mixed
+    message: String,
+    status: String,
+    data: Object,
+    timestamp: {type: Date, default: new Date()},
   },
   {collection: 'dfa_job_log'}
 );

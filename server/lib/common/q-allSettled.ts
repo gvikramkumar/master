@@ -67,7 +67,7 @@ Q.allSettled([p1, p2, p3, p4])
 */
 
 
-export function handleQAllSettled(dataArray, rejectName) {
+export function handleQAllSettled(dataArray?, rejectName?) {
    return (responses) => {
       responses = responses.map((response, i) => {
          response.index = i;

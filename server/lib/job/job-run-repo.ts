@@ -6,11 +6,11 @@ const schema = new Schema(
   {
     serverUrl: {type: String, required: true},
     name: {type: String, required: true},
-    active: {type: Boolean, default: false},
     userId: {type: String, required: true},
     startDate: {type: Date, required: true},
     endDate: {type: Date, required: true},
     duration: {type: String, required: true},
+    running: {type: Boolean, required: true},
     status: {type: String, required: true},
     data: Object
   },
@@ -18,7 +18,7 @@ const schema = new Schema(
 );
 
 @injectable()
-export default class JobRepo extends RepoBase {
+export default class JobRunRepo extends RepoBase {
 
   constructor() {
     super(schema, 'JobRun');

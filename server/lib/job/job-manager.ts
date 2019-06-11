@@ -9,6 +9,11 @@ import {finRequest} from '../common/fin-request';
 import {shUtil} from '../../../shared/misc/shared-util';
 import {ApiError} from '../common/api-error';
 import {svrUtil} from '../common/svr-util';
+import {SyncMap} from '../../../shared/models/sync-map';
+import Q from 'q';
+import {handleQAllSettled} from '../common/q-allSettled';
+import JobRunRepo from './job-run-repo';
+import JobLogRepo from './job-log-repo';
 
 class DfaJob {
   // properties
@@ -19,16 +24,29 @@ class DfaJob {
   runOnStartup: boolean;
   primary: boolean;
   primaryServerUrl: string;
+  active: boolean;
+
+  constructor(data) {
+    Object.assign(this, data);
+  }
 }
 
-class DfaJobRunner {
+type DfaJobFunction = (startup?: boolean, data?) => Promise<any>;
+
+class DfaJobRun {
+  serverUrl: string;
+  name: string;
   userId: string;
   startDate: Date;
   endDate: Date;
   duration: string;
-  active: boolean;
+  running: boolean;
   status: string;
   data: AnyObj;
+
+  constructor(data) {
+    Object.assign(this, data);
+  }
 }
 
 class DfaServer {
@@ -44,6 +62,8 @@ export class JobManager {
 
   constructor(
     private jobRepo: JobConfigRepo,
+    private jobRunRepo: JobRunRepo,
+    private jobLogRepo: JobLogRepo,
     private serverRepo: ServerRepo,
     private submeasureController: SubmeasureController,
     private ruleController: AllocationRuleController
@@ -61,7 +81,7 @@ export class JobManager {
       });
   }
 
-  getJobFcnFromName(name) {
+  getJobFcnFromName(name): DfaJobFunction {
     let fcn;
     switch (name) {
       case 'primary-determination':
@@ -87,18 +107,61 @@ export class JobManager {
    * handle running of all jobs, so one common place to check for:
    * isRunning, active, update runDate, etc
    */
+/*
   getRunJobFunction(job: DfaJob) {
-    return ((data, startup) => {
+    return ((startup, data?) => {
       // do all that junk
       const fcn = this.getJobFcnFromName(job.name);
     }).bind(this);
 
   }
+*/
+
+  log(serverUrl, jobName, message, status?, data?, userId = 'system') {
+    return this.jobLogRepo.addOne({serverUrl, jobName, message, status, data}, userId, false);
+  }
+
+  /*
+      serverUrl: {type: String, required: true},
+    name: {type: String, required: true},
+    userId: {type: String, required: true},
+    startDate: {type: Date, required: true},
+    endDate: {type: Date, required: true},
+    duration: {type: String, required: true},
+    running: {type: Boolean, required: true},
+    status: {type: String, required: true},
+    data: Object
+
+   */
+
+  runJob(job: DfaJob, startup = false, data?) {
+    /*
+    // job boilerwork goes here
+     * check running flag and if running, return promise.resolve or reject with name?? what would make sense there?
+     */
+    return this.jobRunRepo.getOneByQuery({name: job.name, serverUrl: this.serverUrl})
+      .then(_run => {
+        if (!_run) {
+          throw new ApiError(`JobManager.runJob: no job run for ${this.serverUrl} - ${job.name}`);
+        }
+        const run = new DfaJobRun(_run);
+        if (run.running) {
+          return this.log(this.serverUrl, job.name, 'job already running')
+          return Promise.resolve();
+        } else {
+          run.startDate = new Date();
+          delete run.endDate;
+          delete run.duration;
+          return this.getJobFcnFromName(job.name)(startup, data)
+            .then(result => this.log(this.serverUrl, job.name, 'job already running'))
+        }
+      });
+  }
 
   startPeriodicJob(job: DfaJob) {
     setInterval(this.getRunJobFunction(job), job.period);
     if (job.runOnStartup) {
-      this.getRunJobFunction(job)(null, true);
+      this.getRunJobFunction(job)(true);
     }
   }
 
@@ -107,12 +170,12 @@ export class JobManager {
     fcn(null, true);
   }
 
-  primaryDeterminationJob(serverInit: boolean) {
+  primaryDeterminationJob(startup: boolean) {
     const promises = [];
     this.serverRepo.getMany()
       .then(servers => {
         const thisServer = _.find(servers, {name: this.serverUrl});
-        if (serverInit && thisServer) {
+        if (startup && thisServer) {
           // remove yourself from primary jobs, all primary starts are done by startPrimaryJobs so we don't get duplicate primary jobs
           promises.push(this.jobRepo.updateMany({primary: true, primaryServerUrl: thisServer.url}, {$unset: {primaryServerUrl: ''}}));
         }
@@ -186,6 +249,8 @@ export class JobManager {
               // start primary periodic jobs
               primaryJobsNotRunning.filter(x => x.period)
                 .forEach(job => this.startPeriodicJob(job));
+              primaryJobsNotRunning.filter(x => x.startTime)
+                .forEach(job => this.startStartTimeJob(job));
               // update primary jobs to this serverUrl
               return this.jobRepo.updateMany({_id: {$in: [primaryJobsNotRunning.map(x => x._id)]}}, {$set: {primaryServerUrl: this.serverUrl}});
             }
@@ -207,12 +272,16 @@ export class JobManager {
       this.jobRepo.getMany()
     ])
       .then(results => {
-        const primaries = results[0];
+        const primaryServers = results[0];
         const jobs = results[1];
-        if (primaries.length > 1) {
-          const removePrimaryServers = _.orderBy(primaries, ['updatedDate'], ['desc']);
-          primaryServer = removePrimaryServers.shift();
-          promises.push(this.serverRepo.updateMany({_id: {$in: removePrimaryServers.map(x => x._id)}}, {$set: {primary: false}}));
+        if (primaryServers.length > 1) {
+          const primaryJobServerUrl = jobs.filter(x => x.primary).map(x => x.serverUrl)[0];
+          primaryServer = _.find(primaryServers, {url: primaryJobServerUrl});
+          if (primaryServer) {
+          } else {
+            primaryServer = _.orderBy(primaryServers, ['updatedDate'], ['desc'])[0];
+          }
+          promises.push(this.serverRepo.updateMany({_id: {$ne: primaryServer._id}}, {$set: {primary: false}}));
         }
         const removePrimaryForJobs = [];
         jobs.filter(x => x.primary && x.primaryServerUrl)
@@ -230,20 +299,28 @@ export class JobManager {
 
   // checks startTime jobs (primary on primary server as well) for last run and start time, then runs and updates runtime in express app global or db???
   checkStartTimeJobsJob() {
+    return Promise.resolve();
   }
 
   // periodic jobs (15 min or so) that copies mongo data to postgres
-  databaseSyncJob(syncMap) {
-
+  databaseSyncJob(startup, syncMap?: SyncMap) {
+    // can be called fron /api/rul-job (with syncMap then) or from periodic job (no syncMap, so syncs then)
+    return Promise.resolve();
   }
 
   // startTime job that runs once a day to update cache after nightly data updates
   cacheRefreshJob() {
+    const promises = []; // push all refreshes or... done somewhere else??
+    Q.allSettled(promises)
+      .then(results => handleQAllSettled(null, 'qAllReject'));
   }
 
   approvelEmailReminderJob() {
-    this.submeasureController.approvalEmailReminder('submeasure');
-    this.ruleController.approvalEmailReminder('rule');
+    Q.allSettled([
+      this.submeasureController.approvalEmailReminder('submeasure'),
+      this.ruleController.approvalEmailReminder('rule')
+    ])
+      .then(results => handleQAllSettled(null, 'qAllReject'));
   }
 
 }
