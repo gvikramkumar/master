@@ -89,18 +89,12 @@ export function addGlobalData() {
         const modules = results[1];
         const openPeriods = results[2];
         modules.forEach(mod => {
-          if (mod.status === 'A') {
-            mod.fiscalMonth = _.find(openPeriods, {moduleId: mod.moduleId}).fiscalMonth;
-          }
+          const openPeriod = _.find(openPeriods, {moduleId: mod.moduleId});
+          mod.fiscalMonth = openPeriod && openPeriod.fiscalMonth;
         });
         const fiscalMonths: AnyObj = {};
-        modules.forEach(mod => {
-          if (mod.status === 'A') {
-            fiscalMonths[mod.abbrev] = mod.fiscalMonth;
-          }
-        });
-
-        const dfa = new ApiDfaData({
+        modules.forEach(mod => fiscalMonths[mod.abbrev] = mod.fiscalMonth);
+         const dfa = new ApiDfaData({
           req: req,
           user: req.user,
           itadminEmail: lookups[0],

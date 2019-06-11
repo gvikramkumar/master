@@ -6,7 +6,7 @@ import {authUnit} from '../../../lib/middleware/auth-unit';
 const ctrl = injector.get(ModuleController);
 
 export const moduleRouter = Router()
-  .get('/', ctrl.getMany.bind(ctrl))
+  .get('/', ctrl.getManyWithRoles.bind(ctrl))
   .post('/', ctrl.addOne.bind(ctrl))
   .post('/call-method/:method', ctrl.callMethod.bind(ctrl))
   .get('/:id', ctrl.getOne.bind(ctrl))

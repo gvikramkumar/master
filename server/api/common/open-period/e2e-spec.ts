@@ -21,11 +21,6 @@ describe(`Open Period endpoint tests`, () => {
     });
   });
 
-  afterAll(done => {
-    openPeriodRepo.removeQueryOne({moduleId: 12})
-      .then(() => done());
-  });
-
   it(`should get many`, (done) => {
     request(server)
       .get(endpoint)
@@ -71,5 +66,12 @@ describe(`Open Period endpoint tests`, () => {
               });
           });
       });
+  });
+
+  it(`should remove the open period`, done => {
+    request(server)
+      .delete(`${endpoint}/query-one`)
+      .query({moduleId: testOpenPeriod.moduleId})
+      .expect(200, done);
   });
 });

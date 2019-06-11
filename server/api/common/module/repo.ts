@@ -2,8 +2,6 @@ import {injectable} from 'inversify';
 import {Schema} from 'mongoose';
 import RepoBase from '../../../lib/base-classes/repo-base';
 import AnyObj from '../../../../shared/models/any-obj';
-import {ApiError} from '../../../lib/common/api-error';
-
 
 const schema = new Schema(
   {
@@ -12,7 +10,6 @@ const schema = new Schema(
     abbrev: {type: String, required: true},
     name: {type: String, required: true},
     desc: String,
-    roles: String,
     status: {type: String, enum: ['A', 'I'], required: true},
     createdBy: {type: String, required: true},
     createdDate: {type: Date, required: true},
@@ -30,17 +27,17 @@ export class ModuleRepo extends RepoBase {
     super(schema, 'Module');
   }
 
-  getMany(filter: AnyObj = {}) {
+  getManyWithRoles(filter: AnyObj = {}) {
     return super.getMany(filter)
       .then(modules => this.addRoles(modules));
   }
 
   getActiveSortedByDisplayOrder() {
-    return this.getMany({status: 'A', setSort: 'displayOrder'});
+    return this.getManyWithRoles({status: 'A', setSort: 'displayOrder'});
   }
 
   getNonAdminSortedByDisplayOrder() {
-    return this.getMany({moduleId: {$ne: 99}, setSort: 'displayOrder'});
+    return this.getManyWithRoles({moduleId: {$ne: 99}, setSort: 'displayOrder'});
   }
 
   getAutoIncrementValue() {
@@ -49,8 +46,9 @@ export class ModuleRepo extends RepoBase {
 
   addRoles(modules) {
     return modules.map(module => {
-      module.set('roles', `${module.name}:Business Admin, ${module.name}:Super User, ${module.name}:Business User, ${module.name}:End User`.toLowerCase());
-      return module;
+      const mod = module.toObject ? module.toObject() : module;
+      mod.roles = `${module.name}:Business Admin, ${module.name}:Super User, ${module.name}:Business User, ${module.name}:End User`.toLowerCase();
+      return mod;
     });
   }
 }

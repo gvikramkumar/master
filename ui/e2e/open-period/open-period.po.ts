@@ -22,4 +22,9 @@ export class OpenPeriodPO extends CommonPO {
   getDropdownOption(index) {
     return element(by.className('cui-virtual-scroll-content-wrapper')).all(by.tagName('div')).get(index).element(by.tagName(`a`));
   }
+
+  pageRefresh() {
+    browser.refresh();
+    this.waitForPageToLoad();
+  }
 }
