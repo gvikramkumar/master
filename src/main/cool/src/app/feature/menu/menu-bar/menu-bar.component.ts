@@ -110,8 +110,8 @@ export class MenuBarComponent implements OnInit {
         this.accessMgmtService.modalSubject.subscribe((value: boolean) => {
             setTimeout(() => {
                 this.dispValue = value;
-            }, 0)
-        })
+            }, 0);
+        });
 
         this.items = [
             {
@@ -154,7 +154,6 @@ export class MenuBarComponent implements OnInit {
 
         this.menuBarService.getRubboTaxMenu(this.caseId).subscribe(data => {
             if (this.currentURL.includes('offerDimension')) {
-                debugger;
                 this.markCompleteStatus = data['plan'][0]['status'];
                 this.showMarkcompleteToggle = true;
             } else if (this.currentURL.includes('offerSolutioning')) {
@@ -169,26 +168,6 @@ export class MenuBarComponent implements OnInit {
 
 
         })
-
-        this.monetizationModelService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
-            this.offerBuilderdata = data;
-            this.offerBuilderdata['BEList'] = [];
-            this.offerBuilderdata['BUList'] = [];
-            if (this.offerBuilderdata['primaryBEList'] != null) {
-                this.offerBuilderdata['BEList'] = this.offerBuilderdata['BEList'].concat(this.offerBuilderdata['primaryBEList']);
-            }
-            if (this.offerBuilderdata['secondaryBEList'] != null) {
-                this.offerBuilderdata['BEList'] = this.offerBuilderdata['BEList'].concat(this.offerBuilderdata['secondaryBEList']);
-            }
-            if (this.offerBuilderdata['primaryBUList'] != null) {
-                this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['primaryBUList']);
-            }
-            if (this.offerBuilderdata['secondaryBUList'] != null) {
-                this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['secondaryBUList']);
-            }
-        });
-
-
 
     }
 
@@ -309,7 +288,7 @@ export class MenuBarComponent implements OnInit {
 
         this.menuBarService.getDesignReviewStatus(this.offerId).subscribe(data => {
             this.designReviewRequestApprovalStatus = data['designReviewRequestApproval'];
-            if (this.designReviewRequestApprovalStatus == true) {
+            if (this.designReviewRequestApprovalStatus === true) {
                 this.canUncheckComplete = false;
             } else {
                 this.canUncheckComplete = true;
@@ -323,14 +302,14 @@ export class MenuBarComponent implements OnInit {
         this.showMarkcompletePopup = !this.showMarkcompletePopup;
     }
 
-    closeMarkCompletePopup(message) {
+    closeMarkCompletePopup() {
         this.showMarkcompletePopup = false;
         this.markCompleteStatus = !this.markCompleteStatus;
         this.getMarkCompleteStatus.next(this.markCompleteStatus);
         this.disableMarkCompleteToggle();
     }
 
-    confirmMarkComplete(message) {
+    confirmMarkComplete() {
         this.showMarkcompletePopup = false;
         this.getMarkCompleteStatus.next(this.markCompleteStatus);
         this.disableMarkCompleteToggle();
@@ -344,7 +323,7 @@ export class MenuBarComponent implements OnInit {
         if (this.markCompleteStatus === true && this.canUncheckComplete === false) {
             this.shouldDisable = true;
         }
-        console.log('111:' + this.shouldDisable);
+
     }
 
 }

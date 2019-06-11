@@ -1,5 +1,6 @@
-<div class="modal" [hidden]="!show">
+<div class="modal" *ngIf="show">
   <div class="modal__dialog">
+
       <div class="modal__content"  >
           <a class="modal__close" (click)="close()"><span class="icon-close"></span></a>
           <div class="modal__header">
@@ -39,5 +40,6 @@
             <button type="button"class="btn btn--primary" (click)="confirm()">Mark Complete</button>
         </div>
     </div> -->
+
   </div>
 </div>

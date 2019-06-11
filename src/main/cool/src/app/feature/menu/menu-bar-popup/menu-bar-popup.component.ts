@@ -23,6 +23,7 @@ export class MenuBarPopupComponent implements OnInit {
   allowSubmit: boolean = false;
   buttonIsDisabled: boolean = false;
 
+  // ---------------------------------------------------------------------
 
   constructor(private activatedRoute: ActivatedRoute,
     private menuBarService: MenuBarService,
@@ -34,18 +35,12 @@ export class MenuBarPopupComponent implements OnInit {
     });
   }
 
+  // ---------------------------------------------------------------------
+
   ngOnInit() {
   }
 
-  enableSubmit(event): void {
-    let passedString = event.target.value;
-    let inputValue = passedString.trim();
-    if (inputValue === "" || inputValue === null) {
-      this.buttonIsDisabled = false;
-    } else {
-      this.buttonIsDisabled = true;
-    }
-  }
+  // ---------------------------------------------------------------------
 
   getPopupTitle() {
     if (this.popupType === 'hold') {
@@ -57,14 +52,26 @@ export class MenuBarPopupComponent implements OnInit {
     }
   }
 
+  enableSubmit(event): void {
+    const passedString = event.target.value;
+    const inputValue = passedString.trim();
+    if (inputValue === "" || inputValue === null) {
+      this.buttonIsDisabled = false;
+    } else {
+      this.buttonIsDisabled = true;
+    }
+  }
+
+  // ---------------------------------------------------------------------
+
   close() {
     this.closePopup.next('');
     this.reason = '';
   }
-  
-  
+
   submit() {
-    let holdData = {};
+
+    const holdData = {};
     holdData['taskId'] = '';
     holdData['userId'] = this.userService.getUserId();
     holdData['caseId'] = this.caseId;
@@ -73,7 +80,7 @@ export class MenuBarPopupComponent implements OnInit {
     holdData['action'] = 'hold';
     holdData['comment'] = this.reason;
 
-    let cancelData = {};
+    const cancelData = {};
     cancelData['taskId'] = '';
     cancelData['userId'] = this.userService.getUserId();
     cancelData['caseId'] = this.caseId;
@@ -93,5 +100,7 @@ export class MenuBarPopupComponent implements OnInit {
     }
 
   }
+
+  // ---------------------------------------------------------------------
 
 }
