@@ -132,10 +132,10 @@
   cursor: pointer;
   margin: 5px 10px 5px 20px;
 }
-.menu-btn:last-child {
+/* .menu-btn:last-child {
   border-left:solid 1px #39393B;
   padding-left: 25px;
-}
+} */
 .menu-btn span[class*="icon-"]{
   display: block;
   width: 24px;

@@ -1,11 +1,12 @@
 <app-menu-bar *ngIf="dimensionMode" [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId"
-  [offerName]="offerBuilderdata['offerName']" [stakeData]="stakeholders"  [canMarkComplete]="canMarkComplete" (updateMessage)="updateMessage($event)"
-  [showSave]="true"   (getMarkCompleteStatus)="getMarkCompleteStatus($event)" (onProceedToNext)="proceedToOfferSolution($event)">
+  [offerName]="offerBuilderdata['offerName']" [stakeData]="stakeholders" [canMarkComplete]="canMarkComplete"
+  (updateMessage)="updateMessage($event)" [showSave]="true" (getMarkCompleteStatus)="getMarkCompleteStatus($event)"
+  (onProceedToNext)="proceedToOfferSolution($event)">
 </app-menu-bar>
 
 <app-menu-bar *ngIf="!dimensionMode" [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId"
   [offerName]="offerBuilderdata['offerName']" [stakeData]="stakeholders" (updateMessage)="updateMessage($event)"
-  [showSave]="false"> 
+  [showSave]="false">
 </app-menu-bar>
 
 <div class="content">
@@ -22,15 +23,6 @@
         <div class="row">
 
           <div class="leftContent col-sm-12 col-md-9">
-
-            <div class="alert half-margin-bottom"
-              [ngClass]="{'alert--info':message['color']==='black','alert--success': message['color']==='green','alert--danger': message['color']==='red','alert--warning': message['color']==='yellow'}">
-              <div class="alert__icon mm-alert-icon"
-                [ngClass]="{'icon-info-outline': message['color']==='black','icon-error-outline': message['color']==='red','icon-check-outline': message['color']==='green', 'icon-warning-outline': message['color']==='yellow'}">
-              </div>
-              <div class="alert__message" [ngStyle]="{'color': message['color']}">
-                <b>{{message['contentHead']}}</b>&nbsp;{{message['content']}}</div>
-            </div>
 
             <div class="panel-wrapper mt-20">
 

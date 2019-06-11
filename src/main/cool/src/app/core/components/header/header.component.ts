@@ -1,15 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { SharedService } from '@shared/services/common/shared-service.service';
 
-import { CreateOfferService } from '@shared/services';
-import { HeaderService } from '../../services/header.service';
 import { UserService } from '../../services/user.service';
+import { HeaderService } from '../../services/header.service';
+import { CreateOfferService, DashboardService } from '@shared/services';
 import { ConfigurationService } from '../../services/configuration.service';
-import {PirateShipSharedService} from '@app/services/pirate-ship-shared.service';
 import { AccessManagementService } from '@app/services/access-management.service';
-
-
+import { PirateShipSharedService } from '@app/services/pirate-ship-shared.service';
 
 
 @Component({
@@ -20,20 +16,78 @@ import { AccessManagementService } from '@app/services/access-management.service
 })
 export class HeaderComponent implements OnInit {
 
+  userId;
   userInfo;
   userName;
   functionalRole;
-  userId;
+  selectedValues;
+
+  hasAdminAccess = false;
+  isBupmUser: Boolean = false;
   emailPrefOptions: any[] = [];
   notificationPrefOptions: any[] = [];
-  isBupmUser: Boolean = false;
-  hasAdminAccess = false;
-  selectedValues;
+
+  totalActionCount: number;
+
   public userRole;
   public rolesCollection = [];
   public hideListElm = false;
   public allowNavigate: boolean;
   public addArrowClass = false;
+
+  // -----------------------------------------------------------------------------------------
+
+  constructor(
+    private userService: UserService,
+    private headerService: HeaderService,
+    private dashboardService: DashboardService,
+    private startupService: ConfigurationService, 
+    private createOfferService: CreateOfferService,
+    private _pirshipService: PirateShipSharedService,
+
+    private accessMgmtServ: AccessManagementService) {
+
+    this.headerService.getCurrentUser().subscribe((user: any) => {
+      this.userId = user;
+      this.accessMgmtServ.sendFromUserRegistration
+        .subscribe((user: any) => {
+          if (user.userId === this.userId) {
+            this.functionalRole = user.userMapping[0].functionalRole;
+          }
+        })
+      this._pirshipService.setUserId(this.userId);
+      this.headerService.getUserInfo(user).subscribe((data: any) => {
+        this.userName = data[0].cn;
+        this._pirshipService.setUserName(this.userName);
+      });
+
+      this.hasAdminAccess = this.startupService.startupData['hasAdminAccess'];
+
+    });
+
+    this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
+      // this.functionalRole = data.userMappings[0].functionalRole;
+      // this._pirshipService.setRole(this.functionalRole);
+      // this.userService.setFunctionalRole( this.functionalRole);
+      // if (this.functionalRole === 'BUPM' || this.functionalRole === 'CXPM') {
+      //   this.isBupmUser = true;
+      //   this.sharedService.userEventEmit.next(true);
+      // } else {
+      //   this.sharedService.userEventEmit.next(false);
+      // }
+      if (data.userMappings[0].functionalRole.substring(0, 7) === "COOL - ") {
+        this.functionalRole = data.userMappings[0].functionalRole.substring(7);
+      } else {
+        this.functionalRole = data.userMappings[0].functionalRole;
+      }
+      this.accessMgmtServ.sendfunctionalRolRaw.next(data.userMappings[0].functionalRole);
+      this._pirshipService.setRole(this.functionalRole);
+      this.userService.setFunctionalRole(this.functionalRole);
+    });
+
+  }
+  // -----------------------------------------------------------------------------------------
+
 
   ngOnInit() {
 
@@ -64,54 +118,21 @@ export class HeaderComponent implements OnInit {
         name: 'Once Daily',
         value: false
       }];
-  }
 
-  constructor(private headerService: HeaderService, private router: Router,
-    private _pirshipService: PirateShipSharedService,
-    private userService: UserService,
-    private createOfferService: CreateOfferService,
-    private startupService: ConfigurationService, private sharedService: SharedService,
-    private accessMgmtServ: AccessManagementService) {
+    this.dashboardService.getMyActionsList()
+      .subscribe(resActionsAndNotifications => {
 
-    this.headerService.getCurrentUser().subscribe((user: any) => {
-      this.userId = user;
-      this.accessMgmtServ.sendFromUserRegistration
-      .subscribe((user:any)=> {
-        if(user.userId === this.userId) {
-          this.functionalRole = user.userMapping[0].functionalRole;
+        if (resActionsAndNotifications && resActionsAndNotifications.actionList) {
+          const pendingActionCount = resActionsAndNotifications.pendingTasksCount;
+          const needImmediateActionCount = resActionsAndNotifications.immediateTasksCount;
+          this.totalActionCount = pendingActionCount + needImmediateActionCount;
         }
-      })
-      this._pirshipService.setUserId(this.userId);
-      this.headerService.getUserInfo(user).subscribe((data: any) => {
-        this.userName = data[0].cn;
-        this._pirshipService.setUserName(this.userName);
+
       });
 
-      this.hasAdminAccess = this.startupService.startupData['hasAdminAccess'];
-
-    });
-
-    this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
-      // this.functionalRole = data.userMappings[0].functionalRole;
-      // this._pirshipService.setRole(this.functionalRole);
-      // this.userService.setFunctionalRole( this.functionalRole);
-      // if (this.functionalRole === 'BUPM' || this.functionalRole === 'CXPM') {
-      //   this.isBupmUser = true;
-      //   this.sharedService.userEventEmit.next(true);
-      // } else {
-      //   this.sharedService.userEventEmit.next(false);
-      // }
-      if(data.userMappings[0].functionalRole.substring(0,7)==="COOL - ") {
-        this.functionalRole = data.userMappings[0].functionalRole.substring(7);
-      } else {
-        this.functionalRole = data.userMappings[0].functionalRole;
-      }
-      this.accessMgmtServ.sendfunctionalRolRaw.next(data.userMappings[0].functionalRole);
-      this._pirshipService.setRole(this.functionalRole);
-      this.userService.setFunctionalRole(this.functionalRole);
-    });
-
   }
+
+  // -----------------------------------------------------------------------------------------
 
   emailCheckBoxClicked(name) {
     this.emailPrefOptions.forEach(pref => {
@@ -128,5 +149,8 @@ export class HeaderComponent implements OnInit {
       }
     });
   }
+
+  // -----------------------------------------------------------------------------------------
+
 
 }
