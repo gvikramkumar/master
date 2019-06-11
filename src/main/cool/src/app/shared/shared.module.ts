@@ -45,6 +45,9 @@ import { ErrorpageComponent } from './components/errorpage/errorpage.component';
     DynamicFormMultipleComponent,
     CustomMinValidatorDirective,
     CustomRangeValidatorDirective,
+    HiddenelemDirective,
+    ReadonlyDirective,
+    ErrorpageComponent,
   ],
   imports: [
     FormsModule,
@@ -60,9 +63,6 @@ import { ErrorpageComponent } from './components/errorpage/errorpage.component';
     MultiSelectModule,
     AutoCompleteModule,
     ConfirmDialogModule,
-    HiddenelemDirective,
-    ReadonlyDirective,
-    ErrorpageComponent,
     BsDatepickerModule.forRoot()
   ],
   providers: [
@@ -95,6 +95,8 @@ import { ErrorpageComponent } from './components/errorpage/errorpage.component';
     TurbotaxviewComponent,
     PirateShipLegendComponent,
     DynamicFormMultipleComponent,
+    HiddenelemDirective,
+    ReadonlyDirective,
   ]
 })
 export class SharedModule { }
