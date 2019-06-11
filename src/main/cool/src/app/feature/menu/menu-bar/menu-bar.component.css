@@ -192,3 +192,10 @@ span.menu-label {
     background-size: contain;
     margin: 10px auto 8px;
 }
+
+
+.readOnlyClas{
+    pointer-events: none;
+    cursor: not-allowed !important;
+}
+

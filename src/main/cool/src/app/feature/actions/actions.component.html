@@ -66,7 +66,7 @@
                             class="offerDesc">{{actionData.actionDesc}}</span>
                           <span *ngIf="actionData.attachment == true" class="offerDesc"
                             (click)="getActionDetailsFile(actionData.caseId)"><a>{{actionData.actionDesc}}</a></span>
-                          <span (click)="showActionPopUp($event,actionData,popCommentContent)"
+                          <span appHiddenelem [DirectiveValue]="'Actions'" (click)="showActionPopUp($event,actionData,popCommentContent)"
                             class="icon-comment pull-right" pTooltip="Comments" placement="top"></span>
                         </span>
                         <span *ngIf="col.field == 'createdBy'">
@@ -108,7 +108,7 @@
           <div class="pull-right">
             <span class="icon-close" (click)="closeActionDailog()"></span>
           </div>
-          <div class="card__header">
+          <div appHiddenelem [DirectiveValue]="'Actions'" class="card__header">
             <h5 class="card__title">Create an Action</h5>
           </div>
         </div>

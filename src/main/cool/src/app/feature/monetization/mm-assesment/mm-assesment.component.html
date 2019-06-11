@@ -47,7 +47,7 @@
 
                           <div class="row">
                             <div class="col-md-2 margin-auto">{{subGroup}}</div>
-                            <div class="col-md-10">
+                            <div appReadonly [DirectiveValue]="'Offer Model Evaluation'" class="col-md-10">
                               <button *ngFor="let attribute of groupData[activeTabIndex][subGroup]" [ngClass]="{
                               'gray-button':attribute.type===1 && attribute.status===-1,
                               'mm-model-btn-active':attribute.status===1||attribute.type===2,

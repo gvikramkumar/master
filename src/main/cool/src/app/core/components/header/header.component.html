@@ -23,18 +23,18 @@
               <div class="tab__heading" title="Dashboard">Dashboard</div>
             </a>
           </li>
-          <li routerLinkActive="active">
+          <li  [ngClass]="{'visibHidden':hideListElm}" routerLinkActive="active">
             <a routerLink="/coolOffer">
               <div class="tab__heading" title="Offers" *ngIf="isBupmUser">Offers</div>
             </a>
           </li>
 
-          <li routerLinkActive="active">
+          <li  [ngClass]="{'visibHidden':hideListElm}" routerLinkActive="active">
             <a routerLink="/action">
               <div class="tab__heading" title="Actions">Actions</div>
             </a>
           </li>
-          <li routerLinkActive="active">
+          <li  [ngClass]="{'visibHidden':hideListElm}" routerLinkActive="active">
             <a routerLink="/accessManagement">
               <div class="tab__heading" title="Access Management" *ngIf="hasAdminAccess">Access Management</div>
             </a>

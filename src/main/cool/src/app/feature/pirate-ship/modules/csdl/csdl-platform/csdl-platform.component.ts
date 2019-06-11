@@ -219,7 +219,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * When user select is Csdl Required 'No' radio button 
+   * When user select is Csdl Required 'No' radio button
    * @ param event
    */
   onCsdlNotRequired() {

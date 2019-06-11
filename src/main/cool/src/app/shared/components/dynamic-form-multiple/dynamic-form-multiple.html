@@ -27,8 +27,8 @@
           <div class="btns-right pull-right flex-center-vertical">
             <!-- <a href="#" class="base-margin-right"><span class="icon-export--cool half-margin-right"></span> Export as .XLS</a> -->
             <button class="display-none"></button>
-            <button class="btn btn--primary" [disabled]="itemNameInvalid" (click)='saveForm()'>Save</button>
-            <button class="btn btn--secondary" (click)="confirmDialog()">Cancel</button>
+            <button appHiddenelem appReadonly [DirectiveValue]="'Offer Construct'" class="btn btn--primary" [disabled]="itemNameInvalid" (click)='saveForm()'>Save</button>
+            <button appHiddenelem appReadonly [DirectiveValue]="'Offer Construct'" class="btn btn--secondary" (click)="confirmDialog()">Cancel</button>
             <a *ngIf="isItemCreation" href="javascript: void(0);" class="base-margin-right"
               (click)='downloadZip()'><span class="icon-export--cool half-margin-left"></span> Export as Excel</a>
           </div>
@@ -46,7 +46,7 @@
             <p-header>
               {{item.key}}
             </p-header>
-            <div class="row">
+            <div  appReadonly [DirectiveValue]="'Offer Construct'"   class="row">
               <div class="search-buffer">
                 <div class="form-group input--icon half-margin-bottom">
                   <div class="form-group__text search-icon">
@@ -86,7 +86,7 @@
                 </div>
               </div>
             </div>
-            <div class="row">
+            <div  appReadonly [DirectiveValue]="'Offer Construct'"   class="row">
               <!-- Accordian content starts-->
               <div class="col-sm-2" style="padding: 0;overflow: hidden;">
                 <!-- Unique -->
@@ -165,12 +165,14 @@
                                       (blur)="trimSpaces(pInfo, $event)"  [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']" #itemName="ngModel">
-                                  </div>
+
+                              
                                   <div class="tool-tip  slideIn"
                                     *ngIf="pInfo.rules.validationMessage != '' && pInfo.rules.isvalid == false">
                                     <ul>
                                       <li>{{pInfo.rules.validationMessage}}</li>
                                     </ul>
+                                  </div>
                                   </div>
                               </div>
                               <div class="form-group input--compressed" *ngIf="i !== 0">

@@ -5,6 +5,8 @@ import { taskBarNavConstant } from '@shared/constants/taskBarNav.constants';
 import { SharedService } from '@shared/services/common/shared-service.service';
 import { ActionsService } from '@app/services/actions.service';
 import { ConfigurationService } from '../../core/services/configuration.service';
+import { AccessManagementService } from '@app/services/access-management.service';
+
 @Component({
   selector: 'app-taskbar',
   templateUrl: './taskbar.component.html',
@@ -35,6 +37,8 @@ export class TaskbarComponent implements OnInit {
   currentPage = 'dashboard';
   taskBarNavSteps = taskBarNavConstant;
   proceedToOfferSetup: Boolean = true;
+  public readShowFlag = false;
+  role: string;
 
 
   constructor(
@@ -42,7 +46,8 @@ export class TaskbarComponent implements OnInit {
     private sharedService: SharedService,
     private activatedRoute: ActivatedRoute,
     private actionsService: ActionsService,
-    private configService: ConfigurationService
+    private configService: ConfigurationService,
+    private accesMgmtServ: AccessManagementService
   ) { }
 
 
@@ -53,10 +58,30 @@ export class TaskbarComponent implements OnInit {
     this.offerId = this.activatedRoute.snapshot.params['offerId'];
 
     this.setTaskBar();
-    this.userRole = this.sharedService.userFunctionalRole;
-    this.sharedService.userEventEmit.subscribe((role) => {
-      this.userRole = role;
-      this.sharedService.userFunctionalRole = role;
+   
+    this.accesMgmtServ.sendfunctionalRolRaw
+    .subscribe((selectedRole:string)=> {
+      if(selectedRole.substring(0,7)==="COOL - ") {
+        this.role = selectedRole.substring(7);
+      } else {
+        this.role = selectedRole;
+      }
+      if(this.role) {
+      this.accesMgmtServ.sendReadOnlyRoles.subscribe((roles: any) => {
+        let CEPMreadOnlyRoles = roles;
+        let rolesToUppercase = [];
+        for (let item of CEPMreadOnlyRoles) {
+          rolesToUppercase.push(item.toUpperCase());
+        }
+        if (this.role) {
+          if (rolesToUppercase.indexOf(this.role.toUpperCase()) !== -1) {
+              this.readShowFlag = true;
+          } else {
+            this.readShowFlag = false;
+          }
+        }
+      });
+    }
     });
 
     this.userName = this.configService.startupData.userName.split(' ')[0];

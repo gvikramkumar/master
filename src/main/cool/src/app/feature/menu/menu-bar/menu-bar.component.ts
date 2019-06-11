@@ -6,6 +6,7 @@ import { EnvironmentService } from '@env/environment.service';
 import { UserService } from '@app/core/services';
 import { MonetizationModelService } from '@app/services/monetization-model.service';
 import { Location } from '@angular/common';
+import { AccessManagementService } from '@app/services/access-management.service';
 
 @Component({
     selector: 'app-menu-bar',
@@ -44,7 +45,8 @@ export class MenuBarComponent implements OnInit {
     cancelStatusValid = true;
     currentUsername: any;
     designReviewRequestApprovalStatus: boolean;
-    markCompleteStatus: boolean;
+    markCompleteStatus:boolean;
+    public dispValue = true;
 
     constructor(
         private router: Router,
@@ -53,8 +55,9 @@ export class MenuBarComponent implements OnInit {
         private menuBarService: MenuBarService,
         private activatedRoute: ActivatedRoute,
         private environmentService: EnvironmentService,
-        private monetizationModelService: MonetizationModelService) {
-
+        private monetizationModelService: MonetizationModelService,
+        private accessMgmtService: AccessManagementService) {
+         
         this.currentURL = activatedRoute.snapshot['_routerState'].url;
 
         this.showPopup = false;
@@ -103,7 +106,12 @@ export class MenuBarComponent implements OnInit {
     }
 
     ngOnInit() {
-
+      
+        this.accessMgmtService.modalSubject.subscribe((value: boolean) => {
+            setTimeout(() => {
+                this.dispValue = value;
+            }, 0)
+        })
 
         this.items = [
             {
@@ -229,7 +237,7 @@ export class MenuBarComponent implements OnInit {
                     'emailBody': emailBody,
                     'toMailLists': stakeHolders,
                 };
-                this.menuBarService.sendNotification(emailNotificationData).subscribe(res => {
+                this.menuBarService.sendNotification(emailNotificationData).subscribe(() => {
                     this.router.navigate(['/dashboard']);
                 });
             }
@@ -265,7 +273,7 @@ export class MenuBarComponent implements OnInit {
                     'emailBody': emailBody,
                     'toMailLists': stakeHolders,
                 };
-                this.menuBarService.sendNotification(emailNotificationData).subscribe(res => {
+                this.menuBarService.sendNotification(emailNotificationData).subscribe(() => {
                     this.router.navigate(['/dashboard']);
 
 
@@ -315,14 +323,14 @@ export class MenuBarComponent implements OnInit {
         this.showMarkcompletePopup = !this.showMarkcompletePopup;
     }
 
-    closeMarkCompletePopup(message) {
+    closeMarkCompletePopup() {
         this.showMarkcompletePopup = false;
         this.markCompleteStatus = !this.markCompleteStatus;
         this.getMarkCompleteStatus.next(this.markCompleteStatus);
         this.disableMarkCompleteToggle();
     }
 
-    confirmMarkComplete(message) {
+    confirmMarkComplete() {
         this.showMarkcompletePopup = false;
         this.getMarkCompleteStatus.next(this.markCompleteStatus);
         this.disableMarkCompleteToggle();

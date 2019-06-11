@@ -1,14 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { SharedService } from '@shared/services/common/shared-service.service';
 
-import { CreateOfferService, DashboardService } from '@shared/services';
-import { HeaderService } from '../../services/header.service';
 import { UserService } from '../../services/user.service';
+import { HeaderService } from '../../services/header.service';
+import { CreateOfferService, DashboardService } from '@shared/services';
 import { ConfigurationService } from '../../services/configuration.service';
+import { AccessManagementService } from '@app/services/access-management.service';
 import { PirateShipSharedService } from '@app/services/pirate-ship-shared.service';
-
-
 
 
 @Component({
@@ -32,23 +29,32 @@ export class HeaderComponent implements OnInit {
 
   totalActionCount: number;
 
+  public userRole;
+  public rolesCollection = [];
+  public hideListElm = false;
+  public allowNavigate: boolean;
+  public addArrowClass = false;
+
   // -----------------------------------------------------------------------------------------
 
   constructor(
-    private router: Router,
     private userService: UserService,
-    private sharedService: SharedService,
     private headerService: HeaderService,
     private dashboardService: DashboardService,
-    private startupService: ConfigurationService,
+    private startupService: ConfigurationService, 
     private createOfferService: CreateOfferService,
     private _pirshipService: PirateShipSharedService,
-  ) {
 
-    this.totalActionCount = 0;
+    private accessMgmtServ: AccessManagementService) {
 
     this.headerService.getCurrentUser().subscribe((user: any) => {
       this.userId = user;
+      this.accessMgmtServ.sendFromUserRegistration
+        .subscribe((user: any) => {
+          if (user.userId === this.userId) {
+            this.functionalRole = user.userMapping[0].functionalRole;
+          }
+        })
       this._pirshipService.setUserId(this.userId);
       this.headerService.getUserInfo(user).subscribe((data: any) => {
         this.userName = data[0].cn;
@@ -60,20 +66,28 @@ export class HeaderComponent implements OnInit {
     });
 
     this.createOfferService.getPrimaryBusinessUnits().subscribe(data => {
-      this.functionalRole = data.userMappings[0].functionalRole;
+      // this.functionalRole = data.userMappings[0].functionalRole;
+      // this._pirshipService.setRole(this.functionalRole);
+      // this.userService.setFunctionalRole( this.functionalRole);
+      // if (this.functionalRole === 'BUPM' || this.functionalRole === 'CXPM') {
+      //   this.isBupmUser = true;
+      //   this.sharedService.userEventEmit.next(true);
+      // } else {
+      //   this.sharedService.userEventEmit.next(false);
+      // }
+      if (data.userMappings[0].functionalRole.substring(0, 7) === "COOL - ") {
+        this.functionalRole = data.userMappings[0].functionalRole.substring(7);
+      } else {
+        this.functionalRole = data.userMappings[0].functionalRole;
+      }
+      this.accessMgmtServ.sendfunctionalRolRaw.next(data.userMappings[0].functionalRole);
       this._pirshipService.setRole(this.functionalRole);
       this.userService.setFunctionalRole(this.functionalRole);
-      if (this.functionalRole === 'BUPM' || this.functionalRole === 'CXPM') {
-        this.isBupmUser = true;
-        this.sharedService.userEventEmit.next(true);
-      } else {
-        this.sharedService.userEventEmit.next(false);
-      }
     });
 
   }
-
   // -----------------------------------------------------------------------------------------
+
 
   ngOnInit() {
 
@@ -115,6 +129,8 @@ export class HeaderComponent implements OnInit {
         }
 
       });
+
+
 
   }
 

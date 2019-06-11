@@ -9,7 +9,7 @@
             </div>
           </div>
 
-          <div class="header-toolbar col-md-6">
+          <div appHiddenelem [DirectiveValue]="'Access Management'" class="header-toolbar col-md-6">
             <button class="btn btn--white" (click)="registerNewUser()"><span
                 class="icon-add icon-small"></span>&nbsp;Register New Users</button>
           </div>
@@ -38,8 +38,8 @@
         </div>
         <!-- <div class="responsive-table"> removed the responsive-table class to prevent select menu overflow issue -->
         <div>
-          <p-table #dt [columns]="cols" [value]="accessManagementData" [paginator]="true" [rows]="6">
-            <ng-template pTemplate="header" let-columns>
+          <p-table appReadonly [DirectiveValue]="'Access Management'"  #dt [columns]="cols" [value]="accessManagementData" [paginator]="true" [rows]="6">
+            <ng-template pTemplate="header" let-columns  let-ind="rowIndex">
               <tr>
                 <th *ngFor="let col of columns">
                   {{col.header}}
@@ -51,6 +51,17 @@
                 <td>{{user.emailId}}</td>
                 <td>{{user.userName}}</td>
                 <td>{{user.userMapping && user.userMapping[0] ? user.userMapping[0].functionalRole : ''}}</td>
+                <td *ngIf="ind !== IndexCount">
+                  {{user.userMapping && user.userMapping[0] ? user.userMapping[0].functionalRole : ''}}
+                   <span class="icon-pencil colorCl" (click)="onGetCEPMs(user,ind)"></span>
+                 </td>
+                 <td *ngIf="ind === IndexCount">
+                   <p-dropdown *ngIf="!isSelected" [style]="{'width':'100px'}" [(ngModel)]="user.userMapping[0].functionalRole" [disabled]="getCEPM"
+                     (onChange)="onSelectDd(user,$event)" optionLabel="value" [options]="ddRoles">
+                   </p-dropdown>
+                  <span *ngIf="isSelected">{{slectedRole}}</span>
+                   <span class="icon-pencil colorCl" (click)="onGetCEPMs(user,ind)"></span>
+                 </td>
                 <td>
                   <p-multiSelect [options]="user.businessEntities" [filter]="false" [showHeader]="false"
                     [displaySelectedLabel]="true" [(ngModel)]="user.beList"
@@ -101,12 +112,14 @@
                     <div class="form-group__text">
                       <label for="selectedSValue">UserId</label>
                       <input id="userId" type="text" class="form-control" name="userId" [(ngModel)]="userIdValue"
-                        ngModel #userId="ngModel" (ngModelChange)="checkUserIdAvailability($event)" required>
+                        ngModel #userId="ngModel" (ngModelChange)="checkUserIdAvailability($event)"
+                        (keyup)="onGetRoles($event)" required>
                     </div>
-                    <div class="text-success" *ngIf="userIdAvailable ">
+                    <!-- <div class="text-success" *ngIf="userIdAvailable ">
                       User Id Available </div>
                     <div class="text-danger" *ngIf="!userIdAvailable && userId.touched && userId.dirty">
-                      Invalid User Id </div>
+                      Invalid User Id </div> -->
+                      <div class="cepmCl" *ngIf="isInvalidCEPMuser">Invalid CEPM user</div>
 
                   </div>
                 </div>
@@ -114,9 +127,9 @@
                   <div class="form-group">
                     <div class="form-group__text select">
                       <label for="functionName">Function</label>
-                      <select id="functionName" class="form-control" name="functionName" [(ngModel)]="functionNameValue"
-                        ngModel required>
-                        <option *ngFor="let user of registerNewUserfun">{{user}}</option>
+                      <select [disabled]="disabledDd" id="functionName" class="form-control" name="functionName"
+                        [(ngModel)]="functionNameValue" ngModel required>
+                        <option *ngFor="let user of rolesCollection">{{user}}</option>
                       </select>
 
                     </div>

@@ -9,6 +9,7 @@ import { MenuBarComponent } from './menu-bar/menu-bar.component';
 import { MenuBarPopupComponent } from './menu-bar-popup/menu-bar-popup.component';
 import { OfferDetailPopUpComponent } from './offer-detail-pop-up/offer-detail-pop-up.component';
 import { MarkCompletePopupComponent } from './mark-complete-popup/mark-complete-popup.component';
+import { SharedModule } from '@shared/shared.module';
 
 
 
@@ -22,7 +23,8 @@ import { MarkCompletePopupComponent } from './mark-complete-popup/mark-complete-
     imports: [
         FormsModule,
         CommonModule,
-        OverlayPanelModule
+        OverlayPanelModule,
+        SharedModule
     ], exports: [
         MenuBarComponent,
         MenuBarPopupComponent,
