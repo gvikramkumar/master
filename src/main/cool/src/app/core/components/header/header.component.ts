@@ -23,7 +23,6 @@ export class HeaderComponent implements OnInit {
   selectedValues;
 
   hasAdminAccess = false;
-  isBupmUser: Boolean = false;
   emailPrefOptions: any[] = [];
   notificationPrefOptions: any[] = [];
 
