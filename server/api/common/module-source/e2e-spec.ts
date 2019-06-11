@@ -5,7 +5,7 @@ import SourceRepo from '../source/repo';
 import ModuleSourceRepo from './repo';
 
 describe(`Module Source endpoint tests`, () => {
-  let server;
+  let server, moduleSource, returnFromAddingSourceToAModule;
   const endpoint = '/api/module-source';
   const sourceRepo = new SourceRepo();
   const moduleSourceRepo = new ModuleSourceRepo();
@@ -13,8 +13,17 @@ describe(`Module Source endpoint tests`, () => {
   beforeAll(done => {
     serverPromise.then(_server => {
       server = _server;
-      done();
+      moduleSourceRepo.getOneByQuery({moduleId: 1})
+        .then(doc => {
+          moduleSource = doc;
+          done();
+        });
     });
+  });
+
+  afterAll(done => {
+    moduleSourceRepo.update(moduleSource, moduleSource.updatedBy, false, false, false)
+      .then(() => done());
   });
 
   it('should get many', done => {
@@ -32,52 +41,36 @@ describe(`Module Source endpoint tests`, () => {
       });
   });
 
-  describe(`- upsert`, () => {
-    let moduleSource;
-    let returnFromAddingSourceToAModule;
-    beforeAll(done => {
-      moduleSourceRepo.getOneByQuery({moduleId: 1})
-        .then(doc => {
-          moduleSource = doc;
-          done();
-        });
-    });
+  it(`should add a test source to a module`, done => {
+    const testSourceToAddToModule = _.cloneDeep(moduleSource);
+    testSourceToAddToModule.sources = [1001];
+    request(server)
+      .post(`${endpoint}/upsert`)
+      .send(testSourceToAddToModule)
+      .expect(200)
+      .end(() => {
+        moduleSourceRepo.getOneByQuery({moduleId: 1})
+          .then(doc => {
+            returnFromAddingSourceToAModule = doc;
+            expect(doc.toObject().sources).toContain(testSourceToAddToModule.sources[0]);
+            done();
+          });
+      });
+  });
 
-    afterAll(done => {
-      moduleSourceRepo.update(moduleSource, moduleSource.updatedBy, false, false, false);
-      done();
-    });
-
-    it(`should add a test source to a module`, done => {
-      const testSourceToAddToModule = _.cloneDeep(moduleSource);
-      testSourceToAddToModule.sources = [1001];
-      request(server)
-        .post(`${endpoint}/upsert`)
-        .send(testSourceToAddToModule)
-        .expect(200)
-        .end(() => {
-          moduleSourceRepo.getOneByQuery({moduleId: 1})
-            .then(doc => {
-              returnFromAddingSourceToAModule = doc;
-              expect(doc.toObject().sources).toContain(testSourceToAddToModule.sources[0]);
-              done();
-            });
-        });
-    });
-
-    it(`should remove a test source from a module`, done => {
-      returnFromAddingSourceToAModule.sources = [];
-      request(server)
-        .post(`${endpoint}/upsert`)
-        .send(returnFromAddingSourceToAModule)
-        .expect(200)
-        .end(() => {
-          moduleSourceRepo.getOneByQuery({moduleId: 1})
-            .then(doc => {
-              expect(doc.toObject().sources).toEqual([]);
-              done();
-            });
-        });
-    });
+  it(`should remove a test source from a module`, done => {
+    returnFromAddingSourceToAModule.sources = [];
+    request(server)
+      .post(`${endpoint}/upsert`)
+      .send(returnFromAddingSourceToAModule)
+      .expect(200)
+      .end(() => {
+        moduleSourceRepo.getOneByQuery({moduleId: 1})
+          .then(doc => {
+            expect(doc.toObject().sources).toEqual([]);
+            done();
+          });
+      });
   });
 });
+
