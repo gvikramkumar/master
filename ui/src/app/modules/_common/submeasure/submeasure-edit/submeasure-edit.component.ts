@@ -808,7 +808,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.sm.sourceSystemAdjTypeId = undefined;
     }
 
-    if (this.isManualMix() && !this.isAllocatedGroup()) {
+    if (this.isManualMix() && !this.isUnallocatedGroup()) {
       this.sm.manualMixHw = Number(this.manualMixHw);
       this.sm.manualMixSw = Number(this.manualMixSw);
     }
