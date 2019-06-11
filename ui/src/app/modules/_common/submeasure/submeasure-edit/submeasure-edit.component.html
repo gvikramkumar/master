@@ -44,11 +44,11 @@
           <div class="manual-mix" *ngIf="isManualMix()">
             <fin-input name="manualMixHw" [label]="!isUnallocatedGroup()?'HW*':'HW'"
                        [(ngModel)]="manualMixHw"
-                       [required]="!isUnallocatedGroup()" [inline]="true"
+                       [required]="!isUnallocatedGroup()" [inline]="true" [isNumber]="true"
                        class="hwsw-inputs"></fin-input>
             <fin-input name="manualMixSw" [label]="!isUnallocatedGroup()?'SW*':'SW'"
                        [(ngModel)]="manualMixSw"
-                       [required]="!isUnallocatedGroup()" [inline]="true"
+                       [required]="!isUnallocatedGroup()" [inline]="true" [isNumber]="true"
                        class="hwsw-inputs"></fin-input>
           </div>
         </div>
