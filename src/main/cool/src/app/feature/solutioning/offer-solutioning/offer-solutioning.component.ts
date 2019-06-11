@@ -57,7 +57,7 @@ export class OfferSolutioningComponent implements OnInit {
   unGroupedQuestionsAndAnswers: Array<any> = [];
   productFamily: string;
   markCompleteStatus: boolean;
-  
+
   @ViewChild('osForm') osForm: NgForm;
 
 
@@ -460,13 +460,13 @@ export class OfferSolutioningComponent implements OnInit {
     offerSolutioningAnswers['questionAnswer'] = questionAnswer;
 
     questionAnswer.filter(element => {
-      if(element['questionNo'] == 'Q2'){
+      if (element['questionNo'] === 'Q2') {
         this.productFamily = element['answer'];
         this.offersolutioningService.checkStatusOnMaestro(this.offerId, this.productFamily).subscribe(response => {
         });
       }
     });
-   
+
     // Save Offer Solution Answers
     this.offersolutioningService.saveOfferSolutionAnswers(this.offerId, offerSolutioningAnswers).subscribe();
 
@@ -562,9 +562,13 @@ export class OfferSolutioningComponent implements OnInit {
   }
 
   // -----------------------------------------------------------------------------------------------------------------------------
+
   getMarkCompleteStatus(status) {
     this.markCompleteStatus = false;
   }
+
+  // -----------------------------------------------------------------------------------------------------------------------------
+
 }
 
 
