@@ -42,7 +42,13 @@ export class AppComponent implements OnInit {
               Object.getOwnPropertyDescriptor(value, Object.keys(value)[0]));
             delete value[Object.keys(value)[0]];
           }
-
+          
+          let bupmString = "Business Unit Product Manager (BUPM)";
+          if (Object.keys(value)[0] === bupmString) {
+            Object.defineProperty(value, Object.keys(value)[0].substring(31,35),
+              Object.getOwnPropertyDescriptor(value, Object.keys(value)[0]));
+            delete value[Object.keys(value)[0]];
+          }
         })
 
         this.accessMgServ.sendfunctionalRolRaw
