@@ -2,10 +2,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { offerBuilderStepsEnum } from '@shared/enums';
 import { taskBarNavConstant } from '@shared/constants/taskBarNav.constants';
-import { SharedService } from '@shared/services/common/shared-service.service';
 import { ActionsService } from '@app/services/actions.service';
-import { select } from '@ngrx/store';
+import { ConfigurationService } from '../../core/services/configuration.service';
 import { AccessManagementService } from '@app/services/access-management.service';
+
 @Component({
   selector: 'app-taskbar',
   templateUrl: './taskbar.component.html',
@@ -27,6 +27,7 @@ export class TaskbarComponent implements OnInit {
   offerId: string;
   selectedAto: string;
 
+  userName: string;
   userRole: boolean;
   isLastStep: boolean;
   currentStepIndex = 0;
@@ -41,9 +42,9 @@ export class TaskbarComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private sharedService: SharedService,
     private activatedRoute: ActivatedRoute,
     private actionsService: ActionsService,
+    private configService: ConfigurationService,
     private accesMgmtServ: AccessManagementService
   ) { }
 
@@ -55,33 +56,36 @@ export class TaskbarComponent implements OnInit {
     this.offerId = this.activatedRoute.snapshot.params['offerId'];
 
     this.setTaskBar();
-   
+
     this.accesMgmtServ.sendfunctionalRolRaw
-    .subscribe((selectedRole:string)=> {
-      if(selectedRole.substring(0,7)==="COOL - ") {
-        this.role = selectedRole.substring(7);
-      } else {
-        this.role = selectedRole;
-      }
-      if(this.role) {
-      this.accesMgmtServ.sendReadOnlyRoles.subscribe((roles: any) => {
-        let CEPMreadOnlyRoles = roles;
-        let rolesToUppercase = [];
-        for (let item of CEPMreadOnlyRoles) {
-          rolesToUppercase.push(item.toUpperCase());
+      .subscribe((selectedRole: string) => {
+
+        if (selectedRole.substring(0, 7) === 'COOL - ') {
+          this.role = selectedRole.substring(7);
+        } else {
+          this.role = selectedRole;
         }
+
         if (this.role) {
-          if (rolesToUppercase.indexOf(this.role.toUpperCase()) !== -1) {
-              this.readShowFlag = true;
-          } else {
-            this.readShowFlag = false;
-          }
+          this.accesMgmtServ.sendReadOnlyRoles.subscribe((roles: any) => {
+            const CEPMreadOnlyRoles = roles;
+            const rolesToUppercase = [];
+            for (const item of CEPMreadOnlyRoles) {
+              rolesToUppercase.push(item.toUpperCase());
+            }
+            if (this.role) {
+              if (rolesToUppercase.indexOf(this.role.toUpperCase()) !== -1) {
+                this.readShowFlag = true;
+              } else {
+                this.readShowFlag = false;
+              }
+            }
+          });
         }
       });
-    }
-    });
 
-    
+    this.userName = this.configService.startupData.userName.split(' ')[0];
+
 
   }
 
@@ -95,20 +99,22 @@ export class TaskbarComponent implements OnInit {
       this.isLastStep = this.currentStepIndex < Object.keys(offerBuilderStepsEnum).length - 1 ? false : true;
     }
 
-     if (this.taskBarNavSteps[this.currentStepIndex].nxtBtnTitle === 'Offer Setup Workflow') {
+    if (this.taskBarNavSteps[this.currentStepIndex].nxtBtnTitle === 'Offer Setup Workflow') {
       this.actionsService.getMilestones(this.caseId).subscribe(data => {
-        //Enable offer setup only when Strategy Review is Complete
+
+        // Enable offer setup only when Strategy Review is Complete
         data['ideate'].forEach(element => {
-          if(element['subMilestone'] === 'Strategy Review' && element['status'] === 'Completed'){
+          if (element['subMilestone'] === 'Strategy Review' && element['status'] === 'Completed') {
             this.proceedToOfferSetup = false;
           }
         });
+
       });
-    }else{
+    } else {
       this.proceedToOfferSetup = false;
     }
 
-    if(this.taskBarNavSteps[this.currentStepIndex].nxtBtnTitle === 'Readiness Review') {
+    if (this.taskBarNavSteps[this.currentStepIndex].nxtBtnTitle === 'Readiness Review') {
       this.proceedToOfferSetup = true;
     }
   }
@@ -133,4 +139,5 @@ export class TaskbarComponent implements OnInit {
   gotoOfferviewDetails() {
     this.router.navigate(['/offerDetailView', this.offerId, this.caseId]);
   }
+
 }

@@ -14,8 +14,7 @@ export class OfferDetailPopUpComponent implements OnInit {
 
   }
 
-  ngOnInit() {
-
+  ngOnInit() {   
   }
 
 }
