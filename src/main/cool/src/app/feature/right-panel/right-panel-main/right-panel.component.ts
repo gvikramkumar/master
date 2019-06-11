@@ -158,7 +158,7 @@ export class RightPanelComponent implements OnInit {
 
     this.offerPhaseDetailsList.plan.forEach(element => {
       if (element.status === 'Completed') {
-        this.planCompletedCount = this.ideateCompletedCount + 1;
+        this.planCompletedCount = this.planCompletedCount + 1;
       }
     });
 
