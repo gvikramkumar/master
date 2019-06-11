@@ -8,6 +8,7 @@ import { DataTableModule, AccordionModule, DialogModule, PaginatorModule } from 
 import * as _ from 'lodash';
 import { StakeholderAddComponent } from './stakeholder-add/stakeholder-add.component';
 import { RightPanelComponent } from './right-panel-main/right-panel.component';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
     declarations: [
@@ -24,6 +25,7 @@ import { RightPanelComponent } from './right-panel-main/right-panel.component';
         CuiSearchModule,
         CuiTableModule,
         CuiPagerModule,
+        SharedModule,
         BsDatepickerModule.forRoot(),
     ],
     exports: [

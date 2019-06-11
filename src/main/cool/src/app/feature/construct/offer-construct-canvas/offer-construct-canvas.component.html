@@ -26,7 +26,7 @@
 
 
             <div class="row">
-              <div class="col-sm-12">
+              <div appReadonly [DirectiveValue]="'Offer Construct'" class="col-sm-12">
                 <ul class="list list--highlight">
 
                   <li *ngFor="let item of itemCategories" class="ui-helper-clearfix list-item" pDraggable="dragItem"
@@ -55,7 +55,7 @@
                     <div class="row">
                       <div class="col-md-10">
 
-                        <span class="ui-fluid">
+                        <span appReadonly [DirectiveValue]="'Offer Construct'" class="ui-fluid">
 
                           <p-autoComplete [(ngModel)]="selectedPids" [suggestions]="results"
                             (completeMethod)="searchForItemFromPdaf($event)" field="PID"
@@ -125,7 +125,7 @@
                 </div>
                 <div class="row">
                   <div class="col-md-12">
-                    <div pDroppable="dragItem" dropEffect="move" (onDrop)="dropItem()" class="canvas">
+                    <div appReadonly [DirectiveValue]="'Offer Construct'"  pDroppable="dragItem" dropEffect="move" (onDrop)="dropItem()" class="canvas">
                       <p-treeTable [value]="offerConstructItems" [columns]="cols" dataKey='uniqueKey' 
                         tableStyleClass="table table--highlight" selectionMode="checkbox" [(selection)]="selected"
                         [hidden]="initalRowAdded" [scrollHeight]="500">
@@ -190,7 +190,7 @@
                             <!-- to copy -->
                             <td *ngIf="rowData['productName']">
                               <span class="list-price">{{rowData['listPrice']}}</span>
-                              <div *ngIf="rowData['isMajorLineItem']">
+                              <div appHiddenelem appReadonly [DirectiveValue]="'Offer Construct'"  *ngIf="rowData['isMajorLineItem']">
                                 <a *ngIf="!readOnly" (click)="createGroup(rowNode)"><span
                                     class="half-margin-right icon-folder icon-small"></span> Create a
                                   Group</a>
@@ -265,7 +265,7 @@
     </div>
   </div>
   <div class="row base-margin-top">
-    <div class="col-md-12 task--bar">
+    <div appHiddenelem appReadonly [DirectiveValue]="'Offer Construct'" class="col-md-12 task--bar">
       <button [disabled]="readOnly" class="btn btn--primary" (click)="discardChanges()">Discard
         Changes</button>
       <button [disabled]="readOnly" class="btn btn--primary" (click)="!readOnly && saveOfferConstructChanges()">Save

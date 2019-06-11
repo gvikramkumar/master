@@ -24,23 +24,26 @@
 
               <li> <span class="menu-label">On Hold/Cancel</span>
 
-                <ul *ngIf="!currentOfferId">
-                  <li [ngClass]="{'disable-item': holdStatusValid == true}" (click)='showOppupFunc("hold")'><span
+                <ul [ngClass]="{'readOnlyClas':dispValue}"  *ngIf="!currentOfferId">
+                  <li appReadonly [DirectiveValue]="'On Hold'" [ngClass]="{'readOnlyClas':dispValue,'disable-item': holdStatusValid == true}" (click)='showOppupFunc("hold")'>
+                    <span [ngClass]="{'disable-item':dispValue}"
                       class="link">On
                       Hold</span>
                   </li>
-                  <li [ngClass]="{'disable-item': cancelStatusValid == true}" (click)='showOppupFunc("cancel")'>
+                  <li appReadonly [DirectiveValue]="'Cancel'" [ngClass]="{'disable-item': cancelStatusValid == true}" (click)='showOppupFunc("cancel")'>
                     <span class="link">Cancel</span>
                   </li>
                 </ul>
 
                 <ul *ngIf="currentOfferId">
-                  <li [ngClass]="{'disable-item': holdStatusValid !== true}" (click)='showOppupFunc("hold")'><span
+                  <ul [ngClass]="{'readOnlyClas':dispValue}" *ngIf="currentOfferId">
+                    <li appReadonly [DirectiveValue]="'On Hold'" [ngClass]="{'readOnlyClas':dispValue,'disable-item': holdStatusValid !== true}" (click)='showOppupFunc("hold")'>
+                      <span [ngClass]="{'disable-item':dispValue}"
                       class="link">On
                       Hold</span>
                   </li>
-                  <li [ngClass]="{'disable-item': cancelStatusValid !== true}" (click)='showOppupFunc("cancel")'>
-                    <span class="link">Cancel</span>
+                  <li appReadonly [DirectiveValue]="'Cancel'" [ngClass]="{'readOnlyClas':dispValue,'disable-item': cancelStatusValid !== true}" (click)='showOppupFunc("cancel")'>
+                    <span [ngClass]="{'disable-item':dispValue}" class="link">Cancel</span>
                   </li>
                 </ul>
 

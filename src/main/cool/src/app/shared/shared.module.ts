@@ -28,6 +28,9 @@ import {
 
 import { CustomMinValidatorDirective } from './validators/custom-min-validator.directive';
 import { CustomRangeValidatorDirective } from './validators/custom-range-validator.directive';
+import { HiddenelemDirective } from './components/directives/hiddenelem.directive';
+import { ReadonlyDirective } from './components/directives/readonly.directive';
+import { ErrorpageComponent } from './components/errorpage/errorpage.component';
 
 
 @NgModule({
@@ -57,6 +60,9 @@ import { CustomRangeValidatorDirective } from './validators/custom-range-validat
     MultiSelectModule,
     AutoCompleteModule,
     ConfirmDialogModule,
+    HiddenelemDirective,
+    ReadonlyDirective,
+    ErrorpageComponent,
     BsDatepickerModule.forRoot()
   ],
   providers: [
