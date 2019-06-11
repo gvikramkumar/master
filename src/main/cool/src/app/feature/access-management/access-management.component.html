@@ -50,13 +50,11 @@
               <tr>
                 <td>{{user.emailId}}</td>
                 <td>{{user.userName}}</td>
-                <td>{{user.userMapping && user.userMapping[0] ? user.userMapping[0].functionalRole : ''}}</td>
                 <td *ngIf="ind !== IndexCount">
                   {{user.userMapping && user.userMapping[0] ? user.userMapping[0].functionalRole : ''}}
                    <span class="icon-pencil colorCl" (click)="onGetCEPMs(user,ind)"></span>
                  </td>
                  <td *ngIf="ind === IndexCount">
-                
                   <p-dropdown *ngIf="!isSelected" [style]="{'width':'100px'}" [(ngModel)]="user.userMapping[0].functionalRole" [disabled]="getCEPM"
                     (onChange)="onSelectDd(user,$event)" optionLabel="value" [options]="ddRoles">
                   </p-dropdown>
