@@ -104,6 +104,7 @@ export class TcMappingComponent implements OnInit, OnDestroy {
           this.selectedIndex = j;
         }
       }
+      this.showSelectedAtoView(this.selectedIndex);
     }, error => {
       console.log('error', error);
     });   
@@ -123,7 +124,7 @@ export class TcMappingComponent implements OnInit, OnDestroy {
   // -------------------------------------------------------------------------------------------------------------------
 
   showSelectedAtoView(dropDownValue: any) {
-
+    
     if (dropDownValue === 'Overall Offer' || dropDownValue === 0) {
 
       this.selectedAto = this.atoNames[dropDownValue];
