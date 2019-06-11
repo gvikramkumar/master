@@ -45,7 +45,7 @@ export class MenuBarComponent implements OnInit {
     cancelStatusValid = true;
     currentUsername: any;
     designReviewRequestApprovalStatus: boolean;
-    markCompleteStatus:boolean;
+    markCompleteStatus: boolean;
     public dispValue = true;
 
     constructor(
@@ -57,7 +57,7 @@ export class MenuBarComponent implements OnInit {
         private environmentService: EnvironmentService,
         private monetizationModelService: MonetizationModelService,
         private accessMgmtService: AccessManagementService) {
-         
+
         this.currentURL = activatedRoute.snapshot['_routerState'].url;
 
         this.showPopup = false;
@@ -106,7 +106,7 @@ export class MenuBarComponent implements OnInit {
     }
 
     ngOnInit() {
-      
+
         this.accessMgmtService.modalSubject.subscribe((value: boolean) => {
             setTimeout(() => {
                 this.dispValue = value;
@@ -323,14 +323,14 @@ export class MenuBarComponent implements OnInit {
         this.showMarkcompletePopup = !this.showMarkcompletePopup;
     }
 
-    closeMarkCompletePopup() {
+    closeMarkCompletePopup(message) {
         this.showMarkcompletePopup = false;
         this.markCompleteStatus = !this.markCompleteStatus;
         this.getMarkCompleteStatus.next(this.markCompleteStatus);
         this.disableMarkCompleteToggle();
     }
 
-    confirmMarkComplete() {
+    confirmMarkComplete(message) {
         this.showMarkcompletePopup = false;
         this.getMarkCompleteStatus.next(this.markCompleteStatus);
         this.disableMarkCompleteToggle();
@@ -344,8 +344,9 @@ export class MenuBarComponent implements OnInit {
         if (this.markCompleteStatus === true && this.canUncheckComplete === false) {
             this.shouldDisable = true;
         }
-        console.log('111:' + this.shouldDisable)
+        console.log('111:' + this.shouldDisable);
     }
+
 }
 
 

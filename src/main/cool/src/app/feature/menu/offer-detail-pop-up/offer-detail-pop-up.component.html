@@ -13,7 +13,7 @@
 
       <div class="col-md-6">
         <div class="flex-fluid text-left half-margin-left half-margin-bottom half-margin-top">
-          <div class="align-status half-margin-right">
+          <div class="align-status half-margin-right" *ngIf="offerBuilderdata['overallStatus']">
             <span class="icon-software-certified"></span>
             <span class="align-type half-margin-left">
               {{ offerBuilderdata['overallStatus'] }} | {{ offerBuilderdata['derivedMM'] }}

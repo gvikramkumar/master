@@ -8,29 +8,22 @@ import { TableModule } from 'primeng/table';
 import {
   DataTableModule, MultiSelectModule, AccordionModule, TooltipModule, OverlayPanelModule,
   DialogModule,
-  AutoCompleteModule,ConfirmDialogModule
+  AutoCompleteModule, ConfirmDialogModule
 } from 'primeng/primeng';
 
 import { DashboardService, CreateOfferService, SharedService, TurbotaxService, ViewcommentService } from './services';
-import {ConfirmationService} from 'primeng/api';
-
-
-import {
-  StatusComponent,
-  AtoListComponent,
-  ViewOfferComponent,
-  ViewcommentComponent,
-  TurbotaxviewComponent,
-  ViewStrategyComponent,
-  PirateShipLegendComponent,
-  DynamicFormMultipleComponent
-} from './components';
+import { ConfirmationService } from 'primeng/api';
 
 import { CustomMinValidatorDirective } from './validators/custom-min-validator.directive';
 import { CustomRangeValidatorDirective } from './validators/custom-range-validator.directive';
-import { HiddenelemDirective } from './components/directives/hiddenelem.directive';
-import { ReadonlyDirective } from './components/directives/readonly.directive';
+import { HiddenelemDirective } from '@shared/directives/hiddenelem.directive';
+import { ReadonlyDirective } from '@shared/directives/readonly.directive';
 import { ErrorpageComponent } from './components/errorpage/errorpage.component';
+import {
+  StatusComponent, AtoListComponent, ViewOfferComponent,
+  ViewcommentComponent, ViewStrategyComponent, TurbotaxviewComponent,
+  PirateShipLegendComponent, DynamicFormMultipleComponent
+} from '@shared/components';
 
 
 @NgModule({
