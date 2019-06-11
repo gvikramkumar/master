@@ -1,21 +1,17 @@
 <app-menu-bar [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId" [offerName]="offerName"
-  [stakeData]="stakeData" [canMarkComplete]="canMarkComplete" (updateMessage)="updateMessage($event)" (getMarkCompleteStatus)="getMarkCompleteStatus($event)">
+  [stakeData]="stakeData" [canMarkComplete]="canMarkComplete" (updateMessage)="updateMessage($event)"
+  (getMarkCompleteStatus)="getMarkCompleteStatus($event)">
 </app-menu-bar>
 
 <div class="content">
   <div class="container">
     <div class="panel-wrapper mt-15">
+
       <app-taskbar (onProceedToNext)="onProceedToNext($event)"></app-taskbar>
+
       <div class="contentBox mt-10">
         <div class="leftContent">
-          <ul class="list">
-            <li>
-              <div class="panel panel--bordered">
-                <span class="text-success"><span class="icon-check-outline icon-medium"></span>
-                  {{derivedMM}} Aligned</span>
-              </div>
-            </li>
-          </ul>
+
           <div class="alert base-margin-top half-margin-bottom"
             [ngClass]="{'alert--info':message['color']==='black','alert--success': message['color']==='green','alert--danger': message['color']==='red','alert--warning': message['color']==='yellow'}">
             <div class="alert__icon mm-alert-icon"
@@ -24,18 +20,23 @@
             <div class="alert__message" [ngStyle]="{'color': message['color']}">
               <b>{{message['contentHead']}}</b>&nbsp;{{message['content']}}</div>
           </div>
+
           <div class="row base-margin-top">
             <div class="col-md-12">
-              <app-offerconstruct-canvas [markCompleteStatus]="markCompleteStatus" (getCanMarkCompleteStatus)="getCanMarkCompleteStatus($event)"></app-offerconstruct-canvas>
+              <app-offerconstruct-canvas [markCompleteStatus]="markCompleteStatus"
+                (getCanMarkCompleteStatus)="getCanMarkCompleteStatus($event)"></app-offerconstruct-canvas>
             </div>
           </div>
+
         </div>
+
         <div class="rightContent" style="margin-top: -5px;">
           <app-right-panel [offerName]="offerName" [stakeData]="stakeData" [primaryBE]="primaryBE"
             [derivedMM]="derivedMM" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference"
             (updateStakeData)="updateStakeData($event)">
           </app-right-panel>
         </div>
+
       </div>
     </div>
   </div>
