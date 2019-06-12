@@ -173,7 +173,7 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
     }
 
     // Check If Valid User Is Logged In
-    userRoleCheck = (this.functionalRole.includes('Business Unit Product Manager (BUPM)') || this.functionalRole.includes('PDT'))
+    userRoleCheck = (this.functionalRole.includes('BUPM') || this.functionalRole.includes('PDT'))
       ? true : false;
 
     return (statusCheck && userRoleCheck);

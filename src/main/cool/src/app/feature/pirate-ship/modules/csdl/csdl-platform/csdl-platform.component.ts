@@ -194,7 +194,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
         });
 
         this.firstData['stakeholders'].forEach(element => {
-          if (element['functionalRole'] === 'Business Unit Product Manager (BUPM)') {
+          if (element['functionalRole'] === 'BUPM') {
             this.bupmList.push(element._id);
           }
         });

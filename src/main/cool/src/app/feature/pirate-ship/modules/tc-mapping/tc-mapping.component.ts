@@ -206,7 +206,7 @@ export class TcMappingComponent implements OnInit, OnDestroy {
     let licenseExist = true;
 
      // Check If Valid User Is Logged In
-     userRoleCheck = (this.functionalRole.includes('Business Unit Product Manager (BUPM)') || 
+     userRoleCheck = (this.functionalRole.includes('BUPM') || 
                       this.functionalRole.includes('NPPM')|| 
                       this.functionalRole.includes('PLPM') || 
                       this.functionalRole.includes('CXPM') || 

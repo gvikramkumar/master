@@ -125,7 +125,7 @@ export class ChangestatusComponent implements OnInit {
           pirateShipSharedService.getRole()
           &&
           (
-            pirateShipSharedService.getRole() === 'Business Unit Product Manager (Business Unit Product Manager (BUPM))'
+            pirateShipSharedService.getRole() === 'BUPM'
             ||
             pirateShipSharedService.getRole() === 'OLE'
             ||
@@ -145,7 +145,7 @@ export class ChangestatusComponent implements OnInit {
           pirateShipSharedService.getRole()
           &&
           (
-            pirateShipSharedService.getRole() === 'Business Unit Product Manager (BUPM)'
+            pirateShipSharedService.getRole() === 'BUPM'
             ||
             pirateShipSharedService.getRole() === 'OLE'
             ||
@@ -165,7 +165,7 @@ export class ChangestatusComponent implements OnInit {
           pirateShipSharedService.getRole()
           &&
           (
-            pirateShipSharedService.getRole() === 'Business Unit Product Manager (BUPM)'
+            pirateShipSharedService.getRole() === 'BUPM'
             ||
             pirateShipSharedService.getRole() === 'OLE'
             ||
@@ -187,7 +187,7 @@ export class ChangestatusComponent implements OnInit {
           pirateShipSharedService.getRole()
           &&
           (
-            pirateShipSharedService.getRole() === 'Business Unit Product Manager (BUPM)'
+            pirateShipSharedService.getRole() === 'BUPM'
             ||
             pirateShipSharedService.getRole() === 'OLE'
             ||
@@ -206,7 +206,7 @@ export class ChangestatusComponent implements OnInit {
         if ( pirateShipSharedService &&
           pirateShipSharedService.getRole()
           &&
-          (pirateShipSharedService.getRole() === 'Business Unit Product Manager (BUPM)'
+          (pirateShipSharedService.getRole() === 'BUPM'
             ||
             pirateShipSharedService.getRole() === 'NPPM'
             ||
