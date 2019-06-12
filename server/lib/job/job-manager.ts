@@ -14,7 +14,26 @@ import Q from 'q';
 import {handleQAllSettled} from '../common/q-allSettled';
 import JobRunRepo from './job-run-repo';
 import JobLogRepo from './job-log-repo';
+import moment from 'moment';
 
+type DfaJobFunction = (startup?: boolean, data?) => Promise<any>;
+
+interface DfaPeriodicJob {
+  name: string;
+  timerId: number;
+}
+
+/*
+    name: {type: String, required: true},
+    period: Number,
+    startTime: String,
+    runOnStartup: {type: Boolean, required: true},
+    log: {type: Boolean, required: true},
+    active: {type: Boolean, required: true},
+    primary: {type: Boolean, required: true}, // only runs on primary server
+    primaryServerUrl: String, // identify server running primary job
+
+ */
 class DfaJob {
   // properties
   id?: string;
@@ -22,31 +41,81 @@ class DfaJob {
   period?: number;
   startTime?: string;
   runOnStartup: boolean;
+  log: boolean;
+  active: boolean;
   primary: boolean;
   primaryServerUrl: string;
-  active: boolean;
 
   constructor(data) {
+    Object.assign(this, data);
+  }
+
+}
+
+/*
+  {
+    serverUrl: {type: String, required: true},
+    jobName: {type: String, required: true},
+    userId: {type: String, required: true},
+    startDate: Date,
+    endDate: Date,
+    duration: String,
+    running: {type: Boolean, required: true},
+    status: String,
+    data: Object,
+  },
+
+ */
+class DfaJobRunEntry {
+  serverUrl: string;
+  jobName: string;
+  userId = 'system';
+  startDate?: Date;
+  endDate?: Date;
+  duration?: number;
+  running?: boolean;
+  status?: string;
+  data?: AnyObj;
+  error?: AnyObj;
+
+  constructor(data = {}) {
     Object.assign(this, data);
   }
 }
 
-type DfaJobFunction = (startup?: boolean, data?) => Promise<any>;
-
 class DfaJobRun {
-  serverUrl: string;
-  name: string;
-  userId: string;
-  startDate: Date;
-  endDate: Date;
-  duration: string;
-  running: boolean;
-  status: string;
-  data: AnyObj;
+
+  constructor(private jobRunRepo: JobRunRepo) {
+  }
+
+  upsertMerge(entry: DfaJobRunEntry) {
+    return this.jobRunRepo.upsertMerge(entry, entry.userId || 'system', false);
+  }
+
+}
+
+/*
+    serverUrl: {type: String, required: true},
+    jobName: {type: String, required: true},
+    userId: {type: String, required: true},
+    startDate: Date,
+    endDate: Date,
+    duration: String,
+    running: {type: Boolean, required: true},
+    status: String,
+    data: Object,
+    message: String,
+    timestamp: {type: Date, default: new Date()},
+ */
+class DfaJobLogEntry extends DfaJobRunEntry {
+  message?: string;
+  timestamp?: Date;
 
   constructor(data) {
+    super(data);
     Object.assign(this, data);
   }
+
 }
 
 class DfaServer {
@@ -59,6 +128,11 @@ class DfaServer {
 
 export class JobManager {
   serverUrl: string;
+  nonPrimaryPeriodicJobs: DfaJob[];
+  primaryPeriodicJobs: DfaJob[];
+  nonPrimaryStartTimeJobs: DfaJob[];
+  primaryStartTimeJobs: DfaJob[];
+  jobs: DfaJob[];
 
   constructor(
     private jobRepo: JobConfigRepo,
@@ -72,12 +146,17 @@ export class JobManager {
 
   serverStartup() {
     this.serverUrl = app.get('serverUrl');
-    this.jobRepo.getMany({})
+    this.jobRepo.getMany({active: true})
       .then(_jobs => {
-        const nonPrimaryPeriodicJobs = _jobs.filter(x => !x.primary && x.period);
-        const nonPrimaryStartupStartTimeJobs = _jobs.filter(x => !x.primary && x.startTime && x.runOnStartup);
-        nonPrimaryPeriodicJobs.forEach(job => this.startPeriodicJob(job));
-        nonPrimaryStartupStartTimeJobs.forEach(job => this.runStartTimeJob(job));
+        this.jobs = _jobs;
+        this.nonPrimaryPeriodicJobs = _jobs.filter(x => !x.primary && x.period);
+        this.primaryPeriodicJobs = _jobs.filter(x => x.primary && x.period);
+        this.nonPrimaryStartTimeJobs = _jobs.filter(x => !x.primary && x.startTime);
+        this.primaryStartTimeJobs = _jobs.filter(x => x.primary && x.startTime);
+
+        this.nonPrimaryPeriodicJobs.forEach(job => this.startPeriodicJob(job));
+        this.nonPrimaryStartTimeJobs.filter(x => x.runOnStartup)
+          .forEach(job => this.runJob(job, true));
       });
   }
 
@@ -107,19 +186,16 @@ export class JobManager {
    * handle running of all jobs, so one common place to check for:
    * isRunning, active, update runDate, etc
    */
-/*
-  getRunJobFunction(job: DfaJob) {
-    return ((startup, data?) => {
-      // do all that junk
-      const fcn = this.getJobFcnFromName(job.name);
-    }).bind(this);
+  /*
+    getRunJobFunction(job: DfaJob) {
+      return ((startup, data?) => {
+        // do all that junk
+        const fcn = this.getJobFcnFromName(job.name);
+      }).bind(this);
 
-  }
-*/
+    }
+  */
 
-  log(serverUrl, jobName, message, status?, data?, userId = 'system') {
-    return this.jobLogRepo.addOne({serverUrl, jobName, message, status, data}, userId, false);
-  }
 
   /*
       serverUrl: {type: String, required: true},
@@ -134,40 +210,89 @@ export class JobManager {
 
    */
 
-  runJob(job: DfaJob, startup = false, data?) {
+  runUpdate(run, req?) {
+    return this.jobRunRepo.upsertMerge(run, _.get(req, 'user.id') || 'system', false);
+  }
+
+  log(canLog, entry) {
+    if (canLog) {
+      return this.jobLogRepo.addOne(entry, entry.userId || 'system', false);
+    } else {
+      return Promise.resolve();
+    }
+  }
+
+
+
+  runJob(job: DfaJob, startup = false, data?, req?) {
     /*
     // job boilerwork goes here
      * check running flag and if running, return promise.resolve or reject with name?? what would make sense there?
      */
+    if (typeof job === 'string') {
+      job = _.find(this.jobs, {name: job});
+    }
+
     return this.jobRunRepo.getOneByQuery({name: job.name, serverUrl: this.serverUrl})
+      // start
       .then(_run => {
-        if (!_run) {
-          throw new ApiError(`JobManager.runJob: no job run for ${this.serverUrl} - ${job.name}`);
-        }
-        const run = new DfaJobRun(_run);
+        const run = new DfaJobRunEntry(_run);
         if (run.running) {
-          return this.log(this.serverUrl, job.name, 'job already running')
-          return Promise.resolve();
+          const entry = <DfaJobLogEntry>{
+            serverUrl: this.serverUrl,
+            jobName: job.name,
+            message: 'job already running'
+          };
+          return this.log(job.log, entry);
         } else {
-          run.startDate = new Date();
           delete run.endDate;
           delete run.duration;
-          return this.getJobFcnFromName(job.name)(startup, data)
-            .then(result => this.log(this.serverUrl, job.name, 'job already running'))
+          run.running = true;
+          run.startDate = new Date();
+          this.getJobFcnFromName(job.name)(startup, data);
+          const log = <DfaJobLogEntry>{
+            serverUrl: this.serverUrl,
+            jobName: job.name,
+            message: 'job starting',
+            startDate: new Date()
+          };
+          return Promise.all([
+            this.runUpdate(run, req),
+            this.log(job.log, log)
+          ]);
         }
+      })
+      // finish
+      .then(() => [
+        // need to bang this out
+      ])
+      // finish (with error)
+      .catch(err => {
+        // here you need to get jobrun, so you can put startDate and duration in along with the error
+        return this.jobRunRepo.getOneByQuery({name: job.name, serverUrl: this.serverUrl})
+          .then(_run => {
+            const run = new DfaJobRunEntry(_run);
+            run.running = false;
+            run.endDate = new Date();
+            run.duration = run.endDate.getTime() - run.startDate.getTime();
+            run.error = err;
+            const errLog = <DfaJobLogEntry>run;
+            errLog.message = 'job run error';
+          })
+        return Promise.all([
+          this.runUpdate(run, req),
+          this.log(errLog)
+        ]);
+        this.jobLog.log(entry);
       });
   }
 
   startPeriodicJob(job: DfaJob) {
-    setInterval(this.getRunJobFunction(job), job.period);
+    const timerId = setInterval(this.runJob.bind(this, job), job.period);
+    this.periodicJobs.push({name: job.name, timerId});
     if (job.runOnStartup) {
-      this.getRunJobFunction(job)(true);
+      this.runJob(job, true);
     }
-  }
-
-  runStartTimeJob(job: DfaJob) {
-    const fcn = this.getJobFcnFromName(job.name);
-    fcn(null, true);
   }
 
   primaryDeterminationJob(startup: boolean) {
@@ -177,7 +302,10 @@ export class JobManager {
         const thisServer = _.find(servers, {name: this.serverUrl});
         if (startup && thisServer) {
           // remove yourself from primary jobs, all primary starts are done by startPrimaryJobs so we don't get duplicate primary jobs
-          promises.push(this.jobRepo.updateMany({primary: true, primaryServerUrl: thisServer.url}, {$unset: {primaryServerUrl: ''}}));
+          promises.push(this.jobRepo.updateMany({
+            primary: true,
+            primaryServerUrl: thisServer.url
+          }, {$unset: {primaryServerUrl: ''}}));
         }
         // remove all inactive servers from server collection
         servers
@@ -250,7 +378,7 @@ export class JobManager {
               primaryJobsNotRunning.filter(x => x.period)
                 .forEach(job => this.startPeriodicJob(job));
               primaryJobsNotRunning.filter(x => x.startTime)
-                .forEach(job => this.startStartTimeJob(job));
+                .forEach(job => this.runJob(job));
               // update primary jobs to this serverUrl
               return this.jobRepo.updateMany({_id: {$in: [primaryJobsNotRunning.map(x => x._id)]}}, {$set: {primaryServerUrl: this.serverUrl}});
             }

@@ -5,14 +5,15 @@ import RepoBase from '../../lib/base-classes/repo-base';
 const schema = new Schema(
   {
     serverUrl: {type: String, required: true},
-    name: {type: String, required: true},
+    jobName: {type: String, required: true},
     userId: {type: String, required: true},
-    startDate: {type: Date, required: true},
-    endDate: {type: Date, required: true},
-    duration: {type: String, required: true},
+    startDate: Date,
+    endDate: Date,
+    duration: Number,
     running: {type: Boolean, required: true},
-    status: {type: String, required: true},
-    data: Object
+    status: String,
+    data: Object,
+    error: Object
   },
   {collection: 'dfa_job_run'}
 );

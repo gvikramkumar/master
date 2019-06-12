@@ -326,6 +326,29 @@ export default class RepoBase {
       });
   }
 
+  upsert(data, userId, concurrencyCheck = true) {
+    return this.getOneById(data.id)
+      .then(item => {
+        if (item) {
+          return this.update(data, userId, concurrencyCheck);
+        } else {
+          return this.addOne(data, userId);
+        }
+      });
+  }
+
+  upsertMerge(data, userId, concurrencyCheck = true) {
+    return this.getOneById(data.id)
+      .then(item => {
+        if (item) {
+          Object.assign(item, data);
+          return this.update(data, userId, concurrencyCheck);
+        } else {
+          return this.addOne(data, userId);
+        }
+      });
+  }
+
   removeMany(filter): Promise<any> {
     if (!filter) {
       throw new ApiError('No filter for removeMany.');
