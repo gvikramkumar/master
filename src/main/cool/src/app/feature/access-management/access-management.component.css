@@ -294,4 +294,41 @@
     padding: 0;
     overflow: hidden;
   }
+
+    
+  .cepmCl {
+    color: red;
+  }
+
+
+
+#selectCl{
+  width: 157px;
+  height: 35px;
+}
+
+#selectCl option{
+  width: 157px;
+}
+
+select {
+  font: inherit;
+}
+
+.colorCl {
+  color:#186ba0;
+  cursor: pointer;
+  position: absolute;
+  left: 719px;
+}
+
+.widthCl{
+  width:170px;
+}
+
+.dispNone {
+  display: none;
+}
+
+
     

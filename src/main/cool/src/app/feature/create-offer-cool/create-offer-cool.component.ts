@@ -459,6 +459,7 @@ export class CreateOfferCoolComponent implements OnInit {
   goBack() {
     this._location.back();
   }
+
   proceedCheckBu() {
     if (this.offerCreateForm.valid == true && this.idpvalue !== "") {
       this.enableOfferbuild = false;

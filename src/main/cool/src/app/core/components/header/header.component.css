@@ -230,3 +230,43 @@ span.badge-wrapper.base-margin-left:hover:after {
         top: 25px;
     }
 }
+
+
+ 
+
+.roleCl{
+    color: #FFFFFF !important;
+    position: relative;
+    top: 6px;
+    right: 116px;
+    font-size: 10px; 
+}
+
+.w150 {
+    min-width: 200px;
+}
+
+.flex {
+    display: flex;
+}
+
+.hw {
+    width: 200px;
+    /* padding: 10px; */
+    /* height: 350px; */
+}
+
+.visibHidden {
+    visibility: hidden;
+}
+
+.leftCl{
+  left: -19px !important;
+}
+
+.itemBorder {
+    width: 175px;
+    align-self: center;
+    border-bottom: 1px dotted gray;
+    padding-top: 10px;
+}
