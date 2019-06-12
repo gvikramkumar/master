@@ -1,17 +1,16 @@
 import {browser, by, element, protractor} from 'protractor';
+import {CommonPO} from '../common.po';
 
-const EC = protractor.ExpectedConditions;
-
-export class ModulePO {
+export class ModulePO extends CommonPO {
   table = element(by.className(`mat-table`));
   form = element(by.className('edit-form-container'));
 
   navigateTo() {
-    return browser.get('/admn/module');
+    return super.navigateTo('/admn/module');
   }
 
   waitForModulesToLoad() {
-    browser.wait(EC.presenceOf(this.table));
+    browser.wait(this.EC.presenceOf(this.table));
   }
 
   async getModulesLoaded() {
@@ -31,16 +30,12 @@ export class ModulePO {
     return element.all(by.className(`mat-cell`));
   }
 
-  getAddButton() {
-    return element(by.buttonText(`Add New`));
-  }
-
   waitForFormUp() {
-    browser.wait(EC.presenceOf(this.form));
+    browser.wait(this.EC.presenceOf(this.form));
   }
 
   waitForFormDown() {
-    browser.wait(EC.stalenessOf(this.form));
+    browser.wait(this.EC.stalenessOf(this.form));
   }
 
   getFormTitle() {
@@ -77,14 +72,6 @@ export class ModulePO {
 
   getCheckBoxLabel() {
     return element(by.className(`checkbox`)).element(by.className(`checkbox__label`));
-  }
-
-  getSubmitButton() {
-    return element(by.buttonText(`Submit`));
-  }
-
-  getCancelButton() {
-    return element(by.buttonText(`Cancel`));
   }
 
   getFormInputOnlyFields() {

@@ -23,6 +23,11 @@ describe(`Admin - Source Page`, () => {
     status: `Inactive`
   };
 
+  afterAll(done => {
+    sourcePO.finJsonRequest('/api/source/query-one', 'DELETE', undefined, {name: newSourceForUpdate.name})
+      .then(() => done());
+  });
+
 
   beforeEach(() => {
     sourcePO.navigateTo();

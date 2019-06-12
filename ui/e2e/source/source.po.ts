@@ -1,11 +1,13 @@
-import { browser, by, element, protractor } from 'protractor';
-const EC = protractor.ExpectedConditions;
-export class SourcePO {
+import { browser, by, element } from 'protractor';
+import {CommonPO} from '../common.po';
+
+export class SourcePO extends CommonPO {
   form = element(by.className('edit-form-container'));
   table = element(by.className(`mat-table`));
   dialog = element(by.className(`mat-dialog-container`));
-   navigateTo() {
-    return browser.get('/admn/source');
+
+  navigateTo() {
+    return super.navigateTo('/admn/source');
   }
 
    async getSourcesLoaded() {
@@ -20,24 +22,12 @@ export class SourcePO {
     return element(by.buttonText(`Add New`));
   }
 
-   getCancelButton() {
-    return element(by.buttonText(`Cancel`));
-  }
-
    getStatusCheckBox() {
     return element(by.name(`status`)).element(by.className(`checkbox__input`));
   }
 
    getCheckBoxLabel() {
     return element(by.name(`status`)).element(by.className(`checkbox__label`));
-  }
-
-   getSubmitButton() {
-    return element(by.buttonText(`Submit`));
-  }
-
-   getPaginatorNextButton() {
-    return element(by.className(`mat-paginator-navigation-next`));
   }
 
    getCellRow() {
@@ -77,15 +67,15 @@ export class SourcePO {
   }
 
   waitForSourcesToLoad() {
-    browser.wait(EC.presenceOf(this.table));
+    browser.wait(this.EC.presenceOf(this.table));
   }
 
   waitForFormUp() {
-    browser.wait(EC.presenceOf(this.form));
+    browser.wait(this.EC.presenceOf(this.form));
   }
 
   waitForFormDown() {
-    browser.wait(EC.stalenessOf(this.form));
+    browser.wait(this.EC.stalenessOf(this.form));
   }
 
   loadFormInEditModeForSource(name) {
@@ -99,7 +89,7 @@ export class SourcePO {
   }
 
   waitForDialogToShow() {
-     browser.wait(EC.presenceOf(this.dialog));
+     browser.wait(this.EC.presenceOf(this.dialog));
   }
 
   getDialogTitle() {
@@ -112,7 +102,7 @@ export class SourcePO {
 
   closeDialog() {
      element(by.buttonText('OK')).click();
-     browser.wait(EC.stalenessOf(this.dialog));
+     browser.wait(this.EC.stalenessOf(this.dialog));
   }
 
   pageRefresh() {
