@@ -166,7 +166,7 @@
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']" #itemName="ngModel">
 
-                              
+
                                   <div class="tool-tip  slideIn"
                                     *ngIf="pInfo.rules.validationMessage != '' && pInfo.rules.isvalid == false">
                                     <ul>
@@ -210,7 +210,7 @@
                                       <ul>
                                         <li
                                           *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'REQ Start Date Window' &&
-                                          pInfo.egineAttribue !== 'Default Auto Renewal Term' && pInfo.rules.validationMessage != '' && pInfo.egineAttribue !== 'Description'">
+                                          pInfo.egineAttribue !== 'Default Auto Renewal Term' && pInfo.rules.validationMessage != '' && pInfo.egineAttribue !== 'Description' && pInfo.egineAttribue !== 'Asset Quantity'">
                                           {{pInfo.rules.validationMessage}}</li>
                                         <li
                                           *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
@@ -227,6 +227,9 @@
                                           <li
                                             *ngIf="pInfo.egineAttribue === 'Description' && pInfo.rules.validationMessage != ''">
                                             First letter must be capitalized and max of 60 characters</li>
+                                            <li
+                                              *ngIf="pInfo.egineAttribue === 'Asset Quantity'">
+                                              Must be a numeric value</li>
 
                                       </ul>
                                     </div>
@@ -271,7 +274,7 @@
                                       *ngIf="pInfo.rules.isvalid == false && (qafreeText.dirty || qafreeText.touched)">
                                       <ul>
                                         <li
-                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'REQ Start Date Window' && pInfo.rules.validationMessage != ''">
+                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'REQ Start Date Window' && pInfo.rules.validationMessage != '' && pInfo.egineAttribue !== 'Asset Quantity'">
                                           {{pInfo.rules.validationMessage}}</li>
                                         <li
                                           *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
@@ -282,6 +285,9 @@
                                         <li
                                           *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'REQ Start Date Window') && pInfo.rules.validationMessage != ''">
                                           Mandatory entry of 1 numeric value</li>
+                                          <li
+                                            *ngIf="pInfo.egineAttribue === 'Asset Quantity'">
+                                            Must be a numeric value</li>
                                       </ul>
                                     </div>
                                   </div>
@@ -570,7 +576,7 @@
                                       *ngIf="pInfo.rules.isvalid == false && (freeText.dirty || freeText.touched)">
                                       <ul>
                                         <li
-                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'REQ Start Date Window' && pInfo.egineAttribue !== 'Default Auto Renewal Term' && pInfo.rules.validationMessage != ''">
+                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'REQ Start Date Window' && pInfo.egineAttribue !== 'Default Auto Renewal Term' && pInfo.rules.validationMessage != '' && pInfo.egineAttribue !== 'Asset Quantity'">
                                           {{pInfo.rules.validationMessage}}</li>
                                         <li
                                           *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
@@ -584,6 +590,9 @@
                                         <li
                                           *ngIf="pInfo.egineAttribue === 'Default Auto Renewal Term' && pInfo.rules.validationMessage != ''">
                                           Mandatory entry of 1 value from the Std Auto Renewal Term Range</li>
+                                          <li
+                                            *ngIf="pInfo.egineAttribue === 'Asset Quantity'">
+                                            Must be a numeric value</li>
                                       </ul>
                                     </div>
 
