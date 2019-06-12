@@ -15,6 +15,7 @@ import {handleQAllSettled} from '../common/q-allSettled';
 import JobRunRepo from './job-run-repo';
 import JobLogRepo from './job-log-repo';
 import moment from 'moment';
+import {injectable} from 'inversify';
 
 type DfaJobFunction = (startup?: boolean, data?) => Promise<any>;
 
@@ -120,6 +121,7 @@ interface DfaPeriodicJobInstance {
   timerId: number;
 }
 
+@injectable()
 export class JobManager {
   serverUrl: string;
   periodicJobs: DfaPeriodicJobInstance[]  = [];

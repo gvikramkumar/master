@@ -28,10 +28,61 @@ db.dfa_open_period.insertMany([
 db.getCollection('dfa_allocation_rule').updateMany({}, {$set: {approvedOnce: 'Y'}});
 db.getCollection('dfa_allocation_rule').updateMany({glSegmentsMatch: ''}, {$set: {glSegmentsMatch: []}});
 
+db.dfa_job_config.insertMany([
+  {
+    name: 'primary-determination',
+    period: 5 * 1000,
+    runOnStartup: true, // needs to run before start-primary-jobs to initialize from last settings
+    log: false,
+    active: true,
+    primary: false,
+  },
+  {
+    name: 'start-primary-jobs',
+    period: 5 * 1000,
+    runOnStartup: false, // need to let primary determination run once at startup to clear things out, so we'll not run on startup for this one
+    log: false,
+    active: true,
+    primary: false,
+  },
+  {
+    name: 'check-start-time-jobs',
+    period: 5 * 1000,
+    runOnStartup: false,
+    log: false,
+    active: true,
+    primary: false,
+  },
+  {
+    name: 'database-sync',
+    period: 15 * 60 * 1000,
+    runOnStartup: false,
+    log: true,
+    active: true,
+    primary: true,
+  },
+  {
+    name: 'approval-email-reminder',
+    period: 5 * 60 * 1000,
+    runOnStartup: false,
+    log: true,
+    active: true,
+    primary: true,
+  },
+  {
+    name: 'cache-refresh',
+    startTime: '6am',
+    runOnStartup: true,
+    log: true,
+    active: true,
+    primary: false,
+  },
+]);
+
 db.dfa_lookup.insertMany([
   {
     key: 'database-version',
-    value: 20
+    value: 21
   },
   {
     key: 'build-number',
