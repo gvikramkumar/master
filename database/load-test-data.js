@@ -55,7 +55,6 @@ db.dfa_lookup.findOneAndUpdate({key: 'periods'},
 
 db.dfa_allocation_rule.insertMany([
   {
-    "_id": ObjectId("5cf6e9c16a334e4550e5a472"),
     "name": "E2ETESTDRV1-ROLL7",
     "oldName": "RULE7",
     "desc": "Name:  E2ETESTDRV1-ROLL7\nOld Name:  RULE7\nDriver:  Test Driver 1 - E2ETEST\nPeriod:  ROLL7 E2ETEST",
@@ -72,11 +71,9 @@ db.dfa_allocation_rule.insertMany([
     "updatedDate": new Date("2019-05-01T19:42:44.327Z"),
     "approvedBy": "jodoe",
     "approvedDate": new Date("2018-12-01T00:11:48.460Z"),
-    "approvalReminderTime": new Date("2019-05-09T15:25:05.926Z"),
-    "approvalUrl": `http://localhost:4201/prof/rule-management/edit/5cf6e9c16a334e4550e5a472;mode=view`
+    "approvalReminderTime": new Date("2019-05-09T15:25:05.926Z")
   },
   {
-    "_id": ObjectId("5cf6e9c16a334e4550e5a473"),
     "name": "E2ETESTDRV2-ROLL8",
     "oldName": "RULE8",
     "desc": "Name:  E2ETESTDRV2-ROLL8\nOld Name:  RULE8\nDriver:  Test Driver 2 - E2ETEST\nPeriod:  ROLL8 E2ETEST",
@@ -93,14 +90,12 @@ db.dfa_allocation_rule.insertMany([
     "updatedDate": new Date("2019-05-01T19:42:44.327Z"),
     "approvedBy": "jodoe",
     "approvedDate": new Date("2018-12-01T00:11:48.460Z"),
-    "approvalReminderTime": new Date("2019-05-09T15:25:05.926Z"),
-    "approvalUrl": `http://localhost:4201/prof/rule-management/edit/5cf6e9c16a334e4550e5a473;mode=view`
+    "approvalReminderTime": new Date("2019-05-09T15:25:05.926Z")
   }
 ]);
 
 db.dfa_submeasure.insertMany([
   {
-    "_id": ObjectId("5cf6e9c16a334e4550e5a474"),
     "submeasureId": 6,
     "submeasureKey": 6,
     "moduleId": 1,
@@ -152,11 +147,9 @@ db.dfa_submeasure.insertMany([
     "updatedDate": new Date("2018-12-01T00:11:48.450Z"),
     "approvedBy": "jodoe",
     "approvedDate": new Date("2018-12-01T00:11:48.460Z"),
-    "approvalReminderTime": new Date("2019-05-09T15:25:05.926Z"),
-    "approvalUrl": `http://localhost:3002/prof/submeasure/edit/5cf6e9c16a334e4550e5a474;mode=view`
+    "approvalReminderTime": new Date("2019-05-09T15:25:05.926Z")
   },
   {
-    "_id": ObjectId("5cf6e9c16a334e4550e5a475"),
     "submeasureId": 7,
     "submeasureKey": 7,
     "moduleId": 1,
@@ -208,11 +201,9 @@ db.dfa_submeasure.insertMany([
     "updatedDate": new Date("2018-12-01T00:11:48.450Z"),
     "approvedBy": "jodoe",
     "approvedDate": new Date("2018-12-01T00:11:48.460Z"),
-    "approvalReminderTime": new Date("2019-05-09T15:25:05.926Z"),
-    "approvalUrl": `http://localhost:3002/prof/submeasure/edit/5cf6e9c16a334e4550e5a475;mode=view`
+    "approvalReminderTime": new Date("2019-05-09T15:25:05.926Z")
   },
   {
-    "_id": ObjectId("5ce43d36282898d0c0ce8133"),
     "submeasureId": 3,
     "submeasureKey": 3,
     "moduleId": 2,
@@ -257,10 +248,21 @@ db.dfa_submeasure.insertMany([
     "updatedDate": new Date("2018-12-01T00:11:48.450Z"),
     "approvedBy": "jodoe",
     "approvedDate": new Date("2018-12-01T00:11:48.460Z"),
-    "approvalReminderTime": new Date("2019-05-09T15:25:05.926Z"),
-    "approvalUrl": `http://localhost:3002/prof/submeasure/edit/5ce43d36282898d0c0ce8133;mode=view`
+    "approvalReminderTime": new Date("2019-05-09T15:25:05.926Z")
   }
 ]);
+
+db.dfa_allocation_rule.find({}).toArray()
+  .forEach(doc => {
+    doc.approvalUrl = `http://localhost:4201/prof/rule-management/edit/${doc._id.valueOf()};mode=view`;
+    db.dfa_allocation_rule.save(doc);
+  });
+
+db.dfa_submeasure.find({}).toArray()
+  .forEach(doc => {
+    doc.approvalUrl = `http://localhost:4201/prof/submeasure/edit/${doc._id.valueOf()};mode=view`;
+    db.dfa_submeasure.save(doc);
+  });
 
 print('>>>>>>> load-test-data-complete');
 
