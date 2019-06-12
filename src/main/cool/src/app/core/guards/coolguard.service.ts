@@ -20,7 +20,6 @@ export class COOLguardService {
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     return this.accessMgmtServ.onGetUserCEPM()
       .pipe(map((data: any) => {
-        console.log(data);
         this.accessMgmtServ.sendfunctionalRolRaw.subscribe((value) => {
           this.functionalRole = value;
         });
