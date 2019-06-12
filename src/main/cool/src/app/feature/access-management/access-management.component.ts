@@ -131,20 +131,25 @@ export class AccessManagementComponent implements OnInit {
         for (let item of rolesKeys) {
           if (item.substring(0, 7) === "COOL - ") {
             trimmedRoles.push(item.substring(7));
-          } else {
+          } 
+          
+         else if(item === "Business Unit Product Manager (BUPM)") {
+            trimmedRoles.push("BUPM")
+          }
+          else {
             trimmedRoles.push(item);
           }
         }
+
         let lables = [];
         for (let i = 0; i <= trimmedRoles.length - 1; i++) {
-
           if (trimmedRoles[i] === user.userMapping[0].functionalRole) {
             lables.unshift({ label: i, value: user.userMapping[0].functionalRole })
           } else {
             lables.push({ label: i, value: trimmedRoles[i] });
           }
         }
-
+        
         if (lables[0].value === "error") {
           this.ddRoles = [];
         } else {
