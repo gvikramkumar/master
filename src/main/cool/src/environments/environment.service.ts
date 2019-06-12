@@ -194,6 +194,10 @@ export class EnvironmentService {
     // PIRATE SHIP NOTIFICATION URLs
     REST_API_PIRATE_SHIP_DASHBOARD_NOTIFICATION_URL;
 
+    // Royalty_setup Doc upload
+
+  REST_API_RoyaltySetup_upload: string;
+
     // -------------------------------------------------------------------------------------------------
 
 
@@ -501,5 +505,8 @@ export class EnvironmentService {
 
         this.REST_API_PIRATE_SHIP_DASHBOARD_NOTIFICATION_URL = this.baseApiUrl + '/dashboard/notification/generate';
 
+
+        // ------------------------------------------------ROYALTY SETUP DOCUMENT UPLOAD URL--------------------------------
+         this.REST_API_RoyaltySetup_upload  = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/RoyaltySetup_UpLoadDoc';
     }
 }
