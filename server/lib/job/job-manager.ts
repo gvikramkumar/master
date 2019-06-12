@@ -124,7 +124,7 @@ interface DfaPeriodicJobInstance {
 @injectable()
 export class JobManager {
   serverUrl: string;
-  periodicJobs: DfaPeriodicJobInstance[]  = [];
+  periodicJobs: DfaPeriodicJobInstance[] = [];
 
   constructor(
     private jobConfigRepo: JobConfigRepo,
@@ -154,11 +154,11 @@ export class JobManager {
   getJobFcnFromName(name): DfaJobFunction {
     let fcn;
     switch (name) {
-      case 'primary-determination':
-        fcn = this.primaryDeterminationJob;
+      case 'approval-email-reminder':
+        fcn = this.approvelEmailReminderJob;
         break;
-      case 'start-primary-jobs':
-        fcn = this.startPrimaryJobsJob();
+      case 'cache-refresh':
+        fcn = this.cacheRefreshJob();
         break;
       case 'check-start-time-jobs':
         fcn = this.checkStartTimeJobsJob;
@@ -166,40 +166,15 @@ export class JobManager {
       case 'database-sync':
         fcn = this.databaseSyncJob;
         break;
-      case 'approval-email-reminder':
-        fcn = this.approvelEmailReminderJob;
+      case 'primary-determination':
+        fcn = this.primaryDeterminationJob;
+        break;
+      case 'start-primary-jobs':
+        fcn = this.startPrimaryJobsJob();
         break;
     }
     return fcn;
   }
-
-  /*
-   * handle running of all jobs, so one common place to check for:
-   * isRunning, active, update runDate, etc
-   */
-  /*
-    getRunJobFunction(job: DfaJob) {
-      return ((startup, data?) => {
-        // do all that junk
-        const fcn = this.getJobFcnFromName(job.name);
-      }).bind(this);
-
-    }
-  */
-
-
-  /*
-      serverUrl: {type: String, required: true},
-    name: {type: String, required: true},
-    userId: {type: String, required: true},
-    startDate: {type: Date, required: true},
-    endDate: {type: Date, required: true},
-    duration: {type: String, required: true},
-    running: {type: Boolean, required: true},
-    status: {type: String, required: true},
-    data: Object
-
-   */
 
   runUpdate(run, req?) {
     run.userId = _.get(req, 'user.id') || 'system';
@@ -207,9 +182,10 @@ export class JobManager {
   }
 
   log(canLog, run, message, req?) {
+    run.userId = _.get(req, 'user.id') || 'system';
     if (canLog) {
       const log = new DfaJobLog(run, message);
-      return this.jobLogRepo.addOne(log, req.userId || log.userId || 'system', false);
+      return this.jobLogRepo.addOne(log, run.userId || log.userId || 'system', false);
     } else {
       return Promise.resolve();
     }
@@ -232,55 +208,59 @@ export class JobManager {
       this.getActiveJobConfigs(),
       this.getJobRun(job.name)
     ])
-      // start
+    // start
       .then(results => {
         const jobs = results[0];
-        const run = <DfaJobRun>results[1] || new DfaJobRun({name: job.name, serverUrl: this.serverUrl});
-        // /api/run-job calls with jobName
         if (typeof job === 'string') {
           const jobName = job;
           job = _.find(jobs, {name: job});
           if (!job) {
-            this.log(true, {}, `JobManager.runJob /api/run-job: no job found for jobName: ${job}`);
+            this.log(true, {name: jobName, serverUrl: this.serverUrl}, `JobManager.runJob /api/run-job: no job found for jobName: ${job}`);
           }
         }
-        if (run.running) {
+        const jobRun = <DfaJobRun>results[1] || new DfaJobRun({name: job.name, serverUrl: this.serverUrl});
+        // /api/run-job calls with jobName
+        // if running get out
+        if (jobRun.running) {
           const log = <DfaJobRun>{
             serverUrl: this.serverUrl,
             jobName: job.name
           };
           return this.log(job.log, log, 'job already running');
         } else {
-          delete run.endDate;
-          delete run.duration;
-          run.running = true;
-          run.startDate = new Date();
-          return this.runUpdateAndLog(run, req, job.log, 'job starting')
-            .then(() => this.getJobFcnFromName(job.name)(startup, data));
+          delete jobRun.endDate;
+          delete jobRun.duration;
+          delete jobRun.status;
+          jobRun.running = true;
+          jobRun.startDate = new Date();
+          return this.runUpdateAndLog(jobRun, req, job.log, 'job starting')
+            .then(() => this.getJobFcnFromName(job.name)(startup, data))
+            // job success
+            .then(jobData => {
+              return this.getJobRun(job.name)
+                .then(run => {
+                  run.running = false;
+                  run.endDate = new Date();
+                  run.duration = run.endDate.getTime() - run.startDate.getTime();
+                  run.status = 'success';
+                  run.data = jobData;
+                  return this.runUpdateAndLog(run, req, job.log, 'job run error'); // return the job run
+                });
+            })
+            // job error
+            .catch(err => {
+              return this.getJobRun(job.name)
+                .then(_run => {
+                  const run = <DfaJobRun>_run;
+                  run.running = false;
+                  run.endDate = new Date();
+                  run.duration = run.endDate.getTime() - run.startDate.getTime();
+                  run.status = 'failure';
+                  run.error = err;
+                  return this.runUpdateAndLog(run, req, job.log, 'job run error'); // return the job run
+                });
+            });
         }
-      })
-      // job success
-      .then(jobData => {
-        return this.getJobRun(job.name)
-          .then(run => {
-            run.running = false;
-            run.endDate = new Date();
-            run.duration = run.endDate.getTime() - run.startDate.getTime();
-            run.data = jobData;
-            return this.runUpdateAndLog(run, req, job.log, 'job run error'); // return the job run
-          });
-      })
-      // job error
-      .catch(err => {
-        return this.getJobRun(job.name)
-          .then(_run => {
-            const run = <DfaJobRun>_run;
-            run.running = false;
-            run.endDate = new Date();
-            run.duration = run.endDate.getTime() - run.startDate.getTime();
-            run.error = err;
-            return this.runUpdateAndLog(run, req, job.log, 'job run error'); // return the job run
-          });
       });
   }
 
@@ -441,11 +421,14 @@ export class JobManager {
   }
 
   approvelEmailReminderJob() {
+/*
     Q.allSettled([
       this.submeasureController.approvalEmailReminder('submeasure'),
       this.ruleController.approvalEmailReminder('rule')
     ])
       .then(results => handleQAllSettled(null, 'qAllReject'));
+*/
+    return Promise.resolve();
   }
 
 }

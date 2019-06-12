@@ -33,7 +33,7 @@ db.dfa_job_config.insertMany([
     name: 'primary-determination',
     period: 5 * 1000,
     runOnStartup: true, // needs to run before start-primary-jobs to initialize from last settings
-    log: false,
+    log: true,
     active: true,
     primary: false,
   },
@@ -41,7 +41,7 @@ db.dfa_job_config.insertMany([
     name: 'start-primary-jobs',
     period: 5 * 1000,
     runOnStartup: false, // need to let primary determination run once at startup to clear things out, so we'll not run on startup for this one
-    log: false,
+    log: true,
     active: true,
     primary: false,
   },
@@ -49,7 +49,7 @@ db.dfa_job_config.insertMany([
     name: 'check-start-time-jobs',
     period: 5 * 1000,
     runOnStartup: false,
-    log: false,
+    log: true,
     active: true,
     primary: false,
   },

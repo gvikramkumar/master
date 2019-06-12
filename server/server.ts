@@ -73,6 +73,7 @@ export const serverPromise = Promise.all([mgc.promise, pgc.promise])
           console.log('build:', process.env.BUILD_NUMBER);
         }
         console.log(`server listening on ${serverUrl}`);
+        jobManager.serverStartup();
       });
     }
   )

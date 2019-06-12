@@ -12,6 +12,7 @@ const schema = new Schema(
     duration: Number,
     running: {type: Boolean, required: true},
     status: String,
+    step: String, // so jobs can say where they're at the job
     data: Object,
     error: Object
   },

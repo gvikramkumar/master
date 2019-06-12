@@ -13,7 +13,7 @@ const schema = new Schema(
     primary: {type: Boolean, required: true}, // only runs on primary server
     primaryServerUrl: String, // identify server running primary job
   },
-  {collection: 'dfa_job-config'}
+  {collection: 'dfa_job_config'}
 );
 
 @injectable()

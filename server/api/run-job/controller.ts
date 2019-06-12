@@ -13,7 +13,7 @@ export default class RunJobController {
       .then(() => {
         return this.jobManager.runJob(jobName, false, req.body || req.query, req);
       })
-      .then(data => res.json(data))
+      .then(jobRun => res.json(jobRun))
       .catch(next);
   }
 

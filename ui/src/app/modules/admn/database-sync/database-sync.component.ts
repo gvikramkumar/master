@@ -6,6 +6,7 @@ import {UiUtil} from '../../../core/services/ui-util';
 import {DatabaseService} from '../../_common/services/database.service';
 import {DialogType} from '../../../core/models/ui-enums';
 import {SyncMap} from '../../../../../../shared/models/sync-map';
+import AnyObj from '../../../../../../shared/models/any-obj';
 
 @Component({
   selector: 'fin-database-sync',
@@ -42,7 +43,14 @@ export class DatabaseSyncComponent extends RoutingComponentBase {
       .subscribe(resp => {
         if (resp) {
           this.databaseService.mongoToPgSync(this.syncMap)
-            .subscribe(results => this.results = results);
+            .subscribe((jobRun: AnyObj)  => {
+              if (jobRun.running) {
+                this.results = undefined;
+                this.uiUtil.genericDialog('Database sync job is currently running');
+              } else {
+                this.results = jobRun.data;
+              }
+            });
         }
       });
   }
