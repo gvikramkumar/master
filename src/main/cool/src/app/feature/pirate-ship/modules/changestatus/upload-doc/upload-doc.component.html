@@ -1,11 +1,24 @@
 <div>
-  <form>
-  <div>
-    <button class="btn btn--small btn--primary btn--cool2" (click)="showUploadWindow()">Upload File</button>
-  </div>
-  <br/><br/>
-    <div>
-      <input type="file"  id="myFileInput" (change)="handleFileInput($event.target.files)"/>
+
+  <div class="row">
+    <div class="col-md-12">
+      <form>
+        <div>
+          <button class="btn btn--small btn--primary btn--cool2" (click)="showUploadWindow()">Upload File</button>
+        </div>
+        <br/><br/>
+        <div>
+          <input type="file"  id="myFileInput" (change)="handleFileInput($event.target.files)"/>
+        </div>
+      </form>
     </div>
-  </form>
+    <div class="col-1" style="padding-left: 12px">
+      <span class="icon-file-text-o icon-small text-info"></span>
+    </div>
+    <div class="col-11" style="padding: 0px;padding-right: 10px">
+      <div><span class="text-info text-large">File Attachment:</span><span class="text-info text-medium"></span></div>
+      <div></div>
+    </div>
+  </div>
+
 </div>

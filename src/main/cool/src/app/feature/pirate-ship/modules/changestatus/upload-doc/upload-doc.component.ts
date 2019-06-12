@@ -34,16 +34,6 @@ export class UploadDocComponent implements OnInit {
       }
     );
 
-   //  const req = new HttpRequest('POST', this._evnService.REST_API_RoyaltySetup_upload, formdata, {
-   //    reportProgress: true,
-   //    responseType: 'text'
-   //  });
-   // this.httpClient.request(req).subscribe(
-   //   (res) => {
-   //     console.log(res);
-   //     debugger;
-   //   }
-   // );
 
   }
 }
