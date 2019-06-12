@@ -326,6 +326,7 @@ export default class RepoBase {
       });
   }
 
+  // hasn't been used or tested yet
   upsert(data, userId, concurrencyCheck = true) {
     return this.getOneById(data.id)
       .then(item => {
