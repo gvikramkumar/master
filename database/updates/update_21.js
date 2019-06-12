@@ -24,7 +24,6 @@ db.dfa_job.insertMany([
   {
     name: 'primary-determination',
     period: 5 * 1000,
-    startTime: '',
     runOnStartup: true, // needs to run before start-primary-jobs to initialize from last settings
     primary: false,
   },
