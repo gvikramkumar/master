@@ -1,44 +1,41 @@
 import request from 'supertest';
 import {serverPromise} from '../../../server';
-import OpenPeriodRepo from '../open-period/repo';
 import _ from 'lodash';
 import {ModuleRepo} from './repo';
 
 describe('Module endpoint tests', () => {
-  let server, openPeriodRepo;
+  let server;
   const endpoint = `/api/module`;
   const testModule = {
-    displayOrder: 13,
+    displayOrder: 12,
     abbrev: 'test',
-    name: 'Test Revenue Allocations',
-    desc: 'Enables the detailed level allocations required to report holistic view of Product & Service Test Revenue for better predictability of test revenue growth and manage/support any new business models.',
+    name: 'Test Module - E2ETEST',
+    desc: 'Module added during api e2e testing.',
     status: 'A'
   };
   let returnFromAddModule;
   beforeAll(function (done) {
     serverPromise.then(function (_server) {
       server = _server;
-      openPeriodRepo = new OpenPeriodRepo();
       done();
     });
   });
 
-  it('should get many', (done) => {
-    const moduleRepo = new ModuleRepo();
-    moduleRepo.getMany()
-      .then(modules => {
-        request(server)
-          .get(endpoint)
-          .expect(200)
-          .expect((res) => {
+  it('should get many', done => {
+    request(server)
+      .get(endpoint)
+      .expect(200)
+      .end((err, res) => {
+        new ModuleRepo().getManyWithRoles()
+          .then(modules => {
             expect(_.sortBy(res.body.map(x => ({abbrev: x.abbrev, roleCount: x.roles.length})), 'abbrev'))
               .toEqual(_.sortBy(modules.map(x => ({abbrev: x.abbrev, roleCount: x.roles.length})), 'abbrev'));
-          })
-          .end(done);
+            done();
+          });
       });
   });
 
-  it(`should add one and add the open period`, (done) => {
+  it(`should add one`, (done) => {
     request(server)
       .post(endpoint)
       .send(testModule)
@@ -48,13 +45,7 @@ describe('Module endpoint tests', () => {
         expect(returnFromAddModule).toBeDefined();
         Object.keys(testModule).forEach(key => expect(returnFromAddModule[key]).toEqual(testModule[key]));
       })
-      .end(() => {
-        openPeriodRepo.getOneByQuery({moduleId: returnFromAddModule.moduleId})
-          .then(item => {
-            expect(item.moduleId).toEqual(returnFromAddModule.moduleId);
-            done();
-          });
-      });
+      .end(done);
   });
 
   it(`should get one`, (done) => {
@@ -66,9 +57,10 @@ describe('Module endpoint tests', () => {
       .end(done);
   });
 
-  it(`should update one to inactive and delete the open period`, (done) => {
+  it(`should update one to inactive`, (done) => {
     returnFromAddModule.abbrev = 'itest';
-    returnFromAddModule.name = 'Updated Test Revenue Allocations to inactive';
+    returnFromAddModule.name = 'Updated Test Module - E2ETEST';
+    returnFromAddModule.desc = 'Module updated during api e2e testing.';
     returnFromAddModule.status = 'I';
     request(server)
       .put(`${endpoint}/${returnFromAddModule.id}`)
@@ -78,13 +70,7 @@ describe('Module endpoint tests', () => {
         returnFromAddModule.updatedDate = res.body.updatedDate;
         expect(res.body).toEqual(returnFromAddModule);
       })
-      .end(() => {
-        openPeriodRepo.getMany({})
-          .then(openPeriods => {
-            expect(_.find(openPeriods, {moduleId: returnFromAddModule.moduleId})).not.toBeDefined();
-            done();
-          });
-      });
+      .end(done);
   });
 
   it('should get all active modules only sorted by display order', (done) => {
@@ -105,9 +91,8 @@ describe('Module endpoint tests', () => {
       .end(done);
   });
 
-  it(`should update one to active and add the open period`, (done) => {
+  it(`should update one to active `, (done) => {
     returnFromAddModule.abbrev = 'atest';
-    returnFromAddModule.name = 'Updated Test Revenue Allocations to active';
     returnFromAddModule.status = 'A';
     request(server)
       .put(`${endpoint}/${returnFromAddModule.id}`)
@@ -117,26 +102,15 @@ describe('Module endpoint tests', () => {
         returnFromAddModule.updatedDate = res.body.updatedDate;
         expect(res.body).toEqual(returnFromAddModule);
       })
-      .end((err, res) => {
-        openPeriodRepo.getOneByQuery({moduleId: res.body.moduleId})
-          .then(item => {
-            expect(item.moduleId).toEqual(res.body.moduleId);
-            done();
-          });
-      });
+      .end(done);
   });
 
-  it(`should delete one and delete open period if the module state is active`, (done) => {
+  it(`should delete one`, (done) => {
     request(server)
-      .delete(`${endpoint}/${returnFromAddModule.id}`)
+      .delete(`${endpoint}/query-one`)
+      .query({name: returnFromAddModule.name})
       .expect(200)
-      .end(() => {
-        openPeriodRepo.getMany({})
-          .then(openPeriods => {
-            expect(_.find(openPeriods, {moduleId: returnFromAddModule.moduleId})).not.toBeDefined();
-            done();
-          });
-      });
+      .end(done);
   });
 
   it(`should return 404 not found`, (done) => {

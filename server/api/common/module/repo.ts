@@ -3,7 +3,6 @@ import {Schema} from 'mongoose';
 import RepoBase from '../../../lib/base-classes/repo-base';
 import AnyObj from '../../../../shared/models/any-obj';
 
-
 const schema = new Schema(
   {
     moduleId: {type: Number, required: true},
@@ -28,17 +27,17 @@ export class ModuleRepo extends RepoBase {
     super(schema, 'Module');
   }
 
-  getMany(filter: AnyObj = {}) {
+  getManyWithRoles(filter: AnyObj = {}) {
     return super.getMany(filter)
       .then(modules => this.addRoles(modules));
   }
 
   getActiveSortedByDisplayOrder() {
-    return this.getMany({status: 'A', setSort: 'displayOrder'});
+    return this.getManyWithRoles({status: 'A', setSort: 'displayOrder'});
   }
 
   getNonAdminSortedByDisplayOrder() {
-    return this.getMany({moduleId: {$ne: 99}, setSort: 'displayOrder'});
+    return this.getManyWithRoles({moduleId: {$ne: 99}, setSort: 'displayOrder'});
   }
 
   getAutoIncrementValue() {
@@ -51,6 +50,5 @@ export class ModuleRepo extends RepoBase {
       mod.roles = `${module.name}:Business Admin, ${module.name}:Super User, ${module.name}:Business User, ${module.name}:End User`.toLowerCase();
       return mod;
     });
-
   }
 }
