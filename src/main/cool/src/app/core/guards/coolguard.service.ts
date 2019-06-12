@@ -20,22 +20,32 @@ export class COOLguardService {
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     return this.accessMgmtServ.onGetUserCEPM()
       .pipe(map((data: any) => {
+        console.log(data);
         this.accessMgmtServ.sendfunctionalRolRaw.subscribe((value) => {
           this.functionalRole = value;
         });
+
+        data.forEach((value, ind) => {
+          if (Object.keys(value)[0].substring(0, 7) === "COOL - ") {
+            Object.defineProperty(value, Object.keys(value)[0].substring(7),
+              Object.getOwnPropertyDescriptor(value, Object.keys(value)[0]));
+            delete value[Object.keys(value)[0]];
+          }
+          
+          let bupmString = "Business Unit Product Manager (BUPM)";
+          if (Object.keys(value)[0] === bupmString) {
+            Object.defineProperty(value, Object.keys(value)[0].substring(31,35),
+              Object.getOwnPropertyDescriptor(value, Object.keys(value)[0]));
+            delete value[Object.keys(value)[0]];
+          }
+        })
+
         let unTrimmed = [];
         for (let item of data) {
           unTrimmed.push(...Object.keys(item));
         }
-        let trimmed = [];
-        for (let item of unTrimmed) {
-          if (item.substring(0, 7) === "COOL - ") {
-            trimmed.push(item.substring(7))
-          } else {
-            trimmed.push(item);
-          }
-        }
-        if (data.length === 0 || data[0].error || (trimmed.indexOf(this.functionalRole)) === -1) {
+      
+        if (data.length === 0 || data[0].error || (unTrimmed.indexOf(this.functionalRole)) === -1) {
           this.router.navigate(['/errorpage']);
           return false;
         } else {

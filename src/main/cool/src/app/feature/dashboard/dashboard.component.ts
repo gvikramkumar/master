@@ -68,10 +68,11 @@ export class DashboardComponent implements OnInit {
 
 
 
-  constructor(private dashboardService: DashboardService,
+  constructor(
     private router: Router,
     private userService: UserService,
     private actionsService: ActionsService,
+    private dashboardService: DashboardService,
     private createOfferService: CreateOfferService,
   ) {
   }

@@ -86,6 +86,24 @@ export class AccessManagementComponent implements OnInit {
 
       this.accessManagementService.updateAccessManagement(updateAdmin)
         .subscribe(() => {
+          this.accessManagementService.checkAdminAccess()
+          .subscribe((User)=> {
+            if(User.userId === updatedUserBusinessEntity.userId) {
+            this.currentUserData["functionalRole"] = this.slectedRole;
+            this.accessManagementService.getFomattedUserAccessData(this.currentUserData)
+            .subscribe((data)=> {
+              this.accessManagementData = data;
+              console.log(this.accessManagementData);
+            })
+          }
+          })
+          //console.log(updatedUserBusinessEntity.userId === )
+          //this.currentUserData["functionalRole"] = this.slectedRole;
+          // this.accessManagementService.getFomattedUserAccessData(this.currentUserData)
+          // .subscribe((data)=> {
+          //   this.accessManagementData = data;
+          // })
+
           updatedUserBusinessEntity.userMapping[0].functionalRole = this.slectedRole;
           this.accessManagementService.sendFromUserRegistration
           .next(updatedUserBusinessEntity);
@@ -113,9 +131,16 @@ export class AccessManagementComponent implements OnInit {
         for (let item of rolesKeys) {
           if (item.substring(0, 7) === "COOL - ") {
             trimmedRoles.push(item.substring(7));
-          } else {
+          } 
+          
+         else if(item === "Business Unit Product Manager (BUPM)") {
+            trimmedRoles.push("BUPM")
+          }
+          else {
             trimmedRoles.push(item);
           }
+
+          
         }
         let lables = [];
         for (let i = 0; i <= trimmedRoles.length - 1; i++) {
@@ -126,7 +151,7 @@ export class AccessManagementComponent implements OnInit {
             lables.push({ label: i, value: trimmedRoles[i] });
           }
         }
-
+        console.log(lables);
         if (lables[0].value === "error") {
           this.ddRoles = [];
         } else {

@@ -25,7 +25,7 @@
           </li>
           <li  [ngClass]="{'visibHidden':hideListElm}" routerLinkActive="active">
             <a routerLink="/coolOffer">
-              <div class="tab__heading" title="Offers" *ngIf="isBupmUser">Offers</div>
+              <div class="tab__heading" title="Offers">Offers</div>
             </a>
           </li>
 
@@ -42,7 +42,10 @@
 
         </ul>
       </div>
+
     </div>
+
+    <!-- <span style="color:white">{{totalActionCount}}</span> -->
 
     <div class="header-toolbar">
 
@@ -62,7 +65,6 @@
           </svg>
         </div>
         {{userName}}
-
         <span class="role userIdSpacing">{{functionalRole}}</span>
       </a>
 
