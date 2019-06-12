@@ -139,19 +139,17 @@ export class AccessManagementComponent implements OnInit {
           else {
             trimmedRoles.push(item);
           }
-
-          
         }
+
         let lables = [];
         for (let i = 0; i <= trimmedRoles.length - 1; i++) {
-
           if (trimmedRoles[i] === user.userMapping[0].functionalRole) {
             lables.unshift({ label: i, value: user.userMapping[0].functionalRole })
           } else {
             lables.push({ label: i, value: trimmedRoles[i] });
           }
         }
-        console.log(lables);
+        
         if (lables[0].value === "error") {
           this.ddRoles = [];
         } else {
