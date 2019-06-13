@@ -68,9 +68,9 @@
           </div>
           <div class="row base-margin-top">
             <div class="col-md-7">
-              <div *ngIf="moduleName === 'Royalty Setup'">
+              <div *ngIf="moduleName === 'Royalty Setup'|| 'Test Orderability'">
                 <p class="text-dkgray-1 text-medium">Attach your royalty checklist</p>
-                <app-upload-doc></app-upload-doc>
+                <app-upload-doc [moduleName]="moduleName" ></app-upload-doc>
               </div>
             </div>
             <div class="col-md-5" align="left">

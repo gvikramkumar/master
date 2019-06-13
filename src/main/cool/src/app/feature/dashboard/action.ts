@@ -80,6 +80,9 @@ export class ActionsAndNotifcations{
     setOfferId(offerId) {
         this.offerId = offerId;
     }
+    getOfferId() {
+      return  this.offerId;
+    }
 
     setOfferName(offerName) {
         this.offerName = offerName;

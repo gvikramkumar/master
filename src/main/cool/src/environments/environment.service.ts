@@ -196,7 +196,9 @@ export class EnvironmentService {
 
     // Royalty_setup Doc upload
 
-  REST_API_RoyaltySetup_upload: string;
+  REST_API_BasicModule_upload: string;
+   REST_API_BasicModule_DownloadDoc: string;
+   REST_API_BasicModuleFileName: string;
 
     // -------------------------------------------------------------------------------------------------
 
@@ -507,6 +509,9 @@ export class EnvironmentService {
 
 
         // ------------------------------------------------ROYALTY SETUP DOCUMENT UPLOAD URL--------------------------------
-         this.REST_API_RoyaltySetup_upload  = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/RoyaltySetup_UpLoadDoc';
+         this.REST_API_BasicModule_upload  = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/UpLoadDoc';
+         this.REST_API_BasicModule_DownloadDoc = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/DownloadDoc';
+         this.REST_API_BasicModuleFileName = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/getFileName';
+
     }
 }

@@ -16,8 +16,12 @@
       <span class="icon-file-text-o icon-small text-info"></span>
     </div>
     <div class="col-11" style="padding: 0px;padding-right: 10px">
-      <div><span class="text-info text-large">File Attachment:</span><span class="text-info text-medium"></span></div>
-      <div></div>
+      <div><span class="text-info text-large">File Attachment:&nbsp;</span>
+        <span class="text-danger">{{info}}</span>
+        <a [href]="downloadUrl"><span class="text-info text-medium">{{fileName}}</span></a></div>
+      <div *ngIf="userId">
+        <span>{{userName}}&nbsp;&nbsp;</span><span>&nbsp;({{userId}})&nbsp;&nbsp;</span>
+        <span>{{timestamp | date:"d-MMM-yy h:mm a"}}&nbsp;PST</span></div>
     </div>
   </div>
 
