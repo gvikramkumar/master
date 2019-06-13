@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { EnvironmentService } from '@env/environment.service';
 import { UserService } from '@app/core/services';
 import { MonetizationModelService } from '@app/services/monetization-model.service';
+import { Location } from '@angular/common';
 import { AccessManagementService } from '@app/services/access-management.service';
 
 @Component({
@@ -23,7 +24,7 @@ export class MenuBarComponent implements OnInit {
     @Input() showSave = false;
     @Output() onProceedToNext = new EventEmitter();
     @Output() updateMessage = new EventEmitter<string>();
-    @Output() getMarkCompleteStatus= new EventEmitter<boolean>();
+    @Output() getMarkCompleteStatus = new EventEmitter<boolean>();
 
 
 
@@ -44,18 +45,19 @@ export class MenuBarComponent implements OnInit {
     cancelStatusValid = true;
     currentUsername: any;
     designReviewRequestApprovalStatus: boolean;
-    markCompleteStatus:boolean;
+    markCompleteStatus: boolean;
     public dispValue = true;
 
     constructor(
         private router: Router,
+        private _location: Location,
         private userService: UserService,
         private menuBarService: MenuBarService,
-        private activatedRoute: ActivatedRoute,     
+        private activatedRoute: ActivatedRoute,
         private environmentService: EnvironmentService,
         private monetizationModelService: MonetizationModelService,
         private accessMgmtService: AccessManagementService) {
-         
+
         this.currentURL = activatedRoute.snapshot['_routerState'].url;
 
         this.showPopup = false;
@@ -104,12 +106,12 @@ export class MenuBarComponent implements OnInit {
     }
 
     ngOnInit() {
-      
+
         this.accessMgmtService.modalSubject.subscribe((value: boolean) => {
             setTimeout(() => {
                 this.dispValue = value;
-            }, 0)
-        })
+            }, 0);
+        });
 
         this.items = [
             {
@@ -148,45 +150,24 @@ export class MenuBarComponent implements OnInit {
             },
 
         ];
-        
+
 
         this.menuBarService.getRubboTaxMenu(this.caseId).subscribe(data => {
             if (this.currentURL.includes('offerDimension')) {
-                debugger;
                 this.markCompleteStatus = data['plan'][0]['status'];
                 this.showMarkcompleteToggle = true;
-            } else if(this.currentURL.includes('offerSolutioning')){
+            } else if (this.currentURL.includes('offerSolutioning')) {
                 this.markCompleteStatus = data['plan'][1]['status'];
                 this.showMarkcompleteToggle = true;
-            } else if (this.currentURL.includes('offerConstruct')){
+            } else if (this.currentURL.includes('offerConstruct')) {
                 this.markCompleteStatus = data['plan'][2]['status'];
                 this.showMarkcompleteToggle = true;
             }
             this.getMarkCompleteStatus.next(this.markCompleteStatus);
             this.getCanUncheckCompleteStatus();
-         
-         
+
+
         })
-
-        this.monetizationModelService.retrieveOfferDetails(this.currentOfferId).subscribe(data => {
-            this.offerBuilderdata = data;
-            this.offerBuilderdata['BEList'] = [];
-            this.offerBuilderdata['BUList'] = [];
-            if (this.offerBuilderdata['primaryBEList'] != null) {
-                this.offerBuilderdata['BEList'] = this.offerBuilderdata['BEList'].concat(this.offerBuilderdata['primaryBEList']);
-            }
-            if (this.offerBuilderdata['secondaryBEList'] != null) {
-                this.offerBuilderdata['BEList'] = this.offerBuilderdata['BEList'].concat(this.offerBuilderdata['secondaryBEList']);
-            }
-            if (this.offerBuilderdata['primaryBUList'] != null) {
-                this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['primaryBUList']);
-            }
-            if (this.offerBuilderdata['secondaryBUList'] != null) {
-                this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['secondaryBUList']);
-            }
-        });
-
-       
 
     }
 
@@ -235,7 +216,7 @@ export class MenuBarComponent implements OnInit {
                     'emailBody': emailBody,
                     'toMailLists': stakeHolders,
                 };
-                this.menuBarService.sendNotification(emailNotificationData).subscribe(res => {
+                this.menuBarService.sendNotification(emailNotificationData).subscribe(() => {
                     this.router.navigate(['/dashboard']);
                 });
             }
@@ -271,7 +252,7 @@ export class MenuBarComponent implements OnInit {
                     'emailBody': emailBody,
                     'toMailLists': stakeHolders,
                 };
-                this.menuBarService.sendNotification(emailNotificationData).subscribe(res => {
+                this.menuBarService.sendNotification(emailNotificationData).subscribe(() => {
                     this.router.navigate(['/dashboard']);
 
 
@@ -295,6 +276,10 @@ export class MenuBarComponent implements OnInit {
         this.onProceedToNext.emit('false');
     }
 
+    goBack() {
+        this._location.back();
+    }
+
     gotoOfferviewDetails() {
         this.router.navigate(['/offerDetailView', this.offerId, this.caseId]);
     }
@@ -302,44 +287,45 @@ export class MenuBarComponent implements OnInit {
     getCanUncheckCompleteStatus() {
 
         this.menuBarService.getDesignReviewStatus(this.offerId).subscribe(data => {
-              this.designReviewRequestApprovalStatus = data['designReviewRequestApproval'];
-              if (this.designReviewRequestApprovalStatus == true){
+            this.designReviewRequestApprovalStatus = data['designReviewRequestApproval'];
+            if (this.designReviewRequestApprovalStatus === true) {
                 this.canUncheckComplete = false;
             } else {
                 this.canUncheckComplete = true;
             }
             this.disableMarkCompleteToggle();
-         })
-      
+        })
+
     }
 
     toggleMarkCompletePopup() {
-       this.showMarkcompletePopup = !this.showMarkcompletePopup;
+        this.showMarkcompletePopup = !this.showMarkcompletePopup;
     }
 
-    closeMarkCompletePopup(message) {
+    closeMarkCompletePopup() {
         this.showMarkcompletePopup = false;
         this.markCompleteStatus = !this.markCompleteStatus;
         this.getMarkCompleteStatus.next(this.markCompleteStatus);
         this.disableMarkCompleteToggle();
     }
 
-    confirmMarkComplete(message) {
+    confirmMarkComplete() {
         this.showMarkcompletePopup = false;
         this.getMarkCompleteStatus.next(this.markCompleteStatus);
         this.disableMarkCompleteToggle();
     }
-    
+
     disableMarkCompleteToggle() {
 
-        if(this.markCompleteStatus === false && this.canMarkComplete === false) {
-           this.shouldDisable = true;
-        }
-         if(this.markCompleteStatus === true && this.canUncheckComplete === false) {
+        if (this.markCompleteStatus === false && this.canMarkComplete === false) {
             this.shouldDisable = true;
-         }
-         console.log('111:'+ this.shouldDisable)
+        }
+        if (this.markCompleteStatus === true && this.canUncheckComplete === false) {
+            this.shouldDisable = true;
+        }
+
     }
+
 }
 
 

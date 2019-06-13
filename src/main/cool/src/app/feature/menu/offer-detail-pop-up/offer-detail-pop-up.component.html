@@ -4,7 +4,7 @@
 
     <div class="row">
 
-      <div class="col-md-12">
+      <div class="col-md-6">
         <div class="flex-fluid text-left half-margin-left half-margin-bottom half-margin-top">
           <div class="display-6">Offer ID</div>
           <div>{{ offerBuilderdata["offerId"] }}</div>
@@ -13,8 +13,11 @@
 
       <div class="col-md-6">
         <div class="flex-fluid text-left half-margin-left half-margin-bottom half-margin-top">
-          <div class="align-status half-margin-right">
-            <span class="align-type half-margin-left">{{ offerBuilderdata['derivedMM'] }}</span>
+          <div class="align-status half-margin-right" *ngIf="offerBuilderdata['overallStatus']">
+            <span class="icon-software-certified"></span>
+            <span class="align-type half-margin-left">
+              {{ offerBuilderdata['overallStatus'] }} | {{ offerBuilderdata['derivedMM'] }}
+            </span>
           </div>
         </div>
       </div>

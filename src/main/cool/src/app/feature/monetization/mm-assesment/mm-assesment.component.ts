@@ -71,7 +71,6 @@ export class MmAssesmentComponent implements OnInit {
 
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
-    private menuBarService: MenuBarService,
     private monetizationModelService: MonetizationModelService,
     private offerPhaseService: OfferPhaseService,
     private offerDetailViewService: OfferDetailViewService,

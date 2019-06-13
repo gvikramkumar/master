@@ -28,9 +28,6 @@ export class ConfigurationService {
     //   window.location.replace(url);
     // }
     return new Promise((resolve, reject) => {
-      console.log(window.location + "------------this is the window location url------------");
-      console.log(window.location.hash + "------------this is the window location url hash------------");
-      console.log(window.location.hash.indexOf('access_token') + "------------this is the window location indexof('access_token') the right one should be 1------------");
 
       if (this._startupData.token || window.location.hash.indexOf('access_token') !== -1) {
 
@@ -88,9 +85,6 @@ export class ConfigurationService {
   private login_to_dash() {
 
     return new Promise((resolve, reject) => {
-      console.log(window.location + "------------this is the window location url------------");
-      console.log(window.location.hash + "------------this is the window location url hash------------");
-      console.log(window.location.hash.indexOf('access_token') + "------------this is the window location indexof('access_token') the right one should be 1------------");
       this._startupData.token = window.location.hash.split('&')[0].split('=')[1];
 
       this.httpClient.get(this.urlGetCurrentUser).toPromise()

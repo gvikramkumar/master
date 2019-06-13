@@ -15,15 +15,6 @@
 
       <div class="contentBox mt-10">
 
-        <div class="alert" [ngClass]="{'alert--info':message['color']==='black','alert--success': message['color']==='green',
-        'alert--danger': message['color']==='red','alert--warning': message['color']==='yellow'}">
-          <div class="alert__icon mm-alert-icon" [ngClass]="{'icon-info-outline': message['coloFr']==='black','icon-error-outline': message['color']==='red',
-          'icon-check-outline': message['color']==='green', 'icon-warning-outline': message['color']==='yellow'}">
-          </div>
-          <div class="alert__message" [ngStyle]="{'color': message['color']}">
-            <b>{{message['contentHead']}}</b>&nbsp;{{message['content']}}</div>
-        </div>
-
         <div class="card card--raised base-margin-top">
           <ul class="list">
 
