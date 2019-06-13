@@ -1850,6 +1850,11 @@ span.icon-collapse.icon-small:hover {
   text-align: center;
   color:#7F7F86;
 }
+.subheader.text-indigo {
+  font-size:18px;
+  font-weight:bold;
+}
+
 @media (min-width: 1200px) {
   .cool.cui .header-bar__main span.vertical-divider {
     margin: 10px 40px;
