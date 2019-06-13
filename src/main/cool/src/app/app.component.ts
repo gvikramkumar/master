@@ -54,7 +54,6 @@ export class AppComponent implements OnInit {
         this.accessMgServ.sendfunctionalRolRaw
           .subscribe((roleFromDb: any) => {
             for (let item of data) {
-              console.log(item.hasOwnProperty(roleFromDb))
               if (item.hasOwnProperty(roleFromDb) === true) {
                 this.accessMgServ.getRoleObj.next(item[roleFromDb]);
               }
