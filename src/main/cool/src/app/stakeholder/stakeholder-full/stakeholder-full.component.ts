@@ -30,6 +30,7 @@ export class StakeholderFullComponent implements OnInit {
   selectedStakeHolders;
   searchStakeHolderInput;
   searchStakeHolderResults: String[];
+  sentEmailNotification;
 
   cols = [
     { field: 'name', header: 'NAME' },
@@ -71,6 +72,10 @@ export class StakeholderFullComponent implements OnInit {
       this.offerName = data['offerName'];
       this.stakeHolderData = data['stakeholders'];
       this.processStakeHolderData(data['stakeholders']);
+    });
+
+    this.stakeholderfullService.getUniqueEmailNotification(this.currentOfferId).subscribe(emailData => {
+      this.sentEmailNotification = emailData['proceedToStrategyReview'];
     });
 
   }
@@ -220,11 +225,18 @@ export class StakeholderFullComponent implements OnInit {
         'action': '',
         'comment': ''
       };
+
       this.offerPhaseService.createSolutioningActions(proceedPayload).subscribe(result => {
-        this.stakeholderfullService.sendEmailNotification(this.currentOfferId).subscribe(data => {
+        if (!this.sentEmailNotification) {
+          this.stakeholderfullService.sendEmailNotification(this.currentOfferId).subscribe(data => {
+            this.router.navigate(['/strategyReview', this.currentOfferId, this.caseId]);
+            this.stakeholderfullService.uniqueEmailNotification(this.currentOfferId).subscribe(resData => {
+            });
+          }, (error) => {
+          });
+        } else {
           this.router.navigate(['/strategyReview', this.currentOfferId, this.caseId]);
-        }, (error) => {
-        });
+        }
       });
     },
       (error) => {
