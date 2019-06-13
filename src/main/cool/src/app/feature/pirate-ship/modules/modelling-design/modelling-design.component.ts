@@ -86,7 +86,7 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
     this.functionalRole = this.configurationService.startupData.functionalRole;
     this.showDesignCanvasButton = this.selectedAto === 'Overall Offer' ? false : true;
 
-    this.modellingDesignSubscription = this.modellingDesignService.retrieveAtoList(this.offerId)
+    this.modellingDesignSubscription = this.modellingDesignService.retrieveModelingActivities(this.offerId)
       .subscribe((modellingDesignResponse: ModellingDesign) => {
 
         this.modellingDesign = modellingDesignResponse;
