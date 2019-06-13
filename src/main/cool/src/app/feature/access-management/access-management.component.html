@@ -59,7 +59,7 @@
                     (onChange)="onSelectDd(user,$event)" optionLabel="value" [options]="ddRoles">
                   </p-dropdown>
                   <span *ngIf="isSelected">{{slectedRole}}</span>
-                  <span class="icon-pencil colorCl" (click)="onGetCEPMs(user,ind)"></span>
+                 <span *ngIf="isSelected" class="icon-pencil colorCl" (click)="onGetCEPMs(user,ind)"></span>
                 </td>
                 <td>
                   <p-multiSelect [options]="user.businessEntities" [filter]="false" [showHeader]="false"
