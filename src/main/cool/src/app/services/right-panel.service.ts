@@ -3,7 +3,7 @@ import { catchError, retry } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { EnvironmentService } from '../../environments/environment.service';
-import { LeadTime } from '@app/right-panel/models/lead-time';
+import { LeadTime } from '@app/feature/right-panel/models/lead-time';
 import { Observable, throwError } from 'rxjs';
 import { DecimalPipe } from '@angular/common';
 

@@ -1,0 +1,28 @@
+<div class="modal" *ngIf="show">
+    <div class="modal__dialog">
+        <div class="modal__content">
+            <a class="modal__close" (click)="close()"><span class="icon-close"></span></a>
+            
+            <div class="modal__header">
+                <div class="menu-popup-title">{{getPopupTitle()}}</div>
+            </div>
+
+            <div class="modal__body">
+               <div class="form-group label--floated">
+                   <div class="form-group__text">
+                       <textarea class="textarea" autofocus rows="3" (keyup)="enableSubmit($event)" [(ngModel)]="reason" required></textarea>
+                       <label>ADD A REASON</label>
+                   </div>
+               </div>
+            </div>
+
+            <div class="modal__footer">
+                <button class="btn" (click)="close()">Cancel</button>
+                <button type="button"
+                [disabled]="!buttonIsDisabled"
+                class="btn btn--primary" (click)="submit()">Submit</button>
+            </div>
+
+        </div>
+    </div>
+</div>

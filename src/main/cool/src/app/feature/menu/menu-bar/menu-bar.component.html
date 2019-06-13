@@ -1,0 +1,119 @@
+<div class="panel panel--ltgray panel--compressed">
+  <div class="container">
+    <div class="row">
+
+      <div class="col-md-6">
+
+        <h1 class="relative display-4 half-margin-top half-margin-bottom">
+
+          <button class="btn btn--icon" id="flyOut">
+            <span class="icon-list-menu"></span>
+          </button>
+
+          <div id='flyoutmenu'>
+
+            <ul class="panel">
+
+              <li *ngFor="let item of items"><span class="menu-label">{{item['label']}}</span>
+                <ul>
+                  <li *ngFor="let subItem of item['items']"
+                    [ngClass]="{'disable-item': itemShow[subItem['label']] !== true}"
+                    (click)="navigate(subItem['label'])"><span class="link">{{subItem['label']}}</span>
+                  </li>
+                </ul>
+              </li>
+
+              <li> <span class="menu-label">On Hold/Cancel</span>
+
+                <ul [ngClass]="{'readOnlyClas':dispValue}" *ngIf="!currentOfferId">
+                  <li appReadonly [DirectiveValue]="'On Hold'"
+                    [ngClass]="{'readOnlyClas':dispValue,'disable-item': holdStatusValid == true}"
+                    (click)='showOppupFunc("hold")'>
+                    <span [ngClass]="{'disable-item':dispValue}" class="link">On
+                      Hold</span>
+                  </li>
+                  <li appReadonly [DirectiveValue]="'Cancel'" [ngClass]="{'disable-item': cancelStatusValid == true}"
+                    (click)='showOppupFunc("cancel")'>
+                    <span class="link">Cancel</span>
+                  </li>
+                </ul>
+
+                <ul *ngIf="currentOfferId">
+                  <ul [ngClass]="{'readOnlyClas':dispValue}" *ngIf="currentOfferId">
+                    <li appReadonly [DirectiveValue]="'On Hold'"
+                      [ngClass]="{'readOnlyClas':dispValue,'disable-item': holdStatusValid !== true}"
+                      (click)='showOppupFunc("hold")'>
+                      <span [ngClass]="{'disable-item':dispValue}" class="link">On
+                        Hold</span>
+                    </li>
+                    <li appReadonly [DirectiveValue]="'Cancel'"
+                      [ngClass]="{'readOnlyClas':dispValue,'disable-item': cancelStatusValid !== true}"
+                      (click)='showOppupFunc("cancel")'>
+                      <span [ngClass]="{'disable-item':dispValue}" class="link">Cancel</span>
+                    </li>
+                  </ul>
+                </ul>
+
+              </li>
+
+            </ul>
+          </div>
+
+          <span *ngIf="!currentOfferId; then newOffer else oldOffer"></span>
+
+          <ng-template #newOffer>
+            <span>Create New Offer</span>
+          </ng-template>
+
+          <ng-template #oldOffer>
+            <span> {{offerName}}</span>
+            <button class="btn btn--icon btn--transparent">
+              <span class="icon-more" (click)="basicOfferInfo.toggle($event)">
+              </span>
+            </button>
+          </ng-template>
+
+        </h1>
+
+      </div>
+
+      <div class="col-md-6 text-right">
+
+        <button class="menu-btn" (click)="saveCurrentState()" *ngIf="showSave">
+          <span class="ico-save-offer"></span>
+          Save
+        </button>
+
+        <!-- 
+        <label class="menu-btn switch switch—large" *ngIf="showMarkcompleteToggle">
+            <input type="checkbox" [(ngModel)]="markCompleteStatus" (change)="toggleMarkCompletePopup()"
+            [disabled]="(markCompleteStatus==false&&canMarkComplete==false)||(markCompleteStatus==true&&canUncheckComplete==false)"/>
+            <span class="switch__input"></span>
+            <span class="switch__label">Mark Complete</span>
+        </label> -->
+
+        <button (click)="goBack()" class="menu-btn" *ngIf="!currentOfferId">
+          <span class="icon-close"></span> Cancel
+        </button>
+
+        <button class="menu-btn" (click)="gotoOfferviewDetails()" *ngIf="currentOfferId">
+          <span class="ico-offer-details"></span>
+          Offer Details
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<p-overlayPanel #basicOfferInfo>
+  <app-offer-detail-pop-up [offerId]="offerId"></app-offer-detail-pop-up>
+</p-overlayPanel>
+
+<app-menu-bar-popup [popupType]="popupType" (closePopup)="closePopup($event)"></app-menu-bar-popup>
+
+<app-mark-complete-popup [offerId]="currentOfferId" [caseId]="caseId" [show]="showMarkcompletePopup"
+  [currentURL]="currentURL" [markCompleteStatus]="markCompleteStatus"
+  (closeMarkCompletePopup)="closeMarkCompletePopup()" (confirmMarkComplete)="confirmMarkComplete()">
+</app-mark-complete-popup>

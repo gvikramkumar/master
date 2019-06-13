@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SelfServiceOrderability } from '../pirate-ship/modules/self-service-orderability/models/self-service-orderability';
+import { SelfServiceOrderability } from '@app/feature/pirate-ship/modules/self-service-orderability/models/self-service-orderability';
 
 import { EnvironmentService } from '@env/environment.service';
 import { Observable } from 'rxjs';

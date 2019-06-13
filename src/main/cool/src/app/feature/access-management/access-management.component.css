@@ -1,0 +1,334 @@
+.contentBox {
+    display: inline-block;
+    width: 100%;
+  }
+  
+  .leftContent,
+  .rightContent {
+    float: left;
+  }
+  
+  .leftContent {
+    width: calc(100% - 400px);
+    padding-right: 15px;
+  }
+  
+  .rightContent {
+    width: 400px;
+  }
+  
+  .offer-header.card {
+    padding: 0px;
+    overflow: hidden;
+  }
+  
+  .offer-header.card *[class^='col-'] {
+    border-bottom: solid 1px #d8d8d8;
+    border-collapse: collapse;
+    border-right: solid 1px #d8d8d8;
+    padding: 10px;
+  }
+  .mm-page-alert{
+    color: #58585b;
+    position: relative;
+    background: transparent !important;
+    box-shadow: none;
+    border: 1px solid #00bceb !important;
+    border-left-width: 48px !important;
+    padding: 10px;
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    position: relative;
+    width: 100%;
+  }
+  
+  .mm-alert-icon{
+    position: absolute !important;
+    left: -37px !important;
+    top: 3px !important ;
+  }
+  
+  .cui .alert__message {
+    flex: 1 !important;
+    flex-shrink: 1 !important;
+    flex-wrap: wrap !important;
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+  }
+  
+  .icon-info-outline:before {
+    content: "";
+  }
+  
+  .cui ul.tabs .tab__heading, .cui .nav-tabs .tab__heading {
+    display: block;
+    margin: 0;
+    padding: 10px 0;
+  }
+  
+  
+  .gray-button {
+    opacity: 0.5;
+      color: #9e9ea2;
+      outline: 0;
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      background-color: transparent;
+      border: 1px solid #9e9ea2;
+  }
+  
+  /**Group Table CSS Start Here**/
+  .grouptable {
+    border: none;
+  }
+  
+  .grouptable td {
+    padding: 12px 10px 6px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .grouptable tr:last-child td {
+    border-bottom: 0
+  }
+  
+  .xs-small {
+    font-size: 1rem;
+    padding-left: 3px;
+  }
+  
+  .xs-small span.icon-small {
+    vertical-align: middle;
+    margin-right: 3px;
+  }
+  
+  .xs-small span.icon-small::before {
+    font-size: 1.1rem;
+    line-height: 12px;
+  }
+  .grouptable {
+      border: 1px solid lightgray;;
+  }
+  .grouptable .borderColor {
+    border: #e9e9e9 1px solid
+  }
+  
+  
+  .grouptable .grouptableData {
+    padding: 0;
+  }
+  
+  .groupHeader {
+    background: #e9e9e9;
+    padding: 9px 9px 7px;
+    margin: 0;
+    font-weight: bold;
+    font-size: 1.4rem;
+  
+  }
+  
+  .chips {
+    border: #ddd 1px solid;
+    padding: 5px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    margin: 0 12px 0 0; 
+    display: inline-block;
+  }
+  
+  .cui .task--bar .btn {
+    border-radius: 6px;
+  }
+  
+  
+  /* .chips:hover {
+    background: #05b0ee;
+    color: white;
+  } */
+  .chips.selected {
+    background: #049fd9;
+    color: white;
+  }
+  
+  .chips.not-aligned {
+      background: #d90404;
+      color: white;
+  }
+  
+  
+  .aligned-success, .aligned-error, .partial-aligned {
+    font-weight: 500;
+  }
+  
+  .aligned-success {
+    color: rgb(0, 196, 0);
+  }
+  
+  .aligned-error {
+    color: rgb(194, 7, 7);
+  }
+  
+  .partial-aligned {
+    color: #e87127;
+  }
+  
+  .mm-model-btn-active {
+    border: 1px solid transparent;
+      background: #017CAD;
+      color: #ffffff;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent
+  
+  }
+  .mm-model-btn-active:hover {
+    background: #04adf1;
+  }
+  
+  .mm-model-btn-inactive {
+    border: 1px solid transparent;
+      background: white;
+      color: #017CAD;
+      text-decoration: none;
+      box-shadow: inset 0 0 0 1px #017CAD;
+      -webkit-tap-highlight-color: transparent
+  }
+  .mm-model-btn-inactive:hover {
+    background: #04adf1;
+  }
+  
+  .cui .alert__icon {
+    color: #ffffff;
+    position: absolute;
+    left: -36px;
+    top: 10px;
+    font-size: 2.4rem;
+  }
+  
+  .mm-alert-icon {
+    position: relative;
+    left: 0;
+    top: 0;
+    font-size: 2.4rem !important;
+  }
+  
+  .padding-5-20 {
+    padding: 5px 20px
+  }
+  
+  .margin-auto {
+    margin: auto;
+  }
+  
+  .margin-right-10 {
+    margin-right: 10px;
+  }
+  /**Group Table CSS End Here**/
+  
+  /*UI revise*/
+  
+  .cui .card.card--raised, .cui a.card.card--raised {
+    box-shadow: 0 5px 14px -8px rgba(0, 0, 0, 0.25);
+  }
+  .tabs + .card {
+    margin-top:-2px;
+    z-index: 0;
+  }
+  .tabs {
+    z-index: 1;
+  }
+  .ui-accordion-header {
+    text-transform: uppercase;
+    background-color:transparent;
+    padding: 10px;
+    color: #58585b;
+    border: 0px solid #dfdfdf;
+    font-size: 1.6rem;
+  }
+  .ui-accordion-content {
+    margin: 10px auto;
+  }
+  .ui-accordion-content .flex-center-vertical {
+    margin-left: .5em;
+  }
+  span.avatar-ico {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+  } 
+  .list.dimensions--toggle li{
+    padding:10px 0;
+  
+  }
+  .dimensions--toggle button.btn.btn--small {
+    margin: 10px auto;
+  }
+  .cui .btn.btn--small, .cui .btn.btn--wide {
+    max-width: fit-content;
+  }
+  .cui .task--bar .btn {
+    border-radius: 6px !important;
+  }
+  .btn span.icon-chevron-right {
+    margin-left: 15px;
+  }
+  .offerID {
+    text-transform: uppercase;
+    color:#666666;
+    font-size: 18px;
+  }
+  /* For tab's Space */
+  .cui ul.tabs.tabs--bordered > li, .cui .nav-tabs.tabs--bordered > li {
+    margin: 0 5px;
+  } 
+  
+  .cui ul.tabs.tabs--bordered  {
+  margin: 0 5px;
+  }
+  .offer-header.card *[class^='col-'] {
+    border-bottom: solid 1px #d8d8d8;
+    border-collapse: collapse;
+    border-right: solid 1px #d8d8d8;
+    padding: 10px;
+  }
+  .offer-header.card {
+    padding: 0;
+    overflow: hidden;
+  }
+
+    
+  .cepmCl {
+    color: red;
+  }
+
+
+
+#selectCl{
+  width: 157px;
+  height: 35px;
+}
+
+#selectCl option{
+  width: 157px;
+}
+
+select {
+  font: inherit;
+}
+
+.colorCl {
+  color:#186ba0;
+  cursor: pointer;
+  position: absolute;
+  left: 719px;
+}
+
+.widthCl{
+  width:170px;
+}
+
+.dispNone {
+  display: none;
+}
+
+
+    

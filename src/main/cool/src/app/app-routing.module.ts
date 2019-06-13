@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, PreloadAllModules } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 import { APP_ROUTES } from './app.routes';
 

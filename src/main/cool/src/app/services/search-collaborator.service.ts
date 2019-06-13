@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { AddEditCollaborator } from '../create-offer-cool/add-edit-collaborator';
+import { AddEditCollaborator } from '@app/feature/create-offer-cool/add-edit-collaborator';
 import { EnvironmentService } from '../../environments/environment.service';
 
 

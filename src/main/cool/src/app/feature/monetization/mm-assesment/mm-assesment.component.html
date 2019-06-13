@@ -1,0 +1,126 @@
+<app-menu-bar *ngIf="dimensionMode" [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId"
+  [offerName]="offerBuilderdata['offerName']" [stakeData]="stakeholders" [canMarkComplete]="canMarkComplete"
+  (updateMessage)="updateMessage($event)" [showSave]="true" (getMarkCompleteStatus)="getMarkCompleteStatus($event)"
+  (onProceedToNext)="proceedToOfferSolution($event)">
+</app-menu-bar>
+
+<app-menu-bar *ngIf="!dimensionMode" [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId"
+  [offerName]="offerBuilderdata['offerName']" [stakeData]="stakeholders" (updateMessage)="updateMessage($event)"
+  [showSave]="false">
+</app-menu-bar>
+
+<div class="content">
+  <div class="container">
+    <div class="panel-wrapper mt-15">
+
+      <app-taskbar *ngIf="!dimensionMode" (onProceedToNext)="proceedToStakeholder($event)">
+      </app-taskbar>
+
+      <app-taskbar *ngIf="dimensionMode" (onProceedToNext)="proceedToOfferSolution($event)">
+      </app-taskbar>
+
+      <div class="contentBox mt-10">
+        <div class="row">
+
+          <div class="leftContent col-sm-12 col-md-9">
+
+            <div class="panel-wrapper mt-20">
+
+              <ul id="tabsv6" class="tabs tabs--bordered base-margin-top" style="z-index: 0">
+                <li class="tab" *ngFor="let groupName of groupNames; let i = index" [ngClass]="{ active: i == activeTabIndex,
+              disabled: !canClickTab && i!=0 }" (click)="changeTab(i)">
+                  <a tabindex="0" class="padding-5-20 margin-right-10">
+                    <div class="tab__heading" style="margin:auto">{{ groupName }}</div>
+                  </a>
+                </li>
+              </ul>
+
+              <div class="panel panel--compressed panel--bordered panel--raised-small">
+                <h4>{{ groupNames[activeTabIndex] }}</h4>
+                <div class="panel">
+
+                  <div id="tabsv6-content" class="tab-content">
+                    <div id="tabsv6-1-content" class="tab-pane active">
+
+                      <ul class="list dimensions--toggle">
+                        <li *ngFor="let subGroup of getGroupKeys(groupData[activeTabIndex]) ">
+
+                          <div class="row">
+                            <div class="col-md-2 margin-auto">{{subGroup}}</div>
+                            <div appReadonly [DirectiveValue]="'Offer Model Evaluation'" class="col-md-10">
+                              <button *ngFor="let attribute of groupData[activeTabIndex][subGroup]" [ngClass]="{
+                              'gray-button':attribute.type===1 && attribute.status===-1,
+                              'mm-model-btn-active':attribute.status===1||attribute.type===2,
+                              'mm-model-btn-inactive':attribute.status===-1 && attribute.type ===0
+                            }" class="btn btn--small tooltip" placement="top" (click)="toggleSelected(attribute)">
+                                {{attribute.name}}
+                                <span class="tooltiptext" *ngIf="attribute.tooltip!=null && attribute.tooltip!=''">
+                                  {{attribute.tooltip}}</span></button>
+                            </div>
+                          </div>
+
+                        </li>
+                      </ul>
+
+                    </div>
+                  </div>
+
+                  <p-dialog name="events" [(visible)]="showDialog" width="500">
+                    <h3 class="text-center">
+                      <span class="pi pi-exclamation-triangle text-warning"></span>
+                    </h3>
+                    <p class="text-center">
+                      <b>Switching the monetization model may result in losing the changes you have made.
+                        This may also increase Lead Time. Do you still want switch your model evaluation?</b></p>
+                    <p-footer>
+                      <div class="clearfix text-center">
+                        <button type="button" pButton [ngStyle]="{'color': 'white', 'background':'gray'}"
+                          (click)="showDialog=false;" label="Cancel"></button>
+                        <button type="button" pButton [ngStyle]="{'color': 'white', 'background':'green'}"
+                          (click)="showDialog=false;showErrorDialog=true" label="Switch"></button>
+                      </div>
+                    </p-footer>
+                  </p-dialog>
+
+                  <p-dialog name="events" [(visible)]="showErrorDialog" width="500">
+                    <h3 class="text-center"><span class="pi pi-exclamation-triangle text-error"></span></h3>
+                    <p class="text-center"><b>During this pilot period, changes resulting in a Monetization Model
+                        re-alignment are not allowed. If you wish to change Monetization Models, please create a new
+                        offer</b></p>
+                    <p-footer>
+                      <div class="clearfix text-center">
+                        <button type="button" pButton [ngStyle]="{'color': 'white', 'background':'gray'}"
+                          (click)="showErrorDialog=false;" label="Ok"></button>
+                      </div>
+                    </p-footer>
+                  </p-dialog>
+
+                  <div class="panel-footer base-margin-top">
+                    <div class="btn-group btn-group--wide" style="margin: auto;width: 100%;">
+                      <button (click)="toPrevStep()" class="btn btn--gray-ghost">
+                        <span class="icon-chevron-left"></span>
+                      </button>
+                      <button (click)="toNextStep()" [disabled]="!canClickNextStep" class="btn btn--gray">
+                        <span class="icon-chevron-right"></span>
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="rightContent col-sm-12 col-md-3">
+            <app-right-panel [stakeData]="stakeholders" [offerName]="offerName" [derivedMM]="derivedMM"
+              [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference">
+            </app-right-panel>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
