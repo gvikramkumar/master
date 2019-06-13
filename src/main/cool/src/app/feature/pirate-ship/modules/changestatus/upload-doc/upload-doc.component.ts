@@ -20,6 +20,7 @@ export class UploadDocComponent implements OnInit {
   userId: string;
   userName: string;
   info: string;
+ @Input() isReadonly: boolean;
 
   constructor(
    public _evnService: EnvironmentService,
