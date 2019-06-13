@@ -215,7 +215,10 @@ export class JobManager {
           const jobName = job;
           job = _.find(jobs, {name: job});
           if (!job) {
-            this.log(true, {name: jobName, serverUrl: this.serverUrl}, `JobManager.runJob /api/run-job: no job found for jobName: ${job}`);
+            this.log(true, {
+              name: jobName,
+              serverUrl: this.serverUrl
+            }, `JobManager.runJob /api/run-job: no job found for jobName: ${job}`);
           }
         }
         const jobRun = <DfaJobRun>results[1] || new DfaJobRun({name: job.name, serverUrl: this.serverUrl});
@@ -244,7 +247,7 @@ export class JobManager {
                   run.duration = run.endDate.getTime() - run.startDate.getTime();
                   run.status = 'success';
                   run.data = jobData;
-                  return this.runUpdateAndLog(run, req, job.log, 'job run error'); // return the job run
+                  return this.runUpdateAndLog(run, req, job.log, 'job run successful'); // return the job run
                 });
             })
             // job error
@@ -354,7 +357,7 @@ export class JobManager {
               // start primary periodic jobs
               primaryJobsNotRunning.filter(x => x.period)
                 .forEach(job => this.startPeriodicJob(job));
-              primaryJobsNotRunning.filter(x => x.startTime)
+              primaryJobsNotRunning.filter(x => x.startTime && x.runOnStartup)
                 .forEach(job => this.runJob(job));
               // update primary jobs to this serverUrl
               return this.jobConfigRepo.updateMany({_id: {$in: [primaryJobsNotRunning.map(x => x._id)]}}, {$set: {primaryServerUrl: this.serverUrl}});
@@ -404,7 +407,25 @@ export class JobManager {
 
   // checks startTime jobs (primary on primary server as well) for last run and start time, then runs and updates runtime in express app global or db???
   checkStartTimeJobsJob() {
-    return Promise.resolve();
+    return this.getActiveJobConfigs()
+      .then(jobs => {
+        jobs.filter(x => x.startTime && !x.primary).forEach(startTimeJob => this.checkStartTimeAndRunJob(startTimeJob));
+        jobs.filter(x => x.startTime && x.primary && x.serverUrl === this.serverUrl)
+          .forEach(startTimeJob => this.checkStartTimeAndRunJob(startTimeJob));
+      });
+  }
+
+  checkStartTimeAndRunJob(startTimeJob: DfaJob) {
+    if (startTimeJob.startTime === moment().format('ha')) {
+      return this.getJobRun(startTimeJob.name)
+        .then(job => {
+          if (!job.running && job.endDate.getTime() > new Date().getTime()) {
+            return this.runJob(job);
+          }
+        });
+    } else {
+      return Promise.resolve();
+    }
   }
 
   // periodic jobs (15 min or so) that copies mongo data to postgres
@@ -421,13 +442,13 @@ export class JobManager {
   }
 
   approvelEmailReminderJob() {
-/*
-    Q.allSettled([
-      this.submeasureController.approvalEmailReminder('submeasure'),
-      this.ruleController.approvalEmailReminder('rule')
-    ])
-      .then(results => handleQAllSettled(null, 'qAllReject'));
-*/
+    /*
+        Q.allSettled([
+          this.submeasureController.approvalEmailReminder('submeasure'),
+          this.ruleController.approvalEmailReminder('rule')
+        ])
+          .then(results => handleQAllSettled(null, 'qAllReject'));
+    */
     return Promise.resolve();
   }
 
