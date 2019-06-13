@@ -4,7 +4,7 @@
     <div class="col-md-12">
       <form>
         <div>
-          <button class="btn btn--small btn--primary btn--cool2" (click)="showUploadWindow()">Upload File</button>
+          <button [disabled]="isReadonly"  class="btn btn--small btn--primary btn--cool2" (click)="showUploadWindow()">Upload File</button>
         </div>
         <br/><br/>
         <div>
