@@ -314,7 +314,7 @@ export class OfferSolutioningComponent implements OnInit {
       question.questionType = 'Free Text';
     }
 
-    // When Free Text - Restrict Length Of Characters  
+    // When Free Text - Restrict Length Of Characters
     if (question.questionType === 'Free Text') {
       question.rules.maxCharacterLen = _.isEmpty(question.rules.maxCharacterLen) ?
         150 : Number(question.rules.maxCharacterLen);
@@ -449,7 +449,7 @@ export class OfferSolutioningComponent implements OnInit {
     offerSolutioningAnswers['offerId'] = this.offerId;
 
     // Filter Values That Have No Data
-    questionAnswer = questionAnswer.filter(nonEmptyAnswer => nonEmptyAnswer['answer']);
+    questionAnswer = questionAnswer.filter(nonEmptyAnswer => String(nonEmptyAnswer['answer']));
     offerSolutioningAnswers['questionAnswer'] = questionAnswer;
 
     // Save Offer Solution Answers
@@ -549,4 +549,3 @@ export class OfferSolutioningComponent implements OnInit {
   // -----------------------------------------------------------------------------------------------------------------------------
 
 }
-
