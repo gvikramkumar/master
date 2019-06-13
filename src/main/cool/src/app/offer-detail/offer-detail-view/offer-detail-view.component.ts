@@ -219,7 +219,7 @@ export class OfferDetailViewComponent implements OnInit {
             billingAndComp = new OfferCharacteristics();
             billingAndComp.subgroup = element.subgroup;
             billingAndComp.characteristics = element.characteristics;
-            if (element.group === 'Billing&Comp') {
+            if (element.group === 'Billing & Comp') {
               this.billingAndCompList.push(billingAndComp);
             }
             program = new OfferCharacteristics();

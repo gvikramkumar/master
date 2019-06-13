@@ -43,6 +43,19 @@ export class StakeholderfullService {
     return this.httpClient.post(url, { withCredentials: true });
   }
 
+  getUniqueEmailNotification(offerId) {
+    let url = this.environmentService.REST_API_OFFER_STATUS;
+    url += offerId;
+    return this.httpClient.get(url, { withCredentials: true });
+  }
+
+  uniqueEmailNotification(offerId) {
+    let url = this.environmentService.REST_API_OFFER_STATUS;
+    url += offerId;
+    url += '?flag=proceedToStrategyReview&val=true';
+    return this.httpClient.post(url, { withCredentials: true });
+  }
+
   // ---------------------------------------------------------------------------------------------
 
 }
