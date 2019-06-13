@@ -20,6 +20,7 @@ export class UploadDocComponent implements OnInit {
   userId: string;
   userName: string;
   info: string;
+ @Input() isReadonly: boolean;
 
   constructor(
    public _evnService: EnvironmentService,
@@ -77,8 +78,9 @@ export class UploadDocComponent implements OnInit {
   handleFileInput(files: FileList) {
 
    this.fileToUpload = files.item(0);
-    this.fileName =this.fileToUpload.name;
+
     if(this.fileToUpload.size/(1024*1024) <= 5) {
+      this.fileName =this.fileToUpload.name;
      let formdata: FormData = new FormData();
      const usaTime = new Date().toLocaleString('en-US', {timeZone: 'America/Los_Angeles'});
      console.log( new Date(usaTime).getTime().toString());
@@ -102,14 +104,12 @@ export class UploadDocComponent implements OnInit {
 
          } else {
            this.info = res.Message;
-           this.fileName="";
          }
 
        }
      );
    } else {
-     this.info = "please choose the file size in 5M";
-     this.fileName="";
+     this.info = "Upload file exceeded maximum file size allowed. Please try again.";
    }
 
 
