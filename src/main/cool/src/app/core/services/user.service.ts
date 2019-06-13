@@ -8,6 +8,9 @@ export class UserService {
   private lastName;
   private fullName;
   private functionalRole;
+  private _offerId;
+
+
 
   constructor() { }
 
@@ -46,6 +49,14 @@ export class UserService {
   }
   public getFunctionalRole() {
     return this.functionalRole;
+  }
+
+  public getofferId() {
+    return this._offerId;
+  }
+
+  public setofferId(value) {
+    this._offerId = value;
   }
 
 }
