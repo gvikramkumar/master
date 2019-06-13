@@ -31,6 +31,8 @@ import { CustomRangeValidatorDirective } from './validators/custom-range-validat
 import { HiddenelemDirective } from './components/directives/hiddenelem.directive';
 import { ReadonlyDirective } from './components/directives/readonly.directive';
 import { ErrorpageComponent } from './components/errorpage/errorpage.component';
+import { CuiGenericModalComponent } from './components/cui-genric-modal/cui-genric-modal.component';
+import { CuiGenericModalService } from './components/cui-genric-modal/cui-genric-modal.service';
 
 
 @NgModule({
@@ -48,6 +50,7 @@ import { ErrorpageComponent } from './components/errorpage/errorpage.component';
     HiddenelemDirective,
     ReadonlyDirective,
     ErrorpageComponent,
+    CuiGenericModalComponent
   ],
   imports: [
     FormsModule,
@@ -71,7 +74,8 @@ import { ErrorpageComponent } from './components/errorpage/errorpage.component';
     DashboardService,
     CreateOfferService,
     ViewcommentService,
-    ConfirmationService
+    ConfirmationService,
+    CuiGenericModalService
   ],
   exports: [
     FormsModule,
@@ -97,6 +101,7 @@ import { ErrorpageComponent } from './components/errorpage/errorpage.component';
     DynamicFormMultipleComponent,
     HiddenelemDirective,
     ReadonlyDirective,
+    CuiGenericModalComponent
   ]
 })
 export class SharedModule { }
