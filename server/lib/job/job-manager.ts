@@ -16,6 +16,7 @@ import JobRunRepo from './job-run-repo';
 import JobLogRepo from './job-log-repo';
 import moment from 'moment';
 import {injectable} from 'inversify';
+import DatabaseController from '../../api/database/controller';
 
 type DfaJobFunction = (startup?: boolean, data?) => Promise<any>;
 
@@ -132,7 +133,8 @@ export class JobManager {
     private jobLogRepo: JobLogRepo,
     private serverRepo: ServerRepo,
     private submeasureController: SubmeasureController,
-    private ruleController: AllocationRuleController
+    private ruleController: AllocationRuleController,
+    private databaseController: DatabaseController
   ) {
   }
 
@@ -429,9 +431,9 @@ export class JobManager {
   }
 
   // periodic jobs (15 min or so) that copies mongo data to postgres
-  databaseSyncJob(startup, syncMap?: SyncMap) {
-    // can be called fron /api/rul-job (with syncMap then) or from periodic job (no syncMap, so syncs then)
-    return Promise.resolve();
+  databaseSyncJob(startup, syncMap?: SyncMap, req?) {
+    // if (!req)  put this together. const req = _.set({}, 'dfa.fiscalMonths', ??);
+    this.databaseController.mongoToPgSyncPromise(req, syncMap)
   }
 
   // startTime job that runs once a day to update cache after nightly data updates

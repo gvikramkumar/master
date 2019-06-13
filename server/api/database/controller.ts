@@ -25,6 +25,7 @@ import ServiceMapUploadController from '../prof/service-map-upload/controller';
 import ServiceTrainingUploadController from '../prof/service-training-upload/controller';
 import Q from 'q';
 import {handleQAllSettled} from '../../lib/common/q-allSettled';
+import {svrUtil} from '../../lib/common/svr-util';
 
 @injectable()
 export default class DatabaseController {
@@ -142,7 +143,7 @@ export default class DatabaseController {
               throw new ApiError('MongoToPgSync Errors.', {success: log, errors: elog});
               return;
             }
-            return log;
+            return {success: log};
           })
           .catch(err => {
             const data = {success: log, errors: elog};
@@ -156,17 +157,6 @@ export default class DatabaseController {
             // next(new ApiError('MongoToPgSync Errors', data));
           });
       });
-  }
-
-  mongoToPgSync(req, res, next) {
-    const syncMap = req.body && Object.keys(req.body).length ? new SyncMap(req.body) : new SyncMap().setSyncAll();
-
-    this.mongoToPgSyncPromise(req.dfa, syncMap, req.user.id)
-      .then(log => {
-        res.json({success: log});
-      })
-      .catch(next);
-
   }
 
   pgToMongoSync(req, res, next) {
