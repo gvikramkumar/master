@@ -3,6 +3,7 @@ import { Router} from '@angular/router';
 import { TurbotaxService } from '@shared/services';
 import {HttpClient} from '@angular/common/http';
 import {EnvironmentService} from '@env/environment.service';
+import {UserService} from '@core/services';
 
 
 @Component({
@@ -33,6 +34,7 @@ export class TurbotaxviewComponent implements OnChanges {
     constructor(
         private turbotax: TurbotaxService,
         private router: Router,
+        private _userService: UserService
 
     ) { }
 
@@ -44,6 +46,7 @@ export class TurbotaxviewComponent implements OnChanges {
 
         const caseId = caseIdChange ? caseIdChange.currentValue : this.caseId;
         const offerId = offerIdChange ? offerIdChange.currentValue : this.offerId;
+        this._userService.setofferId(offerId);
 
         this.navigateHash['Offer Creation'] = ['/coolOffer', offerId, caseId];
         this.navigateHash['Offer Model Evaluation'] = ['/mmassesment', offerId, caseId];

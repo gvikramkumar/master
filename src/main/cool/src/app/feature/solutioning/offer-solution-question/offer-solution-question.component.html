@@ -15,8 +15,9 @@
       <div class="form-group" [class.has-error]="freeText.invalid" [class.has-success]="freeText.valid">
 
         <textarea class="textarea" name="{{question['questionNo']}}" id="question['questionNo']" #freeText="ngModel"
-          [value]="question['answer']" [(ngModel)]="question['answerToQuestion']" [disabled]="question['hideQuestion'] || markCompleteStatus"
-          rows="3" maxlength="{{question['rules']['maxCharacterLen']}}"
+          [value]="question['answer']" [(ngModel)]="question['answerToQuestion']"
+          [disabled]="question['hideQuestion'] || markCompleteStatus" rows="3"
+          maxlength="{{question['rules']['maxCharacterLen']}}"
           [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
           (change)="showHiddenQuestionBasedOnUserInput(freeText.value, question)"></textarea>
 
@@ -39,7 +40,8 @@
 
         <textarea class="textarea" name="{{question['questionNo']}}" id="question['questionNo']"
           #freeTextWithNoSpace="ngModel" [value]="question['answer']" [(ngModel)]="question['answerToQuestion']"
-          [disabled]="question['hideQuestion'] || markCompleteStatus" rows="3" maxlength="{{question['rules']['maxCharacterLen']}}"
+          [disabled]="question['hideQuestion'] || markCompleteStatus" rows="3"
+          maxlength="{{question['rules']['maxCharacterLen']}}"
           [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
           (change)="showHiddenQuestionBasedOnUserInput(freeTextWithNoSpace.value, question)"></textarea>
 
@@ -76,7 +78,8 @@
       <div class="form-group" [class.has-error]="percentageText.invalid" [class.has-success]="percentageText.valid">
         <input type="number" class="text" name="{{question['questionNo']}}" id="question['questionNo']"
           #currencyText="ngModel" [value]="question['answer']" [(ngModel)]="question['answerToQuestion']"
-          [disabled]="question['hideQuestion'] || markCompleteStatus" rows="3" pattern="^[0-9]{1,2}(\.[0-9]{1,2})?$|^100$"
+          [disabled]="question['hideQuestion'] || markCompleteStatus" rows="3"
+          pattern="^[0-9]{1,2}(\.[0-9]{1,2})?$|^100$"
           [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
           (change)="showHiddenQuestionBasedOnUserInput(percentageText.value, question)" />
 
@@ -96,7 +99,8 @@
 
         <label class="radio">
           <input type="radio" name="{{question['questionNo']}}" id="question['questionNo']" #radioButton="ngModel"
-            [value]="radio" [(ngModel)]="question['answerToQuestion']" [disabled]="question['hideQuestion'] || markCompleteStatus"
+            [value]="radio" [(ngModel)]="question['answerToQuestion']"
+            [disabled]="question['hideQuestion'] || markCompleteStatus"
             [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
             (change)="showHiddenQuestionBasedOnUserInput(radioButton.value, question)" /> <span
             class="radio__input"></span>
@@ -118,7 +122,8 @@
         <div class="form-group__text select">
 
           <select class="offer-solution-quesiton-select" name="{{question['questionNo']}}" id="question['questionNo']"
-            #dropDown="ngModel" [(ngModel)]="question['answerToQuestion']" [disabled]="question['hideQuestion'] || markCompleteStatus"
+            #dropDown="ngModel" [(ngModel)]="question['answerToQuestion']"
+            [disabled]="question['hideQuestion'] || markCompleteStatus"
             [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
             (change)="showHiddenQuestionBasedOnUserInput(dropDown.value, question)">
 
@@ -144,9 +149,10 @@
         <div class="form-group__text" [class.has-error]="osDate.invalid" [class.has-success]="osDate.valid">
 
           <input class="form-control" name="{{question['questionNo']}}" id="question['questionNo']"
-            [(ngModel)]="question['answerToQuestion']" #osDate="ngModel" [disabled]="question['hideQuestion'] || markCompleteStatus"
-            #dp4="bsDatepicker" bsDatepicker placement="top" [minDate]="minDate" containerClass="custome-date"
-            [bsConfig]="{dateInputFormat: 'DD-MMM-YYYY'}" [(bsValue)]="question['answerToQuestion']"
+            [(ngModel)]="question['answerToQuestion']" #osDate="ngModel"
+            [disabled]="question['hideQuestion'] || markCompleteStatus" #dp4="bsDatepicker" bsDatepicker placement="top"
+            [minDate]="minDate" containerClass="custome-date" [bsConfig]="{dateInputFormat: 'DD-MMM-YYYY'}"
+            [(bsValue)]="question['answerToQuestion']"
             [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
             (ngModelChange)="showHiddenQuestionBasedOnUserInput(osDate.value, question)">
 

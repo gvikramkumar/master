@@ -12,11 +12,21 @@
       </div>
 
       <div class="col-md-6">
-        <div class="flex-fluid text-left half-margin-left half-margin-bottom half-margin-top">
+        <div class="flex-fluid text-left half-margin-left half-margin-bottom base-margin-top">
           <div class="align-status half-margin-right" *ngIf="offerBuilderdata['overallStatus']">
-            <span class="icon-software-certified"></span>
-            <span class="align-type half-margin-left">
-              {{ offerBuilderdata['overallStatus'] }} | {{ offerBuilderdata['derivedMM'] }}
+
+            <!-- Green Filled icon with White Check -->
+            <svg fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M9 18C13.9706 18 18 13.9706 18 9C18 4.02944 13.9706 0 9 0C4.02944 0 0 4.02944 0 9C0 13.9706 4.02944 18 9 18Z" fill="#6EBE4A"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M5.1913 9.71944C4.93623 9.43158 4.93623 8.9998 5.1913 8.74793C5.44638 8.49605 5.82899 8.46007 6.08406 8.74793C6.08406 8.74793 6.78597 9.51241 7.13692 9.89466C7.69998 10.5079 7.82609 10.7344 7.82609 10.7344L12.2987 7.21589C12.5537 6.92804 12.9363 6.92804 13.1914 7.21589C13.4465 7.50375 13.4465 7.93553 13.1914 8.18741L7.82609 12.7134L5.1913 9.71944Z" fill="white"/>
+              </svg>
+            <!-- // End: Check icon -->
+
+            <span class="base-margin-left overall-status">
+              {{ offerBuilderdata['overallStatus'] }}
+            </span>
+            <span class="align-type">
+              {{ offerBuilderdata['derivedMM'] }}
             </span>
           </div>
         </div>
