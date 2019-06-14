@@ -160,12 +160,11 @@
                               <div class="form-group input--compressed" *ngIf="i == 0">
                                 <div class="form-group__text">
                                     <input  *ngIf="!(ques.value['eGenieFlag'])" [ngClass]="pInfo.currentValue !='' && (pInfo.rules.isvalid == false || (pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen)) && (itemName.dirty || itemName.touched) ? 'validaionStyles' : 'validaionStylesValid'"
-                                      [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'  maxlength="{{pInfo['rules']['maxCharacterLen']}}"
+                                      [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'  maxlength="18"
                                       [(ngModel)]="ques.value['title']=pInfo.currentValue" value="{{pInfo.currentValue}}"
                                       (blur)="trimSpaces(pInfo, $event)"  [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']" #itemName="ngModel">
-
 
                                   <div class="tool-tip  slideIn"
                                     *ngIf="pInfo.rules.validationMessage != '' && pInfo.rules.isvalid == false">
@@ -210,7 +209,7 @@
                                       <ul>
                                         <li
                                           *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'REQ Start Date Window' &&
-                                          pInfo.egineAttribue !== 'Default Auto Renewal Term' && pInfo.rules.validationMessage != '' && pInfo.egineAttribue !== 'Description'">
+                                          pInfo.egineAttribue !== 'Default Auto Renewal Term' && pInfo.rules.validationMessage != '' && pInfo.egineAttribue !== 'Description' && pInfo.egineAttribue !== 'True Up Term'">
                                           {{pInfo.rules.validationMessage}}</li>
                                         <li
                                           *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
@@ -227,6 +226,9 @@
                                           <li
                                             *ngIf="pInfo.egineAttribue === 'Description' && pInfo.rules.validationMessage != ''">
                                             First letter must be capitalized and max of 60 characters</li>
+                                            <li
+                                              *ngIf="pInfo.egineAttribue === 'True Up Term' && pInfo.rules.validationMessage != ''">
+                                              Mandatory Must be comma seperated, numeric with no spaces</li>
 
                                       </ul>
                                     </div>
@@ -570,7 +572,8 @@
                                       *ngIf="pInfo.rules.isvalid == false && (freeText.dirty || freeText.touched)">
                                       <ul>
                                         <li
-                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'REQ Start Date Window' && pInfo.egineAttribue !== 'Default Auto Renewal Term' && pInfo.rules.validationMessage != ''">
+                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'REQ Start Date Window'
+                                          && pInfo.egineAttribue !== 'Default Auto Renewal Term' && pInfo.rules.validationMessage != '' && pInfo.egineAttribue !== 'True Up Term'">
                                           {{pInfo.rules.validationMessage}}</li>
                                         <li
                                           *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
@@ -584,6 +587,9 @@
                                         <li
                                           *ngIf="pInfo.egineAttribue === 'Default Auto Renewal Term' && pInfo.rules.validationMessage != ''">
                                           Mandatory entry of 1 value from the Std Auto Renewal Term Range</li>
+                                          <li
+                                            *ngIf="pInfo.egineAttribue === 'True Up Term' && pInfo.rules.validationMessage != ''">
+                                            Mandatory Must be comma seperated, numeric with no spaces</li>
                                       </ul>
                                     </div>
 

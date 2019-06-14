@@ -872,21 +872,41 @@ export class DynamicFormMultipleComponent implements OnInit {
             this.itemNameInvalid = true;
 
             this.offerConstructCanvasService.validatePID(question.currentValue).subscribe((data) => {
-                if (!(/^[^\/\.\+\-\@\&\#\%\$\!\*\<\>\:\;\,\\\'\[\]\|\?\^\{\}\=\<\>a-z][^\@\&\#\%\$\!\*\<\>\:\;\,\\\'\[\]\|\?\^\{\}\=\<\>a-z]*$/.test(question.currentValue))) {
+              if(question.rules.isMandatoryOptional == "Mandatory" && question.currentValue == ''){
+                  question.rules.validationMessage = "Item Name is Mandatory";
+                  question.rules.isvalid = false;
+                  this.itemNameInvalid = true;
+                  return;
+              }
+              else if (!(/^[^\/\.\+\-\@\&\#\%\$\!\*\<\>\:\;\,\\\'\[\]\|\?\^\{\}\=\<\>a-z][^\@\&\#\%\$\!\*\<\>\:\;\,\\\'\[\]\|\?\^\{\}\=\<\>a-z]*$/.test(question.currentValue))) {
                     question.rules.validationMessage = "All caps required and maximum of 18 characters";
                     question.rules.isvalid = false;
                     this.itemNameInvalid = true;
+                    return;
                 }
-                else if(data.length > 0){
-                    question.rules.validationMessage = "Item Name already exists, please type another name";
-                    question.rules.isvalid = false;
-                    this.itemNameInvalid = true;
+                else if(question.currentValue.length > 18){
+                  question.rules.validationMessage = "Max length";
+                  question.rules.isvalid = false;
+                  this.itemNameInvalid = true;
+                  return;
                 }
                 else{
                     question.rules.validationMessage = "";
                     question.rules.isvalid = true;
                     this.itemNameInvalid = false;
                 }
+                if(data.length > 0){
+                    question.rules.validationMessage = "Item Name already exists, please type another name";
+                    question.rules.isvalid = false;
+                    this.itemNameInvalid = true;
+                    return;
+                }
+                else{
+                    question.rules.validationMessage = "";
+                    question.rules.isvalid = true;
+                    this.itemNameInvalid = false;
+                }
+
             });
 
         }
