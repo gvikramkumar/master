@@ -99,6 +99,7 @@ export class EnvironmentService {
     REST_API_UPDATE_USER_INFO_URL: string;
     REST_API_RETRIEVE_USER_INFO_URL: string;
     REST_API_ACCESS_MANAGEMENT_GET_ALL_URL: string;
+    REST_API_GET_CEPM_ROLES_URL: string;
 
     //   ACTION URLs
     REST_API_POST_ACTION_URL: string;
@@ -393,6 +394,7 @@ export class EnvironmentService {
         this.REST_API_UPDATE_USER_INFO_URL = this.baseApiUrl + '/access/updateUser';
         this.REST_API_CREATE_NEW_USER_URL = this.baseApiUrl + '/access/createNewUser';
         this.REST_API_ACCESS_MANAGEMENT_GET_ALL_URL = this.baseApiUrl + '/access/getAll';
+        this.REST_API_GET_CEPM_ROLES_URL = this.baseApiUrl + '/access/fetchCEPMRoles';
 
         // ---------------------------------  ACTION URLs -----------------------------------------------------------
 

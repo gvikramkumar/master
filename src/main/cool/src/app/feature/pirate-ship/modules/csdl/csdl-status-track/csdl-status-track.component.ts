@@ -52,7 +52,11 @@ export class CsdlStatusTrackComponent implements OnInit {
       this.stopShipStatus = data['stopShipStatus'];
       this.enforcementLabel = data['enforcementLabel'];
       this.csdlMileStoneStatus = data['csdlMileStoneStatus'];
-      this.latestUpdatedFormatDate = moment(data.latestUpdatedDate).format('DD-MMM-YYYY, h:mma');
+      if (data.latestUpdatedDate === '') {
+        this.latestUpdatedFormatDate = moment().format('DD-MMM-YYYY, h:mma');
+      } else {
+        this.latestUpdatedFormatDate = moment(data.latestUpdatedDate).format('DD-MMM-YYYY, h:mma');
+      }
     });
   }
 
@@ -61,6 +65,54 @@ export class CsdlStatusTrackComponent implements OnInit {
    */
   refreshStatus() {
     this.getUpdatedStatus();
+    /**
+     * Status combinations:
+       Stop Ship - Enforcement - CSDL Activity Status
+       True – Warning - COOL will list activity as complete
+       True – Enforced - COOL will list activity as Available
+       True - None - COOL will list activity as complete
+       False - Warning - COOL will list activity as complete
+       False – Enforced - COOL will list activity as Complete
+       False - None - COOL will list activity as complete
+    */
+    this.csdlIntegrationService.getCsdlInfo(this.currentOfferId).subscribe(data => {
+      const csdlPayload = new CsdlPayload();
+      if (data.stopShipStatus === 'True' && data.enforcementLabel === 'Warning') {
+        // Complete
+        csdlPayload.csdlMileStoneStatus = 'Complete';
+        this.updateCsdlMileStone(csdlPayload.csdlMileStoneStatus);
+      } else if (data.stopShipStatus === 'True' && data.enforcementLabel === 'Enforced') {
+        // Available
+        csdlPayload.csdlMileStoneStatus = 'Available';
+        this.updateCsdlMileStone(csdlPayload.csdlMileStoneStatus);
+      } else if (data.stopShipStatus === 'True' && data.enforcementLabel === '') {
+        // Complete
+        csdlPayload.csdlMileStoneStatus = 'Complete';
+        this.updateCsdlMileStone(csdlPayload.csdlMileStoneStatus);
+      } else if (data.stopShipStatus === 'False' && data.enforcementLabel === 'Warning') {
+        // Complete
+        csdlPayload.csdlMileStoneStatus = 'Complete';
+        this.updateCsdlMileStone(csdlPayload.csdlMileStoneStatus);
+      } else if (data.stopShipStatus === 'False' && data.enforcementLabel === 'Enforced') {
+        // Complete
+        csdlPayload.csdlMileStoneStatus = 'Complete';
+        this.updateCsdlMileStone(csdlPayload.csdlMileStoneStatus);
+      } else if (data.stopShipStatus === 'False' && data.enforcementLabel === '') {
+        // Complete
+        csdlPayload.csdlMileStoneStatus = 'Complete';
+        this.updateCsdlMileStone(csdlPayload.csdlMileStoneStatus);
+      }
+    });
+  }
+
+  updateCsdlMileStone(mileStoneStatus) {
+    const csdlPayload = new CsdlPayload();
+    const csdlPayloadArray: any = [];
+    csdlPayload.coolOfferId = this.currentOfferId;
+    csdlPayload.csdlMileStoneStatus = mileStoneStatus;
+    csdlPayloadArray.push(csdlPayload);
+    this.csdlIntegrationService.restartCsdlAssociation(csdlPayloadArray).subscribe(() => {
+    });
   }
 
   /**
@@ -115,6 +167,9 @@ export class CsdlStatusTrackComponent implements OnInit {
     csdlPayload.associationStatus = 'nan';
     csdlPayload.projectId = Number('-1');
     csdlPayload.projectType = '';
+    csdlPayload.stopShipStatus = '';
+    csdlPayload.enforcementLabel = '';
+    csdlPayload.latestUpdatedDate = '';
     csdlPayloadArray.push(csdlPayload);
     this.csdlIntegrationService.restartCsdlAssociation(csdlPayloadArray).subscribe(() => {
       this.messageService.sendMessage('De Association');
