@@ -237,7 +237,7 @@ export default class SubmeasureController extends ApprovalController {
     if (shUtil.isDeptUpload(sm)) {
       syncMap.dfa_prof_dept_acct_map_upld = true;
     }
-    if (!app.get('syncing') && (syncMap.dfa_prof_swalloc_manualmix_upld || syncMap.dfa_prof_dept_acct_map_upld)) {
+    if ((shUtil.isManualMix(sm) || shUtil.isDeptUpload(sm)) && !app.get('syncing')) {
       return databaseCtrl.mongoToPgSyncPromise(req.dfa, syncMap, req.user.id);
     } else {
       return Promise.resolve();

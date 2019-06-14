@@ -12,6 +12,8 @@ import {UiUtil} from '../../../../core/services/ui-util';
 import {shUtil} from '../../../../../../../shared/misc/shared-util';
 import {DialogSize, DialogType} from '../../../../core/models/ui-enums';
 import {ruleUtil} from '../../../../../../../shared/misc/rule-util';
+import {SubmeasureService} from '../../services/submeasure.service';
+import {Submeasure} from '../../../../../../../shared/models/submeasure';
 
 @Component({
   selector: 'fin-rule-management',
@@ -24,7 +26,7 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
   filteredRules: AllocationRule[] = [];
   rulesCount: Number = 0;
   formControl = new FormControl();
-  tableColumns = ['name', 'period', 'driverName', 'status', 'updatedBy', 'updatedDate', 'icons'];
+  tableColumns = ['name', 'period', 'driverName', 'inUse', 'status', 'updatedBy', 'updatedDate', 'icons'];
   dataSource: MatTableDataSource<AllocationRule>;
   UiUtil = UiUtil;
   showStatuses: string[];
@@ -33,11 +35,13 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
   sortDirection: string;
   pageIndex: number;
   pageSize: number;
+  submeasuresAll: Submeasure[] = [];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     private ruleService: RuleService,
+    private submeasureService: SubmeasureService,
     private store: AppStore,
     public route: ActivatedRoute,
     private uiUtil: UiUtil,
@@ -55,16 +59,37 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
   }
 
   ngOnInit() {
-    this.ruleService.getApprovalVersionedListByNameAndUserType()
-      .subscribe(rules => {
-        this.rules = rules;
-        this.refresh();
-      });
+    /*  this.ruleService.getApprovalVersionedListByNameAndUserType()
+        .subscribe(rules => {
+          this.rules = rules;
+          this.refresh();
+        });*/
+    Promise.all([
+      this.ruleService.getApprovalVersionedListByNameAndUserType().toPromise(),
+      this.submeasureService.getManyLatestGroupByNameActive().toPromise()
+    ]).then(results => {
+      this.rules = results[0];
+      this.submeasuresAll = results[1];
+      this.refresh();
+    });
   }
 
   refresh() {
     this.filteredRules = this.rules.filter(rule =>
-      _.includes(this.showStatuses, rule.status) );
+      _.includes(this.showStatuses, rule.status));
+
+    this.filteredRules.forEach(rule => {
+      rule['usingSubmeasuresNamesTooltip'] = 'Rule is in use by the following submeasures: \n';
+      const submeasuresInUse: string[] = [];
+      this.submeasuresAll.forEach(sm => {
+        if (_.includes(sm.rules, rule.name)) {
+          submeasuresInUse.push(sm.name);
+        }
+      });
+      rule['inUse'] = submeasuresInUse.length || '';
+      rule['usingSubmeasuresNamesTooltip'] += submeasuresInUse.join('\n');
+    });
+
     this.dataSource = new MatTableDataSource<AllocationRule>(this.filteredRules);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -106,7 +131,7 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
     UiUtil.updateUrl(this.router, this.route, {sortProperty: sort.active, sortDirection: sort.direction});
   }
 
-  
+
   pageChange(page: PageEvent) {
     UiUtil.updateUrl(this.router, this.route, {pageIndex: page.pageIndex, pageSize: page.pageSize});
   }

@@ -18,13 +18,13 @@ import AlternateSl2UploadController from '../prof/alternate-sl2-upload/controlle
 import CorpAdjustmentsUploadController from '../prof/corp-adjustments-upload/controller';
 import {ApiDfaData} from '../../lib/middleware/add-global-data';
 import DistiDirectUploadController from '../prof/disti-direct-upload/controller';
-import config from '../../config/get-config';
 import ServiceMapUploadController from '../prof/service-map-upload/controller';
 import ServiceTrainingUploadController from '../prof/service-training-upload/controller';
 import {svrUtil} from '../../lib/common/svr-util';
 import {handleQAllSettled} from '../../lib/common/q-allSettled';
 import Q from 'q';
 import {app} from '../../express-setup';
+import config from '../../config/get-config';
 
 @injectable()
 export default class DatabaseController {
@@ -62,7 +62,7 @@ export default class DatabaseController {
     const promises = [];
 
     // this is to make sure we don't accidentally sync to dev/stage pg with local mongo database, use ldev env to sync to local postgres
-    if ((config.env === 'dev' || svrUtil.isUnitEnv()) && config.postgres.host !== 'localhost') {
+    if (svrUtil.isLocalEnv() && config.postgres.host !== 'localhost') {
       throw new ApiError('Syncing local mongo to non-local postgres.');
     }
 
@@ -135,12 +135,12 @@ export default class DatabaseController {
         return Q.allSettled(promises)
           .then(handleQAllSettled(null, 'qAllReject'))
           .then(results => {
+            app.set('syncing', false);
             if (elog.length) {
-              throw new ApiError('MongoToPgSync Errors.', {success: log, errors: elog});
+              throw new Error('handled in catch');
               return;
             }
-            app.set('syncing', false);
-            return log;
+            return {success: log};
           })
           .catch(err => {
             app.set('syncing', false);
@@ -148,7 +148,6 @@ export default class DatabaseController {
           });
       });
   }
-
 
   pgToMongoSync(req, res, next) {
     const resultArr = [];
