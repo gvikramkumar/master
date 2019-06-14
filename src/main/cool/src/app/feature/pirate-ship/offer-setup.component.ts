@@ -336,6 +336,14 @@ export class OfferSetupComponent implements OnInit {
         this.selectedAto]);
         break;
       }
+      case 'Service Mapping': {
+        this.router.navigate([appRoutesNames.PIRATE_SHIP,
+        this.offerId,
+        this.caseId,
+        pirateShipRoutesNames.SERVICE_MAPPING,
+        this.selectedAto]);
+        break;
+      }
     }
   }
 
