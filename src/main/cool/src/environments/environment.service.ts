@@ -99,6 +99,7 @@ export class EnvironmentService {
     REST_API_UPDATE_USER_INFO_URL: string;
     REST_API_RETRIEVE_USER_INFO_URL: string;
     REST_API_ACCESS_MANAGEMENT_GET_ALL_URL: string;
+    REST_API_GET_CEPM_ROLES_URL: string;
 
     //   ACTION URLs
     REST_API_POST_ACTION_URL: string;
@@ -126,11 +127,11 @@ export class EnvironmentService {
     REST_API_DESIGN_REVIEW_GET_URL: string;
 
     // OFFER SETUP
-    REST_API_RETRIEVE_ATO_LIST_URL: string;
+    REST_API_RETRIEVE_MODELING_ACTIVITIES_URL: string;
     REST_API_OFFER_SETUP_MODULE_GET_URL: string;
     REST_API_OFFER_MODULE_STATUS_GET_URL: string;
     REST_API_LOCK_API_FOR_OWB: string;
-    
+
     // ITEM CREATION URLs
     REST_API_GET_ITEM_DETAILS: string;
     REST_API_GET_OFFER_DROPDOWN: string;
@@ -193,6 +194,12 @@ export class EnvironmentService {
 
     // PIRATE SHIP NOTIFICATION URLs
     REST_API_PIRATE_SHIP_DASHBOARD_NOTIFICATION_URL;
+
+    // Royalty_setup Doc upload
+
+    REST_API_BasicModule_upload: string;
+    REST_API_BasicModule_DownloadDoc: string;
+    REST_API_BasicModuleFileName: string;
 
     // -------------------------------------------------------------------------------------------------
 
@@ -387,6 +394,7 @@ export class EnvironmentService {
         this.REST_API_UPDATE_USER_INFO_URL = this.baseApiUrl + '/access/updateUser';
         this.REST_API_CREATE_NEW_USER_URL = this.baseApiUrl + '/access/createNewUser';
         this.REST_API_ACCESS_MANAGEMENT_GET_ALL_URL = this.baseApiUrl + '/access/getAll';
+        this.REST_API_GET_CEPM_ROLES_URL = this.baseApiUrl + '/access/fetchCEPMRoles';
 
         // ---------------------------------  ACTION URLs -----------------------------------------------------------
 
@@ -419,10 +427,10 @@ export class EnvironmentService {
 
         // ------------------------------------ OFFER SETUP -------------------------------------------------
 
-        this.REST_API_RETRIEVE_ATO_LIST_URL = this.baseApiUrl + '/offersetup/getOWBModelObject/';
-        this.REST_API_OFFER_SETUP_MODULE_GET_URL = this.baseApiUrl + '/offersetup/getAllModuleStatus/';
         this.REST_API_LOCK_API_FOR_OWB = this.baseApiUrl + '/owb/lockAPI/';
-       
+        this.REST_API_OFFER_SETUP_MODULE_GET_URL = this.baseApiUrl + '/offersetup/getAllModuleStatus/';
+        this.REST_API_RETRIEVE_MODELING_ACTIVITIES_URL = this.baseApiUrl + '/modeling/getModelingActivities';
+
         // --------------------------------------- ITEM CREATION --------------------------------------------
 
         this.REST_API_GET_OFFER_DROPDOWN = this.baseApiUrl + '/itemcreation/getATOs';
@@ -500,6 +508,12 @@ export class EnvironmentService {
         // --------------------------------------- PIRATE SHIP DASHBOARD URLs --------------------------------------------
 
         this.REST_API_PIRATE_SHIP_DASHBOARD_NOTIFICATION_URL = this.baseApiUrl + '/dashboard/notification/generate';
+
+
+        // ------------------------------------------------ROYALTY SETUP DOCUMENT UPLOAD URL--------------------------------
+        this.REST_API_BasicModule_upload = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/UpLoadDoc';
+        this.REST_API_BasicModule_DownloadDoc = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/DownloadDoc';
+        this.REST_API_BasicModuleFileName = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/getFileName';
 
     }
 }

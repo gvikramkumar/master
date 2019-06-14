@@ -67,7 +67,13 @@
             </div>
           </div>
           <div class="row base-margin-top">
-            <div class="col-md-9" align="right">
+            <div class="col-md-7">
+<!--              <div *ngIf="moduleName === 'Royalty Setup'|| 'Test Orderability'">-->
+<!--                <p class="text-dkgray-1 text-medium">Attach your royalty checklist</p>-->
+<!--                <app-upload-doc [moduleName]="moduleName" [isReadonly]="isReadOnly"  ></app-upload-doc>-->
+<!--              </div>-->
+            </div>
+            <div class="col-md-5" align="left">
               <div class="help-block text-muted">
                 <span><button class="btn btn--small btn--primary btn--cool" (click)="saveComments()" [disabled]="cmnt.description.trim().length===0">Submit Comments</button></span>
               </div>
@@ -125,9 +131,6 @@
 
 
         </form>
-        <!-- Legend -->
-        <br><br>
-        <app-pirate-ship-legend></app-pirate-ship-legend>
       </div>
       <!-- right panel -->
       <div class="rightContent  col-sm-12 col-md-3">

@@ -61,6 +61,11 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
   components = [];
   bupmList = [];
   projectType;
+  noCode;
+  radioStatus = {
+    noCode: false,
+    noNewCode: false
+  };
 
   constructor(
     private router: Router,
@@ -89,7 +94,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
     });
 
     this.notRequiredCsdlForm = new FormGroup({
-      noCode: new FormControl('', Validators.required)
+      noCode: new FormControl('noCode', Validators.required)
     });
 
     // load status tracking component in the below conditions.
@@ -109,6 +114,15 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
         // When user selected CDSL Not Required and pressed complete button.
         this.isLocked = true;
         this.isCsdlRequired = true;
+
+        if(data.reasonForNotRequired === 'noCode') {
+          this.radioStatus.noCode = true;
+        }
+
+        if(data.reasonForNotRequired === 'noNewCode') {
+          this.radioStatus.noNewCode = true;
+        }
+
       } else {
         this.isCsdlRequired = true;
       }
@@ -289,12 +303,12 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
    */
   onComplete() {
     this.disableRestartModule = false;
-    this.firstData['stakeholders'].forEach(ele => {
-      if (ele['functionalRole'] === 'Security Compliance') {
-          this.csdlIntegrationService.dashboardNotification(this.currentOfferId).subscribe(() => {
-        });
-      }
-    });
+      this.firstData['stakeholders'].forEach(ele => {
+        if (ele['functionalRole'] === 'Security Compliance') {
+            this.csdlIntegrationService.dashboardNotification(this.currentOfferId).subscribe(() => {
+          });
+        }
+      });
 
     this.csdlIntegrationService.getCsdlInfo(this.currentOfferId).subscribe(() => {
       this.existingComplete();
@@ -316,6 +330,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
     csdlPayload.csdlRequired = 'N';
     csdlPayload.csdlMileStoneStatus = 'Complete';
     csdlPayload.associationStatus = 'disassociate';
+    csdlPayload.reasonForNotRequired = this.noCode;
     csdlPayloadArray.push(csdlPayload);
     this.csdlIntegrationService.restartCsdlAssociation(csdlPayloadArray).subscribe(() => {
       this.isCompleteButtonDisabled = true;
@@ -338,6 +353,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
     csdlPayload.csdlRequired = 'N';
     csdlPayload.csdlMileStoneStatus = 'Complete';
     csdlPayload.associationStatus = 'nan';
+    csdlPayload.reasonForNotRequired = this.noCode;
     csdlPayload.projectId = null;
     this.csdlIntegrationService.createCsdlAssociation(csdlPayload).subscribe(
       () => {
@@ -374,6 +390,8 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
     csdlPayloadArray.push(csdlPayload);
     this.csdlIntegrationService.restartCsdlAssociation(csdlPayloadArray).subscribe(
       () => {
+        this.radioStatus.noCode = false;
+        this.radioStatus.noNewCode = false;
       },
       err => {
         console.log(err);
@@ -566,7 +584,14 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
    * Refresh CSDL Project List when triggered manually.
    */
   refreshProjectList() {
-    this.csdlIntegrationService.refreshProjects();
+    this.csdlIntegrationService.refreshProjects().subscribe(
+      () => {
+        // success case
+      },
+      err => {
+        // error case
+      }
+    );
   }
 
   ngOnDestroy() {
