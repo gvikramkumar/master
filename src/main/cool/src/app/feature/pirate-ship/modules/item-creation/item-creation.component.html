@@ -4,14 +4,14 @@
   <div class="content">
   <div class="container">
 
-    <div class="panel panel--compressed task--bar">
+    <div class="half-margin-top">
       <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName"
       [selectedATO]="selectedAto">
       </app-taskbar>
     </div>
-    <div class="row">
+    <div class="row half-margin-top">
       <div class="leftContent col-sm-12 col-md-9">
-        <div class="row base-margin-top">
+        <div class="row">
           <div class="col-md-9">
             <button (click)='showReviewEdit()' [disabled]="!permission" class="btn btn--cool btn--primary">
               <span class="icon-pencil icon-small"></span> Review/Edit Items

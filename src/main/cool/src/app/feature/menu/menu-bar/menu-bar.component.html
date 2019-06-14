@@ -38,7 +38,7 @@
                   </li>
                 </ul>
 
-                <ul *ngIf="currentOfferId">
+                <div *ngIf="currentOfferId">
                   <ul [ngClass]="{'readOnlyClas':dispValue}" *ngIf="currentOfferId">
                     <li appReadonly [DirectiveValue]="'On Hold'"
                       [ngClass]="{'readOnlyClas':dispValue,'disable-item': holdStatusValid !== true}"
@@ -52,7 +52,7 @@
                       <span [ngClass]="{'disable-item':dispValue}" class="link">Cancel</span>
                     </li>
                   </ul>
-                </ul>
+                </div>
 
               </li>
 
@@ -84,7 +84,7 @@
           Save
         </button>
 
-        <!-- 
+        <!--
         <label class="menu-btn switch switch—large" *ngIf="showMarkcompleteToggle">
             <input type="checkbox" [(ngModel)]="markCompleteStatus" (change)="toggleMarkCompletePopup()"
             [disabled]="(markCompleteStatus==false&&canMarkComplete==false)||(markCompleteStatus==true&&canUncheckComplete==false)"/>

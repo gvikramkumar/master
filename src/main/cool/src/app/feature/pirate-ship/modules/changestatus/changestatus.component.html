@@ -6,24 +6,24 @@
 
 
 
-    <div class="panel panel--compressed task--bar mt-15">
+    <div class="panel panel--compressed half-margin-top">
       <div class="row">
         <div class="col-sm-4" *ngIf="moduleName">
-          <h2 class="page--subheading">
-            {{moduleName}}</h2>
+          <h4>
+            {{moduleName}}</h4>
         </div>
         <div class="col-sm-8 text-right">
-          <button class="btn btn--secondary" (click)="goBackToOfferSetup()">
+          <button class="btn btn--cool btn--secondary" (click)="goBackToOfferSetup()">
             <span class="icon-chevron-left"></span>&nbsp; Back to Offer Setup Workflow
           </button>
         </div>
       </div>
     </div>
-    <div class="row">
+    <div class="row half-margin-top">
       <div class="leftContent col-sm-12 col-md-9">
         <form name="form" #changeStatusForm="ngForm">
 
-          <div class="row base-margin-top">
+          <div class="row">
 
             <div class="col-md-6" *ngIf="!mStatus">
               <button class="btn btn--small btn--cool btn--primary" [disabled]="isReadOnly"
