@@ -111,7 +111,7 @@
                   <!-- No Code Executed -->
                   <div class="form-group base-margin-bottom">
                     <label class="radio">
-                      <input type="radio" value="noCode" formControlName="noCode" name="noCode"
+                    <input type="radio" value="noCode" formControlName="noCode" name="noCode" [(ngModel)]="noCode"
                         class="form-control" [attr.disabled]="isLocked ? 'disabled' : null">
                       <span class="radio__input"></span>
                       <span class="radio__label">No code executed</span>
@@ -122,7 +122,7 @@
                   <!-- No New Code -->
                   <div class="form-group">
                     <label class="radio">
-                      <input type="radio" value="noNewCode" formControlName="noCode" name="noCode"
+                      <input type="radio" value="noNewCode" formControlName="noCode" name="noCode" [(ngModel)]="noCode"
                         class="form-control" [attr.disabled]="isLocked ? 'disabled' : null">
                       <span class="radio__input"></span>
                       <span class="radio__label">No new code</span>
@@ -161,7 +161,7 @@
     </div>
 
     <p-dialog [showHeader]="false" [(visible)]="displayNewCsdlIdDailog" [responsive]="true" [width]="600" [height]="400"
-      [minWidth]="600" [minHeight]="400" class="overflow-x-hidden">
+      [minWidth]="600" [minHeight]="400">
       <div class="modal__content">
         <div class="row">
           <div class="col-md-12">
@@ -200,11 +200,11 @@
               </div>
             </div>
           </div>
-          <div class="modal__footer base-margin-top">
+          <div class="modal__footer base-margin-top" style="margin-top: 65px">
             <button class="btn btn--cool btn--primary" type="button" (click)="nextCsdlAssociation()">Continue</button>
           </div>
         </div>
-        <div *ngIf="displayNewCsdl">
+        <div *ngIf="displayNewCsdl" class="overflow-x-hidden">
           <div class="modal__header">
             <h1 class="modal__title">Create a New CSDL ID</h1>
           </div>
@@ -245,7 +245,7 @@
               </div>
             </div>
           </div>
-          <div class="modal__footer base-margin-top">
+          <div class="modal__footer base-margin-top" style="margin-top: 65px">
             <button class="btn btn--cool btn--primary" type="submit" (click)="submitCsdlToContinue()">Submit</button>
           </div>
         </div>
@@ -253,10 +253,8 @@
           <h2 class="text-center">ID Creation In Progress</h2>
           <p class="text-center">A new CSDL ID is being created in Security Insights. Please return in 24 hrs to confirm
             creation</p>
-          <div class="modal__footer base-margin-top">
-
+          <div class="modal__footer base-margin-top" style="margin-top: 65px">
             <button class="btn btn--cool btn--primary" type="submit" (click)="onContinue()">Continue</button>
-
           </div>
         </div>
       </div>
@@ -272,19 +270,14 @@
           </div>
         </div>
       </div>
-
       <div class="modal__header"><h1 class="modal__title">Restart Module</h1></div>
-
         <p class="text-center">
          You're about to restart this module and will be taken to
             beginning of the CSDL sequence.
         </p>
-
       <div class="modal__footer base-margin-top">
-
           <button class="btn btn--cool btn--secondary" type="submit" (click)="closeRestartModuleDailog()">Cancel</button>
           <button class="btn btn--cool btn--primary" type="submit" (click)="restartModuleConfirm()">Restart Module</button>
-
       </div>
     </div>
     </p-dialog>
