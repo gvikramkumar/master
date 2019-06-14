@@ -318,8 +318,7 @@ select {
 .colorCl {
   color:#186ba0;
   cursor: pointer;
-  position: absolute;
-  left: 719px;
+  float: right;
 }
 
 .widthCl{
