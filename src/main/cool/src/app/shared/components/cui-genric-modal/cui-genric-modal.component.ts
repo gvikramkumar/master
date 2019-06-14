@@ -13,9 +13,7 @@ export class CuiGenericModalComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   modalComponentValue: IModalMessage;
   constructor(private genricModalService: CuiGenericModalService) {
-    console.log('CuiGenricModalComponent test');
     this.subscription = this.genricModalService.getMessage().subscribe((value: IModalMessage) => {
-      console.log('CuiGenricModalComponent', value);
       this.modalComponentValue = value;
       // this.isHidden = value.isHidden;
     });

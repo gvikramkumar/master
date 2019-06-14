@@ -134,6 +134,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
   showMajorItemFoundDialog: Boolean;
   isHidden: boolean = true;
+  stackholders: any;
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -1606,7 +1607,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           .subscribe(offerDetails => {
             // Initialize MM ModelICC Request Param Details
             const mmModel = offerDetails.derivedMM;
-
+            this.stackholders = offerDetails.stakeholders;
             // Initialize Offer Types
             const componentsObj =
               offerDetails["selectedCharacteristics"] == null
@@ -2302,24 +2303,23 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           // Raviraj US290268
           if (!_.isEmpty(results)) {
             if (results.body["major/minor"] === "Minor Line") {
-              const searchRespose: Boolean = this.offerconstructPIDService.majorMinorLineRule(results.body);
-              console.log("searchRespose", searchRespose);
+              if (
+                (results.body["WorkFlow Status"] === "APPROVED" ||
+                  results.body["WorkFlow Status"] ===
+                  "PENDING APPROVAL BUC" ||
+                  results.body["WorkFlow Status"].toUpperCase() ===
+                  "PENDING PRODUCT CLASS") &&
+                (results.body["WorkFlow Status Requested By"] === "BUC" ||
+                  results.body["WorkFlow Status Requested By"] === "PDT")
+              ) {
+                // Call to add minor line item.
+                this.addMinorItem(results.body);
+              }
+            } else {
+              const searchRespose: Boolean = this.offerconstructPIDService.majorMinorLineRule(results.body, this.stackholders);
               if (searchRespose) {
-                if (
-                  (results.body["WorkFlow Status"] === "APPROVED" ||
-                    results.body["WorkFlow Status"] ===
-                    "PENDING APPROVAL BUC" ||
-                    results.body["WorkFlow Status"].toUpperCase() ===
-                    "PENDING PRODUCT CLASS") &&
-                  (results.body["WorkFlow Status Requested By"] === "BUC" ||
-                    results.body["WorkFlow Status Requested By"] === "PDT")
-                ) {
-                  // Call to add minor line item.
-                  this.addMinorItem(results.body);
-                }
+                this.addMajorItem(results.body);
               } else {
-                // console.log(this.defaultValueServices.pidErrormessage);
-                // this.isHidden = false;
                 this.genricModal.showModal({
                   title: `Warning`,
                   subTitle: this.offerconstructPIDService.pidErrormessage,
@@ -2328,14 +2328,13 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
                   modelSize: ModalSize.ModalSmall
                 });
               }
-            } else {
-              this.genricModal.showModal({
-                title: ` Please note`,
-                subTitle: this.offerconstructPIDService.pidErrormessage,
-                message: ` User cannot add Major Items`,
-                isHidden: false,
-                modelSize: ModalSize.ModalSmall
-              });
+              // this.genricModal.showModal({
+              //   title: ` Please note`,
+              //   subTitle: this.offerconstructPIDService.pidErrormessage,
+              //   message: ` User cannot add Major Items`,
+              //   isHidden: false,
+              //   modelSize: ModalSize.ModalSmall
+              // });
               // console.log(this.defaultValueServices.pidErrormessage);
               // this.isHidden = false;
               // this.showMajorItemFoundDialog = true;

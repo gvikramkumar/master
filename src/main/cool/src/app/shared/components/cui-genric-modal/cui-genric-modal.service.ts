@@ -10,7 +10,7 @@ export class CuiGenericModalService {
     title: `Warning`,
     subTitle: ``,
     message: ``,
-    isHidden: false,
+    isHidden: true,
     modelSize: ModalSize.ModalSmall
   });
 
