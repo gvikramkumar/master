@@ -6,6 +6,19 @@
     margin-right: 10px;
   }
 
+  .center-align {
+    display:flex;
+    justify-content:center;
+  }
+
+  .in-use {
+    color: crimson;
+  }
+
+  .my-tooltip {
+    white-space: pre-line;
+  }
+
 }
 
 
