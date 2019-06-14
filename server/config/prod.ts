@@ -3,7 +3,6 @@ export default {
   port: 3002,
   corsOrigin: [],
   showStack: false,
-  autoSyncOn: true,
   ssoUrl: 'https://localhost:3443',
   art: {
     url: 'https://wsgi.cisco.com/cepm/pdpservices/authorizationmanagerservice',
