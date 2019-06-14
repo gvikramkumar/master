@@ -273,9 +273,12 @@ export default class ControllerBase {
 
   mongoToPgSync(tableName: string, userId: string, log: string[], elog: string[],
                 mgGetFilter: AnyObj = {}, pgRemoveFilter: AnyObj = {}, dfa?: ApiDfaData) {
-    // try {
+
+
+    // q.allSettled requires promise rejections to work. If we throw, it will jsut get passed onto express error handler
+    try {
       if (this.repo.isModuleRepo && !mgGetFilter.then && mgGetFilter.moduleId !== -1) {
-          elog.push(`mongoToPgSync: ${this.repo.modelName} isModuleRepo but doesn't have mgGetFilter.moduleId set to -1.`);
+        elog.push(`mongoToPgSync: ${this.repo.modelName} isModuleRepo but doesn't have mgGetFilter.moduleId set to -1.`);
       }
 
       const mongoGetPromise = mgGetFilter.then ? mgGetFilter : this.repo.getMany(mgGetFilter);
@@ -293,12 +296,12 @@ export default class ControllerBase {
           return this.postSyncStep(dfa)
             .then(() => log.push(`${tableName}: ${recordCount} records transferred`));
         });
-/*
-    } catch (err) {
-      elog.push(`${tableName}: ${err.message}`);
-      throw err;
+    } catch (_err) {
+      elog.push(`${tableName}: ${_err.message}`);
+      const err = svrUtil.getErrorForJson(_err);
+      err.stack = err.stack ? err.stack.substr(0, 100) : undefined;
+      return Promise.reject(err);
     }
-*/
   }
 
   postSyncStep(dfa: ApiDfaData): Promise<any> {
