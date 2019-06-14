@@ -17,8 +17,10 @@ import JobLogRepo from './job-log-repo';
 import moment from 'moment';
 import {injectable} from 'inversify';
 import DatabaseController from '../../api/database/controller';
+import {ModuleRepo} from '../../api/common/module/repo';
+import OpenPeriodRepo from '../../api/common/open-period/repo';
 
-type DfaJobFunction = (startup?: boolean, data?) => Promise<any>;
+type DfaJobFunction = (startup?: boolean, data?, req?) => Promise<any>;
 
 interface DfaPeriodicJob {
   name: string;
@@ -239,7 +241,7 @@ export class JobManager {
           jobRun.running = true;
           jobRun.startDate = new Date();
           return this.runUpdateAndLog(jobRun, req, job.log, 'job starting')
-            .then(() => this.getJobFcnFromName(job.name)(startup, data))
+            .then(() => this.getJobFcnFromName(job.name)(startup, data, req))
             // job success
             .then(jobData => {
               return this.getJobRun(job.name)
@@ -412,7 +414,7 @@ export class JobManager {
     return this.getActiveJobConfigs()
       .then(jobs => {
         jobs.filter(x => x.startTime && !x.primary).forEach(startTimeJob => this.checkStartTimeAndRunJob(startTimeJob));
-        jobs.filter(x => x.startTime && x.primary && x.serverUrl === this.serverUrl)
+        jobs.filter(x => x.startTime && x.primary && x.primaryServerUrl === this.serverUrl)
           .forEach(startTimeJob => this.checkStartTimeAndRunJob(startTimeJob));
       });
   }
@@ -421,7 +423,7 @@ export class JobManager {
     if (startTimeJob.startTime === moment().format('ha')) {
       return this.getJobRun(startTimeJob.name)
         .then(job => {
-          if (!job.running && job.endDate.getTime() > new Date().getTime()) {
+          if (!job.running && job.endDate.toTimeString() > new Date().toTimeString()) {
             return this.runJob(job);
           }
         });
@@ -431,9 +433,31 @@ export class JobManager {
   }
 
   // periodic jobs (15 min or so) that copies mongo data to postgres
-  databaseSyncJob(startup, syncMap?: SyncMap, req?) {
+  databaseSyncJob(startup, data?, req?) {
     // if (!req)  put this together. const req = _.set({}, 'dfa.fiscalMonths', ??);
-    this.databaseController.mongoToPgSyncPromise(req, syncMap)
+    const userId = req.userId || 'system';
+    const syncMap = data.syncMap ? data.syncMap : new SyncMap().setSyncAll();
+    let dfa;
+    if (!req) {
+      return Promise.all([
+        new ModuleRepo().getNonAdminSortedByDisplayOrder(),
+        new OpenPeriodRepo().getMany()
+      ]).then(results => {
+        const modules = results[0];
+        const openPeriods = results[1];
+        modules.forEach(mod => {
+          const openPeriod = _.find(openPeriods, {moduleId: mod.moduleId});
+          mod.fiscalMonth = openPeriod && openPeriod.fiscalMonth;
+        });
+        const fiscalMonths: AnyObj = {};
+        modules.forEach(mod => fiscalMonths[mod.abbrev] = mod.fiscalMonth);
+        dfa = {};
+        _.set(dfa, 'fiscalMonths', fiscalMonths);
+      });
+    } else {
+      dfa = req.dfa;
+    }
+    return this.databaseController.mongoToPgSyncPromise(dfa, syncMap, userId);
   }
 
   // startTime job that runs once a day to update cache after nightly data updates

@@ -62,7 +62,7 @@ export default class DatabaseController {
     const promises = [];
 
     // this is to make sure we don't accidentally sync to dev/stage pg with local mongo database, use ldev env to sync to local postgres
-    if ((config.env === 'dev' || svrUtil.isUnitEnv()) && config.postgres !== 'localhost') {
+    if ((config.env === 'dev' || svrUtil.isUnitEnv()) && config.postgres.host !== 'localhost') {
       throw new ApiError('Syncing local mongo to non-local postgres.');
     }
 
@@ -149,16 +149,6 @@ export default class DatabaseController {
       });
   }
 
-  mongoToPgSync(req, res, next) {
-    const syncMap = req.body && Object.keys(req.body).length ? new SyncMap(req.body) : new SyncMap().setSyncAll();
-
-    this.mongoToPgSyncPromise(req.dfa, syncMap, req.user.id)
-      .then(log => {
-        res.json({success: log});
-      })
-      .catch(next);
-
-  }
 
   pgToMongoSync(req, res, next) {
     const resultArr = [];
