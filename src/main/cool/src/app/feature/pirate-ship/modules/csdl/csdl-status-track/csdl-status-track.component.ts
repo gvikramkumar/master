@@ -72,7 +72,7 @@ export class CsdlStatusTrackComponent implements OnInit {
        True – Enforced - COOL will list activity as Available
        True - None - COOL will list activity as complete
        False - Warning - COOL will list activity as complete
-       False – Enforced - COOL will list activity as Available
+       False – Enforced - COOL will list activity as Complete
        False - None - COOL will list activity as complete
     */
     this.csdlIntegrationService.getCsdlInfo(this.currentOfferId).subscribe(data => {
@@ -94,8 +94,8 @@ export class CsdlStatusTrackComponent implements OnInit {
         csdlPayload.csdlMileStoneStatus = 'Complete';
         this.updateCsdlMileStone(csdlPayload.csdlMileStoneStatus);
       } else if (data.stopShipStatus === 'False' && data.enforcementLabel === 'Enforced') {
-        // Available
-        csdlPayload.csdlMileStoneStatus = 'Available';
+        // Complete
+        csdlPayload.csdlMileStoneStatus = 'Complete';
         this.updateCsdlMileStone(csdlPayload.csdlMileStoneStatus);
       } else if (data.stopShipStatus === 'False' && data.enforcementLabel === '') {
         // Complete
