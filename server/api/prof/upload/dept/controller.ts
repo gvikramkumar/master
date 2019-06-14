@@ -240,14 +240,5 @@ export default class DeptUploadUploadController extends UploadController {
     return Promise.resolve();
   }
 
-  autoSync() {
-    // no reason to autosync if uploading from submeasure edit page, as temp=Y. only temp=N gets synced
-    // we delay that autosync until submeasure approval postApproveStep
-    if (!this.submeasureMode) {
-      super.autoSync();
-    } else {
-      return Promise.resolve();
-    }
-  }
 }
 

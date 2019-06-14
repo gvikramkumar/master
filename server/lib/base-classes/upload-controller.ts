@@ -104,7 +104,6 @@ export default class UploadController {
       .then(() => this.validateOther())
       .then(() => this.lookForTotalErrors())
       .then(() => this.importRows(this.userId))
-      .then(() => this.autoSync())
       .then(() => {
         this.sendSuccessEmail();
         if (!res.headersSent) {
@@ -445,12 +444,6 @@ export default class UploadController {
     if (uploadType.length < 3) {
       throw new ApiError(`no uploadType: ${uploadType}.`);
     }
-    this.req.query.uploadType = uploadType; // set for autoSync
-  }
-
-  autoSync() {
-    const databaseCtrl = injector.get(DatabaseController);
-    return databaseCtrl.autoSync(this.getSyncMapFromUploadType(), this.req);
   }
 
   getSyncMapFromUploadType() {

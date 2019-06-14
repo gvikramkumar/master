@@ -1,6 +1,5 @@
 export default {
   showStack: true,
-  autoSyncOn: false,
   mongo: {
     uri: 'mongodb://localhost/fin-dfa',
     host: 'localhost',
