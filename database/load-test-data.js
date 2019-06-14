@@ -162,11 +162,11 @@ db.dfa_submeasure.insertMany([
     "processingTime": "Monthly",
     "pnlnodeGrouping": "Indirect Adjustments",
     "categoryType": "HW",
-    "inputFilterLevel": {
-      "salesLevel": "LEVEL1",
-      "scmsLevel": "SCMS",
-      "internalBELevel": "INTERNAL BE",
-      "entityLevel": "BE"
+    "inputFilterLevel" : {
+      "productLevel" : "TG",
+      "salesLevel" : "LEVEL3",
+      "scmsLevel" : "SCMS",
+      "entityLevel" : "BE"
     },
     "manualMapping": {},
     "reportingLevels": [
