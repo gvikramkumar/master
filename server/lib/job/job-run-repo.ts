@@ -4,7 +4,7 @@ import RepoBase from '../../lib/base-classes/repo-base';
 
 const schema = new Schema(
   {
-    serverUrl: {type: String, required: true},
+    serverHost: {type: String, required: true},
     jobName: {type: String, required: true},
     userId: {type: String, required: true},
     startDate: Date,

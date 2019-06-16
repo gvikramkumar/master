@@ -19,115 +19,20 @@ import {injectable} from 'inversify';
 import DatabaseController from '../../api/database/controller';
 import {ModuleRepo} from '../../api/common/module/repo';
 import OpenPeriodRepo from '../../api/common/open-period/repo';
+import {DfaJobFunction, DfaPeriodicJobInstance} from './models/job-misc';
+import {DfaJobConfig} from './models/job-config';
+import {DfaJobLog} from './models/job-log';
+import {DfaJobRun} from './models/job-run';
+import {DfaServer} from './models/job-server';
+import {DisregardError} from '../common/disregard-error';
 
-type DfaJobFunction = (startup?: boolean, data?, req?) => Promise<any>;
-
-interface DfaPeriodicJob {
-  name: string;
-  timerId: number;
-}
-
-/*
-    name: {type: String, required: true},
-    period: Number,
-    startTime: String,
-    runOnStartup: {type: Boolean, required: true},
-    log: {type: Boolean, required: true},
-    active: {type: Boolean, required: true},
-    primary: {type: Boolean, required: true}, // only runs on primary server
-    primaryServerUrl: String, // identify server running primary job
-
- */
-class DfaJob {
-  // properties
-  id?: string;
-  name: string;
-  period?: number;
-  startTime?: string;
-  runOnStartup: boolean;
-  log: boolean;
-  active: boolean;
-  primary: boolean;
-  primaryServerUrl: string;
-
-  constructor(data) {
-    Object.assign(this, data);
-  }
-
-}
-
-/*
-  {
-    serverUrl: {type: String, required: true},
-    jobName: {type: String, required: true},
-    userId: {type: String, required: true},
-    startDate: Date,
-    endDate: Date,
-    duration: String,
-    running: {type: Boolean, required: true},
-    status: String,
-    data: Object,
-  },
-
- */
-class DfaJobRun {
-  serverUrl: string;
-  jobName: string;
-  userId = 'system';
-  startDate?: Date;
-  endDate?: Date;
-  duration?: number;
-  running?: boolean;
-  status?: string;
-  data?: AnyObj;
-  error?: AnyObj;
-
-  constructor(data = {}) {
-    Object.assign(this, data);
-  }
-}
-
-/*
-    serverUrl: {type: String, required: true},
-    jobName: {type: String, required: true},
-    userId: {type: String, required: true},
-    startDate: Date,
-    endDate: Date,
-    duration: String,
-    running: {type: Boolean, required: true},
-    status: String,
-    data: Object,
-    message: String,
-    timestamp: {type: Date, default: new Date()},
- */
-class DfaJobLog extends DfaJobRun {
-  message?: string;
-  timestamp?: Date;
-
-  constructor(run: DfaJobRun, message?) {
-    super(run);
-    this.message = message;
-  }
-
-}
-
-class DfaServer {
-  id?: string;
-  name: string;
-  url: string;
-  primary: boolean;
-  updatedDate: Date;
-}
-
-interface DfaPeriodicJobInstance {
-  job: DfaJob;
-  timerId: number;
-}
 
 @injectable()
 export class JobManager {
+  serverHost: string;
   serverUrl: string;
-  periodicJobs: DfaPeriodicJobInstance[] = [];
+  periodicJobInstances: DfaPeriodicJobInstance[] = [];
+  jobConfigs: DfaJobConfig[];
 
   constructor(
     private jobConfigRepo: JobConfigRepo,
@@ -140,18 +45,44 @@ export class JobManager {
   ) {
   }
 
-  getActiveJobConfigs(filter = {}) {
-    return this.jobConfigRepo.getMany(Object.assign({active: true}, filter));
+  serverStartup() {
+    this.serverHost = app.get('serverHost');
+    this.serverUrl = app.get('serverUrl');
+    this.jobConfigRepo.getManyActive()
+      .then(jobs => this.jobConfigs = jobs)
+      // we need to run this initially before the startup jobs get going to clean out servers and runjobs, then startup jobs will re-add jobruns
+      .then(() => this.cleanupServersAndJobRunMakePrimaryIfNoPrimaryJob(true))
+      .then(() => {
+        this.jobConfigs.filter(x => !x.primary && x.period)
+          .forEach(job => this.startIntervalJob(job));
+        this.jobConfigs.filter(x => !x.primary && x.runOnStartup)
+          .forEach(job => this.runJob(job, true));
+      });
   }
 
-  serverStartup() {
-    this.serverUrl = app.get('serverUrl');
-    this.getActiveJobConfigs()
-      .then(jobs => {
-        jobs.filter(x => !x.primary && x.period)
-          .forEach(job => this.startPeriodicJob(job));
-        jobs.filter(x => !x.primary && x.startTime && x.runOnStartup)
-          .forEach(job => this.runJob(job, true));
+  startIntervalJob(job) {
+    const timerId = setInterval(this.runJob.bind(this, job), job.period);
+    this.periodicJobInstances.push({job: job, timerId});
+  }
+
+  getThisServer(): Promise<DfaServer> {
+    return this.serverRepo.getMany()
+      .then(servers => _.find(servers, {host: this.serverHost}));
+  }
+
+  setServerUploading(val) {
+    this.getThisServer()
+      .then(server => {
+        server.uploading = val;
+        return this.serverRepo.update(server, 'system', false);
+      });
+  }
+
+  setServerSyncing(val) {
+    this.getThisServer()
+      .then(server => {
+        server.syncing = val;
+        return this.serverRepo.update(server, 'system', false);
       });
   }
 
@@ -159,7 +90,7 @@ export class JobManager {
     let fcn;
     switch (name) {
       case 'approval-email-reminder':
-        fcn = this.approvelEmailReminderJob;
+        fcn = this.approvelEmailReminderPrimaryJob;
         break;
       case 'cache-refresh':
         fcn = this.cacheRefreshJob();
@@ -168,10 +99,13 @@ export class JobManager {
         fcn = this.checkStartTimeJobsJob;
         break;
       case 'database-sync':
-        fcn = this.databaseSyncJob;
+        fcn = this.databaseSyncPrimaryJob;
         break;
-      case 'primary-determination':
-        fcn = this.primaryDeterminationJob;
+      case 'primary-placeholder':
+        fcn = this.placeholderPrimaryJob;
+        break;
+      case 'server-and-jobrun-cleanup':
+        fcn = this.cleanupServersAndJobRunMakePrimaryIfNoPrimaryJob;
         break;
       case 'start-primary-jobs':
         fcn = this.startPrimaryJobsJob();
@@ -185,9 +119,9 @@ export class JobManager {
     return this.jobRunRepo.upsertMerge(run, run.userId, false);
   }
 
-  log(canLog, run, message, req?) {
+  log(run, message, req?) {
     run.userId = _.get(req, 'user.id') || 'system';
-    if (canLog) {
+    if (_.find(this.jobConfigs, {name: run.jobName}).canLog) {
       const log = new DfaJobLog(run, message);
       return this.jobLogRepo.addOne(log, run.userId || log.userId || 'system', false);
     } else {
@@ -198,7 +132,7 @@ export class JobManager {
   runUpdateAndLog(run, req, canLog, message) {
     return Promise.all([
       this.runUpdate(run, req),
-      this.log(canLog, run, message)
+      this.log(run, message)
     ])
       .then(results => results[0]); // return the job run
   }
@@ -207,40 +141,32 @@ export class JobManager {
     return this.jobRunRepo.getOneByQuery({name: jobName, serverUrl: this.serverUrl});
   }
 
-  runJob(job: DfaJob, startup = false, data?, req?) {
+  runJob(job: DfaJobConfig, startup = false, data?, req?) {
     return Promise.all([
-      this.getActiveJobConfigs(),
       this.getJobRun(job.name)
     ])
     // start
       .then(results => {
-        const jobs = results[0];
         if (typeof job === 'string') {
           const jobName = job;
-          job = _.find(jobs, {name: job});
-          if (!job) {
-            this.log(true, {
-              name: jobName,
-              serverUrl: this.serverUrl
-            }, `JobManager.runJob /api/run-job: no job found for jobName: ${job}`);
-          }
+          job = _.find(this.jobConfigs, {name: job});
         }
         const jobRun = <DfaJobRun>results[1] || new DfaJobRun({name: job.name, serverUrl: this.serverUrl});
         // /api/run-job calls with jobName
         // if running get out
         if (jobRun.running) {
           const log = <DfaJobRun>{
-            serverUrl: this.serverUrl,
+            serverHost: this.serverHost,
             jobName: job.name
           };
-          return this.log(job.log, log, 'job already running');
+          return this.log(log, 'job already running');
         } else {
           delete jobRun.endDate;
           delete jobRun.duration;
           delete jobRun.status;
           jobRun.running = true;
           jobRun.startDate = new Date();
-          return this.runUpdateAndLog(jobRun, req, job.log, 'job starting')
+          return this.runUpdateAndLog(jobRun, req, job.canLog, 'job starting')
             .then(() => this.getJobFcnFromName(job.name)(startup, data, req))
             // job success
             .then(jobData => {
@@ -251,7 +177,7 @@ export class JobManager {
                   run.duration = run.endDate.getTime() - run.startDate.getTime();
                   run.status = 'success';
                   run.data = jobData;
-                  return this.runUpdateAndLog(run, req, job.log, 'job run successful'); // return the job run
+                  return this.runUpdateAndLog(run, req, job.canLog, 'job run successful'); // return the job run
                 });
             })
             // job error
@@ -264,72 +190,59 @@ export class JobManager {
                   run.duration = run.endDate.getTime() - run.startDate.getTime();
                   run.status = 'failure';
                   run.error = err;
-                  return this.runUpdateAndLog(run, req, job.log, 'job run error'); // return the job run
+                  return this.runUpdateAndLog(run, req, job.canLog, 'job run error'); // return the job run
                 });
             });
         }
       });
   }
 
-  startPeriodicJob(job: DfaJob) {
-    const timerId = setInterval(this.runJob.bind(this, job), job.period);
-    this.periodicJobs.push({job: job, timerId});
-    if (job.runOnStartup) {
-      this.runJob(job, true);
-    }
-  }
-
-  primaryDeterminationJob(startup: boolean) {
-    const promises = [];
-    this.serverRepo.getMany()
+  // ping all servers and update server jobRun collections, then becomes primary if none exists
+  cleanupServersAndJobRunMakePrimaryIfNoPrimaryJob(startup) {
+    const pingPromises = [];
+    return this.serverRepo.getMany()
       .then(servers => {
-        const thisServer = _.find(servers, {name: this.serverUrl});
-        if (startup && thisServer) {
-          // remove yourself from primary jobs, all primary starts are done by startPrimaryJobs so we don't get duplicate primary jobs
-          promises.push(this.jobConfigRepo.updateMany({
-            primary: true,
-            primaryServerUrl: thisServer.url
-          }, {$unset: {primaryServerUrl: ''}}));
-        }
-        // remove all inactive servers from server collection
-        servers
-          .filter(x => x.url !== this.serverUrl)
-          .forEach(server => promises.push(this.pingAndRemoveServer(server)));
-        return Promise.all(promises)
-          .then(_serversToRemove => {
-            const serversToRemove = _serversToRemove.filter(x => !!x); // will be undefined for ping success, so clear those out
-            // remove inactive servers, and if primary jobs are set to their serverUrl, unset it
-            return Promise.all([
+        const thisServer = _.find(servers, {host: this.serverHost});
+        servers.forEach(server => pingPromises.push(this.pingServer(server)));
+        return Promise.all(pingPromises)
+          .then(pings => {
+            const serversToRemove = pings.filter(x => x);
+            // remove all offline servers and their jobruns, and remove this server and jobruns if startup
+            const promises = [
               this.serverRepo.removeMany({_id: {$in: serversToRemove.map(x => x._id)}}),
-              this.jobConfigRepo.updateMany({
-                primary: true,
-                primaryServerUrl: {$in: serversToRemove.map(x => x.url)}
-              }, {$unset: {primaryServerUrl: ''}})
-            ]);
-          })
-          .then(() => {
-            // now that missing servers have been cleaned up, get them again and if no primary, set yourself to primary
-            // it's possible 2 people do this at the same time, but startPrimareyJob's cleanup function will rectify that, choosing only the latest primary
-            // then starting jobs (but only if primary server)
-            return this.serverRepo.getMany({primary: true})
-              .then(primaryServer => {
-                const updateServer = thisServer.toObject() || new DfaServer();
-                updateServer.updatedDate = new Date();
-                if (!primaryServer) {
-                  updateServer.primary = true;
-                }
-                this.serverRepo.upsertQueryOne({url: this.serverUrl}, updateServer, 'system', false, true);
+              this.jobRunRepo.removeMany({host: {$in: serversToRemove.map(x => x.host)}})
+            ];
+            // if startup, blow away this servers server entry and jobruns
+            if (startup) {
+              promises.push(this.jobRunRepo.removeMany({host: this.serverHost}));
+            }
+            return Promise.all(promises)
+              .then(() => {
+                // get latest servers and see if a primary exists, if not, set this server to primary, then add this server
+                return this.serverRepo.getMany({primary: true})
+                  .then(primary => {
+                    const server = thisServer || <DfaServer>{
+                      host: this.serverHost,
+                      url: this.serverUrl
+                    };
+                    if (startup) {
+                      server.startupDate = new Date();
+                      delete server.syncing;
+                      delete server.uploading;
+                    }
+                    if (!primary) {
+                      server.primary = true;
+                    }
+                    return this.serverRepo.upsert(server, 'system', false);
+                  });
               });
           });
       });
-
   }
 
-  // return server if ping fails, else undefined
-  pingAndRemoveServer(server: DfaServer) {
-    shUtil.promiseChain(
-      finRequest({url: `${server.url}/ping`})
-    )
+// return server if ping fails, else undefined
+  pingServer(server: DfaServer) {
+    shUtil.promiseChain(finRequest({url: `${server.url}/ping`}))
       .then(({resp, body}) => {
         if (resp.statusCode >= 400) {
           return server;
@@ -340,100 +253,148 @@ export class JobManager {
       });
   }
 
-  // see if jobs are running on primary (job.primaryServerUrl set and primary exists), if not AND THIS IS PRIMARY, start them,
-  // i.e. primary jobs can only can be started by the primary server
+  // look for primary servers, if none leave, if more than one, get it down to one
+  // if THIS server is primary AND the jobs aren't running, start them
   startPrimaryJobsJob() {
-    shUtil.promiseChain(this.cleanupJobCollection())
-      .then(() => {
-        // get primary jobs and if no primaryServerUrl AND THIS SERVER IS PRIMARY, START THE JOBS AND ADD THIS SERVERS SERVERURL
-        Promise.all([
-          this.serverRepo.getMany({primary: true}),
-          this.getActiveJobConfigs({primary: true})
-        ])
-          .then(results => {
-            const primaryServers = results[0];
-            if (primaryServers.length === 0 || primaryServers.length > 1) {
-              return; // let next run or primary determination clean things up to one primary
+    let primaryServer;
+    const primaryJobNames = this.jobConfigs.filter(x => x.primary).map(x => x.name);
+    return Promise.all([
+      this.serverRepo.getMany({primary: true}),
+      this.jobRunRepo.getMany({name: {$in: primaryJobNames}})
+    ])
+      .then(results => {
+        const primaryServers = results[0];
+        const primaryJobRuns = results[1];
+        if (!primaryServers.length) {
+          return Promise.reject(new DisregardError()); // wait for server-and-jobrun-cleanup to add one
+        }
+        const promises = [];
+        // if more than one, get down to one or leave
+        if (primaryServers.length > 1) {
+          if (primaryJobRuns.length) {
+            primaryServer = _.find(primaryServers, {host: primaryJobRuns[0].host});
+            if (!primaryServer) {
+              return Promise.reject(new DisregardError()); // wait for server-and-jobrun-cleanup to add one
             }
-            const primaryServer = primaryServers[0];
-            if (primaryServer.url === this.serverUrl) {
-              const primaryJobsNotRunning = results[1].filter(x => !x.primaryServerUrl);
-              // start primary periodic jobs
-              primaryJobsNotRunning.filter(x => x.period)
-                .forEach(job => this.startPeriodicJob(job));
-              primaryJobsNotRunning.filter(x => x.startTime && x.runOnStartup)
-                .forEach(job => this.runJob(job));
-              // update primary jobs to this serverUrl
-              return this.jobConfigRepo.updateMany({_id: {$in: [primaryJobsNotRunning.map(x => x._id)]}}, {$set: {primaryServerUrl: this.serverUrl}});
+          } else {
+            // grab newest one
+            primaryServer = _.orderBy(primaryServers, ['updatedDate'], ['desc'])[0];
+          }
+          promises.push(this.serverRepo.updateMany({_id: {$ne: primaryServer._id}}, {$set: {primary: false}}));
+        } else {
+          primaryServer = primaryServers[0];
+        }
+        Promise.all(promises)
+          .then(() => {
+            // have just one primary server now
+
+            // WE ONLY START PRIMARY JOBS ON THE PRIMARY SERVER
+            // not primary server so leave
+            if (primaryServer.host !== this.serverHost) {
+              return;
+            }
+            // this is the primary server, check if jobs are already running, if not, start them
+            if (primaryJobRuns.length && primaryServer.host === primaryJobRuns[0].host) {
+              return; // already running, so leave
+            } else {
+              //  not running so start primary jobs
+              this.jobConfigs.filter(x => x.primary && x.period)
+                .forEach(job => this.startIntervalJob(job));
+              this.jobConfigs.filter(x => x.primary && x.runOnStartup)
+                .forEach(job => this.runJob(job, true));
             }
           });
       })
       .catch(err => {
-        throw new ApiError('jobManager.startPrimaryJobsJob error', svrUtil.getErrorForJson(err));
+        if (err instanceof DisregardError) {
+          // we just used this error to get out of promise chain
+        } else {
+          return Promise.reject(err);
+        }
       });
-
   }
 
-  // look for duplicate primaries and if found remove all but latest (primaryDetermination jobs could run at same time >> duplicate primaries),
-  // then clean job.primaryServerUrls if they don't match the latest primary
-  cleanupJobCollection() {
-    const promises = [];
-    let primaryServer;
+  checkStartTimeJobsJob() {
     return Promise.all([
-      this.serverRepo.getMany({primary: true}),
-      this.getActiveJobConfigs()
+      this.serverRepo.getMany(),
+      this.jobRunRepo.getMany()
     ])
       .then(results => {
-        const primaryServers = results[0];
-        const jobs = results[1];
-        if (primaryServers.length > 1) {
-          const primaryJobServerUrl = jobs.filter(x => x.primary).map(x => x.serverUrl)[0];
-          primaryServer = _.find(primaryServers, {url: primaryJobServerUrl});
-          if (primaryServer) {
-          } else {
-            primaryServer = _.orderBy(primaryServers, ['updatedDate'], ['desc'])[0];
-          }
-          promises.push(this.serverRepo.updateMany({_id: {$ne: primaryServer._id}}, {$set: {primary: false}}));
+        const server = _.find(results[0], {host: this.serverHost});
+        const jobRuns = results[1];
+        // check non-primary start time jobs
+        this.jobConfigs.filter(x => x.startTime && !x.primary).forEach(startTimeJob => this.checkStartTimeAndRunJob(startTimeJob, server, jobRuns));
+
+        // check primary jobs "if this server is primary" AND "if primary jobs are running on this server"
+        const primaryJobNames = this.jobConfigs.filter(x => x.primary).map(x => x.name);
+        const primaryJobRuns = jobRuns.filter(x => _.includes(primaryJobNames,  x.name));
+        if (primaryJobRuns.length && this.serverHost === primaryJobRuns[0].host) {
+          this.jobConfigs.filter(x => x.startTime && x.primary)
+            .forEach(startTimeJob => this.checkStartTimeAndRunJob(startTimeJob, server, jobRuns));
         }
-        const removePrimaryForJobs = [];
-        jobs.filter(x => x.primary && x.primaryServerUrl)
-          .forEach(job => {
-            if (job.primaryServerUrl !== primaryServer.url) {
-              removePrimaryForJobs.push(job);
-            }
-          });
-        if (removePrimaryForJobs.length) {
-          promises.push(this.jobConfigRepo.updateMany({_id: {$in: removePrimaryForJobs.map(x => x._id)}}, {$unset: {primaryServerUrl: ''}}));
-        }
-        return Promise.all(promises);
       });
   }
 
-  // checks startTime jobs (primary on primary server as well) for last run and start time, then runs and updates runtime in express app global or db???
-  checkStartTimeJobsJob() {
-    return this.getActiveJobConfigs()
-      .then(jobs => {
-        jobs.filter(x => x.startTime && !x.primary).forEach(startTimeJob => this.checkStartTimeAndRunJob(startTimeJob));
-        jobs.filter(x => x.startTime && x.primary && x.primaryServerUrl === this.serverUrl)
-          .forEach(startTimeJob => this.checkStartTimeAndRunJob(startTimeJob));
-      });
-  }
+  /*
+    given a comma separated list of 1-60m or 1-12am/pm, create a list of dates, then find the lastDate before now,
+    but "only if it's withing 1 min or now". If found, and <= server.startupDate, get out
+    else if no jobrun or jobrun.endDate < lastDate, run job
+   */
+  checkStartTimeAndRunJob(jobConfig: DfaJobConfig, server, jobRuns) {
+    const jobRun = _.find(jobRuns, {jobName: jobConfig.name});
+    if (jobRun && jobRun.running) {
+      return;
+    }
 
-  checkStartTimeAndRunJob(startTimeJob: DfaJob) {
-    if (startTimeJob.startTime === moment().format('ha')) {
-      return this.getJobRun(startTimeJob.name)
-        .then(job => {
-          if (!job.running && job.endDate.toTimeString() > new Date().toTimeString()) {
-            return this.runJob(job);
-          }
+    let dates;
+    if (/\d{1,2}m/.test(jobConfig.startTime)) {
+      dates = jobConfig.startTime.split(/\d{1,2}m/)
+        .map(x => Number(x.replace('m', '')))
+        .map(minutes => {
+          const date = new Date();
+          date.setMinutes(minutes);
+          return date;
         });
-    } else {
-      return Promise.resolve();
+
+    } else if (/\d{1,2}(am|pm)/.test(jobConfig.startTime)) {
+      dates = jobConfig.startTime.split(/\d{1,2}(am|pm)/)
+        .map(x => {
+          if (/am/.test(x)) {
+            x.replace('am', '');
+            return Number(x) - 1;
+          } else if (/pm/.test(x)) {
+            x.replace('pm', '');
+            return Number(x) + 12 - 1;
+          }
+        })
+        .sort()
+        .map(hour => {
+          const date = new Date();
+          date.setHours(hour);
+          return date;
+        });
+    }
+    const msNow = Date.now();
+    let lastDate;
+    dates.forEach(date => {
+      if (date.getTime() < msNow) {
+        lastDate = date;
+      }
+    });
+    // if lastDate and it's within a minute of now
+    if (lastDate && msNow - lastDate.getTime() < 60 * 1000) {
+      if (server.startupDate.getTime() >= lastDate.getTime()) {
+        return;
+      } else {
+        if (!jobRun || jobRun.endDate.getTime() < lastDate.getTime()) {
+          return this.runJob(jobConfig);
+        }
+      }
     }
   }
 
-  // periodic jobs (15 min or so) that copies mongo data to postgres
-  databaseSyncJob(startup, data?, req?) {
+// periodic jobs (15 min or so) that copies mongo data to postgres
+  databaseSyncPrimaryJob(startup, data ?, req ?) {
     // if (!req)  put this together. const req = _.set({}, 'dfa.fiscalMonths', ??);
     const userId = req.userId || 'system';
     const syncMap = data.syncMap ? data.syncMap : new SyncMap().setSyncAll();
@@ -460,14 +421,14 @@ export class JobManager {
     return this.databaseController.mongoToPgSyncPromise(dfa, syncMap, userId);
   }
 
-  // startTime job that runs once a day to update cache after nightly data updates
+// startTime job that runs once a day to update cache after nightly data updates
   cacheRefreshJob() {
     const promises = []; // push all refreshes or... done somewhere else??
     Q.allSettled(promises)
       .then(results => handleQAllSettled(null, 'qAllReject'));
   }
 
-  approvelEmailReminderJob() {
+  approvelEmailReminderPrimaryJob() {
     /*
         Q.allSettled([
           this.submeasureController.approvalEmailReminder('submeasure'),
@@ -475,6 +436,13 @@ export class JobManager {
         ])
           .then(results => handleQAllSettled(null, 'qAllReject'));
     */
+    return Promise.resolve();
+  }
+
+  placeholderPrimaryJob() {
+    // this job does nothing but indicate that primary jobs are running, and on what server.
+    // We use the job runs to determine the primary server (if more than one), and if the primary jobs are running.
+    // We must have a primary job in there to determine this, so this job is runOnStartup only and will always be there
     return Promise.resolve();
   }
 

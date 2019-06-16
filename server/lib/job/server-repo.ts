@@ -4,9 +4,13 @@ import RepoBase from '../../lib/base-classes/repo-base';
 
 const schema = new Schema(
   {
+    host: {type: String, required: true},
     url: {type: String, required: true},
     primary: {type: Boolean, required: true},
-    heartbeat: {type: Date, required: true},
+    syncing: Boolean,
+    uploading: Boolean,
+    startupDate: {type: Date, required: true},
+    timestamp: {type: Date, default: new Date()}
   },
   {collection: 'dfa_server'}
 );

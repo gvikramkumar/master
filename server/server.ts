@@ -68,6 +68,7 @@ export const serverPromise = Promise.all([mgc.promise, pgc.promise])
           throw(err);
         }
         const serverUrl = `${protocol}://${os.hostname()}:${port}`;
+        app.set('serverHost', os.hostname());
         app.set('serverUrl', serverUrl);
         if (!svrUtil.isLocalEnv()) {
           console.log('build:', process.env.BUILD_NUMBER);

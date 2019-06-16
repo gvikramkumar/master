@@ -7,11 +7,10 @@ const schema = new Schema(
     name: {type: String, required: true},
     period: Number,
     startTime: String,
-    runOnStartup: {type: Boolean, required: true},
-    log: {type: Boolean, required: true},
+    runOnStartup: Boolean, // we can have runOnStartup and !period/startTime, i.e. jobs that run only once on startup
+    canLog: Boolean,
     active: {type: Boolean, required: true},
     primary: {type: Boolean, required: true}, // only runs on primary server
-    primaryServerUrl: String, // identify server running primary job
   },
   {collection: 'dfa_job_config'}
 );

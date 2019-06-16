@@ -20,39 +20,8 @@ db.dfa_job_config.createIndex({name: 1}, {unique: true});
 db.dfa_job_run.createIndex({name: 1, serverUrl: 1}, {unique: true});
 db.dfa_server.createIndex({url: 1}, {unique: true});
 
+
 db.dfa_job_config.insertMany([
-  {
-    name: 'primary-determination',
-    period: 5 * 1000,
-    runOnStartup: true, // needs to run before start-primary-jobs to initialize from last settings
-    log: false,
-    active: true,
-    primary: false,
-  },
-  {
-    name: 'start-primary-jobs',
-    period: 5 * 1000,
-    runOnStartup: false, // need to let primary determination run once at startup to clear things out, so we'll not run on startup for this one
-    log: false,
-    active: true,
-    primary: false,
-  },
-  {
-    name: 'check-start-time-jobs',
-    period: 5 * 1000,
-    runOnStartup: false,
-    log: false,
-    active: true,
-    primary: false,
-  },
-  {
-    name: 'database-sync',
-    period: 15 * 60 * 1000,
-    runOnStartup: false,
-    log: true,
-    active: true,
-    primary: true,
-  },
   {
     name: 'approval-email-reminder',
     period: 5 * 60 * 1000,
@@ -66,6 +35,45 @@ db.dfa_job_config.insertMany([
     startTime: '6am',
     runOnStartup: true,
     log: true,
+    active: true,
+    primary: false,
+  },
+  {
+    name: 'check-start-time-jobs',
+    period: 5 * 1000,
+    runOnStartup: false,
+    log: false,
+    active: true,
+    primary: false,
+  },
+  {
+    name: 'database-sync',
+    startTime: '30m, 60m',
+    runOnStartup: false,
+    log: true,
+    active: true,
+    primary: true,
+  },
+  {
+    name: 'primary-placeholder',
+    runOnStartup: true,
+    log: true,
+    active: true,
+    primary: true,
+  },
+  {
+    name: 'server-and-jobrun-cleanup',
+    period: 5 * 1000,
+    runOnStartup: false, // this job is run before the startup jobs to clean things up, so won't be runOnStartup then
+    log: false,
+    active: true,
+    primary: false,
+  },
+  {
+    name: 'start-primary-jobs',
+    period: 5 * 1000,
+    runOnStartup: false, // keep this false, let the dust settle from startup before starting primary jobs.
+    log: false,
     active: true,
     primary: false,
   },
