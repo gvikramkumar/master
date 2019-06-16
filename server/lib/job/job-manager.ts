@@ -330,7 +330,13 @@ export class JobManager {
         const primaryJobRuns = jobRuns.filter(x => _.includes(primaryJobNames,  x.name));
         if (primaryJobRuns.length && this.serverHost === primaryJobRuns[0].host) {
           this.jobConfigs.filter(x => x.startTime && x.primary)
-            .forEach(startTimeJob => this.checkStartTimeAndRunJob(startTimeJob, server, jobRuns));
+            .forEach(jobConfig => {
+              const jobRun = _.find(jobRuns, {jobName: jobConfig.name});
+              if (jobRun && jobRun.running) {
+                return;
+              }
+              return this.checkStartTimeAndRunJob(jobConfig, server, jobRun);
+            });
         }
       });
   }
@@ -340,12 +346,7 @@ export class JobManager {
     but "only if it's withing 1 min or now". If found, and <= server.startupDate, get out
     else if no jobrun or jobrun.endDate < lastDate, run job
    */
-  checkStartTimeAndRunJob(jobConfig: DfaJobConfig, server, jobRuns) {
-    const jobRun = _.find(jobRuns, {jobName: jobConfig.name});
-    if (jobRun && jobRun.running) {
-      return;
-    }
-
+  checkStartTimeAndRunJob(jobConfig: DfaJobConfig, server, jobRun) {
     let dates;
     if (/\d{1,2}m/.test(jobConfig.startTime)) {
       dates = jobConfig.startTime.split(/\d{1,2}m/)
