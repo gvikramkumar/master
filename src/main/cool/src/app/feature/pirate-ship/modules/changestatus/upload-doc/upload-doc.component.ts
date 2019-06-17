@@ -20,6 +20,8 @@ export class UploadDocComponent implements OnInit {
   userId: string;
   userName: string;
   info: string;
+  DocType: Array<string>;
+  DocSize: string;
  @Input() isReadonly: boolean;
 
   constructor(
@@ -29,6 +31,15 @@ export class UploadDocComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.httpClient.get(this._evnService.REST_API_BasicModuleDocType,{
+      params: new HttpParams().set('moduleName', this.moduleName)
+    }).subscribe(
+      (ModuleExtension: any) => {
+        if ( ModuleExtension.documentType !== 'ALL' ) {
+          this.DocType = ModuleExtension.documentType.split('|');
+        }
+      }
+    );
     this.info = "";
     this.offerId = this._userService.getofferId();
     this.getFileName();
