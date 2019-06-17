@@ -144,11 +144,9 @@ export class RightPanelComponent implements OnInit {
     this.navigateHash['Design Review'] = ['/designReview', this.currentOfferId, this.caseId];
     this.navigateHash['Offer Setup Workflow'] = ['/offerSetup', this.currentOfferId, this.caseId];
 
-    this.ideateCount = this.offerPhaseDetailsList['ideate'].length;
     this.planCount = this.offerPhaseDetailsList['plan'].length;
     this.setupCount = this.offerPhaseDetailsList['setup'].length;
-
-    console.log(this.offerPhaseDetailsList['plan']);
+    this.ideateCount = this.offerPhaseDetailsList['ideate'].length;
 
     this.offerPhaseDetailsList.ideate.forEach(element => {
       if (element.status === 'Completed') {

@@ -10,7 +10,7 @@ export class MenuBarService {
     private environmentService: EnvironmentService
   ) { }
 
-  getRubboTaxMenu(caseId): any {
+  getMiletsoneDetails(caseId): any {
     return this.httpClient.get(this.environmentService.REST_API_RETRIEVE_MILESTONES_URL + '/' + caseId + '/false');
   }
 

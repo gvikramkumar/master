@@ -506,18 +506,36 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
             );
             obj["itemDetails"] = listOfferQuestions;
           }
-          this.offerConstructItems.push(this.itemToTreeNode(obj));
-          this.offerConstructItems = [...this.offerConstructItems];
-          this.countableItems.push(this.uniqueId);
-          this.updateChildCount();
-          this.getQuestionList(obj);
-        },
-        err => {
-          console.log("error" + err);
-          this.loaderService.stopLoading();
-        },
-        () => { }
-      );
+
+          if (obj.productName == 'Hardware'){
+            let listOfferQuestions = this.defaultValueServices.getBasePIDValues(this.listOfferQuestions);
+            obj['itemDetails'] = listOfferQuestions;
+          }
+          // if (obj.productName == 'License') {
+          //     let listOfferQuestions = this.defaultValueServices.setSoftwareLicenseNSKU(this.listOfferQuestions);
+          //     obj['itemDetails'] = listOfferQuestions;
+          // }
+          // else{
+          //     let listOfferQuestions = this.defaultValueServices.setSoftwareLicenseNSKUDefault(this.listOfferQuestions);
+          //     obj['itemDetails'] = listOfferQuestions;
+          // }
+
+          obj['itemDetails'] = this.listOfferQuestions;
+        } else {
+          let listOfferQuestions = this.defaultValueServices.billingSOADefaultValue(this.listOfferQuestions, this.chargeTypeValue, this.beListType);
+          obj['itemDetails'] = listOfferQuestions;
+        }
+        this.offerConstructItems.push(this.itemToTreeNode(obj));
+        this.offerConstructItems = [...this.offerConstructItems];
+        this.countableItems.push(this.uniqueId);
+        this.updateChildCount();
+        this.getQuestionList(obj);
+      }, (err) => {
+        console.log('error' + err);
+        this.loaderService.stopLoading();
+      },
+        () => {
+        });
     }
     var promise = new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -1367,10 +1385,15 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
                   obj["itemDetails"] = listOfferQuestions;
                 }
 
-                // if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'SW Subscription Mapped SKU'){
-                //   let listOfferQuestions = this.defaultValueServices.getCountryNameValues(this.listOfferQuestions, this.createSpare);
-                //   obj['itemDetails'] = listOfferQuestions;
-                // }
+              if (obj.productName == 'Hardware'){
+                let listOfferQuestions = this.defaultValueServices.getBasePIDValues(this.listOfferQuestions);
+                obj['itemDetails'] = listOfferQuestions;
+              }
+
+              // if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'SW Subscription Mapped SKU'){
+              //   let listOfferQuestions = this.defaultValueServices.getCountryNameValues(this.listOfferQuestions, this.createSpare);
+              //   obj['itemDetails'] = listOfferQuestions;
+              // }
 
                 obj["itemDetails"] = this.listOfferQuestions;
               } else {

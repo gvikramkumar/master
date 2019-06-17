@@ -12,13 +12,13 @@
 </ng-template>
 
 <ng-template #available>
-  <ng-container *ngIf="finalStatus==='notStarted';else notYetAvailable">
+  <ng-container *ngIf="finalStatus==='available';else offerNotAvailable">
     <span class="legend-available"></span>
   </ng-container>
 </ng-template>
 
-<ng-template #notYetAvailable>
-  <ng-container *ngIf="finalStatus==='offerNotPresent';else other">
+<ng-template #offerNotAvailable>
+  <ng-container *ngIf="finalStatus==='offerNotAvailable';else other">
     <span class="legend-notavail">
     </span>
   </ng-container>
