@@ -6,18 +6,18 @@
 
 
 
-    <div class="panel-wrapper mt-15">
+    <div class="panel-wrapper half-margin-top">
 
       <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName"
         [selectedATO]="selectedAto">
       </app-taskbar>
 
 
-      <div class="row">
+      <div class="row half-margin-top">
 
         <div class="leftContent col-sm-12 col-md-9">
 
-          <div class="row base-margin-top flex-center-vertical">
+          <div class="row flex-center-vertical">
             <div class="col-sm-12">
 
               <div class="pull-left" *ngIf="showDesignCanvasButton">
@@ -48,7 +48,7 @@
             <app-task-summary [tasks]="atoTask['modelTasks']">/</app-task-summary>
 
           </ng-template>
-          
+
           <app-pirate-ship-legend></app-pirate-ship-legend>
 
         </div>

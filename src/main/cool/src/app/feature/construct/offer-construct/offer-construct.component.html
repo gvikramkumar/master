@@ -5,14 +5,14 @@
 
 <div class="content">
   <div class="container">
-    <div class="panel-wrapper mt-15">
+    <div class="panel-wrapper half-margin-top">
 
       <app-taskbar (onProceedToNext)="onProceedToNext($event)"></app-taskbar>
 
-      <div class="contentBox mt-10">
+      <div class="contentBox half-margin-top">
         <div class="leftContent">
 
-          <div class="row base-margin-top">
+          <div class="row">
             <div class="col-md-12">
               <app-offerconstruct-canvas [markCompleteStatus]="markCompleteStatus"
                 (getCanMarkCompleteStatus)="getCanMarkCompleteStatus($event)"></app-offerconstruct-canvas>
@@ -21,7 +21,7 @@
 
         </div>
 
-        <div class="rightContent" style="margin-top: -5px;">
+        <div class="rightContent">
           <app-right-panel [offerName]="offerName" [stakeData]="stakeData" [primaryBE]="primaryBE"
             [derivedMM]="derivedMM" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference"
             (updateStakeData)="updateStakeData($event)">
