@@ -69,7 +69,7 @@ export class CsdlStatusTrackComponent implements OnInit {
      * Status combinations:
        Stop Ship - Enforcement - CSDL Activity Status
        True – Warning - COOL will list activity as complete
-       True – Enforced - COOL will list activity as Available
+       True – Enforced - COOL will list activity as In Progress
        True - None - COOL will list activity as complete
        False - Warning - COOL will list activity as complete
        False – Enforced - COOL will list activity as Complete
@@ -82,10 +82,10 @@ export class CsdlStatusTrackComponent implements OnInit {
         csdlPayload.csdlMileStoneStatus = 'Complete';
         this.updateCsdlMileStone(csdlPayload.csdlMileStoneStatus);
       } else if (data.stopShipStatus === 'True' && data.enforcementLabel === 'Enforced') {
-        // Available
-        csdlPayload.csdlMileStoneStatus = 'Available';
+        // In Progress
+        csdlPayload.csdlMileStoneStatus = 'In Progress';
         this.updateCsdlMileStone(csdlPayload.csdlMileStoneStatus);
-      } else if (data.stopShipStatus === 'True' && data.enforcementLabel === '') {
+      } else if (data.stopShipStatus === 'True' && data.enforcementLabel === 'None') {
         // Complete
         csdlPayload.csdlMileStoneStatus = 'Complete';
         this.updateCsdlMileStone(csdlPayload.csdlMileStoneStatus);
@@ -97,7 +97,7 @@ export class CsdlStatusTrackComponent implements OnInit {
         // Complete
         csdlPayload.csdlMileStoneStatus = 'Complete';
         this.updateCsdlMileStone(csdlPayload.csdlMileStoneStatus);
-      } else if (data.stopShipStatus === 'False' && data.enforcementLabel === '') {
+      } else if (data.stopShipStatus === 'False' && data.enforcementLabel === 'None') {
         // Complete
         csdlPayload.csdlMileStoneStatus = 'Complete';
         this.updateCsdlMileStone(csdlPayload.csdlMileStoneStatus);

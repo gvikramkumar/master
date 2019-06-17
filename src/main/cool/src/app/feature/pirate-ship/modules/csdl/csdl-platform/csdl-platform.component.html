@@ -58,7 +58,7 @@
                             <div class="form-group__text">
                               <p-autoComplete formControlName="csdlId" [(ngModel)]="selectedProject" class="form-control" [size]="100"
                                 field="csdlId" [minLength]="3" scrollHeight="150px" placeholder="Search by CSDL ID or Project Name"
-                                [suggestions]="results" (completeMethod)="searchProjectNames($event)" field="project_id" required>
+                                [suggestions]="results" (completeMethod)="searchProjectNames($event)" field="project_id" required [forceSelection]="true">
                                 <ng-template pTemplate="body" let-item>
                                   <tbody>
                                     <tr>
@@ -112,7 +112,7 @@
                   <div class="form-group base-margin-bottom">
                     <label class="radio">
                     <input type="radio" value="noCode" formControlName="noCode" name="noCode" [(ngModel)]="noCode"
-                        class="form-control" [attr.disabled]="isLocked ? 'disabled' : null">
+                        class="form-control" [attr.disabled]="isLocked ? 'disabled' : null" [checked]=radioStatus.noCode>
                       <span class="radio__input"></span>
                       <span class="radio__label">No code executed</span>
                     </label>
@@ -123,7 +123,7 @@
                   <div class="form-group">
                     <label class="radio">
                       <input type="radio" value="noNewCode" formControlName="noCode" name="noCode" [(ngModel)]="noCode"
-                        class="form-control" [attr.disabled]="isLocked ? 'disabled' : null">
+                        class="form-control" [attr.disabled]="isLocked ? 'disabled' : null" [checked]=radioStatus.noNewCode>
                       <span class="radio__input"></span>
                       <span class="radio__label">No new code</span>
                     </label>
