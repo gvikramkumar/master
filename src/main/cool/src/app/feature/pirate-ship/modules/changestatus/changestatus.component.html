@@ -6,27 +6,27 @@
 
 
 
-    <div class="panel panel--compressed task--bar mt-15">
+    <div class="panel panel--compressed half-margin-top">
       <div class="row">
         <div class="col-sm-4" *ngIf="moduleName">
-          <h2 class="page--subheading">
-            {{moduleName}}</h2>
+          <h4>
+            {{moduleName}}</h4>
         </div>
         <div class="col-sm-8 text-right">
-            <button class="btn btn--secondary" (click)="goBackToOfferSetup()">
-                <span class="icon-chevron-left"></span>&nbsp; Back to Offer Setup Workflow
-            </button>
+          <button class="btn btn--cool btn--secondary" (click)="goBackToOfferSetup()">
+            <span class="icon-chevron-left"></span>&nbsp; Back to Offer Setup Workflow
+          </button>
         </div>
       </div>
     </div>
-    <div class="row">
+    <div class="row half-margin-top">
       <div class="leftContent col-sm-12 col-md-9">
         <form name="form" #changeStatusForm="ngForm">
 
           <div class="row base-margin-top">
             <div class="col-md-6" *ngIf="showConnectNPIWSbutton" >
               <button class="btn btn--small btn--cool btn--primary" (click)="openNPIWS()">Submit QA Case In NPI Workspace</button>
-            </div>  
+            </div>
 
               <div class="col-md-6" *ngIf="!mStatus" showConnectNPIWSbutton>
                 <button class="btn btn--small btn--cool btn--primary" [disabled]="isReadOnly" (click)="markAsCompleteModal()">Mark as Complete</button>
@@ -40,17 +40,48 @@
             <!--<span class="label label--success label--outlined"><span class="icon-check-outline icon-small"></span> succe2ss</span>
               -->
           </div>
+
+<!-- test orderability section -->
+          <div class="panel panel--ltgray panel--loose base-margin-top">
+            <div class="row">
+              <div class="col-sm-12 col-md-6">
+                <div class="row">
+                  <div class="col-sm-12 col-md-6">
+                    <div class="subheader text-indigo">Upload Test Plan</div>
+                    <p>Please upload test plan used to complete testing activities in CCW</p>
+                    <button class="btn btn--small btn--cool btn--primary">Upload File</button>
+                  </div>
+                  <div class="col-sm-12 col-md-6">
+                    <button class="btn btn--small btn--cool btn--primary">Testing Activities in CCW</button>
+                  </div>
+
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <div class="subheader text-indigo">Provide Test Order ID</div>
+                <p>Provide the Test Order ID used for testing. Select the appropiate ATO(s) to attach to the Test Order
+                  ID </p>
+
+              </div>
+            </div>
+          </div>
+<!-- End: test orderability -->
+
           <div class="row base-margin-top">
             <div class="col-md-9">
-              <div class="text-medium">If all required activities for {{moduleName}} are finished, press "Mark as Complete"</div>
-              <br/>
-              <div class="text-medium"><a class="text-info" (click)="changemodalstatus()"><span class="icon-info-outline">&nbsp;</span>How do you know when I am complete with my activities?</a></div>
-              <app-share-modal [ishide]="ishide" (changestatus)="changemodalstatus()" >
+              <div class="text-medium">If all required activities for {{moduleName}} are finished, press "Mark as
+                Complete"</div>
+              <br />
+              <div class="text-medium"><a class="text-info" (click)="changemodalstatus()"><span
+                    class="icon-info-outline">&nbsp;</span>How do you know when I am complete with my activities?</a>
+              </div>
+              <app-share-modal [ishide]="ishide" (changestatus)="changemodalstatus()">
                 <div modalbody>
                   <!--{{infohelp}}-->
                   <div style="white-space: normal; text-align: left;" [innerHTML]="infohelp"></div>
                   <div *ngIf="isBtnNeeded">
-                    <button class="btn btn--small btn--primary btn--cool" (click)="markAsComplete()" (changestatus)="changemodalstatus()">Continue</button>
+                    <button class="btn btn--small btn--primary btn--cool" (click)="markAsComplete()"
+                      (changestatus)="changemodalstatus()">Continue</button>
                   </div>
                 </div>
               </app-share-modal>
@@ -61,10 +92,11 @@
             <div class="col-md-9">
               <div class="form-group">
                 <div class="form-group__text">
-              <textarea id="input-hint-textarea" class="textarea" rows="5" class="form-control"
-                        [(ngModel)]="cmnt.description" #description="ngModel" name="description" maxlength="1000">
+                  <textarea id="input-hint-textarea" class="textarea" rows="5" class="form-control"
+                    [(ngModel)]="cmnt.description" #description="ngModel" name="description" maxlength="1000">
               </textarea>
-                  <label for="input-hint-textarea">Comments: <i>Optional</i>  <span style="color: red">&nbsp;&nbsp;({{1000-cmnt.description.length}} characters left)</span></label>
+                  <label for="input-hint-textarea">Comments: <i>Optional</i> <span
+                      style="color: red">&nbsp;&nbsp;({{1000-cmnt.description.length}} characters left)</span></label>
                 </div>
               </div>
             </div>
@@ -76,9 +108,10 @@
 <!--                <app-upload-doc [moduleName]="moduleName" [isReadonly]="isReadOnly"  ></app-upload-doc>-->
 <!--              </div>-->
             </div>
-            <div class="col-md-5" align="left">
+            <div class="col-md-5 text-left">
               <div class="help-block text-muted">
-                <span><button class="btn btn--small btn--primary btn--cool" (click)="saveComments()" [disabled]="cmnt.description.trim().length===0">Submit Comments</button></span>
+                <span><button class="btn btn--small btn--primary btn--cool" (click)="saveComments()"
+                    [disabled]="cmnt.description.trim().length===0">Submit Comments</button></span>
               </div>
             </div>
           </div>
@@ -113,7 +146,7 @@
                    </div>
                </div>
            </div>-->
-          <br/>
+          <br />
           <div class="row">
             <div class="col-md-9">
               <div class="panel panel--bordered panel-scroll" id="style-1" *ngIf="comments">
@@ -138,7 +171,7 @@
       <!-- right panel -->
       <div class="rightContent  col-sm-12 col-md-3">
         <app-right-panel [stakeData]="stakeholders" [offerName]="offerName" [derivedMM]="derivedMM"
-                         [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference">
+          [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference">
         </app-right-panel>
       </div>
     </div>
