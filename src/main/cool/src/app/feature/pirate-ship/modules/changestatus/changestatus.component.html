@@ -26,13 +26,13 @@
           <div class="row base-margin-top">
 
               <div class="col-md-6" *ngIf="!mStatus">
-                <button class="btn btn--small btn--cool btn--primary" [disabled]="isReadOnly" (click)="markAsCompleteModal()">Mark as Complete</button>
+                <button class="btn btn--small btn--cool btn--primary btn--cool" [disabled]="isReadOnly" (click)="markAsCompleteModal()">Mark as Complete</button>
               </div>
 
 
             <div class="col-md-9" *ngIf="mStatus && mStatus.status==='Complete'">
               <button type="button" class="btn btn--small btn--green-ghost">
-                <span class="icon-check-outline icon-small pull-left"></span>&nbsp;Complete&nbsp;&nbsp;&nbsp;</button>
+                <span class="icon-check-outline icon-small pull-left btn--cool"></span>&nbsp;Complete&nbsp;&nbsp;&nbsp;</button>
             </div>
             <!--<span class="label label--success label--outlined"><span class="icon-check-outline icon-small"></span> succe2ss</span>
               -->
@@ -43,6 +43,12 @@
               <br/>
               <div class="text-medium"><a class="text-info" (click)="changemodalstatus()"><span class="icon-info-outline">&nbsp;</span>How do you know when I am complete with my activities?</a></div>
               <app-share-modal [ishide]="ishide" (changestatus)="changemodalstatus()" >
+                <div modalheader>
+                  <h1 class="modal__title  text-xlarge">
+                  {{headerName}}
+                  </h1>
+                </div>
+
                 <div modalbody>
                   <!--{{infohelp}}-->
                   <div style="white-space: normal; text-align: left;" [innerHTML]="infohelp"></div>
