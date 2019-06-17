@@ -31,8 +31,8 @@
 
 
             <div class="col-md-9" *ngIf="mStatus && mStatus.status==='Complete'">
-              <button type="button" class="btn btn--small btn--green-ghost">
-                <span class="icon-check-outline icon-small pull-left btn--cool"></span>&nbsp;Complete&nbsp;&nbsp;&nbsp;</button>
+              <button type="button" class="btn btn--small btn--green-ghost btn--cool">
+                <span class="icon-check-outline icon-small pull-left"></span>&nbsp;Complete&nbsp;&nbsp;&nbsp;</button>
             </div>
             <!--<span class="label label--success label--outlined"><span class="icon-check-outline icon-small"></span> succe2ss</span>
               -->
@@ -74,10 +74,10 @@
           </div>
           <div class="row base-margin-top">
             <div class="col-md-7">
-<!--              <div *ngIf="moduleName === 'Royalty Setup'|| 'Test Orderability'">-->
-<!--                <p class="text-dkgray-1 text-medium">Attach your royalty checklist</p>-->
-<!--                <app-upload-doc [moduleName]="moduleName" [isReadonly]="isReadOnly"  ></app-upload-doc>-->
-<!--              </div>-->
+              <div *ngIf="moduleName === 'Royalty Setup'">
+                <p class="text-dkgray-1 text-medium">Attach your royalty checklist</p>
+                <app-upload-doc [moduleName]="moduleName" [isReadonly]="isReadOnly"  ></app-upload-doc>
+              </div>
             </div>
             <div class="col-md-5" align="left">
               <div class="help-block text-muted">
