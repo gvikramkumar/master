@@ -568,7 +568,7 @@ export class DynamicFormMultipleComponent implements OnInit {
             // }
 
             if (question.question == "Enablement") {
-                if (question.currentValue == "Y") {
+                if (question.currentValue == "Yes") {
                     this.defaultValueServices.setEnablementFileType(questionList);
                 }
                 else{
@@ -861,6 +861,16 @@ export class DynamicFormMultipleComponent implements OnInit {
             if (question.egineAttribue == 'Non Standard True Up Term') {
                 if (!(/^(0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120))(-(0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120)))$/.test(question.currentValue))) {
                     question.rules.validationMessage = "Value should be a numeric range (ex. 2-6)";
+                    question.rules.isvalid = false;
+                }
+                else {
+                    question.rules.validationMessage = "";
+                    question.rules.isvalid = true;
+                }
+            }
+            if (question.egineAttribue == 'Refurbished-Original Item') {
+                if (!(/^[^\/\.\+\-\@\&\#\%\$\!\*\<\>\:\;\,\\\'\[\]\|\?\^\{\}\=\<\>a-z][^\@\&\#\%\$\!\*\<\>\:\;\,\\\'\[\]\|\?\^\{\}\=\<\>a-z]*$/.test(question.currentValue))) {
+                    question.rules.validationMessage = "All caps required and maximum of 18 characters ";
                     question.rules.isvalid = false;
                 }
                 else {

@@ -93,7 +93,7 @@ export class AccessManagementComponent implements OnInit {
             this.accessManagementService.getFomattedUserAccessData(this.currentUserData)
             .subscribe((data)=> {
               this.accessManagementData = data;
-              console.log(this.accessManagementData);
+              this.getUserAccessData(this.currentUserData);
             })
           }
           })
@@ -182,7 +182,6 @@ export class AccessManagementComponent implements OnInit {
 
   ngOnInit() {
 
-
     this.rolesData = [];
     this.ddRoles = [];
     this.rolesSubject.pipe(debounceTime(1000)).subscribe((value: string) => {
@@ -254,6 +253,7 @@ export class AccessManagementComponent implements OnInit {
         this.getUserAccessData(this.currentUserData);
       });
   }
+
 
  //CEPM pass role to API
  onGetRoles(e) {
