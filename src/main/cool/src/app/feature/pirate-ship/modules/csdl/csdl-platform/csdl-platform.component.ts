@@ -107,19 +107,24 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
         this.isCsdlRequired = false;
         this.csdlNotRequired = true;
       }
+
       if (data.csdlMileStoneStatus === 'In Progress') {
-        this.isCsdlRequired = false;
-        this.showComponent();
+        this.navigateToStatusTrack();
       } else if (data.csdlMileStoneStatus === 'Complete') {
+        if (data.stopShipStatus === 'True' && data.enforcementLabel === 'Enforced'){
+        } else {
+          this.navigateToStatusTrack();
+        }
+      } else if (data.csdlMileStoneStatus === 'Complete' && data.stopShipStatus === '' && data.enforcementLabel === '') {
         // When user selected CDSL Not Required and pressed complete button.
         this.isLocked = true;
         this.isCsdlRequired = true;
 
-        if(data.reasonForNotRequired === 'noCode') {
+        if (data.reasonForNotRequired === 'noCode') {
           this.radioStatus.noCode = true;
         }
 
-        if(data.reasonForNotRequired === 'noNewCode') {
+        if (data.reasonForNotRequired === 'noNewCode') {
           this.radioStatus.noNewCode = true;
         }
 
@@ -127,9 +132,9 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
         this.isCsdlRequired = true;
       }
     },
-    () => {
-      this.isCsdlRequired = true;
-    });
+      () => {
+        this.isCsdlRequired = true;
+      });
 
     this.subscription = this.messageService.getMessage().subscribe(() => {
       this.afterDeAssociation();
@@ -213,6 +218,15 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
           }
         });
       });
+  }
+
+  /**
+   * Navigating page from pirate ship page to status tracking page
+   * Based on stopship status and enforcementlable values.
+   */
+  navigateToStatusTrack() {
+    this.isCsdlRequired = false;
+    this.showComponent();
   }
 
   /**
