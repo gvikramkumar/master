@@ -110,11 +110,6 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
 
       if (data.csdlMileStoneStatus === 'In Progress') {
         this.navigateToStatusTrack();
-      } else if (data.csdlMileStoneStatus === 'Complete') {
-        if (data.stopShipStatus === 'True' && data.enforcementLabel === 'Enforced'){
-        } else {
-          this.navigateToStatusTrack();
-        }
       } else if (data.csdlMileStoneStatus === 'Complete' && data.stopShipStatus === '' && data.enforcementLabel === '') {
         // When user selected CDSL Not Required and pressed complete button.
         this.isLocked = true;
@@ -128,6 +123,11 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
           this.radioStatus.noNewCode = true;
         }
 
+      } else if (data.csdlMileStoneStatus === 'Complete') {
+        if (data.stopShipStatus === 'True' && data.enforcementLabel === 'Enforced') {
+        } else {
+          this.navigateToStatusTrack();
+        }
       } else {
         this.isCsdlRequired = true;
       }
@@ -345,6 +345,8 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
     csdlPayload.csdlMileStoneStatus = 'Complete';
     csdlPayload.associationStatus = 'disassociate';
     csdlPayload.reasonForNotRequired = this.noCode;
+    csdlPayload.stopShipStatus = '';
+    csdlPayload.enforcementLabel = '';
     csdlPayloadArray.push(csdlPayload);
     this.csdlIntegrationService.restartCsdlAssociation(csdlPayloadArray).subscribe(() => {
       this.isCompleteButtonDisabled = true;
