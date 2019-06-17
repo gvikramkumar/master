@@ -225,6 +225,7 @@ export class StakeholderFullComponent implements OnInit {
         'action': '',
         'comment': ''
       };
+
       this.offerPhaseService.createSolutioningActions(proceedPayload).subscribe(result => {
         if (!this.sentEmailNotification) {
           this.stakeholderfullService.sendEmailNotification(this.currentOfferId).subscribe(data => {
