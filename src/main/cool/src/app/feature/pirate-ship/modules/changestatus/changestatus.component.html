@@ -24,8 +24,11 @@
         <form name="form" #changeStatusForm="ngForm">
 
           <div class="row base-margin-top">
+            <div class="col-md-6" *ngIf="showConnectNPIWSbutton" >
+              <button class="btn btn--small btn--cool btn--primary" (click)="openNPIWS()">Submit QA Case In NPI Workspace</button>
+            </div>  
 
-              <div class="col-md-6" *ngIf="!mStatus">
+              <div class="col-md-6" *ngIf="!mStatus" showConnectNPIWSbutton>
                 <button class="btn btn--small btn--cool btn--primary" [disabled]="isReadOnly" (click)="markAsCompleteModal()">Mark as Complete</button>
               </div>
 
