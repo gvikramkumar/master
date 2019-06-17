@@ -868,6 +868,16 @@ export class DynamicFormMultipleComponent implements OnInit {
                     question.rules.isvalid = true;
                 }
             }
+            if (question.egineAttribue == 'Refurbished-Original Item') {
+                if (!(/^[^\/\.\+\-\@\&\#\%\$\!\*\<\>\:\;\,\\\'\[\]\|\?\^\{\}\=\<\>a-z][^\@\&\#\%\$\!\*\<\>\:\;\,\\\'\[\]\|\?\^\{\}\=\<\>a-z]*$/.test(question.currentValue))) {
+                    question.rules.validationMessage = "All caps required and maximum of 18 characters ";
+                    question.rules.isvalid = false;
+                }
+                else {
+                    question.rules.validationMessage = "";
+                    question.rules.isvalid = true;
+                }
+            }
         }else{
             this.itemNameInvalid = true;
 

@@ -1252,7 +1252,7 @@ getCountryNameValues(questionList) {
               countryName = question.currentValue.split(',')
               //countryName.forEach(element => {
               for(let i=0;i<countryName.length;i++){
-                
+
               if(countryValues.includes(countryName[i])){
                  question.rules.isvalid = true;
               }
