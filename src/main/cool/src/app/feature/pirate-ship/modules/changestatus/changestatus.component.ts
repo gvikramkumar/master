@@ -107,7 +107,7 @@ export class ChangestatusComponent implements OnInit {
   }
 
   findFunctionRoles(moduleName: string, pirateShipSharedService: PirateShipSharedService) {
-    console.log('pirateShipSharedService : ', pirateShipSharedService.getRole());
+
     switch (moduleName) {
       case 'NPI Licensing': {
         this.infohelp = this.basicmodule_hint.NPI_Licensing;
