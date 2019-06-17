@@ -225,14 +225,14 @@ function createSelect(_cond, _choices = []) {
   } else if ((cond && !choices.length) || (!cond && choices.length) ) {
     throw new Error(`ruleUtil.createSelect: missing cond or choices, cond: ${cond}, choices: ${choices.join(', ')}`);
   }
-  let sql = ` ${cond} ( `;
+  let sql = `${cond} (`;
   choices.forEach((choice, idx) => {
     sql += `'${choice.trim()}'`;
     if (idx < choices.length - 1) {
       sql += ', ';
     }
   });
-  sql += ` ) `;
+  sql += `)`;
   return sql;
 }
 
