@@ -47,6 +47,7 @@ import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from './reducers';
 import { CalendarModule } from 'primeng/calendar';
 import { CsdlIntegrationService } from './services/csdl-integration.service';
+import { Dashboard2Component } from './feature/dashboard2/dashboard2.component';
 
 export function app_init(configService: ConfigurationService) {
   return () => configService.init();
@@ -55,7 +56,8 @@ export function app_init(configService: ConfigurationService) {
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent
+    DashboardComponent,
+    Dashboard2Component
   ],
   imports: [
     NgbModule,

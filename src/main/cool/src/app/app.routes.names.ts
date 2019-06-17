@@ -1,6 +1,7 @@
 export const appRoutesNames = {
 
     DASHBOARD: 'dashboard',
+    DASHBOARD2: 'dashboard2',
     ACTIONS: 'action',
     ACCESS_MANAGEMENT: 'accessManagement',
     OFFER_DETAIL_VIEW: 'offerDetailView',
