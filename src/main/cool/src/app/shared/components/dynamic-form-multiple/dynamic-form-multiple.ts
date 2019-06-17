@@ -568,7 +568,7 @@ export class DynamicFormMultipleComponent implements OnInit {
             // }
 
             if (question.question == "Enablement") {
-                if (question.currentValue == "Y") {
+                if (question.currentValue == "Yes") {
                     this.defaultValueServices.setEnablementFileType(questionList);
                 }
                 else{
