@@ -64,7 +64,7 @@
                 </span>
                 </td>
                 <td>
-                --  <p-multiSelect [options]="user.businessEntities" [filter]="false" [showHeader]="false"
+                <p-multiSelect [options]="user.businessEntities" [filter]="false" [showHeader]="false"
                     [displaySelectedLabel]="true" [(ngModel)]="user.beList"
                     (onPanelHide)="updatedAccessManagementBE(user)" [appendTo]="body"
                     (onChange)="getPrimaryBusinessUnitBasedOnPrimaryBEForUser($event.value, user)">
