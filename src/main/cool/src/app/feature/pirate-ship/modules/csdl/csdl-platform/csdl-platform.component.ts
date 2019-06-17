@@ -61,6 +61,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
   components = [];
   bupmList = [];
   projectType;
+  noCode;
 
   constructor(
     private router: Router,
@@ -89,7 +90,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
     });
 
     this.notRequiredCsdlForm = new FormGroup({
-      noCode: new FormControl('', Validators.required)
+      noCode: new FormControl('noCode', Validators.required)
     });
 
     // load status tracking component in the below conditions.
@@ -289,12 +290,12 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
    */
   onComplete() {
     this.disableRestartModule = false;
-    this.firstData['stakeholders'].forEach(ele => {
-      if (ele['functionalRole'] === 'Security Compliance') {
-          this.csdlIntegrationService.dashboardNotification(this.currentOfferId).subscribe(() => {
-        });
-      }
-    });
+      this.firstData['stakeholders'].forEach(ele => {
+        if (ele['functionalRole'] === 'Security Compliance') {
+            this.csdlIntegrationService.dashboardNotification(this.currentOfferId).subscribe(() => {
+          });
+        }
+      });
 
     this.csdlIntegrationService.getCsdlInfo(this.currentOfferId).subscribe(() => {
       this.existingComplete();
@@ -316,6 +317,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
     csdlPayload.csdlRequired = 'N';
     csdlPayload.csdlMileStoneStatus = 'Complete';
     csdlPayload.associationStatus = 'disassociate';
+    csdlPayload.reasonForNotRequired = this.noCode;
     csdlPayloadArray.push(csdlPayload);
     this.csdlIntegrationService.restartCsdlAssociation(csdlPayloadArray).subscribe(() => {
       this.isCompleteButtonDisabled = true;
@@ -338,6 +340,7 @@ export class CsdlPlatformComponent implements OnInit, OnDestroy {
     csdlPayload.csdlRequired = 'N';
     csdlPayload.csdlMileStoneStatus = 'Complete';
     csdlPayload.associationStatus = 'nan';
+    csdlPayload.reasonForNotRequired = this.noCode;
     csdlPayload.projectId = null;
     this.csdlIntegrationService.createCsdlAssociation(csdlPayload).subscribe(
       () => {

@@ -11,7 +11,7 @@
 
 <div class="content">
   <div class="container">
-    <div class="panel-wrapper mt-15">
+    <div class="panel-wrapper half-margin-top">
 
       <app-taskbar *ngIf="!dimensionMode" (onProceedToNext)="proceedToStakeholder($event)">
       </app-taskbar>
@@ -19,7 +19,7 @@
       <app-taskbar *ngIf="dimensionMode" (onProceedToNext)="proceedToOfferSolution($event)">
       </app-taskbar>
 
-      <div class="contentBox mt-10">
+      <div class="contentBox half-margin-top">
         <div class="row">
 
           <div class="leftContent col-sm-12 col-md-9">
