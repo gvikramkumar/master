@@ -4,9 +4,10 @@ import { MenuBarService } from '@app/services/menu-bar.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EnvironmentService } from '@env/environment.service';
 import { UserService } from '@app/core/services';
-import { MonetizationModelService } from '@app/services/monetization-model.service';
 import { Location } from '@angular/common';
 import { AccessManagementService } from '@app/services/access-management.service';
+import { OverlayPanel } from 'primeng/overlaypanel';
+import { OfferDetailViewService } from '@app/services/offer-detail-view.service';
 
 @Component({
     selector: 'app-menu-bar',
@@ -26,27 +27,29 @@ export class MenuBarComponent implements OnInit {
     @Output() updateMessage = new EventEmitter<string>();
     @Output() getMarkCompleteStatus = new EventEmitter<boolean>();
 
-
-
+    currentURL: String;
+    currentUsername: any;
 
     items: MenuItem[];
     showPopup: boolean;
     popupType: String = '';
+
     itemShow: Object = {};
     offerBuilderdata = {};
     navigateHash: Object = {};
-    showMarkcompletePopup: boolean = false;
-    showMarkcompleteToggle: boolean = false;
-    currentURL: String;
-    canUncheckComplete: boolean;
-    shouldDisable: boolean = false;
-    currentOfferId: String = '';
+
+    shouldDisable = false;
     holdStatusValid = true;
-    cancelStatusValid = true;
-    currentUsername: any;
-    designReviewRequestApprovalStatus: boolean;
-    markCompleteStatus: boolean;
     public dispValue = true;
+    cancelStatusValid = true;
+    showMarkcompletePopup = false;
+    showMarkcompleteToggle = false;
+
+    markCompleteStatus: boolean;
+    canUncheckComplete: boolean;
+    designReviewRequestApprovalStatus: boolean;
+
+
 
     constructor(
         private router: Router,
@@ -55,19 +58,20 @@ export class MenuBarComponent implements OnInit {
         private menuBarService: MenuBarService,
         private activatedRoute: ActivatedRoute,
         private environmentService: EnvironmentService,
-        private monetizationModelService: MonetizationModelService,
-        private accessMgmtService: AccessManagementService) {
-
-        this.currentURL = activatedRoute.snapshot['_routerState'].url;
+        private accessMgmtService: AccessManagementService,
+        private offerDetailViewService: OfferDetailViewService
+    ) {
 
         this.showPopup = false;
 
+        this.currentURL = activatedRoute.snapshot['_routerState'].url;
+
         this.activatedRoute.params.subscribe(params => {
-            this.currentOfferId = params['offerId'];
             this.caseId = params['caseId'];
+            this.offerId = params['offerId'];
         });
 
-        this.menuBarService.getRubboTaxMenu(this.caseId).subscribe(data => {
+        this.menuBarService.getMiletsoneDetails(this.caseId).subscribe(data => {
             if (data != null) {
                 if (data['ideate'] != null) {
                     data['ideate'].forEach(element => {
@@ -94,15 +98,15 @@ export class MenuBarComponent implements OnInit {
 
         });
 
-        this.navigateHash['Offer Creation'] = ['/coolOffer', this.currentOfferId, this.caseId];
-        this.navigateHash['Offer Model Evaluation'] = ['/mmassesment', this.currentOfferId, this.caseId];
-        this.navigateHash['Stakeholder Identification'] = ['/stakeholderFull', this.currentOfferId, this.caseId];
-        this.navigateHash['Strategy Review'] = ['/strategyReview', this.currentOfferId, this.caseId];
-        this.navigateHash['Offer Dimension'] = ['/offerDimension', this.currentOfferId, this.caseId];
-        this.navigateHash['Offer Solutioning'] = ['/offerSolutioning', this.currentOfferId, this.caseId];
-        this.navigateHash['Offer Components'] = ['/offerConstruct', this.currentOfferId, this.caseId];
-        this.navigateHash['Design Review'] = ['/designReview', this.currentOfferId, this.caseId];
-        this.navigateHash['Offer Setup Workflow'] = ['/offerSetup', this.currentOfferId, this.caseId];
+        this.navigateHash['Offer Creation'] = ['/coolOffer', this.offerId, this.caseId];
+        this.navigateHash['Offer Model Evaluation'] = ['/mmassesment', this.offerId, this.caseId];
+        this.navigateHash['Stakeholder Identification'] = ['/stakeholderFull', this.offerId, this.caseId];
+        this.navigateHash['Strategy Review'] = ['/strategyReview', this.offerId, this.caseId];
+        this.navigateHash['Offer Dimension'] = ['/offerDimension', this.offerId, this.caseId];
+        this.navigateHash['Offer Solutioning'] = ['/offerSolutioning', this.offerId, this.caseId];
+        this.navigateHash['Offer Components'] = ['/offerConstruct', this.offerId, this.caseId];
+        this.navigateHash['Design Review'] = ['/designReview', this.offerId, this.caseId];
+        this.navigateHash['Offer Setup Workflow'] = ['/offerSetup', this.offerId, this.caseId];
     }
 
     ngOnInit() {
@@ -152,7 +156,7 @@ export class MenuBarComponent implements OnInit {
         ];
 
 
-        this.menuBarService.getRubboTaxMenu(this.caseId).subscribe(data => {
+        this.menuBarService.getMiletsoneDetails(this.caseId).subscribe(data => {
             if (this.currentURL.includes('offerDimension')) {
                 this.markCompleteStatus = data['plan'][0]['status'];
                 this.showMarkcompleteToggle = true;
@@ -324,6 +328,32 @@ export class MenuBarComponent implements OnInit {
             this.shouldDisable = true;
         }
 
+    }
+
+    showOfferInfo(event, overlaypanel: OverlayPanel) {
+
+        this.offerDetailViewService.retrieveOfferDetails(this.offerId).subscribe(offerBuilderdata => {
+
+            this.offerBuilderdata = offerBuilderdata;
+
+            this.offerBuilderdata['BEList'] = [];
+            this.offerBuilderdata['BUList'] = [];
+            if (this.offerBuilderdata['primaryBEList'] != null) {
+                this.offerBuilderdata['BEList'] = this.offerBuilderdata['BEList'].concat(this.offerBuilderdata['primaryBEList']);
+            }
+            if (this.offerBuilderdata['secondaryBEList'] != null) {
+                this.offerBuilderdata['BEList'] = this.offerBuilderdata['BEList'].concat(this.offerBuilderdata['secondaryBEList']);
+            }
+            if (this.offerBuilderdata['primaryBUList'] != null) {
+                this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['primaryBUList']);
+            }
+            if (this.offerBuilderdata['secondaryBUList'] != null) {
+                this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['secondaryBUList']);
+            }
+
+        });
+
+        overlaypanel.toggle(event);
     }
 
 }

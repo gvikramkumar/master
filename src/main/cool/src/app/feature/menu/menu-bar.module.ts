@@ -7,28 +7,28 @@ import { OverlayPanelModule } from 'primeng/primeng';
 
 import { MenuBarComponent } from './menu-bar/menu-bar.component';
 import { MenuBarPopupComponent } from './menu-bar-popup/menu-bar-popup.component';
-import { OfferDetailPopUpComponent } from './offer-detail-pop-up/offer-detail-pop-up.component';
 import { MarkCompletePopupComponent } from './mark-complete-popup/mark-complete-popup.component';
 import { SharedModule } from '@shared/shared.module';
+import { OfferStatusComponent } from './offer-status/offer-status.component';
+import { OfferPopupComponent } from './offer-popup/offer-popup.component';
 
 
 
 @NgModule({
     declarations: [
         MenuBarComponent,
+        OfferPopupComponent,
+        OfferStatusComponent,
         MenuBarPopupComponent,
-        OfferDetailPopUpComponent,
         MarkCompletePopupComponent,
     ],
     imports: [
         FormsModule,
         CommonModule,
-        OverlayPanelModule,
-        SharedModule
+        SharedModule,
+        OverlayPanelModule
     ], exports: [
-        MenuBarComponent,
-        MenuBarPopupComponent,
-        OfferDetailPopUpComponent
+        MenuBarComponent
     ]
 })
 

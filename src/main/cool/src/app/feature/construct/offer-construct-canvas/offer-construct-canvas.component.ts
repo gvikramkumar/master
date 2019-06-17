@@ -369,6 +369,11 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
             let listOfferQuestions = this.defaultValueServices.setItemTypeBillingDefault(this.listOfferQuestions);
             obj['itemDetails'] = listOfferQuestions;
           }
+
+          if (obj.productName == 'Hardware'){
+            let listOfferQuestions = this.defaultValueServices.getBasePIDValues(this.listOfferQuestions);
+            obj['itemDetails'] = listOfferQuestions;
+          }
           // if (obj.productName == 'License') {
           //     let listOfferQuestions = this.defaultValueServices.setSoftwareLicenseNSKU(this.listOfferQuestions);
           //     obj['itemDetails'] = listOfferQuestions;
@@ -1079,6 +1084,11 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
               if (obj.productName == 'Billing'){
                 let listOfferQuestions = this.defaultValueServices.setItemTypeBillingDefault(this.listOfferQuestions);
+                obj['itemDetails'] = listOfferQuestions;
+              }
+
+              if (obj.productName == 'Hardware'){
+                let listOfferQuestions = this.defaultValueServices.getBasePIDValues(this.listOfferQuestions);
                 obj['itemDetails'] = listOfferQuestions;
               }
 

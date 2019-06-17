@@ -22,9 +22,9 @@ export class AccessManagementService {
     public sendfunctionalRolRaw = new BehaviorSubject("");
     public sendFromUserRegistration = new BehaviorSubject([]);
     public roles: any;
-    public baseApiUrl = 'https://cool-srv-dev.cisco.com/coolsrv';
+    // public baseApiUrl = 'https://cool-srv-dev.cisco.com/coolsrv';
 
-    public urlGetCEPMRoles:string = `${this.baseApiUrl}/access/fetchCEPMRoles`
+    // public urlGetCEPMRoles:string = `${this.baseApiUrl}/access/fetchCEPMRoles`
 
 
     urlBusinessUnit: string = this.environmentService.PDAF_API + '?columns=business_unit&distinct=true';
@@ -48,7 +48,7 @@ export class AccessManagementService {
          getCEPMRoles(userId:string) {
             const PAYLOAD = {
                 methodType:"USER_RESOURCE_ACTION_ENVATTR_LEVEL",
-                methodName:"getDecisionsWithRolesForSCUser", 
+                methodName:"getDecisionsWithRolesForSCUser",
                 userName:userId,
                 resourceFQN:"SCAppGrp:Cisco Orchestrated Offer Lifecycle",
                 context:"Global Context:Global Context",
@@ -60,8 +60,8 @@ export class AccessManagementService {
                 returnWithResType:"false",
                 excludeResGrp:"true"
             }
-            return this.httpClient.post(this.urlGetCEPMRoles, PAYLOAD);
-          }   
+            return this.httpClient.post(this.environmentService.REST_API_GET_CEPM_ROLES_URL, PAYLOAD);
+          }
 
 
     accessManagementAll(): any {
