@@ -20,8 +20,9 @@ export class MenuBarPopupComponent implements OnInit {
   reason: String = '';
   currentOfferId: String;
   passedString: String = '';
-  allowSubmit: boolean = false;
-  buttonIsDisabled: boolean = false;
+
+  allowSubmit = false;
+  buttonIsDisabled = false;
 
   // ---------------------------------------------------------------------
 
