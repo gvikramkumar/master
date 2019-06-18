@@ -58,11 +58,13 @@
                   <p-dropdown *ngIf="!isSelected" [style]="{'width':'100px'}" [(ngModel)]="user.userMapping[0].functionalRole" [disabled]="getCEPM"
                     (onChange)="onSelectDd(user,$event)" optionLabel="value" [options]="ddRoles">
                   </p-dropdown>
-                  <span *ngIf="isSelected">{{slectedRole}}</span>
-                 <span *ngIf="isSelected" class="icon-pencil colorCl" (click)="onGetCEPMs(user,ind)"></span>
+                  <span *ngIf="isSelected" >
+                  <span>{{slectedRole}}</span>
+                 <span class="icon-pencil colorCl" (click)="onGetCEPMs(user,ind)"></span>
+                </span>
                 </td>
                 <td>
-                  <p-multiSelect [options]="user.businessEntities" [filter]="false" [showHeader]="false"
+                <p-multiSelect [options]="user.businessEntities" [filter]="false" [showHeader]="false"
                     [displaySelectedLabel]="true" [(ngModel)]="user.beList"
                     (onPanelHide)="updatedAccessManagementBE(user)" [appendTo]="body"
                     (onChange)="getPrimaryBusinessUnitBasedOnPrimaryBEForUser($event.value, user)">

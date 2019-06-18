@@ -5,7 +5,9 @@
 }
 .osw-module--btns button span {
   position: absolute;
-  left: 3px;
+  left: 2px;
+  top: 2px;
+  line-height: 24px;
 }
 .osw-module--btns button.btn.btn--small.btn--warning {
   color: #fff;
@@ -78,4 +80,7 @@
   z-index: -1;
   left: 50%;
   top: -22px;
+}
+a.text-info {
+  line-height: 16px;
 }

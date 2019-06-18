@@ -11,12 +11,14 @@ import {ChangestatusComponent } from './changestatus.component';
 import { ShareModalComponent } from './share-modal/share-modal.component';
 import { SharedataService } from './sharedata.service';
 import { UploadDocComponent } from './upload-doc/upload-doc.component';
+import { TestOrderabilityComponent } from './test-orderability/test-orderability.component';
 
 @NgModule({
     declarations: [
         ChangestatusComponent,
         ShareModalComponent,
-        UploadDocComponent
+        UploadDocComponent,
+        TestOrderabilityComponent
     ],
     imports: [
         SharedModule,
