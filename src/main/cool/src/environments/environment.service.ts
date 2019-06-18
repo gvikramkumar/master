@@ -200,6 +200,7 @@ export class EnvironmentService {
     REST_API_BasicModule_upload: string;
     REST_API_BasicModule_DownloadDoc: string;
     REST_API_BasicModuleFileName: string;
+    REST_API_BasicModuleDocType: string;
 
     // -------------------------------------------------------------------------------------------------
 
@@ -510,10 +511,10 @@ export class EnvironmentService {
         this.REST_API_PIRATE_SHIP_DASHBOARD_NOTIFICATION_URL = this.baseApiUrl + '/dashboard/notification/generate';
 
 
-        // ------------------------------------------------ROYALTY SETUP DOCUMENT UPLOAD URL--------------------------------
+        // -------------------------------------------------Basic Module DOCUMENT UPLOAD URL--------------------------------
         this.REST_API_BasicModule_upload = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/UpLoadDoc';
         this.REST_API_BasicModule_DownloadDoc = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/DownloadDoc';
         this.REST_API_BasicModuleFileName = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/getFileName';
-
+        this.REST_API_BasicModuleDocType = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/getUploadDetail';
     }
 }
