@@ -24,11 +24,8 @@
         <form name="form" #changeStatusForm="ngForm">
 
           <div class="row base-margin-top">
-            <div class="col-md-6" *ngIf="showConnectNPIWSbutton" >
-              <button class="btn btn--small btn--cool btn--primary" (click)="openNPIWS()">Submit QA Case In NPI Workspace</button>
-            </div>  
 
-              <div class="col-md-6" *ngIf="!mStatus" showConnectNPIWSbutton>
+              <div class="col-md-6" *ngIf="!mStatus">
                 <button class="btn btn--small btn--cool btn--primary" [disabled]="isReadOnly" (click)="markAsCompleteModal()">Mark as Complete</button>
               </div>
 
@@ -71,10 +68,10 @@
           </div>
           <div class="row base-margin-top">
             <div class="col-md-7">
-<!--              <div *ngIf="moduleName === 'Royalty Setup'|| 'Test Orderability'">-->
-<!--                <p class="text-dkgray-1 text-medium">Attach your royalty checklist</p>-->
-<!--                <app-upload-doc [moduleName]="moduleName" [isReadonly]="isReadOnly"  ></app-upload-doc>-->
-<!--              </div>-->
+             <div *ngIf="moduleName === 'Royalty Setup'|| 'Test Orderability'">
+               <p class="text-dkgray-1 text-medium">Attach your royalty checklist</p>
+               <app-upload-doc [moduleName]="moduleName"  ></app-upload-doc>
+             </div>
             </div>
             <div class="col-md-5" align="left">
               <div class="help-block text-muted">
