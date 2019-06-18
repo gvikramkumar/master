@@ -718,7 +718,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   valueChange() {
     // shouldn't get called for viewMode and if approvedOnce, they can only edit active flag, so just return
     if (!this.selectMap || this.viewMode || this.isApprovedOnce()) {
-      return Promise.resolve(false);
+      return false;
     }
 
     // we need to clone the selectMap, otherwise they add to it then remove their entry, but addition is still there

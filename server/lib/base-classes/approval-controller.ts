@@ -95,29 +95,32 @@ export default class ApprovalController extends ControllerBase {
 
   approveMany(req, res, next) {
     const items = req.body;
-    Promise.resolve()
+    return Promise.resolve()
       .then(() => {
         return this.approveValidate(items, req, next)
           .then(() => {
-            items.forEach(item => this.approve(item, req, res, next));
-          });
+            const promises = [];
+            items.forEach(item => promises.push(this.approve(item, false, req, res, next)));
+            return Promise.all(promises);
+          })
+          .then(() => res.json({status: 'success'}));
       })
       .catch(next);
   }
 
   approveOne(req, res, next) {
     const item = req.body;
-    Promise.resolve()
+    return Promise.resolve()
       .then(() => {
         return this.approveValidate([item], req, next)
           .then(() => {
-            this.approve(item, req, res, next);
+            return this.approve(item, true, req, res, next);
           });
       })
       .catch(next);
   }
 
-  approve(data, req, res, next) {
+  approve(data, approveOne, req, res, next) {
     this.repo.validate(data);
     let firstTimeApprove = false;
     if (data.approvedOnce === 'Y') {
@@ -132,16 +135,20 @@ export default class ApprovalController extends ControllerBase {
       data.approvedBy = req.user.id;
       data.approvedDate = new Date();
     }
-    this.preApproveStep(data, firstTimeApprove, req)
+    return this.preApproveStep(data, firstTimeApprove, req)
       .then(() => {
-      this.repo.update(data, req.user.id, true, true, false)
+        return this.repo.update(data, req.user.id, true, true, false)
         .then(item => {
           return this.postApproveStep(data, req)
             .then(() => item);
         })
         .then(item => {
           return this.sendApprovalEmail(req, ApprovalMode.approve, item)
-            .then(() => res.json(item));
+            .then(() => {
+              if (approveOne) {
+                res.json(item);
+              }
+            });
         });
     });
   }
@@ -232,24 +239,27 @@ export default class ApprovalController extends ControllerBase {
             } else {
               body = `A new DFA ${type} has been submitted by ${req.user.fullName} for approval: <br><br>${link}`;
             }
+            const submitSubject = `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Submitted for Approval`;
             return mail.sendHtmlMail(dfaAdminEmail, bizAdminEmail, `${itadminEmail},${ppmtEmail},${svrUtil.getEnvEmail(req.user.email)}`,
-              `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Submitted for Approval`, body);
+              submitSubject, body);
           case ApprovalMode.approve:
-            body = `The DFA ${type} submitted by ${item.updatedBy} for approval has been approved:<br><br>${link}`;
+            body = `The "${data.name}" DFA ${type} submitted by ${item.updatedBy} for approval has been approved:<br><br>${link}`;
             if (data.approveRejectMessage) {
               body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
             requester = svrUtil.getEnvEmail(`${item.updatedBy}@cisco.com`);
+            const approveSubject = `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Approved`;
             return mail.sendHtmlMail(bizAdminEmail, requester, `${itadminEmail},${ppmtEmail}`,
-              `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Approved`, body);
+              approveSubject, body);
           case ApprovalMode.reject:
-            body = `The DFA ${type} submitted by ${item.updatedBy} for approval has been rejected:<br><br>${link}`;
+            body = `The "${data.name}" DFA ${type} submitted by ${item.updatedBy} for approval has been rejected:<br><br>${link}`;
             if (data.approveRejectMessage) {
               body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
             }
             requester = svrUtil.getEnvEmail(`${item.updatedBy}@cisco.com`);
+            const rejectSubject = `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Not Approved`;
             return mail.sendHtmlMail(bizAdminEmail, requester, `${itadminEmail},${ppmtEmail}`,
-              `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Not Approved`, body);
+              rejectSubject, body);
         }
       });
 
