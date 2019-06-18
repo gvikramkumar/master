@@ -277,7 +277,6 @@
 .cool.cui .ui-table .ui-table-tbody>tr>td,
 .cool.cui.ui-table .ui-table-tfoot>tr>td {
   padding: .25em .65em;
-  overflow: scroll;
 }
 
 .cool.cui .ui-datatable .ui-datatable-data>tr>td {
