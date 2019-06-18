@@ -86,7 +86,7 @@ export class MmAssesmentComponent implements OnInit {
       this.currentOfferId = params['offerId'];
       this.caseId = params['caseId'];
     });
-
+   
   }
 
   // --------------------------------------------------------------------------------------------
@@ -97,6 +97,7 @@ export class MmAssesmentComponent implements OnInit {
       this.dimensionMode = true;
     }
 
+    console.log('is dimension mode:: '+this.dimensionMode);
     if (this.dimensionMode) {
       this.canClickTab = true;
     }
@@ -1317,8 +1318,8 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   getMarkCompleteStatus(status) {
-
-    this.markCompleteStatus = false;
+    console.log('status in getMarkCompleteStatus() MM is:: '+status);
+    this.markCompleteStatus = status;
   }
 
 

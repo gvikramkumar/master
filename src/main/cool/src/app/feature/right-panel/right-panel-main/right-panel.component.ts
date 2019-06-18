@@ -144,9 +144,9 @@ export class RightPanelComponent implements OnInit {
     this.navigateHash['Design Review'] = ['/designReview', this.currentOfferId, this.caseId];
     this.navigateHash['Offer Setup Workflow'] = ['/offerSetup', this.currentOfferId, this.caseId];
 
+    this.ideateCount = this.offerPhaseDetailsList['ideate'].length;
     this.planCount = this.offerPhaseDetailsList['plan'].length;
     this.setupCount = this.offerPhaseDetailsList['setup'].length;
-    this.ideateCount = this.offerPhaseDetailsList['ideate'].length;
 
     this.offerPhaseDetailsList.ideate.forEach(element => {
       if (element.status === 'Completed') {
@@ -166,7 +166,7 @@ export class RightPanelComponent implements OnInit {
       }
     });
 
-    this.offerPhaseService.getOfferPhaseDetails(this.caseId, true).subscribe(data => {
+    this.offerPhaseService.getOfferPhaseDetails(this.currentOfferId, true).subscribe(data => {
       this.processCurrentPhaseInfo(data);
     });
 
@@ -546,4 +546,3 @@ export class RightPanelComponent implements OnInit {
 
 
 }
-

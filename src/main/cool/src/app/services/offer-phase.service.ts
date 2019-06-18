@@ -11,12 +11,13 @@ export class OfferPhaseService {
     constructor(private httpClient: HttpClient, private environmentService: EnvironmentService) {
     }
 
-    getOfferPhaseDetails(caseId: string, status: boolean): Observable<any> {
-        const url = this.environmentService.REST_API_RETRIEVE_MILESTONES_URL + '/' + caseId + '/' + status;
+    getOfferPhaseDetails(offerId: string, status: boolean): Observable<any> {
+        const url = this.environmentService.REST_API_RETRIEVE_MILESTONES_URL + '/' + offerId + '/' + status;
         return this.httpClient.get(url, { withCredentials: true });
     }
 
     createSolutioningActions(data) {
+        console.log('in offer phase service:: createSolutioningActions');
         const url = this.environmentService.REST_API_POST_ACTION_URL;
         const httpOptions = {
             headers: new HttpHeaders({

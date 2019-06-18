@@ -52,7 +52,8 @@
                               'gray-button':attribute.type===1 && attribute.status===-1,
                               'mm-model-btn-active':attribute.status===1||attribute.type===2,
                               'mm-model-btn-inactive':attribute.status===-1 && attribute.type ===0
-                            }" class="btn btn--small tooltip" placement="top" (click)="toggleSelected(attribute)">
+                            }" class="btn btn--small tooltip" placement="top" (click)="toggleSelected(attribute)" 
+                             [ngStyle]="{'pointer-events' : (markCompleteStatus == true) ? 'none' : 'all' }">
                                 {{attribute.name}}
                                 <span class="tooltiptext" *ngIf="attribute.tooltip!=null && attribute.tooltip!=''">
                                   {{attribute.tooltip}}</span></button>

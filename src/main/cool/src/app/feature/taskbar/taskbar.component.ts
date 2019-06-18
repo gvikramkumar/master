@@ -100,7 +100,7 @@ export class TaskbarComponent implements OnInit {
     }
 
     if (this.taskBarNavSteps[this.currentStepIndex].nxtBtnTitle === 'Offer Setup Workflow') {
-      this.actionsService.getMilestones(this.caseId).subscribe(data => {
+      this.actionsService.getMilestones(this.offerId).subscribe(data => {
 
         // Enable offer setup only when Strategy Review is Complete
         data['ideate'].forEach(element => {

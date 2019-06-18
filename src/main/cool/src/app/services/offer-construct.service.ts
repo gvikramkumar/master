@@ -35,8 +35,9 @@ export class OfferConstructService {
     }
 
 
-    addDetails(groups): Observable<any> {
-        return this.httpClient.post(this.environmentService.REST_API_ADD_DETAILS_OFFER_CONSTRUCT_URL, groups, { withCredentials: true });
+    addDetails(groups, offerId): Observable<any> {
+        const url = this.environmentService.REST_API_ADD_DETAILS_OFFER_CONSTRUCT_URL + '?offerId=' +offerId;
+        return this.httpClient.post(url, groups, { withCredentials: true });
     }
 
     setQuestionsSet(questionsSet) {

@@ -323,7 +323,7 @@ export class EnvironmentService {
         this.REST_API_ACTIONS_TRACKER_URL = this.baseApiUrl + '/bpmApi/getTasksForActionTracker/';
         this.REST_API_ACTIONS_DASHBOARD_URL = this.baseApiUrl + '/bpmApi/getTask/dashboard/';
         this.REST_API_ACTIONS_TRACKER_DETAILS_URL = this.baseApiUrl + '/bpmApi/getInfo/task';
-        this.REST_API_RETRIEVE_MILESTONES_URL = this.baseApiUrl + '/bpmApi/getMilestones';
+        //this.REST_API_RETRIEVE_MILESTONES_URL = this.baseApiUrl + '/bpmApi/getMilestones';
 
         // ------------------------- PDAF URLs ---------------------------------------------------------
 
@@ -494,8 +494,10 @@ export class EnvironmentService {
         this.REST_API_UPDATE_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module/addPirateshipModuleStatus';
         // ------------------------------------MARK COMPLETE STATUS URLs-------------------------------------------------------------------
         this.REST_API_GET_MARK_COMPLETE_STATUS_URL = this.baseApiUrl + '/offersetup/getTogglesStatus/';
-        this.REST_API_UPDATE_MARK_COMPLETE_STATUS_URL = this.baseApiUrl + '/offersetup/UpdateOrAddTogglesStatus';
-
+       // this.REST_API_UPDATE_MARK_COMPLETE_STATUS_URL = this.baseApiUrl + '/offersetup/UpdateOrAddTogglesStatus';
+        this.REST_API_UPDATE_MARK_COMPLETE_STATUS_URL = this.baseApiUrl + '/milestone/setMilestones/';
+        
+        this.REST_API_RETRIEVE_MILESTONES_URL = this.baseApiUrl + '/milestone/getMilestones';
         // -------------------------------------- SELF SERVICE ORDERABILITY URLs --------------------------------------
 
         this.REST_API_GET_SSO_DETAILS_URL = this.baseApiUrl + '/orderability/retrieveSsoDetails/';
