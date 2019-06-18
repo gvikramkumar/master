@@ -23,6 +23,7 @@ export class UploadDocComponent implements OnInit {
   DocType: Array<string>;
   DocSize: number;
  @Input() isReadonly: boolean;
+  ishide: boolean = true;
 
   constructor(
    public _evnService: EnvironmentService,
@@ -70,7 +71,7 @@ export class UploadDocComponent implements OnInit {
   handleFileInput(files: FileList) {
 
    this.fileToUpload = files.item(0);
-
+   console.log(this.DocSize);
     if(this.fileToUpload.size/(1024*1024) <= this.DocSize) {
 
       if (this.DocType.indexOf(this.fileName.split('.')[1]) > -1) {
@@ -103,15 +104,21 @@ export class UploadDocComponent implements OnInit {
           }
         );
       } else {
+        this.ishide = false;
         this.info =  "File type is not supported.";
       }
 
 
    } else {
+      this.ishide = false;
      this.info = "Upload file exceeded maximum file size allowed. Please try again.";
    }
 
 
 
+  }
+
+  changemodalstatus() {
+    this.ishide = true;
   }
 }
