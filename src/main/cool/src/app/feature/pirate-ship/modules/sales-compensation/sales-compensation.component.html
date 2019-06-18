@@ -94,7 +94,7 @@
                 [(selection)]="selectedProductNodes"  [resizableColumns]="true">
                   <ng-template pTemplate="header" let-columns>
                     <tr>
-                      <th *ngFor="let col of columns">
+                      <th *ngFor="let col of columns"  [ngStyle]="{'width': col.width}">
                         <div class="text-left">
                           {{col.header}}
                         </div>
@@ -105,8 +105,8 @@
                       <tr>
                         <td *ngFor="let col of columns; let i = index">
                           <p-treeTableCheckbox class="pull-left" [value]="rowNode" *ngIf="i == 0"></p-treeTableCheckbox>
-                          <p-treeTableToggler class="pull-left" [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
-                          <div class="text-left">{{rowData[col.field]}}</div>
+                          <!-- <p-treeTableToggler class="pull-left" [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler> -->
+                          <div class="text-left"  *ngIf="i!=0">{{rowData[col.field]}}</div>
                         </td>
                       </tr>
                   </ng-template>

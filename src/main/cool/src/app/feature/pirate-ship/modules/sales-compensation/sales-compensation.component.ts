@@ -91,17 +91,18 @@ export class SalesCompensationComponent implements OnInit, OnDestroy {
       { field: 'bookingRecognitionType',header: 'BOOKING RECOGNITION TYPE', value: 'Revenue Recurring, Revenue Other' } 
     ]
     this.salesCompensationItemListColumnHeaders = [
-      { field: 'products',header: 'PRODUCTS', value: 'VEDGE-1000-AC-K9' },
-      { field: 'iccType',header: 'ICC TYPE', value: 'Xaas' },
-      { field: 'offerType',header: 'OFFER TYPE', value: 'Webex' },
-      { field: 'bookingRecognitionType',header: 'BOOKING RECOGNITION TYPE', value: 'Revenue Recurring' },
-      { field: 'approvalStatus',header: 'APPROVAL STATUS', value: 'N/A' },
+      { field: 'Id',header: '', value: '1', width:'5%' },
+      { field: 'products',header: 'PRODUCTS', value: 'VEDGE-1000-AC-K9', width:'23%' },
+      { field: 'iccType',header: 'ICC TYPE', value: 'Xaas', width:'15%' },
+      { field: 'offerType',header: 'OFFER TYPE', value: 'Webex', width:'15%' },
+      { field: 'bookingRecognitionType',header: 'BOOKING RECOGNITION TYPE', value: 'Revenue Recurring' , width:'25%'},
+      { field: 'approvalStatus',header: 'APPROVAL STATUS', value: 'N/A', width:'17%' } 
     ]
     this.atoList = [];
     this.productDetails = [
-      {data: {products: 'VEDGE-1000-AC-K9', iccType: 'Xaas', offerType: 'Webex', bookingRecognitionType: 'Revenue Recurring', approvalStatus: 'N/A'}},
-      {data: {products: 'VEDGE-1000-AC-45', iccType: 'Billing', offerType: 'Webex', bookingRecognitionType: 'Revenue offer', approvalStatus: 'N/A'}},
-      {data: {products: 'VEDGE-1000-AC-K9', iccType: 'Xaas', offerType: 'Webex', bookingRecognitionType: 'Revenue Recurring', approvalStatus: 'N/A'}},
+      {data: {Id:'1', products: 'VEDGE-1000-AC-K9', iccType: 'Xaas', offerType: 'Webex', bookingRecognitionType: 'Revenue Recurring', approvalStatus: 'N/A'}},
+      {data: {Id:'2',products: 'VEDGE-1000-AC-45', iccType: 'Billing', offerType: 'Webex', bookingRecognitionType: 'Revenue offer', approvalStatus: 'N/A'}},
+      {data: {Id:'3',products: 'VEDGE-1000-AC-K9', iccType: 'Xaas', offerType: 'Webex', bookingRecognitionType: 'Revenue Recurring', approvalStatus: 'N/A'}},
     ];
     this.salesCompensationService.getTncMapping(this.offerId).subscribe(atoList => {
       this.atoNames = ['Overall Offer'];
