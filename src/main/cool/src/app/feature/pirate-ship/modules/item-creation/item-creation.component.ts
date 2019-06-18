@@ -613,6 +613,7 @@ export class ItemCreationComponent implements OnInit {
     }
     this.itemCreationService.getItemDetails(this.offerId, dropdownValue).subscribe(response => {
       this.productDetails = this.addingUniqueKey(response.data)
+      console.log('final prodyct details', this.productDetails);
       this.loaderService.stopLoading();
     })
   }
@@ -654,6 +655,7 @@ export class ItemCreationComponent implements OnInit {
     }
 
     this.productDetails = [...this.productDetails];
+    console.log('final product details', this.productDetails);
     this.itemCreationService.removeItemDetails(this.offerId, this.removeList).subscribe(response => {
       this.selectedProductNodes.length = 0;
       this.itemCreationService.getOfferDropdownValues(this.offerId).subscribe(data => {

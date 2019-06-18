@@ -50,5 +50,10 @@ export const PIRATE_SHIP_ROUTES = [
         path: pirateShipRoutesNames.SELF_SERVICE_ORDERABILITY + '/:selectedAto',
         loadChildren: './modules/self-service-orderability/self-service-orderability.module#SelfServiceOrderabilityModule',
         resolve: { offerData: OfferOverViewResolver }
+    },
+    {
+        path: pirateShipRoutesNames.SALES_COMPENSATION + '/:selectedAto',
+        loadChildren: './modules/sales-compensation/sales-compensation.module#SalesCompensationModule',
+        resolve: { offerData: OfferOverViewResolver }
     }
 ]

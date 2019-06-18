@@ -7,7 +7,8 @@ export const pirateShipRoutesNames = {
   SERVICE_MAPPING: 'service-mapping',
   MODELLING_DESIGN: 'modelling-design',
   SERVICE_ANNUITY_PRICING: 'service-annuity-pricing',
-  SELF_SERVICE_ORDERABILITY: 'self-service-orderability'
+  SELF_SERVICE_ORDERABILITY: 'self-service-orderability',
+  SALES_COMPENSATION: 'sales-compensation'
 
 };
 

@@ -1,0 +1,134 @@
+<app-menu-bar [caseId]="caseId" [offerId]="offerId" [offerName]="offerName" [currentMMModel]="derivedMM">
+</app-menu-bar>
+
+<div class="content">
+  <div class="container">
+
+      <div class="panel-wrapper mt-15">
+          
+        <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName" [selectedATO]="selectedAto">
+        </app-taskbar>
+  
+        <br><br>
+
+        <div class="row">
+
+            <div class="leftContent col-sm-12 col-md-9">
+    
+              <div class="row flex-center-vertical">
+                <div class="col-sm-12">
+    
+                  <div class="pull-left" >
+                    <button class="btn btn--primary btn--cool btn--small tooltip" placement="top"
+                      (click)="reject()">
+                      Reject <i class="icon-success"></i>
+                    </button>
+                    <button class="btn btn--primary btn--cool btn--small tooltip" placement="top"
+                      (click)="approve()">
+                      Approve <i class="icon-success"></i>
+                    </button>
+                  </div> 
+    
+                  <div class="pull-right">
+                      <div class="form-group dropdown label--inline ">
+                          <div class="form-group__text select">
+                            <label>Viewing</label>
+                            <select #dropDown="ngModel" [(ngModel)]="selectedIndex" (change)="showSelectedAtoView(dropDown.value)">
+                              <option *ngFor=" let ato of atoNames; let i = index;" [value]="i">
+                                {{ato}}</option>
+                            </select>
+                          </div>
+                        </div>
+                    </div>
+    
+                </div>
+              </div>
+
+              <p-confirmDialog header="Reject" icon="pi pi-exclamation-triangle">
+                <ng-template>
+                <textarea rows="4" [(ngModel)]="comments"></textarea>
+              </ng-template>
+              </p-confirmDialog>
+    
+              <div class="base-margin-top sales-compensation">
+                <!-- <p-treeTable class="item-creation" [value]="salesCompensationColumns" [columns]="salesCompensationColumns" selectionMode="checkbox"
+                [(selection)]="selectedProductNodes"  [resizableColumns]="true">
+                  <ng-template pTemplate="header" let-columns>
+                    <tr>
+                      <th *ngFor="let col of columns let i=index" [ngClass]="{'w10percent':(i==5||i==3)}">
+                        <div class="text-left">
+                          {{col.header}}
+                        </div>
+                      </th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+                    <tr>
+                      <td *ngFor="let col of columns; let i = index">
+                        <div class="text-left">{{col.value}}</div>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-treeTable> -->
+                <table class="table" >
+                    <thead>
+                        <tr>
+                           <th *ngFor="let eachElement of salesCompensationColumns"> 
+                             {{eachElement?.header}}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td *ngFor="let object of salesCompensationColumns"> 
+                              {{object.value}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table> 
+                <br>
+                <br>
+                Item List
+
+                <p-treeTable class="item-creation" [value]="productDetails" [columns]="salesCompensationItemListColumnHeaders" selectionMode="checkbox"
+                [(selection)]="selectedProductNodes"  [resizableColumns]="true">
+                  <ng-template pTemplate="header" let-columns>
+                    <tr>
+                      <th *ngFor="let col of columns">
+                        <div class="text-left">
+                          {{col.header}}
+                        </div>
+                      </th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+                      <tr>
+                        <td *ngFor="let col of columns; let i = index">
+                          <p-treeTableCheckbox class="pull-left" [value]="rowNode" *ngIf="i == 0"></p-treeTableCheckbox>
+                          <p-treeTableToggler class="pull-left" [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+                          <div class="text-left">{{rowData[col.field]}}</div>
+                        </td>
+                      </tr>
+                  </ng-template>
+                </p-treeTable>
+              </div>
+    
+              <ng-template #selectedAtoView>
+                <br><br>
+    
+              </ng-template>
+        
+            </div>
+    
+            <div class="rightContent col-sm-12 col-md-3">
+              <app-right-panel [stakeData]="stakeholders" [offerName]="offerName" [derivedMM]="derivedMM"
+                [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference">
+              </app-right-panel>
+            </div>
+    
+          </div>
+
+      </div>
+
+  </div>
+</div>

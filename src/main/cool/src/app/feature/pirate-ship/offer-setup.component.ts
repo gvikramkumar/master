@@ -157,6 +157,7 @@ export class OfferSetupComponent implements OnInit {
     this.offerSetupService.getModuleData(this.offerId, this.selectedAto, this.functionalRole).subscribe(data => {
 
       this.groupData = {};
+      console.log(this.groupData);
       this.showGroupData = false;
       this.Options = data['listATOs'];
       data['listSetupDetails'].forEach(group => {
@@ -341,6 +342,14 @@ export class OfferSetupComponent implements OnInit {
         this.offerId,
         this.caseId,
         pirateShipRoutesNames.SERVICE_MAPPING,
+        this.selectedAto]);
+        break;
+        }
+      case 'Sales Compensation': {
+        this.router.navigate([appRoutesNames.PIRATE_SHIP,
+        this.offerId,
+        this.caseId,
+        pirateShipRoutesNames.SALES_COMPENSATION,
         this.selectedAto]);
         break;
       }
