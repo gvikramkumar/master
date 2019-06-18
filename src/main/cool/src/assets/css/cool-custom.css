@@ -374,8 +374,13 @@
   width: 130px;
 }
 .my-offers .ui-table.ui-widget table tbody.ui-table-tbody tr td:nth-child(4),
-.my-offers .ui-table.ui-widget table thead.ui-table-thead tr th:nth-child(4) {
+.my-offers .ui-table.ui-widget table thead.ui-table-thead tr th:nth-child(4),
+.action-tracker .ui-table.ui-widget table thead.ui-table-thead tr th:nth-child(7),
+.action-tracker .ui-table.ui-widget table thead.ui-table-thead tr th:nth-child(8) {
   width: 150px;
+}
+.action-tracker .ui-table.ui-widget table thead.ui-table-thead tr th:nth-child(2) {
+  width: 180px;
 }
 .actions-notifications .ui-table.ui-widget table tbody.ui-table-tbody tr td:nth-child(2),
 .actions-notifications .ui-table.ui-widget table thead.ui-table-thead tr th:nth-child(2) {
