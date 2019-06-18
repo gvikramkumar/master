@@ -36,10 +36,10 @@ export class UploadDocComponent implements OnInit {
       params: new HttpParams().set('moduleName', this.moduleName)
     }).subscribe(
       (ModuleExtension: any) => {
-        if ( ModuleExtension.documentType !== 'ALL' ) {
+
           this.DocType = ModuleExtension.documentType.split('|');
           this.DocSize = ModuleExtension.size;
-        }
+
       }
     );
     this.info = "";
@@ -71,11 +71,10 @@ export class UploadDocComponent implements OnInit {
   handleFileInput(files: FileList) {
 
    this.fileToUpload = files.item(0);
-   console.log(this.DocSize);
-    if(this.fileToUpload.size/(1024*1024) <= this.DocSize) {
+    if(this.fileToUpload.size/(1024*1024) <= this.DocSize ) {
 
-      if (this.DocType.indexOf(this.fileName.split('.')[1]) > -1) {
-        this.fileName =this.fileToUpload.name;
+      if (this.DocType.indexOf(  this.fileToUpload.name.split('.')[1].toLocaleLowerCase()) > -1 || this.DocType.indexOf('ALL') > -1) {
+
         let formdata: FormData = new FormData();
         const usaTime = new Date().toLocaleString('en-US', {timeZone: 'America/Los_Angeles'});
         console.log( new Date(usaTime).getTime().toString());
@@ -96,7 +95,6 @@ export class UploadDocComponent implements OnInit {
               this.fileName = res.fileName;
               this.info="";
               this.downloadUrl = this._evnService.REST_API_BasicModule_DownloadDoc+"?offerId="+this.offerId+"&fileName="+this.fileName+"&moduleName="+this.moduleName+"";
-
             } else {
               this.info = res.Message;
             }
