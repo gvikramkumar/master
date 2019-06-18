@@ -64,6 +64,7 @@ export class ChangestatusComponent implements OnInit {
     "Royalty_Setup": "<ol><li>BUPM must engage with the NPPM to fill out the Royalty Configuration Template. BUPM can provide either a reference PID from a past offer that has the same royalties or provide attributes related to the supplier and product.</li><li>The NPPM will work with the Royalty team to complete the royalty setup. Once complete, the BUPM can validate the PID royalty setup using the Royalty Rate Master Report (RRM).</li></ol>",
     "Export Compliance": "<ol><li>BUPMs must complete the <a href=\"https://pepd.cloudapps.cisco.com/legal/export/pepd/EPReviewForm.do?method=showEPRForm#!/\" target=\"_blank\">Export Product Review Form: </a> </li><li>Once the BUPM has completed the form, they will receive an email notification with the results, as well as an EPR number.</li><li>Offer Leads or BUPMs should document the case number as it may be required for creation of new PIDs.</li><li>Offer Leads or BUPMs should reach out to the GET Team to schedule a due diligence review. The following three points are important to note before the due diligence review:<br/>a. The BUPM will need to explain the correlation between PID and the product the customer receives.<br/> b. Any SW associated with the SBP offering needs an export compliance due diligence review.<br/>  c. If the SW requires a formal US government review, the formal government review may potentially take up to 2-3 months.</li><li>Once the compliance due diligence review is complete, an email will be sent from the GET Team (exportclass@cisco.com) stating the PIDs are compliant.</li><li>If emails need to be sent to the GET Team (exportclass@cisco.com) requesting confirmation that export compliance due diligence is complete, please be sure to reference the EPR # in the subject line of the email.</li></ol>"
   };
+  headerName: string;
 
 
 
@@ -107,7 +108,7 @@ export class ChangestatusComponent implements OnInit {
   }
 
   findFunctionRoles(moduleName: string, pirateShipSharedService: PirateShipSharedService) {
-    console.log('pirateShipSharedService : ', pirateShipSharedService.getRole());
+
     switch (moduleName) {
       case 'NPI Licensing': {
         this.infohelp = this.basicmodule_hint.NPI_Licensing;
@@ -392,6 +393,7 @@ export class ChangestatusComponent implements OnInit {
   }
 
   changemodalstatus() {
+    this.headerName = "Activities are completed when...";
     this.infohelp = 'TESTING...';
 
     switch (this.moduleName) {
@@ -426,6 +428,7 @@ export class ChangestatusComponent implements OnInit {
   }
 
   markAsCompleteModal(labelName: string) {
+    this.headerName = "";
     //console.log('complete' , labelName);
     this.isBtnNeeded = true;
     this.infohelp = '<div style="text-align: center ! important;">Are you sure you would like to mark this as complete? Once completing a module, you will not be able to move it back to \"In-progress\" </div>';

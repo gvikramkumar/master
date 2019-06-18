@@ -563,6 +563,7 @@ export class OfferSolutioningComponent implements OnInit {
 
   // -----------------------------------------------------------------------------------------------------------------------------
 
+
   getMarkCompleteStatus(status) {
     this.markCompleteStatus = false;
   }
