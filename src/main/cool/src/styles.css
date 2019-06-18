@@ -250,7 +250,7 @@ body.cui .alert__close:hover {
   font-size: 1em
 }
 
-.cui .container {
+/* .cui .container {
   min-width: 1024px;
   padding-right: 30px;
   padding-left: 30px;
@@ -261,7 +261,7 @@ body.cui .alert__close:hover {
 .cui .container-fluid {
   max-width: 100%;
   margin: auto;
-}
+} */
 
 .cui a,
 .cui .link {

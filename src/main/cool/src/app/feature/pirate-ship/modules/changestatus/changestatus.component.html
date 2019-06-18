@@ -99,10 +99,14 @@
           </div>
           <div class="row base-margin-top">
             <div class="col-md-7">
-              <div *ngIf="moduleName === 'Royalty Setup'">
-                <p class="text-dkgray-1 text-medium">Attach your royalty checklist</p>
-                <app-upload-doc [moduleName]="moduleName" [isReadonly]="isReadOnly"  ></app-upload-doc>
+              <div *ngIf="show_Upload">
+                <div *ngIf="moduleName === 'Royalty Setup'">
+                  <p class="text-dkgray-1 text-medium">Attach your royalty checklist</p>
+                  <app-upload-doc [moduleName]="moduleName" [isReadonly]="isReadOnly"  ></app-upload-doc>
+                </div>
               </div>
+
+
             </div>
             <div class="col-md-5 text-left">
               <div class="help-block text-muted">

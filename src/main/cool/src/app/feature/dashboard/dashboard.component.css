@@ -390,9 +390,9 @@ th.ui-state-default.ui-unselectable-text.ui-sortable-column {
   visibility: visible;
   opacity: 1;
 }
-.regColumn{
+/* .regColumn{
   width:10%; text-align: center
 }
 .lastColumn{
   width:20%; text-align: center
-}
+} */
