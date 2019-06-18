@@ -99,8 +99,8 @@ export class ChangestatusComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(window.localStorage.getItem('upload') ) {
-      this.show_Upload = Boolean(window.localStorage.getItem('upload'));
+    if( window.localStorage.getItem('showSprint6') ) {
+      this.show_Upload = Boolean(window.localStorage.getItem('showSprint6'));
     }
 
     this.changestatusService.getAllComments(this.moduleName, this.offerId).subscribe(data=>{
