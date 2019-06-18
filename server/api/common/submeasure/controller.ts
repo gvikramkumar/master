@@ -191,6 +191,54 @@ export default class SubmeasureController extends ApprovalController {
     return this.sendApprovalEmailBase(req, mode, item, 'submeasure', omitProperties);
   }
 
+  // we need this sync to happen
+  approveMany(req, res, next) {
+    return super.approveMany(req, res, next)
+      .then(() => {
+        const items = req.body;
+        let manualMix, deptUpload;
+        items.forEach(sm => {
+          if (shUtil.isManualMix(sm)) {
+            manualMix = true;
+          }
+          if (shUtil.isDeptUpload(sm)) {
+            deptUpload = true;
+          }
+        });
+        return this.doManualMixAndDeptUploadSync(manualMix, deptUpload, req);
+      });
+  }
+
+  approveOne(req, res, next) {
+    const sm = req.body;
+    return super.approveOne(req, res, next)
+      .then(() => {
+        return this.doManualMixAndDeptUploadSync(shUtil.isManualMix(sm), shUtil.isDeptUpload(sm), req);
+      });
+  }
+
+  doManualMixAndDeptUploadSync(manualMix, deptUpload, req) {
+    if (!manualMix && !deptUpload) {
+      return Promise.resolve();
+    }
+
+    // we have to avoid circular reference between DatabaseController and SubmeasureController. This required changes in both places
+    // to overcome. See DatabaseController constructor for more info
+    const databaseCtrl = injector.get(DatabaseController);
+    const syncMap = new SyncMap();
+    if (manualMix) {
+      syncMap.dfa_prof_swalloc_manualmix_upld = true;
+    }
+    if (deptUpload) {
+      syncMap.dfa_prof_dept_acct_map_upld = true;
+    }
+    if (!app.get('syncing')) {
+      return databaseCtrl.mongoToPgSyncPromise(req.dfa, syncMap, req.user.id);
+    } else {
+      return Promise.resolve();
+    }
+  }
+
   preApproveStep(sm, firstTimeApprove, req) {
     const promises = [];
     // remove product class uploads for this submeasure and add new ones
@@ -224,24 +272,6 @@ export default class SubmeasureController extends ApprovalController {
     }
     return Promise.all(promises)
       .then(() => sm);
-  }
-
-  postApproveStep(sm, req): Promise<any> {
-    // we have to avoid circular reference between DatabaseController and SubmeasureController. This required changes in both places
-    // to overcome. See DatabaseController constructor for more info
-    const databaseCtrl = injector.get(DatabaseController);
-    const syncMap = new SyncMap();
-    if (shUtil.isManualMix(sm)) {
-      syncMap.dfa_prof_swalloc_manualmix_upld = true;
-    }
-    if (shUtil.isDeptUpload(sm)) {
-      syncMap.dfa_prof_dept_acct_map_upld = true;
-    }
-    if ((shUtil.isManualMix(sm) || shUtil.isDeptUpload(sm)) && !app.get('syncing')) {
-      return databaseCtrl.mongoToPgSyncPromise(req.dfa, syncMap, req.user.id);
-    } else {
-      return Promise.resolve();
-    }
   }
 
   preRejectStep(sm, req) {
