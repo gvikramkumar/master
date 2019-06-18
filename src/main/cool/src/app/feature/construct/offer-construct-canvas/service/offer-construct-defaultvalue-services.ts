@@ -727,6 +727,7 @@ export class OfferConstructDefaultValue {
     questionList.forEach(question => {
       if (question.question == "Enablement File Type") {
         question.rules.isDisabled = false;
+        question.rules.isMandatoryOptional = "Mandatory";
       }
     });
     return questionList;
@@ -1252,7 +1253,7 @@ getCountryNameValues(questionList) {
               countryName = question.currentValue.split(',')
               //countryName.forEach(element => {
               for(let i=0;i<countryName.length;i++){
-                
+
               if(countryValues.includes(countryName[i])){
                  question.rules.isvalid = true;
               }
@@ -1297,8 +1298,9 @@ getCountryNameValues(questionList) {
    });
    questionList.forEach(question => {
      if (question.question == "Enablement File Type"){
-       if(enablementFileType == "Y"){
+       if(enablementFileType == "Yes"){
            question.rules.isDisabled = false;
+           question.rules.isMandatoryOptional = "Mandatory";
        }
        else{
            question.rules.isDisabled = true;
