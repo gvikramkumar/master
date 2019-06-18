@@ -54,6 +54,7 @@ export class ChangestatusComponent implements OnInit {
   ishide: boolean = true;
   isBtnNeeded: boolean = false;
   mStatus: any;
+  showConnectNPIWSbutton: boolean = false;
 
   basicmodule_hint = {
     "Pricing_Uplift_Setup": "BUPM has completed their Offer's Pricing Uplift activities in OWB Pricing Canvas",
@@ -145,6 +146,7 @@ export class ChangestatusComponent implements OnInit {
         break;
       }
       case 'Offer Attribution': {
+        this.showConnectNPIWSbutton = true;
         this.infohelp = this.basicmodule_hint.Offer_Attribution;
         if ( pirateShipSharedService &&
           pirateShipSharedService.getRole()
@@ -435,6 +437,10 @@ export class ChangestatusComponent implements OnInit {
     this.isBtnNeeded = true;
     this.infohelp = '<div style="text-align: center ! important;">Are you sure you would like to mark this as complete? Once completing a module, you will not be able to move it back to \"In-progress\" </div>';
     this.ishide = !this.ishide;
+  }
+
+  openNPIWS() {
+    window.open("https://npiws.cloudapps.cisco.com/npi-webapp/npi/showHome", "_blank");
   }
 
 }

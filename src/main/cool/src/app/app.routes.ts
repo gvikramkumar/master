@@ -5,7 +5,7 @@ import { OfferOverViewResolver } from './services/offer-overview-resolver.servic
 import { OfferDetailViewComponent } from '@app/feature/offer-detail/offer-detail-view/offer-detail-view.component';
 import { COOLguardService } from './core/guards/coolguard.service';
 import { ErrorpageComponent } from '@shared/components/errorpage/errorpage.component';
-import { Dashboard2Component } from './feature/dashboard2/dashboard2.component';
+import { CanActivate } from '@angular/router';
 
 export const APP_ROUTES = [
     {
@@ -16,11 +16,6 @@ export const APP_ROUTES = [
     {
         path: appRoutesNames.DASHBOARD,
         component: DashboardComponent,
-        canActivate: [COOLguardService]
-    },
-    {
-        path: appRoutesNames.DASHBOARD2,
-        component: Dashboard2Component,
         canActivate: [COOLguardService]
     },
     {

@@ -41,6 +41,7 @@
 .cool.cui .btn.btn--small,
 .cui .btn.btn--wide {
   max-width: fit-content;
+  line-height: 31px;
 }
 
 .cool.cui h1.page--heading {
@@ -363,6 +364,42 @@
   outline: 0;
   padding: 1em .65em;
 }
+
+/* Column Sizing from Dashboard */
+.my-offers .ui-table.ui-widget table tbody.ui-table-tbody tr td:first-child,
+.my-offers .ui-table.ui-widget table thead.ui-table-thead tr th:first-child,
+.actions-notifications .ui-table.ui-widget table tbody.ui-table-tbody tr td:first-child,
+.actions-notifications .ui-table.ui-widget table thead.ui-table-thead tr th:first-child {
+  width: 130px;
+}
+.my-offers .ui-table.ui-widget table tbody.ui-table-tbody tr td:nth-child(4),
+.my-offers .ui-table.ui-widget table thead.ui-table-thead tr th:nth-child(4),
+.action-tracker .ui-table.ui-widget table thead.ui-table-thead tr th:nth-child(7),
+.action-tracker .ui-table.ui-widget table thead.ui-table-thead tr th:nth-child(8) {
+  width: 150px;
+}
+.action-tracker .ui-table.ui-widget table thead.ui-table-thead tr th:nth-child(2) {
+  width: 180px;
+}
+.actions-notifications .ui-table.ui-widget table tbody.ui-table-tbody tr td:nth-child(2),
+.actions-notifications .ui-table.ui-widget table thead.ui-table-thead tr th:nth-child(2) {
+  width: 25%;
+}
+.actions-notifications .ui-table.ui-widget table tbody.ui-table-tbody tr td:nth-child(6),
+.actions-notifications .ui-table.ui-widget table thead.ui-table-thead tr th:nth-child(6) {
+  width: 100px;
+}
+.actions-notifications .ui-table.ui-widget table tbody.ui-table-tbody tr td:nth-child(7),
+.actions-notifications .ui-table.ui-widget table thead.ui-table-thead tr th:nth-child(7),
+.actions-notifications .ui-table.ui-widget table tbody.ui-table-tbody tr td:nth-child(8),
+.actions-notifications .ui-table.ui-widget table thead.ui-table-thead tr th:nth-child(8) {
+  width: 150px;
+}
+.cool.cui .ui-table .ui-table-thead>tr>th.subcycles {
+  overflow: hidden;
+}
+
+
 
 /* Tables in phase popovers  */
 .cool.cui table.phase-popover {

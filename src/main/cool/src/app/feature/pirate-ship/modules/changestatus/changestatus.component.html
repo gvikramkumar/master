@@ -23,12 +23,14 @@
       <div class="leftContent col-sm-12 col-md-9">
         <form name="form" #changeStatusForm="ngForm">
 
-          <div class="row">
-
-            <div class="col-md-6" *ngIf="!mStatus">
-              <button class="btn btn--small btn--cool btn--primary" [disabled]="isReadOnly"
-                (click)="markAsCompleteModal()">Mark as Complete</button>
+          <div class="row base-margin-top">
+            <div class="col-md-6" *ngIf="showConnectNPIWSbutton" >
+              <button class="btn btn--small btn--cool btn--primary" (click)="openNPIWS()">Submit QA Case In NPI Workspace</button>
             </div>
+
+              <div class="col-md-6" *ngIf="!mStatus" showConnectNPIWSbutton>
+                <button class="btn btn--small btn--cool btn--primary" [disabled]="isReadOnly" (click)="markAsCompleteModal()">Mark as Complete</button>
+              </div>
 
 
             <div class="col-md-9" *ngIf="mStatus && mStatus.status==='Complete'">
@@ -40,7 +42,7 @@
           </div>
 
 <!-- test orderability section -->
-          <div class="panel panel--ltgray panel--loose base-margin-top">
+          <!-- <div class="panel panel--ltgray panel--loose base-margin-top">
             <div class="row">
               <div class="col-sm-12 col-md-6">
                 <div class="row">
@@ -62,7 +64,7 @@
 
               </div>
             </div>
-          </div>
+          </div> -->
 <!-- End: test orderability -->
 
           <div class="row base-margin-top">
