@@ -41,6 +41,7 @@
 .cool.cui .btn.btn--small,
 .cui .btn.btn--wide {
   max-width: fit-content;
+  line-height: 31px;
 }
 
 .cool.cui h1.page--heading {

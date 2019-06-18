@@ -3,12 +3,12 @@
     background: transparent;
     color: #6ebe4a !important;
     text-decoration: none;
-
+    line-height: 30px;
     box-shadow: inset 0 0 0 1px #6ebe4a !important;
 }
 .btn.btn--green-ghost span {
   line-height: 14px;
-  margin-top: 3px;
+  margin-top: 5px;
 }
 .panel-scroll {
     /*width: 670px;*/
@@ -16,6 +16,9 @@
     overflow: auto;
   }
 
+  span.icon-info-outline {
+    line-height: 12px;
+  }
   .message-box {
       color: #005073;
   }
