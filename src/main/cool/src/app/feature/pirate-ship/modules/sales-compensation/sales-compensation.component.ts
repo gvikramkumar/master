@@ -14,6 +14,7 @@ import * as _ from 'lodash';
 
 import { Subscription } from 'rxjs';
 import {ConfirmationService} from 'primeng/api';
+import { OverlayPanel } from 'primeng/overlaypanel';
 import { SalesCompensationService } from '../../../../services/sales-compensation.service';
 
 
@@ -45,6 +46,7 @@ export class SalesCompensationComponent implements OnInit, OnDestroy {
   salesCompensationColumns: any[];
   salesCompensationItemListColumnHeaders: any[];
   selectedProductNodes: TreeNode[]; //selectedNodes3
+  offerProductNodes: TreeNode[];
 
   selectedAto: any;
   atoNames: string[] = [];
@@ -52,6 +54,8 @@ export class SalesCompensationComponent implements OnInit, OnDestroy {
   selectedObjectAto: any;
   productDetails: any;
   selectedIndex: any;
+  offerDetails: any;
+  public newComment: string;
 
   paramsSubscription: Subscription;
 
@@ -81,7 +85,7 @@ export class SalesCompensationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
+    this.newComment = '';
     this.salesCompensationColumns = [
       { field: 'offerStarted',header: 'OFFER STARTED', value: '04-Aug-2019'},
       { field: 'newOfferType',header: 'NEW OFFER TYPE', value: 'Yes' },
@@ -99,6 +103,9 @@ export class SalesCompensationComponent implements OnInit, OnDestroy {
       { field: 'approvalStatus',header: 'APPROVAL STATUS', value: 'N/A', width:'17%' } 
     ]
     this.atoList = [];
+    this.offerDetails = [
+      {data: {offerStarted:'04-Aug-2019', newOfferType: 'Yes', webexOffer: 'No', chargeType: 'Paid Upfront', offerType: 'STORM', bookingRecognitionType: 'Other'}}
+    ];
     this.productDetails = [
       {data: {Id:'1', products: 'VEDGE-1000-AC-K9', iccType: 'Xaas', offerType: 'Webex', bookingRecognitionType: 'Revenue Recurring', approvalStatus: 'N/A'}},
       {data: {Id:'2',products: 'VEDGE-1000-AC-45', iccType: 'Billing', offerType: 'Webex', bookingRecognitionType: 'Revenue offer', approvalStatus: 'N/A'}},
@@ -108,10 +115,12 @@ export class SalesCompensationComponent implements OnInit, OnDestroy {
       this.atoNames = ['Overall Offer'];
       this.selectedIndex = 0;
       this.atoList = atoList.data;
-      for (let i = 0; i < this.atoList.length; i++) {
-        this.atoNames.push(this.atoList[i].itemName);
-        if (!this.atoList[i].hasOwnProperty('itemStatus') && this.atoList[i].hasOwnProperty('mappingStatus')) {
-          this.atoList[i].itemStatus = this.atoList[i].mappingStatus;
+      if (this.atoList) {
+        for (let i = 0; i < this.atoList.length; i++) {
+          this.atoNames.push(this.atoList[i].itemName);
+          if (!this.atoList[i].hasOwnProperty('itemStatus') && this.atoList[i].hasOwnProperty('mappingStatus')) {
+            this.atoList[i].itemStatus = this.atoList[i].mappingStatus;
+          }
         }
       }
       for (let j = 0; j < this.atoNames.length; j++) {
@@ -119,18 +128,41 @@ export class SalesCompensationComponent implements OnInit, OnDestroy {
           this.selectedIndex = j;
         }
       }
+      this.salesCompensationService.getOfferDetails(this.offerId).subscribe(offerdetails => {
+        console.log('offerdetails', offerdetails);
+      });
     }, error => {
       console.log('error in atolist', error);
     });
+  }
+
+  validateComment(event) {
+    const value = event.target.value;
+    this.newComment = value;
   }
 
   ngOnDestroy(): void {
     this.paramsSubscription.unsubscribe();
   }
 
-  reject() {
+
+  reject(event, overlaypanel: OverlayPanel) {
+    
+    overlaypanel.toggle(event);
+  }
+
+  removeComment(overlaypanel: OverlayPanel) {
+    this.newComment = '';
+    overlaypanel.hide()
+  }
+
+  updateComment(overlaypanel: OverlayPanel) {
+    overlaypanel.hide()
+  }
+
+  approve() {
     this.confirmationService.confirm({
-      message: 'Are you sure that you want to perform this action?',
+      message: 'Are you sure that you want to approve?',
       accept: () => {
           //Actual logic to perform a confirmation
       }

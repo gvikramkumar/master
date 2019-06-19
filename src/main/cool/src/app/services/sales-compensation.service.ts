@@ -18,4 +18,10 @@ export class SalesCompensationService {
     const url = this.environmentService.REST_API_RETRIEVE_TERM_CONTENT_MAPPING_URL + '?offerId=' + offerId;
     return this.httpClient.get(url, { withCredentials: true });
   }
+
+  getOfferDetails(offerId: string): Observable<any> {
+    const url = this.environmentService.REST_API_RETRIEVE_SALES_COMPENSATION_OFFER_DETAILS + '?offerId=' + offerId;
+    return this.httpClient.get(url, { withCredentials: true });
+  }
+
 }

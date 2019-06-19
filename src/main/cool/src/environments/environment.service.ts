@@ -148,6 +148,9 @@ export class EnvironmentService {
     // TERM AND CONTENT MAPPING URLs
     REST_API_RETRIEVE_TERM_CONTENT_MAPPING_URL: string;
 
+    //  SALES COMPENSATION URLs
+    REST_API_RETRIEVE_SALES_COMPENSATION_OFFER_DETAILS: string;
+
     // CSDL URLs
     REST_API_GET_ALL_PROJECTS: string;
     REST_API_POST_CREATE_CSDL_ASSOCIATION: string;
@@ -455,6 +458,10 @@ export class EnvironmentService {
         // --------------------------------------- TERM AND CONTENT MAPPING --------------------------------------------
 
         this.REST_API_RETRIEVE_TERM_CONTENT_MAPPING_URL = this.baseApiUrl + '/offersetup/getTNCMappingObject';
+
+        // --------------------------------------- SALES COMPENSATION DETAILS --------------------------------------------
+
+        this.REST_API_RETRIEVE_SALES_COMPENSATION_OFFER_DETAILS = this.baseApiUrl + '/offersetup/getTNCMappingObject';
 
         // -------------------------------------- CSDL --------------------------------------------------------------------------
 

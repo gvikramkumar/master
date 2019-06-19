@@ -17,10 +17,9 @@
     
               <div class="row flex-center-vertical">
                 <div class="col-sm-12">
-    
                   <div class="pull-left" >
                     <button class="btn btn--primary btn--cool btn--small tooltip" placement="top"
-                      (click)="reject()">
+                      (click)="reject($event, popCommentContent)">
                       Reject <i class="icon-success"></i>
                     </button>
                     <button class="btn btn--primary btn--cool btn--small tooltip" placement="top"
@@ -44,48 +43,44 @@
                 </div>
               </div>
 
-              <p-confirmDialog header="Reject" icon="pi pi-exclamation-triangle">
-                <ng-template>
-                <textarea rows="4" [(ngModel)]="comments"></textarea>
-              </ng-template>
-              </p-confirmDialog>
+          
+
+              <p-overlayPanel #popCommentContent [showCloseIcon]="true">
+                  <div  class="comments-modal">
+                    <div class="popover__body">
+                      <h1 class="modalheader">Add Comments</h1>
+                      <div class="add-comment-field">
+                          <textarea class="textarea" [value]="newComment" (input)="validateComment($event)" maxlength="300" placeholder="300 Max Character" rows="5"></textarea><br>
+                          <div class="divider divider--compressed"></div>
+                            <div class="action-bar text-right">
+                            <button class="btn btn--secondary"  (click)="removeComment(popCommentContent)" type="submit">Cancel</button>
+                            <button class="btn btn--primary"  (click)="updateComment(popCommentContent)" type="submit">Submit</button>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                </p-overlayPanel>
     
               <div class="base-margin-top sales-compensation">
-                <!-- <p-treeTable class="item-creation" [value]="salesCompensationColumns" [columns]="salesCompensationColumns" selectionMode="checkbox"
-                [(selection)]="selectedProductNodes"  [resizableColumns]="true">
+                <p-treeTable class="item-creation" [value]="offerDetails" [columns]="salesCompensationColumns" selectionMode="checkbox"
+                [(selection)]="offerProductNodes"  [resizableColumns]="true">
                   <ng-template pTemplate="header" let-columns>
                     <tr>
-                      <th *ngFor="let col of columns let i=index" [ngClass]="{'w10percent':(i==5||i==3)}">
+                      <th *ngFor="let col of columns">
                         <div class="text-left">
                           {{col.header}}
                         </div>
                       </th>
                     </tr>
                   </ng-template>
-                  <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
-                    <tr>
-                      <td *ngFor="let col of columns; let i = index">
-                        <div class="text-left">{{col.value}}</div>
-                      </td>
-                    </tr>
+                  <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+                      <tr>
+                        <td *ngFor="let col of columns; let i = index">
+                          <div class="text-left"  *ngIf="i!=0">{{rowData[col.field]}}</div>
+                        </td>
+                      </tr>
                   </ng-template>
-                </p-treeTable> -->
-                <table class="table" >
-                    <thead>
-                        <tr>
-                           <th *ngFor="let eachElement of salesCompensationColumns"> 
-                             {{eachElement?.header}}
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td *ngFor="let object of salesCompensationColumns"> 
-                              {{object.value}}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table> 
+                </p-treeTable>
                 <br>
                 <br>
                 Item List
