@@ -16,9 +16,6 @@ export class OfferPopupComponent implements OnInit {
 
   ngOnInit() {
 
-    this.offerBuilderdata['overallStatus'] = this.offerBuilderdata && this.offerBuilderdata['overallStatus'] ?
-      this.offerBuilderdata['overallStatus'].toLowerCase() : '';
-
   }
 
 
