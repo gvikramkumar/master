@@ -732,8 +732,7 @@ export class OfferConstructDefaultValue {
     questionList.forEach(question => {
       if (question.question == "Enablement File Type") {
           question.rules.isDisabled = true;
-          question.rules.currentValue = '';
-          question.rules.isMandatoryOptional = "Optional";
+          question.currentValue = '';
       }
     });
     return questionList;
