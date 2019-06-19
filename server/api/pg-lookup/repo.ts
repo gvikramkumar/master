@@ -934,7 +934,7 @@ export default class PgLookupRepo {
       l1_sales_territory_name_code as sl1, 
       l2_sales_territory_name_code as sl2, 
       l3_sales_territory_name_code as sl3 
-      from fpacon.vw_fpa_sales_hierarchy
+      from fpacon.vw_fpa_sales_hierarchy_sl3
       where 
       l1_sales_territory_name_code is not null and  
       l2_sales_territory_name_code is not null and  
@@ -951,7 +951,7 @@ export default class PgLookupRepo {
       technology_group_id as tg, 
       business_unit_id as bu, 
       product_family_id as pf
-      from fpacon.vw_fpa_products  
+      from fpacon.vw_fpa_products_pf  
       where 
       technology_group_id is not null and  
       business_unit_id is not null and  
