@@ -114,7 +114,8 @@ export class TurbotaxviewComponent implements OnChanges {
     }
 
     private isMilestoneCompleted(): any {
-        return milestone => milestone.status && milestone.status.toLowerCase() === 'completed';
+        return milestone => milestone.status && (milestone.status.toLowerCase() === 'completed'
+        || milestone.status.toLowerCase() === 'not applicable');
     }
 
     gotobackTomilestone(value) {

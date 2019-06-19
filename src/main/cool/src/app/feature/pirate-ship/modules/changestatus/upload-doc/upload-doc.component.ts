@@ -23,6 +23,7 @@ export class UploadDocComponent implements OnInit {
   DocType: Array<string>;
   DocSize: number;
  @Input() isReadonly: boolean;
+  ishide: boolean = true;
 
   constructor(
    public _evnService: EnvironmentService,
@@ -35,10 +36,10 @@ export class UploadDocComponent implements OnInit {
       params: new HttpParams().set('moduleName', this.moduleName)
     }).subscribe(
       (ModuleExtension: any) => {
-        if ( ModuleExtension.documentType !== 'ALL' ) {
+          console.log(ModuleExtension);
           this.DocType = ModuleExtension.documentType.split('|');
           this.DocSize = ModuleExtension.size;
-        }
+
       }
     );
     this.info = "";
@@ -70,48 +71,60 @@ export class UploadDocComponent implements OnInit {
   handleFileInput(files: FileList) {
 
    this.fileToUpload = files.item(0);
+   if(  this.fileToUpload.name) {
 
-    if(this.fileToUpload.size/(1024*1024) <= this.DocSize) {
+     if(this.fileToUpload.size/(1024*1024) <= this.DocSize) {
 
-      if (this.DocType.indexOf(this.fileName.split('.')[1]) > -1) {
-        this.fileName =this.fileToUpload.name;
-        let formdata: FormData = new FormData();
-        const usaTime = new Date().toLocaleString('en-US', {timeZone: 'America/Los_Angeles'});
-        console.log( new Date(usaTime).getTime().toString());
-        console.log( new Date(usaTime));
-        this.timestamp = new Date(usaTime).getTime();
-        this.userId = this._userService.getUserId();
-        this.userName =  this._userService.getName();
-        formdata.append('file', this.fileToUpload);
-        formdata.append('offerId', this._userService.getofferId());
-        formdata.append('userId', this._userService.getUserId());
-        formdata.append('userName', this._userService.getName());
-        formdata.append('timeStamp', new Date(usaTime).getTime().toString());
-        formdata.append('moduleName', this.moduleName);
-        this.httpClient.post(this._evnService.REST_API_BasicModule_upload, formdata).subscribe(
-          (res: any) => {
-            this.status = res.status;
-            if (res.status === 200) {
-              this.fileName = res.fileName;
-              this.info="";
-              this.downloadUrl = this._evnService.REST_API_BasicModule_DownloadDoc+"?offerId="+this.offerId+"&fileName="+this.fileName+"&moduleName="+this.moduleName+"";
+       if (this.DocType.indexOf(  this.fileToUpload.name.split('.')[1].toLocaleLowerCase()) > -1 || this.DocType.indexOf('ALL') > -1) {
 
-            } else {
-              this.info = res.Message;
-            }
+         let formdata: FormData = new FormData();
+         const usaTime = new Date().toLocaleString('en-US', {timeZone: 'America/Los_Angeles'});
+         console.log( new Date(usaTime).getTime().toString());
+         console.log( new Date(usaTime));
+         this.timestamp = new Date(usaTime).getTime();
+         this.userId = this._userService.getUserId();
+         this.userName =  this._userService.getName();
+         formdata.append('file', this.fileToUpload);
+         formdata.append('offerId', this._userService.getofferId());
+         formdata.append('userId', this._userService.getUserId());
+         formdata.append('userName', this._userService.getName());
+         formdata.append('timeStamp', new Date(usaTime).getTime().toString());
+         formdata.append('moduleName', this.moduleName);
+         debugger;
+         this.httpClient.post(this._evnService.REST_API_BasicModule_upload, formdata).subscribe(
+           (res: any) => {
+             this.status = res.status;
+             if (res.status === 200) {
+               this.fileName = res.fileName;
+               this.info="";
+               this.downloadUrl = this._evnService.REST_API_BasicModule_DownloadDoc+"?offerId="+this.offerId+"&fileName="+this.fileName+"&moduleName="+this.moduleName+"";
+             } else {
+               this.info = res.Message;
+             }
 
-          }
-        );
-      } else {
-        this.info =  "File type is not supported.";
-      }
+           }
+         );
+       } else {
+         this.ishide = false;
+         this.info =  "File type is not supported.";
+       }
 
+
+     } else {
+       this.ishide = false;
+       this.info = "Upload file exceeded maximum file size allowed. Please try again.";
+     }
 
    } else {
-     this.info = "Upload file exceeded maximum file size allowed. Please try again.";
+     this.info = "Please make sure you have the fileName";
    }
 
 
 
+
+  }
+
+  changemodalstatus() {
+    this.ishide = true;
   }
 }

@@ -10,6 +10,10 @@
   line-height: 14px;
   margin-top: 5px;
 }
+span.ico-punchout {
+    position: relative;
+    top: 4px;
+}
 .panel-scroll {
     /*width: 670px;*/
     height: 220px;
