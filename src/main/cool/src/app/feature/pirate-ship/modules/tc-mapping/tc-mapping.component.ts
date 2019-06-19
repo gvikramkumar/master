@@ -55,7 +55,7 @@ export class TcMappingComponent implements OnInit, OnDestroy {
     private environmentService: EnvironmentService,
     private configurationService: ConfigurationService,
     private stakeholderfullService: StakeholderfullService,
-    private tncMapping : TcMappingService,
+    private tncMapping : TcMappingService
   ) { 
     this.paramsSubscription = this.activatedRoute.params.subscribe(params => {
       this.caseId = params['caseId'];
