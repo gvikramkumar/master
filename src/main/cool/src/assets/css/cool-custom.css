@@ -1280,7 +1280,7 @@ button.btn.btn--secondary:hover span {
   z-index: 10000;
 }
 
-/* Offer Detail */
+/* Offer Detail Indigo Overlay Panel */
 .offer-detail {
   width: 975px;
   min-height: 250px;
@@ -1294,6 +1294,7 @@ button.btn.btn--secondary:hover span {
 .align-status {
   color: #6EBE4A;
   display: inline-block;
+  line-height: 1.2;
 }
 .align-type {
   display: inline-block;
@@ -1303,6 +1304,9 @@ button.btn.btn--secondary:hover span {
   width: 22px;
   height: 22px;
   position: absolute;
+}
+.align-status .overall-status  {
+  padding-left: 5px;
 }
 .overall-status {
   text-transform: uppercase;
