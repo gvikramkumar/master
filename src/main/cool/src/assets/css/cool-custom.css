@@ -1169,6 +1169,11 @@ span[class*="display-"] {
   display: none;
 }
 
+.cool.cui app-menu-bar .ui-overlaypanel .ui-overlaypanel-close:hover {
+  border-color: transparent;
+  background-color: transparent;
+  color: #fff;
+}
 
 /* buttons */
 .btn.btn--transparent {

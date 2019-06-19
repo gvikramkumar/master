@@ -107,7 +107,7 @@
   </div>
 </div>
 
-<p-overlayPanel #basicOfferInfo>
+<p-overlayPanel #basicOfferInfo [dismissable]="true" [showCloseIcon]="true">
   <app-offer-popup [offerBuilderdata]="offerBuilderdata"></app-offer-popup>
 </p-overlayPanel>
 
