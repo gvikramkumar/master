@@ -22,11 +22,8 @@ export class AccessManagementService {
     public sendfunctionalRolRaw = new BehaviorSubject("");
     public sendFromUserRegistration = new BehaviorSubject([]);
     public roles: any;
-    // public baseApiUrl = 'https://cool-srv-dev.cisco.com/coolsrv';
 
-    // public urlGetCEPMRoles:string = `${this.baseApiUrl}/access/fetchCEPMRoles`
-
-
+    public urlGetCEPMRoles:string = this.environmentService.REST_API_GET_CEPMROLES_URL;
     urlBusinessUnit: string = this.environmentService.PDAF_API + '?columns=business_unit&distinct=true';
     urlBusinessEntity: string = this.environmentService.PDAF_API + '?columns=BE&distinct=true';
     urlGetPrimaryBUBasedOnBE: string = this.environmentService.PDAF_API + '?&distinct=true&be=';

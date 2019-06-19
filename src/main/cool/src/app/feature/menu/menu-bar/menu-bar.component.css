@@ -197,6 +197,7 @@ span.menu-label {
 .readOnlyClas{
     pointer-events: none;
     cursor: not-allowed !important;
+    visibility: hidden;
 }
 
 
