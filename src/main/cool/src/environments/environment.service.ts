@@ -127,7 +127,6 @@ export class EnvironmentService {
     REST_API_DESIGN_REVIEW_GET_URL: string;
 
     // OFFER SETUP
-    REST_API_RETRIEVE_MODELING_ACTIVITIES_URL: string;
     REST_API_OFFER_SETUP_MODULE_GET_URL: string;
     REST_API_OFFER_MODULE_STATUS_GET_URL: string;
     REST_API_LOCK_API_FOR_OWB: string;
@@ -137,6 +136,10 @@ export class EnvironmentService {
     REST_API_GET_OFFER_DROPDOWN: string;
     REST_API_REMOVE_ITEM_DETAILS: string;
     REST_API_UPDATE_EGENIE_FLAG: string;
+
+    // MODELING & DESIGN URLs
+    REST_API_RETRIEVE_MODELING_ACTIVITIES_URL: string;
+    REST_API_UPDATE_MODELING_DESIGN_STATUS_URL: string;
 
     // SERVICE ANNUITY URLs
     REST_API_RETRIEVE_SERVICE_ATO_LIST_URL: string;
@@ -430,7 +433,7 @@ export class EnvironmentService {
 
         this.REST_API_LOCK_API_FOR_OWB = this.baseApiUrl + '/owb/lockAPI/';
         this.REST_API_OFFER_SETUP_MODULE_GET_URL = this.baseApiUrl + '/offersetup/getAllModuleStatus/';
-        this.REST_API_RETRIEVE_MODELING_ACTIVITIES_URL = this.baseApiUrl + '/modeling/getModelingActivities';
+
 
         // --------------------------------------- ITEM CREATION --------------------------------------------
 
@@ -438,6 +441,11 @@ export class EnvironmentService {
         this.REST_API_GET_ITEM_DETAILS = this.baseApiUrl + '/itemcreation/getDetails';
         this.REST_API_REMOVE_ITEM_DETAILS = this.baseApiUrl + '/itemcreation/removeATOs';
         this.REST_API_UPDATE_EGENIE_FLAG = this.baseApiUrl + '/itemcreation/getEGenieStatus';
+
+        // ------------------------------------ MODELING & DESIGN -------------------------------------------------
+
+        this.REST_API_RETRIEVE_MODELING_ACTIVITIES_URL = this.baseApiUrl + '/modeling/getModelingActivities';
+        this.REST_API_UPDATE_MODELING_DESIGN_STATUS_URL = this.baseApiUrl + '/modeling/updateModelDesignStatus';
 
         // --------------------------------------- SERVICE ANNUITY  CREATION --------------------------------------------
 
