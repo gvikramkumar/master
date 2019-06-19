@@ -56,6 +56,8 @@ export const serverPromise = Promise.all([mgc.promise, pgc.promise])
         }
       });
 
+      server.timeout = config.serverTimeout;
+
       // to lock down to localhost only:
       // return server.listen(port, '127.0.0.1', function (err) {
       return server.listen(port, function (err) {
