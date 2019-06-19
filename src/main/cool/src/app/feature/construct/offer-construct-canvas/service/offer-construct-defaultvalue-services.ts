@@ -132,21 +132,16 @@ export class OfferConstructDefaultValue {
           element.currentValue = 'No';
           element.previousValue = 'No';
         }
-        // if (element.question == 'TMS Node TS') {
-        //   if (beListType == "Collaboration") {
-        //     element.currentValue = "UC/HVS/SWSS/SUB/TRAN Svc";
-        //     element.previousValue = "UC/HVS/SWSS/SUB/TRAN Svc";
-        //   }
-        //   if (beListType == "Security") {
-        //     element.currentValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
-        //     element.previousValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
-        //   }
-        //   else {
-        //     element.currentValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
-        //     element.previousValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
-        //   }
-        // }
 
+        if (element.question === 'Pricing Type') {
+          if (chargeTypeValue == usageType) {
+            element.currentValue = 'Fixed Amount';
+            element.previousValue = 'Fixed Amount';
+          } else {
+            element.currentValue = 'Scaled Amount';
+            element.previousValue = 'Scaled Amount';
+          }
+        }
     });
     return listOfferQuestions;
   }

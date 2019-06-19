@@ -55,6 +55,8 @@ export class ChangestatusComponent implements OnInit {
   isBtnNeeded: boolean = false;
   mStatus: any;
   showConnectNPIWSbutton: boolean = false;
+  showButton: boolean = false;
+  show_Upload: boolean = false;
 
   basicmodule_hint = {
     "Pricing_Uplift_Setup": "BUPM has completed their Offer's Pricing Uplift activities in OWB Pricing Canvas",
@@ -65,7 +67,6 @@ export class ChangestatusComponent implements OnInit {
     "Export Compliance": "<ol><li>BUPMs must complete the <a href=\"https://pepd.cloudapps.cisco.com/legal/export/pepd/EPReviewForm.do?method=showEPRForm#!/\" target=\"_blank\">Export Product Review Form: </a> </li><li>Once the BUPM has completed the form, they will receive an email notification with the results, as well as an EPR number.</li><li>Offer Leads or BUPMs should document the case number as it may be required for creation of new PIDs.</li><li>Offer Leads or BUPMs should reach out to the GET Team to schedule a due diligence review. The following three points are important to note before the due diligence review:<br/>a. The BUPM will need to explain the correlation between PID and the product the customer receives.<br/> b. Any SW associated with the SBP offering needs an export compliance due diligence review.<br/>  c. If the SW requires a formal US government review, the formal government review may potentially take up to 2-3 months.</li><li>Once the compliance due diligence review is complete, an email will be sent from the GET Team (exportclass@cisco.com) stating the PIDs are compliant.</li><li>If emails need to be sent to the GET Team (exportclass@cisco.com) requesting confirmation that export compliance due diligence is complete, please be sure to reference the EPR # in the subject line of the email.</li></ol>"
   };
   headerName: string;
-  show_Upload: boolean = false;
 
 
 
@@ -99,10 +100,10 @@ export class ChangestatusComponent implements OnInit {
   }
 
   ngOnInit() {
-    if( window.localStorage.getItem('showSprint6') ) {
-      this.show_Upload = Boolean(window.localStorage.getItem('showSprint6'));
-    }
-
+     if(window.localStorage.getItem('showSprint6')) {
+       this.showButton = Boolean(window.localStorage.getItem('showSprint6'));
+       this.show_Upload = Boolean(window.localStorage.getItem('showSprint6'));
+     }
     this.changestatusService.getAllComments(this.moduleName, this.offerId).subscribe(data=>{
       this.comments = data;
     });
