@@ -25,7 +25,7 @@
 
               <li> <span class="menu-label">On Hold/Cancel</span>
 
-                <ul [ngClass]="{'readOnlyClas':dispValue}" *ngIf="!currentOfferId">
+                <ul [ngClass]="{'readOnlyClas':dispValue}" *ngIf="!offerId">
                   <li appReadonly [DirectiveValue]="'On Hold'"
                     [ngClass]="{'readOnlyClas':dispValue,'disable-item': holdStatusValid == true}"
                     (click)='showOppupFunc("hold")'>
@@ -38,8 +38,8 @@
                   </li>
                 </ul>
 
-                <ul *ngIf="currentOfferId">
-                  <ul [ngClass]="{'readOnlyClas':dispValue}" *ngIf="currentOfferId">
+                <div *ngIf="offerId">
+                  <ul [ngClass]="{'readOnlyClas':dispValue}" *ngIf="offerId">
                     <li appReadonly [DirectiveValue]="'On Hold'"
                       [ngClass]="{'readOnlyClas':dispValue,'disable-item': holdStatusValid !== true}"
                       (click)='showOppupFunc("hold")'>
@@ -52,14 +52,14 @@
                       <span [ngClass]="{'disable-item':dispValue}" class="link">Cancel</span>
                     </li>
                   </ul>
-                </ul>
+                </div>
 
               </li>
+              </ul>
 
-            </ul>
           </div>
 
-          <span *ngIf="!currentOfferId; then newOffer else oldOffer"></span>
+          <span *ngIf="!offerId; then newOffer else oldOffer"></span>
 
           <ng-template #newOffer>
             <span>Create New Offer</span>
@@ -68,7 +68,7 @@
           <ng-template #oldOffer>
             <span> {{offerName}}</span>
             <button class="btn btn--icon btn--transparent">
-              <span class="icon-more" (click)="basicOfferInfo.toggle($event)">
+              <span class="icon-more" (click)="showOfferInfo($event,basicOfferInfo)">
               </span>
             </button>
           </ng-template>
@@ -84,7 +84,7 @@
           Save
         </button>
 
-        <!-- 
+        <!--
         <label class="menu-btn switch switch—large" *ngIf="showMarkcompleteToggle">
             <input type="checkbox" [(ngModel)]="markCompleteStatus" (change)="toggleMarkCompletePopup()"
             [disabled]="(markCompleteStatus==false&&canMarkComplete==false)||(markCompleteStatus==true&&canUncheckComplete==false)"/>
@@ -92,11 +92,11 @@
             <span class="switch__label">Mark Complete</span>
         </label> -->
 
-        <button (click)="goBack()" class="menu-btn" *ngIf="!currentOfferId">
+        <button (click)="goBack()" class="menu-btn" *ngIf="!offerId">
           <span class="icon-close"></span> Cancel
         </button>
 
-        <button class="menu-btn" (click)="gotoOfferviewDetails()" *ngIf="currentOfferId">
+        <button class="menu-btn" (click)="gotoOfferviewDetails()" *ngIf="offerId">
           <span class="ico-offer-details"></span>
           Offer Details
         </button>
@@ -108,12 +108,12 @@
 </div>
 
 <p-overlayPanel #basicOfferInfo>
-  <app-offer-detail-pop-up [offerId]="offerId"></app-offer-detail-pop-up>
+  <app-offer-popup [offerBuilderdata]="offerBuilderdata"></app-offer-popup>
 </p-overlayPanel>
 
-<app-menu-bar-popup [popupType]="popupType" (closePopup)="closePopup($event)"></app-menu-bar-popup>
+<!-- <app-menu-bar-popup [popupType]="popupType" (closePopup)="closePopup($event)"></app-menu-bar-popup> -->
 
-<app-mark-complete-popup [offerId]="currentOfferId" [caseId]="caseId" [show]="showMarkcompletePopup"
+<app-mark-complete-popup [offerId]="offerId" [caseId]="caseId" [show]="showMarkcompletePopup"
   [currentURL]="currentURL" [markCompleteStatus]="markCompleteStatus"
   (closeMarkCompletePopup)="closeMarkCompletePopup()" (confirmMarkComplete)="confirmMarkComplete()">
 </app-mark-complete-popup>

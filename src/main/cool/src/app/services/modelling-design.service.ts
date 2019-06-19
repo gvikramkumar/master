@@ -12,9 +12,14 @@ export class ModellingDesignService {
 
   constructor(private httpClient: HttpClient, private environmentService: EnvironmentService) { }
 
-  retrieveAtoList(offerId: string): Observable<ModellingDesign> {
-    const url = this.environmentService.REST_API_RETRIEVE_ATO_LIST_URL + '?offerId=' + offerId;
+  retrieveModelingActivities(offerId: string): Observable<ModellingDesign> {
+    const url = this.environmentService.REST_API_RETRIEVE_MODELING_ACTIVITIES_URL + '/' + offerId;
     return this.httpClient.get<ModellingDesign>(url).pipe(retry(1));
+  }
+
+  updateModelingDesignStatus(offerId: string, selectedAto: string) {
+    const url = this.environmentService.REST_API_UPDATE_MODELING_DESIGN_STATUS_URL + '/' + offerId + '/' + selectedAto;
+    return this.httpClient.put(url, null);
   }
 
 }

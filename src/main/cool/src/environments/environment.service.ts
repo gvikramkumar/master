@@ -99,6 +99,7 @@ export class EnvironmentService {
     REST_API_UPDATE_USER_INFO_URL: string;
     REST_API_RETRIEVE_USER_INFO_URL: string;
     REST_API_ACCESS_MANAGEMENT_GET_ALL_URL: string;
+    REST_API_GET_CEPM_ROLES_URL: string;
 
     //   ACTION URLs
     REST_API_POST_ACTION_URL: string;
@@ -126,16 +127,19 @@ export class EnvironmentService {
     REST_API_DESIGN_REVIEW_GET_URL: string;
 
     // OFFER SETUP
-    REST_API_RETRIEVE_ATO_LIST_URL: string;
     REST_API_OFFER_SETUP_MODULE_GET_URL: string;
     REST_API_OFFER_MODULE_STATUS_GET_URL: string;
     REST_API_LOCK_API_FOR_OWB: string;
-    
+
     // ITEM CREATION URLs
     REST_API_GET_ITEM_DETAILS: string;
     REST_API_GET_OFFER_DROPDOWN: string;
     REST_API_REMOVE_ITEM_DETAILS: string;
     REST_API_UPDATE_EGENIE_FLAG: string;
+
+    // MODELING & DESIGN URLs
+    REST_API_RETRIEVE_MODELING_ACTIVITIES_URL: string;
+    REST_API_UPDATE_MODELING_DESIGN_STATUS_URL: string;
 
     // SERVICE ANNUITY URLs
     REST_API_RETRIEVE_SERVICE_ATO_LIST_URL: string;
@@ -193,6 +197,13 @@ export class EnvironmentService {
 
     // PIRATE SHIP NOTIFICATION URLs
     REST_API_PIRATE_SHIP_DASHBOARD_NOTIFICATION_URL;
+
+    // Royalty_setup Doc upload
+
+    REST_API_BasicModule_upload: string;
+    REST_API_BasicModule_DownloadDoc: string;
+    REST_API_BasicModuleFileName: string;
+    REST_API_BasicModuleDocType: string;
 
     // -------------------------------------------------------------------------------------------------
 
@@ -387,6 +398,7 @@ export class EnvironmentService {
         this.REST_API_UPDATE_USER_INFO_URL = this.baseApiUrl + '/access/updateUser';
         this.REST_API_CREATE_NEW_USER_URL = this.baseApiUrl + '/access/createNewUser';
         this.REST_API_ACCESS_MANAGEMENT_GET_ALL_URL = this.baseApiUrl + '/access/getAll';
+        this.REST_API_GET_CEPM_ROLES_URL = this.baseApiUrl + '/access/fetchCEPMRoles';
 
         // ---------------------------------  ACTION URLs -----------------------------------------------------------
 
@@ -419,16 +431,21 @@ export class EnvironmentService {
 
         // ------------------------------------ OFFER SETUP -------------------------------------------------
 
-        this.REST_API_RETRIEVE_ATO_LIST_URL = this.baseApiUrl + '/offersetup/getOWBModelObject/';
-        this.REST_API_OFFER_SETUP_MODULE_GET_URL = this.baseApiUrl + '/offersetup/getAllModuleStatus/';
         this.REST_API_LOCK_API_FOR_OWB = this.baseApiUrl + '/owb/lockAPI/';
-       
+        this.REST_API_OFFER_SETUP_MODULE_GET_URL = this.baseApiUrl + '/offersetup/getAllModuleStatus/';
+
+
         // --------------------------------------- ITEM CREATION --------------------------------------------
 
         this.REST_API_GET_OFFER_DROPDOWN = this.baseApiUrl + '/itemcreation/getATOs';
         this.REST_API_GET_ITEM_DETAILS = this.baseApiUrl + '/itemcreation/getDetails';
         this.REST_API_REMOVE_ITEM_DETAILS = this.baseApiUrl + '/itemcreation/removeATOs';
         this.REST_API_UPDATE_EGENIE_FLAG = this.baseApiUrl + '/itemcreation/getEGenieStatus';
+
+        // ------------------------------------ MODELING & DESIGN -------------------------------------------------
+
+        this.REST_API_RETRIEVE_MODELING_ACTIVITIES_URL = this.baseApiUrl + '/modeling/getModelingActivities';
+        this.REST_API_UPDATE_MODELING_DESIGN_STATUS_URL = this.baseApiUrl + '/modeling/updateModelDesignStatus';
 
         // --------------------------------------- SERVICE ANNUITY  CREATION --------------------------------------------
 
@@ -501,5 +518,11 @@ export class EnvironmentService {
 
         this.REST_API_PIRATE_SHIP_DASHBOARD_NOTIFICATION_URL = this.baseApiUrl + '/dashboard/notification/generate';
 
+
+        // -------------------------------------------------Basic Module DOCUMENT UPLOAD URL--------------------------------
+        this.REST_API_BasicModule_upload = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/UpLoadDoc';
+        this.REST_API_BasicModule_DownloadDoc = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/DownloadDoc';
+        this.REST_API_BasicModuleFileName = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/getFileName';
+        this.REST_API_BasicModuleDocType = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/getUploadDetail';
     }
 }

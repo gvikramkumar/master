@@ -28,8 +28,8 @@ export class CsdlIntegrationService {
   }
 
   refreshProjects(): Observable<any> {
-    const url = `${this.environmentService.REST_API_REFRESH_PROJECTS}`;
-    return this._http.get(url);
+    const url = this.environmentService.REST_API_REFRESH_PROJECTS;
+    return this._http.get(url, { withCredentials: true });
   }
 
   getCsdlInfo(offerId): Observable<any> {

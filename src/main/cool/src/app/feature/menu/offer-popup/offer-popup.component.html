@@ -1,6 +1,6 @@
 <div class="panel panel--indigo offer-detail">
 
-  <div class="offer-header">
+  <div class="offer-header" *ngIf="offerBuilderdata">
 
     <div class="row">
 
@@ -12,12 +12,19 @@
       </div>
 
       <div class="col-md-6">
-        <div class="flex-fluid text-left half-margin-left half-margin-bottom half-margin-top">
+        <div class="flex-fluid text-left half-margin-left half-margin-bottom base-margin-top">
           <div class="align-status half-margin-right" *ngIf="offerBuilderdata['overallStatus']">
-            <span class="icon-software-certified"></span>
-            <span class="align-type half-margin-left">
-              {{ offerBuilderdata['overallStatus'] }} | {{ offerBuilderdata['derivedMM'] }}
+
+            <app-offer-status [status]="offerBuilderdata['overallStatus']"></app-offer-status>
+
+            <span class="base-margin-left overall-status">
+              {{ offerBuilderdata['overallStatus'] }}
             </span>
+
+            <span class="align-type">
+              {{ offerBuilderdata['derivedMM'] }}
+            </span>
+
           </div>
         </div>
       </div>
@@ -38,10 +45,10 @@
           <div class="display-6">Business Entity</div>
           <div>
             {{
-                  offerBuilderdata["BEList"] != null
-                    ? offerBuilderdata["BEList"].join(", ")
-                    : ""
-                }}
+                    offerBuilderdata["BEList"] != null
+                      ? offerBuilderdata["BEList"].join(", ")
+                      : ""
+                  }}
           </div>
         </div>
       </div>
@@ -55,9 +62,9 @@
           <div class="display-6">Expected Launch Date</div>
           <div>
             {{
-              offerBuilderdata["expectedLaunchDate"]
-              | date:'dd-MMM-yyyy'
-            }}
+                offerBuilderdata["expectedLaunchDate"]
+                | date:'dd-MMM-yyyy'
+              }}
           </div>
         </div>
       </div>
@@ -67,10 +74,10 @@
           <div class="display-6">Business Unit</div>
           <div>
             {{
-                  offerBuilderdata["BUList"] != null
-                    ? offerBuilderdata["BUList"].join(", ")
-                    : ""
-                }}
+                    offerBuilderdata["BUList"] != null
+                      ? offerBuilderdata["BUList"].join(", ")
+                      : ""
+                  }}
           </div>
         </div>
       </div>

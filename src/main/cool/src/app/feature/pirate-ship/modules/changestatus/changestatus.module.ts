@@ -10,11 +10,15 @@ import { CHANGE_STATUS_ROUTES } from './changestatus.routes';
 import {ChangestatusComponent } from './changestatus.component';
 import { ShareModalComponent } from './share-modal/share-modal.component';
 import { SharedataService } from './sharedata.service';
+import { UploadDocComponent } from './upload-doc/upload-doc.component';
+import { TestOrderabilityComponent } from './test-orderability/test-orderability.component';
 
 @NgModule({
     declarations: [
         ChangestatusComponent,
-        ShareModalComponent
+        ShareModalComponent,
+        UploadDocComponent,
+        TestOrderabilityComponent
     ],
     imports: [
         SharedModule,

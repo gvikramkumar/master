@@ -3,11 +3,19 @@
         <div class="modal__dialog">
           <div class="modal__content">
             <a class="modal__close" (click)="closeModal()"><span class="icon-close"></span></a>
+            <div class="modal__header">
+              <div>
+                <ng-content select="[modalheader]">
+
+                </ng-content>
+
+              </div>
+            </div>
             <div class="modal__body">
               <div>
                 <ng-content select="[modalbody]"></ng-content>
               </div>
-      
+
             </div>
           </div>
         </div>

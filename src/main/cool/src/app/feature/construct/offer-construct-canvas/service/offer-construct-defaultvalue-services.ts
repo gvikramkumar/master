@@ -727,6 +727,7 @@ export class OfferConstructDefaultValue {
     questionList.forEach(question => {
       if (question.question == "Enablement File Type") {
         question.rules.isDisabled = false;
+        question.rules.isMandatoryOptional = "Mandatory";
       }
     });
     return questionList;
@@ -1250,15 +1251,20 @@ getCountryNameValues(questionList) {
      questionList.forEach(question => {
        if (question.question == "Country Specific Association" || question.question == "ROHS") {
               countryName = question.currentValue.split(',')
-              countryName.forEach(element => {
-              if(countryValues.includes(element)){
+              //countryName.forEach(element => {
+              for(let i=0;i<countryName.length;i++){
+
+              if(countryValues.includes(countryName[i])){
                  question.rules.isvalid = true;
               }
               else{
                    question.rules.isvalid = false;
                    question.rules.validationMessage = "Entry of a comma separated list of Country Names with no spaces";
+                   break;
+
               }
-            })
+            }
+          //  })
        }
      });
    }
@@ -1292,8 +1298,9 @@ getCountryNameValues(questionList) {
    });
    questionList.forEach(question => {
      if (question.question == "Enablement File Type"){
-       if(enablementFileType == "Y"){
+       if(enablementFileType == "Yes"){
            question.rules.isDisabled = false;
+           question.rules.isMandatoryOptional = "Mandatory";
        }
        else{
            question.rules.isDisabled = true;
@@ -1319,6 +1326,27 @@ setItemTypeBillingDefault(questionList) {
            question.currentValue = "PRODUCT LIST>$0";
          }
      });
+ }
+
+ getBasePIDValues(questionList) {
+    let udiValue;
+    questionList.forEach(question => {
+        if (question.question == "UDI Value") {
+          udiValue = question.currentValue;
+        }
+    });
+    questionList.forEach(question => {
+      if (question.question == "Base PID"){
+        if(udiValue == "Full UDI Compliance" || udiValue == "Will implement Physical visibility only"
+              || udiValue == "Will implement Electronic visibility only"){
+            question.rules.isDisabled = false;
+        }
+        else{
+            question.rules.isDisabled = true;
+            question.currentValue = "";
+        }
+      }
+    });
  }
 
 }

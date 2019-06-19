@@ -54,15 +54,19 @@ export class ChangestatusComponent implements OnInit {
   ishide: boolean = true;
   isBtnNeeded: boolean = false;
   mStatus: any;
+  showConnectNPIWSbutton: boolean = false;
+  showButton: boolean = false;
+  show_Upload: boolean = false;
 
   basicmodule_hint = {
     "Pricing_Uplift_Setup": "BUPM has completed their Offer's Pricing Uplift activities in OWB Pricing Canvas",
     "Test_Orderability": "<ol><li>NPPM must create a test order in CCW to ensure all aspects of the ordering process are functioning properly and there are no gaps or issues.</li><li>BUPM and Offer Lead should meet with the NPPM to complete the ordering process in CCW and confirm all ordering rules are correct.</li><li>After the order is created, Offer Lead should track the order to ensure the order closes as expected and flows to SBP properly without any system issues.</li></ol>",
     "Offer_Attribution": "<ol><li>BUPM must get the proposed OA split approved by Global Revenue and the OA Board. The BUPM, BUC, and TSPM must be engaged in this conversation.</li><li>The BUPM must create the OA child PID(s) in eGenie (PID type is SW Subscription Mapped SKU) to dictate where the revenue will be routed.</li><li>Create an OA child PID for each group that is receiving revenue (i.e. a PID for the BU and a PID for SOA).  It is possible to leverage existing OA child PIDs if the revenue is being routed to the same team</li><li>The BU Controller must approve these PIDs before moving on to the next step</li><li>Once the OA child PIDs are approved in eGenie, BUPM or Offer Lead must complete the OA Mapping Template (PDT can download latest version of template in eGenie</li><li>BUPM must submit completed template to PDT by opening an NPI Workspace Case.</li><li>PDT will complete the OA setup and will reach out to Global Revenue to approve</li><li> Once Global Revenue has approved, the Offer Lead can click the \"Mark as Complete\" button.</li></ol>",
-    "NPI_Licensing": "SW Licensing Stakeholder ensures that NPI licensing activities are complete ",
+    "NPI_Licensing": "License PM Stakeholder ensures that NPI licensing activities are complete ",
     "Royalty_Setup": "<ol><li>BUPM must engage with the NPPM to fill out the Royalty Configuration Template. BUPM can provide either a reference PID from a past offer that has the same royalties or provide attributes related to the supplier and product.</li><li>The NPPM will work with the Royalty team to complete the royalty setup. Once complete, the BUPM can validate the PID royalty setup using the Royalty Rate Master Report (RRM).</li></ol>",
     "Export Compliance": "<ol><li>BUPMs must complete the <a href=\"https://pepd.cloudapps.cisco.com/legal/export/pepd/EPReviewForm.do?method=showEPRForm#!/\" target=\"_blank\">Export Product Review Form: </a> </li><li>Once the BUPM has completed the form, they will receive an email notification with the results, as well as an EPR number.</li><li>Offer Leads or BUPMs should document the case number as it may be required for creation of new PIDs.</li><li>Offer Leads or BUPMs should reach out to the GET Team to schedule a due diligence review. The following three points are important to note before the due diligence review:<br/>a. The BUPM will need to explain the correlation between PID and the product the customer receives.<br/> b. Any SW associated with the SBP offering needs an export compliance due diligence review.<br/>  c. If the SW requires a formal US government review, the formal government review may potentially take up to 2-3 months.</li><li>Once the compliance due diligence review is complete, an email will be sent from the GET Team (exportclass@cisco.com) stating the PIDs are compliant.</li><li>If emails need to be sent to the GET Team (exportclass@cisco.com) requesting confirmation that export compliance due diligence is complete, please be sure to reference the EPR # in the subject line of the email.</li></ol>"
   };
+  headerName: string;
 
 
 
@@ -96,7 +100,10 @@ export class ChangestatusComponent implements OnInit {
   }
 
   ngOnInit() {
-
+     if(window.localStorage.getItem('showSprint6')) {
+       this.showButton = Boolean(window.localStorage.getItem('showSprint6'));
+       this.show_Upload = Boolean(window.localStorage.getItem('showSprint6'));
+     }
     this.changestatusService.getAllComments(this.moduleName, this.offerId).subscribe(data=>{
       this.comments = data;
     });
@@ -106,14 +113,14 @@ export class ChangestatusComponent implements OnInit {
   }
 
   findFunctionRoles(moduleName: string, pirateShipSharedService: PirateShipSharedService) {
-    console.log('pirateShipSharedService : ', pirateShipSharedService.getRole());
+
     switch (moduleName) {
       case 'NPI Licensing': {
         this.infohelp = this.basicmodule_hint.NPI_Licensing;
         if ( pirateShipSharedService &&
           pirateShipSharedService.getRole()
           &&
-          pirateShipSharedService.getRole() === 'SW Licensing') {
+          pirateShipSharedService.getRole() === 'License PM') {
 
           this.isReadOnly = false;
         }
@@ -140,6 +147,7 @@ export class ChangestatusComponent implements OnInit {
         break;
       }
       case 'Offer Attribution': {
+        this.showConnectNPIWSbutton = true;
         this.infohelp = this.basicmodule_hint.Offer_Attribution;
         if ( pirateShipSharedService &&
           pirateShipSharedService.getRole()
@@ -390,6 +398,7 @@ export class ChangestatusComponent implements OnInit {
   }
 
   changemodalstatus() {
+    this.headerName = "Activities are completed when...";
     this.infohelp = 'TESTING...';
 
     switch (this.moduleName) {
@@ -424,10 +433,15 @@ export class ChangestatusComponent implements OnInit {
   }
 
   markAsCompleteModal(labelName: string) {
+    this.headerName = "";
     //console.log('complete' , labelName);
     this.isBtnNeeded = true;
     this.infohelp = '<div style="text-align: center ! important;">Are you sure you would like to mark this as complete? Once completing a module, you will not be able to move it back to \"In-progress\" </div>';
     this.ishide = !this.ishide;
+  }
+
+  openNPIWS() {
+    window.open("https://npiws.cloudapps.cisco.com/npi-webapp/npi/showHome", "_blank");
   }
 
 }

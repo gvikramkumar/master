@@ -22,6 +22,7 @@ export class CsdlPayload {
   associationErrorCode: string;
   projectName: string;
   enforcementLabel: string;
+  latestUpdatedDate: string;
 
   constructor() {
   }
