@@ -145,7 +145,8 @@ export class CreateOfferCoolComponent implements OnInit {
   loadPrimaryBe() {
     // Get Primary BE (hard code 'all')
     this.createOfferService.getDistinctBE().subscribe(data => {
-       const primaryBeArry = [{ label: 'All', value: 'All' }];
+       //const primaryBeArry = [{ label: 'All', value: 'All' }];
+       const primaryBeArry = [];
        const secondaryBeArry = [];
       const dataArray = data as Array<any>;
       dataArray.forEach(element => {
@@ -366,12 +367,13 @@ export class CreateOfferCoolComponent implements OnInit {
     return new Promise((resolve) => {
       this.createOfferService.getPrimaryBusinessEntity(event.toString())
         .subscribe(data => {
-          const primaryBeArry = [{ label: 'All', value: 'All' }];
+          //const primaryBeArry = [{ label: 'All', value: 'All' }];
+          const primaryBeArry = [];
           // When primary business unit is selected as 'All'
           // then entities are displayed as 'all
-          if (data.length === 0 && this.userSelectedAllUnits) {
-            primaryBeArry.push({ label: 'All', value: 'All' });
-          }
+          // if (data.length === 0 && this.userSelectedAllUnits) {
+          //   primaryBeArry.push({ label: 'All', value: 'All' });
+          // }
 
           data.forEach(element => {
             primaryBeArry.push({ label: element.BE, value: element.BE });
