@@ -8,7 +8,7 @@
         </div>
         <br/><br/>
         <div>
-          <input type="file"  id="myFileInput" (change)="handleFileInput($event.target.files)"/>
+          <input type="file"  id="myFileInput" (change)="handleFileInput($event.target.files)" onclick="this.value=null;"/>
         </div>
       </form>
     </div>
