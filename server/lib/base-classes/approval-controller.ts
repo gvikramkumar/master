@@ -54,7 +54,7 @@ export default class ApprovalController extends ControllerBase {
         newItem.approvalUrl = `${req.headers.origin}/prof/${req.query.type}/edit/${savedItem.id};mode=view`;
         this.repo.update(newItem, '', true, true, false)
           .then(updatedItem => {
-            return this.sendApprovalEmail(req, ApprovalMode.submit, updatedItem)
+            return this.sendApprovalEmail(null, req, ApprovalMode.submit, updatedItem)
               .then(() => res.json(updatedItem));
           });
       })
@@ -143,7 +143,7 @@ export default class ApprovalController extends ControllerBase {
             .then(() => item);
         })
         .then(item => {
-          return this.sendApprovalEmail(req, ApprovalMode.approve, item)
+          return this.sendApprovalEmail(data.approveRejectMessage, req, ApprovalMode.approve, item)
             .then(() => {
               if (approveOne) {
                 res.json(item);
@@ -160,7 +160,7 @@ export default class ApprovalController extends ControllerBase {
       .then(() => {
         this.updateOneNoValidatePromise(data, req.user.id, false)
           .then(item => {
-            return this.sendApprovalEmail(req, ApprovalMode.reject, item)
+            return this.sendApprovalEmail(data.approveRejectMessage, req, ApprovalMode.reject, item)
               .then(() => res.json(item));
           });
       });
@@ -205,12 +205,13 @@ export default class ApprovalController extends ControllerBase {
     return Promise.resolve(data);
   }
 
-  sendApprovalEmail(req, mode: ApprovalMode, item: AnyObj): Promise<any> {
+  sendApprovalEmail(approveRejectMessage, req, mode: ApprovalMode, item: AnyObj): Promise<any> {
     throw new ApiError(`sendApprovalEmail not implemented`);
   }
 
-  sendApprovalEmailBase(req, mode: ApprovalMode, item: AnyObj, type: string, omitProperties): Promise<any> {
-    const data = req.body;
+  // approveRejectMessage: we send this in body, BUT IT'S NOT IN REPO (we don't want it there),
+  // so we won't have it in item because that's after a repo save, so we'll just pull it out of body and send it in separately
+  sendApprovalEmailBase(approveRejectMessage, req, mode: ApprovalMode, item: AnyObj, type: string, omitProperties): Promise<any> {
     const moduleId = req.dfa.moduleId;
     const link = `<a href="${item.approvalUrl}">${item.approvalUrl}</a>`;
     let body, requester;
@@ -219,15 +220,15 @@ export default class ApprovalController extends ControllerBase {
     const bizAdminEmail = req.dfa.bizAdminEmail;
     const ppmtEmail = req.dfa.ppmtEmail;
     const promises = [];
-    if (mode === ApprovalMode.submit && data.approvedOnce === 'Y') {
-      promises.push(this.repo.getOneLatestActiveInactive({moduleId, name: data.name, approvedOnce: 'Y'}));
+    if (mode === ApprovalMode.submit && item.approvedOnce === 'Y') {
+      promises.push(this.repo.getOneLatestActiveInactive({moduleId, name: item.name, approvedOnce: 'Y'}));
     }
     return Promise.all(promises)
       .then(results => {
         switch (mode) {
           case ApprovalMode.submit:
-            if (data.approvedOnce === 'Y') {
-              body = `The "${data.name}" DFA ${type} has been updated and submitted by ${req.user.fullName} for approval: <br><br>${link}`;
+            if (item.approvedOnce === 'Y') {
+              body = `The "${item.name}" DFA ${type} has been updated and submitted by ${req.user.fullName} for approval: <br><br>${link}`;
               const oldObj = results[0];
               if (oldObj) {
                 if (item.toObject) {
@@ -243,18 +244,18 @@ export default class ApprovalController extends ControllerBase {
             return mail.sendHtmlMail(dfaAdminEmail, bizAdminEmail, `${itadminEmail},${ppmtEmail},${svrUtil.getEnvEmail(req.user.email)}`,
               submitSubject, body);
           case ApprovalMode.approve:
-            body = `The "${data.name}" DFA ${type} submitted by ${item.updatedBy} for approval has been approved:<br><br>${link}`;
-            if (data.approveRejectMessage) {
-              body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
+            body = `The "${item.name}" DFA ${type} submitted by ${item.updatedBy} for approval has been approved:<br><br>${link}`;
+            if (approveRejectMessage) {
+              body += `<br><br><br>Comments:<br><br>${approveRejectMessage.replace('\n', '<br>')}`;
             }
             requester = svrUtil.getEnvEmail(`${item.updatedBy}@cisco.com`);
             const approveSubject = `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Approved`;
             return mail.sendHtmlMail(bizAdminEmail, requester, `${itadminEmail},${ppmtEmail}`,
               approveSubject, body);
           case ApprovalMode.reject:
-            body = `The "${data.name}" DFA ${type} submitted by ${item.updatedBy} for approval has been rejected:<br><br>${link}`;
-            if (data.approveRejectMessage) {
-              body += `<br><br><br>Comments:<br><br>${data.approveRejectMessage.replace('\n', '<br>')}`;
+            body = `The "${item.name}" DFA ${type} submitted by ${item.updatedBy} for approval has been rejected:<br><br>${link}`;
+            if (approveRejectMessage) {
+              body += `<br><br><br>Comments:<br><br>${approveRejectMessage.replace('\n', '<br>')}`;
             }
             requester = svrUtil.getEnvEmail(`${item.updatedBy}@cisco.com`);
             const rejectSubject = `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Not Approved`;
