@@ -89,21 +89,21 @@
                         <!-- Completed -->
                         <button *ngIf="element['status']=='Completed'"
                           class="btn btn--small btn--success base-margin-bottom" placement="top"
-                          (click)="designReviewComplete && getElementDetails(element)"><span
+                          (click)="getElementDetails(element)"><span
                             class="icon-check pull-left"></span>&nbsp;
                           {{element["moduleName"]}}
                         </button>
                         <!-- In Progress-->
                         <button *ngIf="element['status']=='In Progress'"
                           class="btn btn--small btn--warning base-margin-bottom" placement="top"
-                          (click)="designReviewComplete && getElementDetails(element)"><span
+                          (click)="getElementDetails(element)"><span
                             class="in-progress pull-left"></span>&nbsp;
                           {{element["moduleName"]}}
                         </button>
                         <!-- Available -->
                         <button *ngIf="element['status']=='Available'"
                           class="btn btn--small btn--primary base-margin-bottom" placement="top"
-                          (click)="designReviewComplete && getElementDetails(element)">
+                          (click)="getElementDetails(element)">
                           {{element["moduleName"]}}
                         </button>
                         <!-- Not Yet Available -->

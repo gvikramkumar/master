@@ -210,7 +210,8 @@
                                         <li
                                           *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'Req Start Date Window' &&
                                           pInfo.egineAttribue !== 'Default Auto Renewal Term' && pInfo.rules.validationMessage != '' && pInfo.egineAttribue !== 'Description' && pInfo.egineAttribue !== 'True Up Term'
-                                          && pInfo.egineAttribue !== 'NON STD AUTO RENEWAL TERM' && pInfo.egineAttribue !== 'NON STD INITIAL TERM' && pInfo.egineAttribue !== 'Asset Quantity'">
+                                          && pInfo.egineAttribue !== 'NON STD AUTO RENEWAL TERM' && pInfo.egineAttribue !== 'NON STD INITIAL TERM'
+                                          && pInfo.egineAttribue !== 'Asset Quantity' && pInfo.egineAttribue !== 'Spare Price'">
                                           {{pInfo.rules.validationMessage}}</li>
                                         <li
                                           *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
@@ -239,6 +240,9 @@
                                                 <li
                                                   *ngIf="pInfo.egineAttribue === 'Asset Quantity' && pInfo.rules.validationMessage != ''">
                                                   Must be a numeric value</li>
+                                                <li
+                                                  *ngIf="pInfo.egineAttribue === 'Spare Price' && pInfo.rules.validationMessage != ''">
+                                                  Mandatory entry of a numeric value</li>
 
                                       </ul>
                                     </div>
@@ -584,7 +588,8 @@
                                         <li
                                           *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'Req Start Date Window'
                                           && pInfo.egineAttribue !== 'Default Auto Renewal Term' && pInfo.rules.validationMessage != '' && pInfo.egineAttribue !== 'True Up Term'
-                                          && pInfo.egineAttribue !== 'NON STD AUTO RENEWAL TERM' && pInfo.egineAttribue !== 'NON STD INITIAL TERM' && pInfo.egineAttribue !== 'Asset Quantity'">
+                                          && pInfo.egineAttribue !== 'NON STD AUTO RENEWAL TERM' && pInfo.egineAttribue !== 'NON STD INITIAL TERM' &&
+                                          pInfo.egineAttribue !== 'Asset Quantity' && pInfo.egineAttribue !== 'Spare Price'">
                                           {{pInfo.rules.validationMessage}}</li>
                                         <li
                                           *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
@@ -610,6 +615,9 @@
                                           <li
                                             *ngIf="pInfo.egineAttribue === 'Asset Quantity' && pInfo.rules.validationMessage != ''">
                                             Must be a numeric value</li>
+                                            <li
+                                              *ngIf="pInfo.egineAttribue === 'Spare Price' && pInfo.rules.validationMessage != ''">
+                                              Mandatory entry of a numeric value</li>
                                       </ul>
                                     </div>
 
