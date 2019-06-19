@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import { Observable, Subject} from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 import { EnvironmentService } from '../../environments/environment.service';
 import { CreateAction } from '../models/create-action';
@@ -10,10 +10,8 @@ import { UserService } from '@app/core/services';
 
 @Injectable()
 export class ActionsService {
-  public changeUploadButtonStatus: Subject<string> = new Subject<string>();
+  // public changeUploadButtonStatus: Subject<string> = new Subject<string>();
   constructor(private _http: HttpClient, private userService: UserService, private environmentService: EnvironmentService,
-
-
               ) {
 
   }

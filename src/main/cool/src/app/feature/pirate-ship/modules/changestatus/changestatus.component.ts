@@ -9,7 +9,6 @@ import { PirateShipSharedService } from '@app/services/pirate-ship-shared.servic
 import { OfferSetupService } from '@app/services/offer-setup.service';
 import { RightPanelService } from '@app/services/right-panel.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
-import {ActionsService} from '@app/services/actions.service';
 
 
 @Component({
@@ -81,7 +80,6 @@ export class ChangestatusComponent implements OnInit {
               private offerSetupService: OfferSetupService,
               private rightPanelService: RightPanelService,
               private stakeholderfullService: StakeholderfullService,
-              private _actionService: ActionsService
   ) {
 
     this.activatedRoute.params.subscribe(params => {
@@ -102,10 +100,10 @@ export class ChangestatusComponent implements OnInit {
   }
 
   ngOnInit() {
-     if(window.localStorage.getItem('showSprint6')) {
-       this.showButton = Boolean(window.localStorage.getItem('showSprint6'));
-       this.show_Upload = Boolean(window.localStorage.getItem('showSprint6'));
-     }
+    if(window.localStorage.getItem('showSprint6')) {
+      this.showButton = Boolean(window.localStorage.getItem('showSprint6'));
+      this.show_Upload = Boolean(window.localStorage.getItem('showSprint6'));
+    }
     this.changestatusService.getAllComments(this.moduleName, this.offerId).subscribe(data=>{
       this.comments = data;
     });
@@ -250,7 +248,6 @@ export class ChangestatusComponent implements OnInit {
     this.changestatusService.updateStatus(data).subscribe(obj => {
       this.moduleOfStatus = obj;
       this.mStatus = obj;
-      this._actionService.changeUploadButtonStatus.next(this.mStatus);
     });
     this.ishide = !this.ishide;
     //this.mStatus.status = 'Complete';
@@ -283,7 +280,6 @@ export class ChangestatusComponent implements OnInit {
       });
     }
     this.cmnt.description = '';
-
   }
 
   goBackToOfferSetup() {
