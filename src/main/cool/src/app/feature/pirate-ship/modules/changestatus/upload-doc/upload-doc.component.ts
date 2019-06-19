@@ -3,6 +3,7 @@ import {EnvironmentService} from '@env/environment.service';
 import {HttpClient, HttpHeaders, HttpParams, HttpRequest} from '@angular/common/http';
 import {ActionsAndNotifcations} from '@app/feature/dashboard/action';
 import {UserService} from '@core/services';
+import {ActionsService} from '@app/services/actions.service';
 
 @Component({
   selector: 'app-upload-doc',
@@ -24,22 +25,32 @@ export class UploadDocComponent implements OnInit {
   DocSize: number;
  @Input() isReadonly: boolean;
   ishide: boolean = true;
+  @Input() ModuleCompleted: any;
 
   constructor(
    public _evnService: EnvironmentService,
     public httpClient: HttpClient,
-   private _userService: UserService
+   private _userService: UserService,
+   private _actionService: ActionsService
   ) { }
 
   ngOnInit() {
+    if ( this.ModuleCompleted === "Complete") {
+      this.isReadonly = true;
+    }
+    this._actionService.changeUploadButtonStatus.subscribe(
+      (res: any) =>{
+        if ( res.status === "Complete") {
+          this.isReadonly = true;
+        }
+      }
+    );
     this.httpClient.get(this._evnService.REST_API_BasicModuleDocType,{
       params: new HttpParams().set('moduleName', this.moduleName)
     }).subscribe(
       (ModuleExtension: any) => {
-          console.log(ModuleExtension);
           this.DocType = ModuleExtension.documentType.split('|');
           this.DocSize = ModuleExtension.size;
-
       }
     );
     this.info = "";

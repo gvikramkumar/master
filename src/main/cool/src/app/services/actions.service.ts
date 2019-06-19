@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 import { EnvironmentService } from '../../environments/environment.service';
 import { CreateAction } from '../models/create-action';
@@ -10,8 +10,13 @@ import { UserService } from '@app/core/services';
 
 @Injectable()
 export class ActionsService {
+  public changeUploadButtonStatus: Subject<string> = new Subject<string>();
+  constructor(private _http: HttpClient, private userService: UserService, private environmentService: EnvironmentService,
 
-  constructor(private _http: HttpClient, private userService: UserService, private environmentService: EnvironmentService) { }
+
+              ) {
+
+  }
 
   getActionsTracker(): Observable<any> {
     const url = this.environmentService.REST_API_ACTIONS_TRACKER_URL + this.userService.getUserId();
@@ -89,16 +94,17 @@ export class ActionsService {
     return this._http.post(url, emailPayload);
   }
 
-  updateEscalationDetails(payload){
+  updateEscalationDetails(payload) {
     const url = this.environmentService.REST_API_UPDATE_ESCALATION_DETAILS;
     return this._http.post(url, payload);
   }
-  
+
   downloadActionDetailsFile(caseid) {
     const url = `${this.environmentService.REST_API_DOWNLOAD_FILE_FOR_ACTION}/${caseid}`;
     let headers = new HttpHeaders();
     headers = headers.set('Accept', 'application/octet-stream');
     return this._http.get(url, { headers: headers, responseType: 'blob' });
   }
+
 
 }
