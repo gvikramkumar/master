@@ -61,8 +61,6 @@ export class SapAtoSummaryComponent implements OnInit {
   }
 
   updatedata() {
-    debugger;
-    console.log(this.selectedAto);
     this._offersetupService.getPricing_SKU_Detail(this.offerId, this.selectedAto).subscribe(
       (response) => {
 
@@ -82,7 +80,7 @@ export class SapAtoSummaryComponent implements OnInit {
 
       }
     );
-    if (this.Atosummary_af_sub.skuList){
+    if (this.Atosummary_af_sub.skuList) {
 
       this.middlenumber = Math.ceil(this.Atosummary_af_sub.skuList.length / 2) - 1;
     }
@@ -97,6 +95,7 @@ export class SapAtoSummaryComponent implements OnInit {
     if( atoname === 'Overall Offer') {
       this.router.navigate(['../offerSetup',this.offerId,this.caseId,'service-annuity-pricing','Overall Offer']);
     }
+
     else {
 
 
