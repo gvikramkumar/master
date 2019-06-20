@@ -43,6 +43,23 @@
     </div>
   </div>
 
+  <div *ngSwitchCase="'accessManagement'" class="panel panel--ltgray panel--compressed totals">
+    <div class="container">
+      <div class="row">
+
+        <div appHiddenelem [DirectiveValue]="'Access Management'" class="col-md-3 text-right">
+          <button class="menu-btn" (click)="newBtnClick.next()">
+            <span class="icon-add"></span>
+            Register New Users
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
   <div *ngSwitchCase="'pirate-ship-module'" class="panel panel--compressed task--bar">
     <div class="row">
       <div class="col-md-4 flex-center-vertical">
