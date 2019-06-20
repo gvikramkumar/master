@@ -149,19 +149,19 @@ export class RightPanelComponent implements OnInit {
     this.ideateCount = this.offerPhaseDetailsList['ideate'].length;
 
     this.offerPhaseDetailsList.ideate.forEach(element => {
-      if (element.status === 'Completed') {
+      if (element.status === 'Completed' || element.status === 'Not Applicable') {
         this.ideateCompletedCount = this.ideateCompletedCount + 1;
       }
     });
 
     this.offerPhaseDetailsList.plan.forEach(element => {
-      if (element.status === 'Completed') {
+      if (element.status === 'Completed' || element.status === 'Not Applicable') {
         this.planCompletedCount = this.planCompletedCount + 1;
       }
     });
 
     this.offerPhaseDetailsList.setup.forEach(element => {
-      if (element.status === 'Completed') {
+      if (element.status === 'Completed' || element.status === 'Not Applicable') {
         this.setupCompletedCount = this.setupCompletedCount + 1;
       }
     });
