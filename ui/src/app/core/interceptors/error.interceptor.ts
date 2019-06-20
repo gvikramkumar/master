@@ -53,17 +53,12 @@ export class ErrorInterceptor implements HttpInterceptor {
             return throwError(err);
           }
 
-          /*
-                  if (err.errorCode === errorCodes.server_prefix + errorCodes.user_not_authenticated) {
-                    this.router.navigateByUrl('/login');
-                  }
-          */
-
           if (err.data) {
             delete err.data.stack;
           }
+          const title = resp.status === 504 ? 'Info' : 'Error';
           const showVerboseErrorMessages = environment.showVerboseErrorMessages;
-          this.uiUtil.genericDialog(err.message, err && err.data, 'Error', DialogType.ok, DialogSize.large, true, showVerboseErrorMessages);
+          this.uiUtil.genericDialog(err.message, err && err.data, title, DialogType.ok, DialogSize.large, true, showVerboseErrorMessages);
           return throwError(err);
         }));
   }
