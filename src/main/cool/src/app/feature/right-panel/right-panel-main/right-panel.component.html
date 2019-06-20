@@ -3,7 +3,7 @@
   <!-- Offer Phase Steps -->
   <div class="panel panel--compressed panel--bordered panel--raised-small base-margin-bottom" (click)="showOfferPhaseDailog()">
     <h5 class="half-margin-bottom">Offer Phase
-      <a href="javascript:;" class="pull-right" (click)="showOfferPhaseDailog()">
+      <a appHiddenelem appReadonly [DirectiveValue]="'Offer Phase Widget'" href="javascript:;" class="pull-right" (click)="showOfferPhaseDailog()">
         <span class="icon-pencil"></span> Edit</a>
     </h5>
     <div class="divider divider--compressed"></div>
@@ -98,7 +98,8 @@
   <!-- People Involved -->
   <div class="panel panel--compressed panel--bordered panel--raised-small stakeholders">
 
-    <h5 appHiddenelem appReadonly [DirectiveValue]="'Offer Phase Widget'"  class="half-margin-bottom">People Involved<a href="javascript:;" class="pull-right" (click)="showStakeHolderDialog()">
+    <h5 class="half-margin-bottom">People Involved
+      <a appHiddenelem appReadonly [DirectiveValue]="'Offer Phase Widget'"  href="javascript:;" class="pull-right" (click)="showStakeHolderDialog()">
         <i class="pi pi-plus"></i> Add</a>
     </h5>
 
