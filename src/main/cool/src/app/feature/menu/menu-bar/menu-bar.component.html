@@ -10,6 +10,7 @@
             <span class="icon-list-menu"></span>
           </button>
 
+          <!-- Offer Phases Mega Menu -->
           <div id='flyoutmenu'>
 
             <ul class="panel">
@@ -57,6 +58,7 @@
               </ul>
 
           </div>
+          <!-- // End: Mega Menu -->
 
           <span *ngIf="!offerId; then newOffer else oldOffer"></span>
 
@@ -65,11 +67,14 @@
           </ng-template>
 
           <ng-template #oldOffer>
+            <!-- Title: Offer Name -->
             <span> {{offerName}}</span>
-            <button class="btn btn--icon btn--transparent">
-              <span class="icon-more" (click)="showOfferInfo($event,basicOfferInfo)">
+            <!-- Trigger for Offer Details Indigo Blue Overlay -->
+            <button class="btn btn--icon btn--transparent" (click)="showOfferInfo($event,basicOfferInfo)">
+              <span class="icon-more">
               </span>
             </button>
+            <!-- //End: Trigger -->
           </ng-template>
 
         </h1>

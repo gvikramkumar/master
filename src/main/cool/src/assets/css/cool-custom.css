@@ -1441,7 +1441,8 @@ button.btn.btn--secondary:hover span {
   background: transparent;
 }
 app-menu-bar .ui-overlaypanel {
-  border-radius: 10px;
+  border-radius: 15px;
+  border: none;
 }
 
 .cool.cui .ui-overlaypanel-content .popover__body[_ngcontent-c5] {
