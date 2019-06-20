@@ -197,7 +197,6 @@ export class AccessManagementComponent implements OnInit {
             roles.push(...Object.keys(item));
           }
           let rolesCollect = roles.map((value) => {
-            console.log(value)
             if (value) {
               if (value.substring(0, 7) === "COOL - ") {
                 return value.substring(7);
