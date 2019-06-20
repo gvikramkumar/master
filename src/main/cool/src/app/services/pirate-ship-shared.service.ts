@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {Subject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,7 @@ export class PirateShipSharedService {
   private offerId: string;
   private _role: string;
   private userName: string;
+  public update_pricing: Subject<any> = new Subject<any>();
   private userId: string;
   constructor() { }
    setOfferIdandcaseId(data) {
