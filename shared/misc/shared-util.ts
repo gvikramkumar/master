@@ -28,8 +28,17 @@ export const shUtil = {
   findDuplicatesByProperty,
   catchDisregardHandler,
   stringToArray,
-  arrayFilterUndefinedAndEmptyStrings
+  arrayFilterUndefinedAndEmptyStrings,
+  promiseChain
 };
+
+function promiseChain(_promise) {
+  const promise = (_.isArray(_promise) ? Promise.all(_promise) : _promise) || Promise.resolve();
+  return Promise.resolve()
+    .then(() => {
+      return promise;
+    });
+}
 
 // filter out any array elements that are undefined, empty strings or strings with just spaces in them
 function arrayFilterUndefinedAndEmptyStrings(arr) {

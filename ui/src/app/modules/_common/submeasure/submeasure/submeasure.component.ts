@@ -12,7 +12,6 @@ import {Source} from '../../../../../../../shared/models/source';
 import {SourceService} from '../../services/source.service';
 import {UiUtil} from '../../../../core/services/ui-util';
 import moment from 'moment';
-import AnyObj from '../../../../../../../shared/models/any-obj';
 import {shUtil} from '../../../../../../../shared/misc/shared-util';
 
 @Component({
@@ -60,25 +59,29 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
   }
 
   ngOnInit() {
+    this.store.mainCompDataLoad = true;
+      Promise.all([
+        this.measureService.getManyActive().toPromise(),
+        this.submeasureService.getApprovalVersionedListByNameAndUserType().toPromise(),
+        this.sourceService.getMany().toPromise()
+      ])
+        .then(results => {
+          this.measures = _.sortBy(results[0], 'name');
+          this.submeasures = results[1];
+          this.sources = results[2];
+          const routeMeasure = this.route.snapshot.queryParams.measureId && Number(this.route.snapshot.queryParams.measureId);
+          if (routeMeasure) {
+            this.measureId = routeMeasure;
+          } else {
+            this.measureId = this.measures[0].measureId;
+            UiUtil.updateUrl(this.router, this.route, {measureId: this.measureId});
+          }
+          this.refresh();
+        })
+        .then(() => this.store.mainCompDataLoad = false)
+        .catch(() => this.store.mainCompDataLoad = false);
 
-    Promise.all([
-      this.measureService.getManyActive().toPromise(),
-      this.submeasureService.getApprovalVersionedListByNameAndUserType().toPromise(),
-      this.sourceService.getMany().toPromise()
-    ])
-      .then(results => {
-        this.measures = _.sortBy(results[0], 'name');
-        this.submeasures = results[1];
-        this.sources = results[2];
-        const routeMeasure = this.route.snapshot.queryParams.measureId && Number(this.route.snapshot.queryParams.measureId);
-        if (routeMeasure) {
-          this.measureId = routeMeasure;
-        } else {
-          this.measureId = this.measures[0].measureId;
-          UiUtil.updateUrl(this.router, this.route, {measureId: this.measureId});
-        }
-        this.refresh();
-      });
+
   }
 
   getSourceName(sourceId) {

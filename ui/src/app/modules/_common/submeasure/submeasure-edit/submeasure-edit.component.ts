@@ -226,6 +226,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   ngOnInit() {
+    this.store.mainCompDataLoad = true;
     this.yearmos = shUtil.getFiscalMonthListFromDate(new Date(), 6);
     const promises: Promise<any>[] = [
       this.measureService.getManyActive().toPromise(),
@@ -238,80 +239,84 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     if (!this.addMode) {
       promises.push(this.submeasureService.getOneById(this.route.snapshot.params.id).toPromise());
     }
-    Promise.all(promises)
-      .then(results => {
-        this.measures = _.sortBy(results[0], 'name');
-        this.rules = _.sortBy(results[1].filter(x => x.status === 'A'), 'name');
-        this.rulesAI = results[1];
-        this.sources = _.sortBy(results[2], 'name');
-        this.submeasureNames = results[3];
-        this.pnlNodesAll = results[4];
-        this.deptUploadTemplate = results[5][0];
+      Promise.all(promises)
+        .then(results => {
+          this.measures = _.sortBy(results[0], 'name');
+          this.rules = _.sortBy(results[1].filter(x => x.status === 'A'), 'name');
+          this.rulesAI = results[1];
+          this.sources = _.sortBy(results[2], 'name');
+          this.submeasureNames = results[3];
+          this.pnlNodesAll = results[4];
+          this.deptUploadTemplate = results[5][0];
 
-        if (this.viewMode || this.editMode || this.copyMode) {
-          this.sm = results[6];
-          this.editModeAI = this.editMode && _.includes(['A', 'I'], this.sm.status);
-        }
+          if (this.viewMode || this.editMode || this.copyMode) {
+            this.sm = results[6];
+            this.editModeAI = this.editMode && _.includes(['A', 'I'], this.sm.status);
+          }
 
-        // this is an edge case: create unallocated group >> approve >> now want to make it allocated
-        this.effectiveMonthNotRequired = this.viewMode || (this.editMode && this.sm.approvedOnce === 'Y' && !this.isUnallocatedGroup());
-        if (this.addMode) {
-          if (this.route.snapshot.params.measureId) {
-            this.sm.measureId = Number(this.route.snapshot.params.measureId);
+          // this is an edge case: create unallocated group >> approve >> now want to make it allocated
+          this.effectiveMonthNotRequired = this.viewMode || (this.editMode && this.sm.approvedOnce === 'Y' && !this.isUnallocatedGroup());
+          if (this.addMode) {
+            if (this.route.snapshot.params.measureId) {
+              this.sm.measureId = Number(this.route.snapshot.params.measureId);
+            }
           }
-        }
-        if (this.copyMode) {
-          this.sm.approvedOnce = 'N';
-          delete this.sm.submeasureKey;
-          delete this.sm.submeasureId;
-          delete this.sm.createdBy;
-          delete this.sm.createdDate;
-          // we'll reset these for each edit
-          this.sm.manualMixHw = undefined;
-          this.sm.manualMixSw = undefined;
-          if (this.isDeptUpload()) {
-            this.sm.indicators.deptAcct = 'Y';
-          }
-          delete this.sm.inputProductFamily;
-          delete this.sm.allocProductFamily;
-        }
-        if (this.editMode) {
-          if (this.editModeAI) {
+          if (this.copyMode) {
+            this.sm.approvedOnce = 'N';
+            delete this.sm.submeasureKey;
+            delete this.sm.submeasureId;
+            delete this.sm.createdBy;
+            delete this.sm.createdDate;
+            // we'll reset these for each edit
+            this.sm.manualMixHw = undefined;
+            this.sm.manualMixSw = undefined;
             if (this.isDeptUpload()) {
               this.sm.indicators.deptAcct = 'Y';
             }
+            delete this.sm.inputProductFamily;
+            delete this.sm.allocProductFamily;
           }
-          this.submeasureNames = _.without(this.submeasureNames, this.sm.name.toUpperCase());
-        }
-        if (this.viewMode || this.sm.approvedOnce === 'Y') {
-          this.startFiscalMonth = shUtil.getFiscalMonthLongNameFromNumber(this.sm.startFiscalMonth);
-        } else {
-          // they need to pick a new effective month is it's not in the last 6 months.
-          UiUtil.clearPropertyIfNotInList(this.sm, 'startFiscalMonth', this.yearmos, 'fiscalMonth');
-        }
-      })
-      .then(() => {
-        const promises2: Promise<any>[] = [
-          this.pgLookupService.callRepoMethod('getSubmeasureFlashCategories', {submeasureKey: this.sm.submeasureKey || 0}).toPromise(),
-          this.pgLookupService.callRepoMethod('getSubmeasureAdjustmentTypes', {submeasureKey: this.sm.submeasureKey || 0}).toPromise()
-        ];
-        if ((this.viewMode || this.editMode) && this.isManualMix()) { // needs submeasureKey for this call
-          promises2.push(this.pgLookupService.callRepoMethod('getManualMixHwSwBySubmeasureKey',
-            {submeasureKey: this.sm.submeasureKey, moduleId: this.store.module.moduleId}).toPromise());
-        }
-        return Promise.all(promises2)
-          .then(results => {
-            this.flashCategories = results[0];
-            this.adjustmentTypes = results[1];
-            if ((this.viewMode || this.editMode) && this.isManualMix()) {
-              this.manualMixHwDb = results[2][0] ? results[2][0] * 100 : undefined;
-              this.manualMixSwDb = results[2][1] ? results[2][1] * 100 : undefined;
+          if (this.editMode) {
+            if (this.editModeAI) {
+              if (this.isDeptUpload()) {
+                this.sm.indicators.deptAcct = 'Y';
+              }
             }
-            this.orgSubmeasure = _.cloneDeep(this.sm);
-            this.init();
-            this.verifyRulesActive();
-          });
-      });
+            this.submeasureNames = _.without(this.submeasureNames, this.sm.name.toUpperCase());
+          }
+          if (this.viewMode || this.sm.approvedOnce === 'Y') {
+            this.startFiscalMonth = shUtil.getFiscalMonthLongNameFromNumber(this.sm.startFiscalMonth);
+          } else {
+            // they need to pick a new effective month is it's not in the last 6 months.
+            UiUtil.clearPropertyIfNotInList(this.sm, 'startFiscalMonth', this.yearmos, 'fiscalMonth');
+          }
+        })
+        .then(() => {
+          const promises2: Promise<any>[] = [
+            this.pgLookupService.callRepoMethod('getSubmeasureFlashCategories', {submeasureKey: this.sm.submeasureKey || 0}).toPromise(),
+            this.pgLookupService.callRepoMethod('getSubmeasureAdjustmentTypes', {submeasureKey: this.sm.submeasureKey || 0}).toPromise()
+          ];
+          if ((this.viewMode || this.editMode) && this.isManualMix()) { // needs submeasureKey for this call
+            promises2.push(this.pgLookupService.callRepoMethod('getManualMixHwSwBySubmeasureKey',
+              {submeasureKey: this.sm.submeasureKey, moduleId: this.store.module.moduleId}).toPromise());
+          }
+          return Promise.all(promises2)
+            .then(results => {
+              this.flashCategories = results[0];
+              this.adjustmentTypes = results[1];
+              if ((this.viewMode || this.editMode) && this.isManualMix()) {
+                this.manualMixHwDb = results[2][0] ? results[2][0] * 100 : undefined;
+                this.manualMixSwDb = results[2][1] ? results[2][1] * 100 : undefined;
+              }
+              this.orgSubmeasure = _.cloneDeep(this.sm);
+              this.init();
+              this.verifyRulesActive();
+            });
+        })
+        .then(() => this.store.mainCompDataLoad = false)
+        .catch(() => this.store.mainCompDataLoad = false);
+
+
   }
 
   init(skipMeasureChange?) {

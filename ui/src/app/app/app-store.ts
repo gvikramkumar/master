@@ -24,6 +24,8 @@ export class AppStore extends StoreBase {
   initialBreakpoint: string;
   env: string;
   location: Location;
+  mainCompDataLoad = false;
+
 
   isLocalEnv() {
     return _.includes(['dev', 'ldev'], this.env) || this.isUnitEnv();
