@@ -113,6 +113,6 @@
 <!-- <app-menu-bar-popup [popupType]="popupType" (closePopup)="closePopup($event)"></app-menu-bar-popup> -->
 
 <app-mark-complete-popup [offerId]="offerId" [caseId]="caseId" [show]="showMarkcompletePopup"
-  [currentURL]="currentURL" [markCompleteStatus]="markCompleteStatus"
+  [currentURL]="currentURL" [markCompleteStatus]="markCompleteStatus" (sendUpdatedMilestoneData)="sendUpdatedMilestoneData($event)"
   (closeMarkCompletePopup)="closeMarkCompletePopup()" (confirmMarkComplete)="confirmMarkComplete()">
 </app-mark-complete-popup>

@@ -10,6 +10,7 @@ import * as _ from 'lodash';
 import {HttpClient} from '@angular/common/http';
 import {EnvironmentService} from '@env/environment.service';
 import { LeadTime } from '../models/lead-time';
+import { MenuBarService } from '@app/services/menu-bar.service';
 
 @Component({
   selector: 'app-right-panel',
@@ -113,7 +114,8 @@ export class RightPanelComponent implements OnInit {
     private rightPanelService: RightPanelService,
     private stakeHolderService: StakeholderfullService,
     private httpClinet: HttpClient,
-    private _envService: EnvironmentService
+    private _envService: EnvironmentService,
+    private menuBarService: MenuBarService
     ) {
 
     this.activatedRoute.params.subscribe(params => {
@@ -122,7 +124,13 @@ export class RightPanelComponent implements OnInit {
     });
 
 
-    this.offerPhaseDetailsList = this.activatedRoute.snapshot.data['offerData'];
+    this.menuBarService.getUpdatedOfferPhaseWidget().subscribe(data => {
+      if(data !== ''){
+        this.offerPhaseDetailsList = data;
+      }else{
+        this.offerPhaseDetailsList = this.activatedRoute.snapshot.data['offerData'];
+      }
+    });
 
   }
 
@@ -166,9 +174,16 @@ export class RightPanelComponent implements OnInit {
       }
     });
 
-    this.offerPhaseService.getOfferPhaseDetails(this.currentOfferId, true).subscribe(data => {
-      this.processCurrentPhaseInfo(data);
+    this.menuBarService.getUpdatedOfferPhaseWidget().subscribe(data => {
+      if(data !== ''){
+        this.processCurrentPhaseInfo(data);
+      }else{
+        this.offerPhaseService.getOfferPhaseDetails(this.currentOfferId, true).subscribe(data => {
+          this.processCurrentPhaseInfo(data);
+        });
+      }
     });
+   
 
   }
 

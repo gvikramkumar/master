@@ -26,7 +26,7 @@ export class MenuBarComponent implements OnInit {
     @Output() onProceedToNext = new EventEmitter();
     @Output() updateMessage = new EventEmitter<string>();
     @Output() getMarkCompleteStatus = new EventEmitter<boolean>();
-
+   
     currentURL: String;
     currentUsername: any;
 
@@ -70,7 +70,7 @@ export class MenuBarComponent implements OnInit {
             this.caseId = params['caseId'];
             this.offerId = params['offerId'];
         });
-
+       
         this.menuBarService.getMilestoneDetails(this.offerId).subscribe(data => {
             if (data != null) {
                 if (data['ideate'] != null) {
@@ -330,6 +330,31 @@ export class MenuBarComponent implements OnInit {
      //   this.disableMarkCompleteToggle();
     }
 
+    sendUpdatedMilestoneData(data) {
+        if (data != null) {
+            if (data['ideate'] != null) {
+                data['ideate'].forEach(element => {
+                    if (element['enable'] === true) {
+                        this.itemShow[element['subMilestone']] = true;
+                    }
+                });
+                if (data['plan'] != null) {
+                    data['plan'].forEach(element => {
+                        if (element['enable'] === true) {
+                            this.itemShow[element['subMilestone']] = true;
+                        }
+                    });
+                }
+                if (data['setup'] != null) {
+                    data['setup'].forEach(element => {
+                        if (element['enable'] === true) {
+                            this.itemShow[element['subMilestone']] = true;
+                        }
+                    });
+                }
+            }
+        }
+    }
     // disableMarkCompleteToggle() {
     //     if (this.markCompleteStatus === false && this.canMarkComplete === false) {
     //         this.shouldDisable = true;

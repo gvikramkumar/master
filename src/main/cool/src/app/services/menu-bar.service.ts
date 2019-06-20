@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EnvironmentService } from '../../environments/environment.service';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable()
 export class MenuBarService {
-
+  private subject = new BehaviorSubject<any>('');
   constructor(
     private httpClient: HttpClient,
     private environmentService: EnvironmentService
@@ -69,5 +70,14 @@ export class MenuBarService {
     url += offerId + '/' + milestone + '?status=' + milestoneStatus
     return this.httpClient.put(url, { withCredentials: true });
   }
+
+  updateOfferPhaseWidget(data){
+    this.subject.next(data);
+  }
+
+  getUpdatedOfferPhaseWidget(): Observable<any> {
+  return this.subject.asObservable();
+  }
+
 
 }

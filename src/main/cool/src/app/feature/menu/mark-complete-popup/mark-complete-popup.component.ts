@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MenuBarService } from '@app/services/menu-bar.service';
+import { LoaderService } from '@app/core/services';
 
 @Component({
   selector: 'app-mark-complete-popup',
@@ -15,6 +16,7 @@ export class MarkCompletePopupComponent implements OnInit {
   @Input() currentURL;
   @Output() closeMarkCompletePopup = new EventEmitter<string>();
   @Output() confirmMarkComplete = new EventEmitter<string>();
+  @Output() sendUpdatedMilestoneData = new EventEmitter();
   content1: String;
   content2: String;
   content3: String;
@@ -23,7 +25,8 @@ export class MarkCompletePopupComponent implements OnInit {
   milestone: String;
   milestoneStatus: String;
 
-  constructor(private menuBarService: MenuBarService) { }
+  constructor(private menuBarService: MenuBarService,
+    private loaderService: LoaderService) { }
 
   ngOnInit() {
 
@@ -39,6 +42,8 @@ export class MarkCompletePopupComponent implements OnInit {
   }
 
   confirm() {
+    this.confirmMarkComplete.next('true');
+    this.loaderService.startLoading();
     if (this.currentURL.includes('offerDimension')) {
       this.milestone = 'Offer Dimension';
     } else if (this.currentURL.includes('offerSolutioning')) {
@@ -69,7 +74,10 @@ export class MarkCompletePopupComponent implements OnInit {
       //     this.markCompleteStatus = !this.markCompleteStatus;
       //   }
       // }
-      this.confirmMarkComplete.next('true');
+      this.sendUpdatedMilestoneData.next(response);
+      this.menuBarService.updateOfferPhaseWidget(response);
+      this.loaderService.stopLoading();
+    
     });
    
   }
