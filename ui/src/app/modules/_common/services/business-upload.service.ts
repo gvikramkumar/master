@@ -44,7 +44,7 @@ export class BusinessUploadService {
         if (result.status === 'success') {
           // title = `${result.uploadName} - success`; // for cui toasts
           title = 'Success';
-          message = `${result.rowCount} rows have been processed.`;
+          message = `${result.rowCount} rows have been processed. Data will not be viewable in report until 15 minutes after close of upload window.`;
         } else if (result.status === 'failure') {
           // title = `${result.uploadName} - failure`;
           title = 'Failure';

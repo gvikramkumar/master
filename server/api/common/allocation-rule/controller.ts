@@ -22,13 +22,13 @@ export default class AllocationRuleController extends ApprovalController {
     super.saveToDraft(req, res, next);
   }
 
-  sendApprovalEmail(req, mode: ApprovalMode, item): Promise<any> {
+  sendApprovalEmail(approveRejectMessage, req, mode: ApprovalMode, item): Promise<any> {
     const omitProperties = ['_id', 'id', '__v', 'status', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate', 'approvedOnce',
       'salesSL1CritCond', 'salesSL1CritChoices', 'salesSL2CritCond', 'salesSL2CritChoices', 'salesSL3CritCond', 'salesSL3CritChoices',
       'prodPFCritCond', 'prodPFCritChoices', 'prodBUCritCond', 'prodBUCritChoices', 'prodTGCritCond', 'prodTGCritChoices',
       'scmsCritCond', 'scmsCritChoices', 'beCritCond', 'beCritChoices', 'approvalUrl', 'approvalReminderTime'
     ];
-    return this.sendApprovalEmailBase(req, mode, item, 'rule', omitProperties);
+    return this.sendApprovalEmailBase(approveRejectMessage, req, mode, item, 'rule', omitProperties);
   }
 
   approveValidate(approvalItems, req, next) {

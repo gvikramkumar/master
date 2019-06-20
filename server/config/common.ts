@@ -3,7 +3,8 @@ export default {
   ssl: false,
   corsOrigin: ['http://localhost:4200', 'http://localhost:4201'],
   showStack: true,
-  expressTimeout: 1000 * (55 + 60),
+  serverTimeout: 3 * 60 * 1000, // same time as express timeout which subtracts 5 sec
+  expressTimeout: (3 * 60 * 1000) - 5000, // 5 sec before server times out, put up a friendly message
   submitForApprovalReminderInterval: 5 * (60 * 1000),
   submitForApprovalReminderPeriod: 1 * (24 * 60 * 60 * 1000),
   fileUpload: {
