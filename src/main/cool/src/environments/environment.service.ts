@@ -16,6 +16,12 @@ export class EnvironmentService {
     idpClientId: string;
     idpClientSecret: string;
 
+    // EMAIL NOTIFICATION URL
+    REST_API_POST_USER_DETAILS_FOR_EMAIL_URL:string;
+
+    // CEPM URL
+    REST_API_GET_CEPMROLES_URL:string;
+
     //  AUTHENTICATION URLs
     REST_API_AUTH_IDP_TOKEN_URL: string;
     REST_API_GENERATE_AUTH_TOKEN_URL: string;
@@ -24,6 +30,7 @@ export class EnvironmentService {
     REST_API_LDAP_USER_DETAILS_URL: string;
     REST_API_URL_GET_CURRENT_USER_URL: string;
 
+    
     // LOV URLs
     REST_API_GET_FUNCTIONAL_ROLE_URL: string;
     REST_API_REGISTER_NEW_USER_GET_URL: string;
@@ -293,6 +300,12 @@ export class EnvironmentService {
                 this.tncOwbUrl = 'https://offer-stage.cloudapps.cisco.com/owb/#/subscription';
         }
 
+        //-----------------------EMAIL NOTIFICATION URL --------------------
+        this.REST_API_POST_USER_DETAILS_FOR_EMAIL_URL = `${this.baseApiUrl}/accessManagement/sendAccessManagementEmail`
+
+        //-------------------------CEPM URL------------------------------
+        this.REST_API_GET_CEPMROLES_URL = `${this.baseApiUrl}/access/fetchCEPMRoles`
+        
         // ----------------------- AUTHENTICATION URLs -----------------------------------------------
 
         // tslint:disable-next-line: max-line-length

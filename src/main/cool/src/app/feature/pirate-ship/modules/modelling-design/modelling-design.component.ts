@@ -170,7 +170,7 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
     let userRoleCheck = false;
 
     // Check If ATO has Valid Status
-    const statusList = ['Completed', 'In Progress', 'Available', 'Reopen', 'Not Started'];
+    const statusList = ['Completed', 'In Progress', 'Available', 'Not Required'];
     if (statusList.some(status => currentStatus.includes(status))) {
       statusCheck = true;
     } else {

@@ -22,11 +22,8 @@ export class AccessManagementService {
     public sendfunctionalRolRaw = new BehaviorSubject("");
     public sendFromUserRegistration = new BehaviorSubject([]);
     public roles: any;
-    // public baseApiUrl = 'https://cool-srv-dev.cisco.com/coolsrv';
 
-    // public urlGetCEPMRoles:string = `${this.baseApiUrl}/access/fetchCEPMRoles`
-
-
+    public urlGetCEPMRoles:string = this.environmentService.REST_API_GET_CEPMROLES_URL;
     urlBusinessUnit: string = this.environmentService.PDAF_API + '?columns=business_unit&distinct=true';
     urlBusinessEntity: string = this.environmentService.PDAF_API + '?columns=BE&distinct=true';
     urlGetPrimaryBUBasedOnBE: string = this.environmentService.PDAF_API + '?&distinct=true&be=';
@@ -63,6 +60,15 @@ export class AccessManagementService {
             return this.httpClient.post(this.environmentService.REST_API_GET_CEPM_ROLES_URL, PAYLOAD);
           }
 
+          onSendEmail(assignedUser,assigningAdmin,assignedUserFirstName,assigningAdminFullName) {
+              const PAYLOAD = {
+                "assignedUser":assignedUser,
+                "assigningAdmin":assigningAdmin,
+                "assignedUserFirstName":assignedUserFirstName,
+                "assigningAdminFullName":assigningAdminFullName
+              }
+            return this.httpClient.post(this.environmentService.REST_API_POST_USER_DETAILS_FOR_EMAIL_URL,PAYLOAD)
+          }
 
     accessManagementAll(): any {
         return this.httpClient.get(this.environmentService.REST_API_ACCESS_MANAGEMENT_GET_ALL_URL);
