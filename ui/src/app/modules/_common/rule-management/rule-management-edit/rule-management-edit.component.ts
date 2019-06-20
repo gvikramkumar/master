@@ -121,8 +121,6 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     }
     Promise.all(promises)
       .then(results => {
-        // remove the spinner
-        this.store.mainCompDataLoad = false;
         // assign to your local arrays here, then:
         // map result string arrays to object arrays for use in dropdowns
         this.sl1Sl2Sl3NameCodes = results[0];
@@ -205,8 +203,10 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         this.init(true);
       })
       .then(() => {
-        return this.getRulesAndRuleNamesAndGenerateSelectMap(); // must be "after" this.rule is set
-      }).catch(() => this.store.mainCompDataLoad = false);
+        return this.getRulesAndRuleNamesAndGenerateSelectMap();
+      })
+      .then(() => this.store.mainCompDataLoad = false)
+      .catch(() => this.store.mainCompDataLoad = false);
   }
 
   init(initial?) {

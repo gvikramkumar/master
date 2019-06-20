@@ -62,12 +62,14 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
     Promise.all([
       this.ruleService.getApprovalVersionedListByNameAndUserType().toPromise(),
       this.submeasureService.getManyLatestGroupByNameActive().toPromise()
-    ]).then(results => {
-      this.store.mainCompDataLoad = false;
-      this.rules = results[0];
-      this.submeasuresAll = results[1];
-      this.refresh();
-    }).catch(() => this.store.mainCompDataLoad = false);
+    ])
+      .then(results => {
+        this.rules = results[0];
+        this.submeasuresAll = results[1];
+        this.refresh();
+      })
+      .then(() => this.store.mainCompDataLoad = false)
+      .catch(() => this.store.mainCompDataLoad = false);
   }
 
   refresh() {

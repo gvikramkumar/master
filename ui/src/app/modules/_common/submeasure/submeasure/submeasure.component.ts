@@ -12,9 +12,7 @@ import {Source} from '../../../../../../../shared/models/source';
 import {SourceService} from '../../services/source.service';
 import {UiUtil} from '../../../../core/services/ui-util';
 import moment from 'moment';
-import AnyObj from '../../../../../../../shared/models/any-obj';
 import {shUtil} from '../../../../../../../shared/misc/shared-util';
-import {tryCatch} from 'rxjs/internal-compatibility';
 
 @Component({
   selector: 'fin-submeasure',
@@ -68,7 +66,6 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
         this.sourceService.getMany().toPromise()
       ])
         .then(results => {
-          this.store.mainCompDataLoad = false;
           this.measures = _.sortBy(results[0], 'name');
           this.submeasures = results[1];
           this.sources = results[2];
@@ -80,7 +77,9 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
             UiUtil.updateUrl(this.router, this.route, {measureId: this.measureId});
           }
           this.refresh();
-        }).catch(() => this.store.mainCompDataLoad = false);
+        })
+        .then(() => this.store.mainCompDataLoad = false)
+        .catch(() => this.store.mainCompDataLoad = false);
 
 
   }

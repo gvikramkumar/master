@@ -241,7 +241,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
       Promise.all(promises)
         .then(results => {
-          this.store.mainCompDataLoad = false;
           this.measures = _.sortBy(results[0], 'name');
           this.rules = _.sortBy(results[1].filter(x => x.status === 'A'), 'name');
           this.rulesAI = results[1];
@@ -314,6 +313,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
               this.verifyRulesActive();
             });
         })
+        .then(() => this.store.mainCompDataLoad = false)
         .catch(() => this.store.mainCompDataLoad = false);
 
 
