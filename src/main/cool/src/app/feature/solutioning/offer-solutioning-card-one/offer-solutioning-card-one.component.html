@@ -1,0 +1,50 @@
+<div *ngFor="let group of Object.keys(selectedGroupData), let i = index">
+  <div class="card card--raised half-margin-top">
+
+    <div class="card__header">
+      {{group}}
+    </div>
+
+    <div class="card__body">
+      <div *ngFor="let subgroup of Object.keys(selectedGroupData[group]),
+      let j = index">
+
+        <div class="row">
+
+          <div class="col-md-3 margin-auto">
+            <span *ngIf="group != 'Other'" class="subgroup-name">{{subgroup}}</span>
+          </div>
+
+          <div *ngIf="group != 'Other'" class="col-md-9">
+            <button *ngFor="let btn of selectedGroupData[group][subgroup]['subGroupChoicesGiven']" [ngClass]="{
+              'mm-model-btn-active': checkButtonStatus(btn, selectedGroupData[group][subgroup]['subGroupChoicesSelected']),
+              'mm-model-btn-inactive': !checkButtonStatus(btn, selectedGroupData[group][subgroup]['subGroupChoicesSelected'])
+            }" class="btn btn--small">
+              {{ btn }}
+            </button>
+          </div>
+
+        </div>
+
+        <div *ngFor="let question of selectedGroupData[group][subgroup].questions, index as k">
+
+          <!-- {{groupFormArray.get(group.subgroup.k)}} -->
+          <app-offer-solution-question 
+          [question]="selectedGroupData[group][subgroup].questions[k]"
+          [groupData]="groupData"
+          [unGroupData]="unGroupData"
+          [markCompleteStatus]="markCompleteStatus">
+          </app-offer-solution-question>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div *ngIf="payLoad" class="form-row">
+    <strong>Saved the following values</strong><br>{{payLoad}}
+  </div>
+
+</div>

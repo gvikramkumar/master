@@ -1,8 +1,12 @@
-<p-dialog #dialog header="Add All Item Details" [closable]="false" [modal]="true"
+<p-dialog #dialog [closable]="false" [modal]="true"
   [closeOnEscape]="false" (onShow)="onShowDialog()" class="add-details-dialog"
   [(visible)]="offerConstructService.closeAddDetails" [resizable]="false" [draggable]="false" [maximizable]="true"
   [contentStyle]="{'min-height':'450px', 'overflow-y':'scroll', 'width':'100%'}">
   <p-header>
+    <span class="info">Add All Item Details</span>
+    <a href="https://apps.na.collabserv.com/wikis/home?lang=en-us#!/wiki/W38c0dd07aa03_4898_9869_92ef10e65de5/page/COOL%20Attribute%20Guide" target="_blank">
+        <span class="icon-info icon-small icon-info-custom"></span>
+    </a>
     <span class="pi pi-times close-add-all-details" (click)="confirmDialog()"></span>
   </p-header>
   <div class="divider" style="margin-top: -1.5%"></div>
@@ -23,8 +27,8 @@
           <div class="btns-right pull-right flex-center-vertical">
             <!-- <a href="#" class="base-margin-right"><span class="icon-export--cool half-margin-right"></span> Export as .XLS</a> -->
             <button class="display-none"></button>
-            <button class="btn btn--primary" [disabled]="itemNameInvalid" (click)='saveForm()'>Save</button>
-            <button class="btn btn--secondary" (click)="confirmDialog()">Cancel</button>
+            <button appHiddenelem appReadonly [DirectiveValue]="'Offer Construct'" class="btn btn--primary" [disabled]="itemNameInvalid" (click)='saveForm()'>Save</button>
+            <button appHiddenelem appReadonly [DirectiveValue]="'Offer Construct'" class="btn btn--secondary" (click)="confirmDialog()">Cancel</button>
             <a *ngIf="isItemCreation" href="javascript: void(0);" class="base-margin-right"
               (click)='downloadZip()'><span class="icon-export--cool half-margin-left"></span> Export as Excel</a>
           </div>
@@ -42,7 +46,7 @@
             <p-header>
               {{item.key}}
             </p-header>
-            <div class="row">
+            <div  appReadonly [DirectiveValue]="'Offer Construct'"   class="row">
               <div class="search-buffer">
                 <div class="form-group input--icon half-margin-bottom">
                   <div class="form-group__text search-icon">
@@ -82,7 +86,7 @@
                 </div>
               </div>
             </div>
-            <div class="row">
+            <div  appReadonly [DirectiveValue]="'Offer Construct'"   class="row">
               <!-- Accordian content starts-->
               <div class="col-sm-2" style="padding: 0;overflow: hidden;">
                 <!-- Unique -->
@@ -156,21 +160,18 @@
                               <div class="form-group input--compressed" *ngIf="i == 0">
                                 <div class="form-group__text">
                                     <input  *ngIf="!(ques.value['eGenieFlag'])" [ngClass]="pInfo.currentValue !='' && (pInfo.rules.isvalid == false || (pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen)) && (itemName.dirty || itemName.touched) ? 'validaionStyles' : 'validaionStylesValid'"
-                                      [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'
+                                      [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'  maxlength="18"
                                       [(ngModel)]="ques.value['title']=pInfo.currentValue" value="{{pInfo.currentValue}}"
-                                      (blur)="trimSpaces(pInfo, $event)"
+                                      (blur)="trimSpaces(pInfo, $event)"  [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']" #itemName="ngModel">
-                                      <input  *ngIf="(ques.value['eGenieFlag'])" [ngClass]="pInfo.currentValue !='' && (pInfo.rules.isvalid == false || (pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen)) && (itemName.dirty || itemName.touched) ? 'validaionStyles' : 'validaionStylesValid'"
-                                      [name]='item.egineAttribue_+$parentIndex+ $ChildIndex'
-                                      [(ngModel)]="pInfo.currentValue" value="{{pInfo.currentValue}}"
-                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']" #itemName="ngModel">
-                                  </div>
+
                                   <div class="tool-tip  slideIn"
                                     *ngIf="pInfo.rules.validationMessage != '' && pInfo.rules.isvalid == false">
                                     <ul>
                                       <li>{{pInfo.rules.validationMessage}}</li>
                                     </ul>
+                                  </div>
                                   </div>
                               </div>
                               <div class="form-group input--compressed" *ngIf="i !== 0">
@@ -207,7 +208,10 @@
                                       *ngIf="pInfo.rules.validationMessage != '' && pInfo.rules.isvalid == false && (freeText.dirty || freeText.touched)">
                                       <ul>
                                         <li
-                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'REQ Start Date Window' && pInfo.egineAttribue !== 'Default Auto Renewal Term' && pInfo.rules.validationMessage != ''">
+                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'Req Start Date Window' &&
+                                          pInfo.egineAttribue !== 'Default Auto Renewal Term' && pInfo.rules.validationMessage != '' && pInfo.egineAttribue !== 'Description' && pInfo.egineAttribue !== 'True Up Term'
+                                          && pInfo.egineAttribue !== 'NON STD AUTO RENEWAL TERM' && pInfo.egineAttribue !== 'NON STD INITIAL TERM'
+                                          && pInfo.egineAttribue !== 'Asset Quantity' && pInfo.egineAttribue !== 'Spare Price'">
                                           {{pInfo.rules.validationMessage}}</li>
                                         <li
                                           *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
@@ -216,11 +220,30 @@
                                           *ngIf="pInfo.egineAttribue === 'Base Price' && pInfo.rules.validationMessage != ''">
                                           Base Price must contain a number with 2 decimal places</li>
                                         <li
-                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'REQ Start Date Window') && pInfo.rules.validationMessage != ''">
+                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'Req Start Date Window') && pInfo.rules.validationMessage != ''">
                                           Mandatory entry of 1 numeric value</li>
                                         <li
                                           *ngIf="pInfo.egineAttribue === 'Default Auto Renewal Term' && pInfo.rules.validationMessage != ''">
                                           Mandatory entry of 1 value from the Std Auto Renewal Term Range</li>
+                                          <li
+                                            *ngIf="pInfo.egineAttribue === 'Description' && pInfo.rules.validationMessage != ''">
+                                            First letter must be capitalized and max of 60 characters</li>
+                                            <li
+                                              *ngIf="pInfo.egineAttribue === 'True Up Term' && pInfo.rules.validationMessage != ''">
+                                              Mandatory Must be comma seperated, numeric with no spaces</li>
+                                              <li
+                                                *ngIf="pInfo.egineAttribue === 'NON STD AUTO RENEWAL TERM' && pInfo.rules.validationMessage != ''">
+                                                Value should be a numeric range where 1 is min and 12 is max</li>
+                                              <li
+                                                *ngIf="pInfo.egineAttribue === 'NON STD INITIAL TERM' && pInfo.rules.validationMessage != ''">
+                                                Value should be a numeric range where 1 is min and 120 is max (example: 1-12)</li>
+                                                <li
+                                                  *ngIf="pInfo.egineAttribue === 'Asset Quantity' && pInfo.rules.validationMessage != ''">
+                                                  Must be a numeric value</li>
+                                                <li
+                                                  *ngIf="pInfo.egineAttribue === 'Spare Price' && pInfo.rules.validationMessage != ''">
+                                                  Mandatory entry of a numeric value</li>
+
                                       </ul>
                                     </div>
 
@@ -264,7 +287,7 @@
                                       *ngIf="pInfo.rules.isvalid == false && (qafreeText.dirty || qafreeText.touched)">
                                       <ul>
                                         <li
-                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'REQ Start Date Window' && pInfo.rules.validationMessage != ''">
+                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'Req Start Date Window' && pInfo.rules.validationMessage != ''">
                                           {{pInfo.rules.validationMessage}}</li>
                                         <li
                                           *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
@@ -273,7 +296,7 @@
                                           *ngIf="pInfo.egineAttribue === 'Base Price' && pInfo.rules.validationMessage != ''">
                                           Base Price must contain a number with 2 decimal places</li>
                                         <li
-                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'REQ Start Date Window') && pInfo.rules.validationMessage != ''">
+                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'Req Start Date Window') && pInfo.rules.validationMessage != ''">
                                           Mandatory entry of 1 numeric value</li>
                                       </ul>
                                     </div>
@@ -334,7 +357,7 @@
                                       *ngIf="pInfo.rules.isvalid == false && (radioButton.dirty || radioButton.touched)">
                                       <ul>
                                         <li
-                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'REQ Start Date Window' && pInfo.rules.validationMessage != ''">
+                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'Req Start Date Window' && pInfo.rules.validationMessage != ''">
                                           {{pInfo.rules.validationMessage}}</li>
                                         <li
                                           *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
@@ -343,7 +366,7 @@
                                           *ngIf="pInfo.egineAttribue === 'Base Price' && pInfo.rules.validationMessage != ''">
                                           Base Price must contain a number with 2 decimal places</li>
                                         <li
-                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'REQ Start Date Window') && pInfo.rules.validationMessage != ''">
+                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'Req Start Date Window') && pInfo.rules.validationMessage != ''">
                                           Mandatory entry of 1 numeric value</li>
                                       </ul>
                                     </div>
@@ -390,7 +413,7 @@
                                       *ngIf="pInfo.rules.isvalid == false && (qaRadioButton.dirty || qaRadioButton.touched)">
                                       <ul>
                                         <li
-                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'REQ Start Date Window' && pInfo.rules.validationMessage != ''">
+                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'Req Start Date Window' && pInfo.rules.validationMessage != ''">
                                           {{pInfo.rules.validationMessage}}</li>
                                         <li
                                           *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
@@ -399,7 +422,7 @@
                                           *ngIf="pInfo.egineAttribue === 'Base Price' && pInfo.rules.validationMessage != ''">
                                           Base Price must contain a number with 2 decimal places</li>
                                         <li
-                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'REQ Start Date Window') && pInfo.rules.validationMessage != ''">
+                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'Req Start Date Window') && pInfo.rules.validationMessage != ''">
                                           Mandatory entry of 1 numeric value</li>
                                       </ul>
                                     </div>
@@ -445,7 +468,7 @@
                                       *ngIf="pInfo.rules.isvalid == false && (dropDown.dirty || dropDown.touched)">
                                       <ul>
                                         <li
-                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'REQ Start Date Window' && pInfo.rules.validationMessage != ''">
+                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'Req Start Date Window' && pInfo.rules.validationMessage != ''">
                                           {{pInfo.rules.validationMessage}}</li>
                                         <li
                                           *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
@@ -454,7 +477,7 @@
                                           *ngIf="pInfo.egineAttribue === 'Base Price' && pInfo.rules.validationMessage != ''">
                                           Base Price must contain a number with 2 decimal places</li>
                                         <li
-                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'REQ Start Date Window') && pInfo.rules.validationMessage != ''">
+                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'Req Start Date Window') && pInfo.rules.validationMessage != ''">
                                           Mandatory entry of 1 numeric value</li>
                                       </ul>
                                     </div>
@@ -499,7 +522,7 @@
                                   *ngIf="pInfo.rules.isvalid == false && (multiSelectInput.dirty || multiSelectInput.touched)">
                                   <ul>
                                     <li
-                                      *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'REQ Start Date Window' && pInfo.rules.validationMessage != ''">
+                                      *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'Req Start Date Window' && pInfo.rules.validationMessage != ''">
                                       {{pInfo.rules.validationMessage}}</li>
                                     <li
                                       *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
@@ -508,7 +531,7 @@
                                       *ngIf="pInfo.egineAttribue === 'Base Price' && pInfo.rules.validationMessage != ''">
                                       Base Price must contain a number with 2 decimal places</li>
                                     <li
-                                      *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'REQ Start Date Window') && pInfo.rules.validationMessage != ''">
+                                      *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'Req Start Date Window') && pInfo.rules.validationMessage != ''">
                                       Mandatory entry of 1 numeric value</li>
                                   </ul>
                                 </div>
@@ -531,7 +554,6 @@
                                       [(ngModel)]="pInfo.currentValue"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
-                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                                       [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
@@ -564,7 +586,10 @@
                                       *ngIf="pInfo.rules.isvalid == false && (freeText.dirty || freeText.touched)">
                                       <ul>
                                         <li
-                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'REQ Start Date Window' && pInfo.egineAttribue !== 'Default Auto Renewal Term' && pInfo.rules.validationMessage != ''">
+                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'Req Start Date Window'
+                                          && pInfo.egineAttribue !== 'Default Auto Renewal Term' && pInfo.rules.validationMessage != '' && pInfo.egineAttribue !== 'True Up Term'
+                                          && pInfo.egineAttribue !== 'NON STD AUTO RENEWAL TERM' && pInfo.egineAttribue !== 'NON STD INITIAL TERM' &&
+                                          pInfo.egineAttribue !== 'Asset Quantity' && pInfo.egineAttribue !== 'Spare Price'">
                                           {{pInfo.rules.validationMessage}}</li>
                                         <li
                                           *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
@@ -573,11 +598,26 @@
                                           *ngIf="pInfo.egineAttribue === 'Base Price' && pInfo.rules.validationMessage != ''">
                                           Base Price must contain a number with 2 decimal places</li>
                                         <li
-                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'REQ Start Date Window') && pInfo.rules.validationMessage != ''">
+                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'Req Start Date Window') && pInfo.rules.validationMessage != ''">
                                           Mandatory entry of 1 numeric value</li>
                                         <li
                                           *ngIf="pInfo.egineAttribue === 'Default Auto Renewal Term' && pInfo.rules.validationMessage != ''">
                                           Mandatory entry of 1 value from the Std Auto Renewal Term Range</li>
+                                        <li
+                                          *ngIf="pInfo.egineAttribue === 'True Up Term' && pInfo.rules.validationMessage != ''">
+                                          Mandatory Must be comma seperated, numeric with no spaces</li>
+                                        <li
+                                          *ngIf="pInfo.egineAttribue === 'NON STD AUTO RENEWAL TERM' && pInfo.rules.validationMessage != ''">
+                                          Value should be a numeric range where 1 is min and 12 is max</li>
+                                        <li
+                                          *ngIf="pInfo.egineAttribue === 'NON STD INITIAL TERM' && pInfo.rules.validationMessage != ''">
+                                          Value should be a numeric range where 1 is min and 120 is max (example: 1-12)</li>
+                                          <li
+                                            *ngIf="pInfo.egineAttribue === 'Asset Quantity' && pInfo.rules.validationMessage != ''">
+                                            Must be a numeric value</li>
+                                            <li
+                                              *ngIf="pInfo.egineAttribue === 'Spare Price' && pInfo.rules.validationMessage != ''">
+                                              Mandatory entry of a numeric value</li>
                                       </ul>
                                     </div>
 
@@ -622,7 +662,7 @@
                                       *ngIf="pInfo.rules.isvalid == false && (qafreeText.dirty || qafreeText.touched)">
                                       <ul>
                                         <li
-                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'REQ Start Date Window' && pInfo.rules.validationMessage != ''">
+                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'Req Start Date Window' && pInfo.rules.validationMessage != ''">
                                           {{pInfo.rules.validationMessage}}</li>
                                         <li
                                           *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
@@ -631,7 +671,7 @@
                                           *ngIf="pInfo.egineAttribue === 'Base Price' && pInfo.rules.validationMessage != ''">
                                           Base Price must contain a number with 2 decimal places</li>
                                         <li
-                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'REQ Start Date Window') && pInfo.rules.validationMessage != ''">
+                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'Req Start Date Window') && pInfo.rules.validationMessage != ''">
                                           Mandatory entry of 1 numeric value</li>
                                       </ul>
                                     </div>
@@ -677,7 +717,7 @@
                                       *ngIf="pInfo.rules.isvalid == false && (radioButton.dirty || radioButton.touched)">
                                       <ul>
                                         <li
-                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'REQ Start Date Window' && pInfo.rules.validationMessage != ''">
+                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'Req Start Date Window' && pInfo.rules.validationMessage != ''">
                                           {{pInfo.rules.validationMessage}}</li>
                                         <li
                                           *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
@@ -686,7 +726,7 @@
                                           *ngIf="pInfo.egineAttribue === 'Base Price' && pInfo.rules.validationMessage != ''">
                                           Base Price must contain a number with 2 decimal places</li>
                                         <li
-                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'REQ Start Date Window') && pInfo.rules.validationMessage != ''">
+                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'Req Start Date Window') && pInfo.rules.validationMessage != ''">
                                           Mandatory entry of 1 numeric value</li>
                                       </ul>
                                     </div>
@@ -733,7 +773,7 @@
                                       *ngIf="pInfo.rules.isvalid == false && (qaRadioButton.dirty || qaRadioButton.touched)">
                                       <ul>
                                         <li
-                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'REQ Start Date Window' && pInfo.rules.validationMessage != ''">
+                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'Req Start Date Window' && pInfo.rules.validationMessage != ''">
                                           {{pInfo.rules.validationMessage}}</li>
                                         <li
                                           *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
@@ -742,7 +782,7 @@
                                           *ngIf="pInfo.egineAttribue === 'Base Price' && pInfo.rules.validationMessage != ''">
                                           Base Price must contain a number with 2 decimal places</li>
                                         <li
-                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'REQ Start Date Window') && pInfo.rules.validationMessage != ''">
+                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'Req Start Date Window') && pInfo.rules.validationMessage != ''">
                                           Mandatory entry of 1 numeric value</li>
                                       </ul>
                                     </div>
@@ -788,7 +828,7 @@
                                       *ngIf="pInfo.rules.isvalid == false && (dropDown.dirty || dropDown.touched)">
                                       <ul>
                                         <li
-                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'REQ Start Date Window' && pInfo.rules.validationMessage != ''">
+                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'Req Start Date Window' && pInfo.rules.validationMessage != ''">
                                           {{pInfo.rules.validationMessage}}</li>
                                         <li
                                           *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
@@ -797,7 +837,7 @@
                                           *ngIf="pInfo.egineAttribue === 'Base Price' && pInfo.rules.validationMessage != ''">
                                           Base Price must contain a number with 2 decimal places</li>
                                         <li
-                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'REQ Start Date Window') && pInfo.rules.validationMessage != ''">
+                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'Req Start Date Window') && pInfo.rules.validationMessage != ''">
                                           Mandatory entry of 1 numeric value</li>
                                       </ul>
                                     </div>
@@ -842,7 +882,7 @@
                                   *ngIf="pInfo.rules.isvalid == false && (multiSelectInput.dirty || multiSelectInput.touched)">
                                   <ul>
                                     <li
-                                      *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'REQ Start Date Window' && pInfo.rules.validationMessage != ''">
+                                      *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'Req Start Date Window' && pInfo.rules.validationMessage != ''">
                                       {{pInfo.rules.validationMessage}}</li>
                                     <li
                                       *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
@@ -851,7 +891,7 @@
                                       *ngIf="pInfo.egineAttribue === 'Base Price' && pInfo.rules.validationMessage != ''">
                                       Base Price must contain a number with 2 decimal places</li>
                                     <li
-                                      *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'REQ Start Date Window') && pInfo.rules.validationMessage != ''">
+                                      *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'Req Start Date Window') && pInfo.rules.validationMessage != ''">
                                       Mandatory entry of 1 numeric value</li>
                                   </ul>
                                 </div>

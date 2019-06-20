@@ -1,0 +1,83 @@
+<div class="panel panel--indigo offer-detail">
+
+  <div class="offer-header" *ngIf="offerBuilderdata">
+
+    <div class="row">
+
+      <div class="col-md-6">
+        <div class="flex-fluid text-left half-margin-left half-margin-bottom half-margin-top">
+          <div class="display-6">Offer ID</div>
+          <div>{{ offerBuilderdata["offerId"] }}</div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="flex-fluid text-left half-margin-left half-margin-bottom base-margin-top">
+          <div class="align-status half-margin-right" *ngIf="offerBuilderdata['overallStatus']">
+
+            <app-offer-status [status]="offerBuilderdata['overallStatus']"></app-offer-status>
+
+            <span class="align-type">
+              {{ offerBuilderdata['derivedMM'] }}
+            </span>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row">
+
+      <div class="col-md-6">
+        <div class="flex-fluid text-left half-margin-left half-margin-bottom half-margin-top">
+          <div class="display-6">Offer Description</div>
+          <div>{{ offerBuilderdata["offerDesc"] }}</div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="flex-fluid text-left half-margin-left half-margin-bottom half-margin-top">
+          <div class="display-6">Business Entity</div>
+          <div>
+            {{
+                    offerBuilderdata["BEList"] != null
+                      ? offerBuilderdata["BEList"].join(", ")
+                      : ""
+                  }}
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row">
+
+      <div class="col-md-6">
+        <div class="flex-fluid text-left half-margin-left half-margin-bottom half-margin-top">
+          <div class="display-6">Expected Launch Date</div>
+          <div>
+            {{
+                offerBuilderdata["expectedLaunchDate"]
+                | date:'dd-MMM-yyyy'
+              }}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="flex-fluid text-left half-margin-left half-margin-bottom half-margin-top">
+          <div class="display-6">Business Unit</div>
+          <div>
+            {{
+                    offerBuilderdata["BUList"] != null
+                      ? offerBuilderdata["BUList"].join(", ")
+                      : ""
+                  }}
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>

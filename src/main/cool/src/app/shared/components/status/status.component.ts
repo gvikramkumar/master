@@ -1,4 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { pirateShipRoutesNames } from '../../constants/pirateShipStatus';
+
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-status',
@@ -14,19 +17,21 @@ export class StatusComponent implements OnInit {
 
   ngOnInit() {
 
-    if (this.status === 'Completed') {
-      this.finalStatus = 'Complete';
-    } else if (this.status === 'In Progress' || this.status === 'Reopen') {
-      this.finalStatus = 'InProgress';
-    } else if (this.status === 'Not Started') {
-      this.finalStatus = 'NotStarted';
-    } else if (this.status === 'Offer Not Present' || this.status === 'Offer workflow not setup') {
-      this.finalStatus = 'OfferNotPresent';
-    } else {
-      this.finalStatus = 'Other';
-    }
-  }
+    this.status = _.isEmpty(this.status) ? '' : this.status.toUpperCase();
 
+    if (this.status === pirateShipRoutesNames.Y || this.status === pirateShipRoutesNames.COMPLETED) {
+      this.finalStatus = 'complete';
+    } else if (this.status === pirateShipRoutesNames.N || this.status === pirateShipRoutesNames.IN_PROGRESS) {
+      this.finalStatus = 'inProgress';
+    } else if (this.status === pirateShipRoutesNames.AVAILABLE) {
+      this.finalStatus = 'available';
+    } else if (this.status === pirateShipRoutesNames.NOT_APPLICABLE) {
+      this.finalStatus = 'offerNotAvailable';
+    } else {
+      this.finalStatus = 'other';
+    }
+
+  }
 
 }
 

@@ -1,0 +1,87 @@
+<app-menu-bar [caseId]="caseId" [offerId]="offerId" [offerName]="offerName" [currentMMModel]="derivedMM">
+</app-menu-bar>
+
+<div class="content">
+  <div class="container">
+
+    <div class="panel-wrapper mt-15">
+
+      <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName" [selectedATO]="selectedAto">
+      </app-taskbar>
+
+      <br><br>
+
+      <div class="row">
+
+        <div class="leftContent col-sm-12 col-md-9">
+
+          <div class="row flex-center-vertical">
+            <div class="col-sm-12">
+
+              <div class="pull-left" >
+                <button class="btn btn--primary btn--cool btn--small tooltip" placement="top"
+                  (click)="goToOfferWorkBench()" [disabled]="checkLicenseExist()">
+                  Complete Subscription Mapping <i class="icon-popout"></i>
+                </button>
+              </div>
+
+              <div class="pull-right">
+
+                <div class="form-group dropdown label--inline ">
+                    <div class="form-group__text select">
+                      <label>Viewing</label>
+                      <select #dropDown="ngModel" [(ngModel)]="selectedIndex" (change)="showSelectedAtoView(dropDown.value)">
+                        <option *ngFor=" let ato of atoNames; let i = index;" [value]="i">
+                          {{ato}}</option>
+                      </select>
+                    </div>
+                  </div>
+
+              </div>
+
+            </div>
+          </div>
+
+          <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer' else selectedAtoView">
+            <br><br>
+            <app-ato-list [atoList]="atoList"></app-ato-list>
+          </div>
+
+          <ng-template #selectedAtoView>
+            <br><br>
+            <p-accordion>   
+                <p-accordionTab header="{{selectedAto}}" [selected]="true">
+                  <div *ngFor="let eachElement of selectedObjectAto?.minorPids">
+                      <table class="table" >
+                          <thead *ngIf="checkObject(eachElement)">
+                              <tr>
+                                 <th> {{eachElement?.itemName}}</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <tr *ngFor="let object of eachElement?.swSubcriptionSkuList">
+                                  <td> {{object}}</td>
+                              </tr>
+                          </tbody>
+                      </table> 
+                    </div>
+                </p-accordionTab>
+            </p-accordion>
+
+          </ng-template>
+
+          <app-pirate-ship-legend></app-pirate-ship-legend>
+
+        </div>
+
+        <div class="rightContent col-sm-12 col-md-3">
+          <app-right-panel [stakeData]="stakeholders" [offerName]="offerName" [derivedMM]="derivedMM"
+            [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference">
+          </app-right-panel>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

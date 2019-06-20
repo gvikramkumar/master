@@ -1,0 +1,88 @@
+<app-menu-bar [caseId]="caseId" [offerId]="offerId" [offerName]="offerName">
+</app-menu-bar>
+<div class="content">
+  <div class="container">
+    <div class="panel panel--compressed task--bar">
+      <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName"
+        [selectedATO]="selectedAto">
+      </app-taskbar>
+    </div>
+    <div class="row">
+      <div class="leftContent col-sm-12 col-md-9">
+        <div class="row base-margin-top">
+          <div class="col-md-9">
+            <em>Read Only </em><span class="icon-lock icon-small"></span>
+            Download config sheet for offline analysis
+          </div>
+          <div class="col-md-3">
+            <div class="pull-right">
+              <app-view-offer [atoNames]="offerDropdownValues" [selectedAto]="selectedAto"
+                (atoSelection)="showSelectedAtoView($event)">
+              </app-view-offer>
+            </div>
+
+          </div>
+        </div>
+        <div class="row col-md-12 base-margin-top">
+          <p-treeTable class="service-mapping" [value]="productDetails" [columns]="productColumns"
+            [resizableColumns]="true">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th *ngFor="let col of columns">
+                  <div class="text-center">
+                    {{col.header}}
+                  </div>
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+              <tr>
+                <td *ngFor="let col of columns; let i = index">
+                  <span *ngIf="col.field == 'newItemStatus'">
+                    <div class="text-center">
+                      <span *ngIf="rowData[col.field] == 'Available'">
+                        <span class="available">
+                        </span>
+                      </span>
+                      <span *ngIf="rowData[col.field] == 'Completed'">
+                        <span class="completed">
+                          <span class="icon-check"></span>
+                        </span>
+                      </span>
+                      <span *ngIf="rowData[col.field] == 'In Progress'">
+                        <span class="in-progress">
+                        </span>
+                      </span>
+                      <span *ngIf="rowData[col.field] == 'Not Yet Available'">
+                        <span class="not-available">
+                        </span>
+                      </span>
+                      <span *ngIf="rowData[col.field] == 'Not Required'">
+                        <span class="not-required">
+                        </span>
+                      </span>
+                    </div>
+                  </span>
+                  <span *ngIf="col.field !== 'newItemStatus'">
+                    <div class="text-center">{{rowData[col.field]}}</div>
+                  </span>
+                  <button
+                    *ngIf="col.field == 'download' && (rowData['newItemStatus'] == 'Available' || rowData['newItemStatus'] == 'Completed' || rowData['newItemStatus'] == 'In Progress')"
+                    class="btn btn--secondary btn--cool" (click)="downloadATODetails(rowData)" [disabled]="!permission">
+                    <span class="icon-download icon-small qtr-padding-right"></span>Download ATO Details
+                  </button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-treeTable>
+        </div>
+        <app-pirate-ship-legend></app-pirate-ship-legend>
+      </div>
+      <div class="rightContent col-sm-12 col-md-3">
+        <app-right-panel [stakeData]="stakeholders" [offerName]="offerName" [derivedMM]="derivedMM"
+          [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference">
+        </app-right-panel>
+      </div>
+    </div>
+  </div>
+</div>

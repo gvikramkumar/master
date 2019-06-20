@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { Ato } from '@app/pirate-ship/modules/modelling-design/model/ato';
+import { Ato } from '@app/feature/pirate-ship/modules/modelling-design/model/ato';
 
 @Component({
   selector: 'app-ato-list',

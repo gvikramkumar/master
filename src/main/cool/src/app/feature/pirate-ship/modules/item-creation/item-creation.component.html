@@ -1,0 +1,97 @@
+<app-menu-bar [caseId]="caseId" [offerId]="offerId" [offerName]="offerName">
+  </app-menu-bar>
+
+  <div class="content">
+  <div class="container">
+
+    <div class="half-margin-top">
+      <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName"
+      [selectedATO]="selectedAto">
+      </app-taskbar>
+    </div>
+    <div class="row half-margin-top">
+      <div class="leftContent col-sm-12 col-md-9">
+        <div class="row">
+          <div class="col-md-9">
+            <button (click)='showReviewEdit()' [disabled]="!permission" class="btn btn--cool btn--primary">
+              <span class="icon-pencil icon-small"></span> Review/Edit Items
+            </button>
+          </div>
+          <div class="col-md-3">
+            <div class="pull-right">
+              <app-view-offer [atoNames]="offerDropdownValues" [selectedAto]="selectedAto"
+                (atoSelection)="showSelectedAtoView($event)">
+              </app-view-offer>
+            </div>
+
+          </div>
+        </div>
+        <div class="row col-md-12 base-margin-top">
+          <p-treeTable class="item-creation" [value]="productDetails" [columns]="productColumns" selectionMode="checkbox"
+            [(selection)]="selectedProductNodes" [resizableColumns]="true">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th *ngFor="let col of columns">
+                  <div class="text-center">
+                    {{col.header}}
+                  </div>
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+              <tr>
+                <td *ngFor="let col of columns; let i = index">
+                  <p-treeTableCheckbox class="pull-left" [value]="rowNode" *ngIf="i == 0"></p-treeTableCheckbox>
+                  <p-treeTableToggler class="pull-left" [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+                  <span *ngIf="(col.field == 'newItemStatus' || col.field == 'moduleStatus') && rowData['existing'] == false">
+                    <div class="text-center">
+                      <span *ngIf="rowData[col.field] == 'Available'">
+                        <span class="available">
+                        </span>
+                      </span>
+                      <span *ngIf="rowData[col.field] == 'Completed'">
+                        <span class="completed">
+                          <span class="icon-check"></span>
+                        </span>
+                      </span>
+                      <span *ngIf="rowData[col.field] == 'In Progress'">
+                        <span class="in-progress">
+                        </span>
+                      </span>
+                    </div>
+                  </span>
+                  <span *ngIf="col.field == 'newItemStatus' && rowData['existing'] == true">
+                    <div class="text-center">--</div>
+                  </span>
+                  <span *ngIf="col.field == 'basePrice' && rowData[col.field]!=''">
+                    <div class="text-center">${{rowData[col.field]}}</div>
+                  </span>
+                  <span
+                    *ngIf="col.field !== 'newItemStatus' && col.field !== 'moduleStatus' && col.field !== 'basePrice'">
+                    <div class="text-center">{{rowData[col.field]}}</div>
+                  </span>
+                </td>
+              </tr>
+            </ng-template>
+          </p-treeTable>
+        </div>
+        <div class="row col-md-12 base-margin-top">
+          <button class="btn btn--cool btn--primary" [disabled]="!selectedProductNodes || selectedProductNodes.length === 0 || !permission"
+            (click)="removeProductDetails()">
+            Remove
+          </button>
+        </div>
+        <app-pirate-ship-legend></app-pirate-ship-legend>
+      </div>
+      <div class="rightContent col-sm-12 col-md-3">
+        <app-right-panel [stakeData]="stakeholders" [offerName]="offerName" [derivedMM]="derivedMM"
+          [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference">
+        </app-right-panel>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf='display'>
+  <dynamic-form-multiple (clkDownloadZip)='downloadZip()' (valueChange)='replacetabularFormQuestion($event)' [isItemCreation]="true" [indexVal]="ind"></dynamic-form-multiple>
+</div>

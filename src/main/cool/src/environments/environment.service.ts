@@ -3,7 +3,9 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class EnvironmentService {
 
+    ssoUrl: string;
     owbUrl: string;
+    tncOwbUrl: string;
     baseApiUrl: string;
     baseIdpUrl: string;
     redirectUrl: string;
@@ -14,14 +16,21 @@ export class EnvironmentService {
     idpClientId: string;
     idpClientSecret: string;
 
+    // EMAIL NOTIFICATION URL
+    REST_API_POST_USER_DETAILS_FOR_EMAIL_URL:string;
+
+    // CEPM URL
+    REST_API_GET_CEPMROLES_URL:string;
+
     //  AUTHENTICATION URLs
     REST_API_AUTH_IDP_TOKEN_URL: string;
     REST_API_GENERATE_AUTH_TOKEN_URL: string;
 
-    // USER INFO URLs 
+    // USER INFO URLs
     REST_API_LDAP_USER_DETAILS_URL: string;
     REST_API_URL_GET_CURRENT_USER_URL: string;
 
+    
     // LOV URLs
     REST_API_GET_FUNCTIONAL_ROLE_URL: string;
     REST_API_REGISTER_NEW_USER_GET_URL: string;
@@ -90,12 +99,14 @@ export class EnvironmentService {
     //  EMAIL URLs
     REST_API_EMAIL_NOTIFICATION: string;
     REST_API_SEND_EMAIL_NOTIFICATION_POST_URL: string;
+    REST_API_SEND_DASHBOARD_NOTIFICATION_CSDL_POST_URL: string;
 
     // ACCESS MANAGEMENT URLs
     REST_API_CREATE_NEW_USER_URL: string;
     REST_API_UPDATE_USER_INFO_URL: string;
     REST_API_RETRIEVE_USER_INFO_URL: string;
     REST_API_ACCESS_MANAGEMENT_GET_ALL_URL: string;
+    REST_API_GET_CEPM_ROLES_URL: string;
 
     //   ACTION URLs
     REST_API_POST_ACTION_URL: string;
@@ -123,9 +134,9 @@ export class EnvironmentService {
     REST_API_DESIGN_REVIEW_GET_URL: string;
 
     // OFFER SETUP
-    REST_API_RETRIEVE_ATO_LIST_URL: string;
     REST_API_OFFER_SETUP_MODULE_GET_URL: string;
     REST_API_OFFER_MODULE_STATUS_GET_URL: string;
+    REST_API_LOCK_API_FOR_OWB: string;
 
     // ITEM CREATION URLs
     REST_API_GET_ITEM_DETAILS: string;
@@ -133,35 +144,77 @@ export class EnvironmentService {
     REST_API_REMOVE_ITEM_DETAILS: string;
     REST_API_UPDATE_EGENIE_FLAG: string;
 
+    // MODELING & DESIGN URLs
+    REST_API_RETRIEVE_MODELING_ACTIVITIES_URL: string;
+    REST_API_UPDATE_MODELING_DESIGN_STATUS_URL: string;
+
     // SERVICE ANNUITY URLs
     REST_API_RETRIEVE_SERVICE_ATO_LIST_URL: string;
     REST_API_RETRIEVE_SERVICE_ANNUITY_PRICING_URL: string;
-    
+
+    // TERM AND CONTENT MAPPING URLs
+    REST_API_RETRIEVE_TERM_CONTENT_MAPPING_URL: string;
+
+    // CSDL URLs
+    REST_API_GET_ALL_PROJECTS: string;
+    REST_API_POST_CREATE_CSDL_ASSOCIATION: string;
+    REST_API_REFRESH_PROJECTS: string;
+    REST_API_CSDL_INFO_GET_URL: string;
+    REST_API_CSDL_PUBLISH_INFO_PUT_URL: string;
+
+    // SERVICE FOR BASIC MODULES URLs - NPI
+    REST_API_GET_ALL_COMMENTS_NPI_URL: string;
+    REST_API_ADD_COMMENT_NPI_URL: string;
+
+    // SERVICE FOR BASIC MODULES URLs - Royal Setup
+    REST_API_GET_ALL_COMMENTS_ROYALTY_SETUP: string;
+    REST_API_ADD_COMMENT_ROYALTY: string;
+
+    // SERVICE FOR BASIC MODULES URLs - Offer Attribution
+    REST_API_GET_ALL_COMMENTS_OFFER_ATTRIBUTION: string;
+    REST_API_ADD_COMMENT_OFFER_ATTRIBUTION: string;
+
+    // SERVICE FOR BASIC MODULES URLs - Export Compliance
+    REST_API_GET_ALL_COMMENTS_EXPORT_COMPLIANCE: string;
+    REST_API_ADD_COMMENT_EXPORT_COMPLIANCE: string;
+
+    // SERVICE FOR BASIC MODULES URLs - Testing
+    REST_API_GET_ALL_COMMENTS_TESTING: string;
+    REST_API_ADD_COMMENT_TESTING: string;
+
+    // SERVICE FOR BASIC MODULES URLs - Pricing Uplift
+    REST_API_GET_ALL_COMMENTS_PRICING_UPLIFT: string;
+    REST_API_ADD_COMMENT_PRICING_UPLIFT: string;
+
+    // BASIC MODULE STATUS UPDATE API
+    REST_API_UPDATE_MODULE_STATUS_URL: string;
+    REST_API_GET_MODULE_STATUS_URL: string;
+
+    // MARK COMPLETE STATUS URLs
+    REST_API_GET_MARK_COMPLETE_STATUS_URL: string;
+    REST_API_UPDATE_MARK_COMPLETE_STATUS_URL: string;
+
+    // SELF SERVICE ORDERABILITY URLs
+    REST_API_GET_SSO_DETAILS_URL: string;
+
+    // SERVICE MAPPING URLs
+    REST_API_DOWNLOAD_CONFIG_SHEET: string;
+    REST_API_GET_MAPPING_STATUS: string;
+    REST_CHECK_MAESTRO_PF_STATUS: string;
+
+    // PIRATE SHIP NOTIFICATION URLs
+    REST_API_PIRATE_SHIP_DASHBOARD_NOTIFICATION_URL;
+
+    // Royalty_setup Doc upload
+
+    REST_API_BasicModule_upload: string;
+    REST_API_BasicModule_DownloadDoc: string;
+    REST_API_BasicModuleFileName: string;
+    REST_API_BasicModuleDocType: string;
+
     // -------------------------------------------------------------------------------------------------
 
-        //SERVICE FOR BASIC MODULES URLs - NPI
-        REST_API_GET_ALL_COMMENTS_NPI_URL: string;
-        REST_API_ADD_COMMENT_NPI_URL: string;
-    
-        //SERVICE FOR BASIC MODULES URLs - Royal Setup
-        REST_API_GET_ALL_COMMENTS_ROYALTY_SETUP: string;
-        REST_API_ADD_COMMENT_ROYALTY: string;
-        //SERVICE FOR BASIC MODULES URLs - Offer Attribution
-        REST_API_GET_ALL_COMMENTS_OFFER_ATTRIBUTION: string;
-        REST_API_ADD_COMMENT_OFFER_ATTRIBUTION: string;
-        //SERVICE FOR BASIC MODULES URLs - Export Compliance
-        REST_API_GET_ALL_COMMENTS_EXPORT_COMPLIANCE: string;
-        REST_API_ADD_COMMENT_EXPORT_COMPLIANCE: string;
-        // SERVICE FOR BASIC MODULES URLs - Testing
-        REST_API_GET_ALL_COMMENTS_TESTING: string;
-        REST_API_ADD_COMMENT_TESTING: string;
-        // SERVICE FOR BASIC MODULES URLs - Pricing Uplift
-        REST_API_GET_ALL_COMMENTS_PRICING_UPLIFT: string;
-        REST_API_ADD_COMMENT_PRICING_UPLIFT: string;
-    
-        // BASIC MODULE STATUS UPDATE API
-        REST_API_UPDATE_MODULE_STATUS_URL: string;
-        REST_API_GET_MODULE_STATUS_URL: string;
+
     constructor() {
         this.setEnvironmentVariables();
     }
@@ -191,6 +244,8 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb.cloudapps.cisco.com/owb';
+                this.ssoUrl = 'https://sso.cloudapps.cisco.com/sso/index.html#/dashboard';
+                this.tncOwbUrl = 'https://offer.cloudapps.cisco.com/owb/#/subscription';
                 break;
             case 'stage':
                 this.baseApiUrl = 'https://cool-srv-stg.cisco.com/coolsrv';
@@ -202,6 +257,8 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
+                this.ssoUrl = 'https://sso.cloudapps.cisco.com/sso/index.html#/dashboard';
+                this.tncOwbUrl = 'https://offer-stage.cloudapps.cisco.com/owb/#/subscription';
                 break;
             case 'qualityassurance':
                 this.baseApiUrl = 'https://cool-srv-qa.cisco.com/coolsrv';
@@ -213,6 +270,8 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
+                this.ssoUrl = 'https://sso.cloudapps.cisco.com/sso/index.html#/dashboard';
+                this.tncOwbUrl = 'https://offer-stage.cloudapps.cisco.com/owb/#/subscription';
                 break;
             case 'development':
                 this.baseApiUrl = 'https://cool-srv-dev.cisco.com/coolsrv';
@@ -224,6 +283,8 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
+                this.ssoUrl = 'https://sso.cloudapps.cisco.com/sso/index.html#/dashboard';
+                this.tncOwbUrl = 'https://offer-stage.cloudapps.cisco.com/owb/#/subscription';
                 break;
             default:
                 this.baseApiUrl = '/api';
@@ -235,8 +296,16 @@ export class EnvironmentService {
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
                 this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
+                this.ssoUrl = 'https://sso.cloudapps.cisco.com/sso/index.html#/dashboard';
+                this.tncOwbUrl = 'https://offer-stage.cloudapps.cisco.com/owb/#/subscription';
         }
 
+        //-----------------------EMAIL NOTIFICATION URL --------------------
+        this.REST_API_POST_USER_DETAILS_FOR_EMAIL_URL = `${this.baseApiUrl}/accessManagement/sendAccessManagementEmail`
+
+        //-------------------------CEPM URL------------------------------
+        this.REST_API_GET_CEPMROLES_URL = `${this.baseApiUrl}/access/fetchCEPMRoles`
+        
         // ----------------------- AUTHENTICATION URLs -----------------------------------------------
 
         // tslint:disable-next-line: max-line-length
@@ -291,6 +360,7 @@ export class EnvironmentService {
         this.REST_API_SECONDARY_BUSINESS_ENTITY_URL = this.basePdafApiUrl + '/mdm/1.0/hierarchy/getBUhierarchy?business_unit=';
 
         this.PDAF_ISVALID_EGINIE_PID = this.basePdafApiUrl + '/product/1.0/isPIDavailable?pid=';
+
         // --------------------------------OFFER URL's------------------------------------------------------------
 
         this.REST_API_OFFER_STATUS = this.baseApiUrl + '/offer/flags/';
@@ -333,6 +403,7 @@ export class EnvironmentService {
 
         this.REST_API_EMAIL_NOTIFICATION = this.baseApiUrl + '/emailNotification/send';
         this.REST_API_SEND_EMAIL_NOTIFICATION_POST_URL = this.baseApiUrl + '/emailNotification/sendEmailNotification/';
+        this.REST_API_SEND_DASHBOARD_NOTIFICATION_CSDL_POST_URL = this.baseApiUrl + '/dashboard/notification/generate/';
 
         // ------------------------------- ACCESS MANAGEMENT URLs---------------------------------------------------
 
@@ -340,6 +411,7 @@ export class EnvironmentService {
         this.REST_API_UPDATE_USER_INFO_URL = this.baseApiUrl + '/access/updateUser';
         this.REST_API_CREATE_NEW_USER_URL = this.baseApiUrl + '/access/createNewUser';
         this.REST_API_ACCESS_MANAGEMENT_GET_ALL_URL = this.baseApiUrl + '/access/getAll';
+        this.REST_API_GET_CEPM_ROLES_URL = this.baseApiUrl + '/access/fetchCEPMRoles';
 
         // ---------------------------------  ACTION URLs -----------------------------------------------------------
 
@@ -372,8 +444,9 @@ export class EnvironmentService {
 
         // ------------------------------------ OFFER SETUP -------------------------------------------------
 
-        this.REST_API_RETRIEVE_ATO_LIST_URL = this.baseApiUrl + '/offersetup/getOWBModelObject/';
+        this.REST_API_LOCK_API_FOR_OWB = this.baseApiUrl + '/owb/lockAPI/';
         this.REST_API_OFFER_SETUP_MODULE_GET_URL = this.baseApiUrl + '/offersetup/getAllModuleStatus/';
+
 
         // --------------------------------------- ITEM CREATION --------------------------------------------
 
@@ -382,35 +455,87 @@ export class EnvironmentService {
         this.REST_API_REMOVE_ITEM_DETAILS = this.baseApiUrl + '/itemcreation/removeATOs';
         this.REST_API_UPDATE_EGENIE_FLAG = this.baseApiUrl + '/itemcreation/getEGenieStatus';
 
+        // ------------------------------------ MODELING & DESIGN -------------------------------------------------
+
+        this.REST_API_RETRIEVE_MODELING_ACTIVITIES_URL = this.baseApiUrl + '/modeling/getModelingActivities';
+        this.REST_API_UPDATE_MODELING_DESIGN_STATUS_URL = this.baseApiUrl + '/modeling/updateModelDesignStatus';
+
         // --------------------------------------- SERVICE ANNUITY  CREATION --------------------------------------------
 
         this.REST_API_RETRIEVE_SERVICE_ATO_LIST_URL = this.baseApiUrl + '/itemcreation/getATOs';
         this.REST_API_RETRIEVE_SERVICE_ANNUITY_PRICING_URL = this.baseApiUrl + '/serviceAnnuityPricing/getPricingOfferLevel';
-        // -------------------------------------------------------------------------------------------------
 
-         // --------------------------------------- BASIC MODULES - NPI Licensing ----------------------------------------------
-         this.REST_API_GET_ALL_COMMENTS_NPI_URL = this.baseApiUrl + '/pirateship/module/getNPILicensingComment';
-         this.REST_API_UPDATE_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module';
-         this.REST_API_ADD_COMMENT_NPI_URL = this.baseApiUrl + '/pirateship/module/addNPILicensingComments';
- 
-         // --------------------------------------- BASIC MODULES - ROYALTY SETUP ----------------------------------------------
-         this.REST_API_GET_ALL_COMMENTS_ROYALTY_SETUP = this.baseApiUrl + '/pirateship/module/getRoyaltySetupComment';
-         this.REST_API_ADD_COMMENT_ROYALTY = this.baseApiUrl + '/pirateship/module/addRoyaltySetupComments';
- 
-         // --------------------------------------- BASIC MODULES - OFFER ATTRIBUTION ---------------------------------------------
-         this.REST_API_GET_ALL_COMMENTS_OFFER_ATTRIBUTION = this.baseApiUrl + '/pirateship/module/getOfferAttributionComment';
-         this.REST_API_ADD_COMMENT_OFFER_ATTRIBUTION = this.baseApiUrl + '/pirateship/module/addOfferAttributionComments';
-         // --------------------------------------- BASIC MODULES - Export Compliance ---------------------------------------------
-         this.REST_API_GET_ALL_COMMENTS_EXPORT_COMPLIANCE = this.baseApiUrl + '/pirateship/module/getExportComplianceComment';
-         this.REST_API_ADD_COMMENT_EXPORT_COMPLIANCE = this.baseApiUrl + '/pirateship/module/addExportComplianceComments';
-         // --------------------------------------- BASIC MODULES - Testing --------------------------------------------
-         this.REST_API_GET_ALL_COMMENTS_TESTING = this.baseApiUrl + '/pirateship/module/getTestingComment';
-         this.REST_API_ADD_COMMENT_TESTING = this.baseApiUrl + '/pirateship/module/addTestingComments';
-         // --------------------------------------- BASIC MODULES - Pricing Uplift --------------------------------------------
-         this.REST_API_GET_ALL_COMMENTS_PRICING_UPLIFT = this.baseApiUrl + '/pirateship/module/getPricingUpliftComment';
-         this.REST_API_ADD_COMMENT_PRICING_UPLIFT = this.baseApiUrl + '/pirateship/module/addPricingUpliftComments';
-         // --------------------------------------- BASIC MODULES - Pirateship --------------------------------------------
-         this.REST_API_UPDATE_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module/addPirateshipModuleStatus';
-         this.REST_API_GET_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module/getPirateshipModuleStatus';
+        // --------------------------------------- TERM AND CONTENT MAPPING --------------------------------------------
+
+        this.REST_API_RETRIEVE_TERM_CONTENT_MAPPING_URL = this.baseApiUrl + '/offersetup/getTNCMappingObject';
+
+        // -------------------------------------- CSDL --------------------------------------------------------------------------
+
+        this.REST_API_REFRESH_PROJECTS = this.baseApiUrl + '/csdl/getCsdlDetails';
+        this.REST_API_GET_ALL_PROJECTS = this.baseApiUrl + '/csdl/searchCsdlProjectsNames';
+        this.REST_API_POST_CREATE_CSDL_ASSOCIATION = this.baseApiUrl + '/csdl/saveCsdlDetails';
+        this.REST_API_CSDL_INFO_GET_URL = this.baseApiUrl + '/csdl/csdlInformation/';
+        this.REST_API_CSDL_PUBLISH_INFO_PUT_URL = this.baseApiUrl + '/csdl/publishCsdlData';
+
+        // --------------------------------------- BASIC MODULES - NPI Licensing ----------------------------------------------
+
+        this.REST_API_UPDATE_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module';
+        this.REST_API_ADD_COMMENT_NPI_URL = this.baseApiUrl + '/pirateship/module/addNPILicensingComments';
+        this.REST_API_GET_ALL_COMMENTS_NPI_URL = this.baseApiUrl + '/pirateship/module/getNPILicensingComment';
+
+        // --------------------------------------- BASIC MODULES - ROYALTY SETUP ----------------------------------------------
+
+        this.REST_API_ADD_COMMENT_ROYALTY = this.baseApiUrl + '/pirateship/module/addRoyaltySetupComments';
+        this.REST_API_GET_ALL_COMMENTS_ROYALTY_SETUP = this.baseApiUrl + '/pirateship/module/getRoyaltySetupComment';
+
+
+        // --------------------------------------- BASIC MODULES - OFFER ATTRIBUTION ---------------------------------------------
+
+        this.REST_API_ADD_COMMENT_OFFER_ATTRIBUTION = this.baseApiUrl + '/pirateship/module/addOfferAttributionComments';
+        this.REST_API_GET_ALL_COMMENTS_OFFER_ATTRIBUTION = this.baseApiUrl + '/pirateship/module/getOfferAttributionComment';
+
+        // --------------------------------------- BASIC MODULES - Export Compliance ---------------------------------------------
+
+        this.REST_API_ADD_COMMENT_EXPORT_COMPLIANCE = this.baseApiUrl + '/pirateship/module/addExportComplianceComments';
+        this.REST_API_GET_ALL_COMMENTS_EXPORT_COMPLIANCE = this.baseApiUrl + '/pirateship/module/getExportComplianceComment';
+
+        // --------------------------------------- BASIC MODULES - Testing --------------------------------------------
+
+        this.REST_API_ADD_COMMENT_TESTING = this.baseApiUrl + '/pirateship/module/addTestingComments';
+        this.REST_API_GET_ALL_COMMENTS_TESTING = this.baseApiUrl + '/pirateship/module/getTestingComment';
+
+        // --------------------------------------- BASIC MODULES - Pricing Uplift --------------------------------------------
+
+        this.REST_API_ADD_COMMENT_PRICING_UPLIFT = this.baseApiUrl + '/pirateship/module/addPricingUpliftComments';
+        this.REST_API_GET_ALL_COMMENTS_PRICING_UPLIFT = this.baseApiUrl + '/pirateship/module/getPricingUpliftComment';
+
+        // --------------------------------------- BASIC MODULES - Pirateship --------------------------------------------
+
+        this.REST_API_GET_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module/getPirateshipModuleStatus';
+        this.REST_API_UPDATE_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module/addPirateshipModuleStatus';
+        // ------------------------------------MARK COMPLETE STATUS URLs-------------------------------------------------------------------
+        this.REST_API_GET_MARK_COMPLETE_STATUS_URL = this.baseApiUrl + '/offersetup/getTogglesStatus/';
+        this.REST_API_UPDATE_MARK_COMPLETE_STATUS_URL = this.baseApiUrl + '/offersetup/UpdateOrAddTogglesStatus';
+
+        // -------------------------------------- SELF SERVICE ORDERABILITY URLs --------------------------------------
+
+        this.REST_API_GET_SSO_DETAILS_URL = this.baseApiUrl + '/orderability/retrieveSsoDetails/';
+
+        // --------------------------------------- SERVICE MAPPING --------------------------------------------
+
+        this.REST_API_DOWNLOAD_CONFIG_SHEET = this.baseApiUrl + '/serviceMapping/xls';
+        this.REST_API_GET_MAPPING_STATUS = this.baseApiUrl + '/serviceMapping/getStatus';
+        this.REST_CHECK_MAESTRO_PF_STATUS = this.baseApiUrl + '/serviceMapping/pf/status';
+
+        // --------------------------------------- PIRATE SHIP DASHBOARD URLs --------------------------------------------
+
+        this.REST_API_PIRATE_SHIP_DASHBOARD_NOTIFICATION_URL = this.baseApiUrl + '/dashboard/notification/generate';
+
+
+        // -------------------------------------------------Basic Module DOCUMENT UPLOAD URL--------------------------------
+        this.REST_API_BasicModule_upload = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/UpLoadDoc';
+        this.REST_API_BasicModule_DownloadDoc = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/DownloadDoc';
+        this.REST_API_BasicModuleFileName = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/getFileName';
+        this.REST_API_BasicModuleDocType = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/getUploadDetail';
     }
 }

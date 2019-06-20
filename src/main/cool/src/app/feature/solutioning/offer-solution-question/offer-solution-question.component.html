@@ -1,0 +1,185 @@
+<div class="dimensions-questions">
+
+  <div class="subheader margin-5-0">
+    <span *ngIf="question['rules']['isMandatoryOptional']==='Mandatory'">
+      <font color="red"> * </font>
+    </span>
+    <label class="subheader margin-5-0">{{ question["question"] }}</label>
+  </div>
+
+  <div *ngIf="question['validUser']">
+
+    <!-- Free Text -->
+
+    <div *ngIf="question['questionType']==='Free Text'">
+      <div class="form-group" [class.has-error]="freeText.invalid" [class.has-success]="freeText.valid">
+
+        <textarea class="textarea" name="{{question['questionNo']}}" id="question['questionNo']" #freeText="ngModel"
+          [value]="question['answer']" [(ngModel)]="question['answerToQuestion']"
+          [disabled]="question['hideQuestion'] || markCompleteStatus" rows="3"
+          maxlength="{{question['rules']['maxCharacterLen']}}"
+          [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
+          (change)="showHiddenQuestionBasedOnUserInput(freeText.value, question)"></textarea>
+
+        <span class="help-block" *ngIf="question['answerToQuestion']?.length === question['rules']['maxCharacterLen']">
+          Only {{question['rules']['maxCharacterLen']}} characters allowed
+        </span>
+
+        <span class="help-block" *ngIf="freeText.invalid && (freeText.dirty || freeText.touched)">
+          <span *ngIf="freeText.errors.required">Valid input is required</span>
+        </span>
+
+      </div>
+    </div>
+
+    <!-- Free Text with No Space -->
+
+    <div *ngIf="question['questionType']==='Free Text with No Space'">
+      <div class="form-group" [class.has-error]="freeTextWithNoSpace.invalid"
+        [class.has-success]="freeTextWithNoSpace.valid">
+
+        <textarea class="textarea" name="{{question['questionNo']}}" id="question['questionNo']"
+          #freeTextWithNoSpace="ngModel" [value]="question['answer']" [(ngModel)]="question['answerToQuestion']"
+          [disabled]="question['hideQuestion'] || markCompleteStatus" rows="3"
+          maxlength="{{question['rules']['maxCharacterLen']}}"
+          [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
+          (change)="showHiddenQuestionBasedOnUserInput(freeTextWithNoSpace.value, question)"></textarea>
+
+        <span class="help-block"
+          *ngIf="freeTextWithNoSpace.invalid && (freeTextWithNoSpace.dirty || freeTextWithNoSpace.touched)">
+          <span *ngIf="freeTextWithNoSpace.errors.required">Valid input is required</span>
+        </span>
+
+      </div>
+    </div>
+
+    <!-- Currency Text -->
+
+    <div *ngIf="question['questionType']==='Currency Text'">
+      <div class="form-group" [class.has-error]="currencyText.invalid" [class.has-success]="currencyText.valid">
+
+        <input type="number" class="form-group__text" name="{{question['questionNo']}}" id="question['questionNo']"
+          #currencyText="ngModel" [value]="question['answer']" [(ngModel)]="question['answerToQuestion']"
+          [disabled]="question['hideQuestion'] || markCompleteStatus" rows="3" pattern="^[0-9]{1,5}(\.[0-9]{1,2})?$"
+          [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
+          (change)="showHiddenQuestionBasedOnUserInput(currencyText.value, question)" />
+
+        <span class="help-block" *ngIf="currencyText.invalid && (currencyText.dirty || currencyText.touched)">
+          <span *ngIf="currencyText.errors.required">Valid input is required</span>
+          <span *ngIf="currencyText.errors.pattern">5 digit number is required (XXXXX.XX)</span>
+        </span>
+
+      </div>
+    </div>
+
+    <!-- Percentage -->
+
+    <div *ngIf="question['questionType']==='Percentage'">
+      <div class="form-group" [class.has-error]="percentageText.invalid" [class.has-success]="percentageText.valid">
+        <input type="number" class="text" name="{{question['questionNo']}}" id="question['questionNo']"
+          #currencyText="ngModel" [value]="question['answer']" [(ngModel)]="question['answerToQuestion']"
+          [disabled]="question['hideQuestion'] || markCompleteStatus" rows="3"
+          pattern="^[0-9]{1,2}(\.[0-9]{1,2})?$|^100$"
+          [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
+          (change)="showHiddenQuestionBasedOnUserInput(percentageText.value, question)" />
+
+        <span class="help-block" *ngIf="percentageText.invalid && (percentageText.dirty || percentageText.touched)">
+          <span *ngIf="percentageText.errors.required">Valid input is required</span>
+          <span *ngIf="percentageText.errors.pattern">Input should be in range: 1-100 (XXX.XX)</span>
+        </span>
+
+      </div>
+    </div>
+
+    <!-- Radio Button -->
+
+    <div *ngIf="question['questionType']==='Radio Button'">
+
+      <div class="form-group form-group--inline" *ngFor="let radio of question['values']">
+
+        <label class="radio">
+          <input type="radio" name="{{question['questionNo']}}" id="question['questionNo']" #radioButton="ngModel"
+            [value]="radio" [(ngModel)]="question['answerToQuestion']"
+            [disabled]="question['hideQuestion'] || markCompleteStatus"
+            [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
+            (change)="showHiddenQuestionBasedOnUserInput(radioButton.value, question)" /> <span
+            class="radio__input"></span>
+          <span class="radio__label hidden-xs">{{radio}}</span>
+        </label>
+
+        <span class="help-block" *ngIf="radioButton.invalid && (radioButton.dirty || radioButton.touched)">
+          <span *ngIf=" radioButton.errors.required">Please select one option</span>
+        </span>
+
+      </div>
+    </div>
+
+    <!-- Dropdown -->
+
+    <div *ngIf="question['questionType']==='dropdown'">
+
+      <div class="form-group dropdown" [class.has-error]="dropDown.invalid" [class.has-success]="dropDown.valid">
+        <div class="form-group__text select">
+
+          <select class="offer-solution-quesiton-select" name="{{question['questionNo']}}" id="question['questionNo']"
+            #dropDown="ngModel" [(ngModel)]="question['answerToQuestion']"
+            [disabled]="question['hideQuestion'] || markCompleteStatus"
+            [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
+            (change)="showHiddenQuestionBasedOnUserInput(dropDown.value, question)">
+
+            <option *ngFor="let option of question['values']" [value]="option.value">
+              {{option.display}}</option>
+          </select>
+
+        </div>
+
+        <span class="help-block" *ngIf="dropDown.invalid && (dropDown.dirty || dropDown.touched)">
+          <span *ngIf="dropDown.errors.required">Please select one option</span>
+        </span>
+
+      </div>
+
+    </div>
+
+    <!-- Date Picker -->
+
+    <div *ngIf="question['questionType']==='Date'">
+      <div class="form-group label--floated input--icon half-margin-bottom col-md-6">
+
+        <div class="form-group__text" [class.has-error]="osDate.invalid" [class.has-success]="osDate.valid">
+
+          <input class="form-control" name="{{question['questionNo']}}" id="question['questionNo']"
+            [(ngModel)]="question['answerToQuestion']" #osDate="ngModel"
+            [disabled]="question['hideQuestion'] || markCompleteStatus" #dp4="bsDatepicker" bsDatepicker placement="top"
+            [minDate]="minDate" containerClass="custome-date" [bsConfig]="{dateInputFormat: 'DD-MMM-YYYY'}"
+            [(bsValue)]="question['answerToQuestion']"
+            [required]="question['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
+            (ngModelChange)="showHiddenQuestionBasedOnUserInput(osDate.value, question)">
+
+          <button type="button" class="link" tabindex="-1">
+            <span class="icon-month"></span>
+          </button>
+
+        </div>
+
+        <span class="help-block" *ngIf="(osDate.dirty || osDate.touched) && question['inValidDate']">End date must be
+          within 6 months (180 days) of start date</span>
+
+        <span class="help-block" *ngIf="osDate.invalid && (osDate.dirty || osDate.touched)">
+          <span *ngIf="osDate.errors.required">Select valid date</span>
+        </span>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div *ngIf="!question['validUser']">
+    <div class="form-group">
+      <div class="form-group__text">
+        <label>{{question['answerToQuestion']}}</label>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,118 @@
+<div class="row" *ngIf="projectId != -1 && associationStatusError != 'error'">
+  <div class="col-md-12">
+    <button class="btn btn--cool btn--secondary" type="submit" (click)="refreshStatus()">
+      <span class="icon-refresh icon-small"></span> Refresh Status
+    </button>
+  </div>
+</div>
+
+<div *ngIf="associationStatusError == 'error'">
+
+  <div class="row">
+    <div class="col-md-12">
+      <button class="btn btn--cool btn--secondary" type="submit" (click)="deAssociation()"> Restart Module
+        <span class="icon-redial"></span></button>
+    </div>
+  </div>
+
+  <div class="row base-margin-top">
+    <div class="col-md-12">
+      <div class="alert alert--danger" role="alert">
+        <div class="alert__icon icon-error-outline"></div>
+        <div class="alert__message">{{associationMessage}}</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="row base-margin-top">
+  <div class="col-md-12">
+    <p-table [value]="csdlData" [rows]="4">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>CSDL ID</th>
+          <th><span *ngIf="stopShipStatus == ''"><span class="icon-info-outline icon-small"></span></span>
+            <span *ngIf="stopShipStatus == 'True'"><span class="icon-info-outline icon-small"
+            pTooltip="The associated CSDL project does NOT meet the Security Readiness Criteria
+            and can NOT be released to the customer" tooltipPosition="top">
+              </span></span>
+            <span *ngIf="stopShipStatus == 'False'"><span class="icon-info-outline icon-small"
+              pTooltip="The associated CSDL project meets the Security Readiness Criteria
+              and can be released to the customer." tooltipPosition="top">
+              </span></span>&nbsp;STOP SHIP</th>
+          <th><span *ngIf="enforcementLabel == ''"><span class="icon-info-outline icon-small"></span></span>
+            <span *ngIf="enforcementLabel == 'Warning'"><span class="icon-info-outline icon-small"
+                pTooltip="Warning - The SRC warnings phase could be classified as Soft Enforcement Only.
+                All aspects of SRC should be in place and operational,
+                however BUs will receive 'warnings only' if their offering is not SRC compliant.
+                The entire SRC/SRP process will be required, however an offering will not be release-stopped
+                if the criteria has not been met" tooltipPosition="top">
+              </span></span>
+            <span *ngIf="enforcementLabel == 'Enforced'"><span class="icon-info-outline icon-small"
+              pTooltip="Enforcement - The SRC Enforcement phase is sometimes called Hard Enforcement.
+                  SRC enforcement took effect for on-prem (product) offerings on February 17, 2019.
+                  Cloud SRC enforcement will continue in a warnings phase through the remainder of FY19,
+                  with enforcement beginning in early FY20. The graphic below describes the deployment
+                  phases of SRC." tooltipPosition="top">
+              </span></span>&nbsp;ENFORCEMENT</th>
+          <th>LATEST STATUS UPDATE</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData>
+        <tr>
+          <td class=" text-left">
+            <span *ngIf="projectId == '' && associationStatusError != '' && associationStatusError != 'error'">
+              <span class="text-warning">Creation in Progress</span>
+            </span>
+            <span *ngIf="projectId == -1 && associationStatusError != '' && associationStatusError != 'error'">
+              <span class="text-warning">Creation in Progress</span>
+            </span>
+            <span *ngIf="associationStatusError == 'error'">
+              <span class="text-danger">Creation Rejected</span>
+            </span>
+            <span *ngIf="associationStatusError != '' && associationStatusError != 'error' && projectId != -1">
+              <a (click)="securityInsightsTab()">{{ rowData?.projectName }}({{ rowData?.projectId }})</a>
+            </span>
+          </td>
+          <td class=" text-center">
+            <span *ngIf="rowData?.stopShipStatus == 'True'">
+              <span class="text-danger">{{ rowData?.stopShipStatus }}</span>
+            </span>
+            <span *ngIf="rowData?.stopShipStatus == 'False'">
+              <span class="text-success">{{ rowData?.stopShipStatus }}</span>
+            </span>
+            <span *ngIf="rowData?.stopShipStatus == ''">
+              <span>--</span>
+            </span>
+          </td>
+          <td class=" text-center">
+            <span *ngIf="enforcementLabel == '' || enforcementLabel == null">
+              <span>--</span>
+            </span>
+            <span>{{ rowData?.enforcementLabel }}</span></td>
+          <td class=" text-center">{{ latestUpdatedFormatDate }}
+            <span *ngIf="csdlMileStoneStatus == 'In Progress' && associationStatusError != '' && associationStatusError != 'error'">
+              <span class="icon-trash icon-small pull-right" (click)="removeAssociationConfirmDailog()"></span>
+            </span>
+            <span *ngIf="csdlMileStoneStatus != 'In Progress' && associationStatusError != '' && associationStatusError != 'error'">
+              <span class="icon-trash icon-small pull-right trash-icon-color"
+                pTooltip="You cannot disassociate this CSDL ID as the offer has already passed 
+                the Readiness Review milestone" tooltipPosition="top"></span>
+            </span>
+            <span *ngIf="associationStatusError == 'error'">
+            </span>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <p-confirmDialog #cd header="Removing Association" title="The original ID associated with this offer will remain on this screen until a new ID is associated or created.
+        If CSDL is no longer applicable, the selection of 'Not Required' will also remove the association on this page">
+      <p-footer>
+        <button type="button" pButton label="Proceed" (click)="cd.accept()"></button>
+        <button type="button" pButton label="Cancel" (click)="cd.reject()"></button>
+      </p-footer>
+    </p-confirmDialog>
+    </div>
+</div>
+

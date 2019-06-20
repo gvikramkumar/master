@@ -1,0 +1,62 @@
+<app-menu-bar [caseId]="caseId" [offerId]="offerId" [offerName]="offerName" [currentMMModel]="derivedMM">
+</app-menu-bar>
+
+<div class="content">
+  <div class="container">
+
+
+
+    <div class="panel-wrapper mt-15">
+
+      <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName"
+        [selectedATO]="selectedAto">
+      </app-taskbar>
+
+
+
+      <div class="row">
+
+        <div class="leftContent col-sm-12 col-md-9">
+
+          <div class="row flex-center-vertical base-margin-top">
+            <div class="col-sm-12">
+
+              <!-- <div class="pull-left" *ngIf="showOrderabilityButton"> -->
+                <button class="btn btn--primary btn--cool btn--small tooltip" placement="top"
+                  (click)="goToOrderabilitySSO()" [disabled]="!disableOrderabilityButton">Update Orderability In SSO
+                  <i class="icon-popout"></i>
+                </button>
+              <!-- </div> -->
+
+              <div class="pull-right">
+                <app-view-offer [atoNames]="atoNames" [selectedAto]="selectedAto"
+                  (atoSelection)="showSelectedAtoView($event)">
+                </app-view-offer>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer' else selectedAtoView">
+            <app-sso-ato-list [ssoList]="ssoList" (atoSelection)="showSelectedAtoView($event)"></app-sso-ato-list>
+          </div>
+
+          <ng-template #selectedAtoView>
+            <app-sso-ato-summary [sso]="sso"></app-sso-ato-summary>
+          </ng-template>
+
+          <app-pirate-ship-legend></app-pirate-ship-legend>
+
+        </div>
+
+        <div class="rightContent col-sm-12 col-md-3">
+          <app-right-panel [stakeData]="stakeholders" [offerName]="offerName" [derivedMM]="derivedMM"
+            [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference">
+          </app-right-panel>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

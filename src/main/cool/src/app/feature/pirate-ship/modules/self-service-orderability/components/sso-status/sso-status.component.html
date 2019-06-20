@@ -1,0 +1,71 @@
+<div class="row sso--statuses">
+
+  <div class="col-md-1"></div>
+
+  <div class="col-md-2">
+
+    <div class="sso--status-completed"> Completed
+    </div>
+
+    <div *ngIf="ssoStatus && ssoStatus['completed']">
+      <ul>
+        <li *ngFor="let status of ssoStatus['completed']">{{status}}</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="col-md-2">
+
+    <div class="sso--status-warning">Warning
+    </div>
+
+    <div *ngIf="ssoStatus && ssoStatus['warning']">
+      <ul>
+        <li *ngFor="let status of ssoStatus['warning']">{{status}}</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="col-md-2">
+
+    <div class="sso--status-hold">Hold
+    </div>
+
+    <div *ngIf="ssoStatus && ssoStatus['hold']">
+      <ul>
+        <li *ngFor="let status of ssoStatus['hold']">{{status}}</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="col-md-2">
+
+    <div class="sso--status-error">Error
+    </div>
+
+    <div *ngIf="ssoStatus && ssoStatus['error']">
+      <ul>
+        <li *ngFor="let status of ssoStatus['error']">{{status}}</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="col-md-2">
+
+    <div class="sso--status-notreq">Not Required
+    </div>
+
+    <div *ngIf="ssoStatus && ssoStatus['notRequired']">
+      <ul>
+        <li *ngFor="let status of ssoStatus['notRequired']">{{status}}</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="col-md-1"></div>
+</div>

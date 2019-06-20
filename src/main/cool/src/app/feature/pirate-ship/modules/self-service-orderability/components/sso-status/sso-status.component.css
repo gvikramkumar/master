@@ -1,0 +1,33 @@
+.sso--statuses ul {
+    padding-left: 0;
+}
+
+div[class*="sso--status"] {
+    margin-bottom: 50px;
+    padding-bottom: 3px;
+}
+
+.sso--status-completed {
+    color: #6ebe4a;
+    border-bottom: solid 2px #6ebe4a;
+}
+
+.sso--status-warning {
+    color: #fbab18;
+    border-bottom: solid 2px #fbab18;
+}
+
+.sso--status-hold {
+    color: #005073;
+    border-bottom: solid 2px #005073;
+}
+
+.sso--status-error {
+    color: #e2231a;
+    border-bottom: solid 2px #e2231a;
+}
+
+.sso--status-notreq {
+    color: #9e9ea2;
+    border-bottom: solid 2px #9e9ea2;
+}

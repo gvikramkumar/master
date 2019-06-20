@@ -13,6 +13,7 @@ export const appRoutesNames = {
     CONSTRUCT: 'offerConstruct',
     OAS: 'oas',
     DESIGN_REVIEW: 'designReview',
-    PIRATE_SHIP: 'offerSetup'
+    PIRATE_SHIP: 'offerSetup',
+    ERROR_PAGE:'errorpage'
 }
 

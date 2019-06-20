@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { forkJoin, Observable, of, from } from 'rxjs';
+import { forkJoin, Observable, of, from,Subject,BehaviorSubject } from 'rxjs';
 import { NewUser } from '../models/newuser';
-import { map, filter, mergeMap, merge, mergeAll, concat, concatAll } from 'rxjs/operators';
+import { map, filter, mergeMap, merge, mergeAll, concat, concatAll,switchMap } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { EnvironmentService } from '@env/environment.service';
 import { UserService } from '@app/core/services/user.service';
@@ -10,12 +10,65 @@ import { UserService } from '@app/core/services/user.service';
 @Injectable()
 export class AccessManagementService {
 
+    public modalSubject = new Subject();
+    public sendBoolGuard = new Subject();
+    public sendRouteUrl = new Subject();
+    public sendSelectedRole = new Subject();
+    public getRoleObj = new  BehaviorSubject({});
+    public getRoleObjFromUserRegistration = new  BehaviorSubject(null);
+    public sendReadOnlyRoles = new BehaviorSubject([]);
+    public sendErrMsg = new BehaviorSubject("");
+    public behaviourSub = new BehaviorSubject([]);
+    public sendfunctionalRolRaw = new BehaviorSubject("");
+    public sendFromUserRegistration = new BehaviorSubject([]);
+    public roles: any;
+
+    public urlGetCEPMRoles:string = this.environmentService.REST_API_GET_CEPMROLES_URL;
     urlBusinessUnit: string = this.environmentService.PDAF_API + '?columns=business_unit&distinct=true';
     urlBusinessEntity: string = this.environmentService.PDAF_API + '?columns=BE&distinct=true';
     urlGetPrimaryBUBasedOnBE: string = this.environmentService.PDAF_API + '?&distinct=true&be=';
 
     constructor(
         private httpClient: HttpClient, private environmentService: EnvironmentService, private userService: UserService) { }
+
+        onGetUserCEPM() {
+            return this.checkAdminAccess()
+             .pipe(switchMap((data)=> {
+                 return this.getCEPMRoles(data.userId);
+             }));
+         }
+
+         onGetCEPMrolesUserRegistration(userId:string) {
+            return this.getCEPMRoles(userId);
+         }
+
+         getCEPMRoles(userId:string) {
+            const PAYLOAD = {
+                methodType:"USER_RESOURCE_ACTION_ENVATTR_LEVEL",
+                methodName:"getDecisionsWithRolesForSCUser",
+                userName:userId,
+                resourceFQN:"SCAppGrp:Cisco Orchestrated Offer Lifecycle",
+                context:"Global Context:Global Context",
+                action:"any",
+                roleBundles:{
+                roleBundle:["Default"]
+                },
+                level:"-1",
+                returnWithResType:"false",
+                excludeResGrp:"true"
+            }
+            return this.httpClient.post(this.environmentService.REST_API_GET_CEPM_ROLES_URL, PAYLOAD);
+          }
+
+          onSendEmail(assignedUser,assigningAdmin,assignedUserFirstName,assigningAdminFullName) {
+              const PAYLOAD = {
+                "assignedUser":assignedUser,
+                "assigningAdmin":assigningAdmin,
+                "assignedUserFirstName":assignedUserFirstName,
+                "assigningAdminFullName":assigningAdminFullName
+              }
+            return this.httpClient.post(this.environmentService.REST_API_POST_USER_DETAILS_FOR_EMAIL_URL,PAYLOAD)
+          }
 
     accessManagementAll(): any {
         return this.httpClient.get(this.environmentService.REST_API_ACCESS_MANAGEMENT_GET_ALL_URL);

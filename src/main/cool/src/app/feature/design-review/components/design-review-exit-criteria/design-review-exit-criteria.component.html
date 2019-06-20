@@ -1,0 +1,48 @@
+<div class="content-fluid">
+  <main>
+    <div class="accordion" id="accordion">
+      <div class="card">
+        <div class="card-header" id="headingOne">
+          <h5 class="mb-0">
+            Exit Criteria
+            <button (click)="requestForApproval()" [disabled]="!requestApprovalAvailable || readOnly" class="btn pull-right"
+              type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
+              aria-controls="collapseOne">
+              Request Approval
+            </button></h5>
+        </div>
+        <div class="row height-10"></div>
+        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+          <div class="card-body">
+            <div class="responsive-table">
+              <table class="table table--nostripes offer-dimensions">
+                <thead>
+                  <tr>
+                    <th class="sortable">Exit Criteria </th>
+                    <th class="sortable status-center">Status </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="icon-view-feed-single icon-medium dependancy"></span>
+                      {{ideate['subMilestone']}}</td>
+                    <td class="status" [ngStyle]="{'color': actionStatusColor(ideate['status'])}">
+                      {{ideate['status']}}</td>
+                  </tr>
+                  <ng-container *ngFor="let action of plan">
+                    <tr *ngIf="action['subMilestone'].trim() != 'Design Review'">
+                      <td><span class="icon-view-feed-single icon-medium dependancy"></span>
+                        {{action['subMilestone']}}</td>
+                      <td class="status" [ngStyle]="{'color': actionStatusColor(action['status'])}">
+                        {{action['status']}}</td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

@@ -1,0 +1,11 @@
+.creation-in-progress {
+    color: orange !important
+}
+
+.creation-rejected {
+    color: red !important
+}
+
+.trash-icon-color {
+    color: grey !important;
+}

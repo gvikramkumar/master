@@ -1,0 +1,110 @@
+.osw-module--btns button {
+  min-width:100%;
+  padding-left: 3px;
+  z-index: 9;
+  position: relative;
+}
+.osw-module--btns button.btn.btn--small.btn--warning {
+  color: #fff;
+  background-color: #fbab18;
+}
+.osw-module--btns button.btn.btn--small.btn--warning:hover {
+  color: #fff;
+  background-color: #ffcc00;
+}
+.osw-module--btns button.btn.btn--small.btn--default {
+  color: #585858;
+  background-color: rgba(76, 76, 76, 0.1);
+}
+.osw-module--btns button.btn.btn--small.btn--default:hover {
+  color: #585858;
+  background-color: rgba(76, 76, 76, 0.25);
+}
+.osw-module--btns .btn.btn--small > span[class^="icon-"] {
+  background: white;
+  border-radius: 20px;
+  width: 24px;
+  height: 24px;
+}
+.osw-module--btns .btn.btn--small.btn--success > span[class^="icon-"] {
+  color: #6ebe4a;
+}
+.osw-module--btns .btn.btn--small.btn--primary > span[class^="icon-"] {
+  color: #017CAD;
+}
+.osw-module--btns .btn.btn--small.btn--default > span[class^="icon-"] {
+  color: #58585b;
+}
+.osw-module--btns .btn.btn--small.btn--gray-ghost > span[class^="icon-"] {
+  color: #58585b;
+}
+.osw-module--btns .btn.btn--small.btn--warning > span[class^="icon-"] {
+  color: #fbab18;
+}
+.osw-module--btns .btn.btn--small.btn--gray-ghost {
+  background-color: #fff;
+}
+.osw-module--btns .btn.btn--small.btn--gray-ghost:hover {
+  background-color: #58585b;
+}
+.osw-module--btns .panel.panel--bordered {
+  position: relative;
+  z-index: 1;
+}
+.osw-module--btns:before {
+  content: '';
+  border: solid 1px #dfdfdf;
+  position: absolute;
+  display: block;
+  width: 50%;
+  height: 280px;
+  z-index: 0;
+  left: 15%;
+  top: 15%;
+}
+.osw-module--btns .last li:last-child button:before {
+  content: '';
+  border: solid 1px #dfdfdf;
+  position: absolute;
+  display: block;
+  width: 1px;
+  height: 22px;
+  z-index: -1;
+  left: 50%;
+  top: -22px;
+}
+// Legend
+   .legend-available {
+     background-color:#017CAD;
+     border: solid 1px transparent;
+   }
+.legend-notavail {
+  background-color:white;
+  border:solid 1px rgba(76, 76, 76, 0.1);
+}
+.legend-notreq {
+  background-color:rgba(76, 76, 76, 0.1);
+  border: solid 1px transparent;
+}
+.legend-completed {
+  background-color:#6EBE4A;
+  border: solid 1px transparent;
+}
+.legend-inprog {
+  background-color:#FBAB18;
+  border:solid 1px rgba(76, 76, 76, 0.1);
+}
+.legend-milestone {
+  background-color:#9E9EA2;
+  border: solid 1px transparent;
+}
+
+.center_loading{
+  width:200px;
+  height: 200px;
+  position: absolute;
+  left:50%;
+  top:50%;
+  margin-left:-100px;
+  margin-top:-100px;
+}

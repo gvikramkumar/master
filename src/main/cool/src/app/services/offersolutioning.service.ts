@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import { EnvironmentService } from '../../environments/environment.service';
 
 @Injectable()
 export class OffersolutioningService {
   solutionData: Object = {};
-
   constructor(private httpClient: HttpClient, private environmentService: EnvironmentService) { }
 
   postForOfferSolutioning(data) {
@@ -69,4 +68,10 @@ export class OffersolutioningService {
     const url = `${this.environmentService.REST_API_OFFER_STATUS}${offerId}?flag=${flagKey}&val=${flagValue}`;
     return this.httpClient.post(url, {});
   }
+
+  checkStatusOnMaestro(offerId: string, productFamily:string){
+    const url = this.environmentService.REST_CHECK_MAESTRO_PF_STATUS + '/' + offerId + '/' + productFamily;
+    return this.httpClient.get(url);
+  }
+
 }

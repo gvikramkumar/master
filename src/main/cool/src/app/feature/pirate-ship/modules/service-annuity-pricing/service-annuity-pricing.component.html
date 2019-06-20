@@ -1,0 +1,65 @@
+
+<!--this is new component-->
+
+<app-menu-bar [caseId]="caseId" [offerId]="offerId" [offerName]="offerName" [currentMMModel]="derivedMM"></app-menu-bar>
+
+<div class="content">
+  <div class="container">
+
+    <div class="panel-wrapper mt-15">
+      <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName" [selectedATO]="selectedAto">
+      </app-taskbar>
+
+      <br><br>
+
+      <div class="row">
+
+        <div class="leftContent col-sm-12 col-md-9">
+
+          <div class="row flex-center-vertical">
+              <div class="col-sm-12">
+                <div class="pull-right">
+                  <app-view-offer [atoNames]="atoNames" [selectedAto]="selectedAto"
+                    (atoSelection)="showSelectedAtoView($event)">
+                  </app-view-offer>
+                </div>
+              </div>
+          </div>
+
+          <!--
+          <ng-template #atosummary>
+            <div class="row">
+              <app-sap-ato-summary [atoNames]="atoNames" [selectedAto]="selectedAto" [offerId]="offerId"  [caseId] = "caseId"></app-sap-ato-summary>
+            </div>
+          </ng-template> 
+          -->
+
+          <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer'">
+            <app-ato-list [atoList]="atoList"></app-ato-list>
+          </div>
+<!--          <ng-template #atosummary>-->
+<!--            <div class="row">-->
+<!--              <app-sap-ato-summary [atoNames]="atoNames" [selectedAto]="selectedAto" [offerId]="offerId"  [caseId] = "caseId"></app-sap-ato-summary>-->
+<!--            </div>-->
+<!--          </ng-template>-->
+
+          <!-- New Comment added -->
+
+          <app-pirate-ship-legend></app-pirate-ship-legend>
+
+
+
+        </div>
+
+        <div class="rightContent col-sm-12 col-md-3">
+          <app-right-panel [stakeData]="stakeholders" [offerName]="offerName" [derivedMM]="derivedMM"
+
+                           [primaryBE]="primaryBE" [displayLeadTime]="displayLeadTime" [noOfWeeksDifference]="noOfWeeksDifference">
+          </app-right-panel>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
