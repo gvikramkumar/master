@@ -1,7 +1,7 @@
 <div>
 
   <!-- Offer Phase Steps -->
-  <div class="panel panel--compressed panel--bordered panel--raised-small base-margin-bottom" (click)="showOfferPhaseDailog()">
+  <div appReadonly [DirectiveValue]="'Offer Phase Widget'"  class="panel panel--compressed panel--bordered panel--raised-small base-margin-bottom" (click)="showOfferPhaseDailog()">
     <h5 class="half-margin-bottom">Offer Phase
       <a appHiddenelem appReadonly [DirectiveValue]="'Offer Phase Widget'" href="javascript:;" class="pull-right" (click)="showOfferPhaseDailog()">
         <span class="icon-pencil"></span> Edit</a>
@@ -40,7 +40,7 @@
   </div>
 
   <!-- Estimated Lead Time -->
-  <div appReadonly [DirectiveValue]="'Offer Phase Widget'"  class="panel panel--compressed panel--bordered panel--raised-small base-margin-bottom">
+  <div class="panel panel--compressed panel--bordered panel--raised-small base-margin-bottom">
 
     <h5 class="half-margin-bottom">Estimated Lead Time</h5>
 
@@ -98,7 +98,7 @@
   <!-- People Involved -->
   <div class="panel panel--compressed panel--bordered panel--raised-small stakeholders">
 
-    <h5 class="half-margin-bottom">People Involved
+    <h5 appReadonly [DirectiveValue]="'Offer Phase Widget'"  class="half-margin-bottom">People Involved
       <a appHiddenelem appReadonly [DirectiveValue]="'Offer Phase Widget'"  href="javascript:;" class="pull-right" (click)="showStakeHolderDialog()">
         <i class="pi pi-plus"></i> Add</a>
     </h5>
