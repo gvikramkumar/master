@@ -211,7 +211,7 @@ export class EnvironmentService {
     REST_API_BasicModule_DownloadDoc: string;
     REST_API_BasicModuleFileName: string;
     REST_API_BasicModuleDocType: string;
-
+    REST_API_ServiceAPUpdate: string;
     // -------------------------------------------------------------------------------------------------
 
 
@@ -464,8 +464,10 @@ export class EnvironmentService {
 
         this.REST_API_RETRIEVE_SERVICE_ATO_LIST_URL = this.baseApiUrl + '/itemcreation/getATOs';
         this.REST_API_RETRIEVE_SERVICE_ANNUITY_PRICING_URL = this.baseApiUrl + '/serviceAnnuityPricing/getPricingOfferLevel';
+        this.REST_API_ServiceAPUpdate = this.baseApiUrl + '/serviceAnnuityPricing/getPricingAtoSkusLevel';
 
-        // --------------------------------------- TERM AND CONTENT MAPPING --------------------------------------------
+
+      // --------------------------------------- TERM AND CONTENT MAPPING --------------------------------------------
 
         this.REST_API_RETRIEVE_TERM_CONTENT_MAPPING_URL = this.baseApiUrl + '/offersetup/getTNCMappingObject';
 
@@ -539,5 +541,8 @@ export class EnvironmentService {
         this.REST_API_BasicModule_DownloadDoc = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/DownloadDoc';
         this.REST_API_BasicModuleFileName = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/getFileName';
         this.REST_API_BasicModuleDocType = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/getUploadDetail';
+
+
+
     }
 }
