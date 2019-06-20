@@ -636,6 +636,7 @@ export default class PgLookupRepo {
         when 'APJC__' then 'APJC'
         when 'Americas' then 'Americas'
         when 'EMEAR-REGION' then 'EMEA'
+        when 'EUROPEAN MARKETS' then 'EMEA'
         when 'GLOBAL SERVICE PROVIDER' then 'Americas' end as external_theater
         from  fpadfa.dfa_prof_disti_to_direct_map_upld D2D
         ,fpacon.vw_fpa_sales_hierarchy dsh
