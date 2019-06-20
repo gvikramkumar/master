@@ -34,14 +34,14 @@
           </ng-template> 
           -->
 
-          <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer' else atosummary">
+          <div class="base-margin-top" *ngIf="selectedAto==='Overall Offer'">
             <app-ato-list [atoList]="atoList"></app-ato-list>
           </div>
-          <ng-template #atosummary>
-            <div class="row">
-              <app-sap-ato-summary [atoNames]="atoNames" [selectedAto]="selectedAto" [offerId]="offerId"  [caseId] = "caseId"></app-sap-ato-summary>
-            </div>
-          </ng-template>
+<!--          <ng-template #atosummary>-->
+<!--            <div class="row">-->
+<!--              <app-sap-ato-summary [atoNames]="atoNames" [selectedAto]="selectedAto" [offerId]="offerId"  [caseId] = "caseId"></app-sap-ato-summary>-->
+<!--            </div>-->
+<!--          </ng-template>-->
 
           <!-- New Comment added -->
 

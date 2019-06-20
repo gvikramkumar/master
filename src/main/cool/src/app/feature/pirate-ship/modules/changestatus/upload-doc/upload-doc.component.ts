@@ -76,7 +76,7 @@ export class UploadDocComponent implements OnInit {
       if(this.fileToUpload.size/(1024*1024) <= this.DocSize) {
 
         if (this.DocType.indexOf(  this.fileToUpload.name.split('.')[1].toLocaleLowerCase()) > -1 || this.DocType.indexOf('ALL') > -1) {
-
+          this.fileName = "";
           let formdata: FormData = new FormData();
           const usaTime = new Date().toLocaleString('en-US', {timeZone: 'America/Los_Angeles'});
           console.log( new Date(usaTime).getTime().toString());
@@ -90,14 +90,17 @@ export class UploadDocComponent implements OnInit {
           formdata.append('userName', this._userService.getName());
           formdata.append('timeStamp', new Date(usaTime).getTime().toString());
           formdata.append('moduleName', this.moduleName);
-          debugger;
           this.httpClient.post(this._evnService.REST_API_BasicModule_upload, formdata).subscribe(
             (res: any) => {
               this.status = res.status;
               if (res.status === 200) {
+
                 this.fileName = res.fileName;
                 this.info="";
                 this.downloadUrl = this._evnService.REST_API_BasicModule_DownloadDoc+"?offerId="+this.offerId+"&fileName="+this.fileName+"&moduleName="+this.moduleName+"";
+
+
+
               } else {
                 this.info = res.Message;
               }
