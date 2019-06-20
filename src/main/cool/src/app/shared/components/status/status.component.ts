@@ -25,7 +25,8 @@ export class StatusComponent implements OnInit {
       this.finalStatus = 'inProgress';
     } else if (this.status === pirateShipRoutesNames.AVAILABLE) {
       this.finalStatus = 'available';
-    } else if (this.status === pirateShipRoutesNames.NOT_APPLICABLE) {
+    } else if (this.status === pirateShipRoutesNames.NOT_APPLICABLE
+      || this.status === pirateShipRoutesNames.NOT_YET_AVAILABLE) {
       this.finalStatus = 'offerNotAvailable';
     } else {
       this.finalStatus = 'other';
