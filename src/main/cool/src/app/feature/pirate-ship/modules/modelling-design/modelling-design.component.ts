@@ -129,11 +129,16 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
 
   goToDesignCanvas() {
 
-    const userId = this.configurationService.startupData.userId;
-    let urlToOpen = this.environmentService.owbUrl + '/owb/manage/offer/owbOfferDefinition?';
-    urlToOpen += 'selectedAto=' + this.selectedAto + '&planId=' + this.planId + '&userId=' + userId + '&coolOfferId=' + this.offerId;;
+    this.modellingDesignSubscription = this.modellingDesignService.updateModelingDesignStatus(this.offerId, this.selectedAto)
+      .subscribe(() => {
 
-    window.open(urlToOpen, '_blank');
+        const userId = this.configurationService.startupData.userId;
+        let urlToOpen = this.environmentService.owbUrl + '/owb/manage/offer/owbOfferDefinition?';
+        urlToOpen += 'selectedAto=' + this.selectedAto + '&planId=' + this.planId + '&userId=' + userId + '&coolOfferId=' + this.offerId;
+
+        window.open(urlToOpen, '_blank');
+
+      });
 
   }
 
@@ -165,7 +170,7 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
     let userRoleCheck = false;
 
     // Check If ATO has Valid Status
-    const statusList = ['Completed', 'In Progress', 'Reopen', 'Not Started'];
+    const statusList = ['Completed', 'In Progress', 'Available', 'Not Required'];
     if (statusList.some(status => currentStatus.includes(status))) {
       statusCheck = true;
     } else {

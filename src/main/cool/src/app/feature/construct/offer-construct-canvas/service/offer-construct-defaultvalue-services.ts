@@ -74,6 +74,13 @@ export class OfferConstructDefaultValue {
         }
       }
 
+      if (element.question == 'Terms & Payments Required') {
+        if (element.currentValue == 'No') {
+          // set Subscription Offset(In Days) as disable if the value in 'no'
+          this.disableSubscriptionOffset(listOfferQuestions)
+        }
+      }
+
       if (element.question == 'Service Type?') {
           element.currentValue = 'Support';
           element.previousValue = 'Support';
@@ -132,23 +139,27 @@ export class OfferConstructDefaultValue {
           element.currentValue = 'No';
           element.previousValue = 'No';
         }
-        // if (element.question == 'TMS Node TS') {
-        //   if (beListType == "Collaboration") {
-        //     element.currentValue = "UC/HVS/SWSS/SUB/TRAN Svc";
-        //     element.previousValue = "UC/HVS/SWSS/SUB/TRAN Svc";
-        //   }
-        //   if (beListType == "Security") {
-        //     element.currentValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
-        //     element.previousValue = "Swatch/HVS/SWSS/SUB/TRAN Svc";
-        //   }
-        //   else {
-        //     element.currentValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
-        //     element.previousValue = "X-Arch/HVS/SWSS/SUB/TRAN Svc";
-        //   }
-        // }
 
+        if (element.question === 'Pricing Type') {
+          if (chargeTypeValue == usageType) {
+            element.currentValue = 'Fixed Amount';
+            element.previousValue = 'Fixed Amount';
+          } else {
+            element.currentValue = 'Scaled Amount';
+            element.previousValue = 'Scaled Amount';
+          }
+        }
     });
     return listOfferQuestions;
+  }
+
+  // disableSubscriptionOffset
+  disableSubscriptionOffset(listOfferQuestions) {
+    listOfferQuestions.forEach(element => {
+      if (element.question == 'Subscription Offset(In Days)') {
+        element.rules.isDisabled = true;
+      }
+    });
   }
 
   setSubscriptionType(listOfferQuestions, serviceTypeValue) {
@@ -737,8 +748,7 @@ export class OfferConstructDefaultValue {
     questionList.forEach(question => {
       if (question.question == "Enablement File Type") {
           question.rules.isDisabled = true;
-          question.rules.currentValue = '';
-          question.rules.isMandatoryOptional = "Optional";
+          question.currentValue = '';
       }
     });
     return questionList;

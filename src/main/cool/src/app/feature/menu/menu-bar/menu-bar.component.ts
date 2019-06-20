@@ -40,7 +40,7 @@ export class MenuBarComponent implements OnInit {
 
     shouldDisable = false;
     holdStatusValid = true;
-    public dispValue = true;
+    public dispValue = false;
     cancelStatusValid = true;
     showMarkcompletePopup = false;
     showMarkcompleteToggle = false;
@@ -110,12 +110,6 @@ export class MenuBarComponent implements OnInit {
     }
 
     ngOnInit() {
-
-        this.accessMgmtService.modalSubject.subscribe((value: boolean) => {
-            setTimeout(() => {
-                this.dispValue = value;
-            }, 0);
-        });
 
         this.items = [
             {
