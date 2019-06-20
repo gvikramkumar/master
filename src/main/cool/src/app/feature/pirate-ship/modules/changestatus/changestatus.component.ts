@@ -76,7 +76,7 @@ export class ChangestatusComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private changestatusService: ChangestatusService,
               private headerService: HeaderService,
-              private pirateShipSharedService:PirateShipSharedService,
+              private pirateShipSharedService: PirateShipSharedService,
               private offerSetupService: OfferSetupService,
               private rightPanelService: RightPanelService,
               private stakeholderfullService: StakeholderfullService,
