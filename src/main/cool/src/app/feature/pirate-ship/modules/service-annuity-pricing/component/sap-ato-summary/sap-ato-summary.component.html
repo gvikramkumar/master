@@ -8,17 +8,8 @@
   <div class="row" style="margin-bottom: 20px">
     <div class="col-5">
 
-      <button class="btn btn--primary"  *ngIf="showbutton" (click)="updatecasestatus()" [disabled]="!Atosummary_be_sub.clickable">Submit Setup</button>
+      <button class="btn btn--primary"  *ngIf="showbutton" (click)="updatecasestatus()">Submit Setup</button>
     </div>
-    <div class="col-7">
-
-      <div class="pull-right">
-        <app-view-offer [atoNames]="atoNames" [selectedAto]="selectedAto"
-                        (atoSelection)="showSelectedAtoView($event)">
-        </app-view-offer>
-      </div>
-    </div>
-
   </div>
 
   <div class="center_loading" *ngIf="loading else loadingdetail">
@@ -55,13 +46,13 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let item of Atosummary_be_sub.skuList; let i = index;">
-            <td>{{item.sku}}</td>
+          <tr *ngFor="let item of Atosummary_af_sub.billingSKUs; let i = index;">
+            <td>{{item.skuName}}</td>
             <td>{{item.ranking}}</td>
             <td>{{item.plpPercentage}}</td>
             <td>${{item.monthlyThreshold}}</td>
             <td style="border-right: 1px solid #dfdfdf;">
-              <span *ngIf="Atosummary_af_sub.skuList[i].basedSupportItem" class="icon-check-square"></span>
+              <span *ngIf="Atosummary_af_sub.billingSKUs[i].percentageBasedSupportItem" class="icon-check-square"></span>
             </td>
 
             <td style="border: 0;background-color: #fff;" *ngIf="middlenumber === i">
@@ -108,7 +99,6 @@
         </table>
       </div>
     </div>
-    <app-pirate-ship-legend></app-pirate-ship-legend>
 
   </ng-template>
 
