@@ -48,7 +48,6 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
     private router: Router
   ) {
     super(store, route);
-
     this.sortProperty = this.route.snapshot.queryParams.sortProperty || 'updatedDate';
     this.sortDirection = this.route.snapshot.queryParams.sortDirection || 'desc';
     this.pageIndex = this.route.snapshot.queryParams.pageIndex || 0;
@@ -59,19 +58,16 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
   }
 
   ngOnInit() {
-    /*  this.ruleService.getApprovalVersionedListByNameAndUserType()
-        .subscribe(rules => {
-          this.rules = rules;
-          this.refresh();
-        });*/
+    this.store.mainCompDataLoad = true;
     Promise.all([
       this.ruleService.getApprovalVersionedListByNameAndUserType().toPromise(),
       this.submeasureService.getManyLatestGroupByNameActive().toPromise()
     ]).then(results => {
+      this.store.mainCompDataLoad = false;
       this.rules = results[0];
       this.submeasuresAll = results[1];
       this.refresh();
-    });
+    }).catch(() => this.store.mainCompDataLoad = false);
   }
 
   refresh() {

@@ -105,6 +105,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   public ngOnInit(): void {
+    this.store.mainCompDataLoad = true;
     const promises: Promise<any>[] = [
       this.pgLookupService.callRepoMethod('getDistinctSL1SL2SL3NameCodeFromSalesHierarchy').toPromise(),
       this.pgLookupService.callRepoMethod('getDistincTGBUPFIdsFromProductHierarchy').toPromise(),
@@ -120,6 +121,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     }
     Promise.all(promises)
       .then(results => {
+        // remove the spinner
+        this.store.mainCompDataLoad = false;
         // assign to your local arrays here, then:
         // map result string arrays to object arrays for use in dropdowns
         this.sl1Sl2Sl3NameCodes = results[0];
@@ -203,7 +206,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       })
       .then(() => {
         return this.getRulesAndRuleNamesAndGenerateSelectMap(); // must be "after" this.rule is set
-      });
+      }).catch(() => this.store.mainCompDataLoad = false);
   }
 
   init(initial?) {
