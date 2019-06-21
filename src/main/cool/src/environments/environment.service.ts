@@ -131,6 +131,7 @@ export class EnvironmentService {
 
     // OFFER SETUP
     REST_API_OFFER_SETUP_MODULE_GET_URL: string;
+    REST_API_OFFER_PS_MODULE_GET_URL: string;
     REST_API_OFFER_MODULE_STATUS_GET_URL: string;
     REST_API_LOCK_API_FOR_OWB: string;
 
@@ -438,6 +439,7 @@ export class EnvironmentService {
 
         this.REST_API_LOCK_API_FOR_OWB = this.baseApiUrl + '/owb/lockAPI/';
         this.REST_API_OFFER_SETUP_MODULE_GET_URL = this.baseApiUrl + '/offersetup/getAllModuleStatus/';
+        this.REST_API_OFFER_PS_MODULE_GET_URL = this.baseApiUrl + '/offersetup/getPSModules/';
 
 
         // --------------------------------------- ITEM CREATION --------------------------------------------
