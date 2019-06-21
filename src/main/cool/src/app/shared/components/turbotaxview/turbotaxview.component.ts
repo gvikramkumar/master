@@ -91,10 +91,12 @@ export class TurbotaxviewComponent implements OnChanges {
             };
             const offerMilestone = offerPhaseInfo[phase];
             if (offerMilestone) {
-                if (offerMilestone.every(this.isMilestoneCompleted())) {
+                if (offerMilestone.every(this.isMilestoneVisited())) {
                     phaseInfo.status = 'visited';
-                } else if (offerMilestone.some(this.isMilestoneCompleted())) {
+                } else if (offerMilestone.some(this.isMilestoneActive())) {
                     phaseInfo.status = 'active';
+                } else if (offerMilestone.every(this.isMilestoneNotTouched())) {
+                    phaseInfo.status = '';
                 }
             }
             accumulator.push(phaseInfo);
@@ -115,8 +117,18 @@ export class TurbotaxviewComponent implements OnChanges {
         this.navigateHash = {};
     }
 
-    private isMilestoneCompleted(): any {
+    private isMilestoneNotTouched(): any {
+        return milestone => milestone.status && (milestone.status.toLowerCase() === 'Available'
+        || milestone.status.toLowerCase() === 'not applicable');
+    }
+
+    private isMilestoneActive(): any {
         return milestone => milestone.status && milestone.status.toLowerCase() === 'completed';
+    }
+
+    private isMilestoneVisited(): any {
+        return milestone => milestone.status && (milestone.status.toLowerCase() === 'completed'
+        || milestone.status.toLowerCase() === 'not applicable');
     }
 
     private isMilestoneCompletedAndNotApplicable(): any {

@@ -2,6 +2,9 @@
   min-width:100%;
   z-index: 9;
   position: relative;
+  min-width: 200px;
+  margin: auto;
+  display: block;
 }
 .osw-module--btns button span {
   position: absolute;

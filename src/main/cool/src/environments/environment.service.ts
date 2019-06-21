@@ -135,6 +135,7 @@ export class EnvironmentService {
 
     // OFFER SETUP
     REST_API_OFFER_SETUP_MODULE_GET_URL: string;
+    REST_API_OFFER_PS_MODULE_GET_URL: string;
     REST_API_OFFER_MODULE_STATUS_GET_URL: string;
     REST_API_LOCK_API_FOR_OWB: string;
 
@@ -214,7 +215,7 @@ export class EnvironmentService {
     REST_API_BasicModule_DownloadDoc: string;
     REST_API_BasicModuleFileName: string;
     REST_API_BasicModuleDocType: string;
-
+    REST_API_ServiceAPUpdate: string;
     // -------------------------------------------------------------------------------------------------
 
 
@@ -449,6 +450,7 @@ export class EnvironmentService {
 
         this.REST_API_LOCK_API_FOR_OWB = this.baseApiUrl + '/owb/lockAPI/';
         this.REST_API_OFFER_SETUP_MODULE_GET_URL = this.baseApiUrl + '/offersetup/getAllModuleStatus/';
+        this.REST_API_OFFER_PS_MODULE_GET_URL = this.baseApiUrl + '/offersetup/getPSModules/';
 
 
         // --------------------------------------- ITEM CREATION --------------------------------------------
@@ -467,8 +469,10 @@ export class EnvironmentService {
 
         this.REST_API_RETRIEVE_SERVICE_ATO_LIST_URL = this.baseApiUrl + '/itemcreation/getATOs';
         this.REST_API_RETRIEVE_SERVICE_ANNUITY_PRICING_URL = this.baseApiUrl + '/serviceAnnuityPricing/getPricingOfferLevel';
+        this.REST_API_ServiceAPUpdate = this.baseApiUrl + '/serviceAnnuityPricing/getPricingAtoSkusLevel';
 
-        // --------------------------------------- TERM AND CONTENT MAPPING --------------------------------------------
+
+      // --------------------------------------- TERM AND CONTENT MAPPING --------------------------------------------
 
         this.REST_API_RETRIEVE_TERM_CONTENT_MAPPING_URL = this.baseApiUrl + '/offersetup/getTNCMappingObject';
 
@@ -544,5 +548,8 @@ export class EnvironmentService {
         this.REST_API_BasicModule_DownloadDoc = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/DownloadDoc';
         this.REST_API_BasicModuleFileName = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/getFileName';
         this.REST_API_BasicModuleDocType = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/getUploadDetail';
+
+
+
     }
 }
