@@ -1,3 +1,53 @@
 .w10percent {
     width: 22% !important;
 }
+.txt-center{
+    text-align: center!important;
+}
+.selectAllATO-cls{
+    padding-left: 3px;
+}
+.icon-padding {
+    padding-right: 10px;
+}
+.text-prm{
+    color: #007493;
+}
+.comments-container{
+    border: solid 0.1px lightgray;
+    padding: 5px;
+    margin: 1px;
+}
+.comments-header{
+    font-weight: 500;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+.comments-body{
+    float: left;
+    clear: both;
+    padding: 4px 0px 4px 0px;
+}
+.complete-st-cls{
+    border: solid 0.5px #6ebe4a;
+    padding: 4px;
+    border-radius: 5px;
+    color: #6ebe4a;
+    width: 25%;
+}
+.in-progress-st-cls{
+    border: solid 0.5px #fbab18;
+    padding: 4px;
+    border-radius: 5px;
+    color: #fbab18;
+    width: 40%;
+}
+.reject-st-cls {
+    border: solid 0.5px #e2231a ;
+    padding: 4px;
+    border-radius: 5px;
+}
+.status-txt{
+    font-size: 12px;
+    padding-top: 15px;
+}
