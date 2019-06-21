@@ -36,7 +36,7 @@ export class OfferSetupService {
 
 
   getPricing_SKU_Detail(offerId: string, atoName: string) {
-    const url = this.environmentService.REST_API_ServiceAPUpdate + "/" + offerId + "/" + atoName + "";
+    const url = this.environmentService.REST_API_SERVICE_ANNUITY_UPDATE_URL + "/" + offerId + "/" + atoName + "";
     return this.http.get(url);
   }
 
@@ -44,5 +44,9 @@ export class OfferSetupService {
     const url = this.environmentService.REST_API_LOCK_API_FOR_OWB + offerId;
     return this.http.post(url, { withCredentials: true });
   }
-}
 
+  submit_pricing_percentage(payload: any) {
+    const url = this.environmentService.REST_API_SUBMIT_PRICING_PERCENTAGE;
+    return this.http.post(url, payload);
+  }
+}

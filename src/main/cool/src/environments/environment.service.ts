@@ -152,6 +152,7 @@ export class EnvironmentService {
     // SERVICE ANNUITY URLs
     REST_API_RETRIEVE_SERVICE_ATO_LIST_URL: string;
     REST_API_RETRIEVE_SERVICE_ANNUITY_PRICING_URL: string;
+    REST_API_SUBMIT_PRICING_PERCENTAGE: string;
 
     // TERM AND CONTENT MAPPING URLs
     REST_API_RETRIEVE_TERM_CONTENT_MAPPING_URL: string;
@@ -205,6 +206,7 @@ export class EnvironmentService {
     REST_API_DOWNLOAD_CONFIG_SHEET: string;
     REST_API_GET_MAPPING_STATUS: string;
     REST_CHECK_MAESTRO_PF_STATUS: string;
+    REST_API_SERVICE_ANNUITY_UPDATE_URL: string;
 
     // PIRATE SHIP NOTIFICATION URLs
     REST_API_PIRATE_SHIP_DASHBOARD_NOTIFICATION_URL;
@@ -470,8 +472,8 @@ export class EnvironmentService {
 
         this.REST_API_RETRIEVE_SERVICE_ATO_LIST_URL = this.baseApiUrl + '/itemcreation/getATOs';
         this.REST_API_RETRIEVE_SERVICE_ANNUITY_PRICING_URL = this.baseApiUrl + '/serviceAnnuityPricing/getPricingOfferLevel';
-        this.REST_API_ServiceAPUpdate = this.baseApiUrl + '/serviceAnnuityPricing/getPricingAtoSkusLevel';
-
+        this.REST_API_SERVICE_ANNUITY_UPDATE_URL = this.baseApiUrl + '/serviceAnnuityPricing/getPricingAtoSkusLevel';
+        this.REST_API_SUBMIT_PRICING_PERCENTAGE = this.baseApiUrl + '/serviceAnnuityPricing/submitPricingPercentage'
 
       // --------------------------------------- TERM AND CONTENT MAPPING --------------------------------------------
 

@@ -20,6 +20,7 @@ export class SapAtoSummaryComponent implements OnInit {
   showbutton: boolean  = true;
   Atosummary_af_sub: any = {};
   middlenumber: any;
+  setupEnable: boolean = true;
   constructor(private router: Router,
               private route: ActivatedRoute,
               private _pirateshipService: PirateShipSharedService,
@@ -55,36 +56,44 @@ export class SapAtoSummaryComponent implements OnInit {
   }
 
 
-  updatecasestatus() {
-
-
-  }
+   updatecasestatus() {
+     this.loading = true;
+     let billingItemNames = [];
+     if (this.Atosummary_af_sub && this.Atosummary_af_sub.billingSKUs) {
+      for (let i = 0; i < this.Atosummary_af_sub.billingSKUs.length; i++) {
+        billingItemNames.push(this.Atosummary_af_sub.billingSKUs[i].skuName)
+      }
+      let payload = { "coolOfferId": this.offerId, "itemName": this.selectedAto,"billingItemNames": billingItemNames};
+      this._offersetupService.submit_pricing_percentage(payload).subscribe(
+       (response) => {
+         this.updatedata(); // can be removed
+         this.loading = false;
+       }, error => {
+         this.updatedata(); // can be removed
+         console.log('error', error);// why its not going to error
+         this.loading = false;
+       })
+     } else {
+       this.loading = false;
+     }
+   }
 
   updatedata() {
     this._offersetupService.getPricing_SKU_Detail(this.offerId, this.selectedAto).subscribe(
       (response) => {
-
         this.loading = false;
         this.Atosummary_af_sub = response;
-        // this.Atosummary_af_sub.skuList=[];
-        // this.Atosummary_be_sub =[];
-        // this.Atosummary_be_sub = response;
+        if (this.Atosummary_af_sub.skuList) {
 
-        // for (let i =0; i < this.Atosummary_be_sub.skuList.length; i++) {
-        //   this.Atosummary_af_sub.skuList.push({
-        //     "sku":"",
-        //     "basedSupportItem":false
-        //
-        //   });
-        // }
-
+          this.middlenumber = Math.ceil(this.Atosummary_af_sub.skuList.length / 2) - 1;
+        }
+        if (this.Atosummary_af_sub.setupEnable) {
+          this.setupEnable = false;
+        } else {
+          this.setupEnable = true;
+        }
       }
     );
-    if (this.Atosummary_af_sub.skuList) {
-
-      this.middlenumber = Math.ceil(this.Atosummary_af_sub.skuList.length / 2) - 1;
-    }
-
   }
 
   showSelectedAtoView(atoname: string) {
