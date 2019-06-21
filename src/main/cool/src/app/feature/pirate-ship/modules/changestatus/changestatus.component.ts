@@ -76,7 +76,7 @@ export class ChangestatusComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private changestatusService: ChangestatusService,
               private headerService: HeaderService,
-              private pirateShipSharedService:PirateShipSharedService,
+              private pirateShipSharedService: PirateShipSharedService,
               private offerSetupService: OfferSetupService,
               private rightPanelService: RightPanelService,
               private stakeholderfullService: StakeholderfullService,
@@ -100,10 +100,10 @@ export class ChangestatusComponent implements OnInit {
   }
 
   ngOnInit() {
-     if(window.localStorage.getItem('showSprint6')) {
-       this.showButton = Boolean(window.localStorage.getItem('showSprint6'));
-       this.show_Upload = Boolean(window.localStorage.getItem('showSprint6'));
-     }
+    if(window.localStorage.getItem('showSprint6')) {
+      this.showButton = Boolean(window.localStorage.getItem('showSprint6'));
+      this.show_Upload = Boolean(window.localStorage.getItem('showSprint6'));
+    }
     this.changestatusService.getAllComments(this.moduleName, this.offerId).subscribe(data=>{
       this.comments = data;
     });

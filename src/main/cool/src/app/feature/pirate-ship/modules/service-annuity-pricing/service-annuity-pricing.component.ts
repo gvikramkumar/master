@@ -10,6 +10,7 @@ import { ServiceAnnuityPricingService } from '@app/services/service_annuity_pric
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { ServiceAnnuityDesign } from './model/service-annuity-design';
+import {PirateShipSharedService} from '@app/services/pirate-ship-shared.service';
 
 @Component({
   selector: 'app-service-annuity-pricing',
@@ -47,7 +48,8 @@ export class ServiceAnnuityPricingComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private rightPanelService: RightPanelService,
     private stakeholderfullService: StakeholderfullService,
-    private serviceAnnuityPricing : ServiceAnnuityPricingService,
+    private serviceAnnuityPricing: ServiceAnnuityPricingService,
+    private _pirateshipService: PirateShipSharedService
   ) {
 
     this.paramsSubscription = this.activatedRoute.params.subscribe(params => {
@@ -112,6 +114,7 @@ export class ServiceAnnuityPricingComponent implements OnInit, OnDestroy {
     } else {
 
       this.selectedAto = dropDownValue;
+      this._pirateshipService.update_pricing.next(dropDownValue);
 
     }
   }
