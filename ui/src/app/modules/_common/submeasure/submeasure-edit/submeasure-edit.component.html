@@ -259,8 +259,8 @@
 
       <div class="row" style="margin-top:30px;" [class.disabled]="isUnallocatedGroup() || viewMode">
         <div class="col-lg-6">
-          <fin-input name="startMonth" *ngIf="effectiveMonthNotRequired" [(ngModel)]="startFiscalMonth" label="Effective Month" [disabled]="true"></fin-input>
-          <cui-select *ngIf="!effectiveMonthNotRequired" name="startMonth" [(ngModel)]="sm.startFiscalMonth" [items]="yearmos"
+          <fin-input name="startMonth" *ngIf="!effectiveMonthRequired" [(ngModel)]="startFiscalMonth" label="Effective Month" [disabled]="true"></fin-input>
+          <cui-select *ngIf="effectiveMonthRequired" name="startMonth" [(ngModel)]="sm.startFiscalMonth" [items]="yearmos"
                       [label]="!isUnallocatedGroup()?'Effective Month*':'Effective Month'" empty="true"
                       [required]="!isUnallocatedGroup()" optionsKey="fiscalMonthName" optionsValue="fiscalMonth"></cui-select>
 

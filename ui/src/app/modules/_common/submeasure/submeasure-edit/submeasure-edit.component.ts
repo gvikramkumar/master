@@ -34,7 +34,7 @@ import {ruleUtil} from '../../../../../../../shared/misc/rule-util';
   styleUrls: ['./submeasure-edit.component.scss']
 })
 export class SubmeasureEditComponent extends RoutingComponentBase implements OnInit {
-  effectiveMonthNotRequired = true;
+  effectiveMonthRequired = true;
   deptUploadFilename: string;
   deptUploadTemplate: FsFile;
   manualMixHwDb: number;
@@ -227,6 +227,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
 
   ngOnInit() {
     this.store.mainCompDataLoad = true;
+    this.effectiveMonthRequired = !this.viewMode;
     this.yearmos = shUtil.getFiscalMonthListFromDate(new Date(), 6);
     const promises: Promise<any>[] = [
       this.measureService.getManyActive().toPromise(),
@@ -254,8 +255,6 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
             this.editModeAI = this.editMode && _.includes(['A', 'I'], this.sm.status);
           }
 
-          // this is an edge case: create unallocated group >> approve >> now want to make it allocated
-          this.effectiveMonthNotRequired = this.viewMode || (this.editMode && this.sm.approvedOnce === 'Y' && !this.isUnallocatedGroup());
           if (this.addMode) {
             if (this.route.snapshot.params.measureId) {
               this.sm.measureId = Number(this.route.snapshot.params.measureId);
