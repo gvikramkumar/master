@@ -136,7 +136,7 @@
                     <div class="base-padding-top panel panel--bordered">
                       <div class="row">
 
-                        <div class="col-sm-12 col-md-6">
+                        <div class="col-sm-12 col-lg-6">
 
                           <!-- Group 2 left-->
                           <div *ngIf="showGroupData">
@@ -162,14 +162,12 @@
                               </button>
                               <!-- Not Yet Available -->
                               <button *ngIf="element['status']=='Not Yet Available'"
-                                class="btn btn--small btn--gray-ghost half-margin-bottom" placement="top"
-                                (click)="getElementDetails(element)">
+                                class="btn btn--small btn--gray-ghost half-margin-bottom" placement="top" (click)="getElementDetails(element)">
                                 {{element["moduleName"]}}
                               </button>
                               <!-- Not Required -->
                               <button *ngIf="element['status']=='Not Required'"
-                                class="btn btn--small btn--default half-margin-bottom disabled" placement="top"
-                                (click)="getElementDetails(element)">
+                                class="btn btn--small btn--default half-margin-bottom" placement="top"  (click)="getElementDetails(element)">
                                 {{element["moduleName"]}}
                               </button>
 
@@ -179,7 +177,7 @@
 
                         </div>
 
-                        <div class="col-sm-12 col-md-6">
+                        <div class="col-sm-12 col-lg-6">
 
                           <!-- Group 2 right -->
                           <div *ngIf="showGroupData">
@@ -205,14 +203,12 @@
                               </button>
                               <!-- Not Yet Available -->
                               <button *ngIf="element['status']=='Not Yet Available'"
-                                class="btn btn--small btn--gray-ghost half-margin-bottom" placement="top"
-                                (click)="getElementDetails(element)">
+                                class="btn btn--small btn--gray-ghost half-margin-bottom" placement="top"  (click)="getElementDetails(element)">
                                 {{element["moduleName"]}}
                               </button>
                               <!-- Not Required -->
                               <button *ngIf="element['status']=='Not Required'"
-                                class="btn btn--small btn--default half-margin-bottom disabled" placement="top"
-                                (click)="getElementDetails(element)">
+                                class="btn btn--small btn--default half-margin-bottom" placement="top" (click)="getElementDetails(element)">
                                 {{element["moduleName"]}}
                               </button>
 
@@ -229,7 +225,7 @@
                   <div class="col-sm-6">
                     <div class="base-padding-top panel panel--bordered">
                       <div class="row">
-                        <div class="col-sm-12 col-md-6">
+                        <div class="col-sm-12 col-lg-6">
 
                           <!-- Group 3 left -->
                           <div *ngIf="showGroupData">
@@ -279,7 +275,7 @@
 
                         </div>
 
-                        <div class="col-sm-12 col-md-6">
+                        <div class="col-sm-12 col-lg-6">
 
                           <!-- Group 3 right -->
                           <div *ngIf="showGroupData">

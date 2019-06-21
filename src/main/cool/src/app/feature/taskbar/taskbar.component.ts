@@ -93,7 +93,8 @@ export class TaskbarComponent implements OnInit {
 
     if (this.isPirateShipSubModule) {
       this.currentPage = 'pirate-ship-module';
-    } else if (this.currentPage !== 'dashboard' && this.currentPage !== 'action') {
+    } else if (this.currentPage !== 'dashboard' && this.currentPage !== 'action'
+      && this.currentPage !== 'accessManagement') {
       this.currentStepIndex = offerBuilderStepsEnum[this.currentPage];
       this.disableBackBtn = this.currentStepIndex > 0 ? false : this.offerId ? true : false;
       this.isLastStep = this.currentStepIndex < Object.keys(offerBuilderStepsEnum).length - 1 ? false : true;

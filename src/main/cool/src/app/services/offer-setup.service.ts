@@ -19,7 +19,12 @@ export class OfferSetupService {
     return this.listAtos;
   }
   getModuleData(offerId, offerLevel, functionalRole ) {
-    const url = this.environmentService.REST_API_OFFER_SETUP_MODULE_GET_URL + offerId + '/' + offerLevel + '/' + functionalRole;
+    
+    let url = this.environmentService.REST_API_OFFER_SETUP_MODULE_GET_URL + offerId + '/' + offerLevel + '/' + functionalRole;
+    
+    if(window.localStorage.getItem('showSprint6')) {
+      url = this.environmentService.REST_API_OFFER_PS_MODULE_GET_URL + offerId + '/' + offerLevel + '/' + functionalRole;
+    }
     return this.http.get(url, { withCredentials: true });
   }
 
@@ -31,11 +36,11 @@ export class OfferSetupService {
 
 
   getPricing_SKU_Detail(offerId: string, atoName: string) {
-    const url = " http://localhost:8080/coolsrv/serviceAnnuityPricing/getPricingAtoSkusLevel/"+offerId+"/"+atoName+"";
+    const url = this.environmentService.REST_API_ServiceAPUpdate + "/" + offerId + "/" + atoName + "";
     return this.http.get(url);
   }
 
-  lockAPIForOWB(offerId: string){
+  lockAPIForOWB(offerId: string) {
     const url = this.environmentService.REST_API_LOCK_API_FOR_OWB + offerId;
     return this.http.post(url, { withCredentials: true });
   }

@@ -22,24 +22,25 @@ export class UploadDocComponent implements OnInit {
   info: string;
   DocType: Array<string>;
   DocSize: number;
- @Input() isReadonly: boolean;
+  @Input() isReadonly: boolean;
   ishide: boolean = true;
+  showloader: boolean;
 
   constructor(
-   public _evnService: EnvironmentService,
+    public _evnService: EnvironmentService,
     public httpClient: HttpClient,
-   private _userService: UserService
+    private _userService: UserService
   ) { }
 
   ngOnInit() {
+    this.showloader = true;
     this.httpClient.get(this._evnService.REST_API_BasicModuleDocType,{
       params: new HttpParams().set('moduleName', this.moduleName)
     }).subscribe(
       (ModuleExtension: any) => {
-          console.log(ModuleExtension);
-          this.DocType = ModuleExtension.documentType.split('|');
-          this.DocSize = ModuleExtension.size;
 
+        this.DocType = ModuleExtension.documentType.split('|');
+        this.DocSize = ModuleExtension.size;
       }
     );
     this.info = "";
@@ -61,6 +62,7 @@ export class UploadDocComponent implements OnInit {
         this.userId =  res.userId;
         this.userName = res.userName;
         this.downloadUrl = this._evnService.REST_API_BasicModule_DownloadDoc+"?offerId="+this.offerId+"&fileName="+this.fileName+"&moduleName="+this.moduleName+"";
+        this.showloader = false;
       });
     }
 
@@ -70,54 +72,57 @@ export class UploadDocComponent implements OnInit {
 
   handleFileInput(files: FileList) {
 
-   this.fileToUpload = files.item(0);
-   if(  this.fileToUpload.name) {
+    this.fileToUpload = files.item(0);
+    if(  this.fileToUpload.name) {
 
-     if(this.fileToUpload.size/(1024*1024) <= this.DocSize) {
+      if(this.fileToUpload.size/(1024*1024) <= this.DocSize) {
 
-       if (this.DocType.indexOf(  this.fileToUpload.name.split('.')[1].toLocaleLowerCase()) > -1 || this.DocType.indexOf('ALL') > -1) {
-
-         let formdata: FormData = new FormData();
-         const usaTime = new Date().toLocaleString('en-US', {timeZone: 'America/Los_Angeles'});
-         console.log( new Date(usaTime).getTime().toString());
-         console.log( new Date(usaTime));
-         this.timestamp = new Date(usaTime).getTime();
-         this.userId = this._userService.getUserId();
-         this.userName =  this._userService.getName();
-         formdata.append('file', this.fileToUpload);
-         formdata.append('offerId', this._userService.getofferId());
-         formdata.append('userId', this._userService.getUserId());
-         formdata.append('userName', this._userService.getName());
-         formdata.append('timeStamp', new Date(usaTime).getTime().toString());
-         formdata.append('moduleName', this.moduleName);
-         debugger;
-         this.httpClient.post(this._evnService.REST_API_BasicModule_upload, formdata).subscribe(
-           (res: any) => {
-             this.status = res.status;
-             if (res.status === 200) {
-               this.fileName = res.fileName;
-               this.info="";
-               this.downloadUrl = this._evnService.REST_API_BasicModule_DownloadDoc+"?offerId="+this.offerId+"&fileName="+this.fileName+"&moduleName="+this.moduleName+"";
-             } else {
-               this.info = res.Message;
-             }
-
-           }
-         );
-       } else {
-         this.ishide = false;
-         this.info =  "File type is not supported.";
-       }
+        if (this.DocType.indexOf(  this.fileToUpload.name.split('.')[1].toLocaleLowerCase()) > -1 || this.DocType.indexOf('ALL') > -1) {
+          this.fileName = "";
+          this.showloader = true;
+          let formdata: FormData = new FormData();
+          const usaTime = new Date().toLocaleString('en-US', {timeZone: 'America/Los_Angeles'});
+          console.log( new Date(usaTime).getTime().toString());
+          console.log( new Date(usaTime));
+          this.timestamp = new Date(usaTime).getTime();
+          this.userId = this._userService.getUserId();
+          this.userName =  this._userService.getName();
+          formdata.append('file', this.fileToUpload);
+          formdata.append('offerId', this._userService.getofferId());
+          formdata.append('userId', this._userService.getUserId());
+          formdata.append('userName', this._userService.getName());
+          formdata.append('timeStamp', new Date(usaTime).getTime().toString());
+          formdata.append('moduleName', this.moduleName);
+          this.httpClient.post(this._evnService.REST_API_BasicModule_upload, formdata).subscribe(
+            (res: any) => {
+              this.status = res.status;
+              if (res.status === 200) {
+                this.showloader = false;
+                this.fileName = res.fileName;
+                this.info="";
+                this.downloadUrl = this._evnService.REST_API_BasicModule_DownloadDoc+"?offerId="+this.offerId+"&fileName="+this.fileName+"&moduleName="+this.moduleName+"";
 
 
-     } else {
-       this.ishide = false;
-       this.info = "Upload file exceeded maximum file size allowed. Please try again.";
-     }
+              } else {
+                this.info = res.Message;
+              }
 
-   } else {
-     this.info = "Please make sure you have the fileName";
-   }
+            }
+          );
+        } else {
+          this.ishide = false;
+          this.info =  "File type is not supported.";
+        }
+
+
+      } else {
+        this.ishide = false;
+        this.info = "Upload file exceeded maximum file size allowed. Please try again.";
+      }
+
+    } else {
+      this.info = "Please make sure you have the fileName";
+    }
 
 
 
