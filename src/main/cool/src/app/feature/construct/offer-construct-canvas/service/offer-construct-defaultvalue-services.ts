@@ -74,6 +74,13 @@ export class OfferConstructDefaultValue {
         }
       }
 
+      if (element.question == 'Terms & Payments Required') {
+        if (element.currentValue == 'No') {
+          // set Subscription Offset(In Days) as disable if the value in 'no'
+          this.disableSubscriptionOffset(listOfferQuestions)
+        }
+      }
+
       if (element.question == 'Service Type?') {
           element.currentValue = 'Support';
           element.previousValue = 'Support';
@@ -144,6 +151,15 @@ export class OfferConstructDefaultValue {
         }
     });
     return listOfferQuestions;
+  }
+
+  // disableSubscriptionOffset
+  disableSubscriptionOffset(listOfferQuestions) {
+    listOfferQuestions.forEach(element => {
+      if (element.question == 'Subscription Offset(In Days)') {
+        element.rules.isDisabled = true;
+      }
+    });
   }
 
   setSubscriptionType(listOfferQuestions, serviceTypeValue) {
