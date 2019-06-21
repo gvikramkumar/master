@@ -64,15 +64,17 @@ export class TurbotaxviewComponent implements OnChanges {
 
                 this.offerPhaseDetailsList = resOfferPhases;
 
-
-              this.ideateCount = resOfferPhases.ideate ? resOfferPhases.ideate.length : 0;
-                this.ideateCompletedCount = resOfferPhases.ideate ? resOfferPhases.ideate.filter(this.isMilestoneCompleted()).length : 0;
+                this.ideateCount = resOfferPhases.ideate ? resOfferPhases.ideate.length : 0;
+                this.ideateCompletedCount = resOfferPhases.ideate ? resOfferPhases.ideate.filter(
+                    this.isMilestoneCompletedAndNotApplicable()).length : 0;
 
                 this.planCount = resOfferPhases.plan ? resOfferPhases.plan.length : 0;
-                this.planCompletedCount = resOfferPhases.plan ? resOfferPhases.plan.filter(this.isMilestoneCompleted()).length : 0;
+                this.planCompletedCount = resOfferPhases.plan ? resOfferPhases.plan.filter(
+                    this.isMilestoneCompletedAndNotApplicable()).length : 0;
 
                 this.setupCount = resOfferPhases.setup ? resOfferPhases.setup.length : 0;
-                this.setupCompleteCount = resOfferPhases.setup ? resOfferPhases.setup.filter(this.isMilestoneCompleted()).length : 0;
+                this.setupCompleteCount = resOfferPhases.setup ? resOfferPhases.setup.filter(
+                    this.isMilestoneCompletedAndNotApplicable()).length : 0;
 
                 this.processCurrentPhaseInfo(resOfferPhases);
             }
@@ -114,6 +116,10 @@ export class TurbotaxviewComponent implements OnChanges {
     }
 
     private isMilestoneCompleted(): any {
+        return milestone => milestone.status && milestone.status.toLowerCase() === 'completed';
+    }
+
+    private isMilestoneCompletedAndNotApplicable(): any {
         return milestone => milestone.status && (milestone.status.toLowerCase() === 'completed'
         || milestone.status.toLowerCase() === 'not applicable');
     }

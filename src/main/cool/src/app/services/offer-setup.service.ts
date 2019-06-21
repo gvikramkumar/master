@@ -31,11 +31,11 @@ export class OfferSetupService {
 
 
   getPricing_SKU_Detail(offerId: string, atoName: string) {
-    const url = " http://localhost:8080/coolsrv/serviceAnnuityPricing/getPricingAtoSkusLevel/"+offerId+"/"+atoName+"";
+    const url = this.environmentService.REST_API_ServiceAPUpdate + "/" + offerId + "/" + atoName + "";
     return this.http.get(url);
   }
 
-  lockAPIForOWB(offerId: string){
+  lockAPIForOWB(offerId: string) {
     const url = this.environmentService.REST_API_LOCK_API_FOR_OWB + offerId;
     return this.http.post(url, { withCredentials: true });
   }
