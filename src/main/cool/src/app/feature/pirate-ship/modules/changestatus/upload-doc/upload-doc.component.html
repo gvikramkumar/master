@@ -12,16 +12,30 @@
         </div>
       </form>
     </div>
+    <div class="panel" *ngIf="showloader else upload;">
+      <div class="subheader text-center text-info text-medium">Processing going one, please wait a second</div>
+      <div class="loading-dots loading-dots--info" aria-label="Loading, please wait...">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+    <ng-template #upload>
     <div class="col-1" style="padding-left: 12px">
       <span class="icon-file-text-o icon-small text-info"></span>
     </div>
     <div class="col-11" style="padding: 0px;padding-right: 10px">
-      <div><span class="text-info text-large">File Attachment:&nbsp;</span>
-        <a [href]="downloadUrl"><span class="text-info text-medium">{{fileName}}</span></a></div>
-      <div *ngIf="userId">
-        <span>{{userName}}&nbsp;&nbsp;</span><span>&nbsp;({{userId}})&nbsp;&nbsp;</span>
-        <span>{{timestamp | date:"d-MMM-yy h:mm a"}}&nbsp;PST</span></div>
+
+        <div><span class="text-info text-large">File Attachment:&nbsp;</span>
+          <a [href]="downloadUrl"><span class="text-info text-medium">{{fileName}}</span></a>
+
+        </div>
+        <div *ngIf="userId">
+          <span>{{userName}}&nbsp;&nbsp;</span><span>&nbsp;({{userId}})&nbsp;&nbsp;</span>
+          <span>{{timestamp | date:"d-MMM-yy h:mm a"}}&nbsp;PST</span></div>
+
     </div>
+    </ng-template>
   </div>
 
   <app-share-modal [ishide]="ishide"  (changestatus)="changemodalstatus()">
