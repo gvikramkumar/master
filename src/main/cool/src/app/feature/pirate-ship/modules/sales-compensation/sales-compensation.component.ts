@@ -16,6 +16,8 @@ import { Subscription } from 'rxjs';
 import {ConfirmationService} from 'primeng/api';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { SalesCompensationService } from '../../../../services/sales-compensation.service';
+import { importExpr } from '@angular/compiler/src/output/output_ast';
+import { ItemCreationService } from '@app/services/item-creation.service';
 
 
 @Component({
@@ -56,8 +58,12 @@ export class SalesCompensationComponent implements OnInit, OnDestroy {
   selectedIndex: any;
   offerDetails: any;
   public newComment: string;
-
+  displayCommentsDialog:boolean = false;
+  commentsHaeder:string = "";
+  viewOnlypermission:boolean = true;
+  offerDropdownValues: any;
   paramsSubscription: Subscription;
+  lastATOStatus: string = "Approved";
 
   constructor(
     private loaderService: LoaderService,
@@ -67,7 +73,8 @@ export class SalesCompensationComponent implements OnInit, OnDestroy {
     private configurationService: ConfigurationService,
     private stakeholderfullService: StakeholderfullService,
     private salesCompensationService : SalesCompensationService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private itemCreationService: ItemCreationService,
   ) { 
     this.atoNames = ['Overall Offer'];
     this.selectedIndex = 0;
@@ -85,14 +92,26 @@ export class SalesCompensationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.itemCreationService.getOfferDropdownValues(this.offerId).subscribe(data => {
+      this.offerDropdownValues = data;
+    });
+    console.log("ato list : "+ this.atoNames);
+    this.functionalRole = this.configurationService.startupData.functionalRole;
+    if (this.functionalRole.includes('BUPM') || this.functionalRole.includes('SOE') || this.functionalRole.includes('OLE')) {
+      this.viewOnlypermission = true;
+    }
+    else{
+      this.viewOnlypermission = false;
+    }
+    console.log("functionalRole : "+ this.functionalRole);
     this.newComment = '';
     this.salesCompensationColumns = [
-      { field: 'offerStarted',header: 'OFFER STARTED', value: '04-Aug-2019'},
-      { field: 'newOfferType',header: 'NEW OFFER TYPE', value: 'Yes' },
-      { field: 'webexOffer',header: 'WEBEX OFFER', value: 'No' },
-      { field: 'chargeType',header: 'CHARGE TYPE', value: 'Usage in Arrears w/ pre-commit,Periodic in Arrears' },
-      { field: 'offerType',header: 'OFFER TYPE', value: 'STORM' },
-      { field: 'bookingRecognitionType',header: 'BOOKING RECOGNITION TYPE', value: 'Revenue Recurring, Revenue Other' } 
+      { field: 'offerStarted',header: 'OFFER STARTED', value: '04-Aug-2019', width:'15%'},
+      { field: 'newOfferType',header: 'NEW OFFER TYPE', value: 'Yes', width:'15%' },
+      { field: 'webexOffer',header: 'WEBEX OFFER', value: 'No', width:'13%' },
+      { field: 'chargeType',header: 'CHARGE TYPE', value: 'Usage in Arrears w/ pre-commit,Periodic in Arrears', width:'20%' },
+      { field: 'offerType',header: 'OFFER TYPE', value: 'STORM', width:'13%' },
+      { field: 'bookingRecognitionType',header: 'BOOKING RECOGNITION TYPE', value: 'Revenue Recurring, Revenue Other', width:'24%' } 
     ]
     this.salesCompensationItemListColumnHeaders = [
       { field: 'Id',header: '', value: '1', width:'5%' },
@@ -107,9 +126,10 @@ export class SalesCompensationComponent implements OnInit, OnDestroy {
       {data: {offerStarted:'04-Aug-2019', newOfferType: 'Yes', webexOffer: 'No', chargeType: 'Paid Upfront', offerType: 'STORM', bookingRecognitionType: 'Other'}}
     ];
     this.productDetails = [
-      {data: {Id:'1', products: 'VEDGE-1000-AC-K9', iccType: 'Xaas', offerType: 'Webex', bookingRecognitionType: 'Revenue Recurring', approvalStatus: 'N/A'}},
-      {data: {Id:'2',products: 'VEDGE-1000-AC-45', iccType: 'Billing', offerType: 'Webex', bookingRecognitionType: 'Revenue offer', approvalStatus: 'N/A'}},
-      {data: {Id:'3',products: 'VEDGE-1000-AC-K9', iccType: 'Xaas', offerType: 'Webex', bookingRecognitionType: 'Revenue Recurring', approvalStatus: 'N/A'}},
+      {data: {Id:'1',products: 'VEDGE-1000-AC-K9', iccType: 'Xaas', offerType: 'Webex', bookingRecognitionType: 'Revenue Recurring', approvalStatus: 'Approved'}},
+      {data: {Id:'2',products: 'VEDGE-1000-AC-45', iccType: 'Billing', offerType: 'Webex', bookingRecognitionType: 'Revenue offer', approvalStatus: 'Pending'}},
+      {data: {Id:'3',products: 'VEDGE-1000-AC-K9', iccType: 'Xaas', offerType: 'Webex', bookingRecognitionType: 'Revenue Recurring', approvalStatus: 'Rejected'}},
+      {data: {Id:'4',products: 'VEDGE-1010-AC-K10', iccType: 'Billing', offerType: 'IP Phone', bookingRecognitionType: 'Revenue Offer', approvalStatus: 'N/A'}},
     ];
     this.salesCompensationService.getTncMapping(this.offerId).subscribe(atoList => {
       this.atoNames = ['Overall Offer'];
@@ -168,5 +188,26 @@ export class SalesCompensationComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  showCommentsDialog($e, status){
+    this.displayCommentsDialog = true;
+    this.commentsHaeder = status;
+  }
+  closeCommentsDailog(){
+    this.displayCommentsDialog = false;
+  }
+  nodeSelect(event) {
+    // this.messageService.add({severity: 'info', summary: 'Node Selected', detail: event.node.data.name});
+
+    console.log("node selected..");
+}
+
+nodeUnselect(event) {
+    // this.messageService.add({severity: 'info', summary: 'Node Unselected', detail: event.node.data.name});
+    console.log("Node unselected..")
+}
+showSelectedAtoView(event){
+  console.log("ato view called..")
+}
 
 }

@@ -9,26 +9,62 @@
         <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName" [selectedATO]="selectedAto">
         </app-taskbar>
   
-        <br><br>
-
         <div class="row">
 
             <div class="leftContent col-sm-12 col-md-9">
     
               <div class="row flex-center-vertical">
+
                 <div class="col-sm-12">
-                  <div class="pull-left" >
+                  <!-- <div class="pull-left" >
                     <button class="btn btn--primary btn--cool btn--small tooltip" placement="top"
-                      (click)="reject($event, popCommentContent)">
+                      (click)="showCommentsDialog($event, 'Reject')">
                       Reject <i class="icon-success"></i>
                     </button>
                     <button class="btn btn--primary btn--cool btn--small tooltip" placement="top"
-                      (click)="approve()">
+                      (click)="showCommentsDialog($event, 'Approve Details')">
                       Approve <i class="icon-success"></i>
                     </button>
+                  </div>  -->
+
+                  <div class="pull-left" *ngIf="lastATOStatus==='Approved'">
+                    <div class="complete-st-cls">
+                        <span class="icon-check-outline text-success icon-small"></span>
+                        <span *ngIf="viewOnlypermission" style="padding-left: 14px;padding-right: 17px">Complete</span>
+                        <span *ngIf="!viewOnlypermission" style="padding-left: 14px;padding-right: 17px">Approved</span>
+                    </div>                    
+                    <span class="status-txt" *ngIf="viewOnlypermission">The module has been auto-completed due to Offer Dimensions selections and Offer Solutioning responses</span>
                   </div> 
-    
+
+                  <div class="pull-left" *ngIf="viewOnlypermission && lastATOStatus==='Pending'">
+                    <div class="in-progress-st-cls text-warning">
+                        <span class="in-progress text-warning icon-small"></span>
+                        <span style="padding-left: 20px;">In Progress</span>                                                
+                    </div>                    
+                    <div class="status-txt">Module requires additional approval by The Sales Compensation Team. <br> No additional action is required.</div>
+                  </div>
+
+                  <div class="pull-left" *ngIf="lastATOStatus==='Rejected'">
+                    <div class="reject-st-cls text-danger" *ngIf="!viewOnlypermission">
+                        <span class="icon-exit-contain text-danger icon-small"></span>
+                        <span style="padding-left: 14px;padding-right: 17px">Rejected</span>
+                    </div>
+                    <div class="" *ngIf="viewOnlypermission">
+                      <div>
+                          <button class="btn btn--primary  btn--cool btn--small">Update in eGenie</button>
+                      </div>                        
+                      <div style="padding-top: 10px;padding-bottom: 10px;font-size: 12px;">Sales Compensation Team has rejected the Booking Recognition Type approval request.<br>Please update the Booking Recognition value in eGenie to complete module.</div>
+                      
+                    </div>
+                  </div>
+
                   <div class="pull-right">
+                    <app-view-offer [atoNames]="offerDropdownValues" [selectedAto]="selectedAto"
+                      (atoSelection)="showSelectedAtoView($event)">
+                    </app-view-offer>
+                  </div>
+                  
+                  <!-- <div class="pull-right">
                       <div class="form-group dropdown label--inline ">
                           <div class="form-group__text select">
                             <label>Viewing</label>
@@ -38,14 +74,13 @@
                             </select>
                           </div>
                         </div>
-                    </div>
+                    </div> -->
     
                 </div>
               </div>
 
-          
-
-              <p-overlayPanel #popCommentContent [showCloseIcon]="true">
+        
+              <!-- <p-overlayPanel #popCommentContent [showCloseIcon]="true">
                   <div  class="comments-modal">
                     <div class="popover__body">
                       <h1 class="modalheader">Add Comments</h1>
@@ -59,15 +94,52 @@
                         </div>
                     </div>
                   </div>
-                </p-overlayPanel>
+                </p-overlayPanel> -->
+
+                <p-dialog [showHeader]="false" [responsive]="true" [style]="{'top':'244px'}" [width]="700" [height]="200" [minY]="70"
+                  [(visible)]="displayCommentsDialog" [closable]="true">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="pull-right" style="padding-bottom: 20px;">
+                        <span class="icon-close" (click)="closeCommentsDailog()"></span>
+                      </div>
+                      <div appHiddenelem [DirectiveValue]="'Actions'" class="card__header">
+                        <h5 class="card__title"><span [ngClass]="{'icon-padding icon-check-outline text-success icon-small':commentsHaeder==='Approve Details', 'icon-padding icon-exit-contain text-danger icon-small':commentsHaeder==='Reject'}"></span>{{commentsHaeder}}</h5>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <span>Add Comment <i>Optional</i></span>
+                      <textarea class="textarea" [value]="newComment" (input)="validateComment($event)" rows="1" ></textarea>
+                    </div>
+                  </div>
+                  <br>
+                  <div class="row text-right">
+                      <div class="form-actions">
+                        <button class="btn btn--secondary btn--cool btn--small" (click)="closeCommentsDailog()">Cancel</button>
+                        <button class="btn btn--primary btn--cool btn--small" type="submit">Confirm</button>
+                      </div>
+                    </div>
+                </p-dialog>
+              <div id="reject-alert" class="row" style="border: solid 1px red;margin: 1px;padding: 6px;font-size: 12px;">
+                <span class="icon-warning-outline text-danger" style="padding-right: 20px;"></span>
+                Sale Compensation module rejected
+              </div>
+              <div class="row" *ngIf="!viewOnlypermission">
+                <div class="col-md-12">
+                  <i>View Only</i>
+                  <span class="icon-lock icon-small"></span>
+                </div>
+              </div>    
     
               <div class="base-margin-top sales-compensation">
                 <p-treeTable class="item-creation" [value]="offerDetails" [columns]="salesCompensationColumns" selectionMode="checkbox"
                 [(selection)]="offerProductNodes"  [resizableColumns]="true">
                   <ng-template pTemplate="header" let-columns>
                     <tr>
-                      <th *ngFor="let col of columns">
-                        <div class="text-left">
+                      <th *ngFor="let col of columns; let i = index" [ngStyle]="{'width': col.width}">
+                        <div [ngClass]="{'text-left':i>0, 'text-center':i===0}">
                           {{col.header}}
                         </div>
                       </th>
@@ -76,32 +148,55 @@
                   <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
                       <tr>
                         <td *ngFor="let col of columns; let i = index">
-                          <div class="text-left"  *ngIf="i!=0">{{rowData[col.field]}}</div>
+                          <div [ngClass]="{'text-left':i>0, 'text-center':i===0}">{{rowData[col.field]}}</div>
                         </td>
                       </tr>
                   </ng-template>
                 </p-treeTable>
                 <br>
+                <!-- comments section -->
+                <div class="row comments-container">
+                  <div class="col-md-12 comments-header">
+                      <h6>Comments</h6>
+                  </div>
+                  <div class="col-md-12">
+                      <span class="comments-body">Comments added 1</span>
+                      <span class="comments-body">Comments added 2</span>
+                  </div>
+                </div>
+                <!-- end of comments section -->
                 <br>
                 Item List
-
-                <p-treeTable class="item-creation" [value]="productDetails" [columns]="salesCompensationItemListColumnHeaders" selectionMode="checkbox"
-                [(selection)]="selectedProductNodes"  [resizableColumns]="true">
+                <!-- selectedProductNodes : {{selectedProductNodes|json}} -->
+                <a class="pull-right">View Item Creation</a>
+                <p-treeTable class="item-creation" [value]="productDetails" [columns]="salesCompensationItemListColumnHeaders" selectionMode="multiple"
+                [(selection)]="selectedProductNodes"  [resizableColumns]="true"
+                (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)">
                   <ng-template pTemplate="header" let-columns>
                     <tr>
-                      <th *ngFor="let col of columns"  [ngStyle]="{'width': col.width}">
-                        <div class="text-left">
-                          {{col.header}}
-                        </div>
+                      <th *ngFor="let col of columns;let i = index;"  [ngStyle]="{'width': col.width}" [ngClass]="{'text-left':(i>0&&i<4),'text-left':(i===0), 'text-center':i>3}">
+                        <!-- <p-treeTableCheckbox class="pull-left" [value]="rowNode" *ngIf="i === 0"></p-treeTableCheckbox> -->
+                        <!-- <p-checkbox name="selectAllATO" value="i" ></p-checkbox> -->
+                        <div *ngIf="i===0" class="selectAllATO-cls"><p-treeTableHeaderCheckbox ></p-treeTableHeaderCheckbox></div>                                                
+                        <div *ngIf="i!=0">{{col.header}}</div>
                       </th>
                     </tr>
                   </ng-template>
                   <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
                       <tr>
                         <td *ngFor="let col of columns; let i = index">
-                          <p-treeTableCheckbox class="pull-left" [value]="rowNode" *ngIf="i == 0"></p-treeTableCheckbox>
-                          <!-- <p-treeTableToggler class="pull-left" [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler> -->
-                          <div class="text-left"  *ngIf="i!=0">{{rowData[col.field]}}</div>
+                          <p-treeTableCheckbox class="pull-left" [value]="rowNode" [disabled]="rowData[col.field]==='Approved'" *ngIf="i === 0"></p-treeTableCheckbox>
+                          <div [ngClass]="{'text-left':i<4, 'text-center':i>3}"  *ngIf="i!=0">
+                            
+                            <span [ngClass]="{'icon-padding icon-check-outline text-success icon-small':rowData[col.field]==='Approved', 
+                                              'icon-padding text-warning':rowData[col.field]==='Pending', 
+                                              'icon-padding icon-exit-contain text-danger icon-small':rowData[col.field]==='Rejected'}">
+                            </span>
+                            <span [ngClass]="{'text-success':rowData[col.field]==='Approved',
+                                            'text-warning':rowData[col.field]==='Pending',
+                                            'text-danger':rowData[col.field]==='Rejected',
+                                            'text-prm':col.field==='products'}">{{rowData[col.field]}}</span>                                              
+                          </div>
                         </td>
                       </tr>
                   </ng-template>
