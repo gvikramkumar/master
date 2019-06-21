@@ -17,7 +17,7 @@
 
             <app-offer-status [status]="offerBuilderdata['overallStatus']"></app-offer-status>
 
-            <span class="align-type">
+            <span class="align-type" *ngIf="offerBuilderdata['overallStatus']!=offerBuilderdata['derivedMM']">
               {{ offerBuilderdata['derivedMM'] }}
             </span>
 
