@@ -2,9 +2,13 @@
     <div class="panel panel--ltgray panel--compressed">
         <div class="container">
     <div class="row">
-        <div class="col-md-12">
-          <h1 class="display-4 base-margin-top half-margin-bottom">{{offerName}}<span class="offerID">(Offer ID
+        <div class="col-md-8">
+          <h1 class="display-4 half-margin-top half-margin-bottom"><span>{{offerName}}</span><span class="offerID">(Offer ID
               {{currentOfferId}})</span></h1>
+        </div>
+        <div class="col-md-4 text-right">
+            <button class="menu-btn" (click)="onExportPdf()">
+              <span class="icon-download"></span>Export</button>
         </div>
       </div>
       </div>
@@ -20,9 +24,8 @@
         </div>
         <div class="col-md-8 text-right">
             <button class="btn btn--secondary" (click)="goBack()"><span
-              class="icon-back"></span>&nbsp; Previous</button>
-          <button class="btn btn--primary" (click)="onExportPdf()">Export&nbsp;<span
-              class="icon-right-arrow" style="color:white;"></span></button>
+              class="icon-chevron-left"></span>&nbsp; Back</button>
+
         </div>
       </div>
     </div>
