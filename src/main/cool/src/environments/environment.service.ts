@@ -16,8 +16,12 @@ export class EnvironmentService {
     idpClientId: string;
     idpClientSecret: string;
 
+    // EMAIL NOTIFICATION URL
+    REST_API_POST_USER_DETAILS_FOR_EMAIL_URL:string;
+
     // CEPM URL
     REST_API_GET_CEPMROLES_URL:string;
+
     //  AUTHENTICATION URLs
     REST_API_AUTH_IDP_TOKEN_URL: string;
     REST_API_GENERATE_AUTH_TOKEN_URL: string;
@@ -208,7 +212,7 @@ export class EnvironmentService {
     REST_API_BasicModule_DownloadDoc: string;
     REST_API_BasicModuleFileName: string;
     REST_API_BasicModuleDocType: string;
-
+    REST_API_ServiceAPUpdate: string;
     // -------------------------------------------------------------------------------------------------
 
 
@@ -297,8 +301,12 @@ export class EnvironmentService {
                 this.tncOwbUrl = 'https://offer-stage.cloudapps.cisco.com/owb/#/subscription';
         }
 
-        //-------------------------CEPM URL------------------------------//
+        //-----------------------EMAIL NOTIFICATION URL --------------------
+        this.REST_API_POST_USER_DETAILS_FOR_EMAIL_URL = `${this.baseApiUrl}/accessManagement/sendAccessManagementEmail`
+
+        //-------------------------CEPM URL------------------------------
         this.REST_API_GET_CEPMROLES_URL = `${this.baseApiUrl}/access/fetchCEPMRoles`
+        
         // ----------------------- AUTHENTICATION URLs -----------------------------------------------
 
         // tslint:disable-next-line: max-line-length
@@ -458,8 +466,10 @@ export class EnvironmentService {
 
         this.REST_API_RETRIEVE_SERVICE_ATO_LIST_URL = this.baseApiUrl + '/itemcreation/getATOs';
         this.REST_API_RETRIEVE_SERVICE_ANNUITY_PRICING_URL = this.baseApiUrl + '/serviceAnnuityPricing/getPricingOfferLevel';
+        this.REST_API_ServiceAPUpdate = this.baseApiUrl + '/serviceAnnuityPricing/getPricingAtoSkusLevel';
 
-        // --------------------------------------- TERM AND CONTENT MAPPING --------------------------------------------
+
+      // --------------------------------------- TERM AND CONTENT MAPPING --------------------------------------------
 
         this.REST_API_RETRIEVE_TERM_CONTENT_MAPPING_URL = this.baseApiUrl + '/offersetup/getTNCMappingObject';
 
@@ -531,5 +541,8 @@ export class EnvironmentService {
         this.REST_API_BasicModule_DownloadDoc = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/DownloadDoc';
         this.REST_API_BasicModuleFileName = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/getFileName';
         this.REST_API_BasicModuleDocType = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/getUploadDetail';
+
+
+
     }
 }

@@ -87,26 +87,31 @@ export class AccessManagementComponent implements OnInit {
       this.accessManagementService.updateAccessManagement(updateAdmin)
         .subscribe(() => {
           this.accessManagementService.checkAdminAccess()
-          .subscribe((User)=> {
-            if(User.userId === updatedUserBusinessEntity.userId) {
-            this.currentUserData["functionalRole"] = this.slectedRole;
-            this.accessManagementService.getFomattedUserAccessData(this.currentUserData)
-            .subscribe((data)=> {
-              this.accessManagementData = data;
-              this.getUserAccessData(this.currentUserData);
+            .subscribe((User) => {
+              // assignee user details
+              let assignedUserFirstName = updatedUserBusinessEntity.userName.split(" ")[0];
+              let assignedUserId = updatedUserBusinessEntity.userId;
+              // logged in userAdmin full name and userId
+              let adminUserFullName = User.userName;
+              let adminUserId = User.userId;
+              console.log(assignedUserFirstName, assignedUserId, adminUserFullName, adminUserId);
+              this.accessManagementService
+                .onSendEmail(assignedUserId, adminUserId, assignedUserFirstName, adminUserFullName)
+                .subscribe(() => {
+                }, (err) => { console.log("Email notification error message", err) });
+              if (User.userId === updatedUserBusinessEntity.userId) {
+                this.currentUserData["functionalRole"] = this.slectedRole;
+                this.accessManagementService.getFomattedUserAccessData(this.currentUserData)
+                  .subscribe((data) => {
+                    this.accessManagementData = data;
+                    this.getUserAccessData(this.currentUserData);
+                  })
+              }
             })
-          }
-          })
-          //console.log(updatedUserBusinessEntity.userId === )
-          //this.currentUserData["functionalRole"] = this.slectedRole;
-          // this.accessManagementService.getFomattedUserAccessData(this.currentUserData)
-          // .subscribe((data)=> {
-          //   this.accessManagementData = data;
-          // })
 
           updatedUserBusinessEntity.userMapping[0].functionalRole = this.slectedRole;
           this.accessManagementService.sendFromUserRegistration
-          .next(updatedUserBusinessEntity);
+            .next(updatedUserBusinessEntity);
         });
     } else {
       this.getUserAccessData(this.currentUserData);
@@ -131,9 +136,9 @@ export class AccessManagementComponent implements OnInit {
         for (let item of rolesKeys) {
           if (item.substring(0, 7) === "COOL - ") {
             trimmedRoles.push(item.substring(7));
-          } 
-          
-         else if(item === "Business Unit Product Manager (BUPM)") {
+          }
+
+          else if (item === "Business Unit Product Manager (BUPM)") {
             trimmedRoles.push("BUPM")
           }
           else {
@@ -149,7 +154,7 @@ export class AccessManagementComponent implements OnInit {
             lables.push({ label: i, value: trimmedRoles[i] });
           }
         }
-        
+
         if (lables[0].value === "error") {
           this.ddRoles = [];
         } else {
@@ -195,7 +200,11 @@ export class AccessManagementComponent implements OnInit {
             if (value) {
               if (value.substring(0, 7) === "COOL - ") {
                 return value.substring(7);
-              } else {
+              }
+              else if (value === "Business Unit Product Manager (BUPM)") {
+                return "BUPM"
+              }
+              else {
                 return value;
               }
             }
@@ -255,14 +264,14 @@ export class AccessManagementComponent implements OnInit {
   }
 
 
- //CEPM pass role to API
- onGetRoles(e) {
-  this.disabledDd = true;
-  if (e.target.value.length === 0) {
+  //CEPM pass role to API
+  onGetRoles(e) {
     this.disabledDd = true;
+    if (e.target.value.length === 0) {
+      this.disabledDd = true;
+    }
+    this.rolesSubject.next(e.target.value);
   }
-  this.rolesSubject.next(e.target.value);
-}
 
   getUserAccessData(currentUserData) {
     this.accessManagementService.getFomattedUserAccessData(currentUserData)

@@ -1,22 +1,8 @@
 <div class="content">
   <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="panel panel--compressed task--bar">
-          <div class="header-bar__main col-md-6">
-            <div class="header-heading">
-              <h1 class="page-title">Access Management</h1>
-            </div>
-          </div>
 
-          <div appHiddenelem [DirectiveValue]="'Access Management'" class="header-toolbar col-md-6">
-            <button class="btn btn--white" (click)="registerNewUser()"><span
-                class="icon-add icon-small"></span>&nbsp;Register New Users</button>
-          </div>
+    <app-taskbar (newBtnClick)="registerNewUser()"></app-taskbar>
 
-        </div>
-      </div>
-    </div>
     <div class="card card--raised base-margin-top">
       <div class="panel">
         <div class="row card-table-header">
@@ -38,7 +24,8 @@
         </div>
         <!-- <div class="responsive-table"> removed the responsive-table class to prevent select menu overflow issue -->
         <div>
-          <p-table appReadonly [DirectiveValue]="'Access Management'"  #dt [columns]="cols" [value]="accessManagementData" [paginator]="true" [rows]="6">
+          <p-table appReadonly [DirectiveValue]="'Access Management'" #dt [columns]="cols"
+            [value]="accessManagementData" [paginator]="true" [rows]="6">
             <ng-template pTemplate="header" let-columns>
               <tr>
                 <th *ngFor="let col of columns">
@@ -52,19 +39,20 @@
                 <td>{{user.userName}}</td>
                 <td *ngIf="ind !== IndexCount">
                   {{user.userMapping && user.userMapping[0] ? user.userMapping[0].functionalRole : ''}}
-                   <span class="icon-pencil colorCl" (click)="onGetCEPMs(user,ind)"></span>
-                 </td>
-                 <td *ngIf="ind === IndexCount">
-                  <p-dropdown *ngIf="!isSelected" [style]="{'width':'100px'}" [(ngModel)]="user.userMapping[0].functionalRole" [disabled]="getCEPM"
+                  <span class="icon-pencil colorCl" (click)="onGetCEPMs(user,ind)"></span>
+                </td>
+                <td *ngIf="ind === IndexCount">
+                  <p-dropdown *ngIf="!isSelected" [style]="{'width':'100px'}"
+                    [(ngModel)]="user.userMapping[0].functionalRole" [disabled]="getCEPM"
                     (onChange)="onSelectDd(user,$event)" optionLabel="value" [options]="ddRoles">
                   </p-dropdown>
-                  <span *ngIf="isSelected" >
-                  <span>{{slectedRole}}</span>
-                 <span class="icon-pencil colorCl" (click)="onGetCEPMs(user,ind)"></span>
-                </span>
+                  <span *ngIf="isSelected">
+                    <span>{{slectedRole}}</span>
+                    <span class="icon-pencil colorCl" (click)="onGetCEPMs(user,ind)"></span>
+                  </span>
                 </td>
                 <td>
-                <p-multiSelect [options]="user.businessEntities" [filter]="false" [showHeader]="false"
+                  <p-multiSelect [options]="user.businessEntities" [filter]="false" [showHeader]="false"
                     [displaySelectedLabel]="true" [(ngModel)]="user.beList"
                     (onPanelHide)="updatedAccessManagementBE(user)" [appendTo]="body"
                     (onChange)="getPrimaryBusinessUnitBasedOnPrimaryBEForUser($event.value, user)">
@@ -89,6 +77,7 @@
         </div>
       </div>
     </div>
+
     <section id="formSection" *ngIf="showFormSection">
       <div class="card card--raised base-margin-top">
         <div class="panel">
@@ -120,7 +109,7 @@
                       User Id Available </div>
                     <div class="text-danger" *ngIf="!userIdAvailable && userId.touched && userId.dirty">
                       Invalid User Id </div> -->
-                      <div class="cepmCl" *ngIf="isInvalidCEPMuser">Invalid CEPM user</div>
+                    <div class="cepmCl" *ngIf="isInvalidCEPMuser">Invalid CEPM user</div>
 
                   </div>
                 </div>
@@ -192,5 +181,6 @@
         </div>
       </div>
     </section>
+
   </div>
 </div>
