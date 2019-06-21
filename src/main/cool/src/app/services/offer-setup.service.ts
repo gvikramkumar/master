@@ -19,7 +19,12 @@ export class OfferSetupService {
     return this.listAtos;
   }
   getModuleData(offerId, offerLevel, functionalRole ) {
-    const url = this.environmentService.REST_API_OFFER_SETUP_MODULE_GET_URL + offerId + '/' + offerLevel + '/' + functionalRole;
+    
+    let url = this.environmentService.REST_API_OFFER_SETUP_MODULE_GET_URL + offerId + '/' + offerLevel + '/' + functionalRole;
+    
+    if(window.localStorage.getItem('showSprint6')) {
+      url = this.environmentService.REST_API_OFFER_PS_MODULE_GET_URL + offerId + '/' + offerLevel + '/' + functionalRole;
+    }
     return this.http.get(url, { withCredentials: true });
   }
 
