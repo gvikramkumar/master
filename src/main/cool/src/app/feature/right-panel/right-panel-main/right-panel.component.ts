@@ -7,8 +7,6 @@ import * as moment from 'moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 import * as _ from 'lodash';
-import {HttpClient} from '@angular/common/http';
-import {EnvironmentService} from '@env/environment.service';
 import { LeadTime } from '../models/lead-time';
 
 @Component({
@@ -101,7 +99,7 @@ export class RightPanelComponent implements OnInit {
   loadingLeadTime = true;
   addStakeHolder: Boolean = false;
   displayOfferPhase: Boolean = false;
-
+  public isOfferPhaseBlank = true;
 
 
   // ----------------------------------------------------------------------------------------
@@ -111,9 +109,7 @@ export class RightPanelComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private offerPhaseService: OfferPhaseService,
     private rightPanelService: RightPanelService,
-    private stakeHolderService: StakeholderfullService,
-    private httpClinet: HttpClient,
-    private _envService: EnvironmentService
+    private stakeHolderService: StakeholderfullService
     ) {
 
     this.activatedRoute.params.subscribe(params => {
@@ -144,30 +140,26 @@ export class RightPanelComponent implements OnInit {
     this.navigateHash['Design Review'] = ['/designReview', this.currentOfferId, this.caseId];
     this.navigateHash['Offer Setup Workflow'] = ['/offerSetup', this.currentOfferId, this.caseId];
 
-    this.planCount = this.offerPhaseDetailsList['plan'].length;
-    this.setupCount = this.offerPhaseDetailsList['setup'].length;
-    this.ideateCount = this.offerPhaseDetailsList['ideate'].length;
+    this.offerPhaseService.getOfferPhase(this.caseId).subscribe(resOfferPhases => {
+      if (resOfferPhases) {
+        this.offerPhaseDetailsList = resOfferPhases;
 
-    this.offerPhaseDetailsList.ideate.forEach(element => {
-      if (element.status === 'Completed' || element.status === 'Not Applicable') {
-        this.ideateCompletedCount = this.ideateCompletedCount + 1;
+        this.ideateCount = resOfferPhases.ideate ? resOfferPhases.ideate.length : 0;
+        this.ideateCompletedCount = resOfferPhases.ideate ? resOfferPhases.ideate.filter(
+          this.isMilestoneCompletedAndNotApplicable()).length : 0;
+
+        this.planCount = resOfferPhases.plan ? resOfferPhases.plan.length : 0;
+        this.planCompletedCount = resOfferPhases.plan ? resOfferPhases.plan.filter(
+          this.isMilestoneCompletedAndNotApplicable()).length : 0;
+
+        this.setupCount = resOfferPhases.setup ? resOfferPhases.setup.length : 0;
+        this.setupCompletedCount = resOfferPhases.setup ? resOfferPhases.setup.filter(
+          this.isMilestoneCompletedAndNotApplicable()).length : 0;
+
+        this.processCurrentPhaseInfo(resOfferPhases);
       }
-    });
-
-    this.offerPhaseDetailsList.plan.forEach(element => {
-      if (element.status === 'Completed' || element.status === 'Not Applicable') {
-        this.planCompletedCount = this.planCompletedCount + 1;
-      }
-    });
-
-    this.offerPhaseDetailsList.setup.forEach(element => {
-      if (element.status === 'Completed' || element.status === 'Not Applicable') {
-        this.setupCompletedCount = this.setupCompletedCount + 1;
-      }
-    });
-
-    this.offerPhaseService.getOfferPhaseDetails(this.caseId, true).subscribe(data => {
-      this.processCurrentPhaseInfo(data);
+      this.phaseProcessingCompleted = true;
+      this.isOfferPhaseBlank = resOfferPhases === null || Object.keys(resOfferPhases).length === 0;
     });
 
   }
@@ -188,32 +180,44 @@ export class RightPanelComponent implements OnInit {
 
   // ----------------------------------------------------------------------------------------
 
-  processCurrentPhaseInfo(phaseInfo) {
-    this.mStoneCntInAllPhases.forEach(element => {
-      const obj = {};
-      let count = 0;
-      const phase = phaseInfo[element];
-      if (phase !== undefined) {
-        phase.forEach(element => {
-          if (element.status === 'Completed') {
-            count = count + 1;
-          }
-        });
-        obj['phase'] = element;
-        if (count > 0 && count < 4) {
-          obj['status'] = 'active';
-        } else if (count === 4) {
-          obj['status'] = 'visited';
-        } else if (count === 0) {
-          obj['status'] = '';
+  processCurrentPhaseInfo(offerPhaseInfo) {
+    this.mileStoneStatus = this.mStoneCntInAllPhases.reduce((accumulator, phase) => {
+      const phaseInfo = {
+        phase: phase,
+        status: ''
+      };
+      const offerMilestone = offerPhaseInfo[phase];
+      if (offerMilestone) {
+        if (offerMilestone.every(this.isMilestoneVisited())) {
+          phaseInfo.status = 'visited';
+        } else if (offerMilestone.some(this.isMilestoneActive())) {
+          phaseInfo.status = 'active';
+        } else if (offerMilestone.every(this.isMilestoneNotTouched())) {
+          phaseInfo.status = '';
         }
-      } else {
-        obj['phase'] = element;
-        obj['status'] = '';
       }
-      this.mileStoneStatus.push(obj);
-    });
-    this.phaseProcessingCompleted = true;
+      accumulator.push(phaseInfo);
+      return accumulator;
+    }, []);
+  }
+
+  private isMilestoneNotTouched(): any {
+    return milestone => milestone.status && (milestone.status.toLowerCase() === 'Available'
+      || milestone.status.toLowerCase() === 'not applicable');
+  }
+
+  private isMilestoneActive(): any {
+    return milestone => milestone.status && milestone.status.toLowerCase() === 'completed';
+  }
+
+  private isMilestoneVisited(): any {
+    return milestone => milestone.status && (milestone.status.toLowerCase() === 'completed'
+      || milestone.status.toLowerCase() === 'not applicable');
+  }
+
+  private isMilestoneCompletedAndNotApplicable(): any {
+    return milestone => milestone.status && (milestone.status.toLowerCase() === 'completed'
+      || milestone.status.toLowerCase() === 'not applicable');
   }
 
   // ----------------------------------------------------------------------------------------

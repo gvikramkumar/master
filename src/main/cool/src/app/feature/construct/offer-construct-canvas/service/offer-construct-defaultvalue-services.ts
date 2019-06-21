@@ -520,6 +520,21 @@ export class OfferConstructDefaultValue {
         }
 
       }
+
+      // for Subscription Offset(In Days)
+      if (question.question == 'Subscription Offset(In Days)') {
+        if (chargeTypeValue == recurringType) {
+          question.currentValue = '30';
+          question.previousValue = '30';
+        }
+      }
+
+      if (question.question == 'Terms & Payments Required') {
+        if (question.currentValue == 'No') {
+          // set Subscription Offset(In Days) as disable if the value in 'no'
+          this.disableSubscriptionOffset(questionList)
+        }
+      }
     });
     return questionList;
   }
