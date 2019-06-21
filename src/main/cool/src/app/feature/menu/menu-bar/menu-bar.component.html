@@ -110,6 +110,7 @@
   <app-offer-popup [offerBuilderdata]="offerBuilderdata"></app-offer-popup>
 </p-overlayPanel>
 
+<app-menu-bar-popup [show]="showPopup" [popupType]="popupType" (closePopup)="closePopup($event)"></app-menu-bar-popup>
 <!-- <app-menu-bar-popup [popupType]="popupType" (closePopup)="closePopup($event)"></app-menu-bar-popup> -->
 
 <app-mark-complete-popup [offerId]="offerId" [caseId]="caseId" [show]="showMarkcompletePopup"
