@@ -12,7 +12,8 @@
 }
 span.ico-punchout {
     position: relative;
-    top: 4px;
+    top: 2px;
+    left: 5px;
 }
 .panel-scroll {
     /*width: 670px;*/
