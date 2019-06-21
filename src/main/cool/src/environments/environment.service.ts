@@ -213,6 +213,7 @@ export class EnvironmentService {
     REST_API_BasicModuleFileName: string;
     REST_API_BasicModuleDocType: string;
     REST_API_ServiceAPUpdate: string;
+    REST_API_PirateShipRefresh: string;
     // -------------------------------------------------------------------------------------------------
 
 
@@ -543,6 +544,8 @@ export class EnvironmentService {
         this.REST_API_BasicModuleDocType = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/getUploadDetail';
 
 
+      // -------------------------------------------------pirateship Refresh URL--------------------------------
+      this.REST_API_PirateShipRefresh = 'https://cool-op-srv-dev.cisco.com/coolsrv/offerSetup/getOfferSetupModuleStatusByOfferId';
 
     }
 }

@@ -12,6 +12,9 @@ import { pirateShipRoutesNames } from './pirate-ship.routes.names';
 
 import { interval } from 'rxjs';
 import { ActionsService } from '@app/services/actions.service';
+import {EnvironmentService} from '@env/environment.service';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {ConfigurationService} from '@core/services';
 
 @Component({
   selector: 'app-offer-setup',
@@ -58,6 +61,9 @@ export class OfferSetupComponent implements OnInit {
     private offerSetupService: OfferSetupService,
     private rightPanelService: RightPanelService,
     private stakeholderfullService: StakeholderfullService,
+    private _env: EnvironmentService,
+    private httpClient: HttpClient,
+   private configurationService: ConfigurationService,
     private actionsService: ActionsService) {
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['offerId'];
@@ -352,6 +358,19 @@ export class OfferSetupComponent implements OnInit {
 
   selectedValue(event) {
     this.getAllModuleData();
+  }
+
+  refreshPirateship() {
+    console.log(this.configurationService.startupData.token);
+    this.httpClient.get(this._env.REST_API_PirateShipRefresh + '/' + this.offerId,{
+      headers: new HttpHeaders().set('Access-Control-Allow-Origin', '*').append('Authorization', `Bearer ${this.configurationService.startupData.token}`)
+        .append('Access-Control-Allow-Methods','GET,PUT,POST,DELETE,OPTIONS').append('Access-Control-Allow-Headers','Content-Type, Authorization, Content-Length, X-Requested-With, Accept')
+    }).subscribe(
+      (res) => {
+        console.log(res);
+        debugger;
+      }
+    );
   }
 
 }
