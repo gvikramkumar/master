@@ -72,13 +72,11 @@ export function initializeExpress() {
   app.get('/ping', (req, res) => res.send());
   app.get('/healthcheck', healthcheck());
 
-  /*
-    app.get('/timeout/:delay', function (req: AnyObj, res, next) {
-      const delay = Number(req.params.delay);
-      Q().delay(delay)
-        .then(() => res.json({delay}));
-    });
-  */
+  app.get('/timeout/:delay', function (req: AnyObj, res, next) {
+    const delay = Number(req.params.delay);
+    Q().delay(delay)
+      .then(() => res.json({delay}));
+  });
 
   app.use(addSsoUser());
   app.use(addGlobalData());

@@ -29,7 +29,8 @@ export const shUtil = {
   catchDisregardHandler,
   promiseChain,
   stringToArray,
-  arrayFilterUndefinedAndEmptyStrings
+  arrayFilterUndefinedAndEmptyStrings,
+  promiseChain
 };
 
 function promiseChain(_promise) {

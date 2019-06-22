@@ -183,12 +183,12 @@ export default class SubmeasureController extends ApprovalController {
       .then(docs => res.json(docs));
   }
 
-  sendApprovalEmail(req, mode: ApprovalMode, item): Promise<any> {
+  sendApprovalEmail(approveRejectMessage, req, mode: ApprovalMode, item): Promise<any> {
     const omitProperties = [
       '_id', 'id', 'status', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate', '__v', 'approvedOnce',
       'indicators._id', 'inputFilterLevel._id', 'manualMapping._id', 'approvalUrl', 'approvalReminderTime',
     ];
-    return this.sendApprovalEmailBase(req, mode, item, 'submeasure', omitProperties);
+    return this.sendApprovalEmailBase(approveRejectMessage, req, mode, item, 'submeasure', omitProperties);
   }
 
   // we need this sync to happen
