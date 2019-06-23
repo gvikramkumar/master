@@ -6,13 +6,16 @@ import { OfferSetupService } from '@app/services/offer-setup.service';
 import { RightPanelService } from '@app/services/right-panel.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 
+import { PirateShip } from './model/pirate-ship';
 import { appRoutesNames } from '@app/app.routes.names';
 import { pirateShipRoutesNames } from './pirate-ship.routes.names';
 
-import { interval } from 'rxjs';
 import { ActionsService } from '@app/services/actions.service';
-import { PirateShipModule } from './pirate-ship.module';
-import { PirateShip } from './model/pirate-ship';
+import { ConfigurationService } from '../../core/services/configuration.service';
+
+import { EnvironmentService } from '@env/environment.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-offer-setup',
@@ -56,11 +59,14 @@ export class OfferSetupComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private httpClient: HttpClient,
+    private _env: EnvironmentService,
     private userService: UserService,
     private activatedRoute: ActivatedRoute,
     private actionsService: ActionsService,
     private offerSetupService: OfferSetupService,
     private rightPanelService: RightPanelService,
+    private configurationService: ConfigurationService,
     private stakeholderfullService: StakeholderfullService,
   ) {
 
@@ -359,7 +365,16 @@ export class OfferSetupComponent implements OnInit {
     this.getAllModuleData();
   }
 
-  // ----------------------------------------------------------------------------------------------------------------
-
+  refreshPirateship() {
+    this.httpClient.get(this._env.REST_API_OFFER_SETUP_REFRESH + '/' + this.offerId, {
+      headers: new HttpHeaders().set('Access-Control-Allow-Origin', '*')
+        .append('Authorization', `Bearer ${this.configurationService.startupData.token}`)
+        .append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        .append('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, Accept')
+    }).subscribe(
+      (res) => {
+      }
+    );
+  }
 
 }
