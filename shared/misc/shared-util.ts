@@ -30,7 +30,6 @@ export const shUtil = {
   promiseChain,
   stringToArray,
   arrayFilterUndefinedAndEmptyStrings,
-  promiseChain
 };
 
 function promiseChain(_promise) {

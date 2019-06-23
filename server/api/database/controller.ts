@@ -23,8 +23,8 @@ import ServiceTrainingUploadController from '../prof/service-training-upload/con
 import {svrUtil} from '../../lib/common/svr-util';
 import {handleQAllSettled} from '../../lib/common/q-allSettled';
 import Q from 'q';
-import {app} from '../../express-setup';
 import config from '../../config/get-config';
+import _ from 'lodash';
 
 @injectable()
 export default class DatabaseController {
@@ -66,11 +66,11 @@ export default class DatabaseController {
       throw new ApiError('Syncing local mongo to non-local postgres.');
     }
 
-    if (app.get('syncing')) {
+    if (!_.get(global, 'dfa.syncing')) {
       throw new ApiError('Database sync is already running.');
     }
 
-    app.set('syncing', true);
+    _.set(global, 'dfa.syncing', true);
 
     if (syncMap.dfa_data_sources) {
       promises.push(this.moduleSourceCtrl.mongoToPgSync('dfa_data_sources', userId, log, elog));
@@ -135,7 +135,7 @@ export default class DatabaseController {
         return Q.allSettled(promises)
           .then(handleQAllSettled(null, 'qAllReject'))
           .then(results => {
-            app.set('syncing', false);
+            _.set(global, 'dfa.syncing', false);
             if (elog.length) {
               throw new Error('handled in catch');
               return;
@@ -143,7 +143,7 @@ export default class DatabaseController {
             return {success: log};
           })
           .catch(err => {
-            app.set('syncing', false);
+            _.set(global, 'dfa.syncing', false);
             throw new ApiError('MongoToPgSync Errors.', {success: log, errors: elog});
           });
       });

@@ -13,8 +13,7 @@ import {databaseUpdate} from './database-update';
 import {app, initializeExpress} from './express-setup';
 import os from 'os';
 import {svrUtil} from './lib/common/svr-util';
-import {JobManager} from './lib/job/job-manager';
-
+import _ from 'lodash';
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -27,7 +26,6 @@ export const serverPromise = Promise.all([mgc.promise, pgc.promise])
   .then(() => {
 
       initializeExpress();
-      const jobManager = injector.get(JobManager);
       const port = config.port;
       let server, protocol;
       if (config.ssl) {
@@ -70,13 +68,13 @@ export const serverPromise = Promise.all([mgc.promise, pgc.promise])
           throw(err);
         }
         const serverUrl = `${protocol}://${os.hostname()}:${port}`;
-        app.set('serverHost', os.hostname());
-        app.set('serverUrl', serverUrl);
+        _.set(global, 'dfa.serverHost', os.hostname());
+        _.set(global, 'dfa.serverUrl', serverUrl);
+        _.set(global, 'dfa.app', app);
         if (!svrUtil.isLocalEnv()) {
           console.log('build:', process.env.BUILD_NUMBER);
         }
         console.log(`server listening on ${serverUrl}`);
-        jobManager.serverStartup();
       });
     }
   )

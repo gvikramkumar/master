@@ -20,7 +20,6 @@ import AnyObj from '../../../../shared/models/any-obj';
 import {injector, lazyInject} from '../../../lib/common/inversify.config';
 import DatabaseController from '../../database/controller';
 import {SyncMap} from '../../../../shared/models/sync-map';
-import {app} from '../../../express-setup';
 
 
 interface FilterLevel {
@@ -232,7 +231,7 @@ export default class SubmeasureController extends ApprovalController {
     if (deptUpload) {
       syncMap.dfa_prof_dept_acct_map_upld = true;
     }
-    if (!app.get('syncing')) {
+    if (!_.get(global, 'dfa.syncing')) {
       return databaseCtrl.mongoToPgSyncPromise(req.dfa, syncMap, req.user.id);
     } else {
       return Promise.resolve();

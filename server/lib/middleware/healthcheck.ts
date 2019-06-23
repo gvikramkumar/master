@@ -9,7 +9,6 @@ import {NamedApiError} from '../common/named-api-error';
 import Q from 'q';
 import {handleQAllSettled} from '../common/q-allSettled';
 import _ from 'lodash';
-import {app} from '../../express-setup';
 
 const lookupRepo = new LookupRepo();
 const pgLookupRepo = new PgLookupRepo();
@@ -25,7 +24,7 @@ export function healthcheck () {
     ])
       .then(results => {
         const rtn = {
-          server: app.get('serverUrl'),
+          server: _.get(global, 'dfa.serverUrl'),
           build: `${process.env.BUILD_NUMBER}`,
           mongo: results[0].state === 'fulfilled' ? `dfa-version: ${results[0].value[0]}, mongo-version: ${results[0].value[1].version}` : `DOWN: ${results[0].reason}`,
           pg: results[1].state === 'fulfilled' ? results[1].value : `DOWN: ${results[1].reason}`,

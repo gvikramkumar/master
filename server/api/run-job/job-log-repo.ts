@@ -1,29 +1,28 @@
 import {injectable} from 'inversify';
-import {model, Model, Schema} from 'mongoose';
+import {Schema} from 'mongoose';
 import RepoBase from '../../lib/base-classes/repo-base';
 
 const schema = new Schema(
   {
-    serverHost: {type: String, required: true},
+    host: {type: String, required: true},
     jobName: {type: String, required: true},
     userId: {type: String, required: true},
     startDate: Date,
     endDate: Date,
     duration: Number,
-    running: {type: Boolean, required: true},
     status: String,
-    step: String, // so jobs can say where they're at the job
     data: Object,
-    error: Object
+    error: Object,
+    timestamp: {type: Date, default: new Date()},
   },
-  {collection: 'dfa_job_run'}
+  {collection: 'dfa_job_log'}
 );
 
 @injectable()
-export default class JobRunRepo extends RepoBase {
+export default class JobLogRepo extends RepoBase {
 
   constructor() {
-    super(schema, 'JobRun');
+    super(schema, 'JobLog');
   }
 
 }

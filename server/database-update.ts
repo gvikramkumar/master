@@ -87,10 +87,11 @@ function updateBuildNumber() {
 
 function doUpdate(update) {
   return new Promise((resolve, reject) => {
-    console.log(`starting database update: ${update.version}`);
+    console.log(`>>>>>>>>> starting database update: ${update.version}`);
     const str = `mongo --nodb  --eval "var host='${config.host}', port='${config.port}', _db='${config.db}', username='${process.env.MONGODB_USER}', password='${process.env.MONGODB_PASSWORD}'" database/updates/${update.fileName}`;
     exec(str, (err, stdio, stderr) => {
       if (err) {
+        console.log(`>>>>>>>>> database update failed for version: ${update.version}`);
         console.log('/////////////////// stderr');
         console.log(stderr);
         console.log('/////////////////// stdio');
@@ -100,7 +101,8 @@ function doUpdate(update) {
       } else {
         lookupRepo.upsert({key: 'database-version', value: update.version})
           .then(() => {
-            console.log(`database updated to version: ${update.version}`);
+            console.log(stdio);
+            console.log(`>>>>>>>>> database updated to version: ${update.version}`);
             resolve();
           });
       }

@@ -4,8 +4,8 @@
     "spec/init/init.js",
     "spec/init/init-mocks.js",
     "spec/matchers/jasmine-matchers.js",
-    "server/**/*.spec.js",
-    "shared/**/*.spec.js"
+    "server/**/*spec.js",
+    "shared/**/*spec.js"
   ],
   "helpers": [
     "spec/helpers/**/*.js"
