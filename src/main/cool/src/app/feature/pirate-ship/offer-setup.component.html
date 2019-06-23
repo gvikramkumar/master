@@ -15,22 +15,14 @@
       <div class="row half-margin-top">
         <div class="leftContent col-sm-12 col-md-9">
 
-          <!-- Control Bar -->
+          <!-- Dropdown Menu Bar -->
           <div class="row">
 
             <div class="col-md-8"></div>
-            <div class="col-md-4 text-right">
-              <div class="form-group dropdown label--inline">
-                <div class="form-group__text select">
-                  <label for="select-size-default">Viewing</label>
-                  <select [(ngModel)]="selectedAto" (change)="selectedValue($event)">
-                    <option id="select-size-default" value="Overall Offer">Overall Offer</option>
-                    <option id="select-size-default" *ngFor="let item of Options" value={{item}}>
-                      {{item}}
-                    </option>
-                  </select>
-                </div>
-              </div>
+            <div class="col-md-4 pull-right">
+              <app-view-offer [atoNames]="atoNames" [selectedAto]="selectedAto"
+                (atoSelection)="selectedValue($event)">
+              </app-view-offer>
             </div>
 
           </div>

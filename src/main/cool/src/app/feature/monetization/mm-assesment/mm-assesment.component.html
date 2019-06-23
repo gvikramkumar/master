@@ -1,12 +1,12 @@
 <app-menu-bar *ngIf="dimensionMode" [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId"
   [offerName]="offerBuilderdata['offerName']" [stakeData]="stakeholders" [canMarkComplete]="canMarkComplete"
-  (updateMessage)="updateMessage($event)" [showSave]="true" (getMarkCompleteStatus)="getMarkCompleteStatus($event)"
+  (updateMessage)="updateMessage($event)" [showSave]="canClickNextStep" (getMarkCompleteStatus)="getMarkCompleteStatus($event)"
   (onProceedToNext)="proceedToOfferSolution($event)">
 </app-menu-bar>
 
 <app-menu-bar *ngIf="!dimensionMode" [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId"
   [offerName]="offerBuilderdata['offerName']" [stakeData]="stakeholders" (updateMessage)="updateMessage($event)"
-  [showSave]="false">
+  [showSave]="!canClickNextStep">
 </app-menu-bar>
 
 <div class="content">

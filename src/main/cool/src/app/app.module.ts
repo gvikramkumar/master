@@ -1,6 +1,6 @@
 
 import { DatePipe } from '@angular/common';
- import { RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -24,6 +24,7 @@ import { OffersolutioningService } from './services/offersolutioning.service';
 import { MonetizationModelService } from './services/monetization-model.service';
 import { SearchCollaboratorService } from './services/search-collaborator.service';
 import { OfferOverViewResolver } from './services/offer-overview-resolver.service';
+import { CsdlIntegrationService } from './services/csdl-integration.service';
 import { ExitCriteriaValidationService } from './services/exit-criteria-validation.service';
 
 
@@ -44,9 +45,12 @@ import { RightPanelModule } from '@app/feature/right-panel/right-panel.module';
 import { OfferDetailModule } from '@app/feature/offer-detail/offer-detail.module';
 
 import { StoreModule } from '@ngrx/store';
-import { reducers, metaReducers } from './reducers';
+import { reducers, metaReducers } from '@app/store/reducers';
 import { CalendarModule } from 'primeng/calendar';
-import { CsdlIntegrationService } from './services/csdl-integration.service';
+
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
+
 
 export function app_init(configService: ConfigurationService) {
   return () => configService.init();
@@ -73,7 +77,8 @@ export function app_init(configService: ConfigurationService) {
     OfferDetailModule,
     AppRoutingModule,
     CalendarModule,
-    StoreModule.forRoot(reducers, { metaReducers })
+    StoreModule.forRoot(reducers, { metaReducers }),
+    !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
   providers:
     [

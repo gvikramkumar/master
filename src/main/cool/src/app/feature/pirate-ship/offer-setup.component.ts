@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { UserService } from '@app/core/services/user.service';
-import { MessageService } from '@app/services/message.service';
 import { OfferSetupService } from '@app/services/offer-setup.service';
 import { RightPanelService } from '@app/services/right-panel.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
@@ -12,6 +11,8 @@ import { pirateShipRoutesNames } from './pirate-ship.routes.names';
 
 import { interval } from 'rxjs';
 import { ActionsService } from '@app/services/actions.service';
+import { PirateShipModule } from './pirate-ship.module';
+import { PirateShip } from './model/pirate-ship';
 
 @Component({
   selector: 'app-offer-setup',
@@ -19,46 +20,50 @@ import { ActionsService } from '@app/services/actions.service';
   styleUrls: ['./offer-setup.component.scss']
 })
 export class OfferSetupComponent implements OnInit {
+
   offerId;
   caseId;
   setFlag;
   message;
   offerName;
   offerData;
+  primaryBE: string;
 
-  showMM: boolean = false;
-  readOnly: boolean = false;
   derivedMM;
   moduleStatus;
   functionalRole;
+  readOnly = false;
 
-  stakeHolderData = [];
   stakeholders: any;
+  stakeHolderData = [];
+  stakeHolderInfo: any;
 
   groupData = {};
-  showGroupData: boolean = false;
-  primaryBE: string;
-  stakeHolderInfo: any;
+  showGroupData = false;
+
+  atoNames: any[] = [];
   offerBuilderdata = {};
   displayLeadTime = false;
   noOfWeeksDifference: string;
   backbuttonStatusValid = true;
   proceedButtonStatusValid = true;
   proceedToreadinessreview = true;
-  Options: any[] = [];
-  selectedOffer: any = 'Overall Offer';
-  selectedAto: string = 'Overall Offer';
+
+  selectedAto: string;
   designReviewComplete: Boolean = false;
 
+  pirateShip: PirateShip;
 
-
-  constructor(private router: Router,
+  constructor(
+    private router: Router,
     private userService: UserService,
     private activatedRoute: ActivatedRoute,
+    private actionsService: ActionsService,
     private offerSetupService: OfferSetupService,
     private rightPanelService: RightPanelService,
     private stakeholderfullService: StakeholderfullService,
-    private actionsService: ActionsService) {
+  ) {
+
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['offerId'];
       this.caseId = params['caseId'];
@@ -66,15 +71,20 @@ export class OfferSetupComponent implements OnInit {
         this.selectedAto = params['selectedAto'];
       }
     });
+
   }
+
+  // ----------------------------------------------------------------------------------------------------------------
 
   ngOnInit() {
 
-    //  =======================================================================================
+    this.showGroupData = false;
+    this.selectedAto = 'Overall Offer';
     this.functionalRole = this.userService.getFunctionalRole();
 
-    this.offerSetupService.lockAPIForOWB(this.offerId).subscribe(res=> {
+    this.offerSetupService.lockAPIForOWB(this.offerId).subscribe(() => {
     });
+
     // Check design review status for enabling Item Creation Module
     this.actionsService.getMilestones(this.caseId).subscribe(data => {
       data['plan'].forEach(element => {
@@ -87,15 +97,9 @@ export class OfferSetupComponent implements OnInit {
     // Get Offer Details
     this.getOfferDetails();
 
-
-
-    // for refresh
-    interval(9000000).subscribe(x =>
-      this.getAllModuleData()
-    )
-
-
   }
+
+  // ----------------------------------------------------------------------------------------------------------------
 
   // Get offer Details
 
@@ -126,14 +130,9 @@ export class OfferSetupComponent implements OnInit {
       // Get Module Name and Status
       this.getAllModuleData();
 
-      if (this.derivedMM !== 'Not Aligned') {
-        this.showMM = true;
-      }
-
       if (Array.isArray(offerDetails['primaryBEList']) && offerDetails['primaryBEList'].length) {
         this.primaryBE = offerDetails['primaryBEList'][0];
       }
-
 
       // TTM Info
       this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe(
@@ -151,32 +150,44 @@ export class OfferSetupComponent implements OnInit {
     });
   }
 
+  // ----------------------------------------------------------------------------------------------------------------
+
   // Get All the ModuleName and place in order
   getAllModuleData() {
 
-    this.offerSetupService.getModuleData(this.offerId, this.selectedAto, this.functionalRole).subscribe(data => {
+    this.offerSetupService.getModuleData(this.offerId, this.selectedAto, this.functionalRole)
+      .subscribe((pirateShipResposne: PirateShip) => {
 
-      this.groupData = {};
-      this.showGroupData = false;
-      this.Options = data['listATOs'];
-      data['listSetupDetails'].forEach(group => {
+        this.pirateShip = pirateShipResposne;
 
-        const groupName = group['groupName']
-        if (this.groupData[groupName] == null) {
-          this.groupData[groupName] = { 'left': [], 'right': [] };
-        }
-        if (group['colNum'] == 1) {
-          this.groupData[groupName]['left'].push(group);
-        } else {
-          this.groupData[groupName]['right'].push(group);
-        }
+        this.groupData = {};
+        this.showGroupData = false;
 
-      });
-      this.sortGroupData();
-      this.showGroupData = true;
-    }
-    );
+        this.pirateShip['listSetupDetails'].forEach(group => {
+
+          const groupName = group['groupName']
+          if (this.groupData[groupName] == null) {
+            this.groupData[groupName] = { 'left': [], 'right': [] };
+          }
+          if (group['colNum'] === 1) {
+            this.groupData[groupName]['left'].push(group);
+          } else {
+            this.groupData[groupName]['right'].push(group);
+          }
+
+        });
+
+        this.sortGroupData();
+        this.showGroupData = true;
+
+        this.atoNames = this.pirateShip['listATOs'];
+        this.atoNames.push('Overall Offer');
+
+      }
+      );
   }
+
+  // ----------------------------------------------------------------------------------------------------------------
 
   // sort the module location
   sortGroupData() {
@@ -188,7 +199,7 @@ export class OfferSetupComponent implements OnInit {
     );
   }
 
-
+  // ----------------------------------------------------------------------------------------------------------------
 
   // get stakeHolder information
   private processStakeHolderInfo() {
@@ -210,7 +221,9 @@ export class OfferSetupComponent implements OnInit {
       });
     }
   }
-  
+
+  // ----------------------------------------------------------------------------------------------------------------
+
   // update message for humburger
   updateMessage(message) {
     if (message != null && message !== '') {
@@ -227,14 +240,9 @@ export class OfferSetupComponent implements OnInit {
   }
 
 
+  // ----------------------------------------------------------------------------------------------------------------
 
   getElementDetails(element) {
-    console.log(element.moduleName);
-    /* if (element.moduleName === 'Item Creation') {
-      this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.ITEM_CREATION, this.selectedAto]);
-    } else if (element.moduleName === 'Modeling & Design') {
-      this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.MODELLING_DESIGN, this.selectedAto]);
-    } */
 
     switch (element.moduleName) {
       case 'Item Creation': {
@@ -280,7 +288,6 @@ export class OfferSetupComponent implements OnInit {
         this.caseId,
         pirateShipRoutesNames.CHANGE_STATUS,
         this.selectedAto, element.moduleName]);
-
         break;
       }
       case 'Royalty Setup': {
@@ -289,7 +296,6 @@ export class OfferSetupComponent implements OnInit {
         this.caseId,
         pirateShipRoutesNames.CHANGE_STATUS,
         this.selectedAto, element.moduleName]);
-
         break;
       }
       case 'Offer Attribution': {
@@ -298,7 +304,6 @@ export class OfferSetupComponent implements OnInit {
         this.caseId,
         pirateShipRoutesNames.CHANGE_STATUS,
         this.selectedAto, element.moduleName]);
-
         break;
       }
       case 'Export Compliance': {
@@ -307,7 +312,6 @@ export class OfferSetupComponent implements OnInit {
         this.caseId,
         pirateShipRoutesNames.CHANGE_STATUS,
         this.selectedAto, element.moduleName]);
-
         break;
       }
       case 'Test Orderability': {
@@ -316,7 +320,6 @@ export class OfferSetupComponent implements OnInit {
         this.caseId,
         pirateShipRoutesNames.CHANGE_STATUS,
         this.selectedAto, element.moduleName]);
-
         break;
       }
       case 'Pricing Uplift Setup': {
@@ -325,7 +328,6 @@ export class OfferSetupComponent implements OnInit {
         this.caseId,
         pirateShipRoutesNames.CHANGE_STATUS,
         this.selectedAto, element.moduleName]);
-
         break;
       }
       case 'Orderability': {
@@ -350,8 +352,14 @@ export class OfferSetupComponent implements OnInit {
   onProceedToNext() {
   }
 
-  selectedValue(event) {
+  // ----------------------------------------------------------------------------------------------------------------
+
+  selectedValue(dropDownValue: string) {
+    this.selectedAto = dropDownValue;
     this.getAllModuleData();
   }
+
+  // ----------------------------------------------------------------------------------------------------------------
+
 
 }
