@@ -11,5 +11,6 @@ if (username && password && username !== 'undefined' && password !== 'undefined'
 // recreate dfa_job_log and index for case-insensitive
 db.getCollection('dfa_job_log').drop();
 db.createCollection('dfa_job_log', {collation: {locale: 'en_US', strength: 1, numericOrdering: true}});
+db.dfa_job_log.createIndex({jobName: 1, timestamp: -1});
 db.dfa_job_log.createIndex({startDate: -1}, {expireAfterSeconds: 6 * 30 * 24 * 60 * 60}); // 6 months
 

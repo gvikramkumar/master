@@ -326,23 +326,11 @@ export default class RepoBase {
       });
   }
 
-  // hasn't been used or tested yet
+  // hasn't been used or tested yet, might come in handy
   upsert(data, userId, concurrencyCheck = true) {
     return this.getOneById(data.id)
       .then(item => {
         if (item) {
-          return this.update(data, userId, concurrencyCheck);
-        } else {
-          return this.addOne(data, userId);
-        }
-      });
-  }
-
-  upsertMerge(data, userId, concurrencyCheck = true) {
-    return this.getOneById(data.id)
-      .then(item => {
-        if (item) {
-          Object.assign(item, data);
           return this.update(data, userId, concurrencyCheck);
         } else {
           return this.addOne(data, userId);

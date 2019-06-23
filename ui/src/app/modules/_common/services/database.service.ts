@@ -5,7 +5,6 @@ import {SyncMap} from '../../../../../../shared/models/sync-map';
 
 const apiUrl = environment.apiUrl;
 const endpointUrl = `${apiUrl}/api/database`;
-const mongoToPgSyncEndpointUrl = `${apiUrl}/api/run-job/database-sync`;
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +15,7 @@ export class DatabaseService {
   }
 
   mongoToPgSync(syncMap) {
-    return this.httpClient.post<SyncMap>(mongoToPgSyncEndpointUrl, syncMap);
+    return this.httpClient.post<SyncMap>(`${apiUrl}/api/run-job/database-sync`, syncMap);
   }
 
   pgToMongoSync() {
