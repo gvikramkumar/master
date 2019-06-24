@@ -74,7 +74,7 @@ export class UploadDocComponent implements OnInit {
     }
     setTimeout(()=>{
       this.showloader = false;
-    },5000);
+    },9000);
 
 
 
@@ -89,7 +89,7 @@ export class UploadDocComponent implements OnInit {
 
       if(this.fileToUpload.size/(1024*1024) <= this.DocSize) {
 
-        if (this.DocType.indexOf(  this.fileToUpload.name.split('.')[1].toLocaleLowerCase()) > -1 || this.DocType.indexOf('ALL') > -1) {
+        if (this.DocType.indexOf(  this.fileToUpload.name.split('.')[ this.fileToUpload.name.split('.').length-1].toLocaleLowerCase()) > -1 || this.DocType.indexOf('ALL') > -1) {
           this.fileName = "";
           this.showloader = true;
           let formdata: FormData = new FormData();

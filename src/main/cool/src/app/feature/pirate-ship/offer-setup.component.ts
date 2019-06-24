@@ -96,8 +96,8 @@ export class OfferSetupComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.showGroupData = false;
-    this.selectedAto = 'Overall Offer';
     this.functionalRole = this.userService.getFunctionalRole();
+    this.selectedAto = _.isEmpty(this.selectedAto) ? 'Overall Offer' : this.selectedAto;
 
     this.store.dispatch(new pirateShipActions.LoadPirateShip(
       {
