@@ -82,7 +82,6 @@ export class TurbotaxviewComponent implements OnChanges {
     }
 
     processCurrentPhaseInfo(offerPhaseInfo) {
-        debugger;
         this.mileStoneStatus = this.phases.reduce((accumulator, phase) => {
             const phaseInfo = {
                 phase: phase,

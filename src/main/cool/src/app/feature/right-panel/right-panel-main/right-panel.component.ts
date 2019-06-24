@@ -141,7 +141,6 @@ export class RightPanelComponent implements OnInit {
     this.navigateHash['Offer Setup Workflow'] = ['/offerSetup', this.currentOfferId, this.caseId];
 
     this.offerPhaseService.getOfferPhase(this.caseId).subscribe(resOfferPhases => {
-      console.log(resOfferPhases);
       if (resOfferPhases) {
         this.offerPhaseDetailsList = resOfferPhases;
 
