@@ -33,6 +33,7 @@ export function reducer(state = initialState, action: PirateShipActions): Pirate
         case PirateShipActionTypes.LoadPirateShipFail:
             return {
                 ...state,
+                pirateShip: null,
                 error: action.payload
             };
 

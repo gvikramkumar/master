@@ -13,7 +13,7 @@ export const getSelectedPirateShipInfo = createSelector(
     state => state.pirateShip
 );
 
-// export const getError = createSelector(
-//     getPirateShipState,
-//     state => state.error
-// );
+export const getError = createSelector(
+    getPirateShipState,
+    state => state.error
+);
