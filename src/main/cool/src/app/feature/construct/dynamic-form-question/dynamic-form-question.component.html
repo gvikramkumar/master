@@ -12,23 +12,23 @@
         <span class="help-block" *ngIf="questionForm.controls[question.egineAttribue].errors && (questionForm.controls[question.egineAttribue].touched || questionForm.controls[question.egineAttribue].dirty)" >
          <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
         <span *ngIf="questionForm.controls[question.egineAttribue].errors.maxlength">{{question.egineAttribue}} exceeds max characters({{question.rules.maxCharacterLen}}) allowed</span>
-        <span *ngIf="question.egineAttribue !== 'Base Price' && question.egineAttribue !== 'Default Initial Term' && question.egineAttribue !== 'Grace Window For Renewal' && question.egineAttribue !== 'Req Start Date Window' && 
+        <span *ngIf="question.egineAttribue !== 'Base Price' && question.egineAttribue !== 'Default Initial Term' && question.egineAttribue !== 'Grace Window For Renewal' && question.egineAttribue !== 'Req Start Date Window' &&
         question.egineAttribue !== 'Asset Quantity' && question.egineAttribue !== 'Default Auto Renewal Term' && question.egineAttribue !== 'Non Standard True Up Term' && question.egineAttribue !== 'Initial Term' &&
-        question.egineAttribue !== 'NON STD INITIAL TERM' && question.egineAttribue !== 'STD AUTO RENEWAL TERM' && question.egineAttribue !== 'NON STD AUTO RENEWAL TERM' && 
+        question.egineAttribue !== 'Non Std Initial Term' && question.egineAttribue !== 'Std Auto Renewal Term' && question.egineAttribue !== 'Non Std Auto Renewal Term' &&
         question.egineAttribue !== 'Subscription Offset(In Days)' && questionForm.controls[question.egineAttribue].errors.pattern">
         {{question.egineAttribue}} should be in {{question.rules.textcase}}</span>
         <span *ngIf="question.egineAttribue === 'Default Initial Term' && questionForm.controls[question.egineAttribue].errors.pattern">Mandatory entry of 1 value from the Initial Term range</span>
-        <span *ngIf="question.egineAttribue === 'Base Price' && questionForm.controls[question.egineAttribue].errors.pattern">Base Price must contain a number with 2 decimal places</span> 
-        <span *ngIf="(question.egineAttribue === 'Grace Window For Renewal' || question.egineAttribue === 'REQ Start Date Window') && questionForm.controls[question.egineAttribue].errors.pattern">Mandatory entry of 1 numeric value</span>           
-        <span *ngIf="question.egineAttribue === 'Default Auto Renewal Term' && questionForm.controls[question.egineAttribue].errors.pattern">Mandatory entry of 1 value from the Std Auto Renewal Term Range</span> 
-        <span *ngIf="question.egineAttribue === 'Non Standard True Up Term' && questionForm.controls[question.egineAttribue].errors.pattern">Value should be a numeric range (ex. 2-6)</span>     
-        <span *ngIf="question.egineAttribue === 'Req Start Date Window' && questionForm.controls[question.egineAttribue].errors.pattern">Mandatory entry of 1 numeric value</span> 
-        <span *ngIf="question.egineAttribue === 'Asset Quantity' && questionForm.controls[question.egineAttribue].errors.pattern">Must be a numeric value</span>     
-        <span *ngIf="question.egineAttribue === 'Initial Term' && questionForm.controls[question.egineAttribue].errors.pattern">Comma separated numeric range with no spaces (example: 1,12) where 1 is min and 120 is max</span>     
-        <span *ngIf="question.egineAttribue === 'NON STD INITIAL TERM' && questionForm.controls[question.egineAttribue].errors.pattern">Value should be a numeric range where 1 is min and 120 is max (example: 1-12)</span>     
-        <span *ngIf="question.egineAttribue === 'STD AUTO RENEWAL TERM' && questionForm.controls[question.egineAttribue].errors.pattern">Mandatory entry of 1 numeric  value where 1 is min and 60 is max</span>    
-        <span *ngIf="question.egineAttribue === 'NON STD AUTO RENEWAL TERM' && questionForm.controls[question.egineAttribue].errors.pattern">Value should be a numeric range where 1 is min and 12 is max</span>     
-        <span *ngIf="question.egineAttribue === 'Subscription Offset(In Days)' && questionForm.controls[question.egineAttribue].errors.pattern">Mandatory entry of 1 numeric value between 1 and 60</span>     
+        <span *ngIf="question.egineAttribue === 'Base Price' && questionForm.controls[question.egineAttribue].errors.pattern">Base Price must contain a number with 2 decimal places</span>
+        <span *ngIf="(question.egineAttribue === 'Grace Window For Renewal' || question.egineAttribue === 'REQ Start Date Window') && questionForm.controls[question.egineAttribue].errors.pattern">Mandatory entry of 1 numeric value</span>
+        <span *ngIf="question.egineAttribue === 'Default Auto Renewal Term' && questionForm.controls[question.egineAttribue].errors.pattern">Mandatory entry of 1 value from the Std Auto Renewal Term Range</span>
+        <span *ngIf="question.egineAttribue === 'Non Standard True Up Term' && questionForm.controls[question.egineAttribue].errors.pattern">Value should be a numeric range (ex. 2-6)</span>
+        <span *ngIf="question.egineAttribue === 'Req Start Date Window' && questionForm.controls[question.egineAttribue].errors.pattern">Mandatory entry of 1 numeric value</span>
+        <span *ngIf="question.egineAttribue === 'Asset Quantity' && questionForm.controls[question.egineAttribue].errors.pattern">Must be a numeric value</span>
+        <span *ngIf="question.egineAttribue === 'Initial Term' && questionForm.controls[question.egineAttribue].errors.pattern">Comma separated numeric range with no spaces (example: 1,12) where 1 is min and 120 is max</span>
+        <span *ngIf="question.egineAttribue === 'Non Std Initial Term' && questionForm.controls[question.egineAttribue].errors.pattern">Value should be a numeric range where 1 is min and 120 is max (example: 1-12)</span>
+        <span *ngIf="question.egineAttribue === 'Std Auto Renewal Term' && questionForm.controls[question.egineAttribue].errors.pattern">Mandatory entry of 1 numeric  value where 1 is min and 60 is max</span>
+        <span *ngIf="question.egineAttribue === 'Non Std Auto Renewal Term' && questionForm.controls[question.egineAttribue].errors.pattern">Value should be a numeric range where 1 is min and 12 is max</span>
+        <span *ngIf="question.egineAttribue === 'Subscription Offset(In Days)' && questionForm.controls[question.egineAttribue].errors.pattern">Mandatory entry of 1 numeric value between 1 and 60</span>
       </span>
      </div>
 
@@ -97,14 +97,14 @@
              <span *ngIf="questionForm.controls[question.egineAttribue].errors.required">{{question.egineAttribue}} is required</span>
              <span *ngIf="questionForm.controls[question.egineAttribue].errors.maxlength">{{question.egineAttribue}} exceeds max characters({{question.rules.maxCharacterLen}}) allowed</span>
              <span *ngIf="questionForm.controls[question.egineAttribue].errors.pattern">{{question.egineAttribue}} should be in {{question.rules.textcase}}</span>
-            
+
           </span>
-          
+
           </div>
         </div>
-    
+
       </div>
-      
+
      <!-- Date Field -->
      <div class=" half-margin-bottom half-margin-top" *ngSwitchCase="'Date'">
         <div class="form-group label--floated input--icon half-margin-bottom">
@@ -119,7 +119,7 @@
                   <span class="icon-month"></span>
                 </button>
             </div>
-            
+
         </div>
       </div>
 

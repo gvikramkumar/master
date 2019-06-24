@@ -488,7 +488,7 @@ export class DynamicFormMultipleComponent implements OnInit {
                     this.defaultValueServices.setDefaultInitialTerm(questionList);
                 }
 
-            if (question.question == "STD AUTO RENEWAL TERM") {
+            if (question.question == "Std Auto Renewal Term") {
                     this.defaultValueServices.setDefaultAutoRenewalTerm(questionList);
                 }
 
@@ -818,7 +818,7 @@ export class DynamicFormMultipleComponent implements OnInit {
                     question.rules.isvalid = true;
                 }
             }
-            if (question.egineAttribue == 'NON STD INITIAL TERM') {
+            if (question.egineAttribue == 'Non Std Initial Term') {
                 if (!(/^(0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120))(-(0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120)))$/.test(question.currentValue))) {
                     question.rules.validationMessage = "Value should be a numeric range where 1 is min and 120 is max (example: 1-12)";
                     question.rules.isvalid = false;
@@ -828,7 +828,7 @@ export class DynamicFormMultipleComponent implements OnInit {
                     question.rules.isvalid = true;
                 }
             }
-            if (question.egineAttribue == 'STD AUTO RENEWAL TERM') {
+            if (question.egineAttribue == 'Std Auto Renewal Term') {
                 if (!(/^0*([1-9]|[1-5][0-9]|60)$/.test(question.currentValue))) {
                     question.rules.validationMessage = "Mandatory entry of 1 numeric  value where 1 is min and 60 is max";
                     question.rules.isvalid = false;
@@ -838,7 +838,7 @@ export class DynamicFormMultipleComponent implements OnInit {
                     question.rules.isvalid = true;
                 }
             }
-            if (question.egineAttribue == 'NON STD AUTO RENEWAL TERM') {
+            if (question.egineAttribue == 'Non Std Auto Renewal Term') {
                 if (!(/^(0*([1-9]|1[0-2]))(-(0*([1-9]|1[0-2])))$/.test(question.currentValue))) {
                     question.rules.validationMessage = question.egineAttribue + "Value should be a numeric range where 1 is min and 12 is max";
                     question.rules.isvalid = false;
@@ -859,7 +859,7 @@ export class DynamicFormMultipleComponent implements OnInit {
                 }
             }
             if (question.egineAttribue == 'Refurbished-Original Item') {
-                if (!(/^[^\/\.\+\-\@\&\#\%\$\!\*\<\>\:\;\,\\\'\[\]\|\?\^\{\}\=\<\>a-z][^\@\&\#\%\$\!\*\<\>\:\;\,\\\'\[\]\|\?\^\{\}\=\<\>a-z]*$/.test(question.currentValue))) {
+                if (!(/^[^\/\.\+\-\@\&\#\%\$\!\*\<\>\:\;\,\\\'\[\]\|\?\^\{\}\=\<\>a-z0-9][^\@\&\#\%\$\!\*\<\>\:\;\,\\\'\[\]\|\?\^\{\}\=\<\>a-z0-9]*$/.test(question.currentValue))) {
                     question.rules.validationMessage = "All caps required and maximum of 18 characters ";
                     question.rules.isvalid = false;
                 }

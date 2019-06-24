@@ -222,8 +222,8 @@ export class OfferConstructDefaultValue {
 
   setTermsPaymentsRequired(questionList) {
     questionList.forEach(question => {
-      if (question.question == "Initial Term" || question.question == "NON STD INITIAL TERM" ||
-        question.question == "STD AUTO RENEWAL TERM" || question.question == "NON STD AUTO RENEWAL TERM" || question.question == "Default Initial Term" ||
+      if (question.question == "Initial Term" || question.question == "Non Std Initial Term" ||
+        question.question == "Std Auto Renewal Term" || question.question == "Non Std Auto Renewal Term" || question.question == "Default Initial Term" ||
         question.question == "Default Auto Renewal Term") {
         question.rules.isMandatoryOptional = "Mandatory";
       }
@@ -241,8 +241,8 @@ export class OfferConstructDefaultValue {
 
   setTermsPaymentsRequiredN(questionList) {
     questionList.forEach(question => {
-      if (question.question == "Initial Term" || question.question == "NON STD INITIAL TERM" ||
-        question.question == "STD AUTO RENEWAL TERM" || question.question == "NON STD AUTO RENEWAL TERM" ||
+      if (question.question == "Initial Term" || question.question == "Non Std Initial Term" ||
+        question.question == "Std Auto Renewal Term" || question.question == "Non Std Auto Renewal Term" ||
         question.question == "Req Start Date Window" || question.question == "Grace Window For Renewal") {
         question.currentValue = "";
         question.rules.isMandatoryOptional = "Optional";
@@ -352,7 +352,7 @@ export class OfferConstructDefaultValue {
   ImageSigningForXaas(questionList) {
     questionList.forEach(question => {
       if (question.question == "Image Signing") {
-        question.currentValue = "No, Image signing (Digital Software Signatures) is not supported";
+        question.currentValue = "No Image signing (Digital Software Signatures) is not supported";
       }
     });
     return questionList;
@@ -361,7 +361,7 @@ export class OfferConstructDefaultValue {
   ImageSigningForHardware(questionList) {
     questionList.forEach(question => {
       if (question.question == "Image Signing") {
-        question.currentValue = "Yes, Image signing (Digital Software Signatures) is supported";
+        question.currentValue = "Yes Image signing (Digital Software Signatures) is supported";
       }
     });
     return questionList;
@@ -670,7 +670,7 @@ export class OfferConstructDefaultValue {
     setDefaultAutoRenewalTerm(questionList) {
       let stdAutoRenewalTermDefault;
       questionList.forEach(question => {
-        if (question.question == "STD AUTO RENEWAL TERM") {
+        if (question.question == "Std Auto Renewal Term") {
           stdAutoRenewalTermDefault = question.currentValue;
         }
       });

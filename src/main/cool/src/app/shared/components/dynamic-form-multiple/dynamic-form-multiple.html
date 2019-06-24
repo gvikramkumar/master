@@ -210,7 +210,7 @@
                                         <li
                                           *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'Req Start Date Window' &&
                                           pInfo.egineAttribue !== 'Default Auto Renewal Term' && pInfo.rules.validationMessage != '' && pInfo.egineAttribue !== 'Description' && pInfo.egineAttribue !== 'True Up Term'
-                                          && pInfo.egineAttribue !== 'NON STD AUTO RENEWAL TERM' && pInfo.egineAttribue !== 'NON STD INITIAL TERM'
+                                          && pInfo.egineAttribue !== 'Non Std Auto Renewal Term' && pInfo.egineAttribue !== 'Non Std Initial Term'
                                           && pInfo.egineAttribue !== 'Asset Quantity' && pInfo.egineAttribue !== 'Spare Price'">
                                           {{pInfo.rules.validationMessage}}</li>
                                         <li
@@ -232,10 +232,10 @@
                                               *ngIf="pInfo.egineAttribue === 'True Up Term' && pInfo.rules.validationMessage != ''">
                                               Mandatory Must be comma seperated, numeric with no spaces</li>
                                               <li
-                                                *ngIf="pInfo.egineAttribue === 'NON STD AUTO RENEWAL TERM' && pInfo.rules.validationMessage != ''">
+                                                *ngIf="pInfo.egineAttribue === 'Non Std Auto Renewal Term' && pInfo.rules.validationMessage != ''">
                                                 Value should be a numeric range where 1 is min and 12 is max</li>
                                               <li
-                                                *ngIf="pInfo.egineAttribue === 'NON STD INITIAL TERM' && pInfo.rules.validationMessage != ''">
+                                                *ngIf="pInfo.egineAttribue === 'Non Std Initial Term' && pInfo.rules.validationMessage != ''">
                                                 Value should be a numeric range where 1 is min and 120 is max (example: 1-12)</li>
                                                 <li
                                                   *ngIf="pInfo.egineAttribue === 'Asset Quantity' && pInfo.rules.validationMessage != ''">
@@ -588,7 +588,7 @@
                                         <li
                                           *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'Req Start Date Window'
                                           && pInfo.egineAttribue !== 'Default Auto Renewal Term' && pInfo.rules.validationMessage != '' && pInfo.egineAttribue !== 'True Up Term'
-                                          && pInfo.egineAttribue !== 'NON STD AUTO RENEWAL TERM' && pInfo.egineAttribue !== 'NON STD INITIAL TERM' &&
+                                          && pInfo.egineAttribue !== 'Non Std Auto Renewal Term' && pInfo.egineAttribue !== 'Non Std Initial Term' &&
                                           pInfo.egineAttribue !== 'Asset Quantity' && pInfo.egineAttribue !== 'Spare Price'">
                                           {{pInfo.rules.validationMessage}}</li>
                                         <li
@@ -607,10 +607,10 @@
                                           *ngIf="pInfo.egineAttribue === 'True Up Term' && pInfo.rules.validationMessage != ''">
                                           Mandatory Must be comma seperated, numeric with no spaces</li>
                                         <li
-                                          *ngIf="pInfo.egineAttribue === 'NON STD AUTO RENEWAL TERM' && pInfo.rules.validationMessage != ''">
+                                          *ngIf="pInfo.egineAttribue === 'Non Std Auto Renewal Term' && pInfo.rules.validationMessage != ''">
                                           Value should be a numeric range where 1 is min and 12 is max</li>
                                         <li
-                                          *ngIf="pInfo.egineAttribue === 'NON STD INITIAL TERM' && pInfo.rules.validationMessage != ''">
+                                          *ngIf="pInfo.egineAttribue === 'Non Std Initial Term' && pInfo.rules.validationMessage != ''">
                                           Value should be a numeric range where 1 is min and 120 is max (example: 1-12)</li>
                                           <li
                                             *ngIf="pInfo.egineAttribue === 'Asset Quantity' && pInfo.rules.validationMessage != ''">
