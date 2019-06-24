@@ -1,6 +1,6 @@
-// test changes
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
+//Test changes 2
 import { Router, ActivatedRoute } from '@angular/router';
 import { OfferPhaseService } from '@app/services/offer-phase.service';
 import { RightPanelService } from '@app/services/right-panel.service';
