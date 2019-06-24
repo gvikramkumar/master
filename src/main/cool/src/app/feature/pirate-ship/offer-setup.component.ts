@@ -107,6 +107,8 @@ export class OfferSetupComponent implements OnInit, OnDestroy {
       }
     ));
 
+    this.errorMessage$ = this.store.pipe(select(fromPirateShip.getError));
+
     this.offerSetupService.lockAPIForOWB(this.offerId).subscribe(() => {
     });
 
@@ -186,9 +188,8 @@ export class OfferSetupComponent implements OnInit, OnDestroy {
   // Get All the ModuleName and place in order
   getAllModuleData() {
 
-    // this.errorMessage$ = this.store.pipe(select(fromPirateShip.getError));
+    // this.offerSetupService.getPirateShipInfo(this.offerId, this.selectedAto, this.functionalRole)
     this.pirateShipSubscription = this.store.pipe(select(fromPirateShip.getSelectedPirateShipInfo))
-      // this.offerSetupService.getPirateShipInfo(this.offerId, this.selectedAto, this.functionalRole)
       .subscribe((pirateShipResponse: PirateShip) => {
 
         this.groupData = {};

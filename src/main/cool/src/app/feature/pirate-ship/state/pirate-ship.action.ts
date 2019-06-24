@@ -19,7 +19,6 @@ export class InitializePirateShip implements Action {
 
 export class LoadPirateShip implements Action {
     readonly type = PirateShipActionTypes.LoadPirateShip;
-    // constructor(public offerId: string, public offerLevel: string, public functionalRole: string) { }
     constructor(public payload: { offerId: string, offerLevel: string, functionalRole: string }) { }
 }
 
