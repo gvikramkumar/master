@@ -5,7 +5,6 @@
 <div class="content">
   <div class="container">
 
-
     <div class="panel-wrapper half-margin-top">
 
       <!-- taskbar -->
@@ -26,6 +25,8 @@
             </div>
 
           </div>
+
+          <!-- Refresh Pirate Ship -->
 <!--          <div class="row">-->
 <!--            <div class="col-3">-->
 <!--              <button class="btn btn&#45;&#45;primary btn&#45;&#45;wide" (click)="refreshPirateship()">Refresh the Pirate ship</button>-->
@@ -435,6 +436,11 @@
 
               </ul>
             </div>
+          </div>
+
+          <!-- Error Message -->
+          <div *ngIf="errorMessage$ | async" class="alert alert-danger">
+            Error: {{ errorMessage }}
           </div>
 
           <!-- Legend -->

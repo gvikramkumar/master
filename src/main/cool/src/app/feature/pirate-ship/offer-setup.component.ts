@@ -16,6 +16,11 @@ import { ConfigurationService } from '../../core/services/configuration.service'
 import { EnvironmentService } from '@env/environment.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
+import * as _ from 'lodash';
+import { Observable } from 'rxjs';
+import * as fromPirateShip from './state';
+import { Store, select } from '@ngrx/store';
+import * as pirateShipActions from './state/pirate-ship.action';
 
 @Component({
   selector: 'app-offer-setup',
@@ -57,17 +62,23 @@ export class OfferSetupComponent implements OnInit {
 
   pirateShip: PirateShip;
 
+  errorMessage$: Observable<string>;
+  selectedPirateShipInfo$: Observable<PirateShip>;
+
   constructor(
     private router: Router,
     private httpClient: HttpClient,
     private _env: EnvironmentService,
     private userService: UserService,
+
     private activatedRoute: ActivatedRoute,
     private actionsService: ActionsService,
+    private store: Store<fromPirateShip.State>,
     private offerSetupService: OfferSetupService,
     private rightPanelService: RightPanelService,
     private configurationService: ConfigurationService,
     private stakeholderfullService: StakeholderfullService,
+
   ) {
 
     this.activatedRoute.params.subscribe(params => {
@@ -88,6 +99,14 @@ export class OfferSetupComponent implements OnInit {
     this.selectedAto = 'Overall Offer';
     this.functionalRole = this.userService.getFunctionalRole();
 
+    this.store.dispatch(new pirateShipActions.LoadPirateShip(
+      {
+        offerId: this.offerId,
+        offerLevel: this.selectedAto,
+        functionalRole: this.functionalRole
+      }
+    ));
+
     this.offerSetupService.lockAPIForOWB(this.offerId).subscribe(() => {
     });
 
@@ -99,6 +118,9 @@ export class OfferSetupComponent implements OnInit {
         }
       });
     });
+
+    // Get Module Name and Status
+    this.getAllModuleData();
 
     // Get Offer Details
     this.getOfferDetails();
@@ -116,6 +138,7 @@ export class OfferSetupComponent implements OnInit {
       this.offerBuilderdata = offerDetails;
       this.offerBuilderdata['BEList'] = [];
       this.offerBuilderdata['BUList'] = [];
+
       if (this.offerBuilderdata['primaryBEList'] != null) {
         this.offerBuilderdata['BEList'] = this.offerBuilderdata['BEList'].concat(this.offerBuilderdata['primaryBEList']);
       }
@@ -132,9 +155,6 @@ export class OfferSetupComponent implements OnInit {
       this.derivedMM = offerDetails['derivedMM'];
       this.offerName = offerDetails['offerName'];
       this.stakeHolderData = offerDetails['stakeholders'];
-
-      // Get Module Name and Status
-      this.getAllModuleData();
 
       if (Array.isArray(offerDetails['primaryBEList']) && offerDetails['primaryBEList'].length) {
         this.primaryBE = offerDetails['primaryBEList'][0];
@@ -153,6 +173,7 @@ export class OfferSetupComponent implements OnInit {
 
       // Populate Stake Holder Info
       this.processStakeHolderInfo();
+
     });
   }
 
@@ -161,35 +182,41 @@ export class OfferSetupComponent implements OnInit {
   // Get All the ModuleName and place in order
   getAllModuleData() {
 
-    this.offerSetupService.getModuleData(this.offerId, this.selectedAto, this.functionalRole)
-      .subscribe((pirateShipResposne: PirateShip) => {
-
-        this.pirateShip = pirateShipResposne;
+    // this.errorMessage$ = this.store.pipe(select(fromPirateShip.getError));
+    this.store.pipe(select(fromPirateShip.getSelectedPirateShipInfo))
+      // this.offerSetupService.getPirateShipInfo(this.offerId, this.selectedAto, this.functionalRole)
+      .subscribe((pirateShipResponse: PirateShip) => {
 
         this.groupData = {};
         this.showGroupData = false;
+        this.pirateShip = pirateShipResponse;
 
-        this.pirateShip['listSetupDetails'].forEach(group => {
+        if (!_.isEmpty(this.pirateShip)) {
 
-          const groupName = group['groupName']
-          if (this.groupData[groupName] == null) {
-            this.groupData[groupName] = { 'left': [], 'right': [] };
-          }
-          if (group['colNum'] === 1) {
-            this.groupData[groupName]['left'].push(group);
-          } else {
-            this.groupData[groupName]['right'].push(group);
-          }
+          this.pirateShip['listSetupDetails'].forEach(group => {
 
-        });
+            const groupName = group['groupName'];
+            if (this.groupData[groupName] == null) {
+              this.groupData[groupName] = { 'left': [], 'right': [] };
+            }
+            if (group['colNum'] === 1) {
+              this.groupData[groupName]['left'].push(group);
+            } else {
+              this.groupData[groupName]['right'].push(group);
+            }
 
-        this.sortGroupData();
-        this.showGroupData = true;
+          });
 
-        this.atoNames = this.pirateShip['listATOs'];
-        this.atoNames.push('Overall Offer');
+          this.sortGroupData();
+          this.showGroupData = true;
 
-      }
+          this.atoNames = this.pirateShip['listATOs'];
+          this.atoNames.push('Overall Offer');
+          this.atoNames = _.uniqBy(this.atoNames);
+
+        }
+
+      }, (err => console.log(err))
       );
   }
 
@@ -361,8 +388,19 @@ export class OfferSetupComponent implements OnInit {
   // ----------------------------------------------------------------------------------------------------------------
 
   selectedValue(dropDownValue: string) {
+
     this.selectedAto = dropDownValue;
+
+    this.store.dispatch(new pirateShipActions.LoadPirateShip(
+      {
+        offerId: this.offerId,
+        offerLevel: this.selectedAto,
+        functionalRole: this.functionalRole
+      }
+    ));
+
     this.getAllModuleData();
+
   }
 
   refreshPirateship() {

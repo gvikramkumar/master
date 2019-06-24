@@ -63,6 +63,7 @@ export class MmAssesmentComponent implements OnInit {
   dimensionFirstGroupData: Object;
   dimensionFirstGroupName: string;
 
+  showSave: boolean;
   showDialog: boolean;
   showErrorDialog: boolean;
   isChangedAttribute: boolean;
@@ -125,6 +126,7 @@ export class MmAssesmentComponent implements OnInit {
 
       this.derivedMM = this.offerBuilderdata['derivedMM'];
       this.canClickNextStep = _.isEmpty(offerBuilderdata['derivedMM']) ? false : true;
+      this.showSave = this.canClickNextStep;
 
       this.existingStakeHolders = this.offerBuilderdata['stakeholders'] ? this.offerBuilderdata['stakeholders'] : [];
 
@@ -842,6 +844,7 @@ export class MmAssesmentComponent implements OnInit {
           });
         }
 
+        this.showSave = _.isEmpty(data['mmModel']) ? false : true;
         this.proceedToStakeholder('false');
 
       });

@@ -45,11 +45,12 @@ import { RightPanelModule } from '@app/feature/right-panel/right-panel.module';
 import { OfferDetailModule } from '@app/feature/offer-detail/offer-detail.module';
 
 import { StoreModule } from '@ngrx/store';
-import { reducers, metaReducers } from '@app/store/reducers';
+import { reducers, metaReducers } from '@app/state/reducers';
 import { CalendarModule } from 'primeng/calendar';
 
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
+import { EffectsModule } from '@ngrx/effects';
 
 
 export function app_init(configService: ConfigurationService) {
@@ -77,6 +78,7 @@ export function app_init(configService: ConfigurationService) {
     OfferDetailModule,
     AppRoutingModule,
     CalendarModule,
+    EffectsModule.forRoot([]),
     StoreModule.forRoot(reducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
