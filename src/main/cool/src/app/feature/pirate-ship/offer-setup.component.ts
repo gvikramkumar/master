@@ -64,7 +64,7 @@ export class OfferSetupComponent implements OnInit, OnDestroy {
   errorMessage$: Observable<string>;
   pirateShipSubscription: Subscription;
   selectedPirateShipInfo$: Observable<PirateShip>;
-
+  $showPirateshipLoader: Observable<boolean>;
   constructor(
     private router: Router,
     private httpClient: HttpClient,
@@ -106,8 +106,9 @@ export class OfferSetupComponent implements OnInit, OnDestroy {
         functionalRole: this.functionalRole
       }
     ));
-
+    this.$showPirateshipLoader = this.store.pipe(select(fromPirateShip.getLoaderState));
     this.errorMessage$ = this.store.pipe(select(fromPirateShip.getError));
+
 
     this.offerSetupService.lockAPIForOWB(this.offerId).subscribe(() => {
     });
