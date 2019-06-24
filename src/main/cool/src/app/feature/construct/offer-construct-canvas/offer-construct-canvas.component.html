@@ -154,7 +154,7 @@
                               <div>
                                 <p-treeTableCheckbox [value]="rowNode"></p-treeTableCheckbox>
                                 <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
-                                <span (focusout)='editData=true' (click)='enableEdit()'>
+                                <span style="position: relative;" (focusout)='editData=true' (click)='enableEdit()'>
                                   <input (keyup)="onValidateChars($event)" maxlength="18" [id]='rowData["uniqueKey"]'
                                     autocomplete="off" (click)='showButton($event, rowData["uniqueKey"]);'
                                     (change)="handleChange(rowData, $event)" (blur)="trimSpaces(rowData, $event)"
