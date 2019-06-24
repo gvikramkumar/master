@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Observable, of } from 'rxjs';
-import { map, catchError, switchMap } from 'rxjs/operators';
+import { map, catchError, switchMap, mergeMap } from 'rxjs/operators';
 
 import { Action } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
@@ -23,15 +23,22 @@ export class PirateShipEffects {
     loadPirateShip$: Observable<Action> = this.actions$.pipe(
         ofType(pirateShipActions.PirateShipActionTypes.LoadPirateShip),
         map((action: pirateShipActions.LoadPirateShip) => action.payload),
-        switchMap((action) =>
-            this.offerSetupService.getPirateShipInfo(action.offerId, action.offerLevel, action.functionalRole)
+        mergeMap((pirateShip: any) =>
+            this.offerSetupService.getPirateShipInfo(pirateShip.offerId, pirateShip.offerLevel, pirateShip.functionalRole)
                 .pipe(
-                    map(
-                        (pirateShip: PirateShip) => (new pirateShipActions.LoadPirateShipSuccess(pirateShip)),
-                        catchError(err => of(new pirateShipActions.LoadPirateShipFail(err)))
-                    )
+                    map((pirateShipInfo: PirateShip) => (new pirateShipActions.LoadPirateShipSuccess(pirateShipInfo))),
+                    catchError(err => of(new pirateShipActions.LoadPirateShipFail(err)))
                 )
-        )
-    );
+        ));
+
+    //     switchMap((action) =>
+    //     this.offerSetupService.getPirateShipInfo(action.offerId, action.offerLevel, action.functionalRole)
+    //         .pipe(
+    //             map(
+    //                 (pirateShip: PirateShip) => (new pirateShipActions.LoadPirateShipSuccess(pirateShip)),
+    //                 catchError(err => of(new pirateShipActions.LoadPirateShipFail(err)))
+    //             )
+    //         )
+    // )
 
 }
