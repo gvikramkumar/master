@@ -60,6 +60,15 @@ export class AccessManagementService {
             return this.httpClient.post(this.environmentService.REST_API_GET_CEPM_ROLES_URL, PAYLOAD);
           }
 
+          onSendEmail(assignedUser,assigningAdmin,assignedUserFirstName,assigningAdminFullName) {
+              const PAYLOAD = {
+                "assignedUser":assignedUser,
+                "assigningAdmin":assigningAdmin,
+                "assignedUserFirstName":assignedUserFirstName,
+                "assigningAdminFullName":assigningAdminFullName
+              }
+            return this.httpClient.post(this.environmentService.REST_API_POST_USER_DETAILS_FOR_EMAIL_URL,PAYLOAD)
+          }
 
     accessManagementAll(): any {
         return this.httpClient.get(this.environmentService.REST_API_ACCESS_MANAGEMENT_GET_ALL_URL);

@@ -76,7 +76,7 @@ export class ChangestatusComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private changestatusService: ChangestatusService,
               private headerService: HeaderService,
-              private pirateShipSharedService:PirateShipSharedService,
+              private pirateShipSharedService: PirateShipSharedService,
               private offerSetupService: OfferSetupService,
               private rightPanelService: RightPanelService,
               private stakeholderfullService: StakeholderfullService,
@@ -100,10 +100,10 @@ export class ChangestatusComponent implements OnInit {
   }
 
   ngOnInit() {
-     if(window.localStorage.getItem('showSprint6')) {
-       this.showButton = Boolean(window.localStorage.getItem('showSprint6'));
-       this.show_Upload = Boolean(window.localStorage.getItem('showSprint6'));
-     }
+    if(window.localStorage.getItem('showSprint6')) {
+      this.showButton = Boolean(window.localStorage.getItem('showSprint6'));
+      this.show_Upload = Boolean(window.localStorage.getItem('showSprint6'));
+    }
     this.changestatusService.getAllComments(this.moduleName, this.offerId).subscribe(data=>{
       this.comments = data;
     });
@@ -342,7 +342,7 @@ export class ChangestatusComponent implements OnInit {
 
   // Get All the ModuleName and place in order
   getAllModuleData() {
-    this.offerSetupService.getModuleData(this.offerId, this.selectedAto, this.functionalRole ).subscribe(data => {
+    this.offerSetupService.getPirateShipInfo(this.offerId, this.selectedAto, this.functionalRole ).subscribe(data => {
         this.groupData = {};
         this.showGroupData = false;
         this.Options = data['listATOs'];
@@ -433,7 +433,7 @@ export class ChangestatusComponent implements OnInit {
   }
 
   markAsCompleteModal(labelName: string) {
-    this.headerName = "";
+    this.headerName = "Are you sure you would like to mark this as complete?";
     //console.log('complete' , labelName);
     this.isBtnNeeded = true;
     this.infohelp = '<div style="text-align: center ! important;">Are you sure you would like to mark this as complete? Once completing a module, you will not be able to move it back to \"In-progress\" </div>';
