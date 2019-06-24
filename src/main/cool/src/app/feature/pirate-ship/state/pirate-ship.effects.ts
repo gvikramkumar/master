@@ -31,14 +31,4 @@ export class PirateShipEffects {
                 )
         ));
 
-    //     switchMap((action) =>
-    //     this.offerSetupService.getPirateShipInfo(action.offerId, action.offerLevel, action.functionalRole)
-    //         .pipe(
-    //             map(
-    //                 (pirateShip: PirateShip) => (new pirateShipActions.LoadPirateShipSuccess(pirateShip)),
-    //                 catchError(err => of(new pirateShipActions.LoadPirateShipFail(err)))
-    //             )
-    //         )
-    // )
-
 }
