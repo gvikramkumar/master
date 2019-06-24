@@ -105,7 +105,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   }
 
   public ngOnInit(): void {
-    this.store.mainCompDataLoad = true;
+    this.uiUtil.showSpinner();
     const promises: Promise<any>[] = [
       this.pgLookupService.callRepoMethod('getDistinctSL1SL2SL3NameCodeFromSalesHierarchy').toPromise(),
       this.pgLookupService.callRepoMethod('getDistincTGBUPFIdsFromProductHierarchy').toPromise(),
@@ -205,8 +205,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       .then(() => {
         return this.getRulesAndRuleNamesAndGenerateSelectMap();
       })
-      .then(() => this.store.mainCompDataLoad = false)
-      .catch(() => this.store.mainCompDataLoad = false);
+      .then(() => this.uiUtil.hideSpinner())
+      .catch(() => this.uiUtil.hideSpinner());
   }
 
   init(initial?) {

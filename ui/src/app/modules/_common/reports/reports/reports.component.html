@@ -28,7 +28,8 @@
     </div>
 
     <div class="col-md-7 file-upload">
-      <div class="fin-content">
+     <cui-spinner *ngIf="showSpinner" class="spinner"></cui-spinner>
+      <div *ngIf="!showSpinner" class="fin-content">
         <div class="selected-value"> {{report?.text}}&nbsp;</div><!-- need this &nbsp; here as a placeholder for initial entry -->
 
         <br>

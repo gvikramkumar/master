@@ -46,15 +46,16 @@ interface Report {
   styleUrls: ['./reports.component.scss']
 })
 export class ReportsComponent extends RoutingComponentBase implements OnInit {
+  showSpinner = false;
   measureId: number;
   submeasureKey: number;
   submeasureKeys: number[] = [];
   fiscalMonth: number;
-  fiscalMonths: {fiscalMonth: number}[] = [];
+  fiscalMonths: { fiscalMonth: number }[] = [];
   fiscalMonthMultiSels: number[];
   fiscalMonthMultis = shUtil.getFiscalMonthListFromDate(new Date(), 15);
   fiscalYear: number;
-  fiscalYears: {name: string, value: number}[];
+  fiscalYears: { name: string, value: number }[];
   measures: Measure[] = [];
   measuresAll: Measure[] = [];
   submeasuresAll: Submeasure[] = [];
@@ -93,7 +94,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       filename: 'Rule_Update_Report'
     },
     {
-      type: 'rule-submeasure', hasMultiFiscalMonthOnly: true,  text: 'Rule to Sub-Measure History', disabled: false,
+      type: 'rule-submeasure', hasMultiFiscalMonthOnly: true, text: 'Rule to Sub-Measure History', disabled: false,
       filename: 'Rule_Submeasure_Report'
     },
     {
@@ -113,7 +114,10 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       filename: 'Sales_Split_Percentage_Report'
     },
     {
-      type: 'product-classification', hasFiscalMonthOnly: true, text: 'Product Classification (SW/HW Mix)', disabled: false,
+      type: 'product-classification',
+      hasFiscalMonthOnly: true,
+      text: 'Product Classification (SW/HW Mix)',
+      disabled: false,
       filename: 'Product_Classification_Report'
     },
     {
@@ -136,7 +140,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       type: 'service-training', hasFiscalYearOnly: true, text: 'Service Training Split Percentage', disabled: false,
       filename: 'Service_Training_Report'
     },
-];
+  ];
   report: Report;
 
   constructor(
@@ -155,10 +159,10 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       this.measureService.getManyActive().toPromise(),
       this.submeasureService.getManyLatestGroupByNameActive().toPromise()
     ])
-    .then(results => {
-      this.measuresAll = _.sortBy(results[0], 'name');
-      this.submeasuresAll = _.sortBy(results[1], 'name');
-    });
+      .then(results => {
+        this.measuresAll = _.sortBy(results[0], 'name');
+        this.submeasuresAll = _.sortBy(results[1], 'name');
+      });
     this.reset(true);
   }
 
@@ -171,83 +175,92 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     this.submeasures = [];
     this.fiscalMonths = [];
     this.fiscalYears = [];
-    if (this.report && (this.report.hasNoChoices || this.report.type === 'rule-submeasure')) {
-      this.disableDownload = false;
-    } else {
-      this.disableDownload = true;
-    }
+    this.disableDownload = !(this.report && (this.report.hasNoChoices || this.report.type === 'rule-submeasure'));
     if (!init) {
       this.getInitialData();
     }
   }
 
   getInitialData() {
-    let obsFiscalMonth;
-    let obsFiscalYear;
-    let obsMeasure;
+    this.showSpinner = true;
+    let promise;
+    let obsFiscalMonth = false;
+    let obsFiscalYear = false;
+    let obsMeasure = false;
     switch (this.report.type) {
       case 'sales-split-percentage':
-        obsFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_sales_split_pctmap_upld', 'fiscal_month_id');
+        obsFiscalMonth = true;
+        promise = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_sales_split_pctmap_upld', 'fiscal_month_id').toPromise();
         break;
       case 'product-classification':
-        obsFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_swalloc_manualmix_upld', 'fiscal_month_id');
+        obsFiscalMonth = true;
+        promise = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_swalloc_manualmix_upld', 'fiscal_month_id').toPromise();
         break;
       case 'alternate-sl2':
-        obsFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_scms_triang_altsl2_map_upld', 'fiscal_month_id');
+        obsFiscalMonth = true;
+        promise = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_scms_triang_altsl2_map_upld', 'fiscal_month_id').toPromise();
         break;
       case 'corp-adjustment':
-        obsFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_scms_triang_corpadj_map_upld', 'fiscal_month_id');
+        obsFiscalMonth = true;
+        promise = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_scms_triang_corpadj_map_upld', 'fiscal_month_id').toPromise();
         break;
       case 'disti-direct':
-        obsFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_disti_to_direct_map_upld', 'fiscal_month_id');
+        obsFiscalMonth = true;
+        promise = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_disti_to_direct_map_upld', 'fiscal_month_id').toPromise();
         break;
       case 'service-map':
-        obsFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_service_map_upld', 'fiscal_month_id');
+        obsFiscalMonth = true;
+        promise = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_service_map_upld', 'fiscal_month_id').toPromise();
         break;
       case 'service-training':
-        obsFiscalYear = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_service_trngsplit_pctmap_upld', 'fiscal_year');
+        obsFiscalYear = true;
+        promise = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_service_trngsplit_pctmap_upld', 'fiscal_year').toPromise();
         break;
       case 'valid-slpf-driver':
       case 'dollar-upload':
-        obsMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'sub_measure_key', true);
+        obsMeasure = true;
+        promise = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'sub_measure_key', true).toPromise();
         break;
       case 'mapping-upload':
-        obsMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_manual_map_upld', 'sub_measure_key', true);
+        obsMeasure = true;
+        promise = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_manual_map_upld', 'sub_measure_key', true).toPromise();
         break;
       case 'dept-upload':
-        obsMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_dept_acct_map_upld', 'sub_measure_key', true);
+        obsMeasure = true;
+        promise = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_dept_acct_map_upld', 'sub_measure_key', true).toPromise();
         break;
     }
-    if (obsFiscalMonth) {
-      obsFiscalMonth.subscribe(fiscalMonths => {
-        this.fiscalMonths = fiscalMonths.map(fm => Number(fm)).sort().reverse().slice(0, 24)
-          .map(fiscalMonth => ({name: shUtil.getFiscalMonthLongNameFromNumber(fiscalMonth), fiscalMonth}));
-        if (this.fiscalMonths.length) {
-          this.fiscalMonth = this.fiscalMonths[0].fiscalMonth;
-          this.disableDownload = false;
+    shUtil.promiseChain(promise)
+      .then(result => {
+        this.showSpinner = false;
+        if (obsFiscalMonth) {
+          this.fiscalMonths = result.map(fm => Number(fm)).sort().reverse().slice(0, 24)
+            .map(fiscalMonth => ({name: shUtil.getFiscalMonthLongNameFromNumber(fiscalMonth), fiscalMonth}));
+          if (this.fiscalMonths.length) {
+            this.fiscalMonth = this.fiscalMonths[0].fiscalMonth;
+            this.disableDownload = false;
+          }
         }
-      });
-    }
-    if (obsFiscalYear) {
-      obsFiscalYear.subscribe(fiscalYears => {
-        this.fiscalYears = fiscalYears.map(fy => ({name: `FY${fy}`, value: fy}));
-        this.fiscalYears = _.orderBy(this.fiscalYears, ['value'], ['desc']);
-        if (this.fiscalYears.length) {
-          this.fiscalYear = this.fiscalYears[0].value;
-          this.disableDownload = false;
+        if (obsFiscalYear) {
+          this.fiscalYears = result.map(fy => ({name: `FY${fy}`, value: fy}));
+          this.fiscalYears = _.orderBy(this.fiscalYears, ['value'], ['desc']);
+          if (this.fiscalYears.length) {
+            this.fiscalYear = this.fiscalYears[0].value;
+            this.disableDownload = false;
+          }
+
         }
-      });
-    }
-    if (obsMeasure) {
-      obsMeasure.subscribe(smKeys => {
-        this.submeasuresInData = this.submeasuresAll.filter(sm => _.includes(smKeys, sm.submeasureKey));
-        this.measures = this.measuresAll.filter(m => _.includes(_.uniq(this.submeasuresInData.map(sm => sm.measureId)), m.measureId));
-        if (this.measures.length) {
-          this.measureId = this.measures[0].measureId;
-          this.measureChange();
+        if (obsMeasure) {
+          const smKeys = result;
+          this.submeasuresInData = this.submeasuresAll.filter(sm => _.includes(smKeys, sm.submeasureKey));
+          this.measures = this.measuresAll.filter(m => _.includes(_.uniq(this.submeasuresInData.map(sm => sm.measureId)), m.measureId));
+          if (this.measures.length) {
+            this.measureId = this.measures[0].measureId;
+            this.measureChange();
+          }
         }
-      });
-    }
+      })
+      .catch(() => this.showSpinner = false);
   }
 
   measureChange() {
@@ -269,28 +282,28 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       this.disableDownload = true;
       this.fiscalMonth = undefined;
       this.fiscalMonths = [];
-/*
-      // these moved to multisubmeasure choice, but save for reference
-      let obs;
-      switch (this.report.type) {
-        case 'dollar-upload':
-          obs = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'fiscal_month_id',
-            `sub_measure_key = ${this.submeasureKey}`);
-          break;
-        case 'mapping-upload':
-          obs = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_manual_map_upld', 'fiscal_month_id',
-            `sub_measure_key = ${this.submeasureKey}`);
-          break;
-      }
-      obs.subscribe(fiscalMonths => {
-        this.fiscalMonths = fiscalMonths.map(fm => Number(fm)).sort().reverse().slice(0, 24)
-          .map(fiscalMonth => ({name: shUtil.getFiscalMonthLongNameFromNumber(fiscalMonth), fiscalMonth}));
-        if (this.fiscalMonths.length) {
-          this.fiscalMonth = this.fiscalMonths[0].fiscalMonth;
-          this.disableDownload = false;
-        }
-      });
-*/
+      /*
+            // these moved to multisubmeasure choice, but save for reference
+            let obs;
+            switch (this.report.type) {
+              case 'dollar-upload':
+                obs = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'fiscal_month_id',
+                  `sub_measure_key = ${this.submeasureKey}`);
+                break;
+              case 'mapping-upload':
+                obs = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_manual_map_upld', 'fiscal_month_id',
+                  `sub_measure_key = ${this.submeasureKey}`);
+                break;
+            }
+            obs.subscribe(fiscalMonths => {
+              this.fiscalMonths = fiscalMonths.map(fm => Number(fm)).sort().reverse().slice(0, 24)
+                .map(fiscalMonth => ({name: shUtil.getFiscalMonthLongNameFromNumber(fiscalMonth), fiscalMonth}));
+              if (this.fiscalMonths.length) {
+                this.fiscalMonth = this.fiscalMonths[0].fiscalMonth;
+                this.disableDownload = false;
+              }
+            });
+      */
     }
   }
 

@@ -136,7 +136,7 @@ export class UiUtil {
     let params = new HttpParams();
     _.forEach(_params, (val, key) => {
       params = params.set(key, _params[key]);
-    })
+    });
     return params;
   }
 
@@ -169,7 +169,6 @@ export class UiUtil {
   }
 
   toast(message, action = '', duration?) {
-
     const options: MatSnackBarConfig = {
       horizontalPosition: 'center',
       verticalPosition: 'top',
@@ -188,6 +187,14 @@ export class UiUtil {
   toastPerm(message, action = '') {
     const year = 365 * 24 * 60 * 60 * 1000;
     this.toast(message, action, year); //
+  }
+
+  showSpinner() {
+    this.store.mainCompDataLoad = true;
+  }
+
+  hideSpinner() {
+    this.store.mainCompDataLoad = false;
   }
 
   /*
