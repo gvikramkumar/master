@@ -87,3 +87,6 @@
 a.text-info {
   line-height: 16px;
 }
+.disabled_button {
+  pointer-events: none !important;
+}
