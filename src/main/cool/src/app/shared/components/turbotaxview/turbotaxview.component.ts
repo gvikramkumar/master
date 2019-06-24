@@ -1,8 +1,6 @@
 import {Component, Input, OnChanges, SimpleChanges, SimpleChange, OnInit} from '@angular/core';
 import { Router} from '@angular/router';
 import { TurbotaxService } from '@shared/services';
-import {HttpClient} from '@angular/common/http';
-import {EnvironmentService} from '@env/environment.service';
 import {UserService} from '@core/services';
 
 
@@ -29,7 +27,7 @@ export class TurbotaxviewComponent implements OnChanges {
     public phaseProcessingCompleted = false;
     public isOfferPhaseBlank = true;
     navigateHash: Object = {};
-
+    listOfCompletedPhases: string[] = [];
 
     constructor(
         private turbotax: TurbotaxService,
@@ -84,6 +82,7 @@ export class TurbotaxviewComponent implements OnChanges {
     }
 
     processCurrentPhaseInfo(offerPhaseInfo) {
+        debugger;
         this.mileStoneStatus = this.phases.reduce((accumulator, phase) => {
             const phaseInfo = {
                 phase: phase,
@@ -91,13 +90,49 @@ export class TurbotaxviewComponent implements OnChanges {
             };
             const offerMilestone = offerPhaseInfo[phase];
             if (offerMilestone) {
-                if (offerMilestone.every(this.isMilestoneVisited())) {
-                    phaseInfo.status = 'visited';
-                } else if (offerMilestone.some(this.isMilestoneActive())) {
-                    phaseInfo.status = 'active';
-                } else if (offerMilestone.every(this.isMilestoneNotTouched())) {
-                    phaseInfo.status = '';
+            // This loop will executed for ideate phase.       
+          offerMilestone.forEach(subMilestones => {
+            if (subMilestones.subMilestone === 'Strategy Review') {
+              if (subMilestones.status === 'Completed') {
+                this.listOfCompletedPhases.push('Strategy Review');
+                phaseInfo.status = 'visited';
+              } else {
+                phaseInfo.status = 'active';
+              }
+            }
+          });
+  
+          // This loop will executed for plan phase.
+          offerMilestone.forEach(subMilestones => {
+            if (subMilestones.subMilestone === 'Design Review') {
+              if (subMilestones.status === 'Completed') {
+                this.listOfCompletedPhases.push('Design Review');
+                phaseInfo.status = 'visited';
+              } else {
+                if (this.listOfCompletedPhases.includes('Strategy Review')) {
+                  phaseInfo.status = 'active';
+                } else {
+                  phaseInfo.status = '';
                 }
+              }
+            }
+          });
+  
+          // This loop will executed for setup phase.
+          offerMilestone.forEach(subMilestones => {
+            if (subMilestones.subMilestone === 'Orderability') {
+              if (subMilestones.status === 'Completed') {
+                this.listOfCompletedPhases.push('Orderability');
+                phaseInfo.status = 'visited';
+              } else {
+                if (this.listOfCompletedPhases.includes('Design Review')) {
+                  phaseInfo.status = 'active';
+                } else {
+                  phaseInfo.status = '';
+                }
+              }
+            }
+          });
             }
             accumulator.push(phaseInfo);
             return accumulator;
@@ -115,6 +150,7 @@ export class TurbotaxviewComponent implements OnChanges {
         this.offerPhaseDetailsList = null;
         this.phaseProcessingCompleted = false;
         this.navigateHash = {};
+        this.listOfCompletedPhases = [];
     }
 
     private isMilestoneNotTouched(): any {
