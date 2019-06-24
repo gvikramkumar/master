@@ -984,6 +984,7 @@ export class MmAssesmentComponent implements OnInit {
     const groups = [];
     let groupDataWithFirst = [];
     let groupNamesWithFirst = [];
+    this.showSave = _.isEmpty(this.derivedMM) ? false : true;
 
     groupDataWithFirst.push(this.dimensionFirstGroupData);
     groupDataWithFirst = groupDataWithFirst.concat(this.groupData);

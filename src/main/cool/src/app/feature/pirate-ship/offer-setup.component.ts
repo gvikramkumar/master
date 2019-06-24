@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { UserService } from '@app/core/services/user.service';
@@ -17,7 +17,7 @@ import { EnvironmentService } from '@env/environment.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import * as _ from 'lodash';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import * as fromPirateShip from './state';
 import { Store, select } from '@ngrx/store';
 import * as pirateShipActions from './state/pirate-ship.action';
@@ -27,7 +27,7 @@ import * as pirateShipActions from './state/pirate-ship.action';
   templateUrl: './offer-setup.component.html',
   styleUrls: ['./offer-setup.component.scss']
 })
-export class OfferSetupComponent implements OnInit {
+export class OfferSetupComponent implements OnInit, OnDestroy {
 
   offerId;
   caseId;
@@ -61,8 +61,8 @@ export class OfferSetupComponent implements OnInit {
   designReviewComplete: Boolean = false;
 
   pirateShip: PirateShip;
-
   errorMessage$: Observable<string>;
+  pirateShipSubscription: Subscription;
   selectedPirateShipInfo$: Observable<PirateShip>;
 
   constructor(
@@ -127,6 +127,10 @@ export class OfferSetupComponent implements OnInit {
 
   }
 
+  ngOnDestroy(): void {
+    this.pirateShipSubscription.unsubscribe();
+  }
+
   // ----------------------------------------------------------------------------------------------------------------
 
   // Get offer Details
@@ -183,7 +187,7 @@ export class OfferSetupComponent implements OnInit {
   getAllModuleData() {
 
     // this.errorMessage$ = this.store.pipe(select(fromPirateShip.getError));
-    this.store.pipe(select(fromPirateShip.getSelectedPirateShipInfo))
+    this.pirateShipSubscription = this.store.pipe(select(fromPirateShip.getSelectedPirateShipInfo))
       // this.offerSetupService.getPirateShipInfo(this.offerId, this.selectedAto, this.functionalRole)
       .subscribe((pirateShipResponse: PirateShip) => {
 
