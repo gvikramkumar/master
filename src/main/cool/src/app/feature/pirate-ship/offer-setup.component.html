@@ -56,7 +56,7 @@
                         <!-- Completed -->
                         <button *ngIf="element['status']=='Completed'"
                           class="btn btn--small btn--success base-margin-bottom" placement="top"
-                          (click)="getElementDetails(element)" [disabled]="readOnly"><span
+                          (click) = "getElementDetails(element)" [disabled] = "readOnly"><span
                             class="milestone pull-left"></span>&nbsp;
                           {{element["moduleName"]}}
                         </button>

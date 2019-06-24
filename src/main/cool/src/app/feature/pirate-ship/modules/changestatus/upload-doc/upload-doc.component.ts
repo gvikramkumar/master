@@ -63,8 +63,20 @@ export class UploadDocComponent implements OnInit {
         this.userName = res.userName;
         this.downloadUrl = this._evnService.REST_API_BasicModule_DownloadDoc+"?offerId="+this.offerId+"&fileName="+this.fileName+"&moduleName="+this.moduleName+"";
         this.showloader = false;
-      });
+      }
+        , (res: any) => {
+          this.showloader = false;
+        },
+        () => {
+          this.showloader = false;
+        }
+        );
     }
+    setTimeout(()=>{
+      this.showloader = false;
+    },3000);
+
+
 
   }
 
@@ -101,8 +113,6 @@ export class UploadDocComponent implements OnInit {
                 this.fileName = res.fileName;
                 this.info="";
                 this.downloadUrl = this._evnService.REST_API_BasicModule_DownloadDoc+"?offerId="+this.offerId+"&fileName="+this.fileName+"&moduleName="+this.moduleName+"";
-
-
               } else {
                 this.info = res.Message;
               }
