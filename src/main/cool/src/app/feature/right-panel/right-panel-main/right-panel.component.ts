@@ -100,7 +100,7 @@ export class RightPanelComponent implements OnInit {
   addStakeHolder: Boolean = false;
   displayOfferPhase: Boolean = false;
   public isOfferPhaseBlank = true;
-
+  listOfCompletedPhases: string[] = [];
 
   // ----------------------------------------------------------------------------------------
 
@@ -141,6 +141,7 @@ export class RightPanelComponent implements OnInit {
     this.navigateHash['Offer Setup Workflow'] = ['/offerSetup', this.currentOfferId, this.caseId];
 
     this.offerPhaseService.getOfferPhase(this.caseId).subscribe(resOfferPhases => {
+      console.log(resOfferPhases);
       if (resOfferPhases) {
         this.offerPhaseDetailsList = resOfferPhases;
 
@@ -188,14 +189,51 @@ export class RightPanelComponent implements OnInit {
       };
       const offerMilestone = offerPhaseInfo[phase];
       if (offerMilestone) {
-        if (offerMilestone.every(this.isMilestoneVisited())) {
-          phaseInfo.status = 'visited';
-        } else if (offerMilestone.some(this.isMilestoneActive())) {
-          phaseInfo.status = 'active';
-        } else if (offerMilestone.every(this.isMilestoneNotTouched())) {
-          phaseInfo.status = '';
-        }
+        // This loop will executed for ideate phase.       
+        offerMilestone.forEach(subMilestones => {
+          if (subMilestones.subMilestone === 'Strategy Review') {
+            if (subMilestones.status === 'Completed') {
+              this.listOfCompletedPhases.push('Strategy Review');
+              phaseInfo.status = 'visited';
+            } else {
+              phaseInfo.status = 'active';
+            }
+          }
+        });
+
+        // This loop will executed for plan phase.
+        offerMilestone.forEach(subMilestones => {
+          if (subMilestones.subMilestone === 'Design Review') {
+            if (subMilestones.status === 'Completed') {
+              this.listOfCompletedPhases.push('Design Review');
+              phaseInfo.status = 'visited';
+            } else {
+              if (this.listOfCompletedPhases.includes('Strategy Review')) {
+                phaseInfo.status = 'active';
+              } else {
+                phaseInfo.status = '';
+              }
+            }
+          }
+        });
+
+        // This loop will executed for setup phase.
+        offerMilestone.forEach(subMilestones => {
+          if (subMilestones.subMilestone === 'Orderability') {
+            if (subMilestones.status === 'Completed') {
+              this.listOfCompletedPhases.push('Orderability');
+              phaseInfo.status = 'visited';
+            } else {
+              if (this.listOfCompletedPhases.includes('Design Review')) {
+                phaseInfo.status = 'active';
+              } else {
+                phaseInfo.status = '';
+              }
+            }
+          }
+        });
       }
+      
       accumulator.push(phaseInfo);
       return accumulator;
     }, []);

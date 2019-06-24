@@ -74,7 +74,7 @@ export class UploadDocComponent implements OnInit {
     }
     setTimeout(()=>{
       this.showloader = false;
-    },3000);
+    },5000);
 
 
 
