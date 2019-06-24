@@ -1,64 +1,86 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { UserService } from '@app/core/services/user.service';
-import { MessageService } from '@app/services/message.service';
 import { OfferSetupService } from '@app/services/offer-setup.service';
 import { RightPanelService } from '@app/services/right-panel.service';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 
+import { PirateShip } from './model/pirate-ship';
 import { appRoutesNames } from '@app/app.routes.names';
 import { pirateShipRoutesNames } from './pirate-ship.routes.names';
 
-import { interval } from 'rxjs';
 import { ActionsService } from '@app/services/actions.service';
+import { ConfigurationService } from '../../core/services/configuration.service';
+
+import { EnvironmentService } from '@env/environment.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+import * as _ from 'lodash';
+import { Observable, Subscription } from 'rxjs';
+import * as fromPirateShip from './state';
+import { Store, select } from '@ngrx/store';
+import * as pirateShipActions from './state/pirate-ship.action';
 
 @Component({
   selector: 'app-offer-setup',
   templateUrl: './offer-setup.component.html',
   styleUrls: ['./offer-setup.component.scss']
 })
-export class OfferSetupComponent implements OnInit {
+export class OfferSetupComponent implements OnInit, OnDestroy {
+
   offerId;
   caseId;
   setFlag;
   message;
   offerName;
   offerData;
+  primaryBE: string;
 
-  showMM: boolean = false;
-  readOnly: boolean = false;
   derivedMM;
   moduleStatus;
   functionalRole;
+  readOnly = false;
 
-  stakeHolderData = [];
   stakeholders: any;
+  stakeHolderData = [];
+  stakeHolderInfo: any;
 
   groupData = {};
-  showGroupData: boolean = false;
-  primaryBE: string;
-  stakeHolderInfo: any;
+  showGroupData = false;
+
+  atoNames: any[] = [];
   offerBuilderdata = {};
   displayLeadTime = false;
   noOfWeeksDifference: string;
   backbuttonStatusValid = true;
   proceedButtonStatusValid = true;
   proceedToreadinessreview = true;
-  Options: any[] = [];
-  selectedOffer: any = 'Overall Offer';
-  selectedAto: string = 'Overall Offer';
+
+  selectedAto: string;
   designReviewComplete: Boolean = false;
 
+  pirateShip: PirateShip;
+  errorMessage$: Observable<string>;
+  pirateShipSubscription: Subscription;
+  selectedPirateShipInfo$: Observable<PirateShip>;
 
-
-  constructor(private router: Router,
+  constructor(
+    private router: Router,
+    private httpClient: HttpClient,
+    private _env: EnvironmentService,
     private userService: UserService,
+
     private activatedRoute: ActivatedRoute,
+    private actionsService: ActionsService,
+    private store: Store<fromPirateShip.State>,
     private offerSetupService: OfferSetupService,
     private rightPanelService: RightPanelService,
+    private configurationService: ConfigurationService,
     private stakeholderfullService: StakeholderfullService,
-    private actionsService: ActionsService) {
+
+  ) {
+
     this.activatedRoute.params.subscribe(params => {
       this.offerId = params['offerId'];
       this.caseId = params['caseId'];
@@ -66,15 +88,30 @@ export class OfferSetupComponent implements OnInit {
         this.selectedAto = params['selectedAto'];
       }
     });
+
   }
+
+  // ----------------------------------------------------------------------------------------------------------------
 
   ngOnInit() {
 
-    //  =======================================================================================
+    this.showGroupData = false;
+    this.selectedAto = 'Overall Offer';
     this.functionalRole = this.userService.getFunctionalRole();
 
-    this.offerSetupService.lockAPIForOWB(this.offerId).subscribe(res=> {
+    this.store.dispatch(new pirateShipActions.LoadPirateShip(
+      {
+        offerId: this.offerId,
+        offerLevel: this.selectedAto,
+        functionalRole: this.functionalRole
+      }
+    ));
+
+    this.errorMessage$ = this.store.pipe(select(fromPirateShip.getError));
+
+    this.offerSetupService.lockAPIForOWB(this.offerId).subscribe(() => {
     });
+
     // Check design review status for enabling Item Creation Module
     this.actionsService.getMilestones(this.caseId).subscribe(data => {
       data['plan'].forEach(element => {
@@ -84,18 +121,19 @@ export class OfferSetupComponent implements OnInit {
       });
     });
 
+    // Get Module Name and Status
+    this.getAllModuleData();
+
     // Get Offer Details
     this.getOfferDetails();
 
-
-
-    // for refresh
-    interval(9000000).subscribe(x =>
-      this.getAllModuleData()
-    )
-
-
   }
+
+  ngOnDestroy(): void {
+    this.pirateShipSubscription.unsubscribe();
+  }
+
+  // ----------------------------------------------------------------------------------------------------------------
 
   // Get offer Details
 
@@ -106,6 +144,7 @@ export class OfferSetupComponent implements OnInit {
       this.offerBuilderdata = offerDetails;
       this.offerBuilderdata['BEList'] = [];
       this.offerBuilderdata['BUList'] = [];
+
       if (this.offerBuilderdata['primaryBEList'] != null) {
         this.offerBuilderdata['BEList'] = this.offerBuilderdata['BEList'].concat(this.offerBuilderdata['primaryBEList']);
       }
@@ -123,17 +162,9 @@ export class OfferSetupComponent implements OnInit {
       this.offerName = offerDetails['offerName'];
       this.stakeHolderData = offerDetails['stakeholders'];
 
-      // Get Module Name and Status
-      this.getAllModuleData();
-
-      if (this.derivedMM !== 'Not Aligned') {
-        this.showMM = true;
-      }
-
       if (Array.isArray(offerDetails['primaryBEList']) && offerDetails['primaryBEList'].length) {
         this.primaryBE = offerDetails['primaryBEList'][0];
       }
-
 
       // TTM Info
       this.rightPanelService.displayAverageWeeks(this.primaryBE, this.derivedMM).subscribe(
@@ -148,35 +179,53 @@ export class OfferSetupComponent implements OnInit {
 
       // Populate Stake Holder Info
       this.processStakeHolderInfo();
+
     });
   }
+
+  // ----------------------------------------------------------------------------------------------------------------
 
   // Get All the ModuleName and place in order
   getAllModuleData() {
 
-    this.offerSetupService.getModuleData(this.offerId, this.selectedAto, this.functionalRole).subscribe(data => {
+    // this.offerSetupService.getPirateShipInfo(this.offerId, this.selectedAto, this.functionalRole)
+    this.pirateShipSubscription = this.store.pipe(select(fromPirateShip.getSelectedPirateShipInfo))
+      .subscribe((pirateShipResponse: PirateShip) => {
 
-      this.groupData = {};
-      this.showGroupData = false;
-      this.Options = data['listATOs'];
-      data['listSetupDetails'].forEach(group => {
+        this.groupData = {};
+        this.showGroupData = false;
+        this.pirateShip = pirateShipResponse;
 
-        const groupName = group['groupName']
-        if (this.groupData[groupName] == null) {
-          this.groupData[groupName] = { 'left': [], 'right': [] };
+        if (!_.isEmpty(this.pirateShip)) {
+
+          this.pirateShip['listSetupDetails'].forEach(group => {
+
+            const groupName = group['groupName'];
+            if (this.groupData[groupName] == null) {
+              this.groupData[groupName] = { 'left': [], 'right': [] };
+            }
+            if (group['colNum'] === 1) {
+              this.groupData[groupName]['left'].push(group);
+            } else {
+              this.groupData[groupName]['right'].push(group);
+            }
+
+          });
+
+          this.sortGroupData();
+          this.showGroupData = true;
+
+          this.atoNames = this.pirateShip['listATOs'];
+          this.atoNames.push('Overall Offer');
+          this.atoNames = _.uniqBy(this.atoNames);
+
         }
-        if (group['colNum'] == 1) {
-          this.groupData[groupName]['left'].push(group);
-        } else {
-          this.groupData[groupName]['right'].push(group);
-        }
 
-      });
-      this.sortGroupData();
-      this.showGroupData = true;
-    }
-    );
+      }, (err => console.log(err))
+      );
   }
+
+  // ----------------------------------------------------------------------------------------------------------------
 
   // sort the module location
   sortGroupData() {
@@ -188,7 +237,7 @@ export class OfferSetupComponent implements OnInit {
     );
   }
 
-
+  // ----------------------------------------------------------------------------------------------------------------
 
   // get stakeHolder information
   private processStakeHolderInfo() {
@@ -210,7 +259,9 @@ export class OfferSetupComponent implements OnInit {
       });
     }
   }
-  
+
+  // ----------------------------------------------------------------------------------------------------------------
+
   // update message for humburger
   updateMessage(message) {
     if (message != null && message !== '') {
@@ -227,14 +278,9 @@ export class OfferSetupComponent implements OnInit {
   }
 
 
+  // ----------------------------------------------------------------------------------------------------------------
 
   getElementDetails(element) {
-    console.log(element.moduleName);
-    /* if (element.moduleName === 'Item Creation') {
-      this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.ITEM_CREATION, this.selectedAto]);
-    } else if (element.moduleName === 'Modeling & Design') {
-      this.router.navigate([appRoutesNames.PIRATE_SHIP, this.offerId, this.caseId, pirateShipRoutesNames.MODELLING_DESIGN, this.selectedAto]);
-    } */
 
     switch (element.moduleName) {
       case 'Item Creation': {
@@ -280,7 +326,6 @@ export class OfferSetupComponent implements OnInit {
         this.caseId,
         pirateShipRoutesNames.CHANGE_STATUS,
         this.selectedAto, element.moduleName]);
-
         break;
       }
       case 'Royalty Setup': {
@@ -289,7 +334,6 @@ export class OfferSetupComponent implements OnInit {
         this.caseId,
         pirateShipRoutesNames.CHANGE_STATUS,
         this.selectedAto, element.moduleName]);
-
         break;
       }
       case 'Offer Attribution': {
@@ -298,7 +342,6 @@ export class OfferSetupComponent implements OnInit {
         this.caseId,
         pirateShipRoutesNames.CHANGE_STATUS,
         this.selectedAto, element.moduleName]);
-
         break;
       }
       case 'Export Compliance': {
@@ -307,7 +350,6 @@ export class OfferSetupComponent implements OnInit {
         this.caseId,
         pirateShipRoutesNames.CHANGE_STATUS,
         this.selectedAto, element.moduleName]);
-
         break;
       }
       case 'Test Orderability': {
@@ -316,7 +358,6 @@ export class OfferSetupComponent implements OnInit {
         this.caseId,
         pirateShipRoutesNames.CHANGE_STATUS,
         this.selectedAto, element.moduleName]);
-
         break;
       }
       case 'Pricing Uplift Setup': {
@@ -325,7 +366,6 @@ export class OfferSetupComponent implements OnInit {
         this.caseId,
         pirateShipRoutesNames.CHANGE_STATUS,
         this.selectedAto, element.moduleName]);
-
         break;
       }
       case 'Orderability': {
@@ -350,8 +390,34 @@ export class OfferSetupComponent implements OnInit {
   onProceedToNext() {
   }
 
-  selectedValue(event) {
+  // ----------------------------------------------------------------------------------------------------------------
+
+  selectedValue(dropDownValue: string) {
+
+    this.selectedAto = dropDownValue;
+
+    this.store.dispatch(new pirateShipActions.LoadPirateShip(
+      {
+        offerId: this.offerId,
+        offerLevel: this.selectedAto,
+        functionalRole: this.functionalRole
+      }
+    ));
+
     this.getAllModuleData();
+
+  }
+
+  refreshPirateship() {
+    this.httpClient.get(this._env.REST_API_OFFER_SETUP_REFRESH + '/' + this.offerId, {
+      headers: new HttpHeaders().set('Access-Control-Allow-Origin', '*')
+        .append('Authorization', `Bearer ${this.configurationService.startupData.token}`)
+        .append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        .append('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, Accept')
+    }).subscribe(
+      (res) => {
+      }
+    );
   }
 
 }
