@@ -6,14 +6,14 @@ export class OfferconstructPIDService {
   pidErrormessage: any;
   constructor(private httpClient: HttpClient) { }
 
-  majorMinorLineRule(result, stackHolber) {
+  majorMinorLineRule(result, stackHolder) {
     let Item_owner_status = false;
     let Item_status = false;
     let Workflow_Status = false;
 
     // check stackholder present or not
     if (result['Pid Owner'] !== undefined ) {
-        Item_owner_status = this.isStackHolderPresent(result['Pid Owner'], stackHolber);
+        Item_owner_status = this.isStackHolderPresent(result['Pid Owner'], stackHolder);
     }
 
     if (result['Item Status'] !== undefined) {
@@ -76,8 +76,6 @@ export class OfferconstructPIDService {
     }
 
     currentStackHolderList = currentStackHolderList.map(value => value.trim());
-    console.log(currentStackHolderList);
-    console.log(pidOwners);
     for (const pid of currentStackHolderList) {
       for (const pidOwner of pidOwners) {
         if (pidOwner._id === pid) {
