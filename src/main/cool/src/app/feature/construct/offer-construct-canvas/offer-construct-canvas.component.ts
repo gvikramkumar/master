@@ -1850,7 +1850,10 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   addMinorItem(searchResult) {
     const titleName = this.selectedPids.PID;
     if (this.offerConstructItems.length > 0) {
-      const productName = searchResult['Item Category'];
+      let productName = searchResult['Item Category'];
+       if (productName === 'Billing' && searchResult['Business Unit'] === 'SERVICE-BU') {
+        productName = 'Billing SOA SKU';
+      }
       const obj = Object.create(null);
       obj['uniqueKey'] = ++this.counter;
       this.uniqueId = obj['uniqueKey'];
