@@ -566,7 +566,6 @@ export class OfferSolutioningComponent implements OnInit {
   
   getMarkCompleteStatus(status) {
     this.markCompleteStatus = status;
-    console.log('MAC status in parent:: '+this.markCompleteStatus);
   }
 
   // -----------------------------------------------------------------------------------------------------------------------------

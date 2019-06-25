@@ -1283,7 +1283,6 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   getMarkCompleteStatus(status) {
-    console.log('status in getMarkCompleteStatus() MM is:: '+status);
     this.markCompleteStatus = status;
   }
 

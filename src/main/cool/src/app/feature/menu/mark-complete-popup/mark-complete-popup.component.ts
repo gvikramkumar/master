@@ -33,7 +33,6 @@ export class MarkCompletePopupComponent implements OnInit {
   }
 
   ngOnChanges() {
-    console.log('Mark complete status in pop up contains:: ' + this.markCompleteStatus);
     this.choosePopUp();
   }
 
@@ -57,7 +56,6 @@ export class MarkCompletePopupComponent implements OnInit {
       this.milestoneStatus = 'Completed';
     }
     this.menuBarService.updateMarkCompleteStatus(this.offerId, this.milestone, this.milestoneStatus).subscribe((response) => {
-      console.log('response has:: '+JSON.stringify(response));
       // if (this.currentURL.includes('offerDimension')) {
       //   console.log('plan status for OD:: '+JSON.stringify(response["plan"][0].status));
       //   if(response["plan"][0].status == 'Available'){

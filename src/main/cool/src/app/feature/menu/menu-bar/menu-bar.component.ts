@@ -174,7 +174,6 @@ export class MenuBarComponent implements OnInit {
                 }
                 this.showMarkcompleteToggle = true;
             }
-            console.log('Mark complete status in menu bar:: '+this.markCompleteStatus);
             this.getMarkCompleteStatus.next(this.markCompleteStatus);
             this.getCanUncheckCompleteStatus();
 
@@ -316,14 +315,12 @@ export class MenuBarComponent implements OnInit {
     closeMarkCompletePopup() {
         this.showMarkcompletePopup = false;
         this.markCompleteStatus = !this.markCompleteStatus;
-        console.log('this.markCompleteStatus CLOSE::: '+this.markCompleteStatus);
-         this.getMarkCompleteStatus.next(this.markCompleteStatus);
+        this.getMarkCompleteStatus.next(this.markCompleteStatus);
         //this.disableMarkCompleteToggle();
     }
 
     confirmMarkComplete() {
          this.showMarkcompletePopup = false;
-         console.log('this.markCompleteStatus CONFIRM::: '+this.markCompleteStatus);
          this.getMarkCompleteStatus.next(this.markCompleteStatus);
          this.onProceedToNext.emit('false');
      //   this.disableMarkCompleteToggle();
