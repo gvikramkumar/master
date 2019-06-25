@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
+//Test changes 2
 import { Router, ActivatedRoute } from '@angular/router';
 import { OfferPhaseService } from '@app/services/offer-phase.service';
 import { RightPanelService } from '@app/services/right-panel.service';
@@ -141,7 +142,6 @@ export class RightPanelComponent implements OnInit {
     this.navigateHash['Offer Setup Workflow'] = ['/offerSetup', this.currentOfferId, this.caseId];
 
     this.offerPhaseService.getOfferPhase(this.caseId).subscribe(resOfferPhases => {
-      console.log(resOfferPhases);
       if (resOfferPhases) {
         this.offerPhaseDetailsList = resOfferPhases;
 
