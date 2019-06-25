@@ -1,5 +1,11 @@
 <div class="responsive-table">
 
+  <!-- Note -->
+  <br><br>
+  <span *ngIf="!owbPunchOut" class="text-danger">* Please punch out to OWB to see updated ATO Tasks Status</span>
+  <br><br>
+
+  <!-- ATO Task Summary -->
   <p-dataTable [value]="tasks" scrollable="true" [rows]="10" [paginator]="true" scrollHeight="350px"
     [resizableColumns]="true">
 

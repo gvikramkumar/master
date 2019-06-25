@@ -50,6 +50,7 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
   pirateShipModuleName: string;
   isPirateShipSubModule: boolean;
 
+  owbPunchOut: boolean;
   showDesignCanvasButton: boolean;
   disableDesignCanvasButton: boolean;
 
@@ -99,6 +100,7 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
 
         this.atoTask = _.find(this.atoList, ['itemName', this.selectedAto]);
         const currentAtoStatus = _.isEmpty(this.atoTask) ? '' : this.atoTask.itemStatus;
+        this.owbPunchOut = (!_.isEmpty(this.atoTask) && this.atoTask['owbPunchOut']) ? true : false;
         this.disableDesignCanvasButton = this.showDesignCanvasButton ? this.designCanvasButtonStatus(currentAtoStatus) : false;
 
       });
@@ -160,6 +162,7 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
 
       const currentAtoStatus = _.isEmpty(this.atoTask) ? '' : this.atoTask.itemStatus;
       this.disableDesignCanvasButton = this.designCanvasButtonStatus(currentAtoStatus);
+      this.owbPunchOut = (!_.isEmpty(this.atoTask) && this.atoTask['owbPunchOut']) ? true : false;
 
     }
   }

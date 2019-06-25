@@ -5,11 +5,13 @@ import { PirateShipActionTypes, PirateShipActions } from './pirate-ship.action';
 
 export interface PirateShipState {
     pirateShip: PirateShip;
+  showPirateshipLoader: boolean;
     error: string;
 }
 
 const initialState: PirateShipState = {
     pirateShip: null,
+     showPirateshipLoader: true,
     error: ''
 };
 
@@ -36,6 +38,12 @@ export function reducer(state = initialState, action: PirateShipActions): Pirate
                 pirateShip: null,
                 error: action.payload
             };
+
+        case PirateShipActionTypes.ShowPirateShip:
+             return {
+               ...state,
+               showPirateshipLoader: action.payload
+             };
 
         default:
             return state;

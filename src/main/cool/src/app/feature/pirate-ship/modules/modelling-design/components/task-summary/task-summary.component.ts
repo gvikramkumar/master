@@ -9,6 +9,7 @@ import { Task } from '../../model/task';
 export class TaskSummaryComponent implements OnInit {
 
   @Input() tasks: Array<Task>;
+  @Input() owbPunchOut: boolean;
 
   constructor() { }
 
