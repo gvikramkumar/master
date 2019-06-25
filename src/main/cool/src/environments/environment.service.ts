@@ -138,6 +138,7 @@ export class EnvironmentService {
     REST_API_OFFER_SETUP_REFRESH: string;
     REST_API_OFFER_PS_MODULE_GET_URL: string;
     REST_API_OFFER_SETUP_MODULE_GET_URL: string;
+  REST_API_OFFER_SETUP_MODULE_UPDATE_URL: string;
     REST_API_OFFER_MODULE_STATUS_GET_URL: string;
     REST_API_OFFER_SETUP_DASHBOARD_NOTIFICATION_URL: string;
 
@@ -449,6 +450,7 @@ export class EnvironmentService {
         this.REST_API_LOCK_API_FOR_OWB = this.baseApiUrl + '/owb/lockAPI/';
         this.REST_API_OFFER_PS_MODULE_GET_URL = this.baseApiUrl + '/offersetup/getPSModules/';
         this.REST_API_OFFER_SETUP_MODULE_GET_URL = this.baseApiUrl + '/offersetup/getAllModuleStatus/';
+      this.REST_API_OFFER_SETUP_MODULE_UPDATE_URL = this.baseApiUrl + '/offersetup/getOfferSetupModuleStatusByOfferId/';
         this.REST_API_OFFER_SETUP_DASHBOARD_NOTIFICATION_URL = this.baseApiUrl + '/dashboard/notification/generate';
         this.REST_API_OFFER_SETUP_REFRESH = 'https://cool-op-srv-dev.cisco.com/coolsrv/offerSetup/getOfferSetupModuleStatusByOfferId';
 
