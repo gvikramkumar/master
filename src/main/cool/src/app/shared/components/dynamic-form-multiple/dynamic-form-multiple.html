@@ -118,7 +118,7 @@
                 <div *ngFor="let queslist of item.value['productInfo']">
                   <div *ngFor="let ques of queslist|keyvalue">
                     <table class="pid-data pull-left text-left table table--compressed table--bordered"
-                      style="max-width: 300px;">
+                      style="max-width: 300px;" (click)="eGenieDefault(ques)">
                       <tbody>
                         <tr>
                           <th>
@@ -133,7 +133,7 @@
                           </th>
                         </tr>
                         <div *ngFor="let pInfo of ques.value['listOfferQuestions']; let i = index;">
-                          <tr class="overflow-visible" [ngSwitch]="pInfo.componentType" (click)="eGenieDefault(ques)">
+                          <tr class="overflow-visible" [ngSwitch]="pInfo.componentType">
 
                             <td *ngSwitchCase="'Free Text'">
                               <div class="form-group input--compressed" *ngIf="i == 0">
