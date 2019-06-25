@@ -104,30 +104,13 @@
                         </div>
                       </th>
                     </tr>
-                    <!-- </tbody> -->
-                    <!-- <tbody class="offer-values"> -->
-                    <tr class="section-tr-label">
-                      <th>Unique Item</th>
-                    </tr>
-                    <!-- <div > -->
                     <div *ngFor="let ques of item.value['questionset']">
-                      <tr *ngIf="ques.itemType == 'Unique Item'">
+                      <tr>
                         <td title="{{ques.question}}"><span *ngIf="ques.rules.isMandatoryOptional==='Mandatory'">
                             <font color="red">*</font>
                           </span>{{ques.question}}</td>
                       </tr>
                     </div>
-                    <tr class="section-tr-label">
-                      <th>Additional Item</th>
-                    </tr>
-                    <div *ngFor="let ques of item.value['questionset']">
-                      <tr *ngIf="ques.itemType !== 'Unique Item'">
-                        <td title="{{ques.question}}"><span *ngIf="ques.rules.isMandatoryOptional==='Mandatory'">
-                            <font color="red">*</font>
-                          </span>{{ques.question}}</td>
-                      </tr>
-                    </div>
-                    <!-- </div> -->
                   </tbody>
                 </table>
               </div>
@@ -149,12 +132,8 @@
                             </div>
                           </th>
                         </tr>
-                        <tr class="section-tr-label">
-                          <th></th>
-                        </tr>
                         <div *ngFor="let pInfo of ques.value['listOfferQuestions']; let i = index;">
-                          <tr class="overflow-visible" [ngSwitch]="pInfo.componentType"
-                            *ngIf="pInfo.itemType == 'Unique Item'">
+                          <tr class="overflow-visible" [ngSwitch]="pInfo.componentType">
 
                             <td *ngSwitchCase="'Free Text'">
                               <div class="form-group input--compressed" *ngIf="i == 0">
@@ -182,9 +161,11 @@
                                       [name]='item.egineAttribue_+$parentIndex+ $ChildIndex' id=""
                                       [(ngModel)]="pInfo.currentValue"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
+                                      [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
+									                    (mouseenter)="showError = true; " (mouseleave)="showError = false;" ng-class=''
                                       #freeText="ngModel" class="form-control">
 
 
@@ -266,7 +247,8 @@
                                       maxlength="{{pInfo['rules']['maxCharacterLen']}}"
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                                       [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
-                                      #qafreeText="ngModel" class="form-control" placement="top">
+                                      #qafreeText="ngModel" class="form-control" placement="top"
+									                    (mouseenter)="showError = true; " (mouseleave)="showError = false;">
                                     <div class="tool-tip  slideIn"
                                       *ngIf="qafreeText.invalid && (qafreeText.dirty || qafreeText.touched)">
                                       <ul>
@@ -330,371 +312,14 @@
                                       [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
                                       [(ngModel)]="pInfo.currentValue"
                                       (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
-                                      #radioButton="ngModel" class="form-control" placement="top"
-                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']">
+                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
+                                      maxlength="{{pInfo['rules']['maxCharacterLen']}}"
+                                      [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
+									                    #radioButton="ngModel" class="form-control" placement="top"
+									                    (mouseenter)="showError = true; " (mouseleave)="showError = false;">
                                       <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
                                     </select>
 
-                                    <div class="tool-tip  slideIn"
-                                      *ngIf="radioButton.invalid && (radioButton.dirty || radioButton.touched)">
-
-                                      <ul>
-                                        <li *ngIf="radioButton.errors.required">{{pInfo.egineAttribue}} is required
-                                        </li>
-                                      </ul>
-                                    </div>
-
-                                    <div class="tool-tip  slideIn"
-                                      *ngIf="pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen && (radioButton.dirty || radioButton.touched)">
-
-                                      <ul>
-                                        <li *ngIf="pInfo.currentValue.length == pInfo.rules.maxCharacterLen">
-                                          {{pInfo.egineAttribue}} exceeds max
-                                          characters({{pInfo.rules.maxCharacterLen}}) allowed</li>
-                                      </ul>
-                                    </div>
-                                    <div class="tool-tip  slideIn"
-                                      *ngIf="pInfo.rules.isvalid == false && (radioButton.dirty || radioButton.touched)">
-                                      <ul>
-                                        <li
-                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'Req Start Date Window' && pInfo.rules.validationMessage != ''">
-                                          {{pInfo.rules.validationMessage}}</li>
-                                        <li
-                                          *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
-                                          Mandatory entry of 1 value from the Initial Term range</li>
-                                        <li
-                                          *ngIf="pInfo.egineAttribue === 'Base Price' && pInfo.rules.validationMessage != ''">
-                                          Base Price must contain a number with 2 decimal places</li>
-                                        <li
-                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'Req Start Date Window') && pInfo.rules.validationMessage != ''">
-                                          Mandatory entry of 1 numeric value</li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-
-                            <td *ngSwitchCase="'Q&A Radio Button'">
-                              <div class="form-group dropdown input--compressed">
-                                <div class="form-group__text select" [class.has-error]="qaRadioButton.invalid"
-                                  [class.has-success]="qaRadioButton.valid">
-                                  <div class="on-focus clearfix">
-                                    <select [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control"
-                                      [(ngModel)]="pInfo.currentValue"
-                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
-                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
-                                      maxlength="{{pInfo['rules']['maxCharacterLen']}}"
-                                      [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
-                                      #qaRadioButton="ngModel" class="form-control" placement="top"
-                                      (mouseenter)="showError = true; " (mouseleave)="showError = false;">
-                                      <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
-                                    </select>
-                                    <div class="tool-tip  slideIn"
-                                      *ngIf="qaRadioButton.invalid && (qaRadioButton.dirty || qaRadioButton.touched)">
-
-                                      <ul>
-
-                                        <li *ngIf="qaRadioButton.errors.required">{{pInfo.egineAttribue}} is required
-                                        </li>
-                                      </ul>
-                                    </div>
-
-                                    <div class="tool-tip  slideIn"
-                                      *ngIf="pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen && (qaRadioButton.dirty || qaRadioButton.touched)">
-
-                                      <ul>
-                                        <li *ngIf="pInfo.currentValue.length == pInfo.rules.maxCharacterLen">
-                                          {{pInfo.egineAttribue}} exceeds max
-                                          characters({{pInfo.rules.maxCharacterLen}}) allowed</li>
-                                      </ul>
-                                    </div>
-                                    <div class="tool-tip  slideIn"
-                                      *ngIf="pInfo.rules.isvalid == false && (qaRadioButton.dirty || qaRadioButton.touched)">
-                                      <ul>
-                                        <li
-                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'Req Start Date Window' && pInfo.rules.validationMessage != ''">
-                                          {{pInfo.rules.validationMessage}}</li>
-                                        <li
-                                          *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
-                                          Mandatory entry of 1 value from the Initial Term range</li>
-                                        <li
-                                          *ngIf="pInfo.egineAttribue === 'Base Price' && pInfo.rules.validationMessage != ''">
-                                          Base Price must contain a number with 2 decimal places</li>
-                                        <li
-                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'Req Start Date Window') && pInfo.rules.validationMessage != ''">
-                                          Mandatory entry of 1 numeric value</li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-
-                            <td *ngSwitchCase="'Drop-down'">
-                              <div class="form-group dropdown input--compressed">
-                                <div class="form-group__text select" [class.has-error]="dropDown.invalid"
-                                  [class.has-success]="dropDown.valid">
-                                  <div class="on-focus clearfix">
-                                    <select [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control"
-                                      [(ngModel)]="pInfo.currentValue"
-                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
-                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
-                                      maxlength="{{pInfo['rules']['maxCharacterLen']}}"
-                                      [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
-                                      #dropDown="ngModel" class="form-control" placement="top"
-                                      (mouseenter)="showError = true; " (mouseleave)="showError = false;">
-                                      <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
-                                    </select>
-                                    <div class="tool-tip  slideIn"
-                                      *ngIf="dropDown.invalid && (dropDown.dirty || dropDown.touched)">
-
-                                      <ul>
-
-                                        <li *ngIf="dropDown.errors.required">{{pInfo.egineAttribue}} is required </li>
-                                      </ul>
-                                    </div>
-
-                                    <div class="tool-tip  slideIn"
-                                      *ngIf="pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen && pInfo.currentValue.length == pInfo.rules.maxCharacterLen && (dropDown.dirty || dropDown.touched)">
-
-                                      <ul>
-                                        <li *ngIf="pInfo.currentValue.length == pInfo.rules.maxCharacterLen">
-                                          {{pInfo.egineAttribue}} exceeds max
-                                          characters({{pInfo.rules.maxCharacterLen}}) allowed</li>
-                                      </ul>
-                                    </div>
-                                    <div class="tool-tip  slideIn"
-                                      *ngIf="pInfo.rules.isvalid == false && (dropDown.dirty || dropDown.touched)">
-                                      <ul>
-                                        <li
-                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'Req Start Date Window' && pInfo.rules.validationMessage != ''">
-                                          {{pInfo.rules.validationMessage}}</li>
-                                        <li
-                                          *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
-                                          Mandatory entry of 1 value from the Initial Term range</li>
-                                        <li
-                                          *ngIf="pInfo.egineAttribue === 'Base Price' && pInfo.rules.validationMessage != ''">
-                                          Base Price must contain a number with 2 decimal places</li>
-                                        <li
-                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'Req Start Date Window') && pInfo.rules.validationMessage != ''">
-                                          Mandatory entry of 1 numeric value</li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-
-                            <td *ngSwitchCase="'Multiselect'">
-                              <div class="on-focus clearfix" [class.has-error]="multiSelectInput.invalid"
-                                [class.has-success]="multiSelectInput.valid">
-                                <p-multiSelect [name]='item.egineAttribue_+parentIndex+ ChildIndex'
-                                  [options]="pInfo.listMutiSelect" optionLabel="name"
-                                  [(ngModel)]="pInfo.listCurrentValue"
-                                  (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
-                                  [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
-                                  maxlength="{{pInfo['rules']['maxCharacterLen']}}"
-                                  [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
-                                  #multiSelectInput="ngModel" class="form-control" placement="top"
-                                  (mouseenter)="showError = true; " (mouseleave)="showError = false;">
-                                </p-multiSelect>
-                                <div class="tool-tip  slideIn"
-                                  *ngIf="multiSelectInput.invalid && (multiSelectInput.dirty || multiSelectInput.touched)">
-
-                                  <ul>
-
-                                    <li *ngIf="multiSelectInput.errors.required">{{pInfo.egineAttribue}} is required
-                                    </li>
-                                  </ul>
-                                </div>
-
-                                <div class="tool-tip  slideIn"
-                                  *ngIf="pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen && pInfo.currentValue.length == pInfo.rules.maxCharacterLen && (multiSelectInput.dirty || multiSelectInput.touched)">
-
-                                  <ul>
-                                    <li *ngIf="pInfo.currentValue.length == pInfo.rules.maxCharacterLen">
-                                      {{pInfo.egineAttribue}} exceeds max characters({{pInfo.rules.maxCharacterLen}})
-                                      allowed</li>
-                                  </ul>
-                                </div>
-                                <div class="tool-tip  slideIn"
-                                  *ngIf="pInfo.rules.isvalid == false && (multiSelectInput.dirty || multiSelectInput.touched)">
-                                  <ul>
-                                    <li
-                                      *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'Req Start Date Window' && pInfo.rules.validationMessage != ''">
-                                      {{pInfo.rules.validationMessage}}</li>
-                                    <li
-                                      *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
-                                      Mandatory entry of 1 value from the Initial Term range</li>
-                                    <li
-                                      *ngIf="pInfo.egineAttribue === 'Base Price' && pInfo.rules.validationMessage != ''">
-                                      Base Price must contain a number with 2 decimal places</li>
-                                    <li
-                                      *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'Req Start Date Window') && pInfo.rules.validationMessage != ''">
-                                      Mandatory entry of 1 numeric value</li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </td>
-                          </tr>
-                        </div>
-                        <tr class="section-tr-label">
-                          <th></th>
-                        </tr>
-                        <div *ngFor="let pInfo of ques.value['listOfferQuestions']">
-                          <tr [ngSwitch]="pInfo.componentType" *ngIf="pInfo.itemType !== 'Unique Item'">
-                            <td *ngSwitchCase="'Free Text'">
-                              <div class="form-group input--compressed">
-                                <div class="form-group__text" [class.has-error]="freeText.invalid"
-                                  [class.has-success]="freeText.valid">
-                                  <div class="on-focus clearfix">
-                                    <input [ngClass]="pInfo.currentValue !='' && (pInfo.rules.isvalid == false || (pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen)) && (freeText.dirty || freeText.touched) ? 'validaionStyles' : 'validaionStylesValid'"
-                                      [name]='item.egineAttribue_+parentIndex+ ChildIndex'
-                                      [(ngModel)]="pInfo.currentValue"
-                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
-                                      [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
-                                      maxlength="{{pInfo['rules']['maxCharacterLen']}}"
-                                      [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
-                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
-                                      #freeText="ngModel" class="form-control" placement="top"
-                                      (mouseenter)="showError = true; " (mouseleave)="showError = false;" ng-class=''>
-
-
-
-                                    <div class="tool-tip  slideIn"
-                                      *ngIf="freeText.invalid && (freeText.dirty || freeText.touched)">
-
-                                      <ul>
-
-                                        <li *ngIf="freeText.errors.required">{{pInfo.egineAttribue}} is required </li>
-
-                                      </ul>
-                                    </div>
-
-                                    <div class="tool-tip  slideIn"
-                                      *ngIf="pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen && pInfo.currentValue.length == pInfo.rules.maxCharacterLen && (freeText.dirty || freeText.touched)">
-
-                                      <ul>
-                                        <li *ngIf="pInfo.currentValue.length == pInfo.rules.maxCharacterLen">
-                                          {{pInfo.egineAttribue}} exceeds max
-                                          characters({{pInfo.rules.maxCharacterLen}}) allowed</li>
-                                      </ul>
-                                    </div>
-
-                                    <div class="tool-tip  slideIn"
-                                      *ngIf="pInfo.rules.isvalid == false && (freeText.dirty || freeText.touched)">
-                                      <ul>
-                                        <li
-                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'Req Start Date Window'
-                                          && pInfo.egineAttribue !== 'Default Auto Renewal Term' && pInfo.rules.validationMessage != '' && pInfo.egineAttribue !== 'True Up Term'
-                                          && pInfo.egineAttribue !== 'NON STD AUTO RENEWAL TERM' && pInfo.egineAttribue !== 'NON STD INITIAL TERM' &&
-                                          pInfo.egineAttribue !== 'Asset Quantity' && pInfo.egineAttribue !== 'Spare Price'">
-                                          {{pInfo.rules.validationMessage}}</li>
-                                        <li
-                                          *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
-                                          Mandatory entry of 1 value from the Initial Term range</li>
-                                        <li
-                                          *ngIf="pInfo.egineAttribue === 'Base Price' && pInfo.rules.validationMessage != ''">
-                                          Base Price must contain a number with 2 decimal places</li>
-                                        <li
-                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'Req Start Date Window') && pInfo.rules.validationMessage != ''">
-                                          Mandatory entry of 1 numeric value</li>
-                                        <li
-                                          *ngIf="pInfo.egineAttribue === 'Default Auto Renewal Term' && pInfo.rules.validationMessage != ''">
-                                          Mandatory entry of 1 value from the Std Auto Renewal Term Range</li>
-                                        <li
-                                          *ngIf="pInfo.egineAttribue === 'True Up Term' && pInfo.rules.validationMessage != ''">
-                                          Mandatory Must be comma seperated, numeric with no spaces</li>
-                                        <li
-                                          *ngIf="pInfo.egineAttribue === 'NON STD AUTO RENEWAL TERM' && pInfo.rules.validationMessage != ''">
-                                          Value should be a numeric range where 1 is min and 12 is max</li>
-                                        <li
-                                          *ngIf="pInfo.egineAttribue === 'NON STD INITIAL TERM' && pInfo.rules.validationMessage != ''">
-                                          Value should be a numeric range where 1 is min and 120 is max (example: 1-12)</li>
-                                          <li
-                                            *ngIf="pInfo.egineAttribue === 'Asset Quantity' && pInfo.rules.validationMessage != ''">
-                                            Must be a numeric value</li>
-                                            <li
-                                              *ngIf="pInfo.egineAttribue === 'Spare Price' && pInfo.rules.validationMessage != ''">
-                                              Mandatory entry of a numeric value</li>
-                                      </ul>
-                                    </div>
-
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-
-                            <td *ngSwitchCase="'Q&A FreeText'">
-                              <div class="form-group input--compressed">
-                                <div class="form-group__text" [class.has-error]="qafreeText.invalid"
-                                  [class.has-success]="qafreeText.valid">
-                                  <div class="on-focus clearfix">
-                                    <input [ngClass]="(pInfo.currentValue !='' && (pInfo.rules.isvalid == false && pInfo.rules.validationMessage != '') || (pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen)) && (qafreeText.dirty || qafreeText.touched) ? 'validaionStyles' : 'validaionStylesValid'"
-                                      [name]='item.egineAttribue_+parentIndex+ ChildIndex'
-                                      [(ngModel)]="pInfo.currentValue"
-                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
-                                      class="form-control"
-                                      [readonly]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
-                                      maxlength="{{pInfo['rules']['maxCharacterLen']}}"
-                                      [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
-                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
-                                      #qafreeText="ngModel" placement="top"
-                                      (mouseenter)="showError = true; " (mouseleave)="showError = false;">
-                                    <div class="tool-tip  slideIn"
-                                      *ngIf="qafreeText.invalid && (qafreeText.dirty || qafreeText.touched)">
-                                      <ul>
-                                        <li *ngIf="qafreeText.errors.required">{{pInfo.egineAttribue}} is required </li>
-                                      </ul>
-                                    </div>
-
-                                    <div class="tool-tip  slideIn"
-                                      *ngIf="pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen && pInfo.currentValue.length == pInfo.rules.maxCharacterLen && (qafreeText.dirty || qafreeText.touched)">
-
-                                      <ul>
-                                        <li *ngIf="pInfo.currentValue.length == pInfo.rules.maxCharacterLen">
-                                          {{pInfo.egineAttribue}} exceeds max
-                                          characters({{pInfo.rules.maxCharacterLen}}) allowed</li>
-                                      </ul>
-                                    </div>
-                                    <div class="tool-tip  slideIn"
-                                      *ngIf="pInfo.rules.isvalid == false && (qafreeText.dirty || qafreeText.touched)">
-                                      <ul>
-                                        <li
-                                          *ngIf="pInfo.egineAttribue !== 'Base Price' && pInfo.egineAttribue !== 'Default Initial Term' && pInfo.egineAttribue !== 'Grace Window For Renewal' && pInfo.egineAttribue !== 'Req Start Date Window' && pInfo.rules.validationMessage != ''">
-                                          {{pInfo.rules.validationMessage}}</li>
-                                        <li
-                                          *ngIf="pInfo.egineAttribue === 'Default Initial Term' && pInfo.rules.validationMessage != ''">
-                                          Mandatory entry of 1 value from the Initial Term range</li>
-                                        <li
-                                          *ngIf="pInfo.egineAttribue === 'Base Price' && pInfo.rules.validationMessage != ''">
-                                          Base Price must contain a number with 2 decimal places</li>
-                                        <li
-                                          *ngIf="(pInfo.egineAttribue === 'Grace Window For Renewal' || pInfo.egineAttribue === 'Req Start Date Window') && pInfo.rules.validationMessage != ''">
-                                          Mandatory entry of 1 numeric value</li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-
-                            <td *ngSwitchCase="'Radio Button'">
-                              <div class="form-group dropdown input--compressed">
-                                <div class="form-group__text select" [class.has-error]="radioButton.invalid"
-                                  [class.has-success]="radioButton.valid">
-                                  <div class="on-focus clearfix">
-                                    <select [name]='item.egineAttribue_+parentIndex+ ChildIndex' class="form-control"
-                                      [(ngModel)]="pInfo.currentValue"
-                                      (ngModelChange)="addAllDetailsValidationsonChange($event,pInfo, ques.value['listOfferQuestions'], ques.value['groupName'])"
-                                      [disabled]="ques.value['eGenieFlag'] || pInfo['rules']['isDisabled'] || ques.value['newItemEGenieStatus']"
-                                      maxlength="{{pInfo['rules']['maxCharacterLen']}}"
-                                      [required]="pInfo['rules']['isMandatoryOptional']==='Mandatory' ? true : false"
-                                      #radioButton="ngModel" class="form-control" placement="top"
-                                      (mouseenter)="showError = true; " (mouseleave)="showError = false;">
-                                      <option *ngFor="let opt of pInfo.values" [value]="opt">{{opt}}</option>
-                                    </select>
                                     <div class="tool-tip  slideIn"
                                       *ngIf="radioButton.invalid && (radioButton.dirty || radioButton.touched)">
 
@@ -870,7 +495,7 @@
                                 </div>
 
                                 <div class="tool-tip  slideIn"
-                                  *ngIf="pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen && (multiSelectInput.dirty || multiSelectInput.touched)">
+                                  *ngIf="pInfo.rules.maxCharacterLen != '' && pInfo.currentValue.length == pInfo.rules.maxCharacterLen && pInfo.currentValue.length == pInfo.rules.maxCharacterLen && (multiSelectInput.dirty || multiSelectInput.touched)">
 
                                   <ul>
                                     <li *ngIf="pInfo.currentValue.length == pInfo.rules.maxCharacterLen">
