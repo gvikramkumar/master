@@ -55,6 +55,8 @@ export class ChangestatusComponent implements OnInit {
   isBtnNeeded: boolean = false;
   mStatus: any;
   showConnectNPIWSbutton: boolean = false;
+  showButton: boolean = true;
+  show_Upload: boolean = true;
 
   basicmodule_hint = {
     "Pricing_Uplift_Setup": "BUPM has completed their Offer's Pricing Uplift activities in OWB Pricing Canvas",
@@ -98,7 +100,10 @@ export class ChangestatusComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    // if( window.localStorage.getItem('showSprint6')) {
+    //   this.showButton = Boolean(window.localStorage.getItem('showSprint6'));
+    //   this.show_Upload = Boolean(window.localStorage.getItem('showSprint6'));
+    // }
     this.changestatusService.getAllComments(this.moduleName, this.offerId).subscribe(data=>{
       this.comments = data;
     });

@@ -24,6 +24,7 @@
         <form name="form" #changeStatusForm="ngForm">
 
           <div class="row base-margin-top">
+            <div *ngIf="showButton">
               <div class="col-md-12" *ngIf="showConnectNPIWSbutton" >
                 <button class="btn btn--small btn--cool btn--primary" (click)="openNPIWS()">Submit OA Case In NPI Workspace
                   <span class="ico-punchout">
@@ -43,7 +44,7 @@
                   </span>
                 </button>
               </div>
-
+            </div>
 
             <div class="col-md-12 base-margin-top" *ngIf="!mStatus">
               <button class="btn btn--small btn--cool btn--primary" [disabled]="isReadOnly" (click)="markAsCompleteModal()">Mark as Complete</button>
@@ -91,17 +92,17 @@
                   <label for="input-hint-textarea">Comments: <i>Optional</i> <span
                     class="text-danger">&nbsp;&nbsp;({{1000-cmnt.description.length}} characters left)</span></label>
 
-                    <div>
+                  <div>
                         <textarea id="input-hint-textarea" class="textarea" rows="5" class="form-control"
-                        [(ngModel)]="cmnt.description" #description="ngModel" name="description" maxlength="1000">
+                                  [(ngModel)]="cmnt.description" #description="ngModel" name="description" maxlength="1000">
                         </textarea>
-                    </div>
-                    <div class="help-block text-muted text-right">
+                  </div>
+                  <div class="help-block text-muted text-right">
                         <span>
                           <button class="btn btn--small btn--primary btn--cool" (click)="saveComments()"
-                          [disabled]="cmnt.description.trim().length===0">Submit Comments</button>
+                                  [disabled]="cmnt.description.trim().length===0">Submit Comments</button>
                         </span>
-                    </div>
+                  </div>
 
                 </div>
               </div>
@@ -109,10 +110,14 @@
           </div>
           <div class="row">
             <div class="col-md-7">
+              <div *ngIf="show_Upload">
                 <div *ngIf="moduleName === 'Royalty Setup'">
                   <p class="no-margin-top text-dkgray-1 text-medium">Attach your royalty checklist</p>
                   <app-upload-doc [moduleName]="moduleName" [isReadonly]="isReadOnly"  ></app-upload-doc>
                 </div>
+              </div>
+
+
             </div>
             <div class="col-md-5 text-left">
               <!-- <div class="help-block text-muted">
