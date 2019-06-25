@@ -1,21 +1,25 @@
 <app-taskbar [actionCount]='actionCount' (newBtnClick)="createNewAction()"></app-taskbar>
+
 <div class="content">
   <div class="container">
 
     <div class="row">
       <div class="col-md-12">
-        <div class="card card--raised base-margin-top">
+        <div class="panel panel--compressed panel--bordered panel--raised-small base-margin-top">
           <div class="panel">
             <div class="row card-table-header">
+
               <div class="col-md-7">
                 <h2 class="page--subheading">Action Item Tracker</h2>
               </div>
+
               <div class="col-md-2 switchButton">
                 <div class="flex-center-vertical qtr-margin-top">
                   <p-inputSwitch (onChange)="handleSwitchChange($event)"></p-inputSwitch>
                   <label class="text-large half-margin-left">Show My Actions</label>
                 </div>
               </div>
+
               <div class="col-md-3">
                 <div class="form-group input--icon half-margin-bottom">
                   <div class="form-group__text">
@@ -29,7 +33,8 @@
                 </div>
               </div>
             </div>
-            <div class="responsive-table">
+       
+            <div class="responsive-table action-tracker">
               <p-table [columns]="actionColumns" [value]="myActionsList" [rows]="10" [paginator]="true"
                 #globalFilterForActions [globalFilterFields]="['offerId','offerName','actionTitle', 'actionDesc','createdBy','dueDate']"
                 sortMode="multiple">
@@ -86,6 +91,7 @@
                 </ng-template>
               </p-table>
             </div>
+
           </div>
         </div>
       </div>
@@ -101,6 +107,7 @@
         </div>
       </div>
     </p-overlayPanel>
+
     <p-dialog [showHeader]="false" [responsive]="true" [width]="700" [height]="500" [minY]="70"
       [(visible)]="displayActionPhase" [closable]="true">
       <div class="row">
@@ -216,7 +223,6 @@
     </p-dialog>
 
     <!--Offer Details Pop up-->
-
     <p-overlayPanel #popturboContent [showCloseIcon]="true">
       <div *ngIf="selectedOffer" class="base-padding" style="min-width:700px">
         <app-turbotaxview [caseId]="selectedOffer.caseId" [offerId]="selectedOffer.offerId"></app-turbotaxview>

@@ -21,13 +21,12 @@ export class StatusComponent implements OnInit {
 
     if (this.status === pirateShipRoutesNames.Y || this.status === pirateShipRoutesNames.COMPLETED) {
       this.finalStatus = 'complete';
-    } else if (this.status === pirateShipRoutesNames.N || this.status === pirateShipRoutesNames.IN_PROGRESS
-      || this.status === pirateShipRoutesNames.REOPEN) {
+    } else if (this.status === pirateShipRoutesNames.N || this.status === pirateShipRoutesNames.IN_PROGRESS) {
       this.finalStatus = 'inProgress';
     } else if (this.status === pirateShipRoutesNames.AVAILABLE) {
       this.finalStatus = 'available';
-    } else if (pirateShipRoutesNames.EMPTY
-      || this.status === pirateShipRoutesNames.NOT_APPLICABLE) {
+    } else if (this.status === pirateShipRoutesNames.NOT_APPLICABLE
+      || this.status === pirateShipRoutesNames.NOT_YET_AVAILABLE) {
       this.finalStatus = 'offerNotAvailable';
     } else {
       this.finalStatus = 'other';

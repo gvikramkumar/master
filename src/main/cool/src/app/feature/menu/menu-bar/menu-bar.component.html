@@ -10,6 +10,7 @@
             <span class="icon-list-menu"></span>
           </button>
 
+          <!-- Offer Phases Mega Menu -->
           <div id='flyoutmenu'>
 
             <ul class="panel">
@@ -25,39 +26,39 @@
 
               <li> <span class="menu-label">On Hold/Cancel</span>
 
-                <ul [ngClass]="{'readOnlyClas':dispValue}" *ngIf="!offerId">
-                  <li appReadonly [DirectiveValue]="'On Hold'"
-                    [ngClass]="{'readOnlyClas':dispValue,'disable-item': holdStatusValid == true}"
+                <ul  *ngIf="!offerId">
+                  <li
+                    [ngClass]="{'disable-item': holdStatusValid == true}"
                     (click)='showOppupFunc("hold")'>
-                    <span [ngClass]="{'disable-item':dispValue}" class="link">On
+                    <span  class="link">On
                       Hold</span>
                   </li>
-                  <li appReadonly [DirectiveValue]="'Cancel'" [ngClass]="{'disable-item': cancelStatusValid == true}"
+                  <li  [ngClass]="{'disable-item': cancelStatusValid == true}"
                     (click)='showOppupFunc("cancel")'>
                     <span class="link">Cancel</span>
                   </li>
                 </ul>
 
-                <ul *ngIf="offerId">
-                  <ul [ngClass]="{'readOnlyClas':dispValue}" *ngIf="offerId">
-                    <li appReadonly [DirectiveValue]="'On Hold'"
-                      [ngClass]="{'readOnlyClas':dispValue,'disable-item': holdStatusValid !== true}"
+                <div *ngIf="offerId">
+                  <ul *ngIf="offerId">
+                    <li [ngClass]="{'disable-item': holdStatusValid !== true}"
                       (click)='showOppupFunc("hold")'>
-                      <span [ngClass]="{'disable-item':dispValue}" class="link">On
+                      <span class="link">On
                         Hold</span>
                     </li>
-                    <li appReadonly [DirectiveValue]="'Cancel'"
-                      [ngClass]="{'readOnlyClas':dispValue,'disable-item': cancelStatusValid !== true}"
+                    <li
+                      [ngClass]="{'disable-item': cancelStatusValid !== true}"
                       (click)='showOppupFunc("cancel")'>
-                      <span [ngClass]="{'disable-item':dispValue}" class="link">Cancel</span>
+                      <span class="link">Cancel</span>
                     </li>
                   </ul>
-                </ul>
+                </div>
 
               </li>
+              </ul>
 
-            </ul>
           </div>
+          <!-- // End: Mega Menu -->
 
           <span *ngIf="!offerId; then newOffer else oldOffer"></span>
 
@@ -66,11 +67,14 @@
           </ng-template>
 
           <ng-template #oldOffer>
+            <!-- Title: Offer Name -->
             <span> {{offerName}}</span>
-            <button class="btn btn--icon btn--transparent">
-              <span class="icon-more" (click)="showOfferInfo($event,basicOfferInfo)">
+            <!-- Trigger for Offer Details Indigo Blue Overlay -->
+            <button class="btn btn--icon btn--transparent" (click)="showOfferInfo($event,basicOfferInfo)">
+              <span class="icon-more">
               </span>
             </button>
+            <!-- //End: Trigger -->
           </ng-template>
 
         </h1>
@@ -84,7 +88,7 @@
           Save
         </button>
 
-        <!-- 
+        <!--
         <label class="menu-btn switch switch—large" *ngIf="showMarkcompleteToggle">
             <input type="checkbox" [(ngModel)]="markCompleteStatus" (change)="toggleMarkCompletePopup()"
             [disabled]="(markCompleteStatus==false&&canMarkComplete==false)||(markCompleteStatus==true&&canUncheckComplete==false)"/>
@@ -107,10 +111,11 @@
   </div>
 </div>
 
-<p-overlayPanel #basicOfferInfo>
+<p-overlayPanel #basicOfferInfo [dismissable]="true" [showCloseIcon]="true">
   <app-offer-popup [offerBuilderdata]="offerBuilderdata"></app-offer-popup>
 </p-overlayPanel>
 
+<app-menu-bar-popup [show]="showPopup" [popupType]="popupType" (closePopup)="closePopup($event)"></app-menu-bar-popup>
 <!-- <app-menu-bar-popup [popupType]="popupType" (closePopup)="closePopup($event)"></app-menu-bar-popup> -->
 
 <app-mark-complete-popup [offerId]="offerId" [caseId]="caseId" [show]="showMarkcompletePopup"

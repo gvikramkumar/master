@@ -1,6 +1,7 @@
 <!-- Green Filled icon with White Check -->
 <ng-container *ngIf="status === 'aligned'; else partiallyAligned">
-  <svg fill="none" xmlns="http://www.w3.org/2000/svg">
+
+  <svg class="status-aligned" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path fill-rule="evenodd" clip-rule="evenodd"
       d="M9 18C13.9706 18 18 13.9706 18 9C18 4.02944 13.9706 0 9 0C4.02944 0 0 4.02944 0 9C0 13.9706 4.02944 18 9 18Z"
       fill="#6EBE4A" />
@@ -8,30 +9,49 @@
       d="M5.1913 9.71944C4.93623 9.43158 4.93623 8.9998 5.1913 8.74793C5.44638 8.49605 5.82899 8.46007 6.08406 8.74793C6.08406 8.74793 6.78597 9.51241 7.13692 9.89466C7.69998 10.5079 7.82609 10.7344 7.82609 10.7344L12.2987 7.21589C12.5537 6.92804 12.9363 6.92804 13.1914 7.21589C13.4465 7.50375 13.4465 7.93553 13.1914 8.18741L7.82609 12.7134L5.1913 9.71944Z"
       fill="white" />
   </svg>
+
+  <span class="base-margin-left overall-status">
+    {{status }}
+  </span>
+
 </ng-container>
 
 <!-- Yellow Filled icon with White Check -->
 <ng-template #partiallyAligned>
-  <ng-container *ngIf="status==='partiallyAligned';else other">
-  <svg fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd" clip-rule="evenodd"
-      d="M9 18C13.9706 18 18 13.9706 18 9C18 4.02944 13.9706 0 9 0C4.02944 0 0 4.02944 0 9C0 13.9706 4.02944 18 9 18Z"
-      fill="#6EBE4A" />
-    <path fill-rule="evenodd" clip-rule="evenodd"
-      d="M5.1913 9.71944C4.93623 9.43158 4.93623 8.9998 5.1913 8.74793C5.44638 8.49605 5.82899 8.46007 6.08406 8.74793C6.08406 8.74793 6.78597 9.51241 7.13692 9.89466C7.69998 10.5079 7.82609 10.7344 7.82609 10.7344L12.2987 7.21589C12.5537 6.92804 12.9363 6.92804 13.1914 7.21589C13.4465 7.50375 13.4465 7.93553 13.1914 8.18741L7.82609 12.7134L5.1913 9.71944Z"
-      fill="white" />
-  </svg>
+
+  <ng-container *ngIf="status==='partially aligned';else other">
+
+    <svg fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M9 18C13.9706 18 18 13.9706 18 9C18 4.02944 13.9706 0 9 0C4.02944 0 0 4.02944 0 9C0 13.9706 4.02944 18 9 18Z"
+        fill="#FBAB18" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M9.6322 13.7098C9.46958 13.8743 9.26631 13.9566 9.06304 13.9566C8.85976 13.9566 8.65649 13.8743 8.49387 13.7098C8.33125 13.5454 8.24994 13.3398 8.24994 13.1342C8.24994 12.9286 8.33125 12.723 8.49387 12.5585C8.77845 12.2706 9.34762 12.2706 9.6322 12.5585C9.79482 12.723 9.87613 12.9286 9.87613 13.1342C9.87613 13.3398 9.79482 13.5454 9.6322 13.7098V13.7098Z"
+        fill="white" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M9.87613 10.2569C9.87613 10.7092 9.51024 11.0793 9.06304 11.0793C8.61583 11.0793 8.24994 10.7092 8.24994 10.2569V5.32241C8.24994 4.87008 8.61583 4.5 9.06304 4.5C9.51024 4.5 9.87613 4.87008 9.87613 5.32241V10.2569V10.2569Z"
+        fill="white" />
+    </svg>
+
+    <span class="base-margin-left text-warning overall-status">
+      {{ status}}
+    </span>
+
   </ng-container>
+
 </ng-template>
 
-<!-- Red Filled icon with White Check -->
+<!-- Yellow Filled icon with White Check -->
 <ng-template #other>
+
   <svg fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd" clip-rule="evenodd"
-      d="M9 18C13.9706 18 18 13.9706 18 9C18 4.02944 13.9706 0 9 0C4.02944 0 0 4.02944 0 9C0 13.9706 4.02944 18 9 18Z"
-      fill="#6EBE4A" />
-    <path fill-rule="evenodd" clip-rule="evenodd"
-      d="M5.1913 9.71944C4.93623 9.43158 4.93623 8.9998 5.1913 8.74793C5.44638 8.49605 5.82899 8.46007 6.08406 8.74793C6.08406 8.74793 6.78597 9.51241 7.13692 9.89466C7.69998 10.5079 7.82609 10.7344 7.82609 10.7344L12.2987 7.21589C12.5537 6.92804 12.9363 6.92804 13.1914 7.21589C13.4465 7.50375 13.4465 7.93553 13.1914 8.18741L7.82609 12.7134L5.1913 9.71944Z"
-      fill="white" />
-  </svg>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M9 18C13.9706 18 18 13.9706 18 9C18 4.02944 13.9706 0 9 0C4.02944 0 0 4.02944 0 9C0 13.9706 4.02944 18 9 18Z" fill="#FBAB18"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M9.6322 13.7098C9.46958 13.8743 9.26631 13.9566 9.06304 13.9566C8.85976 13.9566 8.65649 13.8743 8.49387 13.7098C8.33125 13.5454 8.24994 13.3398 8.24994 13.1342C8.24994 12.9286 8.33125 12.723 8.49387 12.5585C8.77845 12.2706 9.34762 12.2706 9.6322 12.5585C9.79482 12.723 9.87613 12.9286 9.87613 13.1342C9.87613 13.3398 9.79482 13.5454 9.6322 13.7098V13.7098Z" fill="white"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M9.87613 10.2569C9.87613 10.7092 9.51024 11.0793 9.06304 11.0793C8.61583 11.0793 8.24994 10.7092 8.24994 10.2569V5.32241C8.24994 4.87008 8.61583 4.5 9.06304 4.5C9.51024 4.5 9.87613 4.87008 9.87613 5.32241V10.2569V10.2569Z" fill="white"/>
+    </svg>
+
+  <span class="base-margin-left text-warning overall-status">
+    {{ status }}
+  </span>
+
 </ng-template>

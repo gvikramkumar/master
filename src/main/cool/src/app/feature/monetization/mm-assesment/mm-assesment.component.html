@@ -1,17 +1,17 @@
 <app-menu-bar *ngIf="dimensionMode" [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId"
   [offerName]="offerBuilderdata['offerName']" [stakeData]="stakeholders" [canMarkComplete]="canMarkComplete"
-  (updateMessage)="updateMessage($event)" [showSave]="true" (getMarkCompleteStatus)="getMarkCompleteStatus($event)"
+  (updateMessage)="updateMessage($event)" [showSave]="!showSave" (getMarkCompleteStatus)="getMarkCompleteStatus($event)"
   (onProceedToNext)="proceedToOfferSolution($event)">
 </app-menu-bar>
 
 <app-menu-bar *ngIf="!dimensionMode" [caseId]="caseId" [currentMMModel]="derivedMM" [offerId]="currentOfferId"
   [offerName]="offerBuilderdata['offerName']" [stakeData]="stakeholders" (updateMessage)="updateMessage($event)"
-  [showSave]="false">
+  [showSave]="showSave">
 </app-menu-bar>
 
 <div class="content">
   <div class="container">
-    <div class="panel-wrapper mt-15">
+    <div class="panel-wrapper half-margin-top">
 
       <app-taskbar *ngIf="!dimensionMode" (onProceedToNext)="proceedToStakeholder($event)">
       </app-taskbar>
@@ -19,14 +19,14 @@
       <app-taskbar *ngIf="dimensionMode" (onProceedToNext)="proceedToOfferSolution($event)">
       </app-taskbar>
 
-      <div class="contentBox mt-10">
+      <div class="contentBox half-margin-top">
         <div class="row">
 
           <div class="leftContent col-sm-12 col-md-9">
 
-            <div class="panel-wrapper mt-20">
+            <div class="panel-wrapper">
 
-              <ul id="tabsv6" class="tabs tabs--bordered base-margin-top" style="z-index: 0">
+              <ul id="tabsv6" class="tabs tabs--bordered" style="z-index: 0">
                 <li class="tab" *ngFor="let groupName of groupNames; let i = index" [ngClass]="{ active: i == activeTabIndex,
               disabled: !canClickTab && i!=0 }" (click)="changeTab(i)">
                   <a tabindex="0" class="padding-5-20 margin-right-10">

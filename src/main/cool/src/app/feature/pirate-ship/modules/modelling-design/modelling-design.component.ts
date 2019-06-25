@@ -50,6 +50,7 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
   pirateShipModuleName: string;
   isPirateShipSubModule: boolean;
 
+  owbPunchOut: boolean;
   showDesignCanvasButton: boolean;
   disableDesignCanvasButton: boolean;
 
@@ -99,6 +100,7 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
 
         this.atoTask = _.find(this.atoList, ['itemName', this.selectedAto]);
         const currentAtoStatus = _.isEmpty(this.atoTask) ? '' : this.atoTask.itemStatus;
+        this.owbPunchOut = (!_.isEmpty(this.atoTask) && this.atoTask['owbPunchOut']) ? true : false;
         this.disableDesignCanvasButton = this.showDesignCanvasButton ? this.designCanvasButtonStatus(currentAtoStatus) : false;
 
       });
@@ -129,11 +131,16 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
 
   goToDesignCanvas() {
 
-    const userId = this.configurationService.startupData.userId;
-    let urlToOpen = this.environmentService.owbUrl + '/owb/manage/offer/owbOfferDefinition?';
-    urlToOpen += 'selectedAto=' + this.selectedAto + '&planId=' + this.planId + '&userId=' + userId + '&coolOfferId=' + this.offerId;;
+    this.modellingDesignSubscription = this.modellingDesignService.updateModelingDesignStatus(this.offerId, this.selectedAto)
+      .subscribe(() => {
 
-    window.open(urlToOpen, '_blank');
+        const userId = this.configurationService.startupData.userId;
+        let urlToOpen = this.environmentService.owbUrl + '/owb/manage/offer/owbOfferDefinition?';
+        urlToOpen += 'selectedAto=' + this.selectedAto + '&planId=' + this.planId + '&userId=' + userId + '&coolOfferId=' + this.offerId;
+
+        window.open(urlToOpen, '_blank');
+
+      });
 
   }
 
@@ -155,6 +162,7 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
 
       const currentAtoStatus = _.isEmpty(this.atoTask) ? '' : this.atoTask.itemStatus;
       this.disableDesignCanvasButton = this.designCanvasButtonStatus(currentAtoStatus);
+      this.owbPunchOut = (!_.isEmpty(this.atoTask) && this.atoTask['owbPunchOut']) ? true : false;
 
     }
   }
@@ -165,7 +173,7 @@ export class ModellingDesignComponent implements OnInit, OnDestroy {
     let userRoleCheck = false;
 
     // Check If ATO has Valid Status
-    const statusList = ['Completed', 'In Progress', 'Reopen', 'Not Started'];
+    const statusList = ['Completed', 'In Progress', 'Available', 'Not Required'];
     if (statusList.some(status => currentStatus.includes(status))) {
       statusCheck = true;
     } else {

@@ -4,13 +4,13 @@
     <div class="container">
       <div class="row">
 
-        <div class="header-bar__main col-md-6">
+        <div class="header-bar__main col-md-9">
           <div class="header-heading">
-            <h1><span class="action--value">Welcome, {{userName}}!</span> </h1>
+            <h1>Welcome, {{userName}}! </h1>
           </div>
         </div>
 
-        <div appHiddenelem [DirectiveValue]="'Create New Offer'" class="col-md-6 text-right">
+        <div appHiddenelem [DirectiveValue]="'Create New Offer'" class="col-md-3 text-right">
           <button (click)="newBtnClick.next()" class="menu-btn">
             <span class="icon-add"></span>
             Create Offer</button>
@@ -23,7 +23,7 @@
   <div *ngSwitchCase="'action'" class="panel panel--ltgray panel--compressed totals">
     <div class="container">
       <div class="row">
-        <div class="header-bar__main col-md-6">
+        <div class="header-bar__main col-md-9">
           <div class="header-heading">
             <h1><span class="action--value">{{actionCount.pendingActionCount}}</span> <span
                 class="action--value-label">Pending
@@ -34,14 +34,31 @@
                 Immediate Action</span></h1>
           </div>
         </div>
-        <div class="col-md-6 text-right">
-          <button (click)="newBtnClick.next()" class="btn btn--white btn--cool">
+        <div class="col-md-3 text-right">
+          <button (click)="newBtnClick.next()" class="menu-btn">
             <span class="icon-add"></span>
             Create New Action</button>
         </div>
       </div>
     </div>
   </div>
+
+  <div *ngSwitchCase="'accessManagement'" class="panel panel--ltgray panel--compressed totals">
+    <div class="container">
+      <div class="row">
+
+        <div appHiddenelem [DirectiveValue]="'Access Management'" class="col-md-12 text-right">
+          <button class="menu-btn" (click)="newBtnClick.next()">
+            <span class="icon-add"></span>
+            Register New Users
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
 
   <div *ngSwitchCase="'pirate-ship-module'" class="panel panel--compressed task--bar">
     <div class="row">

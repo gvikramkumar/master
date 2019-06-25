@@ -16,6 +16,12 @@ export class EnvironmentService {
     idpClientId: string;
     idpClientSecret: string;
 
+    // EMAIL NOTIFICATION URL
+    REST_API_POST_USER_DETAILS_FOR_EMAIL_URL: string;
+
+    // CEPM URL
+    REST_API_GET_CEPMROLES_URL: string;
+
     //  AUTHENTICATION URLs
     REST_API_AUTH_IDP_TOKEN_URL: string;
     REST_API_GENERATE_AUTH_TOKEN_URL: string;
@@ -23,6 +29,7 @@ export class EnvironmentService {
     // USER INFO URLs
     REST_API_LDAP_USER_DETAILS_URL: string;
     REST_API_URL_GET_CURRENT_USER_URL: string;
+
 
     // LOV URLs
     REST_API_GET_FUNCTIONAL_ROLE_URL: string;
@@ -127,16 +134,22 @@ export class EnvironmentService {
     REST_API_DESIGN_REVIEW_GET_URL: string;
 
     // OFFER SETUP
-    REST_API_RETRIEVE_MODELING_ACTIVITIES_URL: string;
+    REST_API_LOCK_API_FOR_OWB: string;
+    REST_API_OFFER_SETUP_REFRESH: string;
+    REST_API_OFFER_PS_MODULE_GET_URL: string;
     REST_API_OFFER_SETUP_MODULE_GET_URL: string;
     REST_API_OFFER_MODULE_STATUS_GET_URL: string;
-    REST_API_LOCK_API_FOR_OWB: string;
+    REST_API_OFFER_SETUP_DASHBOARD_NOTIFICATION_URL: string;
 
     // ITEM CREATION URLs
     REST_API_GET_ITEM_DETAILS: string;
     REST_API_GET_OFFER_DROPDOWN: string;
     REST_API_REMOVE_ITEM_DETAILS: string;
     REST_API_UPDATE_EGENIE_FLAG: string;
+
+    // MODELING & DESIGN URLs
+    REST_API_RETRIEVE_MODELING_ACTIVITIES_URL: string;
+    REST_API_UPDATE_MODELING_DESIGN_STATUS_URL: string;
 
     // SERVICE ANNUITY URLs
     REST_API_RETRIEVE_SERVICE_ATO_LIST_URL: string;
@@ -192,14 +205,12 @@ export class EnvironmentService {
     REST_API_GET_MAPPING_STATUS: string;
     REST_CHECK_MAESTRO_PF_STATUS: string;
 
-    // PIRATE SHIP NOTIFICATION URLs
-    REST_API_PIRATE_SHIP_DASHBOARD_NOTIFICATION_URL;
-
-    // Royalty_setup Doc upload
-
+    // Royalty Setup Doc upload
+    REST_API_ServiceAPUpdate: string;
+    REST_API_BasicModuleDocType: string;
+    REST_API_BasicModuleFileName: string;
     REST_API_BasicModule_upload: string;
     REST_API_BasicModule_DownloadDoc: string;
-    REST_API_BasicModuleFileName: string;
 
     // -------------------------------------------------------------------------------------------------
 
@@ -288,6 +299,14 @@ export class EnvironmentService {
                 this.ssoUrl = 'https://sso.cloudapps.cisco.com/sso/index.html#/dashboard';
                 this.tncOwbUrl = 'https://offer-stage.cloudapps.cisco.com/owb/#/subscription';
         }
+
+        // -----------------------EMAIL NOTIFICATION URL --------------------
+
+        this.REST_API_POST_USER_DETAILS_FOR_EMAIL_URL = `${this.baseApiUrl}/accessManagement/sendAccessManagementEmail`
+
+        // -------------------------CEPM URL------------------------------
+
+        this.REST_API_GET_CEPMROLES_URL = `${this.baseApiUrl}/access/fetchCEPMRoles`
 
         // ----------------------- AUTHENTICATION URLs -----------------------------------------------
 
@@ -428,8 +447,10 @@ export class EnvironmentService {
         // ------------------------------------ OFFER SETUP -------------------------------------------------
 
         this.REST_API_LOCK_API_FOR_OWB = this.baseApiUrl + '/owb/lockAPI/';
+        this.REST_API_OFFER_PS_MODULE_GET_URL = this.baseApiUrl + '/offersetup/getPSModules/';
         this.REST_API_OFFER_SETUP_MODULE_GET_URL = this.baseApiUrl + '/offersetup/getAllModuleStatus/';
-        this.REST_API_RETRIEVE_MODELING_ACTIVITIES_URL = this.baseApiUrl + '/modeling/getModelingActivities';
+        this.REST_API_OFFER_SETUP_DASHBOARD_NOTIFICATION_URL = this.baseApiUrl + '/dashboard/notification/generate';
+        this.REST_API_OFFER_SETUP_REFRESH = 'https://cool-op-srv-dev.cisco.com/coolsrv/offerSetup/getOfferSetupModuleStatusByOfferId';
 
         // --------------------------------------- ITEM CREATION --------------------------------------------
 
@@ -438,10 +459,17 @@ export class EnvironmentService {
         this.REST_API_REMOVE_ITEM_DETAILS = this.baseApiUrl + '/itemcreation/removeATOs';
         this.REST_API_UPDATE_EGENIE_FLAG = this.baseApiUrl + '/itemcreation/getEGenieStatus';
 
+        // ------------------------------------ MODELING & DESIGN -------------------------------------------------
+
+        this.REST_API_RETRIEVE_MODELING_ACTIVITIES_URL = this.baseApiUrl + '/modeling/getModelingActivities';
+        this.REST_API_UPDATE_MODELING_DESIGN_STATUS_URL = this.baseApiUrl + '/modeling/updateModelDesignStatus';
+
         // --------------------------------------- SERVICE ANNUITY  CREATION --------------------------------------------
 
         this.REST_API_RETRIEVE_SERVICE_ATO_LIST_URL = this.baseApiUrl + '/itemcreation/getATOs';
         this.REST_API_RETRIEVE_SERVICE_ANNUITY_PRICING_URL = this.baseApiUrl + '/serviceAnnuityPricing/getPricingOfferLevel';
+        this.REST_API_ServiceAPUpdate = this.baseApiUrl + '/serviceAnnuityPricing/getPricingAtoSkusLevel';
+
 
         // --------------------------------------- TERM AND CONTENT MAPPING --------------------------------------------
 
@@ -491,6 +519,7 @@ export class EnvironmentService {
 
         this.REST_API_GET_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module/getPirateshipModuleStatus';
         this.REST_API_UPDATE_MODULE_STATUS_URL = this.baseApiUrl + '/pirateship/module/addPirateshipModuleStatus';
+
         // ------------------------------------MARK COMPLETE STATUS URLs-------------------------------------------------------------------
         this.REST_API_GET_MARK_COMPLETE_STATUS_URL = this.baseApiUrl + '/offersetup/getTogglesStatus/';
         this.REST_API_UPDATE_MARK_COMPLETE_STATUS_URL = this.baseApiUrl + '/offersetup/UpdateOrAddTogglesStatus';
@@ -505,15 +534,14 @@ export class EnvironmentService {
         this.REST_API_GET_MAPPING_STATUS = this.baseApiUrl + '/serviceMapping/getStatus';
         this.REST_CHECK_MAESTRO_PF_STATUS = this.baseApiUrl + '/serviceMapping/pf/status';
 
-        // --------------------------------------- PIRATE SHIP DASHBOARD URLs --------------------------------------------
-
-        this.REST_API_PIRATE_SHIP_DASHBOARD_NOTIFICATION_URL = this.baseApiUrl + '/dashboard/notification/generate';
-
-
-        // ------------------------------------------------ROYALTY SETUP DOCUMENT UPLOAD URL--------------------------------
+        // -------------------------------------------------Basic Module DOCUMENT UPLOAD URL--------------------------------
         this.REST_API_BasicModule_upload = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/UpLoadDoc';
         this.REST_API_BasicModule_DownloadDoc = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/DownloadDoc';
         this.REST_API_BasicModuleFileName = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/getFileName';
+        this.REST_API_BasicModuleDocType = this.baseApiUrl + '/pirateship/BasicModule_UpLoadDoc/getUploadDetail';
+
+
+
 
     }
 }
