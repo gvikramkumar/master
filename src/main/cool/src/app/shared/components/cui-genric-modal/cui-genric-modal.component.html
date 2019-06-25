@@ -1,0 +1,18 @@
+<div class="modal" [class.hide]="modalComponentValue.isHidden" [ngClass]="[modalComponentValue.modelSize]">
+  <div class="modal__dialog">
+    <div class="modal__content">
+      <a class="modal__close" (click)="closeModal()"><span class="icon-close"></span></a>
+      <div class="modal__header">
+        <h1 class="modal__title">{{modalComponentValue.title}}
+        </h1>
+      </div>
+      <div class="modal__body">
+        <p class="subtitle">{{modalComponentValue.message}}</p>
+      </div>
+      <div class="modal__footer">
+        <button class="btn" (click)="closeModal()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- [class.hide]="showModal" -->
