@@ -64,7 +64,7 @@ export class OfferSetupComponent implements OnInit, OnDestroy {
   errorMessage$: Observable<string>;
   pirateShipSubscription: Subscription;
   selectedPirateShipInfo$: Observable<PirateShip>;
-
+  $showPirateshipLoader: Observable<boolean>;
   constructor(
     private router: Router,
     private httpClient: HttpClient,
@@ -98,6 +98,9 @@ export class OfferSetupComponent implements OnInit, OnDestroy {
     this.showGroupData = false;
     this.functionalRole = this.userService.getFunctionalRole();
     this.selectedAto = _.isEmpty(this.selectedAto) ? 'Overall Offer' : this.selectedAto;
+    // this.httpClient.get(this._env.REST_API_OFFER_SETUP_MODULE_UPDATE_URL + this.offerId).subscribe((res) => {
+    //
+    // });
 
     this.store.dispatch(new pirateShipActions.LoadPirateShip(
       {
@@ -107,7 +110,9 @@ export class OfferSetupComponent implements OnInit, OnDestroy {
       }
     ));
 
+    this.$showPirateshipLoader = this.store.pipe(select(fromPirateShip.getLoaderState));
     this.errorMessage$ = this.store.pipe(select(fromPirateShip.getError));
+
 
     this.offerSetupService.lockAPIForOWB(this.offerId).subscribe(() => {
     });
@@ -192,36 +197,36 @@ export class OfferSetupComponent implements OnInit, OnDestroy {
     this.pirateShipSubscription = this.store.pipe(select(fromPirateShip.getSelectedPirateShipInfo))
       .subscribe((pirateShipResponse: PirateShip) => {
 
-        this.groupData = {};
-        this.showGroupData = false;
-        this.pirateShip = pirateShipResponse;
+          this.groupData = {};
+          this.showGroupData = false;
+          this.pirateShip = pirateShipResponse;
 
-        if (!_.isEmpty(this.pirateShip)) {
+          if (!_.isEmpty(this.pirateShip)) {
 
-          this.pirateShip['listSetupDetails'].forEach(group => {
+            this.pirateShip['listSetupDetails'].forEach(group => {
 
-            const groupName = group['groupName'];
-            if (this.groupData[groupName] == null) {
-              this.groupData[groupName] = { 'left': [], 'right': [] };
-            }
-            if (group['colNum'] === 1) {
-              this.groupData[groupName]['left'].push(group);
-            } else {
-              this.groupData[groupName]['right'].push(group);
-            }
+              const groupName = group['groupName'];
+              if (this.groupData[groupName] == null) {
+                this.groupData[groupName] = { 'left': [], 'right': [] };
+              }
+              if (group['colNum'] === 1) {
+                this.groupData[groupName]['left'].push(group);
+              } else {
+                this.groupData[groupName]['right'].push(group);
+              }
 
-          });
+            });
 
-          this.sortGroupData();
-          this.showGroupData = true;
+            this.sortGroupData();
+            this.showGroupData = true;
 
-          this.atoNames = this.pirateShip['listATOs'];
-          this.atoNames.push('Overall Offer');
-          this.atoNames = _.uniqBy(this.atoNames);
+            this.atoNames = this.pirateShip['listATOs'];
+            this.atoNames.push('Overall Offer');
+            this.atoNames = _.uniqBy(this.atoNames);
 
-        }
+          }
 
-      }, (err => console.log(err))
+        }, (err => console.log(err))
       );
   }
 
@@ -285,103 +290,103 @@ export class OfferSetupComponent implements OnInit, OnDestroy {
     switch (element.moduleName) {
       case 'Item Creation': {
         this.router.navigate([appRoutesNames.PIRATE_SHIP,
-        this.offerId, this.caseId,
-        pirateShipRoutesNames.ITEM_CREATION,
-        this.selectedAto]);
+          this.offerId, this.caseId,
+          pirateShipRoutesNames.ITEM_CREATION,
+          this.selectedAto]);
         break;
       }
       case 'Modeling & Design': {
         this.router.navigate([appRoutesNames.PIRATE_SHIP,
-        this.offerId,
-        this.caseId,
-        pirateShipRoutesNames.MODELLING_DESIGN,
-        this.selectedAto]);
+          this.offerId,
+          this.caseId,
+          pirateShipRoutesNames.MODELLING_DESIGN,
+          this.selectedAto]);
         break;
       }
       case 'Service Annuity  % Pricing': {
         this.router.navigate([appRoutesNames.PIRATE_SHIP,
-        this.offerId, this.caseId,
-        pirateShipRoutesNames.SERVICE_ANNUITY_PRICING,
-        this.selectedAto]);
+          this.offerId, this.caseId,
+          pirateShipRoutesNames.SERVICE_ANNUITY_PRICING,
+          this.selectedAto]);
         break;
       }
       case 'CSDL': {
         this.router.navigate([appRoutesNames.PIRATE_SHIP,
-        this.offerId,
-        this.caseId,
-        pirateShipRoutesNames.CSDL,
-        this.selectedAto]);
+          this.offerId,
+          this.caseId,
+          pirateShipRoutesNames.CSDL,
+          this.selectedAto]);
         break;
       }
       case 'Term & Content Mapping': {
         this.router.navigate([appRoutesNames.PIRATE_SHIP,
-        this.offerId, this.caseId,
-        pirateShipRoutesNames.TC_MAPPING,
-        this.selectedAto]);
+          this.offerId, this.caseId,
+          pirateShipRoutesNames.TC_MAPPING,
+          this.selectedAto]);
         break;
       }
       case 'NPI Licensing': {
         this.router.navigate([appRoutesNames.PIRATE_SHIP,
-        this.offerId,
-        this.caseId,
-        pirateShipRoutesNames.CHANGE_STATUS,
-        this.selectedAto, element.moduleName]);
+          this.offerId,
+          this.caseId,
+          pirateShipRoutesNames.CHANGE_STATUS,
+          this.selectedAto, element.moduleName]);
         break;
       }
       case 'Royalty Setup': {
         this.router.navigate([appRoutesNames.PIRATE_SHIP,
-        this.offerId,
-        this.caseId,
-        pirateShipRoutesNames.CHANGE_STATUS,
-        this.selectedAto, element.moduleName]);
+          this.offerId,
+          this.caseId,
+          pirateShipRoutesNames.CHANGE_STATUS,
+          this.selectedAto, element.moduleName]);
         break;
       }
       case 'Offer Attribution': {
         this.router.navigate([appRoutesNames.PIRATE_SHIP,
-        this.offerId,
-        this.caseId,
-        pirateShipRoutesNames.CHANGE_STATUS,
-        this.selectedAto, element.moduleName]);
+          this.offerId,
+          this.caseId,
+          pirateShipRoutesNames.CHANGE_STATUS,
+          this.selectedAto, element.moduleName]);
         break;
       }
       case 'Export Compliance': {
         this.router.navigate([appRoutesNames.PIRATE_SHIP,
-        this.offerId,
-        this.caseId,
-        pirateShipRoutesNames.CHANGE_STATUS,
-        this.selectedAto, element.moduleName]);
+          this.offerId,
+          this.caseId,
+          pirateShipRoutesNames.CHANGE_STATUS,
+          this.selectedAto, element.moduleName]);
         break;
       }
       case 'Test Orderability': {
         this.router.navigate([appRoutesNames.PIRATE_SHIP,
-        this.offerId,
-        this.caseId,
-        pirateShipRoutesNames.CHANGE_STATUS,
-        this.selectedAto, element.moduleName]);
+          this.offerId,
+          this.caseId,
+          pirateShipRoutesNames.CHANGE_STATUS,
+          this.selectedAto, element.moduleName]);
         break;
       }
       case 'Pricing Uplift Setup': {
         this.router.navigate([appRoutesNames.PIRATE_SHIP,
-        this.offerId,
-        this.caseId,
-        pirateShipRoutesNames.CHANGE_STATUS,
-        this.selectedAto, element.moduleName]);
+          this.offerId,
+          this.caseId,
+          pirateShipRoutesNames.CHANGE_STATUS,
+          this.selectedAto, element.moduleName]);
         break;
       }
       case 'Orderability': {
         this.router.navigate([appRoutesNames.PIRATE_SHIP,
-        this.offerId,
-        this.caseId,
-        pirateShipRoutesNames.SELF_SERVICE_ORDERABILITY,
-        this.selectedAto]);
+          this.offerId,
+          this.caseId,
+          pirateShipRoutesNames.SELF_SERVICE_ORDERABILITY,
+          this.selectedAto]);
         break;
       }
       case 'Service Mapping': {
         this.router.navigate([appRoutesNames.PIRATE_SHIP,
-        this.offerId,
-        this.caseId,
-        pirateShipRoutesNames.SERVICE_MAPPING,
-        this.selectedAto]);
+          this.offerId,
+          this.caseId,
+          pirateShipRoutesNames.SERVICE_MAPPING,
+          this.selectedAto]);
         break;
       }
     }

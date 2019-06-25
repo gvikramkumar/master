@@ -8,8 +8,6 @@
       </div>
     </div>
   </div>
-
-
   <div class="row base-top-margin">
     <div class="col">
       <div class="card card--raised">
@@ -79,8 +77,8 @@
                           </p-autoComplete>
 
 
-                          <p-dialog [(visible)]="showMajorItemFoundDialog"
-                            onHide="showMajorItemFoundDialogFunction()" [style]="{width: '300px', height: '200px'}">
+                          <p-dialog [(visible)]="showMajorItemFoundDialog" onHide="showMajorItemFoundDialogFunction()"
+                            [style]="{width: '300px', height: '200px'}">
                             <p-header>
                               Please note
                             </p-header>
@@ -125,7 +123,8 @@
                 </div>
                 <div class="row">
                   <div class="col-md-12">
-                    <div appReadonly [DirectiveValue]="'Offer Construct'"  pDroppable="dragItem" dropEffect="move" (onDrop)="dropItem()" class="canvas">
+                    <div appReadonly [DirectiveValue]="'Offer Construct'" pDroppable="dragItem" dropEffect="move"
+                      (onDrop)="dropItem()" class="canvas">
                       <p-treeTable [value]="offerConstructItems" [columns]="cols" dataKey='uniqueKey'
                         tableStyleClass="table table--highlight" selectionMode="checkbox" [(selection)]="selected"
                         [hidden]="initalRowAdded" [scrollHeight]="500">
@@ -197,7 +196,8 @@
                             <!-- to copy -->
                             <td *ngIf="rowData['productName']">
                               <span class="list-price">{{rowData['listPrice']}}</span>
-                              <div appHiddenelem appReadonly [DirectiveValue]="'Offer Construct'"  *ngIf="rowData['isMajorLineItem']">
+                              <div appHiddenelem appReadonly [DirectiveValue]="'Offer Construct'"
+                                *ngIf="rowData['isMajorLineItem']">
                                 <a *ngIf="!readOnly" (click)="createGroup(rowNode)"><span
                                     class="half-margin-right icon-folder icon-small"></span> Create a
                                   Group</a>

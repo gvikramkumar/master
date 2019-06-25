@@ -92,17 +92,17 @@
                   <label for="input-hint-textarea">Comments: <i>Optional</i> <span
                     class="text-danger">&nbsp;&nbsp;({{1000-cmnt.description.length}} characters left)</span></label>
 
-                    <div>
+                  <div>
                         <textarea id="input-hint-textarea" class="textarea" rows="5" class="form-control"
-                        [(ngModel)]="cmnt.description" #description="ngModel" name="description" maxlength="1000">
+                                  [(ngModel)]="cmnt.description" #description="ngModel" name="description" maxlength="1000">
                         </textarea>
-                    </div>
-                    <div class="help-block text-muted text-right">
+                  </div>
+                  <div class="help-block text-muted text-right">
                         <span>
                           <button class="btn btn--small btn--primary btn--cool" (click)="saveComments()"
-                          [disabled]="cmnt.description.trim().length===0">Submit Comments</button>
+                                  [disabled]="cmnt.description.trim().length===0">Submit Comments</button>
                         </span>
-                    </div>
+                  </div>
 
                 </div>
               </div>
