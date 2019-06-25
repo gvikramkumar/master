@@ -98,6 +98,9 @@ export class OfferSetupComponent implements OnInit, OnDestroy {
     this.showGroupData = false;
     this.functionalRole = this.userService.getFunctionalRole();
     this.selectedAto = _.isEmpty(this.selectedAto) ? 'Overall Offer' : this.selectedAto;
+    // this.httpClient.get(this._env.REST_API_OFFER_SETUP_MODULE_UPDATE_URL + this.offerId).subscribe((res) => {
+    //
+    // });
 
     this.store.dispatch(new pirateShipActions.LoadPirateShip(
       {
@@ -106,6 +109,7 @@ export class OfferSetupComponent implements OnInit, OnDestroy {
         functionalRole: this.functionalRole
       }
     ));
+
     this.$showPirateshipLoader = this.store.pipe(select(fromPirateShip.getLoaderState));
     this.errorMessage$ = this.store.pipe(select(fromPirateShip.getError));
 

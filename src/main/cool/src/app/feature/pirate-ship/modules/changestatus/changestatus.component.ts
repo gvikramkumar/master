@@ -285,6 +285,7 @@ export class ChangestatusComponent implements OnInit {
   goBackToOfferSetup() {
     //console.log('goBackToOfferSetup...');
     this.router.navigate(['/offerSetup', this.offerId, this.caseId, this.selectedAto]);
+
   }
 
 

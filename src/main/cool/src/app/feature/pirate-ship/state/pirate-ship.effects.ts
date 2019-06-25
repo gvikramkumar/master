@@ -26,8 +26,8 @@ export class PirateShipEffects {
     mergeMap((pirateShip: any) =>
       this.offerSetupService.getPirateShipInfo(pirateShip.offerId, pirateShip.offerLevel, pirateShip.functionalRole)
         .pipe(
-          switchMap((pirateShipInfo: PirateShip) => [new pirateShipActions.LoadPirateShipSuccess(pirateShipInfo),
-
+          switchMap((pirateShipInfo: PirateShip) => [
+            new pirateShipActions.LoadPirateShipSuccess(pirateShipInfo),
           new pirateShipActions.ShowPirateshipLoader(false)
           ]),
 
