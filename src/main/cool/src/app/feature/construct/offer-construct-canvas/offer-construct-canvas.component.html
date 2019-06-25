@@ -160,7 +160,8 @@
                                     class='text-input-box' type='text'
                                     [disabled]="rowData['newItemEGenieStatus'] || (editData ? true : null)"
                                     value="{{rowData['title']}}" [autofocus]='autoFocus' *ngIf="!rowData['eginieItem']">
-                                  <a *ngIf="rowData['eginieItem']">{{rowData['title']}}</a>
+                                  <a *ngIf="rowData['eginieItem']"
+                                    (click)="checkEngineFlag(rowNode)">{{rowData['title']}}</a>
                                   <span *ngIf="rowData['isMajorLineItem']"> ({{rowData['childCount']}})</span>
                                   <span [id]='rowData["uniqueKey"]'
                                     (click)='focusMethod(rowData["uniqueKey"]);showButton($event, rowData["uniqueKey"]);'

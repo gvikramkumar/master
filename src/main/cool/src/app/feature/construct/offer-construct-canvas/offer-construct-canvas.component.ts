@@ -1913,7 +1913,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       // Raviraj US290268
       if (!_.isEmpty(results)) {
         if (results.body['major/minor'] === 'Minor Line') {
-          if ((results.body['WorkFlow Status'] === 'APPROVED' || results.body['WorkFlow Status'] === 'PENDING APPROVAL BUC'
+          if ((results.body['WorkFlow Status'] === 'APPROVED' || results.body['WorkFlow Status'] === 'PENDING APPROVAL'
             || results.body['WorkFlow Status'].toUpperCase() === 'PENDING PRODUCT CLASS') &&
             ((results.body['WorkFlow Status Requested By'] === 'BUC') || (
               results.body['WorkFlow Status Requested By'] === 'PDT'))) {
@@ -2654,6 +2654,15 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
     } else {
       this.getCanMarkCompleteStatus.next(false);
+    }
+  }
+
+  // check checkEngineFlag
+  checkEngineFlag(rowInfo) {
+    if (rowInfo.node.data.eginieItem !== undefined) {
+      if (rowInfo.node.data.title !== undefined) {
+        this.offerconstructPIDService.showEgenie(rowInfo.node.data.title);
+      }
     }
   }
 

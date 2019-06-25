@@ -1,12 +1,12 @@
 <app-menu-bar [caseId]="caseId" [offerId]="offerId" [offerName]="offerName">
-  </app-menu-bar>
+</app-menu-bar>
 
-  <div class="content">
+<div class="content">
   <div class="container">
 
     <div class="panel panel--compressed task--bar">
       <app-taskbar [isPirateShipSubModule]="isPirateShipSubModule" [pirateShipModuleName]="pirateShipModuleName"
-      [selectedATO]="selectedAto">
+        [selectedATO]="selectedAto">
       </app-taskbar>
     </div>
     <div class="row">
@@ -27,8 +27,8 @@
           </div>
         </div>
         <div class="row col-md-12 base-margin-top">
-          <p-treeTable class="item-creation" [value]="productDetails" [columns]="productColumns" selectionMode="checkbox"
-            [(selection)]="selectedProductNodes" [resizableColumns]="true">
+          <p-treeTable class="item-creation" [value]="productDetails" [columns]="productColumns"
+            selectionMode="checkbox" [(selection)]="selectedProductNodes" [resizableColumns]="true">
             <ng-template pTemplate="header" let-columns>
               <tr>
                 <th *ngFor="let col of columns">
@@ -43,7 +43,8 @@
                 <td *ngFor="let col of columns; let i = index">
                   <p-treeTableCheckbox class="pull-left" [value]="rowNode" *ngIf="i == 0"></p-treeTableCheckbox>
                   <p-treeTableToggler class="pull-left" [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
-                  <span *ngIf="(col.field == 'newItemStatus' || col.field == 'moduleStatus') && rowData['existing'] == false">
+                  <span
+                    *ngIf="(col.field == 'newItemStatus' || col.field == 'moduleStatus') && rowData['existing'] == false">
                     <div class="text-center">
                       <span *ngIf="rowData[col.field] == 'Available'">
                         <span class="available">
@@ -60,6 +61,11 @@
                       </span>
                     </div>
                   </span>
+                  <!-- rowData['existing'] ? openTab(rowData[col.field] : '')" -->
+                  <span *ngIf="col.field === 'product'"
+                    (click)="rowData['existing'] ?  openEgineTab(rowData[col.field]) : ''">
+                    <div class="text-center">{{rowData[col.field]}}</div>
+                  </span>
                   <span *ngIf="col.field == 'newItemStatus' && rowData['existing'] == true">
                     <div class="text-center">--</div>
                   </span>
@@ -67,7 +73,7 @@
                     <div class="text-center">${{rowData[col.field]}}</div>
                   </span>
                   <span
-                    *ngIf="col.field !== 'newItemStatus' && col.field !== 'moduleStatus' && col.field !== 'basePrice'">
+                    *ngIf="col.field !== 'newItemStatus' && col.field !== 'moduleStatus' && col.field !== 'basePrice' && col.field !== 'product'">
                     <div class="text-center">{{rowData[col.field]}}</div>
                   </span>
                 </td>
@@ -93,5 +99,6 @@
 </div>
 
 <div *ngIf='display'>
-  <dynamic-form-multiple (clkDownloadZip)='downloadZip()' (valueChange)='replacetabularFormQuestion($event)' [isItemCreation]="true" [indexVal]="ind"></dynamic-form-multiple>
+  <dynamic-form-multiple (clkDownloadZip)='downloadZip()' (valueChange)='replacetabularFormQuestion($event)'
+    [isItemCreation]="true" [indexVal]="ind"></dynamic-form-multiple>
 </div>
