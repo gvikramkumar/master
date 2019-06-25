@@ -43,7 +43,7 @@ export default class SalesSplitUploadUploadController extends UploadController {
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_account_sub_account', 'bk_financial_account_code'),
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_financial_department', 'company_code'),
       this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_account_sub_account', 'bk_subaccount_code'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_territory_name')
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_territory_name_code')
     ])
       .then(results => {
         this.data.accountIds = results[0];
