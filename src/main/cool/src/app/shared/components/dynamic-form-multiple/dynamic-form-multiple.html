@@ -139,7 +139,7 @@
                       <tbody>
                         <tr>
                           <th>
-                            <div class="form-group form-group--inline">
+                            <div class="form-group form-group--inline" (click)="openEgineTab(ques)">
                               <label class="checkbox">
                                 <input type="checkbox" (change)="getSelctedProduct($event, ques.value)"
                                   class="product_check_box" *ngIf="!(ques.value['eGenieFlag'])" />
