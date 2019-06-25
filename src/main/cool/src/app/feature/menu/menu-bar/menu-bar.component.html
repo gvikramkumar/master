@@ -90,7 +90,8 @@
 
         
         <label class="menu-btn switch switch—large" *ngIf="showMarkcompleteToggle">
-            <input type="checkbox" [(ngModel)]="markCompleteStatus" (change)="toggleMarkCompletePopup()" />
+            <input type="checkbox" [(ngModel)]="markCompleteStatus" (change)="toggleMarkCompletePopup()" 
+            [disabled]="shouldDisable"/>
             <!-- [disabled]="(markCompleteStatus==false&&canMarkComplete==false)||(markCompleteStatus==true&&canUncheckComplete==false)"/> -->
             <span class="switch__input"></span>
             <span class="switch__label">Mark Complete</span>

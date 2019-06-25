@@ -176,8 +176,7 @@ export class MenuBarComponent implements OnInit {
             }
             console.log('Mark complete status in menu bar:: '+this.markCompleteStatus);
             this.getMarkCompleteStatus.next(this.markCompleteStatus);
-           // this.getCanUncheckCompleteStatus();
-
+            this.getCanUncheckCompleteStatus();
 
         })
 
@@ -296,19 +295,19 @@ export class MenuBarComponent implements OnInit {
         this.router.navigate(['/offerDetailView', this.offerId, this.caseId]);
     }
 
-    // getCanUncheckCompleteStatus() {
+    getCanUncheckCompleteStatus() {
 
-    //     this.menuBarService.getDesignReviewStatus(this.offerId).subscribe(data => {
-    //         this.designReviewRequestApprovalStatus = data['designReviewRequestApproval'];
-    //         if (this.designReviewRequestApprovalStatus === true) {
-    //             this.canUncheckComplete = false;
-    //         } else {
-    //             this.canUncheckComplete = true;
-    //         }
-    //         this.disableMarkCompleteToggle();
-    //     })
+        this.menuBarService.getDesignReviewStatus(this.offerId).subscribe(data => {
+            this.designReviewRequestApprovalStatus = data['designReviewRequestApproval'];
+            if (this.designReviewRequestApprovalStatus === true) {
+                this.canUncheckComplete = false;
+            } else {
+                this.canUncheckComplete = true;
+            }
+            this.disableMarkCompleteToggle();
+        })
 
-    // }
+    }
 
     toggleMarkCompletePopup() {
         this.showMarkcompletePopup = !this.showMarkcompletePopup;
@@ -355,15 +354,12 @@ export class MenuBarComponent implements OnInit {
             }
         }
     }
-    // disableMarkCompleteToggle() {
-    //     if (this.markCompleteStatus === false && this.canMarkComplete === false) {
-    //         this.shouldDisable = true;
-    //     }
-    //     if (this.markCompleteStatus === true && this.canUncheckComplete === false) {
-    //         this.shouldDisable = true;
-    //     }
+    disableMarkCompleteToggle() {
+        if (this.canMarkComplete === false || this.canUncheckComplete === false) {
+            this.shouldDisable = true;
+        }
 
-    // }
+     }
     showOfferInfo(event, overlaypanel: OverlayPanel) {
 
         this.offerDetailViewService.retrieveOfferDetails(this.offerId).subscribe(offerBuilderdata => {
