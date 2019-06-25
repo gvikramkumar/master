@@ -38,7 +38,6 @@ export class UploadDocComponent implements OnInit {
       params: new HttpParams().set('moduleName', this.moduleName)
     }).subscribe(
       (ModuleExtension: any) => {
-
         this.DocType = ModuleExtension.documentType.split('|');
         this.DocSize = ModuleExtension.size;
       }
