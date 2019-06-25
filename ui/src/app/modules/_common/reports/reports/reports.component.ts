@@ -46,7 +46,6 @@ interface Report {
   styleUrls: ['./reports.component.scss']
 })
 export class ReportsComponent extends RoutingComponentBase implements OnInit {
-  showSpinner = false;
   measureId: number;
   submeasureKey: number;
   submeasureKeys: number[] = [];
@@ -182,7 +181,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   }
 
   getInitialData() {
-    this.showSpinner = true;
+    this.store.showSpinner = true;
     let promise;
     let obsFiscalMonth = false;
     let obsFiscalYear = false;
@@ -232,7 +231,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     }
     shUtil.promiseChain(promise)
       .then(result => {
-        this.showSpinner = false;
+        this.store.showSpinner = false;
         if (obsFiscalMonth) {
           this.fiscalMonths = result.map(fm => Number(fm)).sort().reverse().slice(0, 24)
             .map(fiscalMonth => ({name: shUtil.getFiscalMonthLongNameFromNumber(fiscalMonth), fiscalMonth}));
@@ -260,7 +259,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
           }
         }
       })
-      .catch(() => this.showSpinner = false);
+      .catch(() => this.store.showSpinner = false);
   }
 
   measureChange() {

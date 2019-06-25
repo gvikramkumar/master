@@ -59,7 +59,7 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
   }
 
   ngOnInit() {
-    this.uiUtil.showSpinner();
+    this.store.mainCompDataLoad = true;
       Promise.all([
         this.measureService.getManyActive().toPromise(),
         this.submeasureService.getApprovalVersionedListByNameAndUserType().toPromise(),
@@ -78,8 +78,8 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
           }
           this.refresh();
         })
-        .then(() => this.uiUtil.hideSpinner())
-        .catch(() => this.uiUtil.hideSpinner());
+        .then(() => this.store.mainCompDataLoad = false)
+        .catch(() => this.store.mainCompDataLoad = false);
 
 
   }

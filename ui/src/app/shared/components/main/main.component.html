@@ -6,7 +6,10 @@
 </div>
 
   <div class="main-content base-padding" fxLayout="row" fxLayoutAlign="start stretch">
-    <cui-spinner *ngIf="store.mainCompDataLoad" style="margin:auto" color="default"></cui-spinner>
+    <cui-spinner *ngIf="store.mainCompDataLoad || store.showSpinner"
+                 style="margin:auto"
+                 color="default"
+                 [ngClass]="store.showSpinner? 'spinner': ''" ></cui-spinner>
     <div [style.display]="store.mainCompDataLoad?'none': 'block'" fxFlex="1 1 auto">
       <router-outlet></router-outlet>
     </div>

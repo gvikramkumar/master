@@ -25,6 +25,7 @@ export class AppStore extends StoreBase {
   env: string;
   location: Location;
   mainCompDataLoad = false;
+  showSpinner = false;
 
 
   isLocalEnv() {

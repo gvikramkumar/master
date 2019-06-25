@@ -58,7 +58,7 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
   }
 
   ngOnInit() {
-    this.uiUtil.showSpinner();
+    this.store.mainCompDataLoad = true;
     Promise.all([
       this.ruleService.getApprovalVersionedListByNameAndUserType().toPromise(),
       this.submeasureService.getManyLatestGroupByNameActive().toPromise()
@@ -68,8 +68,8 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
         this.submeasuresAll = results[1];
         this.refresh();
       })
-      .then(() => this.uiUtil.hideSpinner())
-      .catch(() => this.uiUtil.hideSpinner());
+      .then(() => this.store.mainCompDataLoad = false)
+      .catch(() => this.store.mainCompDataLoad = false);
   }
 
   refresh() {

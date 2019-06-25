@@ -226,7 +226,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   }
 
   ngOnInit() {
-    this.uiUtil.showSpinner();
+    this.store.mainCompDataLoad = true;
     this.effectiveMonthRequired = !this.viewMode;
     this.yearmos = shUtil.getFiscalMonthListFromDate(new Date(), 6);
     const promises: Promise<any>[] = [
@@ -312,8 +312,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
               this.verifyRulesActive();
             });
         })
-        .then(() => this.uiUtil.hideSpinner())
-        .catch(() => this.uiUtil.hideSpinner());
+        .then(() => this.store.mainCompDataLoad = false)
+        .catch(() => this.store.mainCompDataLoad = false);
 
 
   }
