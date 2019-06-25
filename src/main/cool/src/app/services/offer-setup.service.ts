@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { EnvironmentService } from '../../environments/environment.service';
 import { throwError, Observable } from 'rxjs';
 import { PirateShip } from '../feature/pirate-ship/model/pirate-ship';
-import { catchError, tap } from 'rxjs/operators';
+import {catchError, map, switchMap, tap} from 'rxjs/operators';
 
 
 @Injectable({
