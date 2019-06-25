@@ -16,6 +16,7 @@ import { TreeNode } from 'primeng/api';
 import * as _ from 'lodash';
 import { LoaderService } from '@app/core/services/loader.service';
 import { ItemCreationService } from '@app/services/item-creation.service';
+import { OfferconstructPIDService } from '@app/feature/construct/offer-construct-canvas/service/offer-construct-pid.service';
 
 @Component({
   selector: 'app-item-creation',
@@ -69,7 +70,8 @@ export class ItemCreationComponent implements OnInit {
     private loaderService: LoaderService,
     private offerDetailViewService: OfferDetailViewService,
     private offerConstructCanvasService: OfferconstructCanvasService,
-    private configurationService: ConfigurationService
+    private configurationService: ConfigurationService,
+    private offerconstructPIDService: OfferconstructPIDService
   ) {
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['offerId'];
@@ -141,12 +143,12 @@ export class ItemCreationComponent implements OnInit {
     });
 
     this.initDynamicFormDetails();
-   
+
   }
 
-  initDynamicFormDetails(){
-     //Update my flag if ATO uploaded into EGENIE
-     this.offerConstructService.updateNewEgenieFlag(this.currentOfferId).subscribe(response => {
+  initDynamicFormDetails() {
+    //Update my flag if ATO uploaded into EGENIE
+    this.offerConstructService.updateNewEgenieFlag(this.currentOfferId).subscribe(response => {
       // Prepare payload to fetch item categories. Obtain MM information.
       this.offerConstructCanvasService.getMMInfo(this.currentOfferId).subscribe((offerDetails) => {
 
@@ -389,7 +391,7 @@ export class ItemCreationComponent implements OnInit {
     this.loaderService.stopLoading();
   }
 
-  // getAndSetQUestionAccordingToPID this is for seach item pid and according to that 
+  // getAndSetQUestionAccordingToPID this is for seach item pid and according to that
   //we have to set question and answer for golbal vaiable
   getSetQuestionAccordingToPID(searchResult, productName, obj, isFromDB, isMajorOrMinor) {
 
@@ -616,13 +618,13 @@ export class ItemCreationComponent implements OnInit {
       this.loaderService.stopLoading();
     })
   }
-  addingUniqueKey(array){
-    let offerList  = 0;
-    return array.map(function(item, index) {
-      if(item.children.length>0){
-          item.children.map(function(i, ix) {
-            i.data['id'] = offerList++; return i;
-         })
+  addingUniqueKey(array) {
+    let offerList = 0;
+    return array.map(function (item, index) {
+      if (item.children.length > 0) {
+        item.children.map(function (i, ix) {
+          i.data['id'] = offerList++; return i;
+        })
       }
       item.data['id'] = offerList++; return item;
     });
@@ -703,9 +705,9 @@ export class ItemCreationComponent implements OnInit {
         title = Object.keys(element);
         this.changeItemDetails(false, element[title]);
         this.offerConstructItems.forEach(major => {
-          if(major['children'].length>0){
-              major['children'].forEach(e => {
-              if(e.data.uniqueKey===element[title].uniqueKey){
+          if (major['children'].length > 0) {
+            major['children'].forEach(e => {
+              if (e.data.uniqueKey === element[title].uniqueKey) {
                 e.data.title = e.data.label = element[title].title;
               }
             });
@@ -828,5 +830,12 @@ export class ItemCreationComponent implements OnInit {
         document.body.removeChild(a);
       }
     });
+  }
+
+  // open egine in new tab
+  openEgineTab(title) {
+    if (title !== undefined) {
+      this.offerconstructPIDService.showEgenie(title);
+    }
   }
 }
