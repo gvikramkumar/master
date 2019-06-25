@@ -24,6 +24,7 @@ export class UploadDocComponent implements OnInit {
   DocSize: number;
   @Input() isReadonly: boolean;
   ishide: boolean = true;
+  showloader: boolean;
 
   constructor(
     public _evnService: EnvironmentService,
@@ -32,14 +33,14 @@ export class UploadDocComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.showloader = true;
     this.httpClient.get(this._evnService.REST_API_BasicModuleDocType,{
       params: new HttpParams().set('moduleName', this.moduleName)
     }).subscribe(
       (ModuleExtension: any) => {
-        console.log(ModuleExtension);
+
         this.DocType = ModuleExtension.documentType.split('|');
         this.DocSize = ModuleExtension.size;
-
       }
     );
     this.info = "";
@@ -61,8 +62,21 @@ export class UploadDocComponent implements OnInit {
         this.userId =  res.userId;
         this.userName = res.userName;
         this.downloadUrl = this._evnService.REST_API_BasicModule_DownloadDoc+"?offerId="+this.offerId+"&fileName="+this.fileName+"&moduleName="+this.moduleName+"";
-      });
+        this.showloader = false;
+      }
+        , (res: any) => {
+          this.showloader = false;
+        },
+        () => {
+          this.showloader = false;
+        }
+        );
     }
+    setTimeout(()=>{
+      this.showloader = false;
+    },5000);
+
+
 
   }
 
@@ -77,6 +91,7 @@ export class UploadDocComponent implements OnInit {
 
         if (this.DocType.indexOf(  this.fileToUpload.name.split('.')[1].toLocaleLowerCase()) > -1 || this.DocType.indexOf('ALL') > -1) {
           this.fileName = "";
+          this.showloader = true;
           let formdata: FormData = new FormData();
           const usaTime = new Date().toLocaleString('en-US', {timeZone: 'America/Los_Angeles'});
           console.log( new Date(usaTime).getTime().toString());
@@ -94,13 +109,10 @@ export class UploadDocComponent implements OnInit {
             (res: any) => {
               this.status = res.status;
               if (res.status === 200) {
-
+                this.showloader = false;
                 this.fileName = res.fileName;
                 this.info="";
                 this.downloadUrl = this._evnService.REST_API_BasicModule_DownloadDoc+"?offerId="+this.offerId+"&fileName="+this.fileName+"&moduleName="+this.moduleName+"";
-
-
-
               } else {
                 this.info = res.Message;
               }

@@ -1,20 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MonetizationModelService } from '@app/services/monetization-model.service';
+
 import { OfferPhaseService } from '@app/services/offer-phase.service';
-import { MenuBarService } from '@app/services/menu-bar.service';
+import { RightPanelService } from '@app/services/right-panel.service';
+import { StrategyReviewService } from '@app/services/strategy-review.service';
+import { StakeholderfullService } from '@app/services/stakeholderfull.service';
+import { ConfigurationService } from '@app/core/services/configuration.service';
 import { OfferDetailViewService } from '@app/services/offer-detail-view.service';
 import { OffersolutioningService } from '@app/services/offersolutioning.service';
-import { RightPanelService } from '@app/services/right-panel.service';
-import { StakeholderfullService } from '@app/services/stakeholderfull.service';
-import { ConfirmationService } from 'primeng/api';
-import { MessageService } from 'primeng/api';
 import { AccessManagementService } from '@app/services/access-management.service';
-import { StrategyReviewService } from '@app/services/strategy-review.service';
-import { MMAttributes } from '@app/models/mmattributes';
+import { MonetizationModelService } from '@app/services/monetization-model.service';
+
 import * as _ from 'lodash';
+import { MessageService } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
+
 import { User } from '@app/models/user';
-import { ConfigurationService } from '@app/core/services/configuration.service';
+import { MMAttributes } from '@app/models/mmattributes';
 
 @Component({
   selector: 'app-mm-assesment',
@@ -48,18 +50,20 @@ export class MmAssesmentComponent implements OnInit {
   selectedGroupData = [];
 
   readOnly = false;
-  canClickTab = false;
   changeInMM = false;
+  canClickTab = false;
   canClickNextStep = false;
+  backbuttonStatusValid = true;
+
   canMarkComplete = false;
-  // currentURL: String;
   markCompleteStatus: boolean;
   showMarkcompleteToggle: boolean;
-  backbuttonStatusValid = true;
+
   dimensionMode: Boolean = false;
   dimensionFirstGroupData: Object;
   dimensionFirstGroupName: string;
 
+  showSave: boolean;
   showDialog: boolean;
   showErrorDialog: boolean;
   isChangedAttribute: boolean;
@@ -81,7 +85,6 @@ export class MmAssesmentComponent implements OnInit {
     private accessMgmtService: AccessManagementService,
     private strategyReviewService: StrategyReviewService
   ) {
-    // this.currentURL = activatedRoute.snapshot['_routerState'].url;
     this.activatedRoute.params.subscribe(params => {
       this.currentOfferId = params['offerId'];
       this.caseId = params['caseId'];
@@ -114,16 +117,17 @@ export class MmAssesmentComponent implements OnInit {
       const selectedCharacteristics = {};
       this.offerBuilderdata = offerBuilderdata;
 
-      this.offerId = this.currentOfferId;
       this.offerBuilderdata['BEList'] = [];
       this.offerBuilderdata['BUList'] = [];
 
+      this.offerId = this.currentOfferId;
       this.offerName = offerBuilderdata['offerName'];
-      this.derivedMM = offerBuilderdata['derivedMM'];
-
       this.offerOwner = offerBuilderdata['offerOwner'];
-      this.derivedMM = this.offerBuilderdata['derivedMM'];
       this.primaryBE = this.offerBuilderdata['primaryBEList'][0];
+
+      this.derivedMM = this.offerBuilderdata['derivedMM'];
+      this.canClickNextStep = _.isEmpty(offerBuilderdata['derivedMM']) ? false : true;
+      this.showSave = this.canClickNextStep;
 
       this.existingStakeHolders = this.offerBuilderdata['stakeholders'] ? this.offerBuilderdata['stakeholders'] : [];
 
@@ -159,41 +163,6 @@ export class MmAssesmentComponent implements OnInit {
         });
       }
 
-
-      // mm model and message section
-      this.derivedMM = offerBuilderdata['derivedMM'];
-      if (offerBuilderdata['derivedMM'] != null && offerBuilderdata['derivedMM'] !== '') {
-        this.canClickNextStep = true;
-      }
-
-      if (offerBuilderdata['overallStatus'] == null) {
-        this.message = {
-          contentHead: 'Great Work!',
-          content: ' Select the idea offer characteristics below to determine the Monetization Model best aligns to your requirements.',
-          color: 'black'
-        };
-      } else if (offerBuilderdata['overallStatus'] === 'Aligned') {
-        this.canClickNextStep = true;
-        this.message = {
-          contentHead: offerBuilderdata['overallStatus'],
-          content: `  Your selected Offer Characteristics indicate that your Offer is fully aligned to ${offerBuilderdata['derivedMM']}`,
-          mmModel: offerBuilderdata['derivedMM']
-        };
-      } else if (offerBuilderdata['overallStatus'] === 'Partially Aligned') {
-        this.canClickNextStep = true;
-        this.message = {
-          contentHead: offerBuilderdata['overallStatus'],
-          content: `  Your selected Offer Characteristics indicate that your Offer is partially aligned to ${offerBuilderdata['derivedMM']}.`,
-          mmModel: offerBuilderdata['derivedMM']
-        };
-      } else {
-        this.message = {
-          contentHead: offerBuilderdata['overallStatus'],
-          content: '  Your selection of Offer Characteristics indicate that your Offer is Not Aligned to any of the 7 Monetization Models.'
-        };
-      }
-
-
       if (this.offerBuilderdata['primaryBEList'] != null) {
         this.offerBuilderdata['BEList'] = this.offerBuilderdata['BEList'].concat(this.offerBuilderdata['primaryBEList']);
       }
@@ -209,8 +178,6 @@ export class MmAssesmentComponent implements OnInit {
       if (this.offerBuilderdata['secondaryBUList'] != null) {
         this.offerBuilderdata['BUList'] = this.offerBuilderdata['BUList'].concat(this.offerBuilderdata['secondaryBUList']);
       }
-
-
 
       // Retrieve Offer Dimensions Attributes
       this.monetizationModelService.retrieveOfferDimensionAttributes().subscribe(offerData => {
@@ -530,11 +497,7 @@ export class MmAssesmentComponent implements OnInit {
 
   }
 
-
-
   // --------------------------------------------------------------------------------------------
-
-
 
   updateMessage(message) {
 
@@ -564,8 +527,6 @@ export class MmAssesmentComponent implements OnInit {
       return [];
     }
   }
-
-
 
   changeTab(index) {
     if (this.canClickNextStep === true) {
@@ -695,7 +656,7 @@ export class MmAssesmentComponent implements OnInit {
     });
   }
 
-  private formatStakeHolderPojoToUpdateOffer_1(user: User, defaultStakeHolder: boolean) {
+  private formatStakeHolderPojoToUpdateOffer_1(defaultStakeHolder: boolean) {
 
     const stakeHolderUpdateOfferFormat = [];
 
@@ -884,6 +845,7 @@ export class MmAssesmentComponent implements OnInit {
           });
         }
 
+        this.showSave = _.isEmpty(data['mmModel']) ? false : true;
         this.proceedToStakeholder('false');
 
       });
@@ -970,7 +932,7 @@ export class MmAssesmentComponent implements OnInit {
           // Populate Update Offer Details Request
           proceedToStakeholderPostData['overallStatus'] = this.message['contentHead'];
           proceedToStakeholderPostData['derivedMM'] = this.derivedMM == null ? '' : this.derivedMM;
-          proceedToStakeholderPostData['stakeholders'] = this.formatStakeHolderPojoToUpdateOffer_1(_, false);
+          proceedToStakeholderPostData['stakeholders'] = this.formatStakeHolderPojoToUpdateOffer_1(false);
           proceedToStakeholderPostData['offerId'] = this.currentOfferId == null ? '' : this.currentOfferId;
 
           if (this.isAllowedtoNextStep) {
@@ -1006,7 +968,7 @@ export class MmAssesmentComponent implements OnInit {
 
       });
 
-    }, (err) => {
+    }, () => {
       if (JSON.parse(withRouter) === true) {
         this.router.navigate(['/stakeholderFull', this.currentOfferId, this.caseId]);
       }
@@ -1023,6 +985,7 @@ export class MmAssesmentComponent implements OnInit {
     const groups = [];
     let groupDataWithFirst = [];
     let groupNamesWithFirst = [];
+    this.showSave = _.isEmpty(this.derivedMM) ? false : true;
 
     groupDataWithFirst.push(this.dimensionFirstGroupData);
     groupDataWithFirst = groupDataWithFirst.concat(this.groupData);
@@ -1292,7 +1255,9 @@ export class MmAssesmentComponent implements OnInit {
   }
 
   // --------------------------------------------------------------------------------------------
+
   // Check Dimension at least select one attribute in each subGroup
+
   checkDimensionSubGroup() {
     //  In Dimension Mode, Set Condition To Enable The Mark Complete Button
     let next = 0;
@@ -1322,5 +1287,6 @@ export class MmAssesmentComponent implements OnInit {
     this.markCompleteStatus = status;
   }
 
+  // --------------------------------------------------------------------------------------------
 
 }

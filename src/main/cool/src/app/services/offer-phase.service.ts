@@ -29,4 +29,8 @@ export class OfferPhaseService {
         return this.httpClient.post(url, data, httpOptions);
     }
 
+    getOfferPhase(caseId): any {
+        return this.httpClient.get(this.environmentService.REST_API_RETRIEVE_MILESTONES_URL + '/' + caseId + '/false');
+      }
+
 }
