@@ -29,8 +29,13 @@ export const svrUtil = {
   toFixed,
   getEnvEmail,
   getErrorForJson,
-  docToObjectWithISODate
+  docToObjectWithISODate,
+  checkForPropChange
 };
+
+function checkForPropChange(prop, newItem, oldItem) {
+  return newItem[prop] && oldItem[prop] && newItem[prop] !== oldItem[prop];
+}
 
 function getErrorForJson(err) {
   const obj = {};

@@ -12,6 +12,7 @@ import UserListRepo from '../../api/user-list/repo';
 import {ModuleRepo} from '../../api/common/module/repo';
 import config from '../../config/get-config';
 import {mail} from '../common/mail';
+import SourceRepo from '../../api/common/source/repo';
 
 export default class ApprovalController extends ControllerBase {
 
@@ -49,14 +50,17 @@ export default class ApprovalController extends ControllerBase {
       promise = this.updatePromise(req, res, next);
     }
     promise
-      .then(savedItem => {
-        const newItem = _.clone(savedItem);
-        newItem.approvalUrl = `${req.headers.origin}/prof/${req.query.type}/edit/${savedItem.id};mode=view`;
-        this.repo.update(newItem, '', true, true, false)
-          .then(updatedItem => {
-            return this.sendApprovalEmail(null, req, ApprovalMode.submit, updatedItem)
-              .then(() => res.json(updatedItem));
-          });
+      .then(item => {
+        if (saveMode === 'add' || saveMode === 'copy') {
+          item.approvalUrl = `${req.headers.origin}/prof/${req.query.type}/edit/${item.id};mode=view`;
+          return this.repo.update(item, '', true, true, false);
+        } else {
+          return item;
+        }
+      })
+      .then(item => {
+        return this.sendApprovalEmail(null, req, ApprovalMode.submit, item)
+          .then(() => res.json(item));
       })
       .catch(next);
   }
@@ -227,20 +231,40 @@ export default class ApprovalController extends ControllerBase {
       .then(results => {
         switch (mode) {
           case ApprovalMode.submit:
+            const submitSubject = `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Submitted for Approval`;
             if (item.approvedOnce === 'Y') {
               body = `The "${item.name}" DFA ${type} has been updated and submitted by ${req.user.fullName} for approval: <br><br>${link}`;
-              const oldObj = results[0];
+              let oldObj = results[0];
               if (oldObj) {
                 if (item.toObject) {
                   item = item.toObject();
                 }
-                body += '<br><br><b>Summary of changes:</b><br><br>' +
-                  shUtil.getUpdateTable(shUtil.getObjectChanges(oldObj.toObject(), item, omitProperties));
+                if (oldObj.toObject) {
+                  oldObj = oldObj.toObject();
+                }
+                if (svrUtil.checkForPropChange('sourceId', item, oldObj)) {
+                  const sourceRepo = new SourceRepo();
+                  return Promise.all([
+                    sourceRepo.getOneByQuery({sourceId: item.sourceId}),
+                    sourceRepo.getOneByQuery({sourceId: oldObj.sourceId})
+                  ]).then(sources => {
+                    delete item.sourceId;
+                    delete oldObj.sourceId;
+                    item['sourceName'] = sources[0].name;
+                    oldObj['sourceName'] = sources[1].name;
+                    body += '<br><br><b>Summary of changes:</b><br><br>' +
+                      shUtil.getUpdateTable(shUtil.getObjectChanges(oldObj, item, omitProperties));
+                    return mail.sendHtmlMail(dfaAdminEmail, bizAdminEmail, `${itadminEmail},${ppmtEmail},${svrUtil.getEnvEmail(req.user.email)}`,
+                      submitSubject, body);
+                  });
+                } else {
+                  body += '<br><br><b>Summary of changes:</b><br><br>' +
+                    shUtil.getUpdateTable(shUtil.getObjectChanges(oldObj, item, omitProperties));
+                }
               }
             } else {
               body = `A new DFA ${type} has been submitted by ${req.user.fullName} for approval: <br><br>${link}`;
             }
-            const submitSubject = `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Submitted for Approval`;
             return mail.sendHtmlMail(dfaAdminEmail, bizAdminEmail, `${itadminEmail},${ppmtEmail},${svrUtil.getEnvEmail(req.user.email)}`,
               submitSubject, body);
           case ApprovalMode.approve:
