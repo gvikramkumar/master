@@ -17,3 +17,9 @@ export const getError = createSelector(
     getPirateShipState,
     state => state.error
 );
+
+
+export const getLoaderState = createSelector(
+  getPirateShipState,
+  state => state.showPirateshipLoader
+);

@@ -321,7 +321,7 @@ export class OfferSolutioningComponent implements OnInit {
       question.questionType = 'Free Text';
     }
 
-    // When Free Text - Restrict Length Of Characters
+    // When Free Text - Restrict Length Of Characters  
     if (question.questionType === 'Free Text') {
       question.rules.maxCharacterLen = _.isEmpty(question.rules.maxCharacterLen) ?
         150 : Number(question.rules.maxCharacterLen);
@@ -563,9 +563,9 @@ export class OfferSolutioningComponent implements OnInit {
 
   // -----------------------------------------------------------------------------------------------------------------------------
 
-
+  
   getMarkCompleteStatus(status) {
-    this.markCompleteStatus = false;
+    this.markCompleteStatus = status;
   }
 
   // -----------------------------------------------------------------------------------------------------------------------------

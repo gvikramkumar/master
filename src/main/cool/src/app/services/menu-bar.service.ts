@@ -1,21 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EnvironmentService } from '../../environments/environment.service';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable()
 export class MenuBarService {
-
+  private subject = new BehaviorSubject<any>('');
   constructor(
     private httpClient: HttpClient,
     private environmentService: EnvironmentService
   ) { }
 
-  getMiletsoneDetails(caseId): any {
-    return this.httpClient.get(this.environmentService.REST_API_RETRIEVE_MILESTONES_URL + '/' + caseId + '/false');
+  getMilestoneDetails(offerId): any {
+    return this.httpClient.get(this.environmentService.REST_API_RETRIEVE_MILESTONES_URL + '/' + offerId + '/false');
   }
 
   holdOffer(data): any {
-
+    console.log('in menu bar service:: holdOffer');
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -28,6 +29,7 @@ export class MenuBarService {
   }
 
   cancelOffer(data): any {
+    console.log('in menu bar service:: cancelOffer');
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -63,9 +65,19 @@ export class MenuBarService {
     return this.httpClient.get(url, { withCredentials: true });
   }
 
-  updateMarkCompleteStatus(data: object) {
-    const url = this.environmentService.REST_API_UPDATE_MARK_COMPLETE_STATUS_URL;
-    return this.httpClient.post(url, data, { withCredentials: true });
+  updateMarkCompleteStatus(offerId, milestone, milestoneStatus) {
+    let url = this.environmentService.REST_API_UPDATE_MARK_COMPLETE_STATUS_URL;
+    url += offerId + '/' + milestone + '?status=' + milestoneStatus
+    return this.httpClient.put(url, { withCredentials: true });
   }
+
+  updateOfferPhaseWidget(data){
+    this.subject.next(data);
+  }
+
+  getUpdatedOfferPhaseWidget(): Observable<any> {
+  return this.subject.asObservable();
+  }
+
 
 }

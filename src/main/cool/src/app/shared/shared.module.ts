@@ -19,12 +19,15 @@ import { CustomRangeValidatorDirective } from './validators/custom-range-validat
 import { HiddenelemDirective } from '@shared/directives/hiddenelem.directive';
 import { ReadonlyDirective } from '@shared/directives/readonly.directive';
 import { ErrorpageComponent } from './components/errorpage/errorpage.component';
+import { CuiGenericModalComponent } from './components/cui-genric-modal/cui-genric-modal.component';
+import { CuiGenericModalService } from './components/cui-genric-modal/cui-genric-modal.service';
 import {
   StatusComponent, AtoListComponent, ViewOfferComponent,
   ViewcommentComponent, ViewStrategyComponent, TurbotaxviewComponent,
   PirateShipLegendComponent, DynamicFormMultipleComponent
 } from '@shared/components';
-
+import {UploadDocComponent} from '@shared/components/upload-doc/upload-doc.component';
+import {ShareModalComponent} from '@shared/components/share-modal/share-modal.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +44,9 @@ import {
     HiddenelemDirective,
     ReadonlyDirective,
     ErrorpageComponent,
+    CuiGenericModalComponent,
+    UploadDocComponent,
+    ShareModalComponent
   ],
   imports: [
     FormsModule,
@@ -64,7 +70,8 @@ import {
     DashboardService,
     CreateOfferService,
     ViewcommentService,
-    ConfirmationService
+    ConfirmationService,
+    CuiGenericModalService
   ],
   exports: [
     FormsModule,
@@ -90,6 +97,9 @@ import {
     DynamicFormMultipleComponent,
     HiddenelemDirective,
     ReadonlyDirective,
+    CuiGenericModalComponent,
+    UploadDocComponent,
+    ShareModalComponent
   ]
 })
 export class SharedModule { }

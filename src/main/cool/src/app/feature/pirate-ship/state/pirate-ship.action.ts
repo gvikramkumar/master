@@ -2,6 +2,7 @@ import { Action } from '@ngrx/store';
 import { PirateShip } from '../model/pirate-ship';
 
 export enum PirateShipActionTypes {
+  ShowPirateShip = 'Show pirateShip',
 
     InitializePirateShip = '[PirateShip] Initialize Pirate Ship',
 
@@ -33,10 +34,15 @@ export class LoadPirateShipSuccess implements Action {
 }
 
 
+export class ShowPirateshipLoader implements Action {
+  readonly type = PirateShipActionTypes.ShowPirateShip;
+  constructor(public payload: boolean) { }
+}
 
 // Union the valid types
 export type PirateShipActions = InitializePirateShip
     | LoadPirateShip
     | LoadPirateShipFail
-    | LoadPirateShipSuccess;
+    | LoadPirateShipSuccess
+    | ShowPirateshipLoader;
 
