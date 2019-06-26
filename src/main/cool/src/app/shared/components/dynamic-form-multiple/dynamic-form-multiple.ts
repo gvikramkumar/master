@@ -451,6 +451,8 @@ export class DynamicFormMultipleComponent implements OnInit {
     this.closeDialogAction = 0;
     // set base price value according to billing_soa SOA Pricing selection type && questionList == this.billing_soa
     if (questionList !== undefined) {
+      /* Added to track user modified details vs auto populated ones for Mark as Complete story*/
+      question.lastModifiedBy = 'User';
       if (groupName == this.billing_soa) {
         if (question.question == "SOA Pricing" || question.question == "Monthly Amount") {
           questionList.forEach(e => {
@@ -498,10 +500,9 @@ export class DynamicFormMultipleComponent implements OnInit {
       if (question.question == "Default Initial Term") {
         this.defaultValueServices.setDefaultInitialTerm(questionList);
       }
-
-      if (question.question == "STD AUTO RENEWAL TERM") {
-        this.defaultValueServices.setDefaultAutoRenewalTerm(questionList);
-      }
+      if (question.question == "Std Auto Renewal Term") {
+              this.defaultValueServices.setDefaultAutoRenewalTerm(questionList);
+          }
 
       if (question.question == "Smart Licensing Enabled") {
         if (question.currentValue == "Yes") {
@@ -829,7 +830,7 @@ export class DynamicFormMultipleComponent implements OnInit {
           question.rules.isvalid = true;
         }
       }
-      if (question.egineAttribue == 'NON STD INITIAL TERM') {
+      if (question.egineAttribue == 'Non Std Initial Term') {
         if (!(/^(0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120))(-(0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120)))$/.test(question.currentValue))) {
           question.rules.validationMessage = "Value should be a numeric range where 1 is min and 120 is max (example: 1-12)";
           question.rules.isvalid = false;
@@ -839,7 +840,7 @@ export class DynamicFormMultipleComponent implements OnInit {
           question.rules.isvalid = true;
         }
       }
-      if (question.egineAttribue == 'STD AUTO RENEWAL TERM') {
+      if (question.egineAttribue == 'Std Auto Renewal Term') {
         if (!(/^0*([1-9]|[1-5][0-9]|60)$/.test(question.currentValue))) {
           question.rules.validationMessage = "Mandatory entry of 1 numeric  value where 1 is min and 60 is max";
           question.rules.isvalid = false;
@@ -849,7 +850,7 @@ export class DynamicFormMultipleComponent implements OnInit {
           question.rules.isvalid = true;
         }
       }
-      if (question.egineAttribue == 'NON STD AUTO RENEWAL TERM') {
+      if (question.egineAttribue == 'Non Std Auto Renewal Term') {
         if (!(/^(0*([1-9]|1[0-2]))(-(0*([1-9]|1[0-2])))$/.test(question.currentValue))) {
           question.rules.validationMessage = question.egineAttribue + "Value should be a numeric range where 1 is min and 12 is max";
           question.rules.isvalid = false;

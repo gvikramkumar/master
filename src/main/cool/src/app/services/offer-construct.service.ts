@@ -35,8 +35,9 @@ export class OfferConstructService {
     }
 
 
-    addDetails(groups): Observable<any> {
-        return this.httpClient.post(this.environmentService.REST_API_ADD_DETAILS_OFFER_CONSTRUCT_URL, groups, { withCredentials: true });
+    addDetails(groups, offerId): Observable<any> {
+        const url = this.environmentService.REST_API_ADD_DETAILS_OFFER_CONSTRUCT_URL + '?offerId=' +offerId;
+        return this.httpClient.post(url, groups, { withCredentials: true });
     }
 
     setQuestionsSet(questionsSet) {
@@ -81,13 +82,13 @@ export class OfferConstructService {
                 if (question.egineAttribue == 'Initial Term') {
                     validators.push(Validators.pattern("^(0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120))(,(0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120)))*$"))
                 }
-                if (question.egineAttribue == 'NON STD INITIAL TERM') {
+                if (question.egineAttribue == 'Non Std Initial Term') {
                     validators.push(Validators.pattern("^0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120)$"))
                 }
-                if (question.egineAttribue == 'STD AUTO RENEWAL TERM') {
+                if (question.egineAttribue == 'Std Auto Renewal Term') {
                     validators.push(Validators.pattern("^0*([1-9]|[1-5][0-9]|60)$"))
                 }
-                if (question.egineAttribue == 'NON STD AUTO RENEWAL TERM') {
+                if (question.egineAttribue == 'Non Std Auto Renewal Term') {
                     validators.push(Validators.pattern("^0*([1-9]|1[0-2])$"))
                 }
                 if (question.egineAttribue == 'Subscription Offset(In Days)') {
@@ -143,19 +144,19 @@ export class OfferConstructService {
                     if (question.egineAttribue == 'Initial Term') {
                         validators.push(Validators.pattern("^0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120)$"))
                     }
-                    if (question.egineAttribue == 'NON STD INITIAL TERM') {
+                    if (question.egineAttribue == 'Non Std Initial Term') {
                         validators.push(Validators.pattern("^0*([1-9]|[1-8][0-9]|9[0-9]|1[01][0-9]|120)$"))
                     }
-                    if (question.egineAttribue == 'STD AUTO RENEWAL TERM') {
+                    if (question.egineAttribue == 'Std Auto Renewal Term') {
                         validators.push(Validators.pattern("^0*([1-9]|[1-5][0-9]|60)$"))
                     }
-                    if (question.egineAttribue == 'NON STD AUTO RENEWAL TERM') {
+                    if (question.egineAttribue == 'Non Std Auto Renewal Term') {
                         validators.push(Validators.pattern("^([1-9]|1[0-2])$"))
                     }
                     if (question.egineAttribue == 'Subscription Offset(In Days)') {
                         validators.push(Validators.pattern("^([1-9]|[1-5][0-9]|60)$"))
                     }
-                    
+
                 }
 
                 if (question.componentType == 'Multiselect') {
@@ -168,7 +169,7 @@ export class OfferConstructService {
         }
         return new FormGroup(group);
     }
-    
+
     updateNewEgenieFlag(offerId): Observable<any>{
         const url = `${this.environmentService.REST_API_UPDATE_EGENIE_FLAG}/${offerId}`;
         return this.httpClient.put(url, { withCredentials: true });

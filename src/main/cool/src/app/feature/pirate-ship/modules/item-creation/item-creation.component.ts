@@ -404,7 +404,7 @@ export class ItemCreationComponent implements OnInit {
     const groupsName = { groups: info };
     let questionsList: any;
     if (!isFromDB) {  // form search PID
-      this.offerConstructService.addDetails(groupsName).subscribe((data) => {
+      this.offerConstructService.addDetails(groupsName, this.currentOfferId).subscribe((data) => {
         questionsList = data.groups[0].listOfferQuestions;
         for (const element in searchResult) {
           questionsList.forEach(ques => {
@@ -435,7 +435,7 @@ export class ItemCreationComponent implements OnInit {
         () => {
         });
     } else {
-      this.offerConstructService.addDetails(groupsName).subscribe((data) => {
+      this.offerConstructService.addDetails(groupsName, this.currentOfferId).subscribe((data) => {
         questionsList = data.groups[0].listOfferQuestions;
         searchResult.forEach(element => {
           questionsList.forEach(ques => {

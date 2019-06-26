@@ -11,8 +11,8 @@ export class ExitCriteriaValidationService {
     private environmentService: EnvironmentService
   ) { }
 
-  getExitCriteriaData(caseId) {
-    const url = this.environmentService.REST_API_RETRIEVE_MILESTONES_URL + '/' + caseId + '/false';
+  getExitCriteriaData(offerId) {
+    const url = this.environmentService.REST_API_RETRIEVE_MILESTONES_URL + '/' + offerId + '/false';
     return this.http.get(url, { withCredentials: true });
   }
   requestApproval(offerId) {

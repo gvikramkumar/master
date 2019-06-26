@@ -153,15 +153,21 @@
                               <div>
                                 <p-treeTableCheckbox [value]="rowNode"></p-treeTableCheckbox>
                                 <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
-                                <span (focusout)='editData=true' (click)='enableEdit()'>
-                                  <input (keyup)="onValidateChars($event)" maxlength="18" [id]='rowData["uniqueKey"]'
+                                <span style="position: relative;" (focusout)='editData=true' (click)='enableEdit()'>
+                                  <input [ngClass]="rowData.isvalid == false && rowData.validationMessage != ''? 'validaionStyles' : 'validaionStylesValid'" (keyup)="onValidateChars($event)" maxlength="18" [id]='rowData["uniqueKey"]'
                                     autocomplete="off" (click)='showButton($event, rowData["uniqueKey"]);'
                                     (change)="handleChange(rowData, $event)" (blur)="trimSpaces(rowData, $event)"
                                     class='text-input-box' type='text'
                                     [disabled]="rowData['newItemEGenieStatus'] || (editData ? true : null)"
                                     value="{{rowData['title']}}" [autofocus]='autoFocus' *ngIf="!rowData['eginieItem']">
-                                  <a *ngIf="rowData['eginieItem']"
-                                    (click)="checkEngineFlag(rowNode)">{{rowData['title']}}</a>
+                                    <div class="tool-tip  slideIn"
+                                      *ngIf="rowData.validationMessage != '' && rowData.isvalid == false">
+                                      <ul>
+                                        <li>{{rowData.validationMessage}}</li>
+                                      </ul>
+                                    </div>
+
+                                  <a *ngIf="rowData['eginieItem']">{{rowData['title']}}</a>
                                   <span *ngIf="rowData['isMajorLineItem']"> ({{rowData['childCount']}})</span>
                                   <span [id]='rowData["uniqueKey"]'
                                     (click)='focusMethod(rowData["uniqueKey"]);showButton($event, rowData["uniqueKey"]);'

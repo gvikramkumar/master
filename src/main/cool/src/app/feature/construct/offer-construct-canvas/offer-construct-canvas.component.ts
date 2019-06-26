@@ -242,7 +242,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
       info.push(majorItem);
       const groupsName = { groups: info };
       // this.getQuestionOnDragDrop(groupsName);  //set listOfOfferquestion to itemDeatils of objects
-      this.offerConstructService.addDetails(groupsName).subscribe((data) => {
+      this.offerConstructService.addDetails(groupsName, this.currentOfferId).subscribe((data) => {
         this.listOfferQuestions = data.groups[0].listOfferQuestions;
 
         if (obj.productName !== this.billing_soa) {
@@ -418,7 +418,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   }
 
   getQuestionOnDragDrop(groupsName) {
-    this.offerConstructService.addDetails(groupsName).subscribe((data) => {
+    this.offerConstructService.addDetails(groupsName, this.currentOfferId).subscribe((data) => {
       return data.groups[0].listOfferQuestions;
     }, () => { },
       () => {
@@ -614,7 +614,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   // remove node from offerConstructService.singleMultipleFormInfo
 
   deleteNode(rowNode) {
-    //if (this.markCompleteStatus === false) {
+    if (this.markCompleteStatus === false) {
     if (rowNode.parent == null) {
       // If parent not present which means its a Major Item and may contains children.
       // Therefore we have to remove complete element from offer array where uniquekey = rowData.uniqueKey
@@ -676,7 +676,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     }
     this.deleteNodeFromOfferConstructItems(rowNode);  // remove node from offerconstruct Item
     this.checkCanMarkCompleteStatus();
-    //}
+    }
 
   }
 
@@ -687,7 +687,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     */
 
   deleteNodeFromOfferConstructItems(rowNode) {
-    //if (this.markCompleteStatus === false) {
+    if (this.markCompleteStatus === false) {
     if (rowNode.parent == null) {
       // If parent not present which means its a Major Item and may contains children.
       // Therefore we have to remove complete element from offer array where uniquekey = rowData.uniqueKey
@@ -732,7 +732,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     this.offerConstructItems = [...this.offerConstructItems];
     this.removeEginieMajorItemFromListofAlreadyAddedItems(rowNode.node.data.title);
     this.updateChildCount();
-    //}
+    }
 
   }
 
@@ -777,7 +777,19 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
   handleChange(obj, $event) {
     const newValue = $event.target.value;
-    obj.name = newValue;
+    this.offerConstructCanvasService.validatePID(newValue).subscribe((data) => {
+      if(data.length > 0){
+          obj.validationMessage = "Item Name already exists, please type another name";
+          obj.isvalid = false;
+          obj.name = newValue;
+          return;
+      }
+      else{
+        obj.validationMessage = "";
+        obj.isvalid = "";
+      }
+    });
+
   }
 
   trimSpaces = function (obj, $event) {
@@ -951,7 +963,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
           test.push(majorItem);
           const groupsName = { groups: test };
           // obj['itemDetails'] = this.getQuestionOnDragDrop(groupsName);
-          this.offerConstructService.addDetails(groupsName).subscribe((data) => {
+          this.offerConstructService.addDetails(groupsName, this.currentOfferId).subscribe((data) => {
             this.listOfferQuestions = data.groups[0].listOfferQuestions;
             if (obj.productName !== this.billing_soa) {
               if (obj.productName == 'License') {
@@ -1099,7 +1111,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
                 let listOfferQuestions = this.defaultValueServices.getBasePIDValues(this.listOfferQuestions);
                 obj['itemDetails'] = listOfferQuestions;
               }
-
+              
               // if (obj.productName == 'License' || obj.productName == 'Hardware' || obj.productName == 'SW Subscription Mapped SKU'){
               //   let listOfferQuestions = this.defaultValueServices.getCountryNameValues(this.listOfferQuestions, this.createSpare);
               //   obj['itemDetails'] = listOfferQuestions;
@@ -1680,7 +1692,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
   // }
 
   removeSelected() {
-    //if (this.markCompleteStatus === false) {
+    if (this.markCompleteStatus === false) {
     if (this.selected.length) {
       this.selected.forEach((selectedItem) => {
         if (selectedItem.parent == null) {
@@ -1727,7 +1739,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     }
     this.removeSelectedNode();  //  remove selected node from offerConstructItems
     this.checkCanMarkCompleteStatus();
-    // }
+     }
 
   }
 
@@ -1966,7 +1978,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
     const groupsName = { groups: info };
     let questionsList: any;
     if (!isFromDB) {  // form search PID
-      this.offerConstructService.addDetails(groupsName).subscribe((data) => {
+      this.offerConstructService.addDetails(groupsName, this.currentOfferId).subscribe((data) => {
         questionsList = data.groups[0].listOfferQuestions;
         for (const element in searchResult) {
           questionsList.forEach(ques => {
@@ -1997,7 +2009,7 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
         () => {
         });
     } else {
-      this.offerConstructService.addDetails(groupsName).subscribe((data) => {
+      this.offerConstructService.addDetails(groupsName, this.currentOfferId).subscribe((data) => {
         questionsList = data.groups[0].listOfferQuestions;
         searchResult.forEach(element => {
           questionsList.forEach(ques => {

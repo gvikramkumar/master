@@ -138,7 +138,7 @@ export class DesignReviewComponent implements OnInit, OnDestroy {
       });
 
     forkJoin([this.exitCriteriaValidationService.getDesignReview(this.caseId),
-    this.actionsService.getMilestones(this.caseId)]).subscribe(data => {
+    this.actionsService.getMilestones(this.currentOfferId)]).subscribe(data => {
       const [designReviewData, milstones] = data;
       //Enable offer setup only when Strategy Review is Complete
       milstones['ideate'].forEach(element => {

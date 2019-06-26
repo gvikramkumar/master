@@ -85,7 +85,7 @@ export class DesignReviewExitCriteriaComponent implements OnInit {
       }
     });
 
-    this.exitCriteriaValidationService.getExitCriteriaData(this.currentCaseId).subscribe(data => {
+    this.exitCriteriaValidationService.getExitCriteriaData(this.currentOfferId).subscribe(data => {
       const canRequestUsers = [];
       this.exitCriteriaData = data;
       this.ideate = data['ideate'][3];

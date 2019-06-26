@@ -1,0 +1,17 @@
+---
+kind: "Route"
+apiVersion: "v1"
+metadata:
+  name: "cool"
+  labels:
+     component: "cool"
+spec:
+   host: "cool-dev2.cisco.com"
+   to:
+     kind: "Service"
+     name: "cool"
+   port:
+     targetPort: "web"
+   tls:
+     insecureEdgeTerminationPolicy: Allow
+     termination: edge

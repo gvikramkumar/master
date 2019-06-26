@@ -138,6 +138,7 @@ export class EnvironmentService {
     REST_API_OFFER_SETUP_REFRESH: string;
     REST_API_OFFER_PS_MODULE_GET_URL: string;
     REST_API_OFFER_SETUP_MODULE_GET_URL: string;
+  REST_API_OFFER_SETUP_MODULE_UPDATE_URL: string;
     REST_API_OFFER_MODULE_STATUS_GET_URL: string;
     REST_API_OFFER_SETUP_DASHBOARD_NOTIFICATION_URL: string;
 
@@ -261,11 +262,11 @@ export class EnvironmentService {
                 this.tncOwbUrl = 'https://offer-stage.cloudapps.cisco.com/owb/#/subscription';
                 break;
             case 'qualityassurance':
-                this.baseApiUrl = 'https://cool-srv-qa.cisco.com/coolsrv';
+                this.baseApiUrl = 'https://cool-srv-qa2.cisco.com/coolsrv';
                 this.basePdafApiUrl = 'https://api-supplychain-dev.cisco.com/pdafapp';
                 this.authTokenBaseApiUrl = 'https://cloudsso-test.cisco.com';
                 this.clientId = 'cool_pdaf_client';
-                this.redirectUrl = 'https://cool-qa.cisco.com/cool';
+                this.redirectUrl = 'https://cool-qa2.cisco.com/cool';
                 this.baseIdpUrl = 'https://idp-stage-api.cisco.com';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
@@ -274,11 +275,11 @@ export class EnvironmentService {
                 this.tncOwbUrl = 'https://offer-stage.cloudapps.cisco.com/owb/#/subscription';
                 break;
             case 'development':
-                this.baseApiUrl = 'https://cool-srv-dev.cisco.com/coolsrv';
+                this.baseApiUrl = 'https://cool-srv-dev2.cisco.com/coolsrv';
                 this.basePdafApiUrl = 'https://api-supplychain-dev.cisco.com/pdafapp';
                 this.authTokenBaseApiUrl = 'https://cloudsso-test.cisco.com';
                 this.clientId = 'cool_pdaf_client';
-                this.redirectUrl = 'https://cool-dev.cisco.com/cool';
+                this.redirectUrl = 'https://cool-dev2.cisco.com/cool';
                 this.baseIdpUrl = 'https://idp-stage-api.cisco.com';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
@@ -341,7 +342,7 @@ export class EnvironmentService {
         this.REST_API_ACTIONS_TRACKER_URL = this.baseApiUrl + '/bpmApi/getTasksForActionTracker/';
         this.REST_API_ACTIONS_DASHBOARD_URL = this.baseApiUrl + '/bpmApi/getTask/dashboard/';
         this.REST_API_ACTIONS_TRACKER_DETAILS_URL = this.baseApiUrl + '/bpmApi/getInfo/task';
-        this.REST_API_RETRIEVE_MILESTONES_URL = this.baseApiUrl + '/bpmApi/getMilestones';
+        //this.REST_API_RETRIEVE_MILESTONES_URL = this.baseApiUrl + '/bpmApi/getMilestones';
 
         // ------------------------- PDAF URLs ---------------------------------------------------------
 
@@ -449,6 +450,7 @@ export class EnvironmentService {
         this.REST_API_LOCK_API_FOR_OWB = this.baseApiUrl + '/owb/lockAPI/';
         this.REST_API_OFFER_PS_MODULE_GET_URL = this.baseApiUrl + '/offersetup/getPSModules/';
         this.REST_API_OFFER_SETUP_MODULE_GET_URL = this.baseApiUrl + '/offersetup/getAllModuleStatus/';
+      this.REST_API_OFFER_SETUP_MODULE_UPDATE_URL = this.baseApiUrl + '/offersetup/getOfferSetupModuleStatusByOfferId/';
         this.REST_API_OFFER_SETUP_DASHBOARD_NOTIFICATION_URL = this.baseApiUrl + '/dashboard/notification/generate';
         this.REST_API_OFFER_SETUP_REFRESH = 'https://cool-op-srv-dev.cisco.com/coolsrv/offerSetup/getOfferSetupModuleStatusByOfferId';
 
@@ -522,8 +524,10 @@ export class EnvironmentService {
 
         // ------------------------------------MARK COMPLETE STATUS URLs-------------------------------------------------------------------
         this.REST_API_GET_MARK_COMPLETE_STATUS_URL = this.baseApiUrl + '/offersetup/getTogglesStatus/';
-        this.REST_API_UPDATE_MARK_COMPLETE_STATUS_URL = this.baseApiUrl + '/offersetup/UpdateOrAddTogglesStatus';
-
+       // this.REST_API_UPDATE_MARK_COMPLETE_STATUS_URL = this.baseApiUrl + '/offersetup/UpdateOrAddTogglesStatus';
+        this.REST_API_UPDATE_MARK_COMPLETE_STATUS_URL = this.baseApiUrl + '/milestone/setMilestones/';
+        
+        this.REST_API_RETRIEVE_MILESTONES_URL = this.baseApiUrl + '/milestone/getMilestones';
         // -------------------------------------- SELF SERVICE ORDERABILITY URLs --------------------------------------
 
         this.REST_API_GET_SSO_DETAILS_URL = this.baseApiUrl + '/orderability/retrieveSsoDetails/';

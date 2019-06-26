@@ -26,14 +26,14 @@ export class MenuBarComponent implements OnInit {
     @Output() onProceedToNext = new EventEmitter();
     @Output() updateMessage = new EventEmitter<string>();
     @Output() getMarkCompleteStatus = new EventEmitter<boolean>();
-
+   
     currentURL: String;
     currentUsername: any;
 
     items: MenuItem[];
     showPopup: boolean;
     popupType: String = '';
-
+    
     itemShow: Object = {};
     offerBuilderdata = {};
     navigateHash: Object = {};
@@ -48,7 +48,7 @@ export class MenuBarComponent implements OnInit {
     markCompleteStatus: boolean;
     canUncheckComplete: boolean;
     designReviewRequestApprovalStatus: boolean;
-
+    
 
 
     constructor(
@@ -60,8 +60,8 @@ export class MenuBarComponent implements OnInit {
         private environmentService: EnvironmentService,
         private accessMgmtService: AccessManagementService,
         private offerDetailViewService: OfferDetailViewService
-    ) {
-
+        ) {
+        
         this.showPopup = false;
 
         this.currentURL = activatedRoute.snapshot['_routerState'].url;
@@ -70,8 +70,8 @@ export class MenuBarComponent implements OnInit {
             this.caseId = params['caseId'];
             this.offerId = params['offerId'];
         });
-
-        this.menuBarService.getMiletsoneDetails(this.caseId).subscribe(data => {
+       
+        this.menuBarService.getMilestoneDetails(this.offerId).subscribe(data => {
             if (data != null) {
                 if (data['ideate'] != null) {
                     data['ideate'].forEach(element => {
@@ -150,20 +150,32 @@ export class MenuBarComponent implements OnInit {
         ];
 
 
-        this.menuBarService.getMiletsoneDetails(this.caseId).subscribe(data => {
+        this.menuBarService.getMilestoneDetails(this.offerId).subscribe(data => {
             if (this.currentURL.includes('offerDimension')) {
-                this.markCompleteStatus = data['plan'][0]['status'];
+                if(data['plan'][0]['status'] == 'Completed'){
+                    this.markCompleteStatus = true;
+                }else {
+                    this.markCompleteStatus = false;
+                }
+                // this.markCompleteStatus = data['plan'][0]['status'];
                 this.showMarkcompleteToggle = true;
             } else if (this.currentURL.includes('offerSolutioning')) {
-                this.markCompleteStatus = data['plan'][1]['status'];
+                if(data['plan'][1]['status'] == 'Completed') {
+                    this.markCompleteStatus = true;
+                }else {
+                    this.markCompleteStatus = false;
+                }
                 this.showMarkcompleteToggle = true;
             } else if (this.currentURL.includes('offerConstruct')) {
-                this.markCompleteStatus = data['plan'][2]['status'];
+                if(data['plan'][2]['status'] == 'Completed') {
+                    this.markCompleteStatus = true;
+                }else {
+                    this.markCompleteStatus = false;
+                }
                 this.showMarkcompleteToggle = true;
             }
             this.getMarkCompleteStatus.next(this.markCompleteStatus);
             this.getCanUncheckCompleteStatus();
-
 
         })
 
@@ -304,26 +316,47 @@ export class MenuBarComponent implements OnInit {
         this.showMarkcompletePopup = false;
         this.markCompleteStatus = !this.markCompleteStatus;
         this.getMarkCompleteStatus.next(this.markCompleteStatus);
-        this.disableMarkCompleteToggle();
+        //this.disableMarkCompleteToggle();
     }
 
     confirmMarkComplete() {
-        this.showMarkcompletePopup = false;
-        this.getMarkCompleteStatus.next(this.markCompleteStatus);
-        this.disableMarkCompleteToggle();
+         this.showMarkcompletePopup = false;
+         this.getMarkCompleteStatus.next(this.markCompleteStatus);
+         this.onProceedToNext.emit('false');
+     //   this.disableMarkCompleteToggle();
     }
 
+    sendUpdatedMilestoneData(data) {
+        if (data != null) {
+            if (data['ideate'] != null) {
+                data['ideate'].forEach(element => {
+                    if (element['enable'] === true) {
+                        this.itemShow[element['subMilestone']] = true;
+                    }
+                });
+                if (data['plan'] != null) {
+                    data['plan'].forEach(element => {
+                        if (element['enable'] === true) {
+                            this.itemShow[element['subMilestone']] = true;
+                        }
+                    });
+                }
+                if (data['setup'] != null) {
+                    data['setup'].forEach(element => {
+                        if (element['enable'] === true) {
+                            this.itemShow[element['subMilestone']] = true;
+                        }
+                    });
+                }
+            }
+        }
+    }
     disableMarkCompleteToggle() {
-
-        if (this.markCompleteStatus === false && this.canMarkComplete === false) {
-            this.shouldDisable = true;
-        }
-        if (this.markCompleteStatus === true && this.canUncheckComplete === false) {
+        if (this.canMarkComplete === false || this.canUncheckComplete === false) {
             this.shouldDisable = true;
         }
 
-    }
-
+     }
     showOfferInfo(event, overlaypanel: OverlayPanel) {
 
         this.offerDetailViewService.retrieveOfferDetails(this.offerId).subscribe(offerBuilderdata => {
