@@ -135,7 +135,7 @@ export class StrategyReviewComponent implements OnInit, OnDestroy {
         });
       });
 
-    forkJoin([this.strategyReviewService.getStrategyReview(this.caseId), this.actionsService.getMilestones(this.caseId)])
+    forkJoin([this.strategyReviewService.getStrategyReview(this.caseId), this.actionsService.getMilestones(this.currentOfferId)])
       .subscribe(data => {
         const [strategyReviewData, milstones] = data;
         this.getStrategyReview(strategyReviewData);

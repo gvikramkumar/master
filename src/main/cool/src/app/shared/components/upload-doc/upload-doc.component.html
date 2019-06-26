@@ -17,7 +17,7 @@
         <div>
           <button [disabled]="isReadonly"  class="btn btn--small btn--primary btn--cool2" (click)="showUploadWindow()">Upload File</button>&nbsp;
         </div>
-        <br/><br/>
+        <br/>
         <div>
           <input type="file"  id="myFileInput" (change)="handleFileInput($event.target.files)" onclick="this.value=null;"/>
         </div>

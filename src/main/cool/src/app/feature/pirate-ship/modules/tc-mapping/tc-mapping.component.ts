@@ -93,12 +93,12 @@ export class TcMappingComponent implements OnInit, OnDestroy {
       this.atoNames = ['Overall Offer'];
       this.selectedIndex = 0;
       this.atoList = atoList.data;
-      for (let i = 0; i < this.atoList.length; i++) {
-        this.atoNames.push(this.atoList[i].itemName);
-        if (!this.atoList[i].hasOwnProperty('itemStatus') && this.atoList[i].hasOwnProperty('mappingStatus')) {
-          this.atoList[i].itemStatus = this.atoList[i].mappingStatus;
+        for (let i = 0; i < this.atoList.length; i++) {
+          this.atoNames.push(this.atoList[i].itemName);
+          if (!this.atoList[i].hasOwnProperty('itemStatus') && this.atoList[i].hasOwnProperty('mappingStatus')) {
+            this.atoList[i].itemStatus = this.atoList[i].mappingStatus;
+          }
         }
-      }
       for (let j = 0; j < this.atoNames.length; j++) {
         if (this.atoNames[j] === this.selectedAto) {
           this.selectedIndex = j;
@@ -194,7 +194,17 @@ export class TcMappingComponent implements OnInit, OnDestroy {
   }
 
   checkObject(element) {
-    if (this.selectedObjectAto && this.selectedObjectAto.itemType === element.itemType && element.itemType === 'License' && element.itemCategory !== this.selectedObjectAto.itemCategory) {
+    let itemTypeMatched = false;
+    if (element.itemType === 'License') {
+      itemTypeMatched = true;
+    } else {
+      for (let i = 0; i < this.selectedObjectAto.minorPids.length; i++) {
+        if (this.selectedObjectAto.minorPids[i].itemType === 'License') {
+          itemTypeMatched = true;
+        }
+      }
+    }
+    if (this.selectedObjectAto &&  itemTypeMatched && element.itemCategory !== this.selectedObjectAto.itemCategory) {
       return true;
     } else {
       return false;

@@ -26,6 +26,8 @@ import {
   ViewcommentComponent, ViewStrategyComponent, TurbotaxviewComponent,
   PirateShipLegendComponent, DynamicFormMultipleComponent
 } from '@shared/components';
+import {UploadDocComponent} from '@shared/components/upload-doc/upload-doc.component';
+import {ShareModalComponent} from '@shared/components/share-modal/share-modal.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,9 @@ import {
     HiddenelemDirective,
     ReadonlyDirective,
     ErrorpageComponent,
-    CuiGenericModalComponent
+    CuiGenericModalComponent,
+    UploadDocComponent,
+    ShareModalComponent
   ],
   imports: [
     FormsModule,
@@ -93,7 +97,9 @@ import {
     DynamicFormMultipleComponent,
     HiddenelemDirective,
     ReadonlyDirective,
-    CuiGenericModalComponent
+    CuiGenericModalComponent,
+    UploadDocComponent,
+    ShareModalComponent
   ]
 })
 export class SharedModule { }

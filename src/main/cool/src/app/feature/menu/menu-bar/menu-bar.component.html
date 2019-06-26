@@ -55,7 +55,7 @@
                 </div>
 
               </li>
-              </ul>
+            </ul>
 
           </div>
           <!-- // End: Mega Menu -->
@@ -88,13 +88,14 @@
           Save
         </button>
 
-        <!--
+        
         <label class="menu-btn switch switch—large" *ngIf="showMarkcompleteToggle">
-            <input type="checkbox" [(ngModel)]="markCompleteStatus" (change)="toggleMarkCompletePopup()"
-            [disabled]="(markCompleteStatus==false&&canMarkComplete==false)||(markCompleteStatus==true&&canUncheckComplete==false)"/>
+            <input type="checkbox" [(ngModel)]="markCompleteStatus" (change)="toggleMarkCompletePopup()" 
+            [disabled]="!canMarkComplete || shouldDisable"/>
+            <!-- [disabled]="(markCompleteStatus==false&&canMarkComplete==false)||(markCompleteStatus==true&&canUncheckComplete==false)"/> -->
             <span class="switch__input"></span>
             <span class="switch__label">Mark Complete</span>
-        </label> -->
+        </label>
 
         <button (click)="goBack()" class="menu-btn" *ngIf="!offerId">
           <span class="icon-close"></span> Cancel
@@ -119,6 +120,6 @@
 <!-- <app-menu-bar-popup [popupType]="popupType" (closePopup)="closePopup($event)"></app-menu-bar-popup> -->
 
 <app-mark-complete-popup [offerId]="offerId" [caseId]="caseId" [show]="showMarkcompletePopup"
-  [currentURL]="currentURL" [markCompleteStatus]="markCompleteStatus"
+  [currentURL]="currentURL" [markCompleteStatus]="markCompleteStatus" (sendUpdatedMilestoneData)="sendUpdatedMilestoneData($event)"
   (closeMarkCompletePopup)="closeMarkCompletePopup()" (confirmMarkComplete)="confirmMarkComplete()">
 </app-mark-complete-popup>

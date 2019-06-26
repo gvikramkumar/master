@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { MenuBarService } from '@app/services/menu-bar.service';
 
 @Component({
   selector: 'app-mark-complete-popup',
@@ -13,6 +12,7 @@ export class MarkCompletePopupComponent implements OnInit {
   @Input() offerId;
   @Input() caseId;
   @Input() currentURL;
+  @Input() disableMessage;
   @Output() closeMarkCompletePopup = new EventEmitter<string>();
   @Output() confirmMarkComplete = new EventEmitter<string>();
   content1: String;
@@ -20,15 +20,16 @@ export class MarkCompletePopupComponent implements OnInit {
   content3: String;
   confirmButtonname: String;
   title: String;
-  
+  milestone: String;
+  milestoneStatus: String;
 
-  constructor(private menuBarService: MenuBarService) { }
+  constructor() {
+      }
 
   ngOnInit() {
+    }
 
-  }
-
-  ngOnChanges(){
+  ngOnChanges() {
     this.choosePopUp();
   }
 
@@ -37,39 +38,35 @@ export class MarkCompletePopupComponent implements OnInit {
   }
 
   confirm() {
-    let updataStatusData = {};
-    updataStatusData['offerId'] = this.offerId;
-    updataStatusData['caseId'] = this.caseId;
-    if (this.currentURL.includes('offerDimension')) {
-      updataStatusData['offerDimension_toggleStatus'] = this.markCompleteStatus;
-  } else if(this.currentURL.includes('offerSolutioning')){
-    updataStatusData['offerSolutioning_toggleStatus'] = this.markCompleteStatus;
-  } else if (this.currentURL.includes('offerConstruct')){
-    updataStatusData['offerComponent_toggleStatus'] = this.markCompleteStatus;
-  }
-    this.menuBarService.updateMarkCompleteStatus(updataStatusData).subscribe(() => {
-      this.confirmMarkComplete.next('');
-    });
-   
+    this.confirmMarkComplete.next('true');
   }
 
   choosePopUp() {
-    if(this.markCompleteStatus === true) {
-      this.title = "Mark Complete";
-      this.content1 = "Marking pages as complete will lock the page for edits.";
-      this.content2 = "Mark as Complete tool can be unchecked as long as Design Review approvals have not been requested.";
-      this.content3 = "Please confirm if you would like to continue.";
-      this.confirmButtonname = "Mark Complete";
+    //if(this.disableMessage === '' || this.disableMessage === undefined){
+    if (this.markCompleteStatus === true) {
+        this.title = "Mark Complete";
+        this.content1 = "Marking pages as complete will lock the page for edits.";
+        this.content2 = "Note that the \"Mark as Complete\" tool can be unchecked as long as Design Review approvals have not been requested.";
+        this.content3 = "Please confirm if you would like to continue.";
+        //this.confirmButtonname = "Mark Complete";
 
-      
-    } else{
-      this.title = "Uncheck Complete";
-      this.content1 = "Do you want to uncheck the Mark As Complete Tool?";
-      this.content2 = "";
-      this.content3 = "";
-      this.confirmButtonname ="Uncheck";
-    }
+
+      } else {
+        this.title = "Mark Incomplete";
+        this.content1 = "Un-Marking pages as complete will enable edits to be made.";
+        this.content2 = "Depending upon the edits made, subsequent activities may become available again. Additionally, \"Offer Components Details\" may require manual attention as the system will not overwrite user entered data.";
+        this.content3 = "Please confirm if you would like to continue.";
+        //this.confirmButtonname = "Continue";
+      }
+  //   }
+  // else{
+  //     this.title = "Note";
+  //     console.log('disable message::::: '+this.disableMessage);
+  //     console.log('show popup::: '+this.show);
+  //     this.content1 = this.disableMessage;
+  //     this.content2 = '';
+  //     this.content3 = '';
+  //     //this.confirmButtonname = "Continue";
+  //   }
   }
-
-
-}
+  }

@@ -9,6 +9,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { StakeholderfullService } from '@app/services/stakeholderfull.service';
 import * as _ from 'lodash';
 import { LeadTime } from '../models/lead-time';
+import { MenuBarService } from '@app/services/menu-bar.service';
 
 @Component({
   selector: 'app-right-panel',
@@ -110,7 +111,8 @@ export class RightPanelComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private offerPhaseService: OfferPhaseService,
     private rightPanelService: RightPanelService,
-    private stakeHolderService: StakeholderfullService
+    private stakeHolderService: StakeholderfullService,
+    private menuBarService: MenuBarService
     ) {
 
     this.activatedRoute.params.subscribe(params => {
@@ -119,7 +121,13 @@ export class RightPanelComponent implements OnInit {
     });
 
 
-    this.offerPhaseDetailsList = this.activatedRoute.snapshot.data['offerData'];
+    this.menuBarService.getUpdatedOfferPhaseWidget().subscribe(data => {
+      if(data !== ''){
+        this.offerPhaseDetailsList = data;
+      }else{
+        this.offerPhaseDetailsList = this.activatedRoute.snapshot.data['offerData'];
+      }
+    });
 
   }
 
@@ -141,7 +149,11 @@ export class RightPanelComponent implements OnInit {
     this.navigateHash['Design Review'] = ['/designReview', this.currentOfferId, this.caseId];
     this.navigateHash['Offer Setup Workflow'] = ['/offerSetup', this.currentOfferId, this.caseId];
 
-    this.offerPhaseService.getOfferPhase(this.caseId).subscribe(resOfferPhases => {
+    this.menuBarService.getUpdatedOfferPhaseWidget().subscribe(data => {
+      if(data !== ''){
+        this.processCurrentPhaseInfo(data);
+      }else{
+    this.offerPhaseService.getOfferPhaseDetails(this.currentOfferId, false).subscribe(resOfferPhases => {
       if (resOfferPhases) {
         this.offerPhaseDetailsList = resOfferPhases;
 
@@ -162,7 +174,8 @@ export class RightPanelComponent implements OnInit {
       this.phaseProcessingCompleted = true;
       this.isOfferPhaseBlank = resOfferPhases === null || Object.keys(resOfferPhases).length === 0;
     });
-
+  }
+});     
   }
 
   // ----------------------------------------------------------------------------------------
@@ -588,4 +601,3 @@ export class RightPanelComponent implements OnInit {
 
 
 }
-

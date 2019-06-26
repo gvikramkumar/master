@@ -1,17 +1,17 @@
-<div class="modal" *ngIf="show">
+<!--<div class="modal" *ngIf="show">
   <div class="modal__dialog">
 
       <div class="modal__content"  >
           <a class="modal__close" (click)="close()"><span class="icon-close"></span></a>
           <div class="modal__header">
-              <div class="menu-popup-title">{{title}}</div>
+              <h1>{{title}}</h1>
           </div>
           <div class="modal__body">
              <div class="form-group label--floated">
                 
-                     <label>{{content1}}</label>
-                     <label>{{content2}}</label>
-                     <label>{{content3}}</label>
+                     <p>{{content1}}</p>
+                     <p>{{content2}}</p>
+                     <p>{{content3}}</p>
                  
              </div>
           </div>
@@ -21,7 +21,7 @@
           </div>
       </div>
 
-      <!-- <div class="modal__content" *ngIf="markCompleteStatus">
+       <div class="modal__content" *ngIf="markCompleteStatus">
         <a class="modal__close" (click)="close()"><span class="icon-close"></span></a>
         <div class="modal__header">
             <div class="menu-popup-title">Uncheck Complete</div>
@@ -39,7 +39,28 @@
             <button class="btn" (click)="close()">Cancel</button>
             <button type="button"class="btn btn--primary" (click)="confirm()">Mark Complete</button>
         </div>
-    </div> -->
+    </div> 
 
   </div>
+</div> -->
+
+
+<div class="modal modal--small" *ngIf="show">
+    <div class="modal__dialog">
+        <div class="modal__content">
+            <a class="modal__close" (click)="close()"><span class="icon-close"></span></a>
+            <div class="modal__header">
+                <h1 class="modal__title">{{title}}</h1>
+            </div>
+            <div class="modal__body">
+               <p class="subtitle">{{content1}}</p>
+               <p>{{content2}}</p>
+               <p>{{content3}}</p>
+            </div>
+            <div class="modal__footer">
+                <button class="btn" (click)="close()">Cancel</button>
+                <button type="button"class="btn btn--primary" (click)="confirm()">Continue</button>
+            </div>
+        </div>
+    </div>
 </div>
