@@ -138,7 +138,7 @@ export class EnvironmentService {
     REST_API_OFFER_SETUP_REFRESH: string;
     REST_API_OFFER_PS_MODULE_GET_URL: string;
     REST_API_OFFER_SETUP_MODULE_GET_URL: string;
-  REST_API_OFFER_SETUP_MODULE_UPDATE_URL: string;
+    REST_API_OFFER_SETUP_MODULE_UPDATE_URL: string;
     REST_API_OFFER_MODULE_STATUS_GET_URL: string;
     REST_API_OFFER_SETUP_DASHBOARD_NOTIFICATION_URL: string;
 
@@ -224,7 +224,9 @@ export class EnvironmentService {
 
         const windowUrl = location.href;
         let environment = 'localhost';
-        if (windowUrl.includes('dev')) {
+        if (windowUrl.includes('dev2')) {
+            environment = 'development2';
+        } else if (windowUrl.includes('dev')) {
             environment = 'development';
         } else if (windowUrl.includes('qa')) {
             environment = 'qualityassurance';
@@ -274,8 +276,21 @@ export class EnvironmentService {
                 this.ssoUrl = 'https://sso.cloudapps.cisco.com/sso/index.html#/dashboard';
                 this.tncOwbUrl = 'https://offer-stage.cloudapps.cisco.com/owb/#/subscription';
                 break;
-            case 'development':
+            case 'development2':
                 this.baseApiUrl = 'https://cool-srv-dev2.cisco.com/coolsrv';
+                this.basePdafApiUrl = 'https://api-supplychain-dev.cisco.com/pdafapp';
+                this.authTokenBaseApiUrl = 'https://cloudsso-test.cisco.com';
+                this.clientId = 'cool_pdaf_client';
+                this.redirectUrl = 'https://cool-dev2.cisco.com/cool';
+                this.baseIdpUrl = 'https://idp-stage-api.cisco.com';
+                this.idpClientId = 'cool-idp-nprd';
+                this.idpClientSecret = 'Cool123!';
+                this.owbUrl = 'https://owb1-stage.cloudapps.cisco.com/owb';
+                this.ssoUrl = 'https://sso.cloudapps.cisco.com/sso/index.html#/dashboard';
+                this.tncOwbUrl = 'https://offer-stage.cloudapps.cisco.com/owb/#/subscription';
+                break;
+            case 'development2':
+                this.baseApiUrl = 'https://cool-srv-dev.cisco.com/coolsrv';
                 this.basePdafApiUrl = 'https://api-supplychain-dev.cisco.com/pdafapp';
                 this.authTokenBaseApiUrl = 'https://cloudsso-test.cisco.com';
                 this.clientId = 'cool_pdaf_client';
@@ -450,7 +465,7 @@ export class EnvironmentService {
         this.REST_API_LOCK_API_FOR_OWB = this.baseApiUrl + '/owb/lockAPI/';
         this.REST_API_OFFER_PS_MODULE_GET_URL = this.baseApiUrl + '/offersetup/getPSModules/';
         this.REST_API_OFFER_SETUP_MODULE_GET_URL = this.baseApiUrl + '/offersetup/getAllModuleStatus/';
-      this.REST_API_OFFER_SETUP_MODULE_UPDATE_URL = this.baseApiUrl + '/offersetup/getOfferSetupModuleStatusByOfferId/';
+        this.REST_API_OFFER_SETUP_MODULE_UPDATE_URL = this.baseApiUrl + '/offersetup/getOfferSetupModuleStatusByOfferId/';
         this.REST_API_OFFER_SETUP_DASHBOARD_NOTIFICATION_URL = this.baseApiUrl + '/dashboard/notification/generate';
         this.REST_API_OFFER_SETUP_REFRESH = 'https://cool-op-srv-dev.cisco.com/coolsrv/offerSetup/getOfferSetupModuleStatusByOfferId';
 
@@ -524,9 +539,9 @@ export class EnvironmentService {
 
         // ------------------------------------MARK COMPLETE STATUS URLs-------------------------------------------------------------------
         this.REST_API_GET_MARK_COMPLETE_STATUS_URL = this.baseApiUrl + '/offersetup/getTogglesStatus/';
-       // this.REST_API_UPDATE_MARK_COMPLETE_STATUS_URL = this.baseApiUrl + '/offersetup/UpdateOrAddTogglesStatus';
+        // this.REST_API_UPDATE_MARK_COMPLETE_STATUS_URL = this.baseApiUrl + '/offersetup/UpdateOrAddTogglesStatus';
         this.REST_API_UPDATE_MARK_COMPLETE_STATUS_URL = this.baseApiUrl + '/milestone/setMilestones/';
-        
+
         this.REST_API_RETRIEVE_MILESTONES_URL = this.baseApiUrl + '/milestone/getMilestones';
         // -------------------------------------- SELF SERVICE ORDERABILITY URLs --------------------------------------
 
