@@ -65,54 +65,6 @@ export class CsdlStatusTrackComponent implements OnInit {
    */
   refreshStatus() {
     this.getUpdatedStatus();
-    /**
-     * Status combinations:
-       Stop Ship - Enforcement - CSDL Activity Status
-       True – Warning - COOL will list activity as complete
-       True – Enforced - COOL will list activity as In Progress
-       True - None - COOL will list activity as complete
-       False - Warning - COOL will list activity as complete
-       False – Enforced - COOL will list activity as Complete
-       False - None - COOL will list activity as complete
-    */
-    this.csdlIntegrationService.getCsdlInfo(this.currentOfferId).subscribe(data => {
-      const csdlPayload = new CsdlPayload();
-      if (data.stopShipStatus === 'True' && data.enforcementLabel === 'Warning') {
-        // Complete
-        csdlPayload.csdlMileStoneStatus = 'Complete';
-        this.updateCsdlMileStone(csdlPayload.csdlMileStoneStatus);
-      } else if (data.stopShipStatus === 'True' && data.enforcementLabel === 'Enforced') {
-        // In Progress
-        csdlPayload.csdlMileStoneStatus = 'In Progress';
-        this.updateCsdlMileStone(csdlPayload.csdlMileStoneStatus);
-      } else if (data.stopShipStatus === 'True' && data.enforcementLabel === 'None') {
-        // Complete
-        csdlPayload.csdlMileStoneStatus = 'Complete';
-        this.updateCsdlMileStone(csdlPayload.csdlMileStoneStatus);
-      } else if (data.stopShipStatus === 'False' && data.enforcementLabel === 'Warning') {
-        // Complete
-        csdlPayload.csdlMileStoneStatus = 'Complete';
-        this.updateCsdlMileStone(csdlPayload.csdlMileStoneStatus);
-      } else if (data.stopShipStatus === 'False' && data.enforcementLabel === 'Enforced') {
-        // Complete
-        csdlPayload.csdlMileStoneStatus = 'Complete';
-        this.updateCsdlMileStone(csdlPayload.csdlMileStoneStatus);
-      } else if (data.stopShipStatus === 'False' && data.enforcementLabel === 'None') {
-        // Complete
-        csdlPayload.csdlMileStoneStatus = 'Complete';
-        this.updateCsdlMileStone(csdlPayload.csdlMileStoneStatus);
-      }
-    });
-  }
-
-  updateCsdlMileStone(mileStoneStatus) {
-    const csdlPayload = new CsdlPayload();
-    const csdlPayloadArray: any = [];
-    csdlPayload.coolOfferId = this.currentOfferId;
-    csdlPayload.csdlMileStoneStatus = mileStoneStatus;
-    csdlPayloadArray.push(csdlPayload);
-    this.csdlIntegrationService.restartCsdlAssociation(csdlPayloadArray).subscribe(() => {
-    });
   }
 
   /**
