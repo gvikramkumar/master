@@ -161,6 +161,7 @@ export class EnvironmentService {
 
     //  SALES COMPENSATION URLs
     REST_API_RETRIEVE_SALES_COMPENSATION_OFFER_DETAILS: string;
+    REST_API_APPROVE_REJECT_OFFER_URL: string;
 
     // CSDL URLs
     REST_API_GET_ALL_PROJECTS: string;
@@ -482,8 +483,9 @@ export class EnvironmentService {
 
         // --------------------------------------- SALES COMPENSATION DETAILS --------------------------------------------
 
-        this.REST_API_RETRIEVE_SALES_COMPENSATION_OFFER_DETAILS = this.baseApiUrl + '/offersetup/getTNCMappingObject';
-
+        // this.REST_API_RETRIEVE_SALES_COMPENSATION_OFFER_DETAILS = this.baseApiUrl + '/offersetup/getTNCMappingObject';
+        this.REST_API_RETRIEVE_SALES_COMPENSATION_OFFER_DETAILS = '../assets/json/sales-compensation-offerDetails.json';
+        this.REST_API_APPROVE_REJECT_OFFER_URL = "../assets/json/sales-compensation-offerDetails.json";
         // -------------------------------------- CSDL --------------------------------------------------------------------------
 
         this.REST_API_REFRESH_PROJECTS = this.baseApiUrl + '/csdl/getCsdlDetails';
