@@ -118,7 +118,7 @@ export class OfferSetupComponent implements OnInit, OnDestroy {
     });
 
     // Check design review status for enabling Item Creation Module
-    this.actionsService.getMilestones(this.caseId).subscribe(data => {
+    this.actionsService.getMilestones(this.offerId).subscribe(data => {
       data['plan'].forEach(element => {
         if (element['subMilestone'] === 'Design Review' && element['status'] === 'Completed') {
           this.designReviewComplete = true;

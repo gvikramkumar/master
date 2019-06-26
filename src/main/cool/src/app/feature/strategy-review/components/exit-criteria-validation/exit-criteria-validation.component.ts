@@ -43,7 +43,7 @@ export class ExitCriteriaValidationComponent implements OnInit {
 
     this.readOnly = this.configurationService.startupData.readOnly;
     const getOfferFlags = this.offersolutioningService.retrieveOfferFlags(this.currentOfferId);
-    const getExitCriteria = this.exitCriteriaValidationService.getExitCriteriaData(this.currentCaseId)
+    const getExitCriteria = this.exitCriteriaValidationService.getExitCriteriaData(this.currentOfferId)
     forkJoin([getOfferFlags, getExitCriteria]).subscribe(res => {
 
       const [offerFlags, exitCriteriaData] = res;

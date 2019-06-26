@@ -451,6 +451,8 @@ export class DynamicFormMultipleComponent implements OnInit {
     this.closeDialogAction = 0;
     // set base price value according to billing_soa SOA Pricing selection type && questionList == this.billing_soa
     if (questionList !== undefined) {
+      /* Added to track user modified details vs auto populated ones for Mark as Complete story*/
+      question.lastModifiedBy = 'User';
       if (groupName == this.billing_soa) {
         if (question.question == "SOA Pricing" || question.question == "Monthly Amount") {
           questionList.forEach(e => {
