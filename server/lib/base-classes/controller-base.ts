@@ -5,6 +5,7 @@ import RepoBase from './repo-base';
 import {PgRepoBase} from './pg-repo-base';
 import AnyObj from '../../../shared/models/any-obj';
 import {ApiDfaData} from '../middleware/add-global-data';
+import {shUtil} from '../../../shared/misc/shared-util';
 
 export default class ControllerBase {
   isMirrorRepo = false; // set if you're writing to mongo and pg at same time (we sync daily now so not used currently)
@@ -276,32 +277,32 @@ export default class ControllerBase {
 
 
     // q.allSettled requires promise rejections to work. If we throw, it will jsut get passed onto express error handler
-    try {
-      if (this.repo.isModuleRepo && !mgGetFilter.then && mgGetFilter.moduleId !== -1) {
-        elog.push(`mongoToPgSync: ${this.repo.modelName} isModuleRepo but doesn't have mgGetFilter.moduleId set to -1.`);
-      }
 
-      const mongoGetPromise = mgGetFilter.then ? mgGetFilter : this.repo.getMany(mgGetFilter);
-      return mongoGetPromise
-        .then(docs => {
-          if (docs.length && docs[0].toObject) {
-            return docs.map(doc => doc.toObject());
-          } else {
-            return docs;
-          }
-        })
-        .then(objs => this.mongoToPgSyncTransform(objs, userId, log, elog)) // override this to transform
-        .then(objs => this.mongoToPgSyncRecords(pgRemoveFilter, objs, userId, dfa))
-        .then(recordCount => {
-          return this.postSyncStep(dfa)
-            .then(() => log.push(`${tableName}: ${recordCount} records transferred`));
-        });
-    } catch (_err) {
-      elog.push(`${tableName}: ${_err.message}`);
-      const err = svrUtil.getErrorForJson(_err);
-      err.stack = err.stack ? err.stack.substr(0, 100) : undefined;
-      return Promise.reject(err);
+    if (this.repo.isModuleRepo && !mgGetFilter.then && mgGetFilter.moduleId !== -1) {
+      elog.push(`mongoToPgSync: ${this.repo.modelName} isModuleRepo but doesn't have mgGetFilter.moduleId set to -1.`);
     }
+
+    const mongoGetPromise = mgGetFilter.then ? mgGetFilter : this.repo.getMany(mgGetFilter);
+    return shUtil.promiseChain(mongoGetPromise)
+      .then(docs => {
+        if (docs.length && docs[0].toObject) {
+          return docs.map(doc => doc.toObject());
+        } else {
+          return docs;
+        }
+      })
+      .then(objs => this.mongoToPgSyncTransform(objs, userId, log, elog)) // override this to transform
+      .then(objs => this.mongoToPgSyncRecords(pgRemoveFilter, objs, userId, dfa))
+      .then(recordCount => {
+        return this.postSyncStep(dfa)
+          .then(() => log.push(`${tableName}: ${recordCount} records transferred`));
+      })
+      .catch(_err => {
+        elog.push(`${tableName}: ${_err.message}`);
+        const err = svrUtil.getErrorForJson(_err);
+        err.stack = err.stack ? err.stack.substr(0, 100) : undefined;
+        return Promise.reject(err);
+      });
   }
 
   postSyncStep(dfa: ApiDfaData): Promise<any> {
