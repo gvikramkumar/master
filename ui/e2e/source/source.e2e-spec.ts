@@ -31,19 +31,19 @@ describe(`Admin - Source Page`, () => {
 
   beforeEach(() => {
     sourcePO.navigateTo();
-    sourcePO.waitForSourcesToLoad();
+    sourcePO.waitForTableToLoad();
   });
 
   it(`should load all the sources`, () => {
-    expect(sourcePO.getSourcesLoaded()).toBeGreaterThanOrEqual(20);
+    expect(sourcePO.getCountOfItemsLoadedInTheTable()).toBeGreaterThanOrEqual(20);
   });
 
 
   it(`should find source from search field`, () => {
     sourcePO.getSearchField().sendKeys(existingSourceInDb.name);
-    expect(sourcePO.getFirstCellInARow().getText()).toEqual(existingSourceInDb.name);
-    expect(sourcePO.getCellRow().get(1).getText()).toEqual(existingSourceInDb.typeCode);
-    expect(sourcePO.getCellRow().last().getText()).toEqual(existingSourceInDb.status);
+    expect(sourcePO.getFirstCellInFirstRow().getText()).toEqual(existingSourceInDb.name);
+    expect(sourcePO.getTableRows().get(1).getText()).toEqual(existingSourceInDb.typeCode);
+    expect(sourcePO.getTableRows().last().getText()).toEqual(existingSourceInDb.status);
   });
   
   describe(`Add Source Tests`, () => {
@@ -115,15 +115,15 @@ describe(`Admin - Source Page`, () => {
       sourcePO.getSubmitButton().click();
       sourcePO.waitForFormDown();
       sourcePO.getSearchField().sendKeys(newTestSource.name);
-      expect(sourcePO.getFirstCellInARow().getText()).toEqual(newTestSource.name);
-      expect(sourcePO.getCellRow().get(1).getText()).toEqual(newTestSource.typeCode);
-      expect(sourcePO.getCellRow().last().getText()).toEqual(newTestSource.status);
+      expect(sourcePO.getFirstCellInFirstRow().getText()).toEqual(newTestSource.name);
+      expect(sourcePO.getTableRows().get(1).getText()).toEqual(newTestSource.typeCode);
+      expect(sourcePO.getTableRows().last().getText()).toEqual(newTestSource.status);
     });
   });
 
   describe('Update Source Tests', () => {
     it(`should show form with source values on clicking on the source name in table`, () => {
-      sourcePO.loadFormInEditModeForSource(existingSourceInDb.name);
+      sourcePO.loadFormInEditMode(existingSourceInDb.name);
       expect(sourcePO.getFormTitle().getText()).toEqual(`Edit Source`);
       expect(sourcePO.getFieldName().getAttribute('value')).toEqual(existingSourceInDb.name);
       expect(sourcePO.getFieldTypeCode().getAttribute('value')).toEqual(existingSourceInDb.typeCode);
@@ -135,26 +135,26 @@ describe(`Admin - Source Page`, () => {
     });
 
     it(`should not allow the user to submit the form when updating source with mandatory fields empty`, () => {
-      sourcePO.loadFormInEditModeForSource(newTestSource.name);
+      sourcePO.loadFormInEditMode(newTestSource.name);
       sourcePO.getFieldName().clear();
       sourcePO.getFieldTypeCode().clear();
       sourcePO.getSubmitButton().click();
       expect(sourcePO.getFormInputOnlyFields().first().getAttribute(`class`)).toContain('ng-invalid');
       expect(sourcePO.getFormInputOnlyFields().get(1).getAttribute(`class`)).toContain('ng-invalid');
       sourcePO.pageRefresh();
-      sourcePO.loadFormInEditModeForSource(newTestSource.name);
+      sourcePO.loadFormInEditMode(newTestSource.name);
       sourcePO.getFieldName().clear();
       sourcePO.getSubmitButton().click();
       expect(sourcePO.getFormInputOnlyFields().first().getAttribute(`class`)).toContain('ng-invalid');
       sourcePO.pageRefresh();
-      sourcePO.loadFormInEditModeForSource(newTestSource.name);
+      sourcePO.loadFormInEditMode(newTestSource.name);
       sourcePO.getFieldTypeCode().clear();
       sourcePO.getSubmitButton().click();
       expect(sourcePO.getFormInputOnlyFields().get(1).getAttribute(`class`)).toContain('ng-invalid');
     });
 
     it(`should show an error dialog when updating source with mandatory fields that already exist`, () => {
-      sourcePO.loadFormInEditModeForSource(newTestSource.name);
+      sourcePO.loadFormInEditMode(newTestSource.name);
       sourcePO.getFieldName().clear();
       sourcePO.getFieldName().sendKeys(existingSourceInDb.name);
       sourcePO.getSubmitButton().click();
@@ -162,7 +162,7 @@ describe(`Admin - Source Page`, () => {
       expect(sourcePO.getDialogTitle().getText()).toEqual('Error');
       expect(sourcePO.getDialogMessage().getText()).toContain('duplicate key error');
       sourcePO.pageRefresh();
-      sourcePO.loadFormInEditModeForSource(newTestSource.name);
+      sourcePO.loadFormInEditMode(newTestSource.name);
       sourcePO.getFieldTypeCode().clear();
       sourcePO.getFieldTypeCode().sendKeys(existingSourceInDb.typeCode);
       sourcePO.getSubmitButton().click();
@@ -172,7 +172,7 @@ describe(`Admin - Source Page`, () => {
     });
 
     it(`should update an existing source`, () => {
-      sourcePO.loadFormInEditModeForSource(newTestSource.name);
+      sourcePO.loadFormInEditMode(newTestSource.name);
       sourcePO.getFieldName().clear();
       sourcePO.getFieldName().sendKeys(newSourceForUpdate.name);
       sourcePO.getFieldTypeCode().clear();
@@ -184,13 +184,13 @@ describe(`Admin - Source Page`, () => {
       sourcePO.waitForFormDown();
       sourcePO.getSearchField().clear();
       sourcePO.getSearchField().sendKeys(newSourceForUpdate.name);
-      expect(sourcePO.getFirstCellInARow().getText()).toEqual(newSourceForUpdate.name);
-      expect(sourcePO.getCellRow().get(1).getText()).toEqual(newSourceForUpdate.typeCode);
-      expect(sourcePO.getCellRow().last().getText()).toEqual(newSourceForUpdate.status);
+      expect(sourcePO.getFirstCellInFirstRow().getText()).toEqual(newSourceForUpdate.name);
+      expect(sourcePO.getTableRows().get(1).getText()).toEqual(newSourceForUpdate.typeCode);
+      expect(sourcePO.getTableRows().last().getText()).toEqual(newSourceForUpdate.status);
     });
 
     it(`should show in use for source being used`, () => {
-      sourcePO.loadFormInEditModeForSource(existingSourceInDb.name);
+      sourcePO.loadFormInEditMode(existingSourceInDb.name);
       expect(sourcePO.checkIfSourceIsUsed()).toBeTruthy();
     });
   });

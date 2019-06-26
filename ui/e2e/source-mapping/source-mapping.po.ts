@@ -1,10 +1,11 @@
-import {browser, by, element, protractor} from 'protractor';
+import {browser, by, element} from 'protractor';
 import {CommonPO} from '../common.po';
 
+const pageUrl = '/admn/source-mapping';
 export class SourceMappingPO extends CommonPO {
 
-  navigateTo() {
-    return super.navigateTo('/admn/source-mapping');
+  constructor() {
+    super(pageUrl);
   }
 
   getActiveModules() {

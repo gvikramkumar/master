@@ -1,10 +1,12 @@
 import {browser, by, element} from 'protractor';
 import {CommonPO} from '../common.po';
 
+const pageUrl = '/admn/open-period';
+
 export class OpenPeriodPO extends CommonPO {
 
-  navigateTo() {
-    return super.navigateTo('/admn/open-period');
+  constructor() {
+    super(pageUrl);
   }
 
   getActiveModules() {

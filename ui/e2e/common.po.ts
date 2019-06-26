@@ -5,8 +5,17 @@ import * as request from 'request';
 import * as os from 'os';
 
 export class CommonPO {
+  pageUrl: string;
   container = element(by.className(`fin-container`));
+  table = element(by.className(`mat-table`));
+  form = element(by.className('edit-form-container'));
+  dialog = element(by.className(`mat-dialog-container`));
+
   EC = protractor.ExpectedConditions;
+
+  constructor(_pageUrl) {
+    this.pageUrl = _pageUrl;
+  }
 
   finJsonRequest(_url, method, json, queryString, _options = {}) {
     const options = {
@@ -29,12 +38,63 @@ export class CommonPO {
     });
   }
 
-  navigateTo(page) {
-    return browser.get(page);
+  navigateTo() {
+    return browser.get(this.pageUrl);
+  }
+
+  pageRefresh() {
+    browser.refresh();
+    this.waitForTableToLoad();
   }
 
   waitForPageToLoad() {
     browser.wait(this.EC.presenceOf(this.container));
+  }
+
+
+  // Table functions
+  waitForTableToLoad() {
+    browser.wait(this.EC.presenceOf(this.table));
+  }
+
+  getSearchField() {
+    return element.all(by.className(`mat-input-element`)).first();
+  }
+
+  async getCountOfItemsLoadedInTheTable() {
+    const range = await element(by.className(`mat-paginator-range-label`)).getText();
+    return Number(range.substr(range.indexOf('f') + 2));
+  }
+
+  getTableRows() {
+    return element.all(by.className(`mat-cell`));
+  }
+
+  getFirstCellInFirstRow() {
+    return this.getTableRows().first().element(by.tagName(`a`));
+  }
+
+  // Form functions
+  getFormTitle() {
+    return element(by.tagName(`legend`));
+  }
+
+  waitForFormUp() {
+    browser.wait(this.EC.presenceOf(this.form));
+  }
+
+  waitForFormDown() {
+    browser.wait(this.EC.stalenessOf(this.form));
+  }
+
+  loadFormInEditMode(name) {
+    this.getSearchField().sendKeys(name);
+    this.getFirstCellInFirstRow().click();
+    this.waitForFormUp();
+  }
+
+  getFormField(selector) {
+    return element(by.name(selector)).element(by.className(`form-group__text`)).element(by.className(`ng-star-inserted`));
   }
 
   // Form Buttons
@@ -48,6 +108,24 @@ export class CommonPO {
 
   getCancelButton() {
     return element(by.buttonText(`Cancel`));
+  }
+
+  // Dialog functions
+  waitForDialogToShow() {
+    browser.wait(this.EC.presenceOf(this.dialog));
+  }
+
+  getDialogTitle() {
+    return element(by.className(`mat-dialog-title`));
+  }
+
+  getDialogMessage() {
+    return element(by.className(`fin-dialog-title`));
+  }
+
+  closeDialog() {
+    element(by.buttonText('OK')).click();
+    browser.wait(this.EC.stalenessOf(this.dialog));
   }
 
 

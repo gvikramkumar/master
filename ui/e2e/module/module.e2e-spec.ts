@@ -36,19 +36,19 @@ describe(`Admin - Module Page`, () => {
 
   beforeEach(() => {
     modulePO.navigateTo();
-    modulePO.waitForModulesToLoad();
+    modulePO.waitForTableToLoad();
   });
 
   it(`should load all the modules`, () => {
-    expect(modulePO.getModulesLoaded()).toBeGreaterThanOrEqual(11);
+    expect(modulePO.getCountOfItemsLoadedInTheTable()).toBeGreaterThanOrEqual(11);
   });
 
   it(`should find module from search field`, () => {
     modulePO.getSearchField().sendKeys(existingModuleInDb.name);
-    expect(modulePO.getFirstCellInARow().getText()).toEqual(existingModuleInDb.name);
-    expect(modulePO.getCellRow().get(1).getText()).toEqual(existingModuleInDb.abbrev);
-    expect(modulePO.getCellRow().get(2).getText()).toEqual(existingModuleInDb.displayOrder);
-    expect(modulePO.getCellRow().last().getText()).toEqual(existingModuleInDb.status);
+    expect(modulePO.getFirstCellInFirstRow().getText()).toEqual(existingModuleInDb.name);
+    expect(modulePO.getTableRows().get(1).getText()).toEqual(existingModuleInDb.abbrev);
+    expect(modulePO.getTableRows().get(2).getText()).toEqual(existingModuleInDb.displayOrder);
+    expect(modulePO.getTableRows().last().getText()).toEqual(existingModuleInDb.status);
   });
 
   describe(`Add Module Tests`, () => {
@@ -141,10 +141,10 @@ describe(`Admin - Module Page`, () => {
       modulePO.getSubmitButton().click();
       modulePO.waitForFormDown();
       modulePO.getSearchField().sendKeys(newTestModuleActive.name);
-      expect(modulePO.getFirstCellInARow().getText()).toEqual(newTestModuleActive.name);
-      expect(modulePO.getCellRow().get(1).getText()).toEqual(newTestModuleActive.abbrev);
-      expect(modulePO.getCellRow().get(2).getText()).toEqual(newTestModuleActive.displayOrder);
-      expect(modulePO.getCellRow().last().getText()).toEqual(newTestModuleActive.status);
+      expect(modulePO.getFirstCellInFirstRow().getText()).toEqual(newTestModuleActive.name);
+      expect(modulePO.getTableRows().get(1).getText()).toEqual(newTestModuleActive.abbrev);
+      expect(modulePO.getTableRows().get(2).getText()).toEqual(newTestModuleActive.displayOrder);
+      expect(modulePO.getTableRows().last().getText()).toEqual(newTestModuleActive.status);
     });
 
     it(`should add a new module with inactive status`, () => {
@@ -157,16 +157,16 @@ describe(`Admin - Module Page`, () => {
       modulePO.getSubmitButton().click();
       modulePO.waitForFormDown();
       modulePO.getSearchField().sendKeys(newTestModuleInactive.name);
-      expect(modulePO.getFirstCellInARow().getText()).toEqual(newTestModuleInactive.name);
-      expect(modulePO.getCellRow().get(1).getText()).toEqual(newTestModuleInactive.abbrev);
-      expect(modulePO.getCellRow().get(2).getText()).toEqual(newTestModuleInactive.displayOrder);
-      expect(modulePO.getCellRow().last().getText()).toEqual(newTestModuleInactive.status);
+      expect(modulePO.getFirstCellInFirstRow().getText()).toEqual(newTestModuleInactive.name);
+      expect(modulePO.getTableRows().get(1).getText()).toEqual(newTestModuleInactive.abbrev);
+      expect(modulePO.getTableRows().get(2).getText()).toEqual(newTestModuleInactive.displayOrder);
+      expect(modulePO.getTableRows().last().getText()).toEqual(newTestModuleInactive.status);
     });
   });
 
   describe(`Update Module Tests`, () => {
     it(`should show form with module values on clicking on the module name in table`, () => {
-      modulePO.loadFormInEditModeForModule(existingModuleInDb.name);
+      modulePO.loadFormInEditMode(existingModuleInDb.name);
       expect(modulePO.getFormTitle().getText()).toEqual(`Edit Module`);
       expect(modulePO.getFieldModuleName().getAttribute('value')).toEqual(existingModuleInDb.name);
       expect(modulePO.getFieldAbbreviation().getAttribute('value')).toEqual(existingModuleInDb.abbrev);
@@ -178,7 +178,7 @@ describe(`Admin - Module Page`, () => {
     });
 
     it(`should not allow the user to submit the form when updating source with mandatory fields empty`, () => {
-      modulePO.loadFormInEditModeForModule(newTestModuleActive.name);
+      modulePO.loadFormInEditMode(newTestModuleActive.name);
       modulePO.getFieldModuleName().clear();
       modulePO.getFieldAbbreviation().clear();
       modulePO.getFieldDisplayOrder().clear();
@@ -187,24 +187,24 @@ describe(`Admin - Module Page`, () => {
       expect(modulePO.getFormInputOnlyFields().get(1).getAttribute(`class`)).toContain('ng-invalid');
       expect(modulePO.getFormInputOnlyFields().get(2).getAttribute(`class`)).toContain('ng-invalid');
       modulePO.pageRefresh();
-      modulePO.loadFormInEditModeForModule(newTestModuleActive.name);
+      modulePO.loadFormInEditMode(newTestModuleActive.name);
       modulePO.getFieldModuleName().clear();
       modulePO.getSubmitButton().click();
       expect(modulePO.getFormInputOnlyFields().first().getAttribute(`class`)).toContain('ng-invalid');
       modulePO.pageRefresh();
-      modulePO.loadFormInEditModeForModule(newTestModuleActive.name);
+      modulePO.loadFormInEditMode(newTestModuleActive.name);
       modulePO.getFieldAbbreviation().clear();
       modulePO.getSubmitButton().click();
       expect(modulePO.getFormInputOnlyFields().get(1).getAttribute(`class`)).toContain('ng-invalid');
       modulePO.pageRefresh();
-      modulePO.loadFormInEditModeForModule(newTestModuleActive.name);
+      modulePO.loadFormInEditMode(newTestModuleActive.name);
       modulePO.getFieldDisplayOrder().clear();
       modulePO.getSubmitButton().click();
       expect(modulePO.getFormInputOnlyFields().get(2).getAttribute(`class`)).toContain('ng-invalid');
     });
 
     it(`should show an error message when updating source with mandatory fields that already exist`, () => {
-      modulePO.loadFormInEditModeForModule(newTestModuleActive.name);
+      modulePO.loadFormInEditMode(newTestModuleActive.name);
       modulePO.getFieldModuleName().clear();
       modulePO.getFieldModuleName().sendKeys(existingModuleInDb.name);
       expect(modulePO.getErrorMessage(0)).toEqual('Value already exists');
@@ -217,7 +217,7 @@ describe(`Admin - Module Page`, () => {
     });
 
     it(`should show an error message when updating source with mandatory fields that are invalid`, () => {
-      modulePO.loadFormInEditModeForModule(newTestModuleActive.name);
+      modulePO.loadFormInEditMode(newTestModuleActive.name);
       modulePO.getFieldAbbreviation().clear();
       modulePO.getFieldAbbreviation().sendKeys('a');
       expect(modulePO.getErrorMessage(0)).toEqual('Must be exactly 4 characters long');
@@ -229,14 +229,14 @@ describe(`Admin - Module Page`, () => {
       expect(modulePO.getErrorMessage(0)).toEqual('Must be exactly 4 characters long');
       modulePO.getFieldAbbreviation().clear();
       modulePO.pageRefresh();
-      modulePO.loadFormInEditModeForModule(newTestModuleActive.name);
+      modulePO.loadFormInEditMode(newTestModuleActive.name);
       modulePO.getFieldDisplayOrder().clear();
       modulePO.getFieldDisplayOrder().sendKeys('a');
       expect(modulePO.getErrorMessage(0)).toEqual('Not a number');
     });
 
     it(`should update an active module to inactive`, () => {
-      modulePO.loadFormInEditModeForModule(newTestModuleActive.name);
+      modulePO.loadFormInEditMode(newTestModuleActive.name);
       modulePO.getFieldDescription().clear();
       modulePO.getFieldDescription().sendKeys('Active Module added during testing made inactive');
       modulePO.getStatusCheckBox().click();
@@ -244,14 +244,14 @@ describe(`Admin - Module Page`, () => {
       modulePO.waitForFormDown();
       modulePO.getSearchField().clear();
       modulePO.getSearchField().sendKeys(newTestModuleActive.name);
-      expect(modulePO.getFirstCellInARow().getText()).toEqual(newTestModuleActive.name);
-      expect(modulePO.getCellRow().get(1).getText()).toEqual(newTestModuleActive.abbrev);
-      expect(modulePO.getCellRow().get(2).getText()).toEqual(newTestModuleActive.displayOrder);
-      expect(modulePO.getCellRow().last().getText()).toEqual('Inactive');
+      expect(modulePO.getFirstCellInFirstRow().getText()).toEqual(newTestModuleActive.name);
+      expect(modulePO.getTableRows().get(1).getText()).toEqual(newTestModuleActive.abbrev);
+      expect(modulePO.getTableRows().get(2).getText()).toEqual(newTestModuleActive.displayOrder);
+      expect(modulePO.getTableRows().last().getText()).toEqual('Inactive');
     });
 
     it(`should update an Inactive module to active`, () => {
-      modulePO.loadFormInEditModeForModule(newTestModuleInactive.name);
+      modulePO.loadFormInEditMode(newTestModuleInactive.name);
       modulePO.getFieldDescription().clear();
       modulePO.getFieldDescription().sendKeys('Inactive Module added during testing made active');
       modulePO.getStatusCheckBox().click();
@@ -259,10 +259,10 @@ describe(`Admin - Module Page`, () => {
       modulePO.waitForFormDown();
       modulePO.getSearchField().clear();
       modulePO.getSearchField().sendKeys(newTestModuleInactive.name);
-      expect(modulePO.getFirstCellInARow().getText()).toEqual(newTestModuleInactive.name);
-      expect(modulePO.getCellRow().get(1).getText()).toEqual(newTestModuleInactive.abbrev);
-      expect(modulePO.getCellRow().get(2).getText()).toEqual(newTestModuleInactive.displayOrder);
-      expect(modulePO.getCellRow().last().getText()).toEqual('Active');
+      expect(modulePO.getFirstCellInFirstRow().getText()).toEqual(newTestModuleInactive.name);
+      expect(modulePO.getTableRows().get(1).getText()).toEqual(newTestModuleInactive.abbrev);
+      expect(modulePO.getTableRows().get(2).getText()).toEqual(newTestModuleInactive.displayOrder);
+      expect(modulePO.getTableRows().last().getText()).toEqual('Active');
     });
   });
   });
