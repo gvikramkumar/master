@@ -266,7 +266,7 @@ export class EnvironmentService {
                 this.basePdafApiUrl = 'https://api-supplychain-dev.cisco.com/pdafapp';
                 this.authTokenBaseApiUrl = 'https://cloudsso-test.cisco.com';
                 this.clientId = 'cool_pdaf_client';
-                this.redirectUrl = 'https://cool-qa.cisco.com/cool';
+                this.redirectUrl = 'https://cool-qa2.cisco.com/cool';
                 this.baseIdpUrl = 'https://idp-stage-api.cisco.com';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
@@ -279,7 +279,7 @@ export class EnvironmentService {
                 this.basePdafApiUrl = 'https://api-supplychain-dev.cisco.com/pdafapp';
                 this.authTokenBaseApiUrl = 'https://cloudsso-test.cisco.com';
                 this.clientId = 'cool_pdaf_client';
-                this.redirectUrl = 'https://cool-dev.cisco.com/cool';
+                this.redirectUrl = 'https://cool-dev2.cisco.com/cool';
                 this.baseIdpUrl = 'https://idp-stage-api.cisco.com';
                 this.idpClientId = 'cool-idp-nprd';
                 this.idpClientSecret = 'Cool123!';
