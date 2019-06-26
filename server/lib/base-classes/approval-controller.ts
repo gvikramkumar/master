@@ -51,16 +51,12 @@ export default class ApprovalController extends ControllerBase {
     }
     promise
       .then(item => {
-        if (saveMode === 'add' || saveMode === 'copy') {
-          item.approvalUrl = `${req.headers.origin}/prof/${req.query.type}/edit/${item.id};mode=view`;
-          return this.repo.update(item, '', true, true, false);
-        } else {
-          return item;
-        }
-      })
-      .then(item => {
-        return this.sendApprovalEmail(null, req, ApprovalMode.submit, item)
-          .then(() => res.json(item));
+        item.approvalUrl = `${req.headers.origin}/prof/${req.query.type}/edit/${item.id};mode=view`;
+        return this.repo.update(item, '', true, true, false)
+          .then(updatedItem => {
+            return this.sendApprovalEmail(null, req, ApprovalMode.submit, updatedItem)
+              .then(() => res.json(updatedItem));
+          });
       })
       .catch(next);
   }
@@ -225,46 +221,32 @@ export default class ApprovalController extends ControllerBase {
     const ppmtEmail = req.dfa.ppmtEmail;
     const promises = [];
     if (mode === ApprovalMode.submit && item.approvedOnce === 'Y') {
-      promises.push(this.repo.getOneLatestActiveInactive({moduleId, name: item.name, approvedOnce: 'Y'}));
+      promises.push(
+        this.repo.getOneLatestActiveInactive({moduleId, name: item.name, approvedOnce: 'Y'}),
+        new SourceRepo().getMany()
+      );
     }
     return Promise.all(promises)
       .then(results => {
         switch (mode) {
           case ApprovalMode.submit:
-            const submitSubject = `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Submitted for Approval`;
             if (item.approvedOnce === 'Y') {
               body = `The "${item.name}" DFA ${type} has been updated and submitted by ${req.user.fullName} for approval: <br><br>${link}`;
-              let oldObj = results[0];
+              const oldObj = results[0];
+              const sources = results[1];
               if (oldObj) {
                 if (item.toObject) {
                   item = item.toObject();
                 }
-                if (oldObj.toObject) {
-                  oldObj = oldObj.toObject();
-                }
-                if (svrUtil.checkForPropChange('sourceId', item, oldObj)) {
-                  const sourceRepo = new SourceRepo();
-                  return Promise.all([
-                    sourceRepo.getOneByQuery({sourceId: item.sourceId}),
-                    sourceRepo.getOneByQuery({sourceId: oldObj.sourceId})
-                  ]).then(sources => {
-                    delete item.sourceId;
-                    delete oldObj.sourceId;
-                    item['sourceName'] = sources[0].name;
-                    oldObj['sourceName'] = sources[1].name;
-                    body += '<br><br><b>Summary of changes:</b><br><br>' +
-                      shUtil.getUpdateTable(shUtil.getObjectChanges(oldObj, item, omitProperties));
-                    return mail.sendHtmlMail(dfaAdminEmail, bizAdminEmail, `${itadminEmail},${ppmtEmail},${svrUtil.getEnvEmail(req.user.email)}`,
-                      submitSubject, body);
-                  });
-                } else {
-                  body += '<br><br><b>Summary of changes:</b><br><br>' +
-                    shUtil.getUpdateTable(shUtil.getObjectChanges(oldObj, item, omitProperties));
-                }
+                let objectChanges = shUtil.getObjectChanges(oldObj.toObject(), item, omitProperties);
+                objectChanges = this.addSourceNameForSourceId(sources, objectChanges);
+                body += '<br><br><b>Summary of changes:</b><br><br>' +
+                  shUtil.getUpdateTable(objectChanges);
               }
             } else {
               body = `A new DFA ${type} has been submitted by ${req.user.fullName} for approval: <br><br>${link}`;
             }
+            const submitSubject = `${this.getEnv()}DFA - ${_.find(req.dfa.modules, {moduleId}).name} - ${_.upperFirst(type)} Submitted for Approval`;
             return mail.sendHtmlMail(dfaAdminEmail, bizAdminEmail, `${itadminEmail},${ppmtEmail},${svrUtil.getEnvEmail(req.user.email)}`,
               submitSubject, body);
           case ApprovalMode.approve:
@@ -288,6 +270,18 @@ export default class ApprovalController extends ControllerBase {
         }
       });
 
+  }
+
+  addSourceNameForSourceId(sources, objectChanges) {
+    const path = 'sourceId';
+    const sourceChange = _.find(objectChanges, {path});
+    if (sourceChange) {
+      const oldVal = _.find(sources, {sourceId: Number(sourceChange.oldVal)}).name;
+      const newVal = _.find(sources, {sourceId: Number(sourceChange.newVal)}).name;
+      objectChanges.push({path: 'sourceName', oldVal, newVal});
+      // _.remove(objectChanges, sourceChange);
+    }
+    return objectChanges;
   }
 
   approvalEmailReminder(type: string): any {
