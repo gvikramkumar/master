@@ -251,3 +251,174 @@ span.icon-cart {
 .bold-row {
   font-weight: bold;
 }
+
+
+
+
+
+
+/* custom css for ToolTip validation*/
+
+
+/* tooltip */
+
+
+.tool-tip{
+	color: #fff;
+	background-color: #005073;
+	text-shadow: none;
+	font-size: .8em;
+	visibility: hidden;
+	-webkit-border-radius: 7px;
+	-moz-border-radius: 7px;
+	-o-border-radius: 7px;
+	border-radius: 7px;
+	opacity: 0;
+	z-index: 999;
+	padding: 3px 8px;
+	position: absolute;
+	cursor: default;
+	-webkit-transition: all 240ms ease-in-out;
+	-moz-transition: all 240ms ease-in-out;
+	-ms-transition: all 240ms ease-in-out;
+	-o-transition: all 240ms ease-in-out;
+	transition: all 240ms ease-in-out;
+}
+
+.tool-tip,
+.tool-tip.top{
+	top: auto;
+	bottom: 114%;
+	left: 50%;
+}
+
+.tool-tip.top:after,
+.tool-tip:after{
+	position: absolute;
+	bottom: -12px;
+	left: 50%;
+	margin-left: -7px;
+	content: ' ';
+	height: 0px;
+	width: 0px;
+	border: 6px solid transparent;
+  border-top-color: #005073;
+}
+
+/* default heights, width and margin w/o Javscript */
+
+.tool-tip ul {
+  margin: 0;
+  padding: 5px 5px 5px 20px;
+}
+.tool-tip ul li {
+  list-style: disc;
+  white-space: normal;
+}
+.tool-tip,
+.tool-tip.top{
+	min-width: 80px;
+  max-width: 240px;
+  min-height: 22px;
+  transform: translateX(-50%);
+  width: 240px;
+
+}
+
+/* tool tip position right */
+
+.tool-tip.right{
+	top: 50%;
+	right: auto;
+	left: 106%;
+	margin-top: -15px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.tool-tip.right:after{
+	left: -5px;
+	top: 50%;
+	margin-top: -6px;
+	bottom: auto;
+	border-top-color: transparent;
+  border-right-color: #005073;
+}
+
+
+
+
+
+
+/* on hover of element containing tooltip default*/
+
+*:not(.on-focus):hover > .tool-tip,
+.on-focus input:focus + .tool-tip,
+.on-focus select:focus + .tool-tip,
+.on-focus input:hover + .tool-tip,
+.on-focus select:hover + .tool-tip {
+	visibility: visible;
+  opacity: 1;
+  text-align: left;
+	-webkit-transition: all 240ms ease-in-out;
+	-moz-transition: all 240ms ease-in-out;
+	-ms-transition: all 240ms ease-in-out;
+	-o-transition: all 240ms ease-in-out;
+	transition: all 240ms ease-in-out;
+}
+
+
+/* tool tip slide out */
+
+*:not(.on-focus) > .tool-tip.slideIn,
+.on-focus > .tool-tip{
+	display: block;
+}
+
+.on-focus > .tool-tip.slideIn{
+	z-index: -1;
+}
+
+.on-focus > input:focus + .tool-tip.slideIn,
+.on-focus > select:focus + .tool-tip.slideIn,
+.on-focus > input:hover + .tool-tip.slideIn,
+.on-focus > select:hover + .tool-tip.slideIn {
+	z-index: 1;
+}
+
+
+
+/* top slideIn */
+
+*:not(.on-focus) > .tool-tip.slideIn,
+*:not(.on-focus) > .tool-tip.slideIn.top,
+.on-focus > .tool-tip.slideIn,
+.on-focus > .tool-tip.slideIn.top {
+	bottom: 50%;
+}
+
+*:not(.on-focus):hover > .tool-tip.slideIn,
+*:not(.on-focus):hover > .tool-tip.slideIn.top,
+.on-focus > input:focus + .tool-tip.slideIn,
+.on-focus > input:focus + .tool-tip.slideIn.top,
+.on-focus > input:hover + .tool-tip.slideIn,
+.on-focus > input:hover + .tool-tip.slideIn.top,
+.on-focus > select:focus + .tool-tip.slideIn,
+.on-focus > select:focus + .tool-tip.slideIn.top,
+.on-focus > select:hover + .tool-tip.slideIn,
+.on-focus > select:hover + .tool-tip.slideIn.top {
+	bottom: 110%;
+}
+
+.validaionStyles{
+    border: 1px solid #e2231a !important;
+    box-shadow: 0.025px 0.025px 0.025px red;
+    margin: 2px;
+    box-shadow: inset 0.025px 0.025px 0.025px rgba(226, 35, 26, 0.25) !important;
+}
+
+.validaionStylesValid{
+    background: white;
+}
+.icon-info-custom{color:#007493;}
+.info{padding-right: 5px}

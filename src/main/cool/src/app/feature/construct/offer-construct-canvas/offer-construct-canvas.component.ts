@@ -777,7 +777,19 @@ export class OfferconstructCanvasComponent implements OnInit, OnDestroy {
 
   handleChange(obj, $event) {
     const newValue = $event.target.value;
-    obj.name = newValue;
+    this.offerConstructCanvasService.validatePID(newValue).subscribe((data) => {
+      if(data.length > 0){
+          obj.validationMessage = "Item Name already exists, please type another name";
+          obj.isvalid = false;
+          obj.name = newValue;
+          return;
+      }
+      else{
+        obj.validationMessage = "";
+        obj.isvalid = "";
+      }
+    });
+
   }
 
   trimSpaces = function (obj, $event) {
