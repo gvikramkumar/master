@@ -153,7 +153,7 @@ export class RightPanelComponent implements OnInit {
       if(data !== ''){
         this.processCurrentPhaseInfo(data);
       }else{
-    this.offerPhaseService.getOfferPhaseDetails(this.currentOfferId, true).subscribe(resOfferPhases => {
+    this.offerPhaseService.getOfferPhaseDetails(this.currentOfferId, false).subscribe(resOfferPhases => {
       if (resOfferPhases) {
         this.offerPhaseDetailsList = resOfferPhases;
 
