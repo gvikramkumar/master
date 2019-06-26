@@ -262,7 +262,7 @@ export class EnvironmentService {
                 this.tncOwbUrl = 'https://offer-stage.cloudapps.cisco.com/owb/#/subscription';
                 break;
             case 'qualityassurance':
-                this.baseApiUrl = 'https://cool-srv-qa.cisco.com/coolsrv';
+                this.baseApiUrl = 'https://cool-srv-qa2.cisco.com/coolsrv';
                 this.basePdafApiUrl = 'https://api-supplychain-dev.cisco.com/pdafapp';
                 this.authTokenBaseApiUrl = 'https://cloudsso-test.cisco.com';
                 this.clientId = 'cool_pdaf_client';
@@ -275,7 +275,7 @@ export class EnvironmentService {
                 this.tncOwbUrl = 'https://offer-stage.cloudapps.cisco.com/owb/#/subscription';
                 break;
             case 'development':
-                this.baseApiUrl = 'https://cool-srv-dev.cisco.com/coolsrv';
+                this.baseApiUrl = 'https://cool-srv-dev2.cisco.com/coolsrv';
                 this.basePdafApiUrl = 'https://api-supplychain-dev.cisco.com/pdafapp';
                 this.authTokenBaseApiUrl = 'https://cloudsso-test.cisco.com';
                 this.clientId = 'cool_pdaf_client';
