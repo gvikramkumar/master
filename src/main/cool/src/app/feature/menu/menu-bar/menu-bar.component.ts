@@ -3,11 +3,12 @@ import { MenuItem } from 'primeng/api';
 import { MenuBarService } from '@app/services/menu-bar.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EnvironmentService } from '@env/environment.service';
-import { UserService } from '@app/core/services';
+import { UserService, LoaderService } from '@app/core/services';
 import { Location } from '@angular/common';
 import { AccessManagementService } from '@app/services/access-management.service';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { OfferDetailViewService } from '@app/services/offer-detail-view.service';
+import { ConfigurationService } from '@app/core/services/configuration.service';
 
 @Component({
     selector: 'app-menu-bar',
@@ -26,14 +27,14 @@ export class MenuBarComponent implements OnInit {
     @Output() onProceedToNext = new EventEmitter();
     @Output() updateMessage = new EventEmitter<string>();
     @Output() getMarkCompleteStatus = new EventEmitter<boolean>();
-   
+
     currentURL: String;
     currentUsername: any;
 
     items: MenuItem[];
     showPopup: boolean;
     popupType: String = '';
-    
+
     itemShow: Object = {};
     offerBuilderdata = {};
     navigateHash: Object = {};
@@ -48,9 +49,11 @@ export class MenuBarComponent implements OnInit {
     markCompleteStatus: boolean;
     canUncheckComplete: boolean;
     designReviewRequestApprovalStatus: boolean;
-    
-
-
+    markCompleteVisible: Boolean = false;
+    appRoleList;
+    disableMessage: String;
+    milestone: String;
+    milestoneStatus: String;
     constructor(
         private router: Router,
         private _location: Location,
@@ -59,9 +62,11 @@ export class MenuBarComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private environmentService: EnvironmentService,
         private accessMgmtService: AccessManagementService,
-        private offerDetailViewService: OfferDetailViewService
-        ) {
-        
+        private offerDetailViewService: OfferDetailViewService,
+        private configurationService: ConfigurationService,
+        private loaderService: LoaderService
+    ) {
+
         this.showPopup = false;
 
         this.currentURL = activatedRoute.snapshot['_routerState'].url;
@@ -70,7 +75,7 @@ export class MenuBarComponent implements OnInit {
             this.caseId = params['caseId'];
             this.offerId = params['offerId'];
         });
-       
+
         this.menuBarService.getMilestoneDetails(this.offerId).subscribe(data => {
             if (data != null) {
                 if (data['ideate'] != null) {
@@ -149,7 +154,10 @@ export class MenuBarComponent implements OnInit {
 
         ];
 
-
+        this.appRoleList = this.configurationService.startupData.appRoleList;
+        if (this.appRoleList.includes('Owner') || this.appRoleList.includes('Co-Owner')) {
+            this.markCompleteVisible = true;
+        }
         this.menuBarService.getMilestoneDetails(this.offerId).subscribe(data => {
             if (this.currentURL.includes('offerDimension')) {
                 if(data['plan'][0]['status'] == 'Completed'){
@@ -320,10 +328,32 @@ export class MenuBarComponent implements OnInit {
     }
 
     confirmMarkComplete() {
-         this.showMarkcompletePopup = false;
-         this.getMarkCompleteStatus.next(this.markCompleteStatus);
-         this.onProceedToNext.emit('false');
-     //   this.disableMarkCompleteToggle();
+        if (this.canUncheckComplete === false) {
+            this.showMarkcompletePopup = false;
+            this.markCompleteStatus = !this.markCompleteStatus;
+        } else {
+            if (this.currentURL.includes('offerDimension')) {
+                this.milestone = 'Offer Dimension';
+            } else if (this.currentURL.includes('offerSolutioning')) {
+                this.milestone = 'Offer Solutioning';
+            } else if (this.currentURL.includes('offerConstruct')) {
+                this.milestone = 'Offer Components';
+            }
+            if (this.markCompleteStatus == false) {
+                this.milestoneStatus = 'Available';
+            } else if (this.markCompleteStatus == true) {
+                this.milestoneStatus = 'Completed';
+            }
+            this.showMarkcompletePopup = false;
+            this.loaderService.startLoading();
+            this.menuBarService.updateMarkCompleteStatus(this.offerId, this.milestone, this.milestoneStatus).subscribe((response) => {
+                this.getMarkCompleteStatus.next(this.markCompleteStatus);
+                this.onProceedToNext.emit('false');
+                this.sendUpdatedMilestoneData(response);
+                this.menuBarService.updateOfferPhaseWidget(response);
+                this.loaderService.stopLoading();
+            });
+        }
     }
 
     sendUpdatedMilestoneData(data) {
@@ -352,11 +382,12 @@ export class MenuBarComponent implements OnInit {
         }
     }
     disableMarkCompleteToggle() {
-        if (this.canMarkComplete === false || this.canUncheckComplete === false) {
+        if (this.canUncheckComplete === false) {
             this.shouldDisable = true;
+            this.disableMessage = "As Design Review has been requested, Offer Builder has been locked for edits."
         }
 
-     }
+    }
     showOfferInfo(event, overlaypanel: OverlayPanel) {
 
         this.offerDetailViewService.retrieveOfferDetails(this.offerId).subscribe(offerBuilderdata => {
