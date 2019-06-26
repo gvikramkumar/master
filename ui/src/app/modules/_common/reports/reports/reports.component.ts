@@ -182,57 +182,49 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
 
   getInitialData() {
     this.store.showSpinner = true;
-    let promise;
-    let obsFiscalMonth = false;
-    let obsFiscalYear = false;
-    let obsMeasure = false;
+    const promises = [];
+    let prmFiscalMonth;
+    let prmFiscalYear;
+    let prmMeasure;
     switch (this.report.type) {
       case 'sales-split-percentage':
-        obsFiscalMonth = true;
-        promise = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_sales_split_pctmap_upld', 'fiscal_month_id').toPromise();
+        prmFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_sales_split_pctmap_upld', 'fiscal_month_id').toPromise();
         break;
       case 'product-classification':
-        obsFiscalMonth = true;
-        promise = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_swalloc_manualmix_upld', 'fiscal_month_id').toPromise();
+        prmFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_swalloc_manualmix_upld', 'fiscal_month_id').toPromise();
         break;
       case 'alternate-sl2':
-        obsFiscalMonth = true;
-        promise = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_scms_triang_altsl2_map_upld', 'fiscal_month_id').toPromise();
+        prmFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_scms_triang_altsl2_map_upld', 'fiscal_month_id').toPromise();
         break;
       case 'corp-adjustment':
-        obsFiscalMonth = true;
-        promise = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_scms_triang_corpadj_map_upld', 'fiscal_month_id').toPromise();
+        prmFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_scms_triang_corpadj_map_upld', 'fiscal_month_id').toPromise();
         break;
       case 'disti-direct':
-        obsFiscalMonth = true;
-        promise = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_disti_to_direct_map_upld', 'fiscal_month_id').toPromise();
+        prmFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_disti_to_direct_map_upld', 'fiscal_month_id').toPromise();
         break;
       case 'service-map':
-        obsFiscalMonth = true;
-        promise = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_service_map_upld', 'fiscal_month_id').toPromise();
+        prmFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_service_map_upld', 'fiscal_month_id').toPromise();
         break;
       case 'service-training':
-        obsFiscalYear = true;
-        promise = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_service_trngsplit_pctmap_upld', 'fiscal_year').toPromise();
+        prmFiscalYear = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_service_trngsplit_pctmap_upld', 'fiscal_year').toPromise();
         break;
       case 'valid-slpf-driver':
       case 'dollar-upload':
-        obsMeasure = true;
-        promise = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'sub_measure_key', true).toPromise();
+        prmMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'sub_measure_key', true).toPromise();
         break;
       case 'mapping-upload':
-        obsMeasure = true;
-        promise = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_manual_map_upld', 'sub_measure_key', true).toPromise();
+        prmMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_manual_map_upld', 'sub_measure_key', true).toPromise();
         break;
       case 'dept-upload':
-        obsMeasure = true;
-        promise = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_dept_acct_map_upld', 'sub_measure_key', true).toPromise();
+        prmMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_dept_acct_map_upld', 'sub_measure_key', true).toPromise();
         break;
     }
-    shUtil.promiseChain(promise)
-      .then(result => {
+    promises.push(prmFiscalMonth, prmFiscalYear, prmMeasure);
+    shUtil.promiseChain(promises.filter(x => !!x))
+      .then(results => {
+        const result = results[0];
         this.store.showSpinner = false;
-        if (obsFiscalMonth) {
+        if (prmFiscalMonth) {
           this.fiscalMonths = result.map(fm => Number(fm)).sort().reverse().slice(0, 24)
             .map(fiscalMonth => ({name: shUtil.getFiscalMonthLongNameFromNumber(fiscalMonth), fiscalMonth}));
           if (this.fiscalMonths.length) {
@@ -240,7 +232,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
             this.disableDownload = false;
           }
         }
-        if (obsFiscalYear) {
+        if (prmFiscalYear) {
           this.fiscalYears = result.map(fy => ({name: `FY${fy}`, value: fy}));
           this.fiscalYears = _.orderBy(this.fiscalYears, ['value'], ['desc']);
           if (this.fiscalYears.length) {
@@ -249,7 +241,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
           }
 
         }
-        if (obsMeasure) {
+        if (prmMeasure) {
           const smKeys = result;
           this.submeasuresInData = this.submeasuresAll.filter(sm => _.includes(smKeys, sm.submeasureKey));
           this.measures = this.measuresAll.filter(m => _.includes(_.uniq(this.submeasuresInData.map(sm => sm.measureId)), m.measureId));
