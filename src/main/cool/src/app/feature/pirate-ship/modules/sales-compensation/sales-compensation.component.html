@@ -16,16 +16,16 @@
               <div class="row flex-center-vertical">
 
                 <div class="col-sm-12">
-                  <!-- <div class="pull-left" >
+                  <div class="pull-left" *ngIf="!viewOnlypermission && lastATOStatus==='Pending'">
                     <button class="btn btn--primary btn--cool btn--small tooltip" placement="top"
-                      (click)="showCommentsDialog($event, 'Reject')">
+                      (click)="showCommentsDialog($event, 'Reject')" [disabled]="selectedATO.length<1">
                       Reject <i class="icon-success"></i>
                     </button>
                     <button class="btn btn--primary btn--cool btn--small tooltip" placement="top"
-                      (click)="showCommentsDialog($event, 'Approve Details')">
+                      (click)="showCommentsDialog($event, 'Approve Details')" [disabled]="selectedATO.length<1" >
                       Approve <i class="icon-success"></i>
                     </button>
-                  </div>  -->
+                  </div> 
 
                   <div class="pull-left" *ngIf="lastATOStatus==='Approved'">
                     <div class="complete-st-cls">
@@ -118,13 +118,13 @@
                   <div class="row text-right">
                       <div class="form-actions">
                         <button class="btn btn--secondary btn--cool btn--small" (click)="closeCommentsDailog()">Cancel</button>
-                        <button class="btn btn--primary btn--cool btn--small" type="submit">Confirm</button>
+                        <button class="btn btn--primary btn--cool btn--small" type="submit" (click)="actOnATO()" >Confirm</button>
                       </div>
                     </div>
                 </p-dialog>
-              <div id="reject-alert" class="row" style="border: solid 1px red;margin: 1px;padding: 6px;font-size: 12px;">
-                <span class="icon-warning-outline text-danger" style="padding-right: 20px;"></span>
-                Sale Compensation module rejected
+              <div *ngIf="viewOnlypermission && lastATOStatus==='Rejected'" id="reject-alert" class="row" style="border: solid 1px red;margin: 1px;font-size: 12px;">
+                <span class="icon-warning-outline" style="padding: 4px;color:white;background-color: red;font-size: 19px;"></span>
+                <span style="padding-top: 9px;padding-left: 25px;">Sales Compensation module rejected</span>
               </div>
               <div class="row" *ngIf="!viewOnlypermission">
                 <div class="col-md-12">
@@ -134,8 +134,7 @@
               </div>    
     
               <div class="base-margin-top sales-compensation">
-                <p-treeTable class="item-creation" [value]="offerDetails" [columns]="salesCompensationColumns" selectionMode="checkbox"
-                [(selection)]="offerProductNodes"  [resizableColumns]="true">
+                <p-treeTable class="item-creation" [value]="offerDetails" [columns]="salesCompensationColumns">
                   <ng-template pTemplate="header" let-columns>
                     <tr>
                       <th *ngFor="let col of columns; let i = index" [ngStyle]="{'width': col.width}">
@@ -145,10 +144,11 @@
                       </th>
                     </tr>
                   </ng-template>
-                  <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+                  <ng-template pTemplate="body" let-rowData="rowData" let-columns="columns">
                       <tr>
                         <td *ngFor="let col of columns; let i = index">
-                          <div [ngClass]="{'text-left':i>0, 'text-center':i===0}">{{rowData[col.field]}}</div>
+                          <div *ngIf="i===0" [ngClass]="{'text-left':i>0, 'text-center':i===0}">{{rowData[col.field]|date:'dd-MMM-yyyy'}}</div>
+                          <div *ngIf="i!=0" [ngClass]="{'text-left':i>0, 'text-center':i===0}" style="word-break: break-word;" >{{rowData[col.field]}}</div>
                         </td>
                       </tr>
                   </ng-template>
@@ -169,15 +169,17 @@
                 Item List
                 <!-- selectedProductNodes : {{selectedProductNodes|json}} -->
                 <a class="pull-right">View Item Creation</a>
-                <p-treeTable class="item-creation" [value]="productDetails" [columns]="salesCompensationItemListColumnHeaders" selectionMode="multiple"
-                [(selection)]="selectedProductNodes"  [resizableColumns]="true"
-                (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)">
+                <p-treeTable class="item-creation" [value]="productDetails" [columns]="salesCompensationItemListColumnHeaders" 
+                selectionMode="checkbox" [(selection)]="selectedProductNodes" [resizableColumns]="true">
                   <ng-template pTemplate="header" let-columns>
                     <tr>
                       <th *ngFor="let col of columns;let i = index;"  [ngStyle]="{'width': col.width}" [ngClass]="{'text-left':(i>0&&i<4),'text-left':(i===0), 'text-center':i>3}">
                         <!-- <p-treeTableCheckbox class="pull-left" [value]="rowNode" *ngIf="i === 0"></p-treeTableCheckbox> -->
                         <!-- <p-checkbox name="selectAllATO" value="i" ></p-checkbox> -->
-                        <div *ngIf="i===0" class="selectAllATO-cls"><p-treeTableHeaderCheckbox ></p-treeTableHeaderCheckbox></div>                                                
+                        <div *ngIf="i===0 && !viewOnlypermission" class="selectAllATO-cls">
+                          <!-- <p-treeTableHeaderCheckbox ></p-treeTableHeaderCheckbox> -->
+                          <p-checkbox name="groupname" value="selectAllATO" [(ngModel)]="selectAllATOObj" (onChange)="toggleChecks($event)"></p-checkbox>
+                        </div>                                                
                         <div *ngIf="i!=0">{{col.header}}</div>
                       </th>
                     </tr>
@@ -185,7 +187,10 @@
                   <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
                       <tr>
                         <td *ngFor="let col of columns; let i = index">
-                          <p-treeTableCheckbox class="pull-left" [value]="rowNode" [disabled]="rowData[col.field]==='Approved'" *ngIf="i === 0"></p-treeTableCheckbox>
+                          <!-- <p-treeTableToggler [rowNode]="rowNode" *ngIf="i === 0 && rowData[col.field]==='Pending'"></p-treeTableToggler> -->
+                          <!-- <p-treeTableCheckbox class="pull-left" [value]="rowNode" *ngIf="i === 0"></p-treeTableCheckbox> -->
+                          <p-checkbox name="atoGroup" value="{{rowData['Id']}}" [(ngModel)]="selectedATO" 
+                          *ngIf="i === 0 && !viewOnlypermission" [disabled]="rowData['approvalStatus']!='Pending'" (onChange)="checkSelectedATOCount($event)"></p-checkbox>
                           <div [ngClass]="{'text-left':i<4, 'text-center':i>3}"  *ngIf="i!=0">
                             
                             <span [ngClass]="{'icon-padding icon-check-outline text-success icon-small':rowData[col.field]==='Approved', 
@@ -202,7 +207,6 @@
                   </ng-template>
                 </p-treeTable>
               </div>
-    
               <ng-template #selectedAtoView>
                 <br><br>
     

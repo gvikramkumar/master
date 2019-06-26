@@ -12,6 +12,7 @@ import { SalesCompensationComponent } from './sales-compensation.component';
 import * as _ from 'lodash';
 import { SALES_COMPENSATION_ROUTES } from './sales-compensation.routes';
 import { TreeTableModule, AutoCompleteModule, ConfirmDialogModule, OverlayPanelModule } from 'primeng/primeng';
+import {CheckboxModule} from 'primeng/checkbox';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { TreeTableModule, AutoCompleteModule, ConfirmDialogModule, OverlayPanelM
     TreeTableModule,
     ConfirmDialogModule,
     OverlayPanelModule,
+    CheckboxModule,
     RouterModule.forChild(SALES_COMPENSATION_ROUTES)
   ],
   exports: [

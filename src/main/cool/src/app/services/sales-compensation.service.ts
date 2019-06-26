@@ -24,4 +24,8 @@ export class SalesCompensationService {
     return this.httpClient.get(url, { withCredentials: true });
   }
 
+  approveRejectOffer(ATODetails: any): Observable<any> {
+    return this.httpClient.post(this.environmentService.REST_API_APPROVE_REJECT_OFFER_URL, ATODetails);
+  }
+
 }

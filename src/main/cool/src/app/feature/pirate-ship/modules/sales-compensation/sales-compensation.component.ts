@@ -19,7 +19,6 @@ import { SalesCompensationService } from '../../../../services/sales-compensatio
 import { importExpr } from '@angular/compiler/src/output/output_ast';
 import { ItemCreationService } from '@app/services/item-creation.service';
 
-
 @Component({
   selector: 'app-sales-compensation',
   templateUrl: './sales-compensation.component.html',
@@ -51,19 +50,23 @@ export class SalesCompensationComponent implements OnInit, OnDestroy {
   offerProductNodes: TreeNode[];
 
   selectedAto: any;
+  selectedATO: any = [];
   atoNames: string[] = [];
   atoList: any;
   selectedObjectAto: any;
   productDetails: any;
   selectedIndex: any;
-  offerDetails: any;
+  offerDetails: TreeNode[];
   public newComment: string;
   displayCommentsDialog:boolean = false;
   commentsHaeder:string = "";
   viewOnlypermission:boolean = true;
   offerDropdownValues: any;
   paramsSubscription: Subscription;
-  lastATOStatus: string = "Approved";
+  lastATOStatus: string = "Rejected";
+  selectAllATOObj:any = ["All"];
+  pendingATOs:number;
+  selectedProductDetailsReqObj:any;
 
   constructor(
     private loaderService: LoaderService,
@@ -95,23 +98,24 @@ export class SalesCompensationComponent implements OnInit, OnDestroy {
     this.itemCreationService.getOfferDropdownValues(this.offerId).subscribe(data => {
       this.offerDropdownValues = data;
     });
+    this.loadOfferDetails();    
     console.log("ato list : "+ this.atoNames);
     this.functionalRole = this.configurationService.startupData.functionalRole;
     if (this.functionalRole.includes('BUPM') || this.functionalRole.includes('SOE') || this.functionalRole.includes('OLE')) {
       this.viewOnlypermission = true;
     }
     else{
-      this.viewOnlypermission = false;
+      this.viewOnlypermission = true;
     }
     console.log("functionalRole : "+ this.functionalRole);
     this.newComment = '';
     this.salesCompensationColumns = [
-      { field: 'offerStarted',header: 'OFFER STARTED', value: '04-Aug-2019', width:'15%'},
-      { field: 'newOfferType',header: 'NEW OFFER TYPE', value: 'Yes', width:'15%' },
-      { field: 'webexOffer',header: 'WEBEX OFFER', value: 'No', width:'13%' },
-      { field: 'chargeType',header: 'CHARGE TYPE', value: 'Usage in Arrears w/ pre-commit,Periodic in Arrears', width:'20%' },
-      { field: 'offerType',header: 'OFFER TYPE', value: 'STORM', width:'13%' },
-      { field: 'bookingRecognitionType',header: 'BOOKING RECOGNITION TYPE', value: 'Revenue Recurring, Revenue Other', width:'24%' } 
+      { field: 'OFFER_CREATED',header: 'OFFER STARTED', value: '04-Aug-2019', width:'15%'},
+      { field: 'OFFER_NEW',header: 'NEW OFFER TYPE', value: 'Yes', width:'15%' },
+      { field: 'OFFER_WEBEX',header: 'WEBEX OFFER', value: 'No', width:'13%' },
+      { field: 'CHARGE_TYPE',header: 'CHARGE TYPE', value: 'Usage in Arrears w/ pre-commit,Periodic in Arrears', width:'20%' },
+      { field: 'OFFER_TYPE',header: 'OFFER TYPE', value: 'STORM', width:'13%' },
+      { field: 'BRT',header: 'BOOKING RECOGNITION TYPE', value: 'Revenue Recurring, Revenue Other', width:'24%' } 
     ]
     this.salesCompensationItemListColumnHeaders = [
       { field: 'Id',header: '', value: '1', width:'5%' },
@@ -119,18 +123,19 @@ export class SalesCompensationComponent implements OnInit, OnDestroy {
       { field: 'iccType',header: 'ICC TYPE', value: 'Xaas', width:'15%' },
       { field: 'offerType',header: 'OFFER TYPE', value: 'Webex', width:'15%' },
       { field: 'bookingRecognitionType',header: 'BOOKING RECOGNITION TYPE', value: 'Revenue Recurring' , width:'25%'},
-      { field: 'approvalStatus',header: 'APPROVAL STATUS', value: 'N/A', width:'17%' } 
+      { field: 'approvalStatus',header: 'APPROVAL STATUS', value: 'N/A', width:'17%' }
     ]
     this.atoList = [];
-    this.offerDetails = [
-      {data: {offerStarted:'04-Aug-2019', newOfferType: 'Yes', webexOffer: 'No', chargeType: 'Paid Upfront', offerType: 'STORM', bookingRecognitionType: 'Other'}}
-    ];
+    // this.offerDetails = [
+    //   {data: {offerStarted:'04-Aug-2019', newOfferType: 'Yes', webexOffer: 'No', chargeType: 'Paid Upfront', offerType: 'STORM', bookingRecognitionType: 'Other'}}
+    // ];
     this.productDetails = [
-      {data: {Id:'1',products: 'VEDGE-1000-AC-K9', iccType: 'Xaas', offerType: 'Webex', bookingRecognitionType: 'Revenue Recurring', approvalStatus: 'Approved'}},
-      {data: {Id:'2',products: 'VEDGE-1000-AC-45', iccType: 'Billing', offerType: 'Webex', bookingRecognitionType: 'Revenue offer', approvalStatus: 'Pending'}},
-      {data: {Id:'3',products: 'VEDGE-1000-AC-K9', iccType: 'Xaas', offerType: 'Webex', bookingRecognitionType: 'Revenue Recurring', approvalStatus: 'Rejected'}},
-      {data: {Id:'4',products: 'VEDGE-1010-AC-K10', iccType: 'Billing', offerType: 'IP Phone', bookingRecognitionType: 'Revenue Offer', approvalStatus: 'N/A'}},
+      {data: {Id:'1',products: 'VEDGE-1000-AC-K9', iccType: 'Xaas', offerType: 'Webex', bookingRecognitionType: 'Revenue Recurring', approvalStatus: 'Approved', "selectable":true}, "selectable":true},
+      {data: {Id:'2',products: 'VEDGE-1000-AC-45', iccType: 'Billing', offerType: 'Webex', bookingRecognitionType: 'Revenue offer', approvalStatus: 'Pending', "selectable":true}, "selectable":true},
+      {data: {Id:'3',products: 'VEDGE-1000-AC-K9', iccType: 'Xaas', offerType: 'Webex', bookingRecognitionType: 'Revenue Recurring', approvalStatus: 'Pending', "selectable":false}, "selectable":false},
+      {data: {Id:'4',products: 'VEDGE-1010-AC-K10', iccType: 'Billing', offerType: 'IP Phone', bookingRecognitionType: 'Revenue Offer', approvalStatus: 'N/A', "selectable":false}, "selectable":false},
     ];
+    this.calculatePendingATOs(this.productDetails);
     this.salesCompensationService.getTncMapping(this.offerId).subscribe(atoList => {
       this.atoNames = ['Overall Offer'];
       this.selectedIndex = 0;
@@ -155,7 +160,11 @@ export class SalesCompensationComponent implements OnInit, OnDestroy {
       console.log('error in atolist', error);
     });
   }
-
+  loadOfferDetails(){
+    this.salesCompensationService.getOfferDetails(this.offerId).subscribe(data => {
+      this.offerDetails = this.formatOfferDetailsObj(data);
+    });
+  }
   validateComment(event) {
     const value = event.target.value;
     this.newComment = value;
@@ -195,19 +204,62 @@ export class SalesCompensationComponent implements OnInit, OnDestroy {
   }
   closeCommentsDailog(){
     this.displayCommentsDialog = false;
+    this.newComment = '';
   }
   nodeSelect(event) {
     // this.messageService.add({severity: 'info', summary: 'Node Selected', detail: event.node.data.name});
 
     console.log("node selected..");
-}
+  }
 
-nodeUnselect(event) {
-    // this.messageService.add({severity: 'info', summary: 'Node Unselected', detail: event.node.data.name});
-    console.log("Node unselected..")
-}
-showSelectedAtoView(event){
-  console.log("ato view called..")
-}
+  nodeUnselect(event) {
+      // this.messageService.add({severity: 'info', summary: 'Node Unselected', detail: event.node.data.name});
+      console.log("Node unselected..")
+  }
+  showSelectedAtoView(event){
+    console.log("ato view called..")
+  }
+  formatOfferDetailsObj(data){
+    let formattedObj = []
+    data.forEach((Obj)=>{
+      formattedObj.push({"data":Obj});
+    })
+    return formattedObj;
+  }
+  toggleChecks($e){
+    this.selectedATO = [];
+    if($e){
+      for(let i=0; i<this.productDetails.length; i++){
+        if(this.productDetails[i]['data']['approvalStatus'] === 'Pending'){
+          this.selectedATO.push(this.productDetails[i]['data']['Id']);
+        }
+      }
+    }
+  }
+  calculatePendingATOs(prodDetails){
+    this.pendingATOs = 0;
+    prodDetails.forEach((Obj)=>{
+      if(Obj['data']['approvalStatus'] === 'Pending'){
+        this.pendingATOs++;
+      }
+    });
+  }
+
+  checkSelectedATOCount($e){
+    if($e && this.selectedATO.length === this.pendingATOs){
+      this.selectAllATOObj = ["selectAllATO"];
+    }
+    else{
+      this.selectAllATOObj = [];
+    }
+  }
+  actOnATO(){
+    this.closeCommentsDailog();
+    console.log("new comments :" + this.newComment.trim());
+    this.salesCompensationService.approveRejectOffer
+    this.salesCompensationService.approveRejectOffer(this.selectedProductDetailsReqObj).subscribe(response => {
+      this.loadOfferDetails();
+    });
+  }
 
 }
