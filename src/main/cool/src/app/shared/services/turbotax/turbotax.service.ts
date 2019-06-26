@@ -7,8 +7,8 @@ export class TurbotaxService {
 
   constructor(private _http: HttpClient, private environmentService: EnvironmentService) { }
 
-  getRubboTaxMenu(caseId): any {
-    return this._http.get(this.environmentService.REST_API_RETRIEVE_MILESTONES_URL + '/' + caseId + '/false');
+  getRubboTaxMenu(offerId): any {
+    return this._http.get(this.environmentService.REST_API_RETRIEVE_MILESTONES_URL + '/' + offerId + '/false');
   }
 
 }

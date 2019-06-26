@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { EnvironmentService } from '../../environments/environment.service';
 import { throwError, Observable } from 'rxjs';
 import { PirateShip } from '../feature/pirate-ship/model/pirate-ship';
-import { catchError, tap } from 'rxjs/operators';
+import {catchError, map, switchMap, tap} from 'rxjs/operators';
 
 
 @Injectable({
@@ -40,9 +40,9 @@ export class OfferSetupService {
   getPirateShipInfo(offerId: string, offerLevel: string, functionalRole: string): Observable<PirateShip> {
 
     let url = this.environmentService.REST_API_OFFER_SETUP_MODULE_GET_URL + offerId + '/' + offerLevel + '/' + functionalRole;
-    if (window.localStorage.getItem('showSprint6')) {
-      url = this.environmentService.REST_API_OFFER_PS_MODULE_GET_URL + offerId + '/' + offerLevel + '/' + functionalRole;
-    }
+    // if (window.localStorage.getItem('showSprint6')) {
+    //   url = this.environmentService.REST_API_OFFER_PS_MODULE_GET_URL + offerId + '/' + offerLevel + '/' + functionalRole;
+    // }
 
     return this.http.get<PirateShip>(url, { withCredentials: true })
       .pipe(

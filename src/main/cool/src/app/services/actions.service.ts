@@ -25,8 +25,8 @@ export class ActionsService {
     const url = `${this.environmentService.REST_API_ACTIONS_TRACKER_DETAILS_URL}/${taskId}`;
     return this._http.get(url, { withCredentials: true });
   }
-  getMilestones(caseId): Observable<any> {
-    const url = `${this.environmentService.REST_API_RETRIEVE_MILESTONES_URL}/${caseId}/false`;
+  getMilestones(offerId): Observable<any> {
+    const url = `${this.environmentService.REST_API_RETRIEVE_MILESTONES_URL}/${offerId}/false`;
     return this._http.get(url, { withCredentials: true });
   }
 
@@ -60,11 +60,13 @@ export class ActionsService {
   }
 
   createNotAndConditional(createActionComment: CreateActionComment): Observable<any> {
+    console.log('in actions service:: createNotAndConditional');
     const url = this.environmentService.REST_API_POST_ACTION_URL;
     return this._http.post(url, createActionComment);
   }
 
   createActionApprove(createActionApprove: CreateActionApprove): Observable<any> {
+    console.log('in actions service:: createActionApprove');
     const url = this.environmentService.REST_API_POST_ACTION_URL;
     return this._http.post(url, createActionApprove);
   }
