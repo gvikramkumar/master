@@ -167,7 +167,7 @@
                                       </ul>
                                     </div>
 
-                                  <a *ngIf="rowData['eginieItem']">{{rowData['title']}}</a>
+                                  <a *ngIf="rowData['eginieItem']" (click)="checkEngineFlag(rowNode)">{{rowData['title']}}</a>
                                   <span *ngIf="rowData['isMajorLineItem']"> ({{rowData['childCount']}})</span>
                                   <span [id]='rowData["uniqueKey"]'
                                     (click)='focusMethod(rowData["uniqueKey"]);showButton($event, rowData["uniqueKey"]);'
