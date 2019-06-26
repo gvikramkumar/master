@@ -16,6 +16,7 @@ import config from '../../config/get-config';
 import {injector} from '../common/inversify.config';
 import {shUtil} from '../../../shared/misc/shared-util';
 import {mail} from '../common/mail';
+import LookupRepo from '../../api/lookup/repo';
 
 
 export default class UploadController {
@@ -62,72 +63,84 @@ export default class UploadController {
 
 
   upload(req, res, next) {
-    this.verifyProperties(req.query, ['moduleId']);
-    this.req = req;
-    this.dfa = req.dfa;
-    this.moduleId = Number(req.query.moduleId);
-    this.user = req.user;
-    this.setUploadType();
-    this.startUpload = Date.now();
-    this.userId = req.user.id;
-    const sheets = xlsx.parse(req.file.buffer);
-    let headerRow = sheets[0].data[4];
-    this.rows1 = sheets[0].data.slice(5).filter(row => row.length > 0);
-    this.rows2 = [];
-    if (this.hasTwoSheets) {
-      if (!sheets[1]) {
-        next(new ApiError('Upload expects 2 sheets in upload file.', null, 400));
-        return;
-      }
-      this.rows2 = sheets[1].data.slice(5).filter(row => row.length > 0);
-    }
-    this.totalErrors = {};
-    this.hasTotalErrors = false;
-    if (this.rows1.length === 0) {
-      next(new ApiError('No records to upload. Please use the appropriate upload template, entering records after line 5.', null, 400));
-      return;
-    }
-    const propNames = _.values(this.PropNames).map(x => x.trim().toLowerCase());
-    headerRow = _.map(headerRow, (str) => str.replace(/(\*)/g, '').replace(/(\-)/g, ' ').trim().toLowerCase());
-    if (headerRow.length !== _.intersection(headerRow, propNames).length) {
-      next(new ApiError('Wrong template uploaded. Please use the appropriate upload template.', null, 400));
-      return;
-    }
 
-    this.getInitialData()
-      .then(() => this.removeOtherFiscalMonthOrFiscalYearUploads())
-      .then(() => this.getValidationAndImportData())
-      .then(() => this.validateRows(1, this.rows1))
-      .then(() => this.lookForTotalErrors())
-      .then(() => this.validateRows(2, this.rows2))
-      .then(() => this.lookForTotalErrors())
-      .then(() => this.validateOther())
-      .then(() => this.lookForTotalErrors())
-      .then(() => this.importRows(this.userId))
-      .then(() => {
-        this.sendSuccessEmail();
-        if (!res.headersSent) {
-          res.json({status: 'success', uploadName: this.uploadName, rowCount: this.rows1.length});
+    const lookupRepo = injector.get(LookupRepo);
+    lookupRepo.getSyncingAndUploading()
+      .then(results => {
+        if (results.syncing) {
+          throw new ApiError('Database sync is currently running. Please try again later.');
         }
+        return lookupRepo.setUploading();
       })
-      .catch(err => {
-        if (err && err.name === this.UploadValidationError) {
-          this.sendValidationEmail();
-          if (!res.headersSent) {
-            res.json({status: 'failure', uploadName: this.uploadName});
+      .then(() => {
+        this.verifyProperties(req.query, ['moduleId']);
+        this.req = req;
+        this.dfa = req.dfa;
+        this.moduleId = Number(req.query.moduleId);
+        this.user = req.user;
+        this.setUploadType();
+        this.startUpload = Date.now();
+        this.userId = req.user.id;
+        const sheets = xlsx.parse(req.file.buffer);
+        let headerRow = sheets[0].data[4];
+        this.rows1 = sheets[0].data.slice(5).filter(row => row.length > 0);
+        this.rows2 = [];
+        if (this.hasTwoSheets) {
+          if (!sheets[1]) {
+            next(new ApiError('Upload expects 2 sheets in upload file.', null, 400));
+            return;
           }
-        } else {
-          const data = Object.assign({}, err);
-          if (err.message) {
-            data.message = err.message;
-          }
-          if (err.stack) {
-            data.stack = err.stack;
-          }
-          const _err = new ApiError(`Unexpected ${this.uploadName} Error.`, data);
-          this.sendErrorEmail(_err);
-          next(_err);
+          this.rows2 = sheets[1].data.slice(5).filter(row => row.length > 0);
         }
+        this.totalErrors = {};
+        this.hasTotalErrors = false;
+        if (this.rows1.length === 0) {
+          next(new ApiError('No records to upload. Please use the appropriate upload template, entering records after line 5.', null, 400));
+          return;
+        }
+        const propNames = _.values(this.PropNames).map(x => x.trim().toLowerCase());
+        headerRow = _.map(headerRow, (str) => str.replace(/(\*)/g, '').replace(/(\-)/g, ' ').trim().toLowerCase());
+        if (headerRow.length !== _.intersection(headerRow, propNames).length) {
+          next(new ApiError('Wrong template uploaded. Please use the appropriate upload template.', null, 400));
+          return;
+        }
+
+        this.getInitialData()
+          .then(() => this.removeOtherFiscalMonthOrFiscalYearUploads())
+          .then(() => this.getValidationAndImportData())
+          .then(() => this.validateRows(1, this.rows1))
+          .then(() => this.lookForTotalErrors())
+          .then(() => this.validateRows(2, this.rows2))
+          .then(() => this.lookForTotalErrors())
+          .then(() => this.validateOther())
+          .then(() => this.lookForTotalErrors())
+          .then(() => this.importRows(this.userId))
+          .then(() => {
+            this.sendSuccessEmail();
+            if (!res.headersSent) {
+              res.json({status: 'success', uploadName: this.uploadName, rowCount: this.rows1.length});
+            }
+          })
+          .catch(err => {
+            if (err && err.name === this.UploadValidationError) {
+              this.sendValidationEmail();
+              if (!res.headersSent) {
+                res.json({status: 'failure', uploadName: this.uploadName});
+              }
+            } else {
+              const data = Object.assign({}, err);
+              if (err.message) {
+                data.message = err.message;
+              }
+              if (err.stack) {
+                data.stack = err.stack;
+              }
+              const _err = new ApiError(`Unexpected ${this.uploadName} Error.`, data);
+              this.sendErrorEmail(_err);
+              next(_err);
+            }
+            return lookupRepo.clearUploading();
+          });
       });
   }
 

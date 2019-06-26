@@ -43,13 +43,8 @@ export class DatabaseSyncComponent extends RoutingComponentBase {
       .subscribe(resp => {
         if (resp) {
           this.databaseService.mongoToPgSync(this.syncMap)
-            .subscribe((jobRun: AnyObj)  => {
-              if (jobRun.running) {
-                this.results = undefined;
-                this.uiUtil.genericDialog('Database sync job is currently running');
-              } else {
-                this.results = jobRun.data;
-              }
+            .subscribe((jobLog: AnyObj)  => {
+              this.results = jobLog.data;
             });
         }
       });

@@ -2,6 +2,7 @@ import {injectable} from 'inversify';
 import {model, Model, Schema} from 'mongoose';
 import _ from 'lodash';
 import {ApiError} from '../../lib/common/api-error';
+import {dfaJobs} from '../run-job/controller';
 
 const schema = new Schema(
   {
@@ -70,9 +71,20 @@ Model: Model<any>;
     return this.getDoc(data.key)
       .then(item => {
         if (!item) {
-            return this.add(data);
+          return this.add(data);
         }
         item.value = data.value;
+        return item.save().then(doc => doc.value);
+      });
+  }
+
+  upsertMerge(data) {
+    return this.getDoc(data.key)
+      .then(item => {
+        if (!item) {
+          return this.add(data);
+        }
+        item.value = _.assign(item.value, data.value) ;
         return item.save().then(doc => doc.value);
       });
   }
@@ -80,6 +92,40 @@ Model: Model<any>;
   remove(item) {
     return item.remove()
       .then(() => item.value);
+  }
+
+  removeByKey(key) {
+    return this.Model.remove({key})
+      .setOptions({ single: true });
+  }
+
+  getSyncingAndUploading() {
+    return this.getValue('runningJobs')
+      .then(runningJobs => {
+        return {syncing: _.get(runningJobs, 'databaseSync'), uploading: _.get(runningJobs, 'approvalEmailReminder')};
+      });
+  }
+
+  setSyncing() {
+    return this.upsertMerge({
+      key: 'runningJobs',
+      databaseSync: _.get(global, 'dfa.serverHost')
+    });
+  }
+
+  setUploading() {
+    return this.upsert({
+      key: 'runningJobs',
+      value: _.get(global, 'dfa.serverHost')
+    });
+  }
+
+  clearSyncing() {
+    return this.removeByKey('syncing');
+  }
+
+  clearUploading() {
+    return this.removeByKey('uploading');
   }
 
 }

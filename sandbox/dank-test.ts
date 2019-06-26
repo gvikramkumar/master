@@ -12,9 +12,15 @@ import RunJobController from '../server/api/run-job/controller';
 // import {take, first} from 'rxjs/operators';
 
 
+let a;
+console.log(_.get(a, 'lala'));
 
+
+
+/*
 const sut = new RunJobController(<any>{}, <any>{}, <any>{}, <any>{});
 const i = 5;
+*/
 
 
 /*
