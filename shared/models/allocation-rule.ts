@@ -43,6 +43,7 @@ export class AllocationRule {
   activeStatus = 'I';
   status = 'D';
   approvedOnce = 'N';
+  approvalUrl?: string;
   createdBy?: string;
   createdDate?: string;
   updatedBy?: string;
