@@ -16,14 +16,14 @@ type DfaJobFunction = (startup?: boolean, data?, req?) => Promise<any>;
 
 interface DfaJob {
   displayName: string;
-  prop: string;
+  lookupRunningKey: string;
   param: string;
   singleServer: boolean;
 }
 
 export const dfaJobs = [
-  {dislayName: 'Database Sync', prop: 'databaseSync', param: 'database-sync', singleServer: true},
-  {dislayName: 'Approval Email Reminder', prop: 'approvalEmailReminder', param: 'approval-email-reminder', singleServer: true}
+  {name: 'databaseSync', dislayName: 'Database Sync', lookupKey: 'syncing', param: 'database-sync', singleServer: true},
+  {name: 'approvalEmailReminder', dislayName: 'Approval Email Reminder', lookupKey: 'uploading', param: 'approval-email-reminder', singleServer: true}
 ]
 
 @injectable()
@@ -69,13 +69,23 @@ export default class RunJobController {
     return fcn;
   }
 
+  isDatabaseSyncJob(job) {
+    return job.name === 'databaseSync';
+  }
+
   isJobRunning(job: DfaJob) {
-    if (job.singleServer) { // singleServer runningJobs are in lookup
-      return this.lookupRepo.getValue('runningJobs')
-        .then(runningJobs => _.get(runningJobs, job.prop));
-    } else { // non-singleServer runningJobs is in global.dfa
-      return Promise.resolve(_.get(global, `dfa.runningJobs.${job.prop}`));
-    }
+    return Promise.all([
+      this.lookupRepo.getValues([job.lookupRunningKey, 'uploading']),
+    ])
+      .then(values => {
+        const running = values[0];
+        const uploading = values[1];
+        if (running) {
+          return `${job.displayName} job is already running.`;
+        } else if (this.isDatabaseSyncJob(job) && uploading) {
+          return `Upload in progress, please try again later.`;
+        }
+      });
   }
 
   runJob(jobName, startup = false, data?, req?) {
@@ -96,7 +106,7 @@ export default class RunJobController {
           log.status = 'already running';
           return this.log(log, req)
             .then(() => {
-              Promise.reject(new ApiError (`${job.displayName} is already running`));
+              Promise.reject(new ApiError (running));
             });
         }
       })

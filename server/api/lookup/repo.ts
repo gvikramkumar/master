@@ -100,22 +100,22 @@ Model: Model<any>;
   }
 
   getSyncingAndUploading() {
-    return this.getValue('runningJobs')
-      .then(runningJobs => {
-        return {syncing: _.get(runningJobs, 'databaseSync'), uploading: _.get(runningJobs, 'approvalEmailReminder')};
+    return this.getValues(['syncing', 'uploading'])
+      .then(values => {
+        return {syncing: values[0], uploading: values[1]};
       });
   }
 
   setSyncing() {
-    return this.upsertMerge({
-      key: 'runningJobs',
-      databaseSync: _.get(global, 'dfa.serverHost')
+    return this.upsert({
+      key: 'syncing',
+      value: _.get(global, 'dfa.serverHost')
     });
   }
 
   setUploading() {
     return this.upsert({
-      key: 'runningJobs',
+      key: 'uploading',
       value: _.get(global, 'dfa.serverHost')
     });
   }
