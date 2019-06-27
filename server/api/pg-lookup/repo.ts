@@ -243,8 +243,8 @@ export default class PgLookupRepo {
             group_id, 
             node_type, 
             CASE
-              WHEN sales_finance_hierarchy != null THEN sales_finance_hierarchy
-              ELSE 'Sales Fin Hierarchy'
+            WHEN sales_finance_hierarchy is not null THEN sales_finance_hierarchy
+            ELSE 'Sales Fin Hierarchy'
             end as sales_finance_hierarchy,
             node_code,
             ext_theater_name,
