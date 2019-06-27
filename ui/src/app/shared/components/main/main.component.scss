@@ -8,17 +8,8 @@
   //min-height: calc(100vh - #{$header-height-ltlg + $hero-header-height + $fin-footer-height});
   min-height: calc(100vh - #{$header-height-ltlg + $hero-header-height});
   position: relative;
-  .spinner {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: #ffffff;
-    opacity: 0.5;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 10;
-  }
+
+
   @media (min-width: $breakpoint-lg) and (max-width: $breakpoint-ltxxl) {
     //min-height: calc(100vh - #{$hero-header-height + $hero-header-height + $fin-footer-height});
     min-height: calc(100vh - #{$hero-header-height + $hero-header-height});

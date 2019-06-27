@@ -185,8 +185,6 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   }
 
   getInitialData() {
-    this.store.showSpinner = true;
-    const promises = [];
     let prmFiscalMonth;
     let prmFiscalYear;
     let prmMeasure;
@@ -223,39 +221,43 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
         prmMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_dept_acct_map_upld', 'sub_measure_key', true).toPromise();
         break;
     }
-    promises.push(prmFiscalMonth, prmFiscalYear, prmMeasure);
-    shUtil.promiseChain(promises.filter(x => !!x))
-      .then(results => {
-        const result = results[0];
-        this.store.showSpinner = false;
-        if (prmFiscalMonth) {
-          this.fiscalMonths = result.map(fm => Number(fm)).sort().reverse().slice(0, 24)
-            .map(fiscalMonth => ({name: shUtil.getFiscalMonthLongNameFromNumber(fiscalMonth), fiscalMonth}));
-          if (this.fiscalMonths.length) {
-            this.fiscalMonth = this.fiscalMonths[0].fiscalMonth;
-            this.disableDownload = false;
+    const promises = [prmFiscalMonth, prmFiscalYear, prmMeasure].filter(x => !!x);
+    if (promises.length) {
+      this.store.showSpinner = true;
+      shUtil.promiseChain(promises)
+        .then(results => {
+          const result = results[0];
+          this.store.showSpinner = false;
+          if (prmFiscalMonth) {
+            this.fiscalMonths = result.map(fm => Number(fm)).sort().reverse().slice(0, 24)
+              .map(fiscalMonth => ({name: shUtil.getFiscalMonthLongNameFromNumber(fiscalMonth), fiscalMonth}));
+            if (this.fiscalMonths.length) {
+              this.fiscalMonth = this.fiscalMonths[0].fiscalMonth;
+              this.disableDownload = false;
+            }
           }
-        }
-        if (prmFiscalYear) {
-          this.fiscalYears = result.map(fy => ({name: `FY${fy}`, value: fy}));
-          this.fiscalYears = _.orderBy(this.fiscalYears, ['value'], ['desc']);
-          if (this.fiscalYears.length) {
-            this.fiscalYear = this.fiscalYears[0].value;
-            this.disableDownload = false;
-          }
+          if (prmFiscalYear) {
+            this.fiscalYears = result.map(fy => ({name: `FY${fy}`, value: fy}));
+            this.fiscalYears = _.orderBy(this.fiscalYears, ['value'], ['desc']);
+            if (this.fiscalYears.length) {
+              this.fiscalYear = this.fiscalYears[0].value;
+              this.disableDownload = false;
+            }
 
-        }
-        if (prmMeasure) {
-          const smKeys = result;
-          this.submeasuresInData = this.submeasuresAll.filter(sm => _.includes(smKeys, sm.submeasureKey));
-          this.measures = this.measuresAll.filter(m => _.includes(_.uniq(this.submeasuresInData.map(sm => sm.measureId)), m.measureId));
-          if (this.measures.length) {
-            this.measureId = this.measures[0].measureId;
-            this.measureChange();
           }
-        }
-      })
-      .catch(() => this.store.showSpinner = false);
+          if (prmMeasure) {
+            const smKeys = result;
+            this.submeasuresInData = this.submeasuresAll.filter(sm => _.includes(smKeys, sm.submeasureKey));
+            this.measures = this.measuresAll.filter(m => _.includes(_.uniq(this.submeasuresInData.map(sm => sm.measureId)), m.measureId));
+            if (this.measures.length) {
+              this.measureId = this.measures[0].measureId;
+              this.measureChange();
+            }
+          }
+        })
+        .catch(() => this.store.showSpinner = false);
+    }
+
   }
 
   measureChange() {
