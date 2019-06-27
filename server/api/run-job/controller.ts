@@ -22,8 +22,8 @@ interface DfaJob {
 }
 
 export const dfaJobs = [
-  {name: 'databaseSync', dislayName: 'Database Sync', lookupKey: 'syncing', param: 'database-sync', singleServer: true},
-  {name: 'approvalEmailReminder', dislayName: 'Approval Email Reminder', lookupKey: 'uploading', param: 'approval-email-reminder', singleServer: true}
+  {name: 'databaseSync', displayName: 'Database Sync', lookupRunningKey: 'syncing', param: 'database-sync', singleServer: true},
+  {name: 'approvalEmailReminder', displayName: 'Approval Email Reminder', lookupRunningKey: 'uploading', param: 'approval-email-reminder', singleServer: true}
 ]
 
 @injectable()
@@ -37,16 +37,6 @@ export default class RunJobController {
     private databaseController: DatabaseController
   ) {
 
-  }
-
-  runJobAndRespond(req, res, next) {
-    const jobName = req.params['jobName'];
-    Promise.resolve()
-      .then(() => {
-        return this.runJob(jobName, false, req.body || req.query, req);
-      })
-      .then(log => res.json(log))
-      .catch(next);
   }
 
   log(log, req?) {
@@ -74,9 +64,7 @@ export default class RunJobController {
   }
 
   isJobRunning(job: DfaJob) {
-    return Promise.all([
-      this.lookupRepo.getValues([job.lookupRunningKey, 'uploading']),
-    ])
+    return this.lookupRepo.getValues([job.lookupRunningKey, 'uploading'])
       .then(values => {
         const running = values[0];
         const uploading = values[1];
@@ -86,6 +74,16 @@ export default class RunJobController {
           return `Upload in progress, please try again later.`;
         }
       });
+  }
+
+  runJobAndRespond(req, res, next) {
+    const jobName = req.params['jobName'];
+    Promise.resolve()
+      .then(() => {
+        return this.runJob(jobName, false, req.body || req.query, req);
+      })
+      .then(log => res.json(log))
+      .catch(next);
   }
 
   runJob(jobName, startup = false, data?, req?) {
@@ -106,7 +104,7 @@ export default class RunJobController {
           log.status = 'already running';
           return this.log(log, req)
             .then(() => {
-              Promise.reject(new ApiError (running));
+              return Promise.reject(new ApiError (running));
             });
         }
       })
@@ -132,16 +130,15 @@ export default class RunJobController {
             log.error = err;
             return this.log(log, req)
               .then(logSaved => {
-                throw new ApiError('Run job error', logSaved.toObject());
+                throw new ApiError(_.get(err, 'message') || 'Run Job Error' , logSaved.toObject());
               });
           });
       });
   }
 
-  databaseSyncJob(startup, data ?, req ?) {
+  databaseSyncJob(startup, syncMap?, req?) {
     // if (!req)  put this together. const req = _.set({}, 'dfa.fiscalMonths', ??);
     const userId = req.userId || 'system';
-    const syncMap = data.syncMap ? data.syncMap : new SyncMap().setSyncAll();
     return this.databaseController.mongoToPgSyncPromise(req.dfa, syncMap, userId);
   }
 

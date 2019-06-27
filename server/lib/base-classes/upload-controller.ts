@@ -141,7 +141,8 @@ export default class UploadController {
             }
             return lookupRepo.clearUploading();
           });
-      });
+      })
+      .catch(next);
   }
 
   getInitialData(): Promise<any> {
