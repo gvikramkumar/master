@@ -189,14 +189,6 @@ export class UiUtil {
     this.toast(message, action, year); //
   }
 
-  showSpinner() {
-    this.store.mainCompDataLoad = true;
-  }
-
-  hideSpinner() {
-    this.store.mainCompDataLoad = false;
-  }
-
   /*
       showPermToast(title, message, severity = ToastSeverity.info) {
         // this.permToast.addToast(severity, title, message);
