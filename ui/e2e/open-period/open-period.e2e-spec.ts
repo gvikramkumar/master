@@ -1,6 +1,6 @@
 import {OpenPeriodPO} from './open-period.po';
 
-describe(`Admin - Open period page`, () => {
+xdescribe(`Admin - Open period page`, () => {
   const openPeriodPO = new OpenPeriodPO();
   const testModule = {
     displayOrder: 12,
@@ -19,8 +19,8 @@ describe(`Admin - Open period page`, () => {
 
   afterAll(done => {
     openPeriodPO.finJsonRequest('/api/module/query-one', 'DELETE', undefined, {name: testModule.name})
-      .then((result: any) => {
-        const deletedModule = JSON.parse(result.resp.body);
+      .then(result => {
+        const deletedModule = result.body;
         openPeriodPO.finJsonRequest('/api/open-period/query-one', 'DELETE', undefined, {moduleId: deletedModule.moduleId})
           .then(() => done());
       });
@@ -28,7 +28,6 @@ describe(`Admin - Open period page`, () => {
 
   beforeEach(() => {
     openPeriodPO.navigateTo();
-    openPeriodPO.waitForPageToLoad();
   });
 
   it(`should load all the active modules`, () => {

@@ -8,6 +8,10 @@ export class SourceMappingPO extends CommonPO {
     super(pageUrl);
   }
 
+  init() {
+    this.waitForPageToLoad();
+  }
+
   getActiveModules() {
     return element.all(by.className('module-name'));
   }

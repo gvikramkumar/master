@@ -1,6 +1,6 @@
 import {ModulePO} from './module.po';
 
-describe(`Admin - Module Page`, () => {
+xdescribe(`Admin - Module Page`, () => {
   const modulePO = new ModulePO();
   const newTestModuleActive = {
     displayOrder : '12',
@@ -36,7 +36,6 @@ describe(`Admin - Module Page`, () => {
 
   beforeEach(() => {
     modulePO.navigateTo();
-    modulePO.waitForTableToLoad();
   });
 
   it(`should load all the modules`, () => {
@@ -62,8 +61,8 @@ describe(`Admin - Module Page`, () => {
       expect(modulePO.getFieldDisplayOrder().getAttribute('value')).toEqual(``);
       expect(modulePO.getFieldDescription().getAttribute('value')).toEqual(``);
       expect(modulePO.getStatusCheckBox().isEnabled()).toBeTruthy();
-      expect(modulePO.isCheckBoxDisabled()).toBe(false);
-      expect(modulePO.getCheckBoxLabel().getText()).toEqual(`Active`);
+      expect(modulePO.isStatusCheckBoxDisabled()).toBe(false);
+      expect(modulePO.getStatusCheckBoxLabel().getText()).toEqual(`Active`);
       expect(modulePO.getSubmitButton().isPresent()).toBe(true);
       expect(modulePO.getCancelButton().isPresent()).toBe(true);
     });
@@ -173,8 +172,8 @@ describe(`Admin - Module Page`, () => {
       expect(modulePO.getFieldDisplayOrder().getAttribute('value')).toEqual(existingModuleInDb.displayOrder);
       expect(modulePO.getFieldDescription().getAttribute('value')).toEqual(existingModuleInDb.desc);
       expect(modulePO.getStatusCheckBox().isEnabled()).toBe(true);
-      expect(modulePO.isCheckBoxDisabled()).toBe(false);
-      expect(modulePO.getCheckBoxLabel().getText()).toEqual(existingModuleInDb.status);
+      expect(modulePO.isStatusCheckBoxDisabled()).toBe(false);
+      expect(modulePO.getStatusCheckBoxLabel().getText()).toEqual(existingModuleInDb.status);
     });
 
     it(`should not allow the user to submit the form when updating source with mandatory fields empty`, () => {

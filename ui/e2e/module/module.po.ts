@@ -8,32 +8,37 @@ export class ModulePO extends CommonPO {
     super(pageUrl);
   }
 
+  init() {
+    this.waitForTableToLoad();
+  }
+
   getFieldModuleName() {
-    return this.getFormField(`name`);
+    return this.getFormInputField(`name`);
   }
 
   getFieldAbbreviation() {
-    return this.getFormField(`abbrev`);
+    return this.getFormInputField(`abbrev`);
   }
 
   getFieldDisplayOrder() {
-    return this.getFormField(`order`);
+    return this.getFormInputField(`order`);
   }
 
   getFieldDescription() {
-    return this.getFormField(`desc`);
+    return this.getFormTextareaField(`desc`);
   }
+
 
   getStatusCheckBox() {
-    return element(by.className(`checkbox`)).element(by.className(`checkbox__input`));
+    return this.getCheckBoxInputByName('status');
   }
 
-  isCheckBoxDisabled() {
-    return element(by.className(`checkbox disabled`)).isPresent();
+  getStatusCheckBoxLabel() {
+    return this.getCheckBoxLabelByName('status');
   }
 
-  getCheckBoxLabel() {
-    return element(by.className(`checkbox`)).element(by.className(`checkbox__label`));
+  isStatusCheckBoxDisabled() {
+    return this.isCheckBoxDisabled('status');
   }
 
   getFormInputOnlyFields() {

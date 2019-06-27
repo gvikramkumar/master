@@ -17,14 +17,12 @@ export class CommonPO {
     this.pageUrl = _pageUrl;
   }
 
-  finJsonRequest(_url, method, json, queryString, _options = {}) {
+  finJsonRequest(_url, method, payload, queryString, _options = {}): any {
     const options = {
       url: `http://${os.hostname()}:3001${_url}`,
       method,
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      json,
+      body: payload,
+      json: true,
       qs: queryString || {}
     };
     Object.assign(options, _options);
@@ -38,13 +36,18 @@ export class CommonPO {
     });
   }
 
+  // template method
+  init() {
+  }
+
   navigateTo() {
-    return browser.get(this.pageUrl);
+    browser.get(this.pageUrl);
+    this.init();
   }
 
   pageRefresh() {
     browser.refresh();
-    this.waitForTableToLoad();
+    this.init();
   }
 
   waitForPageToLoad() {
@@ -93,8 +96,25 @@ export class CommonPO {
     this.waitForFormUp();
   }
 
-  getFormField(selector) {
-    return element(by.name(selector)).element(by.className(`form-group__text`)).element(by.className(`ng-star-inserted`));
+  getFormInputField(selector) {
+    return element(by.name(selector)).element(by.className(`form-group__text`)).element(by.tagName('input'));
+  }
+
+  getFormTextareaField(selector) {
+    return element(by.name(selector)).element(by.className(`form-group__text`)).element(by.tagName('textarea'));
+  }
+
+  getCheckBoxInputByName(name: string) {
+    return element(by.name(name)).element(by.className(`checkbox`)).element(by.className(`checkbox__input`));
+  }
+
+  getCheckBoxLabelByName(name: string) {
+    return element(by.name(name)).element(by.className(`checkbox`)).element(by.className(`checkbox__label`));
+  }
+
+
+  isCheckBoxDisabled(name: string) {
+    return element(by.name(name)).element(by.className(`checkbox disabled`)).isPresent();
   }
 
   // Form Buttons
@@ -108,6 +128,10 @@ export class CommonPO {
 
   getCancelButton() {
     return element(by.buttonText(`Cancel`));
+  }
+
+  getResetButton() {
+    return element(by.buttonText(`Reset`));
   }
 
   // Dialog functions

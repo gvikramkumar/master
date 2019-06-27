@@ -9,6 +9,10 @@ export class OpenPeriodPO extends CommonPO {
     super(pageUrl);
   }
 
+  init() {
+    this.waitForPageToLoad();
+  }
+
   getActiveModules() {
     return element.all(by.className('module-name'));
   }
@@ -25,8 +29,4 @@ export class OpenPeriodPO extends CommonPO {
     return element(by.className('cui-virtual-scroll-content-wrapper')).all(by.tagName('div')).get(index).element(by.tagName(`a`));
   }
 
-  pageRefresh() {
-    browser.refresh();
-    this.waitForPageToLoad();
-  }
 }

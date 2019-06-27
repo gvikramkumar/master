@@ -1,5 +1,6 @@
-import { browser, by, element } from 'protractor';
+import {browser, by, element} from 'protractor';
 import {CommonPO} from '../common.po';
+
 const pageUrl = '/admn/source';
 
 export class SourcePO extends CommonPO {
@@ -8,40 +9,39 @@ export class SourcePO extends CommonPO {
     super(pageUrl);
   }
 
-   getAddButton() {
-    return element(by.buttonText(`Add New`));
+  init() {
+    this.waitForTableToLoad();
   }
 
-   getStatusCheckBox() {
-    return element(by.name(`status`)).element(by.className(`checkbox__input`));
+  getFieldName() {
+    return this.getFormInputField(`name`);
   }
 
-   getCheckBoxLabel() {
-    return element(by.name(`status`)).element(by.className(`checkbox__label`));
+  getFieldTypeCode() {
+    return this.getFormInputField(`typeCode`);
   }
 
-   getFieldName() {
-    return this.getFormField(`name`);
+  getFieldDescription() {
+    return this.getFormTextareaField(`desc`);
   }
 
-   getFieldTypeCode() {
-    return this.getFormField(`typeCode`);
+  getStatusCheckBox() {
+    return this.getCheckBoxInputByName('status');
   }
 
-   getFieldDescription() {
-    return this.getFormField(`desc`);
+  getStatusCheckBoxLabel() {
+    return this.getCheckBoxLabelByName('status');
   }
 
-   checkIfSourceIsUsed() {
+  isStatusCheckBoxDisabled() {
+    return this.isCheckBoxDisabled('status');
+  }
+
+  checkIfSourceIsUsed() {
     return element(by.className(`in-use`)).isDisplayed();
   }
 
   getFormInputOnlyFields() {
-     return element.all(by.tagName(`fin-input`));
-  }
-
-
-  isCheckBoxDisabled() {
-    return element(by.className(`checkbox disabled`)).isPresent();
+    return element.all(by.tagName(`fin-input`));
   }
 }
