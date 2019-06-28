@@ -99,6 +99,10 @@ Model: Model<any>;
       .setOptions({ single: true });
   }
 
+  removeByKeys(keys) {
+    return this.Model.remove({key: {$in: keys}});
+  }
+
   getSyncingAndUploading() {
     return this.getValues(['syncing', 'uploading'])
       .then(values => {
@@ -109,14 +113,14 @@ Model: Model<any>;
   setSyncing() {
     return this.upsert({
       key: 'syncing',
-      value: _.get(global, 'dfa.serverHost')
+      value: _.get(global, 'dfa.serverUrl')
     });
   }
 
   setUploading() {
     return this.upsert({
       key: 'uploading',
-      value: _.get(global, 'dfa.serverHost')
+      value: _.get(global, 'dfa.serverUrl')
     });
   }
 

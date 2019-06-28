@@ -14,6 +14,7 @@ import {app, initializeExpress} from './express-setup';
 import os from 'os';
 import {svrUtil} from './lib/common/svr-util';
 import _ from 'lodash';
+import {ServerStartup} from './lib/common/server-startup';
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -71,10 +72,14 @@ export const serverPromise = Promise.all([mgc.promise, pgc.promise])
         _.set(global, 'dfa.serverHost', os.hostname());
         _.set(global, 'dfa.serverUrl', serverUrl);
         _.set(global, 'dfa.app', app);
-        if (!svrUtil.isLocalEnv()) {
-          console.log('build:', process.env.BUILD_NUMBER);
-        }
-        console.log(`server listening on ${serverUrl}`);
+        const serverStartup = injector.get(ServerStartup);
+        return serverStartup.startup()
+          .then(() => {
+            if (!svrUtil.isLocalEnv()) {
+              console.log('build:', process.env.BUILD_NUMBER);
+            }
+            console.log(`server listening on ${serverUrl}`);
+          });
       });
     }
   )
