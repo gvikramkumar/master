@@ -4,7 +4,7 @@ export default {
   corsOrigin: [],
   showStack: false,
   ssoUrl: 'https://localhost:3443',
-  checkServerFlags: true,
+  multipleServers: true,
   art: {
     url: 'https://wsgi.cisco.com/cepm/pdpservices/authorizationmanagerservice',
   },

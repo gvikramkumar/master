@@ -1,6 +1,6 @@
 export default {
   ssoUrl: 'http://localhost:8080',
-  checkServerFlags: false,
+  multipleServers: false,
   mongo: {
     uri: 'mongodb://findp-dev-01.cisco.com/fin-dfa',
     host: 'findp-dev-01.cisco.com',

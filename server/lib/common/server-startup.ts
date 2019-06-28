@@ -4,33 +4,33 @@ import {finRequest} from './fin-request';
 import {shUtil} from '../../../shared/misc/shared-util';
 import _ from 'lodash';
 import {injectable} from 'inversify';
+import {dfaJobs} from '../../api/run-job/controller';
 
 
 @injectable()
 export class ServerStartup {
+  // jobs = dfaJobs.filter(x => x.singleServer);
+  singleServerJobs = dfaJobs.filter(x => x.singleServer);
+  multipleServerJobs = dfaJobs.filter(x => !x.singleServer);
 
   constructor(private lookupRepo: LookupRepo) {
   }
 
   startup() {
-    // if syncing or uploading is this server (we set them to serverHost names), clear it cause we just started again
-    return this.lookupRepo.getValues(['syncing', 'uploading'])
+    return this.lookupRepo.getValues(this.singleServerJobs.map(x => x.lookupRunningKey))
       .then(values => {
-        const syncing = values[0];
-        const uploading = values[1];
         const keys = [];
-        if (syncing === (<any>global).dfa.serverHost) {
-          keys.push('syncing');
-        }
-        if (uploading === (<any>global).dfa.serverHost) {
-          keys.push('uploading');
-        }
+        const serverUrl = (<any>global).dfa.serverUrl;
+        this.singleServerJobs.forEach((job, idx) => {
+          if (values[idx] === serverUrl) {
+            keys.push(job.lookupRunningKey);
+          }
+        })
         const promise: any = keys.length ? this.lookupRepo.removeByKeys(keys) : Promise.resolve();
         return promise
           .then(() => {
-            if (config.checkServerFlags) {
-              // there's servers that set the global server flags. Need to start a job to check if flag gets stuck on
-              // when server goes down, can't have that
+            if (config.multipleServers) {
+              // make sure server job flags don't get stuck on. All servers will check this periodically
               setInterval(this.clearServerLookupFlags.bind(this), 60 * 1000);
               this.clearServerLookupFlags();
             }
@@ -38,44 +38,36 @@ export class ServerStartup {
       });
   }
 
-  // ping server and return serverHost if fails
-  pingServer(serverHost) {
-    return shUtil.promiseChain(finRequest({url: `${serverHost}/ping`}))
+  // ping server and return serverUrl if fails
+  pingServer(serverUrl) {
+    return shUtil.promiseChain(finRequest({url: `${serverUrl}/ping`}))
       .then(({resp, body}) => {
         if (resp.statusCode >= 400) {
-          return serverHost;
+          return serverUrl;
         }
       })
       .catch(err => {
-        return serverHost;
+        return serverUrl;
       });
   }
 
   // get flags from lookup, they'll have serverUrls for them, then ping servers and if not there, remove the flags
   // what we're doing here is clearing the flags that says server is busy doing something, when server is no longer there
   clearServerLookupFlags() {
-    this.lookupRepo.getValues(['syncing', 'uploading'])
+    return this.lookupRepo.getValues(this.singleServerJobs.map(x => x.lookupRunningKey))
       .then(values => {
-        const syncing = values[0];
-        const uploading = values[1];
-        const pingPromises = [
-          syncing ? this.pingServer(syncing) : Promise.resolve(),
-          uploading ? this.pingServer(uploading) : Promise.resolve(),
-        ];
-
+        const pingPromises = [];
+        values.forEach((val, idx) => pingPromises.push(val ? this.pingServer(this.singleServerJobs[idx].lookupRunningKey) : Promise.resolve()));
         Promise.all(pingPromises)
           .then(missingServers => {
             if (missingServers.filter(x => !!x).length) {
               const keys = [];
-              if (missingServers[0]) {
-                keys.push('syncing');
-              }
-              if (missingServers[1]) {
-                keys.push('uploading');
-              }
-              if (keys.length) {
-                this.lookupRepo.removeByKeys(keys);
-              }
+              missingServers.forEach((serverUrl, idx) => {
+                if (serverUrl) {
+                  keys.push(this.singleServerJobs[idx].lookupRunningKey);
+                }
+              })
+              this.lookupRepo.removeByKeys(keys);
             }
           });
       });

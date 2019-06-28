@@ -3,7 +3,7 @@ export default {
   port: 3002,
   showStack: false,
   ssoUrl: 'https://localhost:3443',
-  checkServerFlags: true,
+  multipleServers: true,
   mongo: {
     uri: 'mongodb://findp-stg-01.cisco.com/fin-dfa',
     host: 'findp-stg-01.cisco.com',

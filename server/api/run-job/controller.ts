@@ -23,8 +23,8 @@ interface DfaJob {
 
 export const dfaJobs = [
   {name: 'databaseSync', displayName: 'Database Sync', lookupRunningKey: 'syncing', param: 'database-sync', singleServer: true},
-  {name: 'approvalEmailReminder', displayName: 'Approval Email Reminder', lookupRunningKey: 'uploading', param: 'approval-email-reminder', singleServer: true}
-]
+  {name: 'approvalEmailReminder', displayName: 'Approval Email Reminder', lookupRunningKey: 'approvalEmailReminder', param: 'approval-email-reminder', singleServer: true}
+];
 
 @injectable()
 export default class RunJobController {
