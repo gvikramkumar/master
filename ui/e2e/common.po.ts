@@ -50,10 +50,13 @@ export class CommonPO {
     this.init();
   }
 
+  mouseDownOnElement(_element) {
+    browser.actions().mouseDown(_element).perform();
+  }
+
   waitForPageToLoad() {
     browser.wait(this.EC.presenceOf(this.container));
   }
-
 
   // Table functions
   waitForTableToLoad() {
@@ -96,12 +99,20 @@ export class CommonPO {
     this.waitForFormUp();
   }
 
-  getFormInputField(selector) {
-    return element(by.name(selector)).element(by.className(`form-group__text`)).element(by.tagName('input'));
+  getFormInputField(name, cuiElement?) {
+    if (cuiElement) {
+      return element(by.name(name));
+    } else {
+      return element(by.name(name)).element(by.className(`form-group__text`)).element(by.tagName('input'));
+    }
   }
 
-  getFormTextareaField(selector) {
-    return element(by.name(selector)).element(by.className(`form-group__text`)).element(by.tagName('textarea'));
+  getFormTextareaField(name, cuiElement?) {
+    if (cuiElement) {
+      return element(by.name(name));
+    } else {
+      return element(by.name(name)).element(by.className(`form-group__text`)).element(by.tagName('textarea'));
+    }
   }
 
   getCheckBoxInputByName(name: string) {
@@ -115,6 +126,26 @@ export class CommonPO {
 
   isCheckBoxDisabled(name: string) {
     return element(by.name(name)).element(by.className(`checkbox disabled`)).isPresent();
+  }
+  // cui-select/multi-select
+  openDropDownForSelectControl(name: string) {
+    this.mouseDownOnElement(element(by.name(name)).element(by.className('dropdown-chevron icon-chevron-down')));
+  }
+
+  closeDropdown(name: string, offset) {
+    browser.actions().mouseMove(element(by.name(name)), offset).click().perform();
+  }
+
+  clearDropdown(name: string) {
+    this.mouseDownOnElement(element(by.name(name)).element(by.className('icon-close')));
+  }
+
+  getDropdownOption(index) {
+    return element(by.className('cui-virtual-scroll-content-wrapper')).all(by.tagName('div')).get(index).element(by.tagName(`a`));
+  }
+
+  getErrorMessageForFormField(name: string) {
+    return element(by.name(name)).element(by.className('help-block')).element(by.tagName('span')).getText();
   }
 
   // Form Buttons

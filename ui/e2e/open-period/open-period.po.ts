@@ -20,13 +20,4 @@ export class OpenPeriodPO extends CommonPO {
   getSelectForOpenPeriod(index) {
     return element.all(by.className('dropdown-chevron icon-chevron-down')).get(index);
   }
-
-  mouseDownOnElement(_element) {
-    browser.actions().mouseDown(_element).perform();
-  }
-
-  getDropdownOption(index) {
-    return element(by.className('cui-virtual-scroll-content-wrapper')).all(by.tagName('div')).get(index).element(by.tagName(`a`));
-  }
-
 }

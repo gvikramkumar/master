@@ -14,8 +14,8 @@ export class MeasurePO extends CommonPO {
     this.waitForTableToLoad();
   }
 
-  getFieldMeasureName() {
-    return this.getFormInputField('name');
+  getFieldMeasureName(finInput = false) {
+    return this.getFormInputField('name', finInput);
   }
 
   getStatusCheckBox() {
@@ -26,16 +26,16 @@ export class MeasurePO extends CommonPO {
     return this.getCheckBoxLabelByName('status');
   }
 
-  getFieldTypeCode() {
-    return this.getFormInputField('typeCode');
+  getFieldTypeCode(finInput = false) {
+    return this.getFormInputField('typeCode', finInput);
   }
 
-  getFieldSources() {
-    return this.getFormInputField('sources');
+  getFieldSources(cuiMultiSelect = false) {
+    return this.getFormInputField('sources', cuiMultiSelect);
   }
 
-  getFieldHierarchies() {
-    return this.getFormInputField('hier');
+  getFieldHierarchies(cuiMultiSelect = false) {
+    return this.getFormInputField('hier', cuiMultiSelect);
   }
 
   getReportingLevel(level: number) {
@@ -57,4 +57,36 @@ export class MeasurePO extends CommonPO {
   getSetToSubMeasureNameCheckboxLabel(level: number) {
     return element(by.className(`rep-level-sm-checkbox-${level}`)).element(by.className(`checkbox`)).element(by.className(`checkbox__label`)).getText();
   }
- }
+
+  openDropDownForSources() {
+    this.openDropDownForSelectControl('soures');
+  }
+
+  closeDropdownForSources() {
+    this.closeDropdown('sources', {x: -50, y: 0});
+  }
+
+  clearDropdownForSources() {
+    this.clearDropdown('sources');
+  }
+
+  openDropDownForHierarchies() {
+    this.openDropDownForSelectControl('hier');
+  }
+
+  closeDropdownForHierarchies() {
+    this.closeDropdown('hier', {x: -50, y: 0});
+  }
+
+  clearDropdownForHierarchies() {
+    this.clearDropdown('hier');
+  }
+
+  getErrorMessageForMeasureName() {
+    return this.getErrorMessageForFormField('name');
+  }
+
+  getErrorMessageForTypecode() {
+    return this.getErrorMessageForFormField('typeCode');
+  }
+}

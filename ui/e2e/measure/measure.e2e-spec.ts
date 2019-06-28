@@ -4,6 +4,12 @@ import * as moment from 'moment';
 describe(`Profitabily Allocations - Measure page`, () => {
   const measurePO = new MeasurePO();
   let existingMeasuresInDb, existingMeasureInDb;
+
+  const newTestMeasure = {
+    name: 'Test Measure - E2ETEST',
+    typeCode: 'test'
+  };
+
   beforeAll(done => {
     const url = '/api/measure';
     measurePO.finJsonRequest(url, 'GET', undefined, {moduleId: 1})
@@ -55,6 +61,62 @@ describe(`Profitabily Allocations - Measure page`, () => {
       expect(measurePO.getSubmitButton().isPresent()).toBe(true);
       expect(measurePO.getCancelButton().isPresent()).toBe(true);
       expect(measurePO.getResetButton().isPresent()).toBe(true);
+    });
+
+    it(`should close form on clicking cancel`, () => {
+      measurePO.getAddButton().click();
+      measurePO.waitForFormUp();
+      measurePO.getCancelButton().click();
+      measurePO.waitForFormDown();
+      expect(measurePO.form.isPresent()).toBe(false);
+    });
+
+
+    it(`should not allow the user to submit form with missing mandatory values`, () => {
+      measurePO.getAddButton().click();
+      measurePO.waitForFormUp();
+      measurePO.getSubmitButton().click();
+      expect(measurePO.getFieldMeasureName(true).getAttribute(`class`)).toContain('ng-invalid');
+      expect(measurePO.getFieldTypeCode(true).getAttribute(`class`)).toContain('ng-invalid');
+      expect(measurePO.getFieldSources(true).getAttribute(`class`)).toContain('ng-invalid');
+      expect(measurePO.getFieldHierarchies(true).getAttribute(`class`)).toContain('ng-invalid');
+      measurePO.getFieldMeasureName().sendKeys(newTestMeasure.name);
+      measurePO.getSubmitButton().click();
+      expect(measurePO.getFieldTypeCode(true).getAttribute(`class`)).toContain('ng-invalid');
+      expect(measurePO.getFieldSources(true).getAttribute(`class`)).toContain('ng-invalid');
+      expect(measurePO.getFieldHierarchies(true).getAttribute(`class`)).toContain('ng-invalid');
+      measurePO.getFieldMeasureName().clear();
+      measurePO.getFieldTypeCode().sendKeys(newTestMeasure.typeCode);
+      measurePO.getSubmitButton().click();
+      expect(measurePO.getFieldMeasureName(true).getAttribute(`class`)).toContain('ng-invalid');
+      expect(measurePO.getFieldSources(true).getAttribute(`class`)).toContain('ng-invalid');
+      expect(measurePO.getFieldHierarchies(true).getAttribute(`class`)).toContain('ng-invalid');
+      measurePO.getFieldTypeCode().clear();
+      measurePO.openDropDownForSources();
+      measurePO.getDropdownOption(0).click();
+      measurePO.closeDropdownForSources();
+      measurePO.getSubmitButton().click();
+      expect(measurePO.getFieldMeasureName(true).getAttribute(`class`)).toContain('ng-invalid');
+      expect(measurePO.getFieldTypeCode(true).getAttribute(`class`)).toContain('ng-invalid');
+      expect(measurePO.getFieldHierarchies(true).getAttribute(`class`)).toContain('ng-invalid');
+      measurePO.clearDropdownForSources();
+      measurePO.openDropDownForHierarchies();
+      measurePO.getDropdownOption(0).click();
+      measurePO.closeDropdownForHierarchies();
+      measurePO.getSubmitButton().click();
+      expect(measurePO.getFieldMeasureName(true).getAttribute(`class`)).toContain('ng-invalid');
+      expect(measurePO.getFieldTypeCode(true).getAttribute(`class`)).toContain('ng-invalid');
+      expect(measurePO.getFieldSources(true).getAttribute(`class`)).toContain('ng-invalid');
+      measurePO.clearDropdownForHierarchies();
+    });
+
+    it(`should show an error on the form field when the user adds a mandatory form field that already exists`, () => {
+      measurePO.getAddButton().click();
+      measurePO.waitForFormUp();
+      measurePO.getFieldMeasureName().sendKeys(existingMeasureInDb.name);
+      expect(measurePO.getErrorMessageForMeasureName()).toEqual('Measure name already exists');
+      measurePO.getFieldTypeCode().sendKeys(existingMeasureInDb.typeCode);
+      expect(measurePO.getErrorMessageForTypecode()).toEqual('Typecode already exists');
     });
   });
 });

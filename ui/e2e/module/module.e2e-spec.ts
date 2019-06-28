@@ -79,54 +79,50 @@ describe(`Admin - Module Page`, () => {
       modulePO.getAddButton().click();
       modulePO.waitForFormUp();
       modulePO.getSubmitButton().click();
-      expect(modulePO.getFormInputOnlyFields().first().getAttribute(`class`)).toContain('ng-invalid');
-      expect(modulePO.getFormInputOnlyFields().get(1).getAttribute(`class`)).toContain('ng-invalid');
-      expect(modulePO.getFormInputOnlyFields().get(2).getAttribute(`class`)).toContain('ng-invalid');
+      expect(modulePO.getFieldModuleName(true).getAttribute(`class`)).toContain('ng-invalid');
+      expect(modulePO.getFieldAbbreviation(true).getAttribute(`class`)).toContain('ng-invalid');
+      expect(modulePO.getFieldDisplayOrder(true).getAttribute(`class`)).toContain('ng-invalid');
       modulePO.getFieldModuleName().sendKeys(newTestModuleActive.name);
       modulePO.getSubmitButton().click();
-      expect(modulePO.getFormInputOnlyFields().get(1).getAttribute(`class`)).toContain('ng-invalid');
-      expect(modulePO.getFormInputOnlyFields().get(2).getAttribute(`class`)).toContain('ng-invalid');
+      expect(modulePO.getFieldAbbreviation(true).getAttribute(`class`)).toContain('ng-invalid');
+      expect(modulePO.getFieldDisplayOrder(true).getAttribute(`class`)).toContain('ng-invalid');
       modulePO.getFieldModuleName().clear();
       modulePO.getFieldAbbreviation().sendKeys(newTestModuleActive.abbrev);
       modulePO.getSubmitButton().click();
-      expect(modulePO.getFormInputOnlyFields().first().getAttribute(`class`)).toContain('ng-invalid');
-      expect(modulePO.getFormInputOnlyFields().get(2).getAttribute(`class`)).toContain('ng-invalid');
+      expect(modulePO.getFieldModuleName(true).getAttribute(`class`)).toContain('ng-invalid');
+      expect(modulePO.getFieldDisplayOrder(true).getAttribute(`class`)).toContain('ng-invalid');
       modulePO.getFieldAbbreviation().clear();
       modulePO.getFieldDisplayOrder().sendKeys(newTestModuleActive.displayOrder);
       modulePO.getSubmitButton().click();
-      expect(modulePO.getFormInputOnlyFields().first().getAttribute(`class`)).toContain('ng-invalid');
-      expect(modulePO.getFormInputOnlyFields().get(1).getAttribute(`class`)).toContain('ng-invalid');
+      expect(modulePO.getFieldModuleName(true).getAttribute(`class`)).toContain('ng-invalid');
+      expect(modulePO.getFieldAbbreviation(true).getAttribute(`class`)).toContain('ng-invalid');
     });
 
-    it(`should show an error on the form field when the user adds a mandatory form field that already exists`, () => {
+    fit(`should show an error on the form field when the user adds a mandatory form field that already exists`, () => {
       modulePO.getAddButton().click();
       modulePO.waitForFormUp();
       modulePO.getFieldModuleName().sendKeys(existingModuleInDb.name);
-      expect(modulePO.getErrorElementBlock(0).isDisplayed()).toBe(true);
-      expect(modulePO.getErrorMessage(0)).toEqual('Value already exists');
+      expect(modulePO.getErrorMessageForModuleName()).toEqual('Value already exists');
       modulePO.getFieldAbbreviation().sendKeys(existingModuleInDb.abbrev);
-      expect(modulePO.getErrorElementBlock(1).isDisplayed()).toBe(true);
-      expect(modulePO.getErrorMessage(1)).toEqual('Value already exists');
+      expect(modulePO.getErrorMessageForAbbreviation()).toEqual('Value already exists');
       modulePO.getFieldDisplayOrder().sendKeys(existingModuleInDb.displayOrder);
-      expect(modulePO.getErrorElementBlock(2).isDisplayed()).toBe(true);
-      expect(modulePO.getErrorMessage(2)).toEqual('Value already exists');
+      expect(modulePO.getErrorMessageForDisplayOrder()).toEqual('Value already exists');
     });
 
     it(`should show an error on the form field when the user adds a mandatory form field with incorrect value`, () => {
       modulePO.getAddButton().click();
       modulePO.waitForFormUp();
       modulePO.getFieldAbbreviation().sendKeys('a');
-      expect(modulePO.getErrorElementBlock(1).isDisplayed()).toBe(true);
-      expect(modulePO.getErrorMessage(1)).toEqual('Must be exactly 4 characters long');
+      expect(modulePO.getErrorMessageForAbbreviation()).toEqual('Must be exactly 4 characters long');
       modulePO.getFieldAbbreviation().clear();
       modulePO.getFieldAbbreviation().sendKeys('ab');
-      expect(modulePO.getErrorMessage(1)).toEqual('Must be exactly 4 characters long');
+      expect(modulePO.getErrorMessageForAbbreviation()).toEqual('Must be exactly 4 characters long');
       modulePO.getFieldAbbreviation().clear();
       modulePO.getFieldAbbreviation().sendKeys('abc');
-      expect(modulePO.getErrorMessage(1)).toEqual('Must be exactly 4 characters long');
+      expect(modulePO.getErrorMessageForAbbreviation()).toEqual('Must be exactly 4 characters long');
       modulePO.getFieldAbbreviation().clear();
       modulePO.getFieldDisplayOrder().sendKeys('a');
-      expect(modulePO.getErrorMessage(2)).toEqual('Not a number');
+      expect(modulePO.getErrorMessageForDisplayOrder()).toEqual('Not a number');
     });
 
     it(`should add a new module with active status`, () => {
@@ -182,56 +178,56 @@ describe(`Admin - Module Page`, () => {
       modulePO.getFieldAbbreviation().clear();
       modulePO.getFieldDisplayOrder().clear();
       modulePO.getSubmitButton().click();
-      expect(modulePO.getFormInputOnlyFields().first().getAttribute(`class`)).toContain('ng-invalid');
-      expect(modulePO.getFormInputOnlyFields().get(1).getAttribute(`class`)).toContain('ng-invalid');
-      expect(modulePO.getFormInputOnlyFields().get(2).getAttribute(`class`)).toContain('ng-invalid');
+      expect(modulePO.getFieldModuleName(true).getAttribute(`class`)).toContain('ng-invalid');
+      expect(modulePO.getFieldAbbreviation(true).getAttribute(`class`)).toContain('ng-invalid');
+      expect(modulePO.getFieldDisplayOrder(true).getAttribute(`class`)).toContain('ng-invalid');
       modulePO.pageRefresh();
       modulePO.loadFormInEditMode(newTestModuleActive.name);
       modulePO.getFieldModuleName().clear();
       modulePO.getSubmitButton().click();
-      expect(modulePO.getFormInputOnlyFields().first().getAttribute(`class`)).toContain('ng-invalid');
+      expect(modulePO.getFieldModuleName(true).getAttribute(`class`)).toContain('ng-invalid');
       modulePO.pageRefresh();
       modulePO.loadFormInEditMode(newTestModuleActive.name);
       modulePO.getFieldAbbreviation().clear();
       modulePO.getSubmitButton().click();
-      expect(modulePO.getFormInputOnlyFields().get(1).getAttribute(`class`)).toContain('ng-invalid');
+      expect(modulePO.getFieldAbbreviation(true).getAttribute(`class`)).toContain('ng-invalid');
       modulePO.pageRefresh();
       modulePO.loadFormInEditMode(newTestModuleActive.name);
       modulePO.getFieldDisplayOrder().clear();
       modulePO.getSubmitButton().click();
-      expect(modulePO.getFormInputOnlyFields().get(2).getAttribute(`class`)).toContain('ng-invalid');
+      expect(modulePO.getFieldDisplayOrder(true).getAttribute(`class`)).toContain('ng-invalid');
     });
 
     it(`should show an error message when updating source with mandatory fields that already exist`, () => {
       modulePO.loadFormInEditMode(newTestModuleActive.name);
       modulePO.getFieldModuleName().clear();
       modulePO.getFieldModuleName().sendKeys(existingModuleInDb.name);
-      expect(modulePO.getErrorMessage(0)).toEqual('Value already exists');
+      expect(modulePO.getErrorMessageForModuleName()).toEqual('Value already exists');
       modulePO.getFieldAbbreviation().clear();
       modulePO.getFieldAbbreviation().sendKeys(existingModuleInDb.abbrev);
-      expect(modulePO.getErrorMessage(1)).toEqual('Value already exists');
+      expect(modulePO.getErrorMessageForAbbreviation()).toEqual('Value already exists');
       modulePO.getFieldDisplayOrder().clear();
       modulePO.getFieldDisplayOrder().sendKeys(existingModuleInDb.displayOrder);
-      expect(modulePO.getErrorMessage(2)).toEqual('Value already exists');
+      expect(modulePO.getErrorMessageForDisplayOrder()).toEqual('Value already exists');
     });
 
     it(`should show an error message when updating source with mandatory fields that are invalid`, () => {
       modulePO.loadFormInEditMode(newTestModuleActive.name);
       modulePO.getFieldAbbreviation().clear();
       modulePO.getFieldAbbreviation().sendKeys('a');
-      expect(modulePO.getErrorMessage(0)).toEqual('Must be exactly 4 characters long');
+      expect(modulePO.getErrorMessageForAbbreviation()).toEqual('Must be exactly 4 characters long');
       modulePO.getFieldAbbreviation().clear();
       modulePO.getFieldAbbreviation().sendKeys('ab');
-      expect(modulePO.getErrorMessage(0)).toEqual('Must be exactly 4 characters long');
+      expect(modulePO.getErrorMessageForAbbreviation()).toEqual('Must be exactly 4 characters long');
       modulePO.getFieldAbbreviation().clear();
       modulePO.getFieldAbbreviation().sendKeys('abc');
-      expect(modulePO.getErrorMessage(0)).toEqual('Must be exactly 4 characters long');
+      expect(modulePO.getErrorMessageForAbbreviation()).toEqual('Must be exactly 4 characters long');
       modulePO.getFieldAbbreviation().clear();
       modulePO.pageRefresh();
       modulePO.loadFormInEditMode(newTestModuleActive.name);
       modulePO.getFieldDisplayOrder().clear();
       modulePO.getFieldDisplayOrder().sendKeys('a');
-      expect(modulePO.getErrorMessage(0)).toEqual('Not a number');
+      expect(modulePO.getErrorMessageForDisplayOrder()).toEqual('Not a number');
     });
 
     it(`should update an active module to inactive`, () => {

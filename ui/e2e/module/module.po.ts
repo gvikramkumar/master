@@ -12,20 +12,20 @@ export class ModulePO extends CommonPO {
     this.waitForTableToLoad();
   }
 
-  getFieldModuleName() {
-    return this.getFormInputField(`name`);
+  getFieldModuleName(finInput = false) {
+    return this.getFormInputField(`name`, finInput);
   }
 
-  getFieldAbbreviation() {
-    return this.getFormInputField(`abbrev`);
+  getFieldAbbreviation(finInput = false) {
+    return this.getFormInputField(`abbrev`, finInput);
   }
 
-  getFieldDisplayOrder() {
-    return this.getFormInputField(`order`);
+  getFieldDisplayOrder(finInput = false) {
+    return this.getFormInputField(`order`, finInput);
   }
 
-  getFieldDescription() {
-    return this.getFormTextareaField(`desc`);
+  getFieldDescription(finInput = false) {
+    return this.getFormTextareaField(`desc`, finInput);
   }
 
 
@@ -41,16 +41,15 @@ export class ModulePO extends CommonPO {
     return this.isCheckBoxDisabled('status');
   }
 
-  getFormInputOnlyFields() {
-    return element.all(by.tagName(`fin-input`));
+  getErrorMessageForModuleName() {
+    return this.getErrorMessageForFormField('name');
   }
 
-  getErrorElementBlock(index) {
-    return element.all(by.className(`help-block`)).get(index);
+  getErrorMessageForAbbreviation() {
+    return this.getErrorMessageForFormField('abbrev');
   }
 
-  getErrorMessage(index) {
-    return this.getErrorElementBlock(index).element(by.tagName(`span`)).getText();
+  getErrorMessageForDisplayOrder() {
+    return this.getErrorMessageForFormField('order');
   }
-
 }
