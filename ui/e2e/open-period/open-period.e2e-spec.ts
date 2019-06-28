@@ -1,6 +1,6 @@
 import {OpenPeriodPO} from './open-period.po';
 
-xdescribe(`Admin - Open period page`, () => {
+describe(`Admin - Open period page`, () => {
   const openPeriodPO = new OpenPeriodPO();
   const testModule = {
     displayOrder: 12,

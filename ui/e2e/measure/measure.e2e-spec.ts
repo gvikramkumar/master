@@ -37,7 +37,7 @@ describe(`Profitabily Allocations - Measure page`, () => {
       expect(measurePO.form.isPresent()).toBe(true);
       expect(measurePO.getFieldMeasureName().getAttribute('value')).toEqual(``);
       expect(measurePO.getStatusCheckBox().isEnabled()).toBe(true);
-      expect(measurePO.getStatusCheckBoxLabel().getText()).toEqual(`Active`);
+      expect(measurePO.getStatusCheckBoxLabel()).toEqual(`Active`);
       expect(measurePO.getFieldTypeCode().getAttribute('value')).toEqual(``);
       expect(measurePO.getFieldSources().getAttribute('value')).toEqual(``);
       expect(measurePO.getFieldHierarchies().getAttribute('value')).toEqual(``);
@@ -47,7 +47,11 @@ describe(`Profitabily Allocations - Measure page`, () => {
       expect(measurePO.getReportingLevelCheckbox(1).isEnabled()).toBe(true);
       expect(measurePO.getReportingLevelCheckbox(2).isEnabled()).toBe(true);
       expect(measurePO.getReportingLevelCheckbox(3).isEnabled()).toBe(true);
-
+      expect(measurePO.getReportingLevelCheckboxLabel(1)).toEqual(`Enabled`);
+      expect(measurePO.getReportingLevelCheckboxLabel(2)).toEqual(`Enabled`);
+      expect(measurePO.getReportingLevelCheckboxLabel(3)).toEqual(`Enabled`);
+      expect(measurePO.getSetToSubMeasureNameCheckbox(3).isEnabled()).toBe(true);
+      expect(measurePO.getSetToSubMeasureNameCheckboxLabel(3)).toEqual(`Set To Submeasure Name`);
       expect(measurePO.getSubmitButton().isPresent()).toBe(true);
       expect(measurePO.getCancelButton().isPresent()).toBe(true);
       expect(measurePO.getResetButton().isPresent()).toBe(true);

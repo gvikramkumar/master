@@ -1,6 +1,6 @@
 import {ModulePO} from './module.po';
 
-xdescribe(`Admin - Module Page`, () => {
+describe(`Admin - Module Page`, () => {
   const modulePO = new ModulePO();
   const newTestModuleActive = {
     displayOrder : '12',
@@ -62,7 +62,7 @@ xdescribe(`Admin - Module Page`, () => {
       expect(modulePO.getFieldDescription().getAttribute('value')).toEqual(``);
       expect(modulePO.getStatusCheckBox().isEnabled()).toBeTruthy();
       expect(modulePO.isStatusCheckBoxDisabled()).toBe(false);
-      expect(modulePO.getStatusCheckBoxLabel().getText()).toEqual(`Active`);
+      expect(modulePO.getStatusCheckBoxLabel()).toEqual(`Active`);
       expect(modulePO.getSubmitButton().isPresent()).toBe(true);
       expect(modulePO.getCancelButton().isPresent()).toBe(true);
     });
@@ -173,7 +173,7 @@ xdescribe(`Admin - Module Page`, () => {
       expect(modulePO.getFieldDescription().getAttribute('value')).toEqual(existingModuleInDb.desc);
       expect(modulePO.getStatusCheckBox().isEnabled()).toBe(true);
       expect(modulePO.isStatusCheckBoxDisabled()).toBe(false);
-      expect(modulePO.getStatusCheckBoxLabel().getText()).toEqual(existingModuleInDb.status);
+      expect(modulePO.getStatusCheckBoxLabel()).toEqual(existingModuleInDb.status);
     });
 
     it(`should not allow the user to submit the form when updating source with mandatory fields empty`, () => {

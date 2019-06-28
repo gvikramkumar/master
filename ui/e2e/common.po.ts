@@ -109,7 +109,7 @@ export class CommonPO {
   }
 
   getCheckBoxLabelByName(name: string) {
-    return element(by.name(name)).element(by.className(`checkbox`)).element(by.className(`checkbox__label`));
+    return element(by.name(name)).element(by.className(`checkbox`)).element(by.className(`checkbox__label`)).getText();
   }
 
 

@@ -39,14 +39,22 @@ export class MeasurePO extends CommonPO {
   }
 
   getReportingLevel(level: number) {
-    return element.all(by.className(`rep-level-${level}`)).get(level - 1).element(by.className(`form-group__text`)).element(by.tagName('input'));
+    return element(by.className(`rep-level-${level}`)).element(by.className(`form-group__text`)).element(by.tagName('input'));
   }
 
   getReportingLevelCheckbox(level: number) {
-    return element.all(by.className(`rep-level-checkbox-${level}`)).get(level - 1).element(by.className(`checkbox`)).element(by.className(`checkbox__input`));
+    return element(by.className(`rep-level-checkbox-${level}`)).element(by.className(`checkbox`)).element(by.className(`checkbox__input`));
   }
 
   getReportingLevelCheckboxLabel(level: number) {
-    return element.all(by.className(`rep-level-checkbox-${level}`)).get(level - 1).element(by.className(`checkbox`)).element(by.className(`checkbox__label`));
+    return element(by.className(`rep-level-checkbox-${level}`)).element(by.className(`checkbox`)).element(by.className(`checkbox__label`)).getText();
+  }
+
+  getSetToSubMeasureNameCheckbox(level: number) {
+    return element(by.className(`rep-level-sm-checkbox-${level}`)).element(by.className(`checkbox`)).element(by.className(`checkbox__input`));
+  }
+
+  getSetToSubMeasureNameCheckboxLabel(level: number) {
+    return element(by.className(`rep-level-sm-checkbox-${level}`)).element(by.className(`checkbox`)).element(by.className(`checkbox__label`)).getText();
   }
  }
