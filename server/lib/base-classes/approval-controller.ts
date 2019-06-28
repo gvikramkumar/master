@@ -14,6 +14,13 @@ import config from '../../config/get-config';
 import {mail} from '../common/mail';
 import SourceRepo from '../../api/common/source/repo';
 
+interface Updates {
+  oldPath: string;
+  newPath: string;
+  newPropName: string;
+  data;
+}
+
 export default class ApprovalController extends ControllerBase {
 
   constructor(
@@ -239,7 +246,13 @@ export default class ApprovalController extends ControllerBase {
                   item = item.toObject();
                 }
                 let objectChanges = shUtil.getObjectChanges(oldObj.toObject(), item, omitProperties);
-                objectChanges = this.addSourceNameForSourceId(sources, objectChanges);
+                const update = {
+                  oldPath: 'sourceId',
+                  newPath: 'sourceName',
+                  newPropName: 'name',
+                  data: sources
+                };
+                objectChanges = this.addFriendlyNames(objectChanges, update);
                 body += '<br><br><b>Summary of changes:</b><br><br>' +
                   shUtil.getUpdateTable(objectChanges);
               }
@@ -272,14 +285,13 @@ export default class ApprovalController extends ControllerBase {
 
   }
 
-  addSourceNameForSourceId(sources, objectChanges) {
-    const path = 'sourceId';
-    const sourceChange = _.find(objectChanges, {path});
-    if (sourceChange) {
-      const oldVal = _.find(sources, {sourceId: Number(sourceChange.oldVal)}).name;
-      const newVal = _.find(sources, {sourceId: Number(sourceChange.newVal)}).name;
-      objectChanges.push({path: 'sourceName', oldVal, newVal});
-      // _.remove(objectChanges, sourceChange);
+  addFriendlyNames(objectChanges, update: Updates) {
+    const pathToChange = _.find(objectChanges, {path: update.oldPath});
+    if (pathToChange) {
+      const oldVal = update.data.filter(item => item[update.oldPath] === Number(pathToChange.oldVal))[0][update.newPropName];
+      const newVal = update.data.filter(item => item[update.oldPath] === Number(pathToChange.newVal))[0][update.newPropName];
+      objectChanges.push({path: update.newPath, oldVal, newVal});
+      _.remove(objectChanges, pathToChange);
     }
     return objectChanges;
   }
