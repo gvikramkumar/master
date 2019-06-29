@@ -143,6 +143,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         }
         if (this.copyMode) {
           this.rule.approvedOnce = 'N';
+          delete this.rule.approvalUrl;
           this.rule.status = 'D';
           delete this.rule.createdBy;
           delete this.rule.createdDate;

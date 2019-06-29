@@ -234,3 +234,19 @@ i {
 .bg-plum {
   background-color: plum;
 }
+
+.mat-table .mat-header-row {
+  background: #64bbe3;
+}
+
+.spinner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+
+
+

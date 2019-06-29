@@ -51,6 +51,7 @@ export class Submeasure {
   activeStatus = 'I';
   status = 'D';
   approvedOnce = 'N';
+  approvalUrl?: string;
   createdBy?: string;
   createdDate?: string;
   updatedBy?: string;
