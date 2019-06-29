@@ -75,31 +75,29 @@ fileCollections.forEach(coll => {
 
 // add indexes;
 // id columns
-db.dfa_module.createIndex({moduleId: -1}, {unique: true});
-db.dfa_measure.createIndex({measureId: 1}, {unique: true});
-db.dfa_data_source.createIndex({sourceId: -1}, {unique: true});
-
-db.getCollection('fs.files').createIndex({'metadata.directory': 1});
 db.dfa_allocation_rule.createIndex({name: 1, updatedDate: -1});
-db.dfa_submeasure.createIndex({name: 1, updatedDate: -1});
+db.dfa_data_source.createIndex({name: 1}, {unique: true});
+db.dfa_data_source.createIndex({sourceId: -1}, {unique: true});
+db.dfa_data_source.createIndex({typeCode: 1}, {unique: true});
+db.getCollection('fs.files').createIndex({'metadata.directory': 1});
+// expireAfterSeconds takes seconds. So 1 year is 365 * 24 * 60 * 60
+db.dfa_job_log.createIndex({startDate: -1}, {expireAfterSeconds: 365 * 24 * 60 * 60});
+db.dfa_lookup.createIndex({key: 1}, {unique: true});// shared
 db.dfa_measure.createIndex({name: 1}, {unique: true});
-
-db.dfa_prof_input_amnt_upld.createIndex({submeasureName: 1, fiscalMonth: -1});
-db.dfa_prof_manual_map_upld.createIndex({submeasureName: 1, fiscalMonth: -1});
-db.dfa_prof_swalloc_manualmix_upld.createIndex({submeasureName: 1, fiscalMonth: -1});
-
+db.dfa_measure.createIndex({measureId: 1}, {unique: true});
+db.dfa_measure.createIndex({typeCode: 1}, {unique: true});
 db.dfa_module.createIndex({name: 1}, {unique: true});
 db.dfa_module.createIndex({abbrev: 1}, {unique: true});
 db.dfa_module.createIndex({displayOrder: 1}, {unique: true});
-db.dfa_data_source.createIndex({name: 1}, {unique: true});
-db.dfa_data_source.createIndex({typeCode: 1}, {unique: true});
+db.dfa_module.createIndex({moduleId: -1}, {unique: true});
 db.dfa_module_data_source.createIndex({moduleId: 1}, {unique: true});
-
-db.dfa_lookup.createIndex({key: 1}, {unique: true});// shared
 db.dfa_module_lookup.createIndex({moduleId: 1, key: 1}, {unique: true});// per module
 db.dfa_open_period.createIndex({moduleId: 1}, {unique: true});// per module
-db.dfa_job_log.createIndex({startDate: -1}, {expireAfterSeconds: 365 * 24 * 60 * 60});
-// expireAfterSeconds takes seconds. So 1 year is 365 * 24 * 60 * 60
+db.dfa_prof_input_amnt_upld.createIndex({submeasureName: 1, fiscalMonth: -1});
+db.dfa_prof_manual_map_upld.createIndex({submeasureName: 1, fiscalMonth: -1});
+db.dfa_prof_swalloc_manualmix_upld.createIndex({submeasureName: 1, fiscalMonth: -1});
+db.dfa_submeasure.createIndex({name: 1, updatedDate: -1});
+
 print('>>>>>>>>>>>> create-collections complete');
 // unique constraints
 
