@@ -136,7 +136,7 @@ export class UiUtil {
     let params = new HttpParams();
     _.forEach(_params, (val, key) => {
       params = params.set(key, _params[key]);
-    })
+    });
     return params;
   }
 
@@ -169,7 +169,6 @@ export class UiUtil {
   }
 
   toast(message, action = '', duration?) {
-
     const options: MatSnackBarConfig = {
       horizontalPosition: 'center',
       verticalPosition: 'top',

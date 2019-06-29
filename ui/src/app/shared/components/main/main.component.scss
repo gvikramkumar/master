@@ -7,6 +7,8 @@
 .main-content {
   //min-height: calc(100vh - #{$header-height-ltlg + $hero-header-height + $fin-footer-height});
   min-height: calc(100vh - #{$header-height-ltlg + $hero-header-height});
+  position: relative;
+
 
   @media (min-width: $breakpoint-lg) and (max-width: $breakpoint-ltxxl) {
     //min-height: calc(100vh - #{$hero-header-height + $hero-header-height + $fin-footer-height});
