@@ -92,16 +92,16 @@ describe(`Admin - Source Page`, () => {
       sourcePO.getFieldTypeCode().sendKeys('TEST');
       sourcePO.getSubmitButton().click();
       sourcePO.waitForDialogToShow();
-      expect(sourcePO.getDialogTitle().getText()).toEqual('Error');
-      expect(sourcePO.getDialogMessage().getText()).toContain('duplicate key error');
+      expect(sourcePO.getDialogTitle()).toEqual('Error');
+      expect(sourcePO.getDialogMessage()).toContain('duplicate key error');
       sourcePO.closeDialog();
       sourcePO.getFieldName().clear();
       sourcePO.getFieldTypeCode().clear();
       sourcePO.getFieldName().sendKeys(newTestSource.name);
       sourcePO.getFieldTypeCode().sendKeys(existingSourceInDb.typeCode);
       sourcePO.getSubmitButton().click();
-      expect(sourcePO.getDialogTitle().getText()).toEqual('Error');
-      expect(sourcePO.getDialogMessage().getText()).toContain('duplicate key error');
+      expect(sourcePO.getDialogTitle()).toEqual('Error');
+      expect(sourcePO.getDialogMessage()).toContain('duplicate key error');
     });
 
     it(`should add a new source with active status`, () => {
@@ -158,16 +158,16 @@ describe(`Admin - Source Page`, () => {
       sourcePO.getFieldName().sendKeys(existingSourceInDb.name);
       sourcePO.getSubmitButton().click();
       sourcePO.waitForDialogToShow();
-      expect(sourcePO.getDialogTitle().getText()).toEqual('Error');
-      expect(sourcePO.getDialogMessage().getText()).toContain('duplicate key error');
+      expect(sourcePO.getDialogTitle()).toEqual('Error');
+      expect(sourcePO.getDialogMessage()).toContain('duplicate key error');
       sourcePO.pageRefresh();
       sourcePO.loadFormInEditMode(newTestSource.name);
       sourcePO.getFieldTypeCode().clear();
       sourcePO.getFieldTypeCode().sendKeys(existingSourceInDb.typeCode);
       sourcePO.getSubmitButton().click();
       sourcePO.waitForDialogToShow();
-      expect(sourcePO.getDialogTitle().getText()).toEqual('Error');
-      expect(sourcePO.getDialogMessage().getText()).toContain('duplicate key error');
+      expect(sourcePO.getDialogTitle()).toEqual('Error');
+      expect(sourcePO.getDialogMessage()).toContain('duplicate key error');
     });
 
     it(`should update an existing source`, () => {

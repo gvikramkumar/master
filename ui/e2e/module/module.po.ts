@@ -13,19 +13,19 @@ export class ModulePO extends CommonPO {
   }
 
   getFieldModuleName(finInput = false) {
-    return this.getFormInputField(`name`, finInput);
+    return this.getFormInputFieldByName(`name`, finInput);
   }
 
   getFieldAbbreviation(finInput = false) {
-    return this.getFormInputField(`abbrev`, finInput);
+    return this.getFormInputFieldByName(`abbrev`, finInput);
   }
 
   getFieldDisplayOrder(finInput = false) {
-    return this.getFormInputField(`order`, finInput);
+    return this.getFormInputFieldByName(`order`, finInput);
   }
 
   getFieldDescription(finInput = false) {
-    return this.getFormTextareaField(`desc`, finInput);
+    return this.getFormTextareaFieldByName(`desc`, finInput);
   }
 
 
@@ -38,7 +38,7 @@ export class ModulePO extends CommonPO {
   }
 
   isStatusCheckBoxDisabled() {
-    return this.isCheckBoxDisabled('status');
+    return this.isCheckBoxWithNameDisabled('status');
   }
 
   getErrorMessageForModuleName() {

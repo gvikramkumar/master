@@ -14,15 +14,15 @@ export class SourcePO extends CommonPO {
   }
 
   getFieldName() {
-    return this.getFormInputField(`name`);
+    return this.getFormInputFieldByName(`name`);
   }
 
   getFieldTypeCode() {
-    return this.getFormInputField(`typeCode`);
+    return this.getFormInputFieldByName(`typeCode`);
   }
 
   getFieldDescription() {
-    return this.getFormTextareaField(`desc`);
+    return this.getFormTextareaFieldByName(`desc`);
   }
 
   getStatusCheckBox() {
@@ -34,7 +34,7 @@ export class SourcePO extends CommonPO {
   }
 
   isStatusCheckBoxDisabled() {
-    return this.isCheckBoxDisabled('status');
+    return this.isCheckBoxWithNameDisabled('status');
   }
 
   checkIfSourceIsUsed() {

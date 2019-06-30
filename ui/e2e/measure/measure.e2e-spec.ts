@@ -7,7 +7,11 @@ describe(`Profitabily Allocations - Measure page`, () => {
 
   const newTestMeasure = {
     name: 'Test Measure - E2ETEST',
-    typeCode: 'test'
+    typeCode: 'test',
+    reportingLevels: [
+      'Indirect',
+      'Excess and obsolete'
+    ]
   };
 
   beforeAll(done => {
@@ -35,7 +39,7 @@ describe(`Profitabily Allocations - Measure page`, () => {
     expect(measurePO.getTableRows().get(3).getText()).toEqual(existingMeasureInDb.updatedBy);
     expect(measurePO.getTableRows().last().getText()).toEqual(moment(existingMeasureInDb.updatedDate).format('MM/DD/YYYY hh:mm A'));
   });
-  
+
   describe(`Add Measure tests`, () => {
     it(`should show form on clicking add`, () => {
       measurePO.getAddButton().click();
@@ -56,8 +60,8 @@ describe(`Profitabily Allocations - Measure page`, () => {
       expect(measurePO.getReportingLevelCheckboxLabel(1)).toEqual(`Enabled`);
       expect(measurePO.getReportingLevelCheckboxLabel(2)).toEqual(`Enabled`);
       expect(measurePO.getReportingLevelCheckboxLabel(3)).toEqual(`Enabled`);
-      expect(measurePO.getSetToSubMeasureNameCheckbox(3).isEnabled()).toBe(true);
-      expect(measurePO.getSetToSubMeasureNameCheckboxLabel(3)).toEqual(`Set To Submeasure Name`);
+      expect(measurePO.getSetToSubMeasureNameCheckbox().isEnabled()).toBe(true);
+      expect(measurePO.getSetToSubMeasureNameCheckboxLabel()).toEqual(`Set To Submeasure Name`);
       expect(measurePO.getSubmitButton().isPresent()).toBe(true);
       expect(measurePO.getCancelButton().isPresent()).toBe(true);
       expect(measurePO.getResetButton().isPresent()).toBe(true);
@@ -116,7 +120,41 @@ describe(`Profitabily Allocations - Measure page`, () => {
       measurePO.getFieldMeasureName().sendKeys(existingMeasureInDb.name);
       expect(measurePO.getErrorMessageForMeasureName()).toEqual('Measure name already exists');
       measurePO.getFieldTypeCode().sendKeys(existingMeasureInDb.typeCode);
-      expect(measurePO.getErrorMessageForTypecode()).toEqual('Typecode already exists');
+      expect(measurePO.getErrorMessageForTypecode()).toEqual('Type Code already exists');
+    });
+
+    it(`should reset form on clicking reset button`, () => {
+      measurePO.getAddButton().click();
+      measurePO.waitForFormUp();
+      measurePO.getFieldMeasureName().sendKeys(newTestMeasure.name);
+      measurePO.getFieldTypeCode().sendKeys(newTestMeasure.typeCode);
+      measurePO.getStatusCheckBox().click();
+      measurePO.openDropDownForSources();
+      measurePO.getDropdownOption(0).click();
+      measurePO.closeDropdownForSources();
+      measurePO.openDropDownForHierarchies();
+      measurePO.getDropdownOption(0).click();
+      measurePO.getDropdownOption(1).click();
+      measurePO.closeDropdownForHierarchies();
+      measurePO.getReportingLevel(1).sendKeys(newTestMeasure.reportingLevels[0]);
+      measurePO.getReportingLevel(2).sendKeys(newTestMeasure.reportingLevels[1]);
+      measurePO.getReportingLevelCheckbox(2).click();
+      measurePO.getSetToSubMeasureNameCheckbox().click();
+      measurePO.getResetButton().click();
+      measurePO.waitForDialogToShow();
+      expect(measurePO.getDialogMessage()).toEqual('Are you sure you want to lose your changes?');
+      measurePO.getYesButton().click();
+      measurePO.waitForDialogToHide();
+      expect(measurePO.getFieldMeasureName().getAttribute('value')).toEqual(``);
+      expect(measurePO.isStatusCheckboxChecked()).toBe(false);
+      expect(measurePO.getFieldTypeCode().getAttribute('value')).toEqual(``);
+      expect(measurePO.getFieldSources().getAttribute('value')).toEqual(``);
+      expect(measurePO.getFieldHierarchies().getAttribute('value')).toEqual(``);
+      expect(measurePO.getReportingLevel(1).getAttribute('value')).toEqual(``);
+      expect(measurePO.getReportingLevel(2).getAttribute('value')).toEqual(``);
+      expect(measurePO.isReportingLevelCheckboxChecked(2)).toBe(false);
+      expect(measurePO.getReportingLevel(3).getAttribute('value')).toEqual(``);
+      expect(measurePO.isSetToSubMeasureNameCheckboxChecked()).toBe(false);
     });
   });
 });

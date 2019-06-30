@@ -99,7 +99,7 @@ export class CommonPO {
     this.waitForFormUp();
   }
 
-  getFormInputField(name, cuiElement?) {
+  getFormInputFieldByName(name, cuiElement?) {
     if (cuiElement) {
       return element(by.name(name));
     } else {
@@ -107,11 +107,27 @@ export class CommonPO {
     }
   }
 
-  getFormTextareaField(name, cuiElement?) {
+  getFormInputFieldByClassName(name, cuiElement?) {
+    if (cuiElement) {
+      return element(by.className(name));
+    } else {
+      return element(by.className(name)).element(by.className(`form-group__text`)).element(by.tagName('input'));
+    }
+  }
+
+  getFormTextareaFieldByName(name, cuiElement?) {
     if (cuiElement) {
       return element(by.name(name));
     } else {
       return element(by.name(name)).element(by.className(`form-group__text`)).element(by.tagName('textarea'));
+    }
+  }
+
+  getFormTextareaFieldByClassName(name, cuiElement?) {
+    if (cuiElement) {
+      return element(by.className(name));
+    } else {
+      return element(by.className(name)).element(by.className(`form-group__text`)).element(by.tagName('textarea'));
     }
   }
 
@@ -123,10 +139,30 @@ export class CommonPO {
     return element(by.name(name)).element(by.className(`checkbox`)).element(by.className(`checkbox__label`)).getText();
   }
 
+  isCheckboxWithNameChecked(name: string) {
+    return element(by.name(name)).element(by.className(`checkbox`)).element(by.tagName('input')).isSelected();
+  }
 
-  isCheckBoxDisabled(name: string) {
+  isCheckBoxWithNameDisabled(name: string) {
     return element(by.name(name)).element(by.className(`checkbox disabled`)).isPresent();
   }
+
+  getCheckBoxInputByClassName(name: string) {
+    return element(by.className(name)).element(by.className(`checkbox`)).element(by.className(`checkbox__input`));
+  }
+
+  getCheckBoxLabelByClassName(name: string) {
+    return element(by.className(name)).element(by.className(`checkbox`)).element(by.className(`checkbox__label`)).getText();
+  }
+
+  isCheckboxWithClassNameChecked(name: string) {
+    return element(by.className(name)).element(by.className(`checkbox`)).element(by.tagName('input')).isSelected();
+  }
+
+  isCheckBoxWithClassNameDisabled(name: string) {
+    return element(by.className(name)).element(by.className(`checkbox disabled`)).isPresent();
+  }
+
   // cui-select/multi-select
   openDropDownForSelectControl(name: string) {
     this.mouseDownOnElement(element(by.name(name)).element(by.className('dropdown-chevron icon-chevron-down')));
@@ -165,17 +201,29 @@ export class CommonPO {
     return element(by.buttonText(`Reset`));
   }
 
+  getYesButton() {
+    return element(by.buttonText(`Yes`));
+  }
+
+  getNoButton() {
+    return element(by.buttonText(`No`));
+  }
+
   // Dialog functions
   waitForDialogToShow() {
     browser.wait(this.EC.presenceOf(this.dialog));
   }
 
+  waitForDialogToHide() {
+    browser.wait(this.EC.stalenessOf(this.dialog));
+  }
+
   getDialogTitle() {
-    return element(by.className(`mat-dialog-title`));
+    return element(by.className(`mat-dialog-title`)).getText();
   }
 
   getDialogMessage() {
-    return element(by.className(`fin-dialog-title`));
+    return element(by.className(`fin-dialog-title`)).getText();
   }
 
   closeDialog() {

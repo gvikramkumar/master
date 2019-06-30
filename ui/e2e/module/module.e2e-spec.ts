@@ -98,7 +98,7 @@ describe(`Admin - Module Page`, () => {
       expect(modulePO.getFieldAbbreviation(true).getAttribute(`class`)).toContain('ng-invalid');
     });
 
-    fit(`should show an error on the form field when the user adds a mandatory form field that already exists`, () => {
+    it(`should show an error on the form field when the user adds a mandatory form field that already exists`, () => {
       modulePO.getAddButton().click();
       modulePO.waitForFormUp();
       modulePO.getFieldModuleName().sendKeys(existingModuleInDb.name);
