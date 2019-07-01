@@ -193,6 +193,14 @@ export class CommonPO {
     return element(by.buttonText(`Submit`));
   }
 
+  confirmAndSubmit() {
+    this.getSubmitButton().click();
+    this.waitForDialogToShow();
+    this.getYesButton().click();
+    this.waitForDialogToShow();
+    this.init();
+  }
+
   getCancelButton() {
     return element(by.buttonText(`Cancel`));
   }

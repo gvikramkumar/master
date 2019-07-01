@@ -172,7 +172,7 @@ describe(`Admin - Module Page`, () => {
       expect(modulePO.getStatusCheckBoxLabel()).toEqual(existingModuleInDb.status);
     });
 
-    it(`should not allow the user to submit the form when updating source with mandatory fields empty`, () => {
+    it(`should not allow the user to submit the form when updating module with mandatory fields empty`, () => {
       modulePO.loadFormInEditMode(newTestModuleActive.name);
       modulePO.getFieldModuleName().clear();
       modulePO.getFieldAbbreviation().clear();
@@ -198,7 +198,7 @@ describe(`Admin - Module Page`, () => {
       expect(modulePO.getFieldDisplayOrder(true).getAttribute(`class`)).toContain('ng-invalid');
     });
 
-    it(`should show an error message when updating source with mandatory fields that already exist`, () => {
+    it(`should show an error message when updating module with mandatory fields that already exist`, () => {
       modulePO.loadFormInEditMode(newTestModuleActive.name);
       modulePO.getFieldModuleName().clear();
       modulePO.getFieldModuleName().sendKeys(existingModuleInDb.name);
@@ -211,7 +211,7 @@ describe(`Admin - Module Page`, () => {
       expect(modulePO.getErrorMessageForDisplayOrder()).toEqual('Value already exists');
     });
 
-    it(`should show an error message when updating source with mandatory fields that are invalid`, () => {
+    it(`should show an error message when updating module with mandatory fields that are invalid`, () => {
       modulePO.loadFormInEditMode(newTestModuleActive.name);
       modulePO.getFieldAbbreviation().clear();
       modulePO.getFieldAbbreviation().sendKeys('a');

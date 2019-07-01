@@ -162,7 +162,7 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
 
   reportingLevel3SetToSubmeasureNameChange() {
     if (this.measure.reportingLevel3SetToSubmeasureName) {
-      this.measure.reportingLevels[2] = undefined;
+      this.measure.reportingLevels[2] = '';
     }
   }
 
