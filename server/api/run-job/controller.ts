@@ -10,24 +10,32 @@ import DatabaseController from '../database/controller';
 import SubmeasureController from '../common/submeasure/controller';
 import AllocationRuleController from '../common/allocation-rule/controller';
 import LookupRepo from '../lookup/repo';
+import config from '../../config/get-config';
+import {shUtil} from '../../../shared/misc/shared-util';
+import {finRequest} from '../../lib/common/fin-request';
 
 
 type DfaJobFunction = (startup?: boolean, data?, req?) => Promise<any>;
 
 interface DfaJob {
+  name: string;
   displayName: string;
-  lookupRunningKey: string;
   param: string;
   singleServer: boolean;
 }
 
 export const dfaJobs = [
-  {name: 'databaseSync', displayName: 'Database Sync', lookupRunningKey: 'syncing', param: 'database-sync', singleServer: true},
-  {name: 'approvalEmailReminder', displayName: 'Approval Email Reminder', lookupRunningKey: 'approvalEmailReminder', param: 'approval-email-reminder', singleServer: true}
+  {name: 'databaseSync', displayName: 'Database Sync', param: 'database-sync',
+    fcn: this.databaseSyncJob.bind(this), singleServer: true, log: true},
+  {name: 'approvalEmailReminder', displayName: 'Approval Email Reminder', param: 'approval-email-reminder',
+    fcn: this.approvelEmailReminderJob.bind(this), singleServer: true, log: true},
+  {name: 'clearServerLookupFlagsJob', displayName: 'Clear Server Lookup Flags', fcn: this.clearServerLookupFlagsJob.bind(this), period: 5 * 1000, runOnStartup: true}
 ];
 
 @injectable()
 export default class RunJobController {
+  singleServerJobs = dfaJobs.filter(x => x.singleServer);
+  multipleServerJobs = dfaJobs.filter(x => !x.singleServer);
 
   constructor(
     private jobLogRepo: JobLogRepo,
@@ -36,27 +44,46 @@ export default class RunJobController {
     private ruleController: AllocationRuleController,
     private databaseController: DatabaseController
   ) {
-
   }
 
-  log(log, req?) {
-    log.userId = _.get(req, 'user.id') || 'system';
-    return this.jobLogRepo.addOne(log, log.userId, false);
-  }
-
-  getJobFcnFromName(jobName): DfaJobFunction {
-    let fcn;
-    switch (jobName) {
-      case 'approval-email-reminder':
-        fcn = this.approvelEmailReminderJob.bind(this);
-        break;
-      case 'database-sync':
-        fcn = this.databaseSyncJob.bind(this);
-        break;
-      default:
-        throw new ApiError(`getJobFcnFromName: job not found: ${jobName}.`);
+  //
+  startup() {
+    const multipleServerJobs = dfaJobs.filter(x => !x.singleServer);
+    if (!config.multipleServers) {
+      _.pull(multipleServerJobs, {name: 'clearServerLookupFlagsJob'});
     }
-    return fcn;
+    multipleServerJobs.filter(x => x.period)
+      .forEach(job => setInterval(job.fcn, job.period));
+    const promises = [];
+    multipleServerJobs.forEach(job => {
+      if (job.runOnStartup) {
+        promises.push(job.fcn(true));
+      }
+    });
+    return Q.allSettled(promises)
+      .then(results => handleQAllSettled(null, 'serverStartup'));
+  }
+
+  // ping server and return serverUrl if fails
+  pingServer(serverUrl) {
+    return shUtil.promiseChain(finRequest({url: `${serverUrl}/ping`}))
+      .then(({resp, body}) => {
+        if (resp.statusCode >= 400) {
+          return serverUrl;
+        }
+      })
+      .catch(err => {
+        return serverUrl;
+      });
+  }
+
+  log(canLog, log, req?) {
+    if (canLog) {
+      log.userId = _.get(req, 'user.id') || 'system';
+      return this.jobLogRepo.addOne(log, log.userId, false);
+    } else {
+      return Promise.resolve();
+    }
   }
 
   isDatabaseSyncJob(job) {
@@ -64,16 +91,24 @@ export default class RunJobController {
   }
 
   isJobRunning(job: DfaJob) {
-    return this.lookupRepo.getValues([job.lookupRunningKey, 'uploading'])
-      .then(values => {
-        const running = values[0];
-        const uploading = values[1];
-        if (running) {
-          return `${job.displayName} job is already running.`;
-        } else if (this.isDatabaseSyncJob(job) && uploading) {
-          return `Upload in progress, please try again later.`;
-        }
-      });
+    let promise;
+    if (job.singleServer) {
+      promise = this.lookupRepo.getValues([job.name, 'uploading'])
+        .then(values => {
+          const running = values[0];
+          const uploading = values[1];
+          return {running, uploading};
+        });
+    } else {
+      promise = Promise.resolve(_.get(global, `dfa.${job.name}`));
+    }
+    return promise.then((running, uploading) => {
+      if (running) {
+        return `${job.displayName} job is already running.`;
+      } else if (this.isDatabaseSyncJob(job) && uploading) {
+        return `Upload in progress, please try again later.`;
+      }
+    });
   }
 
   runJobAndRespond(req, res, next) {
@@ -102,17 +137,16 @@ export default class RunJobController {
       .then(running => {
         if (running) {
           log.status = 'already running';
-          return this.log(log, req)
+          return this.log(job.log, log, req)
             .then(() => {
               return Promise.reject(new ApiError (running));
             });
         }
       })
       .then(() => {
-        return this.log(log, req)
+        return this.log(job.log, log, req)
           .then(() => {
-            const jobFcn = this.getJobFcnFromName(jobName);
-            return jobFcn(startup, data, req);
+            return job.fcn(startup, data, req);
           })
           // job success
           .then(jobData => {
@@ -120,7 +154,7 @@ export default class RunJobController {
             log.duration = log.endDate.getTime() - log.startDate.getTime();
             log.status = 'success';
             log.data = jobData;
-            return this.log(log, req);
+            return this.log(job.log, log, req);
           })
           // job error
           .catch(err => {
@@ -128,7 +162,7 @@ export default class RunJobController {
             log.duration = log.endDate.getTime() - log.startDate.getTime();
             log.status = 'error';
             log.error = err;
-            return this.log(log, req)
+            return this.log(true, log, req)
               .then(logSaved => {
                 throw new ApiError(_.get(err, 'message') || 'Run Job Error' , logSaved.toObject());
               });
@@ -150,5 +184,41 @@ export default class RunJobController {
       .then(results => handleQAllSettled(null, 'qAllReject'));
   }
 
+  // get flags from lookup, they'll have serverUrls for them, then ping servers and if not there, remove the flags
+  // what we're doing here is clearing the flags that says server is busy doing something, when server is no longer there
+  clearServerLookupFlagsJob(startup) {
+    if (startup) {
+      return this.lookupRepo.getValues(this.singleServerJobs.map(x => x.name))
+        .then(values => {
+          const keys = [];
+          const serverUrl = (<any>global).dfa.serverUrl;
+          this.singleServerJobs.forEach((job, idx) => {
+            if (values[idx] === serverUrl) {
+              keys.push(job.name);
+            }
+          });
+          const promise: any = keys.length ? this.lookupRepo.removeByKeys(keys) : Promise.resolve();
+          return promise;
+        });
+    } else {
+      return this.lookupRepo.getValues(this.singleServerJobs.map(x => x.name))
+        .then(values => {
+          const pingPromises = [];
+          values.forEach((val, idx) => pingPromises.push(val ? this.pingServer(this.singleServerJobs[idx].name) : Promise.resolve()));
+          Promise.all(pingPromises)
+            .then(missingServers => {
+              if (missingServers.filter(x => !!x).length) {
+                const keys = [];
+                missingServers.forEach((serverUrl, idx) => {
+                  if (serverUrl) {
+                    keys.push(this.singleServerJobs[idx].name);
+                  }
+                });
+                return this.lookupRepo.removeByKeys(keys);
+              }
+            });
+        });
+    }
+  }
 
 }

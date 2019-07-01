@@ -104,7 +104,7 @@ Model: Model<any>;
   }
 
   getSyncingAndUploading() {
-    return this.getValues(['syncing', 'uploading'])
+    return this.getValues(['databaseSync', 'uploading'])
       .then(values => {
         return {syncing: values[0], uploading: values[1]};
       });
@@ -112,7 +112,7 @@ Model: Model<any>;
 
   setSyncing() {
     return this.upsert({
-      key: 'syncing',
+      key: 'databaseSync',
       value: _.get(global, 'dfa.serverUrl')
     });
   }
@@ -125,7 +125,7 @@ Model: Model<any>;
   }
 
   clearSyncing() {
-    return this.removeByKey('syncing');
+    return this.removeByKey('databaseSync');
   }
 
   clearUploading() {
