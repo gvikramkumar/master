@@ -122,7 +122,7 @@ export class RuleManagementComponent extends RoutingComponentBase implements OnI
   }
 
   showDeleteIcon(rule) {
-    return _.includes(['D', 'P'], rule.status);
+    return _.includes(['D', 'P'], rule.status) && (this.store.user.isItAdmin() || this.store.user.id === rule.updatedBy);
   }
 
   sortChange(sort: Sort) {
