@@ -15,6 +15,7 @@ import os from 'os';
 import {svrUtil} from './lib/common/svr-util';
 import _ from 'lodash';
 import {ServerStartup} from './lib/common/server-startup';
+import RunJobController from './api/run-job/controller';
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -72,8 +73,8 @@ export const serverPromise = Promise.all([mgc.promise, pgc.promise])
         _.set(global, 'dfa.serverHost', os.hostname());
         _.set(global, 'dfa.serverUrl', serverUrl);
         _.set(global, 'dfa.app', app);
-        const serverStartup = injector.get(ServerStartup);
-        return serverStartup.startup()
+        const runJobController = injector.get(RunJobController);
+        return runJobController.startup()
           .then(() => {
             if (!svrUtil.isLocalEnv()) {
               console.log('build:', process.env.BUILD_NUMBER);
