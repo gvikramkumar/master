@@ -141,7 +141,7 @@ fdescribe(`Admin - Source Page`, () => {
     });
 
     it(`should show in use and disable checkbox for status, if a source is in use by a module`, () => {
-      // we are only gonna check for first 3 sources, there could be 100 sources, no point in testing if it is in-use for each
+      // we are only gonna check for first 3 sources that are in use, there could be 100 sources, no point in testing all of them
       let count = 0;
       existingSourcesInDb.forEach(source => {
         if (count < 3) {
