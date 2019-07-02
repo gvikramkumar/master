@@ -13,7 +13,7 @@ export class SourcePO extends CommonPO {
     this.waitForTableToLoad();
   }
 
-  getFieldName() {
+  getFieldSourceName() {
     return this.getFormInputFieldByName(`name`);
   }
 
@@ -31,6 +31,10 @@ export class SourcePO extends CommonPO {
 
   getStatusCheckBoxLabel() {
     return this.getCheckBoxLabelByName('status');
+  }
+
+  isStatusCheckBoxChecked() {
+    return this.isCheckBoxWithNameChecked('status');
   }
 
   isStatusCheckBoxDisabled() {

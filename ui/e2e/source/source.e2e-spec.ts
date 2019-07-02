@@ -1,30 +1,30 @@
 import {SourcePO} from './source.po';
+import * as _ from 'lodash';
 
-describe(`Admin - Source Page`, () => {
+fdescribe(`Admin - Source Page`, () => {
+  const url = '/api/source';
+  let existingSourcesInDb, existingSourceInDb;
   const sourcePO = new SourcePO();
+
   const newTestSource = {
-    name: `Active Test Source - E2ETEST`,
-    typeCode: 'ATEST',
+    name: `Test Source - E2ETEST`,
+    typeCode: 'TEST',
     description: `Adding a new active test source`,
-    status: 'Active'
+    status: 'A'
   };
 
-  const existingSourceInDb = {
-    name: `Rapid Revenue`,
-    typeCode: 'RRR',
-    description: `Rapid Revenue Reporting Source`,
-    status: 'Active'
-  };
 
-  const newSourceForUpdate = {
-    name: 'Inactive Test Source - E2ETEST',
-    typeCode: 'ITEST',
-    description: 'Updated source to inactive',
-    status: `Inactive`
-  };
+  beforeAll(done => {
+    sourcePO.finJsonRequest(url, 'GET', undefined, undefined)
+      .then(result => {
+        existingSourcesInDb = result.body;
+        existingSourceInDb = existingSourcesInDb[0];
+        done();
+      });
+  });
 
   afterAll(done => {
-    sourcePO.finJsonRequest('/api/source/query-one', 'DELETE', undefined, {name: newSourceForUpdate.name})
+    sourcePO.finJsonRequest('/api/source/query-one', 'DELETE', undefined, {name: newTestSource.name})
       .then(() => done());
   });
 
@@ -34,7 +34,7 @@ describe(`Admin - Source Page`, () => {
   });
 
   it(`should load all the sources`, () => {
-    expect(sourcePO.getCountOfItemsLoadedInTheTable()).toBeGreaterThanOrEqual(20);
+    expect(sourcePO.getCountOfItemsLoadedInTheTable()).toEqual(existingSourcesInDb.length);
   });
 
 
@@ -42,7 +42,7 @@ describe(`Admin - Source Page`, () => {
     sourcePO.getSearchField().sendKeys(existingSourceInDb.name);
     expect(sourcePO.getFirstCellInFirstRow().getText()).toEqual(existingSourceInDb.name);
     expect(sourcePO.getTableRows().get(1).getText()).toEqual(existingSourceInDb.typeCode);
-    expect(sourcePO.getTableRows().last().getText()).toEqual(existingSourceInDb.status);
+    expect(sourcePO.getTableRows().last().getText()).toEqual(existingSourceInDb.status === 'A' ? 'Active' : 'Inactive');
   });
   
   describe(`Add Source Tests`, () => {
@@ -51,7 +51,7 @@ describe(`Admin - Source Page`, () => {
       sourcePO.waitForFormUp();
       expect(sourcePO.form.isPresent()).toBeTruthy();
       expect(sourcePO.getFormTitle().getText()).toEqual(`Add New Source`);
-      expect(sourcePO.getFieldName().getAttribute('value')).toEqual(``);
+      expect(sourcePO.getFieldSourceName().getAttribute('value')).toEqual(``);
       expect(sourcePO.getFieldTypeCode().getAttribute('value')).toEqual(``);
       expect(sourcePO.getFieldDescription().getAttribute('value')).toEqual(``);
       expect(sourcePO.getStatusCheckBox().isEnabled()).toBeTruthy();
@@ -76,10 +76,10 @@ describe(`Admin - Source Page`, () => {
       sourcePO.getSubmitButton().click();
       expect(sourcePO.getFormInputOnlyFields().first().getAttribute(`class`)).toContain('ng-invalid');
       expect(sourcePO.getFormInputOnlyFields().get(1).getAttribute(`class`)).toContain('ng-invalid');
-      sourcePO.getFieldName().sendKeys(newTestSource.name);
+      sourcePO.getFieldSourceName().sendKeys(newTestSource.name);
       sourcePO.getSubmitButton().click();
       expect(sourcePO.getFormInputOnlyFields().get(1).getAttribute(`class`)).toContain('ng-invalid');
-      sourcePO.getFieldName().clear();
+      sourcePO.getFieldSourceName().clear();
       sourcePO.getFieldTypeCode().sendKeys(newTestSource.description);
       sourcePO.getSubmitButton().click();
       expect(sourcePO.getFormInputOnlyFields().first().getAttribute(`class`)).toContain('ng-invalid');
@@ -88,16 +88,16 @@ describe(`Admin - Source Page`, () => {
     it(`should show an error dialog when the user adds a mandatory source field that already exists`, () => {
       sourcePO.getAddButton().click();
       sourcePO.waitForFormUp();
-      sourcePO.getFieldName().sendKeys(existingSourceInDb.name);
-      sourcePO.getFieldTypeCode().sendKeys('TEST');
+      sourcePO.getFieldSourceName().sendKeys(existingSourceInDb.name);
+      sourcePO.getFieldTypeCode().sendKeys(newTestSource.typeCode);
       sourcePO.getSubmitButton().click();
       sourcePO.waitForDialogToShow();
       expect(sourcePO.getDialogTitle()).toEqual('Error');
       expect(sourcePO.getDialogMessage()).toContain('duplicate key error');
       sourcePO.closeDialog();
-      sourcePO.getFieldName().clear();
+      sourcePO.getFieldSourceName().clear();
       sourcePO.getFieldTypeCode().clear();
-      sourcePO.getFieldName().sendKeys(newTestSource.name);
+      sourcePO.getFieldSourceName().sendKeys(newTestSource.name);
       sourcePO.getFieldTypeCode().sendKeys(existingSourceInDb.typeCode);
       sourcePO.getSubmitButton().click();
       expect(sourcePO.getDialogTitle()).toEqual('Error');
@@ -107,7 +107,7 @@ describe(`Admin - Source Page`, () => {
     it(`should add a new source with active status`, () => {
       sourcePO.getAddButton().click();
       sourcePO.waitForFormUp();
-      sourcePO.getFieldName().sendKeys(newTestSource.name);
+      sourcePO.getFieldSourceName().sendKeys(newTestSource.name);
       sourcePO.getFieldTypeCode().sendKeys(newTestSource.typeCode);
       sourcePO.getFieldDescription().sendKeys(newTestSource.description);
       sourcePO.getStatusCheckBox().click();
@@ -116,33 +116,56 @@ describe(`Admin - Source Page`, () => {
       sourcePO.getSearchField().sendKeys(newTestSource.name);
       expect(sourcePO.getFirstCellInFirstRow().getText()).toEqual(newTestSource.name);
       expect(sourcePO.getTableRows().get(1).getText()).toEqual(newTestSource.typeCode);
-      expect(sourcePO.getTableRows().last().getText()).toEqual(newTestSource.status);
+      expect(sourcePO.getTableRows().last().getText()).toEqual(newTestSource.status === 'A' ? 'Active' : 'Inactive');
     });
   });
 
   describe('Update Source Tests', () => {
+    let moduleSource;
+    beforeAll(done => {
+      sourcePO.finJsonRequest('/api/module-source/query-one', 'GET', undefined, {moduleId: 1})
+        .then(result => {
+          moduleSource = result.body;
+          done();
+        });
+    });
+
     it(`should show form with source values on clicking on the source name in table`, () => {
       sourcePO.loadFormInEditMode(existingSourceInDb.name);
       expect(sourcePO.getFormTitle().getText()).toEqual(`Edit Source`);
-      expect(sourcePO.getFieldName().getAttribute('value')).toEqual(existingSourceInDb.name);
+      expect(sourcePO.getFieldSourceName().getAttribute('value')).toEqual(existingSourceInDb.name);
       expect(sourcePO.getFieldTypeCode().getAttribute('value')).toEqual(existingSourceInDb.typeCode);
-      expect(sourcePO.getFieldDescription().getAttribute('value')).toEqual(existingSourceInDb.description);
-      expect(sourcePO.getStatusCheckBox().isEnabled()).toBe(true);
-      expect(sourcePO.isStatusCheckBoxDisabled()).toBe(true);
-      expect(sourcePO.getStatusCheckBoxLabel()).toEqual(existingSourceInDb.status);
-      expect(sourcePO.checkIfSourceIsUsed()).toBe(true);
+      expect(sourcePO.getFieldDescription().getAttribute('value')).toEqual(existingSourceInDb.desc);
+      expect(sourcePO.isStatusCheckBoxChecked()).toBe(existingSourceInDb.status === 'A');
+      expect(sourcePO.checkIfSourceIsUsed()).toEqual(sourcePO.isStatusCheckBoxDisabled());
+    });
+
+    it(`should show in use and disable checkbox for status, if a source is in use by a module`, () => {
+      // we are only gonna check for first 3 sources, there could be 100 sources, no point in testing if it is in-use for each
+      let count = 0;
+      existingSourcesInDb.forEach(source => {
+        if (count < 3) {
+          if (_.includes(moduleSource.sources, source.sourceId)) {
+            count++;
+            sourcePO.loadFormInEditMode(source.name);
+            expect(sourcePO.checkIfSourceIsUsed()).toEqual(true);
+            expect(sourcePO.isStatusCheckBoxDisabled()).toEqual(true);
+            sourcePO.getSearchField().clear();
+          }
+        }
+      });
     });
 
     it(`should not allow the user to submit the form when updating source with mandatory fields empty`, () => {
       sourcePO.loadFormInEditMode(newTestSource.name);
-      sourcePO.getFieldName().clear();
+      sourcePO.getFieldSourceName().clear();
       sourcePO.getFieldTypeCode().clear();
       sourcePO.getSubmitButton().click();
       expect(sourcePO.getFormInputOnlyFields().first().getAttribute(`class`)).toContain('ng-invalid');
       expect(sourcePO.getFormInputOnlyFields().get(1).getAttribute(`class`)).toContain('ng-invalid');
       sourcePO.pageRefresh();
       sourcePO.loadFormInEditMode(newTestSource.name);
-      sourcePO.getFieldName().clear();
+      sourcePO.getFieldSourceName().clear();
       sourcePO.getSubmitButton().click();
       expect(sourcePO.getFormInputOnlyFields().first().getAttribute(`class`)).toContain('ng-invalid');
       sourcePO.pageRefresh();
@@ -154,8 +177,8 @@ describe(`Admin - Source Page`, () => {
 
     it(`should show an error dialog when updating source with mandatory fields that already exist`, () => {
       sourcePO.loadFormInEditMode(newTestSource.name);
-      sourcePO.getFieldName().clear();
-      sourcePO.getFieldName().sendKeys(existingSourceInDb.name);
+      sourcePO.getFieldSourceName().clear();
+      sourcePO.getFieldSourceName().sendKeys(existingSourceInDb.name);
       sourcePO.getSubmitButton().click();
       sourcePO.waitForDialogToShow();
       expect(sourcePO.getDialogTitle()).toEqual('Error');
@@ -170,27 +193,39 @@ describe(`Admin - Source Page`, () => {
       expect(sourcePO.getDialogMessage()).toContain('duplicate key error');
     });
 
-    it(`should update an existing source`, () => {
+    it('should update the name of the test source', () => {
       sourcePO.loadFormInEditMode(newTestSource.name);
-      sourcePO.getFieldName().clear();
-      sourcePO.getFieldName().sendKeys(newSourceForUpdate.name);
+      sourcePO.getFieldSourceName().clear();
+      newTestSource.name = 'Updated Test Source - E2ETEST';
+      sourcePO.getFieldSourceName().sendKeys(newTestSource.name);
+      sourcePO.getSubmitButton().click();
+      sourcePO.waitForFormDown();
+      sourcePO.getSearchField().clear();
+      sourcePO.getSearchField().sendKeys(newTestSource.name);
+      expect(sourcePO.getFirstCellInFirstRow().getText()).toEqual(newTestSource.name);
+    });
+
+    it('should update the type code of the test source', () => {
+      sourcePO.loadFormInEditMode(newTestSource.name);
       sourcePO.getFieldTypeCode().clear();
-      sourcePO.getFieldTypeCode().sendKeys(newSourceForUpdate.typeCode);
-      sourcePO.getFieldDescription().clear();
-      sourcePO.getFieldDescription().sendKeys(newSourceForUpdate.description);
+      newTestSource.typeCode = 'UTEST';
+      sourcePO.getFieldTypeCode().sendKeys(newTestSource.typeCode);
+      sourcePO.getSubmitButton().click();
+      sourcePO.waitForFormDown();
+      sourcePO.getSearchField().clear();
+      sourcePO.getSearchField().sendKeys(newTestSource.name);
+      expect(sourcePO.getTableRows().get(1).getText()).toEqual(newTestSource.typeCode);
+    });
+
+    it(`should update an existing source to inactive`, () => {
+      sourcePO.loadFormInEditMode(newTestSource.name);
+      newTestSource.status = 'I';
       sourcePO.getStatusCheckBox().click();
       sourcePO.getSubmitButton().click();
       sourcePO.waitForFormDown();
       sourcePO.getSearchField().clear();
-      sourcePO.getSearchField().sendKeys(newSourceForUpdate.name);
-      expect(sourcePO.getFirstCellInFirstRow().getText()).toEqual(newSourceForUpdate.name);
-      expect(sourcePO.getTableRows().get(1).getText()).toEqual(newSourceForUpdate.typeCode);
-      expect(sourcePO.getTableRows().last().getText()).toEqual(newSourceForUpdate.status);
-    });
-
-    it(`should show in use for source being used`, () => {
-      sourcePO.loadFormInEditMode(existingSourceInDb.name);
-      expect(sourcePO.checkIfSourceIsUsed()).toBeTruthy();
+      sourcePO.getSearchField().sendKeys(newTestSource.name);
+      expect(sourcePO.getTableRows().last().getText()).toEqual(newTestSource.status === 'A' ? 'Active' : 'Inactive');
     });
   });
 });

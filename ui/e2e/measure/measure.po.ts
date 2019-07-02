@@ -26,8 +26,8 @@ export class MeasurePO extends CommonPO {
     return this.getCheckBoxLabelByName('status');
   }
 
-  isStatusCheckboxChecked() {
-    return this.isCheckboxWithNameChecked('status');
+  isStatusCheckBoxChecked() {
+    return this.isCheckBoxWithNameChecked('status');
   }
 
   getFieldTypeCode(finInput = false) {
@@ -46,28 +46,32 @@ export class MeasurePO extends CommonPO {
     return this.getFormInputFieldByClassName(`rep-level-${level}`);
   }
 
-  getReportingLevelCheckbox(level: number) {
+  getReportingLevelCheckBox(level: number) {
     return this.getCheckBoxInputByClassName(`rep-level-checkbox-${level}`);
   }
 
-  getReportingLevelCheckboxLabel(level: number) {
+  getReportingLevelCheckBoxLabel(level: number) {
     return this.getCheckBoxLabelByClassName(`rep-level-checkbox-${level}`);
   }
 
-  isReportingLevelCheckboxChecked(level: number) {
-    return this.isCheckboxWithClassNameChecked(`rep-level-checkbox-${level}`);
+  isReportingLevelCheckBoxChecked(level: number) {
+    return this.isCheckBoxWithClassNameChecked(`rep-level-checkbox-${level}`);
   }
 
-  getSetToSubMeasureNameCheckbox() {
+  isReportingLevelCheckBoxDisabled(level: number) {
+    return this.isCheckBoxWithClassNameDisabled(`rep-level-checkbox-${level}`);
+  }
+
+  getSetToSubMeasureNameCheckBox() {
     return this.getCheckBoxInputByClassName(`rep-level-sm-checkbox-3`);
   }
 
-  getSetToSubMeasureNameCheckboxLabel() {
+  getSetToSubMeasureNameCheckBoxLabel() {
     return this.getCheckBoxLabelByClassName(`rep-level-sm-checkbox-3`);
   }
 
-  isSetToSubMeasureNameCheckboxChecked() {
-    return this.isCheckboxWithClassNameChecked('rep-level-sm-checkbox-3');
+  isSetToSubMeasureNameCheckBoxChecked() {
+    return this.isCheckBoxWithClassNameChecked('rep-level-sm-checkbox-3');
   }
 
   openDropDownForSources() {

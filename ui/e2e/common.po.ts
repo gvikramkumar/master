@@ -139,7 +139,7 @@ export class CommonPO {
     return element(by.name(name)).element(by.className(`checkbox`)).element(by.className(`checkbox__label`)).getText();
   }
 
-  isCheckboxWithNameChecked(name: string) {
+  isCheckBoxWithNameChecked(name: string) {
     return element(by.name(name)).element(by.className(`checkbox`)).element(by.tagName('input')).isSelected();
   }
 
@@ -155,7 +155,7 @@ export class CommonPO {
     return element(by.className(name)).element(by.className(`checkbox`)).element(by.className(`checkbox__label`)).getText();
   }
 
-  isCheckboxWithClassNameChecked(name: string) {
+  isCheckBoxWithClassNameChecked(name: string) {
     return element(by.className(name)).element(by.className(`checkbox`)).element(by.tagName('input')).isSelected();
   }
 

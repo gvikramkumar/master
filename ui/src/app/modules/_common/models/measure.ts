@@ -8,8 +8,8 @@ export class Measure {
   sources: number[] = [];
   hierarchies: string[] = [];
   reportingLevels: string[] = [];
-  reportingLevelEnableds: boolean[] = [];
-  reportingLevel3SetToSubmeasureName?: boolean;
+  reportingLevelEnableds: boolean[] = [false, false, false];
+  reportingLevel3SetToSubmeasureName = false;
   status = 'I';
   createdBy?: string;
   createdDate?: string;

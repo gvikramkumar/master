@@ -25,21 +25,29 @@
 
     <div class="row">
       <div class="col-lg-6">
-        <cui-multiselect name="sources" [(ngModel)]="measure.sources" [items]="moduleSources" label="Sources"
+        <cui-multiselect name="sources" [(ngModel)]="measure.sources" [items]="moduleSources" label="Sources*"
                     optionsKey="name" optionsValue="sourceId" [required]="true"></cui-multiselect>
       </div>
       <div class="col-lg-6">
-        <cui-multiselect name="hier" [(ngModel)]="measure.hierarchies" [items]="hierarchies" empty="true" label="Hierarchies"
+        <cui-multiselect name="hier" [(ngModel)]="measure.hierarchies" [items]="hierarchies" empty="true" label="Hierarchies*"
                     optionsKey="name" optionsValue="value" [required]="true"></cui-multiselect>
       </div>
     </div>
 
     <div *ngFor="let level of [1,2,3];let idx=index;" class="row">
       <div class="col-6">
-        <fin-input name="repLvl{{level}}" class="rep-level-{{level}}" [(ngModel)]="measure.reportingLevels[idx]" label="Reporting Level {{level}}"></fin-input>
+        <fin-input name="repLvl{{level}}"
+                   class="rep-level-{{level}}"
+                   [(ngModel)]="measure.reportingLevels[idx]"
+                   [disabled]="idx === 2 && measure.reportingLevel3SetToSubmeasureName"
+                   label="Reporting Level {{level}}"></fin-input>
       </div>
       <div class="col-6 form-group-check">
-        <fin-checkbox name="repLvl-enabled{{level}}" class="rep-level-checkbox-{{level}}" [(model)]="measure.reportingLevelEnableds[idx]" label="Enabled" [inline]="true"></fin-checkbox>
+        <fin-checkbox name="repLvl-enabled{{level}}"
+                      class="rep-level-checkbox-{{level}}"
+                      [(model)]="measure.reportingLevelEnableds[idx]"
+                      [disabled]="idx === 2 && measure.reportingLevel3SetToSubmeasureName"
+                      label="Enabled" [inline]="true"></fin-checkbox>
         <fin-checkbox *ngIf="idx === 2" name="repLvl1-sm-name" class="rep-level-sm-checkbox-{{level}}" [(model)]="measure.reportingLevel3SetToSubmeasureName" label="Set To Submeasure Name" [inline]="true"
                       (modelChange)="reportingLevel3SetToSubmeasureNameChange()"></fin-checkbox>
       </div>

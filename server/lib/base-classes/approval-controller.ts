@@ -12,6 +12,14 @@ import UserListRepo from '../../api/user-list/repo';
 import {ModuleRepo} from '../../api/common/module/repo';
 import config from '../../config/get-config';
 import {mail} from '../common/mail';
+import SourceRepo from '../../api/common/source/repo';
+
+interface Updates {
+  oldPath: string;
+  newPath: string;
+  newPropName: string;
+  data;
+}
 
 export default class ApprovalController extends ControllerBase {
 
@@ -49,10 +57,9 @@ export default class ApprovalController extends ControllerBase {
       promise = this.updatePromise(req, res, next);
     }
     promise
-      .then(savedItem => {
-        const newItem = _.clone(savedItem);
-        newItem.approvalUrl = `${req.headers.origin}/prof/${req.query.type}/edit/${savedItem.id};mode=view`;
-        this.repo.update(newItem, '', true, true, false)
+      .then(item => {
+        item.approvalUrl = `${req.headers.origin}/prof/${req.query.type}/edit/${item.id};mode=view`;
+        return this.repo.update(item, '', true, true, false)
           .then(updatedItem => {
             return this.sendApprovalEmail(null, req, ApprovalMode.submit, updatedItem)
               .then(() => res.json(updatedItem));
@@ -221,7 +228,10 @@ export default class ApprovalController extends ControllerBase {
     const ppmtEmail = req.dfa.ppmtEmail;
     const promises = [];
     if (mode === ApprovalMode.submit && item.approvedOnce === 'Y') {
-      promises.push(this.repo.getOneLatestActiveInactive({moduleId, name: item.name, approvedOnce: 'Y'}));
+      promises.push(
+        this.repo.getOneLatestActiveInactive({moduleId, name: item.name, approvedOnce: 'Y'}),
+        new SourceRepo().getMany()
+      );
     }
     return Promise.all(promises)
       .then(results => {
@@ -230,12 +240,16 @@ export default class ApprovalController extends ControllerBase {
             if (item.approvedOnce === 'Y') {
               body = `The "${item.name}" DFA ${type} has been updated and submitted by ${req.user.fullName} for approval: <br><br>${link}`;
               const oldObj = results[0];
+              const sources = results[1];
               if (oldObj) {
                 if (item.toObject) {
                   item = item.toObject();
                 }
+                const updates: Updates[] = [];
+                updates.push(this.getUpdateObject('sourceId', 'sourceName', 'name', sources));
+                const objectChanges = this.addFriendlyNames(shUtil.getObjectChanges(oldObj.toObject(), item, omitProperties), updates);
                 body += '<br><br><b>Summary of changes:</b><br><br>' +
-                  shUtil.getUpdateTable(shUtil.getObjectChanges(oldObj.toObject(), item, omitProperties));
+                  shUtil.getUpdateTable(objectChanges);
               }
             } else {
               body = `A new DFA ${type} has been submitted by ${req.user.fullName} for approval: <br><br>${link}`;
@@ -264,6 +278,25 @@ export default class ApprovalController extends ControllerBase {
         }
       });
 
+  }
+
+  getUpdateObject(oldPath, newPath, newPropName, data) {
+    return {oldPath, newPath, newPropName, data};
+  }
+
+  addFriendlyNames(objectChanges, updates: Updates[]) {
+    if (updates.length) {
+      updates.forEach(update => {
+        const pathToChange = _.find(objectChanges, {path: update.oldPath});
+        if (pathToChange) {
+          const oldVal = update.data.filter(item => item[update.oldPath] === Number(pathToChange.oldVal))[0][update.newPropName];
+          const newVal = update.data.filter(item => item[update.oldPath] === Number(pathToChange.newVal))[0][update.newPropName];
+          objectChanges.push({path: update.newPath, oldVal, newVal});
+          _.remove(objectChanges, pathToChange);
+        }
+      });
+    }
+    return objectChanges;
   }
 
   approvalEmailReminder(type: string): any {

@@ -1,36 +1,40 @@
 import {ModulePO} from './module.po';
 
 describe(`Admin - Module Page`, () => {
+  const url = '/api/module';
+  let existingModulesInDb;
+  let existingModuleInDb;
   const modulePO = new ModulePO();
-  const newTestModuleActive = {
-    displayOrder : '12',
+  const newTestModuleActive: any = {
     abbrev : 'atst',
     name : 'New Active Test Module - E2ETEST',
     desc : `This module is added during testing.`,
     status : 'Active'
   };
 
-  const newTestModuleInactive = {
-    displayOrder : '13',
+  const newTestModuleInactive: any = {
     abbrev : 'itst',
     name : 'New Inactive Test Module - E2ETEST',
     desc : `This module is added during testing.`,
     status : 'Inactive'
   };
 
-  const existingModuleInDb = {
-    displayOrder : '1',
-    abbrev : 'prof',
-    name : 'Profitability Allocations',
-    desc : `This capability performs allocations at the multiple dimensions/hierarchies such as Sales Theater Level and Product Family Level used for Company's Profit/Loss (P/L) reporting to drive profitable growth.`,
-    status : 'Active'
-  };
+  beforeAll(done => {
+    modulePO.finJsonRequest(`${url}/call-method/getNonAdminSortedByDisplayOrder`, 'POST', undefined, {moduleId: 1})
+      .then(result => {
+        existingModulesInDb = result.body;
+        existingModuleInDb = existingModulesInDb[0];
+        let highestDisplayOrderForSavedModules = Number(existingModulesInDb.map(x => x.displayOrder).sort((a, b) => b - a)[0]);
+        newTestModuleActive['displayOrder'] = ++highestDisplayOrderForSavedModules;
+        newTestModuleInactive['displayOrder'] = ++highestDisplayOrderForSavedModules;
+        done();
+      });
+  });
 
   afterAll(done => {
-    const url = '/api/module/query-one';
     Promise.all([
-      modulePO.finJsonRequest(url, 'DELETE', undefined, {name: newTestModuleActive.name}),
-      modulePO.finJsonRequest(url, 'DELETE', undefined, {name: newTestModuleInactive.name})
+      modulePO.finJsonRequest(`${url}/query-one`, 'DELETE', undefined, {name: newTestModuleActive.name}),
+      modulePO.finJsonRequest(`${url}/query-one`, 'DELETE', undefined, {name: newTestModuleInactive.name})
     ]).then(() => done());
   });
 
@@ -39,15 +43,15 @@ describe(`Admin - Module Page`, () => {
   });
 
   it(`should load all the modules`, () => {
-    expect(modulePO.getCountOfItemsLoadedInTheTable()).toBeGreaterThanOrEqual(11);
+    expect(modulePO.getCountOfItemsLoadedInTheTable()).toEqual(existingModulesInDb.length);
   });
 
   it(`should find module from search field`, () => {
     modulePO.getSearchField().sendKeys(existingModuleInDb.name);
     expect(modulePO.getFirstCellInFirstRow().getText()).toEqual(existingModuleInDb.name);
     expect(modulePO.getTableRows().get(1).getText()).toEqual(existingModuleInDb.abbrev);
-    expect(modulePO.getTableRows().get(2).getText()).toEqual(existingModuleInDb.displayOrder);
-    expect(modulePO.getTableRows().last().getText()).toEqual(existingModuleInDb.status);
+    modulePO.getTableRows().get(2).getText().then(text => expect(Number(text)).toEqual(existingModuleInDb.displayOrder));
+    expect(modulePO.getTableRows().last().getText()).toEqual(existingModuleInDb.status === 'A' ? 'Active' : 'Inactive');
   });
 
   describe(`Add Module Tests`, () => {
@@ -138,7 +142,7 @@ describe(`Admin - Module Page`, () => {
       modulePO.getSearchField().sendKeys(newTestModuleActive.name);
       expect(modulePO.getFirstCellInFirstRow().getText()).toEqual(newTestModuleActive.name);
       expect(modulePO.getTableRows().get(1).getText()).toEqual(newTestModuleActive.abbrev);
-      expect(modulePO.getTableRows().get(2).getText()).toEqual(newTestModuleActive.displayOrder);
+      modulePO.getTableRows().get(2).getText().then(text => expect(Number(text)).toEqual(newTestModuleActive.displayOrder));
       expect(modulePO.getTableRows().last().getText()).toEqual(newTestModuleActive.status);
     });
 
@@ -154,7 +158,7 @@ describe(`Admin - Module Page`, () => {
       modulePO.getSearchField().sendKeys(newTestModuleInactive.name);
       expect(modulePO.getFirstCellInFirstRow().getText()).toEqual(newTestModuleInactive.name);
       expect(modulePO.getTableRows().get(1).getText()).toEqual(newTestModuleInactive.abbrev);
-      expect(modulePO.getTableRows().get(2).getText()).toEqual(newTestModuleInactive.displayOrder);
+      modulePO.getTableRows().get(2).getText().then(text => expect(Number(text)).toEqual(newTestModuleInactive.displayOrder));
       expect(modulePO.getTableRows().last().getText()).toEqual(newTestModuleInactive.status);
     });
   });
@@ -165,11 +169,10 @@ describe(`Admin - Module Page`, () => {
       expect(modulePO.getFormTitle().getText()).toEqual(`Edit Module`);
       expect(modulePO.getFieldModuleName().getAttribute('value')).toEqual(existingModuleInDb.name);
       expect(modulePO.getFieldAbbreviation().getAttribute('value')).toEqual(existingModuleInDb.abbrev);
-      expect(modulePO.getFieldDisplayOrder().getAttribute('value')).toEqual(existingModuleInDb.displayOrder);
+      modulePO.getFieldDisplayOrder().getAttribute('value').then(text => expect(Number(text)).toEqual(existingModuleInDb.displayOrder));
       expect(modulePO.getFieldDescription().getAttribute('value')).toEqual(existingModuleInDb.desc);
       expect(modulePO.getStatusCheckBox().isEnabled()).toBe(true);
       expect(modulePO.isStatusCheckBoxDisabled()).toBe(false);
-      expect(modulePO.getStatusCheckBoxLabel()).toEqual(existingModuleInDb.status);
     });
 
     it(`should not allow the user to submit the form when updating module with mandatory fields empty`, () => {
@@ -241,7 +244,7 @@ describe(`Admin - Module Page`, () => {
       modulePO.getSearchField().sendKeys(newTestModuleActive.name);
       expect(modulePO.getFirstCellInFirstRow().getText()).toEqual(newTestModuleActive.name);
       expect(modulePO.getTableRows().get(1).getText()).toEqual(newTestModuleActive.abbrev);
-      expect(modulePO.getTableRows().get(2).getText()).toEqual(newTestModuleActive.displayOrder);
+      modulePO.getTableRows().get(2).getText().then(text => expect(Number(text)).toEqual(newTestModuleActive.displayOrder));
       expect(modulePO.getTableRows().last().getText()).toEqual('Inactive');
     });
 
@@ -256,7 +259,7 @@ describe(`Admin - Module Page`, () => {
       modulePO.getSearchField().sendKeys(newTestModuleInactive.name);
       expect(modulePO.getFirstCellInFirstRow().getText()).toEqual(newTestModuleInactive.name);
       expect(modulePO.getTableRows().get(1).getText()).toEqual(newTestModuleInactive.abbrev);
-      expect(modulePO.getTableRows().get(2).getText()).toEqual(newTestModuleInactive.displayOrder);
+      modulePO.getTableRows().get(2).getText().then(text => expect(Number(text)).toEqual(newTestModuleInactive.displayOrder));
       expect(modulePO.getTableRows().last().getText()).toEqual('Active');
     });
   });

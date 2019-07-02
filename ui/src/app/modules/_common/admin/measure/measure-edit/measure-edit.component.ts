@@ -25,7 +25,7 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
   editMode = false;
   measure = new Measure();
   measures: Measure[];
-  orgMeasure = _.cloneDeep(this.measure);
+  orgMeasure = new Measure();
   sources: Source[] = [];
   measureNames: string[] = [];
   measureTypecodes: string[] = [];
@@ -70,15 +70,17 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
   }
 
   public ngOnInit(): void {
+    this.store.mainCompDataLoad = true;
     this.getData()
       .then(() => {
+        this.store.mainCompDataLoad = false;
         if (this.editMode) {
           this.measure = _.find(this.measures, {id: this.route.snapshot.params.id});
           this.measureNames = this.measureNames.filter(name => name !== this.measure.name);
           this.measureTypecodes = this.measureTypecodes.filter(typeCode => typeCode !== this.measure.typeCode);
           this.orgMeasure = _.cloneDeep(this.measure);
         }
-      });
+      }).catch(() => this.store.mainCompDataLoad = false);
   }
 
   hasChanges() {
@@ -97,7 +99,7 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
     this.verifyLosingChanges()
       .subscribe(resp => {
         if (resp) {
-          this.router.navigateByUrl('/prof/admin/measure');
+          history.go(-1);
         }
       });
   }
@@ -154,7 +156,7 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
             } else {
               obs = this.measureService.add(this.measure);
             }
-            obs.subscribe(measure => this.router.navigateByUrl('/prof/admin/measure'));
+            obs.subscribe(measure => history.go(-1));
           }
         });
     }
@@ -163,6 +165,7 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
   reportingLevel3SetToSubmeasureNameChange() {
     if (this.measure.reportingLevel3SetToSubmeasureName) {
       this.measure.reportingLevels[2] = '';
+      this.measure.reportingLevelEnableds[2] = false;
     }
   }
 

@@ -25,6 +25,12 @@ describe(`Profitabily Allocations - Measure page`, () => {
         done();
       });
   });
+
+  afterAll(done => {
+    measurePO.finJsonRequest(`${url}/${newTestMeasure.id}`, 'DELETE', undefined, undefined)
+      .then(() => done());
+  });
+
   beforeEach(() => {
     measurePO.navigateTo();
   });
@@ -56,14 +62,14 @@ describe(`Profitabily Allocations - Measure page`, () => {
       expect(measurePO.getReportingLevel(1).getAttribute('value')).toEqual(``);
       expect(measurePO.getReportingLevel(2).getAttribute('value')).toEqual(``);
       expect(measurePO.getReportingLevel(3).getAttribute('value')).toEqual(``);
-      expect(measurePO.getReportingLevelCheckbox(1).isEnabled()).toBe(true);
-      expect(measurePO.getReportingLevelCheckbox(2).isEnabled()).toBe(true);
-      expect(measurePO.getReportingLevelCheckbox(3).isEnabled()).toBe(true);
-      expect(measurePO.getReportingLevelCheckboxLabel(1)).toEqual(`Enabled`);
-      expect(measurePO.getReportingLevelCheckboxLabel(2)).toEqual(`Enabled`);
-      expect(measurePO.getReportingLevelCheckboxLabel(3)).toEqual(`Enabled`);
-      expect(measurePO.getSetToSubMeasureNameCheckbox().isEnabled()).toBe(true);
-      expect(measurePO.getSetToSubMeasureNameCheckboxLabel()).toEqual(`Set To Submeasure Name`);
+      expect(measurePO.getReportingLevelCheckBox(1).isEnabled()).toBe(true);
+      expect(measurePO.getReportingLevelCheckBox(2).isEnabled()).toBe(true);
+      expect(measurePO.getReportingLevelCheckBox(3).isEnabled()).toBe(true);
+      expect(measurePO.getReportingLevelCheckBoxLabel(1)).toEqual(`Enabled`);
+      expect(measurePO.getReportingLevelCheckBoxLabel(2)).toEqual(`Enabled`);
+      expect(measurePO.getReportingLevelCheckBoxLabel(3)).toEqual(`Enabled`);
+      expect(measurePO.getSetToSubMeasureNameCheckBox().isEnabled()).toBe(true);
+      expect(measurePO.getSetToSubMeasureNameCheckBoxLabel()).toEqual(`Set To Submeasure Name`);
       expect(measurePO.getSubmitButton().isPresent()).toBe(true);
       expect(measurePO.getCancelButton().isPresent()).toBe(true);
       expect(measurePO.getResetButton().isPresent()).toBe(true);
@@ -140,25 +146,33 @@ describe(`Profitabily Allocations - Measure page`, () => {
       measurePO.closeDropdownForHierarchies();
       measurePO.getReportingLevel(1).sendKeys(newTestMeasure.reportingLevels[0]);
       measurePO.getReportingLevel(2).sendKeys(newTestMeasure.reportingLevels[1]);
-      measurePO.getReportingLevelCheckbox(2).click();
-      measurePO.getSetToSubMeasureNameCheckbox().click();
+      measurePO.getReportingLevelCheckBox(2).click();
+      measurePO.getSetToSubMeasureNameCheckBox().click();
       measurePO.getResetButton().click();
       measurePO.waitForDialogToShow();
       expect(measurePO.getDialogMessage()).toEqual('Are you sure you want to lose your changes?');
       measurePO.getYesButton().click();
       measurePO.waitForDialogToHide();
       expect(measurePO.getFieldMeasureName().getAttribute('value')).toEqual(``);
-      expect(measurePO.isStatusCheckboxChecked()).toBe(false);
+      expect(measurePO.isStatusCheckBoxChecked()).toBe(false);
       expect(measurePO.getFieldTypeCode().getAttribute('value')).toEqual(``);
       expect(measurePO.getFieldSources().getAttribute('value')).toEqual(``);
       expect(measurePO.getFieldHierarchies().getAttribute('value')).toEqual(``);
       expect(measurePO.getReportingLevel(1).getAttribute('value')).toEqual(``);
       expect(measurePO.getReportingLevel(2).getAttribute('value')).toEqual(``);
-      expect(measurePO.isReportingLevelCheckboxChecked(2)).toBe(false);
+      expect(measurePO.isReportingLevelCheckBoxChecked(2)).toBe(false);
       expect(measurePO.getReportingLevel(3).getAttribute('value')).toEqual(``);
-      expect(measurePO.isSetToSubMeasureNameCheckboxChecked()).toBe(false);
+      expect(measurePO.isSetToSubMeasureNameCheckBoxChecked()).toBe(false);
     });
-    
+
+    it(`should disable reporting level 3 on checking setToSubmeasure flag`, () => {
+      measurePO.getAddButton().click();
+      measurePO.waitForFormUp();
+      measurePO.getSetToSubMeasureNameCheckBox().click();
+      expect(measurePO.getReportingLevel(3).isEnabled()).toEqual(false);
+      expect(measurePO.isReportingLevelCheckBoxDisabled(3)).toEqual(true);
+    });
+
     it(`should add a new measure with active status`, async () => {
       measurePO.getAddButton().click();
       measurePO.waitForFormUp();
@@ -174,8 +188,8 @@ describe(`Profitabily Allocations - Measure page`, () => {
       measurePO.closeDropdownForHierarchies();
       measurePO.getReportingLevel(1).sendKeys(newTestMeasure.reportingLevels[0]);
       measurePO.getReportingLevel(2).sendKeys(newTestMeasure.reportingLevels[1]);
-      measurePO.getReportingLevelCheckbox(2).click();
-      measurePO.getSetToSubMeasureNameCheckbox().click();
+      measurePO.getReportingLevelCheckBox(2).click();
+      measurePO.getSetToSubMeasureNameCheckBox().click();
       measurePO.getSubmitButton().click();
       measurePO.waitForDialogToShow();
       expect(measurePO.getDialogMessage()).toEqual(`Are you sure you want to save?`);
@@ -190,7 +204,7 @@ describe(`Profitabily Allocations - Measure page`, () => {
       expect(moment(await measurePO.getTableRows().last().getText(), 'MM/DD/YYYY hh:mm A').minutes()).toBeLessThanOrEqual(moment().minutes());
     });
   });
-  
+
   describe(`Update Measure Test`, () => {
     let sources;
     beforeAll(done => {
@@ -210,17 +224,17 @@ describe(`Profitabily Allocations - Measure page`, () => {
       measurePO.loadFormInEditMode(newTestMeasure.name);
       expect(measurePO.getFieldMeasureName().getAttribute('value')).toEqual(newTestMeasure.name);
       expect(measurePO.getFieldTypeCode().getAttribute('value')).toEqual(newTestMeasure.typeCode);
-      expect(measurePO.isStatusCheckboxChecked()).toEqual(true);
+      expect(measurePO.isStatusCheckBoxChecked()).toEqual(true);
       const sourceName = sources.filter(source => source.sourceId === newTestMeasure.sources[0])[0].name;
       expect(measurePO.getFieldSources().getAttribute('value')).toEqual(sourceName);
       expect(measurePO.getFieldHierarchies().getAttribute('value')).toEqual(newTestMeasure.hierarchies.map(x => _.upperFirst(x.toLowerCase())).join(', '));
       expect(measurePO.getReportingLevel(1).getAttribute('value')).toEqual(newTestMeasure.reportingLevels[0]);
-      // expect(measurePO.isReportingLevelCheckboxChecked(1)).toEqual(newTestMeasure.reportingLevelEnableds[0]);
+      expect(measurePO.isReportingLevelCheckBoxChecked(1)).toEqual(newTestMeasure.reportingLevelEnableds[0]);
       expect(measurePO.getReportingLevel(2).getAttribute('value')).toEqual(newTestMeasure.reportingLevels[1]);
-     //  expect(measurePO.isReportingLevelCheckboxChecked(2)).toEqual(newTestMeasure.reportingLevelEnableds[1]);
+      expect(measurePO.isReportingLevelCheckBoxChecked(2)).toEqual(newTestMeasure.reportingLevelEnableds[1]);
       expect(measurePO.getReportingLevel(3).getAttribute('value')).toEqual(newTestMeasure.reportingLevels[2]);
-      // expect(measurePO.isReportingLevelCheckboxChecked(3)).toEqual(newTestMeasure.reportingLevelEnableds[2]);
-      // expect(measurePO.isSetToSubMeasureNameCheckboxChecked()).toEqual(newTestMeasure.reportingLevel3SetToSubmeasureName);
+      expect(measurePO.isReportingLevelCheckBoxChecked(3)).toEqual(newTestMeasure.reportingLevelEnableds[2]);
+      expect(measurePO.isSetToSubMeasureNameCheckBoxChecked()).toEqual(newTestMeasure.reportingLevel3SetToSubmeasureName);
     });
 
     it(`should not allow the user to submit the form when updating measure with mandatory fields empty`, () => {
@@ -273,7 +287,7 @@ describe(`Profitabily Allocations - Measure page`, () => {
       expect(measurePO.getTableRows().get(2).getText()).toEqual('Inactive');
     });
 
-    fit(`should update sources of a measure`, async() => {
+    it(`should update sources of a measure`, async () => {
       measurePO.loadFormInEditMode(newTestMeasure.name);
       measurePO.clearDropdownForSources();
       measurePO.openDropDownForSources();
@@ -283,10 +297,10 @@ describe(`Profitabily Allocations - Measure page`, () => {
       measurePO.confirmAndSubmit();
       measurePO.loadFormInEditMode(newTestMeasure.name);
       const measureSources = await measurePO.getFieldSources().getAttribute('value');
-      measureSources.split(',').forEach(x => expect(sources.filter(source => source.name === x).length).toEqual(1))
+      measureSources.split(',').map(x => x.trim()).forEach(x => expect(sources.filter(source => source.name === x).length).toEqual(1));
     });
 
-    fit(`should update sources of a measure`, async() => {
+    it(`should update hierarchies of a measure`, async () => {
       measurePO.loadFormInEditMode(newTestMeasure.name);
       measurePO.clearDropdownForHierarchies();
       measurePO.openDropDownForHierarchies();
@@ -295,6 +309,19 @@ describe(`Profitabily Allocations - Measure page`, () => {
       measurePO.confirmAndSubmit();
       measurePO.loadFormInEditMode(newTestMeasure.name);
       expect(measurePO.getFieldHierarchies().getAttribute('value')).toEqual(_.upperFirst(newTestMeasure.hierarchies[0].toLowerCase()));
+    });
+
+    it('should enable reporting level 3 and check the enabled checkbox', () => {
+      measurePO.loadFormInEditMode(newTestMeasure.name);
+      measurePO.getSetToSubMeasureNameCheckBox().click();
+      expect(measurePO.getReportingLevel(3).isEnabled()).toEqual(true);
+      expect(measurePO.isReportingLevelCheckBoxDisabled(3)).toEqual(false);
+      measurePO.getReportingLevel(3).sendKeys(newTestMeasure.reportingLevels[0]);
+      measurePO.getReportingLevelCheckBox(3).click();
+      measurePO.confirmAndSubmit();
+      measurePO.loadFormInEditMode(newTestMeasure.name);
+      expect(measurePO.getReportingLevel(3).getAttribute('value')).toEqual(newTestMeasure.reportingLevels[0]);
+      expect(measurePO.isReportingLevelCheckBoxChecked(3)).toEqual(true);
     });
   });
 });
