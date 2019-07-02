@@ -34,10 +34,6 @@ export class CheckboxComponent implements OnInit {
     this.bool = this.model === this.trueVal;
   }
 
-  ngAfterViewChecked() {
-    this.bool = this.model === this.trueVal;
-  }
-
   change() {
     this.modelChange.emit(this.bool ? this.trueVal : this.falseVal);
   }
