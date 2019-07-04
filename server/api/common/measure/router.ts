@@ -1,7 +1,7 @@
 import {injector} from '../../../lib/common/inversify.config';
 import {Router} from 'express';
 import MeasureController from './controller';
-import {authorize} from '../../../lib/middleware/authorize';
+import {authUnit} from '../../../lib/middleware/auth-unit';
 
 
 const ctrl = injector.get(MeasureController);
@@ -12,4 +12,4 @@ export const measureRouter = Router()
   .get('/query-one', ctrl.getQueryOne.bind(ctrl))
   .get('/:id', ctrl.getOne.bind(ctrl))
   .put('/:id', ctrl.update.bind(ctrl))
-  .delete('/:id', ctrl.remove.bind(ctrl));
+  .delete('/:id', authUnit(), ctrl.remove.bind(ctrl));

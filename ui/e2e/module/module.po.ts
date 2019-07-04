@@ -1,99 +1,55 @@
-import {browser, by, element, protractor} from 'protractor';
+import {browser, by, element} from 'protractor';
 import {CommonPO} from '../common.po';
 
+const pageUrl = '/admn/module';
 export class ModulePO extends CommonPO {
-  table = element(by.className(`mat-table`));
-  form = element(by.className('edit-form-container'));
 
-  navigateTo() {
-    return super.navigateTo('/admn/module');
+  constructor() {
+    super(pageUrl);
   }
 
-  waitForModulesToLoad() {
-    browser.wait(this.EC.presenceOf(this.table));
+  init() {
+    this.waitForTableToLoad();
   }
 
-  async getModulesLoaded() {
-    const range = await element(by.className(`mat-paginator-range-label`)).getText();
-    return Number(range.substr(range.indexOf('f') + 2));
+  getFieldModuleName(finInput = false) {
+    return this.getFormInputFieldByName(`name`, finInput);
   }
 
-  getSearchField() {
-    return element.all(by.className(`mat-input-element`)).first();
+  getFieldAbbreviation(finInput = false) {
+    return this.getFormInputFieldByName(`abbrev`, finInput);
   }
 
-  getFirstCellInARow() {
-    return this.getCellRow().first().element(by.tagName(`a`));
+  getFieldDisplayOrder(finInput = false) {
+    return this.getFormInputFieldByName(`order`, finInput);
   }
 
-  getCellRow() {
-    return element.all(by.className(`mat-cell`));
+  getFieldDescription(finInput = false) {
+    return this.getFormTextareaFieldByName(`desc`, finInput);
   }
 
-  waitForFormUp() {
-    browser.wait(this.EC.presenceOf(this.form));
-  }
-
-  waitForFormDown() {
-    browser.wait(this.EC.stalenessOf(this.form));
-  }
-
-  getFormTitle() {
-    return element(by.tagName(`legend`));
-  }
-
-  getFieldModuleName() {
-    return this.getFormField(`name`);
-  }
-
-  getFieldAbbreviation() {
-    return this.getFormField(`abbrev`);
-  }
-
-  getFieldDisplayOrder() {
-    return this.getFormField(`order`);
-  }
-
-  getFieldDescription() {
-    return this.getFormField(`desc`);
-  }
-
-  getFormField(selector) {
-    return element(by.name(selector)).element(by.className(`form-group__text`)).element(by.className(`ng-star-inserted`));
-  }
 
   getStatusCheckBox() {
-    return element(by.className(`checkbox`)).element(by.className(`checkbox__input`));
+    return this.getCheckBoxInputByName('status');
   }
 
-  isCheckBoxDisabled() {
-    return element(by.className(`checkbox disabled`)).isPresent();
+  getStatusCheckBoxLabel() {
+    return this.getCheckBoxLabelByName('status');
   }
 
-  getCheckBoxLabel() {
-    return element(by.className(`checkbox`)).element(by.className(`checkbox__label`));
+  isStatusCheckBoxDisabled() {
+    return this.isCheckBoxWithNameDisabled('status');
   }
 
-  getFormInputOnlyFields() {
-    return element.all(by.tagName(`fin-input`));
+  getErrorMessageForModuleName() {
+    return this.getErrorMessageForFormField('name');
   }
 
-  getErrorElementBlock(index) {
-    return element.all(by.className(`help-block`)).get(index);
+  getErrorMessageForAbbreviation() {
+    return this.getErrorMessageForFormField('abbrev');
   }
 
-  getErrorMessage(index) {
-    return this.getErrorElementBlock(index).element(by.tagName(`span`)).getText();
-  }
-
-  loadFormInEditModeForModule(name) {
-    this.getSearchField().sendKeys(name);
-    this.getFirstCellInARow().click();
-    this.waitForFormUp();
-  }
-
-  pageRefresh() {
-    browser.refresh();
-    this.waitForModulesToLoad();
+  getErrorMessageForDisplayOrder() {
+    return this.getErrorMessageForFormField('order');
   }
 }
