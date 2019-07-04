@@ -12,8 +12,9 @@ import RunJobController from '../server/api/run-job/controller';
 // import {take, first} from 'rxjs/operators';
 
 
-let a;
-console.log(_.get(a, 'lala'));
+const a = {name: 'dank', age: 'fitty'};
+const b = {name: 'carl', age: undefined};
+console.log(Object.assign(a, b));
 
 
 

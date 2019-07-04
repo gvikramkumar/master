@@ -20,6 +20,7 @@ import AnyObj from '../../../../shared/models/any-obj';
 import {injector, lazyInject} from '../../../lib/common/inversify.config';
 import DatabaseController from '../../database/controller';
 import {SyncMap} from '../../../../shared/models/sync-map';
+import {DisregardError} from '../../../lib/common/disregard-error';
 
 
 interface FilterLevel {
@@ -232,7 +233,14 @@ export default class SubmeasureController extends ApprovalController {
       syncMap.dfa_prof_dept_acct_map_upld = true;
     }
     if (!_.get(global, 'dfa.syncing')) {
-      return databaseCtrl.mongoToPgSyncPromise(req.dfa, syncMap, req.user.id);
+      return shUtil.promiseChain(databaseCtrl.mongoToPgSyncPromise(req.dfa, syncMap, req.user.id))
+        .catch(err => {
+          if (err instanceof DisregardError) {
+            throw new ApiError(`Approval succeeded, but couldn't sync the manual mix or department upload data at this time. This data won't be available for edit page or reports until the next data sync.`);
+          } else {
+            throw new ApiError('Approval succeeded, but there was a sync error for the manual mix or department upload data', err);
+          }
+        });
     } else {
       return Promise.resolve();
     }

@@ -12,6 +12,10 @@ const schema = new Schema(
   {collection: 'dfa_lookup'}
 );
 
+const RUNNING_JOBS = 'runningJobs';
+const SYNCING = 'databaseSync';
+const UPLOADING = 'uploading';
+
 @injectable()
 export default class LookupRepo {
 Model: Model<any>;
@@ -85,6 +89,7 @@ Model: Model<any>;
           return this.add(data);
         }
         item.value = _.assign(item.value, data.value) ;
+        item.markModified('value'); // need this for a merge as value is staying the same, but being modified, mongoose won't update then
         return item.save().then(doc => doc.value);
       });
   }
@@ -104,32 +109,48 @@ Model: Model<any>;
   }
 
   getSyncingAndUploading() {
-    return this.getValues(['databaseSync', 'uploading'])
-      .then(values => {
-        return {syncing: values[0], uploading: values[1]};
+    return this.getValue(RUNNING_JOBS)
+      .then(runningJobs => {
+        return {syncing: _.get(runningJobs, SYNCING), uploading: _.get(runningJobs, UPLOADING)};
       });
   }
 
-  setSyncing() {
-    return this.upsert({
-      key: 'databaseSync',
-      value: _.get(global, 'dfa.serverUrl')
+  setJobRunning(jobName) {
+    return this.upsertMerge({
+      key: RUNNING_JOBS,
+      value: {[jobName]: _.get(global, 'dfa.serverUrl')}
     });
+  }
+
+  clearJobRunning(jobName) {
+    return this.getDoc(RUNNING_JOBS)
+      .then(doc => {
+        if (doc) {
+          const runningJobs = doc.value;
+          runningJobs[jobName] = undefined;
+          doc.markModified('value');
+          return doc.save();
+        }
+      });
   }
 
   setUploading() {
-    return this.upsert({
-      key: 'uploading',
-      value: _.get(global, 'dfa.serverUrl')
+    return this.upsertMerge({
+      key: RUNNING_JOBS,
+      value: {[UPLOADING]: _.get(global, 'dfa.serverUrl')}
     });
   }
 
-  clearSyncing() {
-    return this.removeByKey('databaseSync');
-  }
-
   clearUploading() {
-    return this.removeByKey('uploading');
+    return this.getDoc(RUNNING_JOBS)
+      .then(doc => {
+        if (doc) {
+          const runningJobs = doc.value;
+          runningJobs[UPLOADING] = undefined;
+          doc.markModified('value');
+          return doc.save();
+        }
+      });
   }
 
 }

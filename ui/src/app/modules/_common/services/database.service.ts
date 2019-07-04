@@ -15,7 +15,7 @@ export class DatabaseService {
   }
 
   mongoToPgSync(syncMap) {
-    return this.httpClient.post<SyncMap>(`${apiUrl}/api/run-job/database-sync`, syncMap);
+    return this.httpClient.post<SyncMap>(`${apiUrl}/api/run-job/databaseSync`, syncMap);
   }
 
   pgToMongoSync() {

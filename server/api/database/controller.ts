@@ -26,6 +26,7 @@ import Q from 'q';
 import config from '../../config/get-config';
 import _ from 'lodash';
 import LookupRepo from '../lookup/repo';
+import {DisregardError} from '../../lib/common/disregard-error';
 
 @injectable()
 export default class DatabaseController {
@@ -69,13 +70,10 @@ export default class DatabaseController {
 
     return this.lookupRepo.getSyncingAndUploading()
       .then(results => {
-        if (results.syncing) {
-          throw new ApiError('Database sync is already running.');
+
+        if (results.syncing || results.uploading) {
+          throw new DisregardError();
         }
-        if (results.uploading) {
-          throw new ApiError('Database sync: upload in progress, please try later.');
-        }
-        return this.lookupRepo.setSyncing();
       })
       .then(() => {
         if (syncMap.dfa_data_sources) {
@@ -141,20 +139,13 @@ export default class DatabaseController {
             return Q.allSettled(promises)
               .then(handleQAllSettled(null, 'qAllReject'))
               .then(results => {
-                return this.lookupRepo.clearSyncing()
-                  .then(() => {
-                  if (elog.length) {
-                    throw new Error('handled in catch');
-                    return;
-                  }
-                  return {success: log};
-                });
+                if (elog.length) {
+                  throw new Error('handled in catch');
+                  return;
+                }
               })
               .catch(err => {
-                return this.lookupRepo.clearSyncing()
-                  .then(() => {
-                    throw new ApiError('MongoToPgSync Errors.', {success: log, errors: elog});
-                  });
+                throw new ApiError('MongoToPgSync Errors.', {success: log, errors: elog});
               });
           });
       });

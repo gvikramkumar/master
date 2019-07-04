@@ -32,6 +32,9 @@ export const shUtil = {
   arrayFilterUndefinedAndEmptyStrings,
 };
 
+// We throw exceptions on errors. If we're in a promise chain, these exceptions will only be caught by the terminating .catch()
+// "if they happen inside a then function" i.e. then() wraps the code in a try/catch and in catch returns Promise.reject(err).
+// so we have a function that make sure we're "always in a then()" as normally whoever starts the chain isn't.
 function promiseChain(_promise) {
   const promise = (_.isArray(_promise) ? Promise.all(_promise) : _promise) || Promise.resolve();
   return Promise.resolve()
