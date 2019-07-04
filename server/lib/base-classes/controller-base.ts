@@ -275,7 +275,6 @@ export default class ControllerBase {
   mongoToPgSync(tableName: string, userId: string, log: string[], elog: string[],
                 mgGetFilter: AnyObj = {}, pgRemoveFilter: AnyObj = {}, dfa?: ApiDfaData) {
 
-
     // q.allSettled requires promise rejections to work. If we throw, it will jsut get passed onto express error handler
 
     if (this.repo.isModuleRepo && !mgGetFilter.then && mgGetFilter.moduleId !== -1) {

@@ -108,7 +108,7 @@ export default class ApprovalController extends ControllerBase {
       .catch(next);
   }
 
-  approveOne(req, res, next) {
+  approveOne(req, res, next, skipResponse) {
     const item = req.body;
     return Promise.resolve()
       .then(() => {
@@ -116,6 +116,13 @@ export default class ApprovalController extends ControllerBase {
           .then(() => {
             return this.approve(item, true, req, res, next);
           });
+      })
+      .then(savedItem => {
+        if (skipResponse) {
+          return savedItem;
+        } else {
+          res.json(savedItem);
+        }
       })
       .catch(next);
   }
@@ -146,7 +153,7 @@ export default class ApprovalController extends ControllerBase {
           return this.sendApprovalEmail(data.approveRejectMessage, req, ApprovalMode.approve, item)
             .then(() => {
               if (approveOne) {
-                res.json(item);
+                return item;
               }
             });
         });

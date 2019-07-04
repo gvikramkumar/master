@@ -20,7 +20,7 @@ export function errorHandler (options) {
 
   const defaults = {showStack: false};
   const opts = _.merge(defaults, options)
-  const truncateLength = 160;
+  const truncateLength = 300;
 
   return function (err, req, res, next) {
     const obj: AnyObj = {};

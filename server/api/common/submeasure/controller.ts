@@ -211,10 +211,12 @@ export default class SubmeasureController extends ApprovalController {
 
   approveOne(req, res, next) {
     const sm = req.body;
-    return super.approveOne(req, res, next)
-      .then(() => {
-        return this.doManualMixAndDeptUploadSync(shUtil.isManualMix(sm), shUtil.isDeptUpload(sm), req);
-      });
+    return super.approveOne(req, res, next, true)
+      .then(item => {
+        return this.doManualMixAndDeptUploadSync(shUtil.isManualMix(sm), shUtil.isDeptUpload(sm), req)
+          .then(() => res.json(item));
+      })
+      .catch(next);
   }
 
   doManualMixAndDeptUploadSync(manualMix, deptUpload, req) {
@@ -232,18 +234,16 @@ export default class SubmeasureController extends ApprovalController {
     if (deptUpload) {
       syncMap.dfa_prof_dept_acct_map_upld = true;
     }
-    if (!_.get(global, 'dfa.syncing')) {
-      return shUtil.promiseChain(databaseCtrl.mongoToPgSyncPromise(req.dfa, syncMap, req.user.id))
-        .catch(err => {
-          if (err instanceof DisregardError) {
-            throw new ApiError(`Approval succeeded, but couldn't sync the manual mix or department upload data at this time. This data won't be available for edit page or reports until the next data sync.`);
-          } else {
-            throw new ApiError('Approval succeeded, but there was a sync error for the manual mix or department upload data', err);
-          }
-        });
-    } else {
-      return Promise.resolve();
-    }
+    return this.lookupRepo.getSyncingAndUploading()
+      .then(results => {
+        if (results.syncing || results.uploading) {
+          throw new ApiError(`Approval succeeded, but couldn't sync the manual mix or department upload data at this time. This data won't be available for edit page or reports until the next data sync.`);
+        }
+        return shUtil.promiseChain(databaseCtrl.mongoToPgSyncPromise(req.dfa, syncMap, req.user.id))
+          .catch(err => {
+            throw new ApiError('Approval succeeded, but there was a sync error for the manual mix or department upload data.', err);
+          });
+      });
   }
 
   preApproveStep(sm, firstTimeApprove, req) {

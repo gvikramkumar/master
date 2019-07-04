@@ -72,6 +72,78 @@ export default class RunJobController {
       .then(results => handleQAllSettled(null, 'serverStartup'));
   }
 
+  runJobAndRespond(req, res, next) {
+    const jobName = req.params['jobName'];
+      shUtil.promiseChain(this.runJob(jobName, false, req.body || req.query, req))
+      .then(log => res.json(log))
+      .catch(err => {
+        next(err);
+      });
+  }
+
+  runJob(jobName, startup = false, data?, req?) {
+    const job = _.find(dfaJobs, {name: jobName});
+    if (!job) {
+      throw new Error(`Job not found: ${jobName}`);
+    }
+    const log = <DfaJobLog>{
+      host: _.get(global, 'dfa.serverHost'),
+      jobName,
+      startDate: new Date(),
+      data,
+      status: 'starting'
+    };
+
+    return this.isJobRunning(job)
+      .then(running => {
+        if (running) {
+          log.status = 'already running';
+          return this.log(true, log, req) // we always log 'already running'
+            .then(() => {
+              return Promise.reject(new ApiError(running));
+            });
+        }
+      })
+      .then(() => {
+        return shUtil.promiseChain([
+          this.log(job.log, log, req),
+          this.setJobRunning(job)
+        ])
+          .then(() => {
+            return this[job.name](startup, data, req);
+          })
+          // job success
+          .then(jobData => {
+            log.endDate = new Date();
+            log.duration = log.endDate.getTime() - log.startDate.getTime();
+            log.status = 'success';
+            log.data = jobData;
+            return Promise.all([
+              this.log(job.log, log, req),
+              this.clearJobRunning(job)
+            ])
+              .then(results => results[0]);
+          })
+          // job error
+          .catch(err => {
+            log.endDate = new Date();
+            log.duration = log.endDate.getTime() - log.startDate.getTime();
+            log.status = 'error';
+            if (err.data) {
+              log.data = err.data; // we need this to get data back from databaseSync job when some tables error, some succeed, some error, need the data to show which
+            }
+            log.error = svrUtil.getErrorForJson(err);
+            return Promise.all([
+              this.log(true, log, req), // we always log errors
+              this.clearJobRunning(job)
+            ])
+              .then(results => {
+                throw new ApiError(_.get(err, 'message') || 'Run Job Error', results[0].toObject());
+              });
+          });
+      });
+  }
+
   // ping server and return serverUrl if fails
   pingServer(serverUrl) {
     return shUtil.promiseChain(finRequest({url: `${serverUrl}/ping`}))
@@ -137,75 +209,6 @@ export default class RunJobController {
       promise = Promise.resolve(_.set(global, `${DFA_RUNNING_JOBS}.${job.name}`, false));
     }
     return promise;
-  }
-
-  runJobAndRespond(req, res, next) {
-    const jobName = req.params['jobName'];
-      shUtil.promiseChain(this.runJob(jobName, false, req.body || req.query, req))
-      .then(log => res.json(log))
-      .catch(err => {
-        next(err);
-      });
-  }
-
-  runJob(jobName, startup = false, data?, req?) {
-    const job = _.find(dfaJobs, {name: jobName});
-    if (!job) {
-      throw new Error(`Job not found: ${jobName}`);
-    }
-    const log = <DfaJobLog>{
-      host: _.get(global, 'dfa.serverHost'),
-      jobName,
-      startDate: new Date(),
-      data,
-      status: 'starting'
-    };
-
-    return this.isJobRunning(job)
-      .then(running => {
-        if (running) {
-          log.status = 'already running';
-          return this.log(true, log, req) // we always log 'already running'
-            .then(() => {
-              return Promise.reject(new ApiError(running));
-            });
-        }
-      })
-      .then(() => {
-        return shUtil.promiseChain([
-          this.log(job.log, log, req),
-          this.setJobRunning(job)
-        ])
-          .then(() => {
-            return this[job.name](startup, data, req);
-          })
-          // job success
-          .then(jobData => {
-            log.endDate = new Date();
-            log.duration = log.endDate.getTime() - log.startDate.getTime();
-            log.status = 'success';
-            log.data = jobData;
-            return Promise.all([
-              this.log(job.log, log, req),
-              this.clearJobRunning(job)
-            ])
-              .then(results => results[0]);
-          })
-          // job error
-          .catch(err => {
-            log.endDate = new Date();
-            log.duration = log.endDate.getTime() - log.startDate.getTime();
-            log.status = 'error';
-            log.error = svrUtil.getErrorForJson(err);
-            return Promise.all([
-              this.log(true, log, req), // we always log errors
-              this.clearJobRunning(job)
-            ])
-              .then(results => {
-                throw new ApiError(_.get(err, 'message') || 'Run Job Error', results[0].toObject());
-              });
-          });
-      });
   }
 
   databaseSync(startup, syncMap?, req?) {
