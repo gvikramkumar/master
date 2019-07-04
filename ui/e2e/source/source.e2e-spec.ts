@@ -1,7 +1,7 @@
 import {SourcePO} from './source.po';
 import * as _ from 'lodash';
 
-fdescribe(`Admin - Source Page`, () => {
+describe(`Admin - Source Page`, () => {
   const url = '/api/source';
   let existingSourcesInDb, existingSourceInDb;
   const sourcePO = new SourcePO();

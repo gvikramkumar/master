@@ -43,7 +43,7 @@ describe(`Profitabily Allocations - Measure page`, () => {
     measurePO.getSearchField().sendKeys(existingMeasureInDb.name);
     expect(measurePO.getFirstCellInFirstRow().getText()).toEqual(existingMeasureInDb.name);
     expect(measurePO.getTableRows().get(1).getText()).toEqual(existingMeasureInDb.typeCode);
-    expect(measurePO.getTableRows().get(2).getText()).toEqual('Active');
+    expect(measurePO.getTableRows().get(2).getText()).toEqual(existingMeasureInDb.status === 'A' ? 'Active' : 'Inactive');
     expect(measurePO.getTableRows().get(3).getText()).toEqual(existingMeasureInDb.updatedBy);
     expect(measurePO.getTableRows().last().getText()).toEqual(moment(existingMeasureInDb.updatedDate).format('MM/DD/YYYY hh:mm A'));
   });
@@ -311,7 +311,7 @@ describe(`Profitabily Allocations - Measure page`, () => {
       expect(measurePO.getFieldHierarchies().getAttribute('value')).toEqual(_.upperFirst(newTestMeasure.hierarchies[0].toLowerCase()));
     });
 
-    it('should enable reporting level 3 and check the enabled checkbox', () => {
+    it('should enable reporting level 3 and enable the enabled checkbox on unchecking setToSubmeasureName checkbox', () => {
       measurePO.loadFormInEditMode(newTestMeasure.name);
       measurePO.getSetToSubMeasureNameCheckBox().click();
       expect(measurePO.getReportingLevel(3).isEnabled()).toEqual(true);

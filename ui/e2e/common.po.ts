@@ -1,6 +1,4 @@
-import {$, $$, browser, element, by, ElementFinder, protractor} from 'protractor';
-import * as _ from 'lodash';
-import * as cp from 'child_process';
+import {browser, element, by, protractor} from 'protractor';
 import * as request from 'request';
 import * as os from 'os';
 
@@ -10,7 +8,6 @@ export class CommonPO {
   table = element(by.className(`mat-table`));
   form = element(by.className('edit-form-container'));
   dialog = element(by.className(`mat-dialog-container`));
-
   EC = protractor.ExpectedConditions;
 
   constructor(_pageUrl) {
@@ -197,7 +194,7 @@ export class CommonPO {
     this.getSubmitButton().click();
     this.waitForDialogToShow();
     this.getYesButton().click();
-    this.waitForDialogToShow();
+    this.waitForDialogToHide();
     this.init();
   }
 
