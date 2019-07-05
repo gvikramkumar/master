@@ -236,15 +236,9 @@ export default class SubmeasureController extends ApprovalController {
     if (deptUpload) {
       syncMap.dfa_prof_dept_acct_map_upld = true;
     }
-    return this.lookupRepo.getSyncing()
-      .then(syncing => {
-        if (syncing) {
-          throw new ApiError(`Approval succeeded, but couldn't sync the manual mix or department upload data at this time. This data won't be available for edit page or reports until the next data sync.`);
-        }
-        return shUtil.promiseChain(databaseCtrl.mongoToPgSyncPromise(req.dfa, syncMap, req.user.id))
-          .catch(err => {
-            throw new ApiError('Approval succeeded, but there was a sync error for the manual mix or department upload data.', err);
-          });
+    return shUtil.promiseChain(databaseCtrl.mongoToPgSyncPromise(req.dfa, syncMap, req.user.id))
+      .catch(err => {
+        throw new ApiError('Approval succeeded, but there was a sync error for the manual mix or department upload data.', err);
       });
   }
 
