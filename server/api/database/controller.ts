@@ -11,7 +11,6 @@ import {ModuleSourceController} from '../common/module-source/controller';
 import ProductClassUploadController from '../prof/product-class-upload/controller';
 import SalesSplitUploadController from '../prof/sales-split-upload/controller';
 import OpenPeriodRepo from '../common/open-period/repo';
-import {shUtil} from '../../../shared/misc/shared-util';
 import {SyncMap} from '../../../shared/models/sync-map';
 import SubmeasureRepo from '../common/submeasure/repo';
 import AlternateSl2UploadController from '../prof/alternate-sl2-upload/controller';
@@ -20,13 +19,12 @@ import {ApiDfaData} from '../../lib/middleware/add-global-data';
 import DistiDirectUploadController from '../prof/disti-direct-upload/controller';
 import ServiceMapUploadController from '../prof/service-map-upload/controller';
 import ServiceTrainingUploadController from '../prof/service-training-upload/controller';
-import {svrUtil} from '../../lib/common/svr-util';
 import {handleQAllSettled} from '../../lib/common/q-allSettled';
 import Q from 'q';
 import config from '../../config/get-config';
-import _ from 'lodash';
 import LookupRepo from '../lookup/repo';
-import {DisregardError} from '../../lib/common/disregard-error';
+import {svrUtil} from '../../lib/common/svr-util';
+import {shUtil} from '../../../shared/misc/shared-util';
 
 @injectable()
 export default class DatabaseController {
@@ -65,7 +63,7 @@ export default class DatabaseController {
 
     // this is to make sure we don't accidentally sync to dev/stage pg with local mongo database, use ldev env to sync to local postgres
     if (svrUtil.isLocalEnv() && config.postgres.host !== 'localhost') {
-      throw new ApiError('Syncing local mongo to non-local postgres.');
+      return Promise.resolve({success: {message: 'Syncing local mongo to non-local postgres.'}});
     }
 
     if (syncMap.dfa_data_sources) {
