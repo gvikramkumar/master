@@ -14,7 +14,6 @@ const schema = new Schema(
 
 const RUNNING_JOBS = 'runningJobs';
 const SYNCING = 'databaseSync';
-const UPLOADING = 'uploading';
 
 @injectable()
 export default class LookupRepo {
@@ -108,11 +107,9 @@ Model: Model<any>;
     return this.Model.remove({key: {$in: keys}});
   }
 
-  getSyncingAndUploading() {
+  getSyncing() {
     return this.getValue(RUNNING_JOBS)
-      .then(runningJobs => {
-        return {syncing: _.get(runningJobs, SYNCING), uploading: _.get(runningJobs, UPLOADING)};
-      });
+      .then(runningJobs => runningJobs && runningJobs[SYNCING]);
   }
 
   setJobRunning(jobName) {
@@ -128,25 +125,6 @@ Model: Model<any>;
         if (doc) {
           const runningJobs = doc.value;
           runningJobs[jobName] = undefined;
-          doc.markModified('value');
-          return doc.save();
-        }
-      });
-  }
-
-  setUploading() {
-    return this.upsertMerge({
-      key: RUNNING_JOBS,
-      value: {[UPLOADING]: _.get(global, 'dfa.serverUrl')}
-    });
-  }
-
-  clearUploading() {
-    return this.getDoc(RUNNING_JOBS)
-      .then(doc => {
-        if (doc) {
-          const runningJobs = doc.value;
-          runningJobs[UPLOADING] = undefined;
           doc.markModified('value');
           return doc.save();
         }

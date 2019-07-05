@@ -1,5 +1,4 @@
 export default {
-  multipleServers: true,
   mongo: {
     uri: 'mongodb://localhost/fin-dfa',
     host: 'localhost',

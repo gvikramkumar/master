@@ -1,7 +1,6 @@
 import {injectable} from 'inversify';
 import JobLogRepo from './job-log-repo';
 import {DfaJobLog} from './job-log';
-import {SyncMap} from '../../../shared/models/sync-map';
 import {handleQAllSettled} from '../../lib/common/q-allSettled';
 import Q from 'q';
 import _ from 'lodash';
@@ -10,7 +9,6 @@ import DatabaseController from '../database/controller';
 import SubmeasureController from '../common/submeasure/controller';
 import AllocationRuleController from '../common/allocation-rule/controller';
 import LookupRepo from '../lookup/repo';
-import config from '../../config/get-config';
 import {shUtil} from '../../../shared/misc/shared-util';
 import {finRequest} from '../../lib/common/fin-request';
 import {svrUtil} from '../../lib/common/svr-util';
@@ -30,7 +28,6 @@ export interface DfaJob {
 const RUNNING_JOBS = 'runningJobs';
 const DFA_RUNNING_JOBS = 'dfa.runningJobs';
 const SYNCING = 'databaseSync';
-const UPLOADING = 'uploading';
 
 export const dfaJobs: DfaJob[] = [
   {name: 'databaseSync', displayName: 'Database Sync', singleServer: true, log: true},
@@ -58,9 +55,6 @@ export default class RunJobController {
     this.serverUrl = (<any>global).dfa.serverUrl;
 
     const multipleServerJobs = dfaJobs.filter(x => !x.singleServer);
-    if (!config.multipleServers) {
-      _.pullAllBy(multipleServerJobs, [{name: 'clearServerLookupFlags'}], 'name');
-    }
     multipleServerJobs.filter(x => x.period)
       .forEach(job => setInterval(this.runJob.bind(this, job.name), job.period));
     const promises = [];
@@ -176,17 +170,14 @@ export default class RunJobController {
       promise = this.lookupRepo.getValue(RUNNING_JOBS)
         .then(runningJobs => {
           const running = _.get(runningJobs, job.name);
-          const uploading = _.get(runningJobs, UPLOADING);
-          return {running, uploading};
+          return running;
         });
     } else {
       promise = Promise.resolve({running: _.get(global, `${DFA_RUNNING_JOBS}.${job.name}`)});
     }
-    return promise.then(({running, uploading}) => {
+    return promise.then(running => {
       if (running) {
         return `${job.displayName} job is already running.`;
-      } else if (this.isDatabaseSyncJob(job) && uploading) {
-        return `Upload in progress, please try again later.`;
       }
     });
   }

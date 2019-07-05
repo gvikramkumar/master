@@ -193,7 +193,7 @@ export default class SubmeasureController extends ApprovalController {
 
   // we need this sync to happen
   approveMany(req, res, next) {
-    return super.approveMany(req, res, next)
+    return super.approveMany(req, res, next, true)
       .then(() => {
         const items = req.body;
         let manualMix, deptUpload;
@@ -205,8 +205,10 @@ export default class SubmeasureController extends ApprovalController {
             deptUpload = true;
           }
         });
-        return this.doManualMixAndDeptUploadSync(manualMix, deptUpload, req);
-      });
+        return this.doManualMixAndDeptUploadSync(manualMix, deptUpload, req)
+          .then(() => res.json({status: 'success'}));
+      })
+      .catch(next);
   }
 
   approveOne(req, res, next) {
@@ -234,9 +236,9 @@ export default class SubmeasureController extends ApprovalController {
     if (deptUpload) {
       syncMap.dfa_prof_dept_acct_map_upld = true;
     }
-    return this.lookupRepo.getSyncingAndUploading()
-      .then(results => {
-        if (results.syncing || results.uploading) {
+    return this.lookupRepo.getSyncing()
+      .then(syncing => {
+        if (syncing) {
           throw new ApiError(`Approval succeeded, but couldn't sync the manual mix or department upload data at this time. This data won't be available for edit page or reports until the next data sync.`);
         }
         return shUtil.promiseChain(databaseCtrl.mongoToPgSyncPromise(req.dfa, syncMap, req.user.id))

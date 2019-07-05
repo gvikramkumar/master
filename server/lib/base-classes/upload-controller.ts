@@ -65,12 +65,11 @@ export default class UploadController {
   upload(req, res, next) {
 
     const lookupRepo = injector.get(LookupRepo);
-    lookupRepo.getSyncingAndUploading()
-      .then(results => {
-        if (results.syncing) {
+    lookupRepo.getSyncing()
+      .then(syncing => {
+        if (syncing) {
           throw new ApiError('Database sync is currently running. Please try again later.');
         }
-        return lookupRepo.setUploading();
       })
       .then(() => {
         this.verifyProperties(req.query, ['moduleId']);
@@ -139,7 +138,6 @@ export default class UploadController {
               this.sendErrorEmail(_err);
               next(_err);
             }
-            return lookupRepo.clearUploading();
           });
       })
       .catch(next);
