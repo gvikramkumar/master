@@ -25,9 +25,10 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
   editMode = false;
   measure = new Measure();
   measures: Measure[];
-  orgMeasure = _.cloneDeep(this.measure);
+  orgMeasure = new Measure();
   sources: Source[] = [];
   measureNames: string[] = [];
+  measureTypecodes: string[] = [];
   moduleSourceIds: number[] = [];
   moduleSources: Source[] = [];
   hierarchies: AnyObj[] = [
@@ -55,29 +56,31 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
     return Promise.all([
       this.sourceService.getMany().toPromise(),
       this.moduleSourceService.getQueryOne({moduleId: this.store.module.moduleId}).toPromise(),
-      this.measureService.getMany().toPromise(),
-      this.measureService.getDistinct('name', {moduleId: -1}).toPromise(),
+      this.measureService.getMany().toPromise()
     ])
       .then(results => {
         this.sources = results[0];
         this.moduleSourceIds = results[1].sources;
         this.measures = results[2];
-        this.measureNames = results[3]
-
+        this.measureNames = this.measures.map(x => x.name);
+        this.measureTypecodes = this.measures.map(x => x.typeCode);
         // filter sources by current module
         this.moduleSources = this.sources.filter(source => _.includes(this.moduleSourceIds, source.sourceId));
       });
   }
 
   public ngOnInit(): void {
+    this.store.mainCompDataLoad = true;
     this.getData()
       .then(() => {
+        this.store.mainCompDataLoad = false;
         if (this.editMode) {
           this.measure = _.find(this.measures, {id: this.route.snapshot.params.id});
           this.measureNames = this.measureNames.filter(name => name !== this.measure.name);
+          this.measureTypecodes = this.measureTypecodes.filter(typeCode => typeCode !== this.measure.typeCode);
           this.orgMeasure = _.cloneDeep(this.measure);
         }
-      });
+      }).catch(() => this.store.mainCompDataLoad = false);
   }
 
   hasChanges() {
@@ -96,7 +99,7 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
     this.verifyLosingChanges()
       .subscribe(resp => {
         if (resp) {
-          this.router.navigateByUrl('/prof/admin/measure');
+          history.go(-1);
         }
       });
   }
@@ -153,7 +156,7 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
             } else {
               obs = this.measureService.add(this.measure);
             }
-            obs.subscribe(measure => this.router.navigateByUrl('/prof/admin/measure'));
+            obs.subscribe(measure => history.go(-1));
           }
         });
     }
@@ -161,7 +164,8 @@ export class MeasureEditComponent extends RoutingComponentBase implements OnInit
 
   reportingLevel3SetToSubmeasureNameChange() {
     if (this.measure.reportingLevel3SetToSubmeasureName) {
-      this.measure.reportingLevels[2] = undefined;
+      this.measure.reportingLevels[2] = '';
+      this.measure.reportingLevelEnableds[2] = false;
     }
   }
 

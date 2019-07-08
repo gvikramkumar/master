@@ -131,8 +131,8 @@ export class SubmeasureComponent extends RoutingComponentBase implements OnInit 
       });
   }
 
-  showDeleteIcon(rule) {
-    return _.includes(['D', 'P'], rule.status);
+  showDeleteIcon(sm) {
+    return _.includes(['D', 'P'], sm.status) && (this.store.user.isItAdmin() || this.store.user.id === sm.updatedBy);
   }
 
   sortChange(sort: Sort) {

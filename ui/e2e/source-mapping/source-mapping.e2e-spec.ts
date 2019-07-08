@@ -38,7 +38,7 @@ describe(`Admin - Source Mapping page`, () => {
       srcMapPO.finJsonRequest('/api/source/query-one', 'DELETE', undefined, {name: testSource2.name})
     ])
       .then((results: any) => {
-        const deletedModule = JSON.parse(results[0].resp.body);
+        const deletedModule = results[0].body;
         srcMapPO.finJsonRequest('/api/module-source/query-one', 'DELETE', undefined, {moduleId: deletedModule.moduleId})
           .then(() => done());
       });
@@ -46,7 +46,6 @@ describe(`Admin - Source Mapping page`, () => {
 
   beforeEach(() => {
     srcMapPO.navigateTo();
-    srcMapPO.waitForPageToLoad();
   });
 
   it(`should load all the active modules`, () => {

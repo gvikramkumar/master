@@ -67,7 +67,7 @@
                        [isNumber]="true" [notInList]="formModules" notInListProperty="displayOrder"></fin-input>
             <fin-input name="desc" [textarea]="true" [(ngModel)]="module.desc" [rows]="4" label="Description"></fin-input>
             <div style="padding-top:15px;">
-              <fin-checkbox label="Active" [(model)]="module.status" trueVal="A" falseVal="I"></fin-checkbox>
+              <fin-checkbox name="status" label="Active" [(model)]="module.status" trueVal="A" falseVal="I"></fin-checkbox>
             </div>
           </fieldset>
 
