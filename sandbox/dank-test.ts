@@ -1,13 +1,27 @@
+import {injector} from '../server/lib/common/inversify.config';
+const inj = injector; // required to import reflect-metadata before any injection
+
 import _ from 'lodash';
 import AnyObj from '../shared/models/any-obj';
 import {shUtil} from '../shared/misc/shared-util';
 import {svrUtil} from '../server/lib/common/svr-util';
 import Q from 'q';
+import RunJobController from '../server/api/run-job/controller';
 
 // import {Subject, BehaviorSubject} from 'rxjs';
 // import {take, first} from 'rxjs/operators';
 
 
+const a = {name: 'dank', age: 'fitty'};
+const b = {name: 'carl', age: undefined};
+console.log(Object.assign(a, b));
+
+
+
+/*
+const sut = new RunJobController(<any>{}, <any>{}, <any>{}, <any>{});
+const i = 5;
+*/
 
 
 /*

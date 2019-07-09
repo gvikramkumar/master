@@ -20,7 +20,7 @@ import AnyObj from '../../../../shared/models/any-obj';
 import {injector, lazyInject} from '../../../lib/common/inversify.config';
 import DatabaseController from '../../database/controller';
 import {SyncMap} from '../../../../shared/models/sync-map';
-import {app} from '../../../express-setup';
+import {DisregardError} from '../../../lib/common/disregard-error';
 
 
 interface FilterLevel {
@@ -193,7 +193,7 @@ export default class SubmeasureController extends ApprovalController {
 
   // we need this sync to happen
   approveMany(req, res, next) {
-    return super.approveMany(req, res, next)
+    return super.approveMany(req, res, next, true)
       .then(() => {
         const items = req.body;
         let manualMix, deptUpload;
@@ -205,16 +205,20 @@ export default class SubmeasureController extends ApprovalController {
             deptUpload = true;
           }
         });
-        return this.doManualMixAndDeptUploadSync(manualMix, deptUpload, req);
-      });
+        return this.doManualMixAndDeptUploadSync(manualMix, deptUpload, req)
+          .then(() => res.json({status: 'success'}));
+      })
+      .catch(next);
   }
 
   approveOne(req, res, next) {
     const sm = req.body;
-    return super.approveOne(req, res, next)
-      .then(() => {
-        return this.doManualMixAndDeptUploadSync(shUtil.isManualMix(sm), shUtil.isDeptUpload(sm), req);
-      });
+    return super.approveOne(req, res, next, true)
+      .then(item => {
+        return this.doManualMixAndDeptUploadSync(shUtil.isManualMix(sm), shUtil.isDeptUpload(sm), req)
+          .then(() => res.json(item));
+      })
+      .catch(next);
   }
 
   doManualMixAndDeptUploadSync(manualMix, deptUpload, req) {
@@ -232,11 +236,10 @@ export default class SubmeasureController extends ApprovalController {
     if (deptUpload) {
       syncMap.dfa_prof_dept_acct_map_upld = true;
     }
-    if (!app.get('syncing')) {
-      return databaseCtrl.mongoToPgSyncPromise(req.dfa, syncMap, req.user.id);
-    } else {
-      return Promise.resolve();
-    }
+    return shUtil.promiseChain(databaseCtrl.mongoToPgSyncPromise(req.dfa, syncMap, req.user.id))
+      .catch(err => {
+        throw new ApiError('Approval succeeded, but there was a sync error for the manual mix or department upload data.', err);
+      });
   }
 
   preApproveStep(sm, firstTimeApprove, req) {

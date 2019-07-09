@@ -40,14 +40,15 @@ import {svrUtil} from './lib/common/svr-util';
 
 export const app = express();
 
+
 export function initializeExpress() {
 
-/*
-  app.use(function tap(req, res, next) {
-    console.log(req.method, req.url);
-    next();
-  })
-*/
+  /*
+    app.use(function tap(req, res, next) {
+      console.log(req.method, req.url);
+      next();
+    })
+  */
 
   app.use(timeoutHandler());
 
@@ -62,15 +63,15 @@ export function initializeExpress() {
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(cookieParser());
 
-/*
-    app.use((req, res, next) => {
-      console.log(`${new Date().toISOString()} ${req.method} ${req.url}`);
-      next();
-    });
-*/
+  /*
+      app.use((req, res, next) => {
+        console.log(`${new Date().toISOString()} ${req.method} ${req.url}`);
+        next();
+      });
+  */
 
-  app.get('/healthcheck', healthcheck());
   app.get('/ping', (req, res) => res.send());
+  app.get('/healthcheck', healthcheck());
 
   app.get('/timeout/:delay', function (req: AnyObj, res, next) {
     const delay = Number(req.params.delay);
@@ -104,24 +105,24 @@ if (!svrUtil.isUnitEnv()) {
 }
 
 
-/*
-  app.get('/cause-error', function (req, res, next) {
-    if (svrUtil.isLocalEnv()) {
-      const err = new NamedApiError('CauseError', 'api error with data');
-      throw err;
-    } else {
-      next();
-    }
-  })
-
-    app.get('/crash-site', function (req, res, next) {
+  /*
+    app.get('/cause-error', function (req, res, next) {
       if (svrUtil.isLocalEnv()) {
-        process.exit(666);
+        const err = new NamedApiError('CauseError', 'api error with data');
+        throw err;
       } else {
         next();
       }
     })
-*/
+
+      app.get('/crash-site', function (req, res, next) {
+        if (svrUtil.isLocalEnv()) {
+          process.exit(666);
+        } else {
+          next();
+        }
+      })
+  */
 
   app.use('/api/allocation-rule', allocationRuleRouter);
   app.use('/api/database', databaseRouter);

@@ -100,7 +100,7 @@ export default class ApprovalController extends ControllerBase {
       });
   }
 
-  approveMany(req, res, next) {
+  approveMany(req, res, next, skipResponse = false) {
     const items = req.body;
     return Promise.resolve()
       .then(() => {
@@ -110,12 +110,16 @@ export default class ApprovalController extends ControllerBase {
             items.forEach(item => promises.push(this.approve(item, false, req, res, next)));
             return Promise.all(promises);
           })
-          .then(() => res.json({status: 'success'}));
+          .then(() => {
+            if (!skipResponse) {
+              res.json({status: 'success'});
+            }
+          });
       })
       .catch(next);
   }
 
-  approveOne(req, res, next) {
+  approveOne(req, res, next, skipResponse) {
     const item = req.body;
     return Promise.resolve()
       .then(() => {
@@ -123,6 +127,13 @@ export default class ApprovalController extends ControllerBase {
           .then(() => {
             return this.approve(item, true, req, res, next);
           });
+      })
+      .then(savedItem => {
+        if (skipResponse) {
+          return savedItem;
+        } else {
+          res.json(savedItem);
+        }
       })
       .catch(next);
   }
@@ -153,7 +164,7 @@ export default class ApprovalController extends ControllerBase {
           return this.sendApprovalEmail(data.approveRejectMessage, req, ApprovalMode.approve, item)
             .then(() => {
               if (approveOne) {
-                res.json(item);
+                return item;
               }
             });
         });

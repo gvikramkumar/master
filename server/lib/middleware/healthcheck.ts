@@ -24,7 +24,8 @@ export function healthcheck () {
     ])
       .then(results => {
         const rtn = {
-          api: `build: ${process.env.BUILD_NUMBER}`,
+          server: _.get(global, 'dfa.serverUrl'),
+          build: `${process.env.BUILD_NUMBER}`,
           mongo: results[0].state === 'fulfilled' ? `dfa-version: ${results[0].value[0]}, mongo-version: ${results[0].value[1].version}` : `DOWN: ${results[0].reason}`,
           pg: results[1].state === 'fulfilled' ? results[1].value : `DOWN: ${results[1].reason}`,
           sso: results[2].state === 'fulfilled' ? results[2].value : `DOWN: ${results[2].reason}`

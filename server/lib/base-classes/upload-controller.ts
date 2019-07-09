@@ -11,9 +11,6 @@ import DfaUser from '../../../shared/models/dfa-user';
 import {svrUtil} from '../common/svr-util';
 import {ApiDfaData} from '../middleware/add-global-data';
 import {SyncMap} from '../../../shared/models/sync-map';
-import DatabaseController from '../../api/database/controller';
-import config from '../../config/get-config';
-import {injector} from '../common/inversify.config';
 import {shUtil} from '../../../shared/misc/shared-util';
 import {mail} from '../common/mail';
 
@@ -59,7 +56,6 @@ export default class UploadController {
     and what does upload return?? probably upload record count and failures. Hmmm. how to mix the two return types??
     have to break out upload to 2 functions and use inner return value in approve without res.json call right?
    */
-
 
   upload(req, res, next) {
     this.verifyProperties(req.query, ['moduleId']);

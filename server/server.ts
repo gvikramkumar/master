@@ -1,5 +1,4 @@
 import {injector} from './lib/common/inversify.config';
-
 const inj = injector; // required to import reflect-metadata before any injection
 import config from './config/get-config';
 import process from 'process';
@@ -14,7 +13,9 @@ import {databaseUpdate} from './database-update';
 import {app, initializeExpress} from './express-setup';
 import os from 'os';
 import {svrUtil} from './lib/common/svr-util';
-
+import _ from 'lodash';
+import {ServerStartup} from './lib/common/server-startup';
+import RunJobController from './api/run-job/controller';
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -27,7 +28,6 @@ export const serverPromise = Promise.all([mgc.promise, pgc.promise])
   .then(() => {
 
       initializeExpress();
-
       const port = config.port;
       let server, protocol;
       if (config.ssl) {
@@ -70,12 +70,17 @@ export const serverPromise = Promise.all([mgc.promise, pgc.promise])
           throw(err);
         }
         const serverUrl = `${protocol}://${os.hostname()}:${port}`;
-        app.set('serverUrl', serverUrl);
-        if (!svrUtil.isLocalEnv()) {
-          console.log('build:', process.env.BUILD_NUMBER);
-          console.log('svrurl', app.get('serverUrl'));
-        }
-        console.log(`${protocol} server listening on ${port}`);
+        _.set(global, 'dfa.serverHost', os.hostname());
+        _.set(global, 'dfa.serverUrl', serverUrl);
+        _.set(global, 'dfa.app', app);
+        const runJobController = injector.get(RunJobController);
+        return runJobController.startup()
+          .then(() => {
+            if (!svrUtil.isLocalEnv()) {
+              console.log('build:', process.env.BUILD_NUMBER);
+            }
+            console.log(`server listening on ${serverUrl}`);
+          });
       });
     }
   )

@@ -2,6 +2,7 @@ import {injectable} from 'inversify';
 import {model, Model, Schema} from 'mongoose';
 import _ from 'lodash';
 import {ApiError} from '../../lib/common/api-error';
+import {dfaJobs} from '../run-job/controller';
 
 const schema = new Schema(
   {
@@ -10,6 +11,9 @@ const schema = new Schema(
   },
   {collection: 'dfa_lookup'}
 );
+
+const RUNNING_JOBS = 'runningJobs';
+const SYNCING = 'databaseSync';
 
 @injectable()
 export default class LookupRepo {
@@ -70,9 +74,21 @@ Model: Model<any>;
     return this.getDoc(data.key)
       .then(item => {
         if (!item) {
-            return this.add(data);
+          return this.add(data);
         }
         item.value = data.value;
+        return item.save().then(doc => doc.value);
+      });
+  }
+
+  upsertMerge(data) {
+    return this.getDoc(data.key)
+      .then(item => {
+        if (!item) {
+          return this.add(data);
+        }
+        item.value = _.assign(item.value, data.value) ;
+        item.markModified('value'); // need this for a merge as value is staying the same, but being modified, mongoose won't update then
         return item.save().then(doc => doc.value);
       });
   }
@@ -80,6 +96,39 @@ Model: Model<any>;
   remove(item) {
     return item.remove()
       .then(() => item.value);
+  }
+
+  removeByKey(key) {
+    return this.Model.remove({key})
+      .setOptions({ single: true });
+  }
+
+  removeByKeys(keys) {
+    return this.Model.remove({key: {$in: keys}});
+  }
+
+  getSyncing() {
+    return this.getValue(RUNNING_JOBS)
+      .then(runningJobs => runningJobs && runningJobs[SYNCING]);
+  }
+
+  setJobRunning(jobName) {
+    return this.upsertMerge({
+      key: RUNNING_JOBS,
+      value: {[jobName]: _.get(global, 'dfa.serverUrl')}
+    });
+  }
+
+  clearJobRunning(jobName) {
+    return this.getDoc(RUNNING_JOBS)
+      .then(doc => {
+        if (doc) {
+          const runningJobs = doc.value;
+          runningJobs[jobName] = undefined;
+          doc.markModified('value');
+          return doc.save();
+        }
+      });
   }
 
 }
