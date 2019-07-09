@@ -91,7 +91,7 @@ export function addSsoUser() {
               }
             })
             .then(roles => {
-              if (!roles.length) {
+              if (userId !== 'dfaadmin.gen' && !roles.length) {
                 const msg = `No user roles set up for user: ${userId}`;
                 console.error(msg);
                 res.status(401).send(shUtil.getHtmlForLargeSingleMessage(msg));
