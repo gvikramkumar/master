@@ -69,7 +69,7 @@ export default class RunJobController {
   runJobAndRespond(req, res, next) {
     const jobName = req.params['jobName'];
       shUtil.promiseChain(this.runJob(jobName, false, req.body || req.query, req))
-      .then(log => res.json(log))
+      .then(log => res.status(202).json(log))
       .catch(err => {
         next(err);
       });
