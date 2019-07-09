@@ -69,6 +69,8 @@ export default class RunJobController {
   runJobAndRespond(req, res, next) {
     const jobName = req.params['jobName'];
       shUtil.promiseChain(this.runJob(jobName, false, req.body || req.query, req))
+      // why 202 here? We're calling this via sso. We need to know if this job succeeds (202) or fails (not 202). The issue is: if sso fails,
+      // it redirects to login page, which returns 200, so "we" return 202 so we know it actually hit our endpoint, not login page
       .then(log => res.status(202).json(log))
       .catch(err => {
         next(err);
