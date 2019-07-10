@@ -153,9 +153,10 @@ export default class RunJobController {
       });
   }
 
-  log(canLog, log, req?) {
+  log(canLog, log: DfaJobLog, req?) {
     if (canLog) {
       log.userId = _.get(req, 'user.id') || 'system';
+      log.timestamp = new Date();
       return this.jobLogRepo.addOne(log, log.userId, false);
     } else {
       return Promise.resolve();

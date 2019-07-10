@@ -480,6 +480,22 @@ export default class ReportController extends ControllerBase {
           });
         break;
 
+      case 'input-data':
+        excelSheetname = ['Input System Data'];
+        excelHeaders = ['Measure Name', 'Sub Measure Name', 'Product', 'Sales', 'Entity', 'SCMS', 'Amount', 'Uploaded By', 'Last Updated Date'];
+        excelProperties = ['measure_name', 'sub_measure_name', 'input_product_value', 'input_sales_value', 'input_entity_value', 'input_scms_value', 'amount', 'update_owner', 'update_datetimestamp'];
+        promise = Promise.all([
+          this.measureRepo.getManyActive({moduleId}),
+          this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
+          this.pgLookupRepo.getInputSystemDataReport(body.fiscalMonth, body.submeasureKeys)
+        ])
+          .then(results => {
+            this.measures = results[0];
+            this.submeasures = results[1];
+            const rtn = results[2].map(obj => this.transformAddMeasureAndSubmeasure(obj));
+            return _.sortBy(rtn, 'sm.name');
+          });
+        break;
       default:
         next(new ApiError('Bad report type.', null, 400));
         return;

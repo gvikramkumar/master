@@ -101,6 +101,10 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       filename: 'Manual_Uploaded_Data_Report'
     },
     {
+      type: 'input-data', hasMultiSmAndFiscalMonth: true, text: 'Input System Data', disabled: false,
+      filename: 'Input_System_Data_Report'
+    },
+    {
       type: 'mapping-upload', hasMultiSmAndFiscalMonth: true, text: 'Manual Mapping Split Percentage', disabled: false,
       filename: 'Manual_Mapping_Data_Report'
     },
@@ -214,11 +218,15 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       case 'dollar-upload':
         prmMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'sub_measure_key', true).toPromise();
         break;
+
       case 'mapping-upload':
         prmMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_manual_map_upld', 'sub_measure_key', true).toPromise();
         break;
       case 'dept-upload':
         prmMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_dept_acct_map_upld', 'sub_measure_key', true).toPromise();
+        break;
+      case 'input-data':
+        prmMeasure = this.pgLookupService.callRepoMethod('getSubmeasureForSystemInputData').toPromise();
         break;
     }
     const promises = [prmFiscalMonth, prmFiscalYear, prmMeasure].filter(x => !!x);
@@ -313,6 +321,9 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
         break;
       case 'mapping-upload':
         obs = this.pgLookupService.callRepoMethod('getMappingUploadFiscalMonthsFromSubmeasureKeys', {submeasureKeys: this.submeasureKeys});
+        break;
+      case 'input-data':
+        obs = this.pgLookupService.callRepoMethod('getInputDataFiscalMonthsFromSubmeasureKeys', {submeasureKeys: this.submeasureKeys});
         break;
     }
     obs.subscribe(fiscalMonths => {
