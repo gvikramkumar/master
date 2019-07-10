@@ -479,7 +479,7 @@ export default class ReportController extends ControllerBase {
             return _.orderBy(rows, ['fiscalMonth', 'sm.measureName', 'sm.name']);
           });
         break;
-// Input System Data Report
+
       case 'input-data':
         excelSheetname = ['Input System Data'];
         excelHeaders = ['Measure Name', 'Sub Measure Name', 'Product', 'Sales', 'Entity', 'SCMS', 'Amount', 'Uploaded By', 'Last Updated Date'];

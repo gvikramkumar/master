@@ -962,7 +962,7 @@ export default class PgLookupRepo {
     return pgc.pgdb.query(sql)
       .then(results => results.rows);
   }
-  // System Input data report query for report data
+
   getInputSystemDataReport(fiscalMonth, submeasureKeys) {
     const sql = `
     select 
@@ -990,18 +990,22 @@ export default class PgLookupRepo {
     return pgc.pgdb.query(sql)
       .then(results => results.rows);
   }
-  // System Input data report query for sub measure drop down
-  getSubMeaureForSystemInputData(isNumber ?) {
-    const sql = `select distinct sub_measure_id as col from fpadfa.dfa_prof_input_data where sub_measure_id is not null and source_system_type_code!='EXCEL' order by sub_measure_id`;
+
+  getSubmeasureForSystemInputData() {
+    const sql = `
+      select distinct sub_measure_id as col from fpadfa.dfa_prof_input_data 
+      where sub_measure_id is not null and source_system_type_code != 'EXCEL' 
+      order by sub_measure_id
+    `;
     return pgc.pgdb.query(sql)
-      .then(results => results.rows.map(obj => obj.col))
-      .then(vals =>  isNumber ? vals.map(val => Number(val)) : vals);
+      .then(results => results.rows.map(row => Number(row.col)));
   }
-  // Getting fiscal months parameter dropdown for System Input Data report
+
   getInputDataFiscalMonthsFromSubmeasureKeys(req) {
     return this.getListFromColumn('fpadfa.dfa_prof_input_data', 'fiscal_month_id',
       `sub_measure_id in ( ${req.body.submeasureKeys} )`);
   }
+
   getETLAndAllocationFlags() {
     const sql = `
       select dl_processed_flag, alloc_processed_flag 

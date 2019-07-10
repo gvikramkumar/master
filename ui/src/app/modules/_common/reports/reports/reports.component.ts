@@ -226,8 +226,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
         prmMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_dept_acct_map_upld', 'sub_measure_key', true).toPromise();
         break;
       case 'input-data':
-        prmMeasure = this.pgLookupService.callRepoMethod('getSubMeaureForSystemInputData').toPromise();
-
+        prmMeasure = this.pgLookupService.callRepoMethod('getSubmeasureForSystemInputData').toPromise();
         break;
     }
     const promises = [prmFiscalMonth, prmFiscalYear, prmMeasure].filter(x => !!x);
