@@ -26,20 +26,20 @@ export default class PgLookupRepo {
           `);
   }
 
-/*
-// this was taking too long to replace the dollar/mapping/dept upload reports with pg only solutions
-// i.e. getting submeasure.name from pg instead of mongo
-  getDollarUploadReport(params) {
-    return pgc.pgdb.query(`
-            select fiscal_month_id, sm.sub_measure_name, input_product_value, input_sales_value, 
-              input_entity_value, input_internal_be_value, input_scms_value, amount_value
-            from fpadfa.dfa_prof_input_amnt_upld up
-            left outer join fpadfa.dfa_sub_measure sm on up.sub_measure_key = sm.sub_measure_key
-            where fiscal_month_id = ${params.fiscalMonth} and up.sub_measure_key = ${params.submeasureKey};
-            `);
+  /*
+  // this was taking too long to replace the dollar/mapping/dept upload reports with pg only solutions
+  // i.e. getting submeasure.name from pg instead of mongo
+    getDollarUploadReport(params) {
+      return pgc.pgdb.query(`
+              select fiscal_month_id, sm.sub_measure_name, input_product_value, input_sales_value,
+                input_entity_value, input_internal_be_value, input_scms_value, amount_value
+              from fpadfa.dfa_prof_input_amnt_upld up
+              left outer join fpadfa.dfa_sub_measure sm on up.sub_measure_key = sm.sub_measure_key
+              where fiscal_month_id = ${params.fiscalMonth} and up.sub_measure_key = ${params.submeasureKey};
+              `);
 
-  }
-*/
+    }
+  */
 
   getDollarUploadFiscalMonthsFromSubmeasureKeys(req) {
     return this.getListFromColumn('fpadfa.dfa_prof_input_amnt_upld', 'fiscal_month_id',
@@ -197,31 +197,31 @@ export default class PgLookupRepo {
           `)
       .then(results => results.rows);
   }
-/*
-  // no longer used, getting from mongo now
-  getSubmeasureGroupingReport() {
-    return pgc.pgdb.query(`
-            select 
-            sbm.sub_measure_name,
-            group1.group_sub_measure_name,
-            sbm.create_owner,
-            sbm.create_datetimestamp,
-            sbm.update_owner,
-            sbm.update_datetimestamp
-            from 
-              fpadfa.dfa_sub_measure sbm,
-              (select distinct a.grouped_by_smeasure_key as groupkey,
-                  b.sub_measure_name as group_sub_measure_name
-                  from fpadfa.dfa_sub_measure a, fpadfa.dfa_sub_measure b
-                  where 1=1
-                  and a.grouped_by_smeasure_key is not null
-                  and a.grouped_by_smeasure_key = b.sub_measure_key) group1
-            where 1=1
-            and sbm.grouped_by_smeasure_key is not null
-            and sbm.grouped_by_smeasure_key=group1.groupkey
-          `);
-  }
-*/
+  /*
+    // no longer used, getting from mongo now
+    getSubmeasureGroupingReport() {
+      return pgc.pgdb.query(`
+              select
+              sbm.sub_measure_name,
+              group1.group_sub_measure_name,
+              sbm.create_owner,
+              sbm.create_datetimestamp,
+              sbm.update_owner,
+              sbm.update_datetimestamp
+              from
+                fpadfa.dfa_sub_measure sbm,
+                (select distinct a.grouped_by_smeasure_key as groupkey,
+                    b.sub_measure_name as group_sub_measure_name
+                    from fpadfa.dfa_sub_measure a, fpadfa.dfa_sub_measure b
+                    where 1=1
+                    and a.grouped_by_smeasure_key is not null
+                    and a.grouped_by_smeasure_key = b.sub_measure_key) group1
+              where 1=1
+              and sbm.grouped_by_smeasure_key is not null
+              and sbm.grouped_by_smeasure_key=group1.groupkey
+            `);
+    }
+  */
 
   get2TSubmeasureListReport(fiscalMonth) {
     return pgc.pgdb.query(`
@@ -256,7 +256,7 @@ export default class PgLookupRepo {
             from fpadfa.dfa_prof_disti_to_direct_map_upld            
             where fiscal_month_id = ${fiscalMonth}
           `)
-          .then(results => results.rows);
+      .then(results => results.rows);
   }
 
   getAlternateSL2Report(fiscalMonth) {
@@ -273,7 +273,7 @@ export default class PgLookupRepo {
             from fpadfa.dfa_prof_scms_triang_altsl2_map_upld
             where fiscal_month_id = ${fiscalMonth}
           `)
-          .then(results => results.rows);
+      .then(results => results.rows);
   }
 
   getCorpAdjustmentReport(fiscalMonth) {
@@ -290,7 +290,7 @@ export default class PgLookupRepo {
             from fpadfa.dfa_prof_scms_triang_corpadj_map_upld
             where fiscal_month_id = ${fiscalMonth}
           `)
-          .then(results => results.rows);
+      .then(results => results.rows);
   }
 
   getSalesSplitPercentageReport(fiscalMonth) {
@@ -367,7 +367,7 @@ export default class PgLookupRepo {
             GROUP by 1,2,3
             ORDER by 1,2,3
           `)
-          .then(results => results.rows);
+      .then(results => results.rows);
   }
 
   getDriverSL3Report(dfa) {
@@ -404,7 +404,7 @@ export default class PgLookupRepo {
             sh.l3_sales_territory_descr
           `;
     return pgc.pgdb.query(sql)
-          .then(results => results.rows);
+      .then(results => results.rows);
   }
 
   getShipmentDriverPFReport(dfa) {
@@ -437,7 +437,7 @@ export default class PgLookupRepo {
             order by product_hier.technology_group_id,product_hier.business_unit_id, product_hier.product_family_id
           `;
     return pgc.pgdb.query(sql)
-          .then(results => results.rows);
+      .then(results => results.rows);
   }
 
   getRoll3DriverWithBEReport(dfa) {
@@ -476,7 +476,7 @@ export default class PgLookupRepo {
             order by DRIVER_TYPE, product_hier.technology_group_id,product_hier.business_unit_id, product_hier.product_family_id
           `;
     return pgc.pgdb.query(sql)
-          .then(results => results.rows);
+      .then(results => results.rows);
   }
 
   getSubmeasureFlashCategories(req) {
@@ -962,7 +962,46 @@ export default class PgLookupRepo {
     return pgc.pgdb.query(sql)
       .then(results => results.rows);
   }
-
+  // System Input data report query for report data
+  getInputSystemDataReport(fiscalMonth, submeasureKeys) {
+    const sql = `
+    select 
+    asd.measure_name ,
+    asm.sub_measure_name, 
+    asd.input_product_value , asd.input_sales_value , asd.input_entity_value,
+    --asd.INPUT_BILLTO_CUST_VALUE , asd.INPUT_SHIPTO_CUST_VALUE , asd.INPUT_SOLDTO_CUST_VALUE, --BillTo, ShipTo and SoldTo fields are not available in DFA input table
+    asd.input_scms_value,
+    sum(asd.amount) as amount,
+    asd.update_owner, asd.update_datetimestamp
+    from fpadfa.dfa_prof_input_data asd,
+         fpadfa.dfa_sub_measure asm,
+         fpadfa.dfa_measure cm
+    where
+    asm.sub_measure_key in ( ${submeasureKeys} )
+    and asd.fiscal_month_id =  ${fiscalMonth}
+    and asd.sub_measure_id = asm.sub_measure_id
+    and asm.measure_id = cm.measure_id
+    group by asd.measure_name, asm.sub_measure_name,
+             asd.input_product_value , asd.input_sales_value , asd.input_entity_value,asd.input_scms_value,
+             asd.update_owner, asd.update_datetimestamp
+    order by asd.measure_name, asm.sub_measure_name,
+             asd.input_product_value , asd.input_sales_value , asd.input_entity_value,asd.input_scms_value
+    `;
+    return pgc.pgdb.query(sql)
+      .then(results => results.rows);
+  }
+  // System Input data report query for sub measure drop down
+  getSubMeaureForSystemInputData(isNumber ?) {
+    const sql = `select distinct sub_measure_id as col from fpadfa.dfa_prof_input_data where sub_measure_id is not null and source_system_type_code!='EXCEL' order by sub_measure_id`;
+    return pgc.pgdb.query(sql)
+      .then(results => results.rows.map(obj => obj.col))
+      .then(vals =>  isNumber ? vals.map(val => Number(val)) : vals);
+  }
+  // Getting fiscal months parameter dropdown for System Input Data report
+  getInputDataFiscalMonthsFromSubmeasureKeys(req) {
+    return this.getListFromColumn('fpadfa.dfa_prof_input_data', 'fiscal_month_id',
+      `sub_measure_id in ( ${req.body.submeasureKeys} )`);
+  }
   getETLAndAllocationFlags() {
     const sql = `
       select dl_processed_flag, alloc_processed_flag 
