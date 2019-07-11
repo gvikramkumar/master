@@ -32,7 +32,7 @@ const SYNCING = 'databaseSync';
 export const dfaJobs: DfaJob[] = [
   {name: 'databaseSync', displayName: 'Database Sync', singleServer: true, log: true},
   {name: 'approvalEmailReminder', displayName: 'Approval Email Reminder', singleServer: true, log: true},
-  {name: 'clearServerLookupFlags', displayName: 'Clear Server Lookup Flags', runOnStartup: false, log: true} // period: 5 * 1000,
+  {name: 'clearServerLookupFlags', displayName: 'Clear Server Lookup Flags', period: 60 * 1000, runOnStartup: true, log: false}
 ];
 
 @injectable()
