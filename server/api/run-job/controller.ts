@@ -93,6 +93,8 @@ export default class RunJobController {
     return this.isJobRunning(job)
       .then(running => {
         if (running) {
+          log.endDate = new Date();
+          log.duration = log.endDate.getTime() - log.startDate.getTime();
           log.status = 'already running';
           return this.log(true, log, req) // we always log 'already running'
             .then(() => {
@@ -156,7 +158,6 @@ export default class RunJobController {
   log(canLog, log: DfaJobLog, req?) {
     if (canLog) {
       log.userId = _.get(req, 'user.id') || 'system';
-      log.timestamp = new Date();
       return this.jobLogRepo.addOne(log, log.userId, false);
     } else {
       return Promise.resolve();
