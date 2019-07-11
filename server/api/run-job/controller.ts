@@ -177,7 +177,8 @@ export default class RunJobController {
           return running;
         });
     } else {
-      promise = Promise.resolve({running: _.get(global, `${DFA_RUNNING_JOBS}.${job.name}`)});
+      const running = _.get(global, `${DFA_RUNNING_JOBS}.${job.name}`);
+      promise = Promise.resolve(running);
     }
     return promise.then(running => {
       if (running) {
@@ -191,7 +192,8 @@ export default class RunJobController {
     if (job.singleServer) {
       promise = this.lookupRepo.setJobRunning(job.name);
     } else {
-      promise = Promise.resolve(_.set(global, `${DFA_RUNNING_JOBS}.${job.name}`, true));
+      _.set(global, `${DFA_RUNNING_JOBS}.${job.name}`, true);
+      promise = Promise.resolve();
     }
     return promise;
   }
@@ -201,7 +203,8 @@ export default class RunJobController {
     if (job.singleServer) {
       promise = this.lookupRepo.clearJobRunning(job.name);
     } else {
-      promise = Promise.resolve(_.set(global, `${DFA_RUNNING_JOBS}.${job.name}`, false));
+      _.set(global, `${DFA_RUNNING_JOBS}.${job.name}`, false);
+      promise = Promise.resolve();
     }
     return promise;
   }
@@ -234,7 +237,7 @@ export default class RunJobController {
                 doc.markModified('value');
               }
             });
-            const promise: any = doc.isModified() ? doc.save() : Promise.resolve();
+            const promise: any = doc.isModified() ? doc.save() : Promise.resolve(doc);
             return promise;
           }
         });
@@ -261,8 +264,10 @@ export default class RunJobController {
                       }
                     });
                   });
-                  const promise: any = doc.isModified() ? doc.save() : Promise.resolve();
+                  const promise: any = doc.isModified() ? doc.save() : Promise.resolve(doc);
                   return promise;
+                } else {
+                  return doc;
                 }
               });
           }
