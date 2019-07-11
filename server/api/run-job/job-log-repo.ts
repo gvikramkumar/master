@@ -12,8 +12,7 @@ const schema = new Schema(
     duration: Number,
     status: String,
     data: Object,
-    error: Object,
-    timestamp: {type: Date, required: true},
+    error: Object
   },
   {collection: 'dfa_job_log'}
 );
