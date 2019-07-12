@@ -14,7 +14,7 @@ import {finRequest} from '../../lib/common/fin-request';
 import {svrUtil} from '../../lib/common/svr-util';
 
 
-type DfaJobFunction = (startup?: boolean, data?, req?) => Promise<any>;
+type DfaJobFunction = (startup?: boolean, body?, query?, req?) => Promise<any>;
 
 export interface DfaJob {
   name: string;
@@ -61,16 +61,16 @@ export default class RunJobController {
     multipleServerJobs.filter(x => x.runOnStartup)
       .forEach(job => {
         promises.push(this.runJob(job.name, true));
-    });
+      });
     return Q.allSettled(promises)
       .then(results => handleQAllSettled(null, 'serverStartup'));
   }
 
   runJobAndRespond(req, res, next) {
     const jobName = req.params['jobName'];
-      shUtil.promiseChain(this.runJob(jobName, false, req.body || req.query, req))
-      // why 202 here? We're calling this via sso. We need to know if this job succeeds (202) or fails (not 202). The issue is: if sso fails,
-      // it redirects to login page, which returns 200, so "we" return 202 so we know it actually hit our endpoint, not login page
+    shUtil.promiseChain(this.runJob(jobName, false, req.body, req.query, req))
+    // why 202 here? We're calling this via sso. We need to know if this job succeeds (202) or fails (not 202). The issue is: if sso fails,
+    // it redirects to login page, which returns 200, so "we" return 202 so we know it actually hit our endpoint, not login page
       .then(log => res.status(202).json(log))
       .catch(err => {
         next(err);
@@ -209,10 +209,10 @@ export default class RunJobController {
     return promise;
   }
 
-  databaseSync(startup, syncMap?, req?) {
+  databaseSync(startup, body?, query?, req?) {
     // if (!req)  put this together. const req = _.set({}, 'dfa.fiscalMonths', ??);
     const userId = req.userId || 'system';
-    return this.databaseController.mongoToPgSyncPromise(req.dfa, syncMap, userId);
+    return this.databaseController.mongoToPgSyncPromise(req.dfa, {syncMap: body}, userId);
   }
 
   approvalEmailReminder() {
