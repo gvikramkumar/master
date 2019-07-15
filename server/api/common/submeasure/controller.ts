@@ -236,7 +236,7 @@ export default class SubmeasureController extends ApprovalController {
     if (deptUpload) {
       syncMap.dfa_prof_dept_acct_map_upld = true;
     }
-    return shUtil.promiseChain(databaseCtrl.mongoToPgSyncPromise(req.dfa, syncMap, req.user.id))
+    return shUtil.promiseChain(databaseCtrl.mongoToPgSyncPromise(req.dfa, {syncMap}, req.user.id))
       .catch(err => {
         throw new ApiError('Approval succeeded, but there was a sync error for the manual mix or department upload data.', err);
       });

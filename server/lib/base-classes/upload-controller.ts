@@ -100,11 +100,17 @@ export default class UploadController {
       .then(() => this.validateOther())
       .then(() => this.lookForTotalErrors())
       .then(() => this.importRows(this.userId))
+      .then(() => this.sendSuccessEmail())
       .then(() => {
-        this.sendSuccessEmail();
-        if (!res.headersSent) {
-          res.json({status: 'success', uploadName: this.uploadName, rowCount: this.rows1.length});
-        }
+        return this.autoSync(req)
+          .then(() => {
+            if (!res.headersSent) {
+              res.json({status: 'success', uploadName: this.uploadName, rowCount: this.rows1.length});
+            }
+          })
+          .catch(err => {
+            throw new ApiError(`Upload succeeded, but there was a sync error. Your data won't be visible in reports until the next allocation run.`, err);
+          });
       })
       .catch(err => {
         if (err && err.name === this.UploadValidationError) {
@@ -466,6 +472,9 @@ export default class UploadController {
     return syncMap;
   }
 
+  autoSync(req) {
+    return Promise.resolve();
+  }
 
   verifyProperties(data, arr) {
     const missingProps = [];

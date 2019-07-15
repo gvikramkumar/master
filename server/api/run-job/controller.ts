@@ -12,6 +12,7 @@ import LookupRepo from '../lookup/repo';
 import {shUtil} from '../../../shared/misc/shared-util';
 import {finRequest} from '../../lib/common/fin-request';
 import {svrUtil} from '../../lib/common/svr-util';
+import {SyncMap} from '../../../shared/models/sync-map';
 
 
 type DfaJobFunction = (startup?: boolean, body?, query?, req?) => Promise<any>;
@@ -68,7 +69,7 @@ export default class RunJobController {
 
   runJobAndRespond(req, res, next) {
     const jobName = req.params['jobName'];
-    shUtil.promiseChain(this.runJob(jobName, false, req.body, req.query, req))
+    shUtil.promiseChain(this.runJob(jobName, false, {body: req.body || {}, query: req.query || {}}, req))
     // why 202 here? We're calling this via sso. We need to know if this job succeeds (202) or fails (not 202). The issue is: if sso fails,
     // it redirects to login page, which returns 200, so "we" return 202 so we know it actually hit our endpoint, not login page
       .then(log => res.status(202).json(log))
@@ -77,7 +78,7 @@ export default class RunJobController {
       });
   }
 
-  runJob(jobName, startup = false, data?, req?) {
+  runJob(jobName, startup = false, bodyAndQuery?, req?) {
     const job = _.find(dfaJobs, {name: jobName});
     if (!job) {
       throw new Error(`Job not found: ${jobName}`);
@@ -86,7 +87,7 @@ export default class RunJobController {
       host: _.get(global, 'dfa.serverHost'),
       jobName,
       startDate: new Date(),
-      data,
+      data: bodyAndQuery,
       status: 'starting'
     };
 
@@ -108,7 +109,7 @@ export default class RunJobController {
           this.setJobRunning(job)
         ])
           .then(() => {
-            return this[job.name](startup, data, req);
+            return this[job.name](startup, bodyAndQuery, req);
           })
           // job success
           .then(jobData => {
@@ -209,10 +210,20 @@ export default class RunJobController {
     return promise;
   }
 
-  databaseSync(startup, body?, query?, req?) {
+  databaseSync(startup, data?, req?) {
     // if (!req)  put this together. const req = _.set({}, 'dfa.fiscalMonths', ??);
-    const userId = req.userId || 'system';
-    return this.databaseController.mongoToPgSyncPromise(req.dfa, {syncMap: body}, userId);
+    const userId = _.get(req, 'user.id') || 'system';
+    let syncMap;
+    const bodySyncMap = _.get(data, 'body.syncMap');
+    const querySyncTables = _.get(data, 'query.syncTables');
+    if (bodySyncMap) {
+      syncMap = bodySyncMap; // database sync page
+    } else if (querySyncTables) {
+      syncMap = new SyncMap().setSyncTableList(querySyncTables); // tidal: do only dollar upload for evening etl
+    } else {
+      syncMap = new SyncMap().setSyncAll(); // tidal: all but dollar upload, every 30 minutest
+    }
+    return this.databaseController.mongoToPgSyncPromise(req.dfa, {syncMap}, userId);
   }
 
   approvalEmailReminder() {
