@@ -65,9 +65,9 @@ export default class DatabaseController {
     const promises = [];
     const syncMap = data.syncMap;
 
-    if (syncMap) {
-      throw new ApiError('mongoToPgSyncPromise: no syncMap');
-    }
+    // if (syncMap) {
+    //   throw new ApiError('mongoToPgSyncPromise: no syncMap');
+    // }
 
     // this is to make sure we don't accidentally sync to dev/stage pg with local mongo database, use ldev env to sync to local postgres
     if (svrUtil.isLocalEnv() && config.postgres.host !== 'localhost') {
@@ -107,7 +107,7 @@ export default class DatabaseController {
         }
         if (syncMap.dfa_prof_input_amnt_upld_autosync) {
           promises.push(this.dollarUploadCtrl.mongoToPgSync('dfa_prof_input_amnt_upld', userId, log, elog,
-            {fiscalMonth: dfa.fiscalMonths.prof, submeasureName: {$in: data.submeasureNames}}, undefined));
+            {fiscalMonth: dfa.fiscalMonths.prof, submeasureName: {$in: data.submeasureNames}}, {fiscalMonth: dfa.fiscalMonths.prof}));
         }
         if (syncMap.dfa_prof_manual_map_upld) {
           promises.push(this.mappingUploadCtrl.mongoToPgSync('dfa_prof_manual_map_upld', userId, log, elog,
