@@ -11,7 +11,7 @@ import { BkgmRoutingModule } from './bkgm-routing.module';
     DfaCommonModule
   ]
 })
-export class ProfModule {
+export class BkgmModule {
   constructor() {
   }
 }

@@ -36,6 +36,14 @@ const routes: Routes = [
     },
     canActivate: [InitializationGuard, AuthorizationGuard]
   },
+  {
+    path: 'bkgm',
+    loadChildren: '../modules/bkgm/bkgm.module#BkgmModule',
+    data: {
+      authorization: 'bookings misc allocations:business admin, bookings misc allocations:super user, bookings misc allocations:business user, bookings misc allocations:end user'
+    },
+    canActivate: [InitializationGuard, AuthorizationGuard]
+  },
   {path: '**', component: PageNotFoundComponent}
 ];
 
