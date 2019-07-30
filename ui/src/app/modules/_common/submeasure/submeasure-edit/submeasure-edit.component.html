@@ -136,23 +136,23 @@
                 </div>
                 <div class="row ifl-section">
                   <div class="col-6">
-                    <div class="check-wrap">
+                    <div class="check-wrap" *ngIf="moduleId!=2">
                       <fin-checkbox [(model)]="ifl_switch_ibe" label="Internal Business Entity"
                                     (modelChange)="iflChange('ibe')" [disabled]="BeIflDisabled || isPassThrough()"></fin-checkbox>
                     </div>
                     <div class="check-wrap">
                       <fin-checkbox [(model)]="ifl_switch_p" label="Product" (modelChange)="iflChange('p')" [disabled]="ProductIflDisabled"></fin-checkbox>
                     </div>
-                    <div class="check-wrap">
+                    <div class="check-wrap" *ngIf="moduleId!=2">
                       <fin-checkbox [(model)]="ifl_switch_le" label="Legal Entity" (modelChange)="iflChange('le')" [disabled]="LegalIflDisabled || isPassThrough()"></fin-checkbox>
                     </div>
                     <div class="check-wrap">
                       <fin-checkbox [(model)]="ifl_switch_s" label="Sales" (modelChange)="iflChange('s')" [disabled]="SalesIflDisabled"></fin-checkbox>
                     </div>
-                    <div class="check-wrap">
+                    <div class="check-wrap" *ngIf="moduleId!=2">
                       <fin-checkbox [(model)]="ifl_switch_scms" label="SCMS" (modelChange)="iflChange('scms')" [disabled]="ScmsIflDisabled || isPassThrough()"></fin-checkbox>
                     </div>
-                    <div class="check-wrap">
+                    <div class="check-wrap" *ngIf="moduleId!=2">
                       <fin-checkbox [(model)]="ifl_switch_glseg" label="GL Segments" (modelChange)="iflChange('glseg')" [disabled]="!hasSourceRapidRevenue() || isPassThrough()"
                       matTooltip="Gl Segments only available for source Rapid Revenue" [matTooltipDisabled]="hasSourceRapidRevenue()" matTooltipShowDelay="1000"></fin-checkbox>
                     </div>
@@ -166,19 +166,19 @@
                       <cui-select name="productLevel" [(ngModel)]="sm.inputFilterLevel.productLevel" [required]="ifl_switch_p" class="option"
                                   [items]="p_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!ifl_switch_p"></cui-select>
                     </div>
-                    <div class="sel-wrap">
+                    <div class="sel-wrap" *ngIf="moduleId!=2">
                       <cui-select name="entityLevel" [(ngModel)]="sm.inputFilterLevel.entityLevel" [required]="ifl_switch_le" class="option"
                                   [items]="le_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!ifl_switch_le"></cui-select>
                     </div>
-                    <div class="sel-wrap">
+                    <div class="sel-wrap" *ngIf="moduleId!=2">
                       <cui-select name="salesLevel" [(ngModel)]="sm.inputFilterLevel.salesLevel" [required]="ifl_switch_s" class="option"
                                   [items]="s_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!ifl_switch_s"></cui-select>
                     </div>
-                    <div class="sel-wrap">
+                    <div class="sel-wrap" *ngIf="moduleId!=2">
                       <cui-select name="scmsLevel" [(ngModel)]="sm.inputFilterLevel.scmsLevel" [required]="ifl_switch_scms" class="option"
                                   [items]="scms_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!ifl_switch_scms"></cui-select>
                     </div>
-                    <div class="sel-wrap">
+                    <div class="sel-wrap" *ngIf="moduleId!=2">
                       <cui-multiselect name="glSegLevel" [(ngModel)]="sm.inputFilterLevel.glSegLevel" [required]="ifl_switch_glseg" class="option"
                                        [items]="glseg_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!ifl_switch_glseg"></cui-multiselect>
                     </div>
@@ -209,20 +209,20 @@
                   </div>
                   <div class="row ifl-section"  [class.disabled]="!isManualMapping()">
                     <div class="col-6">
-                      <div class="check-wrap">
+                      <div class="check-wrap" *ngIf="moduleId!=2">
                         <fin-checkbox [(model)]="mm_switch_ibe" label="Internal Business Entity"
                                       (modelChange)="mmChange('ibe')" [disabled]="BeMmDisabled"></fin-checkbox>
                       </div>
                       <div class="check-wrap">
                         <fin-checkbox [(model)]="mm_switch_p" label="Product" (modelChange)="mmChange('p')" [disabled]="ProductMmDisabled"></fin-checkbox>
                       </div>
-                      <div class="check-wrap">
+                      <div class="check-wrap" *ngIf="moduleId!=2">
                         <fin-checkbox [(model)]="mm_switch_le" label="Legal Entity" (modelChange)="mmChange('le')" [disabled]="LegalMmDisabled"></fin-checkbox>
                       </div>
                       <div class="check-wrap">
                         <fin-checkbox [(model)]="mm_switch_s" label="Sales" (modelChange)="mmChange('s')" [disabled]="SalesMmDisabled"></fin-checkbox>
                       </div>
-                      <div class="check-wrap">
+                      <div class="check-wrap" *ngIf="moduleId!=2">
                         <fin-checkbox [(model)]="mm_switch_scms" label="SCMS" (modelChange)="mmChange('scms')" [disabled]="ScmsMmDisabled"></fin-checkbox>
                       </div>
                     </div>
@@ -235,15 +235,15 @@
                         <cui-select name="productLevelMM" [(ngModel)]="sm.manualMapping.productLevel" [required]="mm_switch_p" class="option"
                                     [items]="p_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!mm_switch_p"></cui-select>
                       </div>
-                      <div class="sel-wrap">
+                      <div class="sel-wrap" *ngIf="moduleId!=2">
                         <cui-select name="entityLevelMM" [(ngModel)]="sm.manualMapping.entityLevel" [required]="mm_switch_le" class="option"
                                     [items]="le_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!mm_switch_le"></cui-select>
                       </div>
-                      <div class="sel-wrap">
+                      <div class="sel-wrap" *ngIf="moduleId!=2">
                         <cui-select name="salesLevelMM" [(ngModel)]="sm.manualMapping.salesLevel" [required]="mm_switch_s" class="option"
                                     [items]="s_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!mm_switch_s"></cui-select>
                       </div>
-                      <div class="sel-wrap">
+                      <div class="sel-wrap" *ngIf="moduleId!=2">
                         <cui-select name="scmsLevelMM" [(ngModel)]="sm.manualMapping.scmsLevel" [required]="mm_switch_scms" class="option"
                                     [items]="scms_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!mm_switch_scms"></cui-select>
                       </div>
