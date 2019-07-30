@@ -200,7 +200,7 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   ];
   pnlNodesAll = [];
   pnlNodes = [];
-
+  moduleId:number;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -222,7 +222,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.addMode = this.route.snapshot.params.mode === 'add';
     this.viewMode = this.route.snapshot.params.mode === 'view';
     this.editMode = this.route.snapshot.params.mode === 'edit';
-    this.copyMode = this.route.snapshot.params.mode === 'copy';
+    this.copyMode = this.route.snapshot.params.mode === 'copy';    
+    this.moduleId = this.store.module.moduleId;
   }
 
   ngOnInit() {

@@ -36,7 +36,7 @@
 
       <div class="col-lg-6">
         <div [class.disabled]="disableCategories || isUnallocatedGroup()">
-          <cui-select name="category" [(ngModel)]="sm.categoryType"
+          <cui-select  *ngIf="moduleId!=2" name="category" [(ngModel)]="sm.categoryType"
                       [items]="categoryTypes"
                       [required]="isCogsMeasure() && !isUnallocatedGroup()"
                       [label]="isCogsMeasure() && !isUnallocatedGroup()? 'Sub-Measure Category Type*':'Sub-Measure Category Type'"
@@ -60,7 +60,7 @@
                       empty="true"
                       [required]="!isUnallocatedGroup()" optionsKey="mrap_category_id"
                       optionsValue="adj_type_id"></cui-select>
-          <cui-select *ngIf="sm.measureId === 1" [disabled]="sm.sourceId !== 1" name="adjustmentType"
+          <cui-select   *ngIf="sm.measureId === 1 && moduleId!=2" [disabled]="sm.sourceId !== 1" name="adjustmentType"
                       [(ngModel)]="adjustmentType" [items]="adjustmentTypes"
                       [label]="!isUnallocatedGroup()?'Adjustment Type*':'Adjustment Type'"
                       empty="true"
@@ -73,7 +73,7 @@
           <div style="margin-bottom:-10px;">
             <div class="row" style="margin-top:1px; margin-bottom:15px;">
               <div class="col-6">
-                <fin-checkbox label="Is Grouping Sub-Measure" [(model)]="sm.indicators.groupFlag" trueVal="Y" falseVal="N"
+                <fin-checkbox *ngIf="moduleId!=2" label="Is Grouping Sub-Measure" [(model)]="sm.indicators.groupFlag" trueVal="Y" falseVal="N"
                               [disabled]="!!sm.groupingSubmeasureId" (modelChange)="handleGroupingChange()"></fin-checkbox>
               </div>
               <div class="col-6">
@@ -83,7 +83,7 @@
                               trueVal="Y" falseVal="N" (modelChange)="handleAllocationRequiredChange()"></fin-checkbox>
               </div>
             </div>
-            <cui-select name="groupingSubmeasure" [(ngModel)]="sm.groupingSubmeasureId" [items]="groupingSubmeasures"
+            <cui-select *ngIf="moduleId!=2" name="groupingSubmeasure" [(ngModel)]="sm.groupingSubmeasureId" [items]="groupingSubmeasures"
                         label="Grouping Sub-Measure" empty="true" optionsKey="name"
                         optionsValue="submeasureKey" [disabled]="isGroupingParent()"></cui-select>
           </div>
@@ -193,7 +193,7 @@
           <div class="form-group-max-width">
             <div class="border-and-padding" style="padding-bottom:58px;">
               <fieldset class="input-filter-level mm-fieldset">
-                <legend>
+                <legend *ngIf="moduleId!=2">
                   <fin-checkbox class="legend-checkbox" [(model)]="sm.indicators.manualMapping" label="Manual Mapping"
                                 trueVal="Y" falseVal="N" (modelChange)="mmSelect()"></fin-checkbox>
                 </legend>
@@ -267,10 +267,10 @@
           <cui-select name="processingTime" [(ngModel)]="sm.processingTime" [items]="timings" label="Processing Timing" empty="true"
                       optionsKey="name" optionsValue="name"></cui-select>
 
-          <cui-select name="pnlnodeGrouping" [(ngModel)]="sm.pnlnodeGrouping" [items]="pnlNodes" label="P&L Node Grouping" empty="true"
+          <cui-select *ngIf="moduleId!=2" name="pnlnodeGrouping" [(ngModel)]="sm.pnlnodeGrouping" [items]="pnlNodes" label="P&L Node Grouping" empty="true"
                       optionsKey="pnlnode_grouping" optionsValue="pnlnode_grouping"></cui-select>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-6" *ngIf="moduleId!=2">
           <fin-input name="reportingLevel{{level}}" type="text" *ngFor="let level of [1,2,3]; let idx=index;"
                      [(ngModel)]="sm.reportingLevels[idx]"
                      [disabled]="!currentMeasure.reportingLevelEnableds[idx]" label="Reporting Level {{level}}"></fin-input>
@@ -306,18 +306,18 @@
         <div class="col-12">
           <div class="inline-check-row">
             <div [class.disabled]="isUnallocatedGroup()" style="display:inline-block">
-              <div class="form-group-check form-group-inline-20">
+              <div *ngIf="moduleId!=2" class="form-group-check form-group-inline-20">
                 <fin-checkbox label="Retained Earnings" [(model)]="sm.indicators.retainedEarnings" trueVal="Y"
                               falseVal="N"></fin-checkbox>
               </div>
-              <div class="form-group-check form-group-inline-20">
+              <div *ngIf="moduleId!=2" class="form-group-check form-group-inline-20">
                 <fin-checkbox label="Transition" [(model)]="sm.indicators.transition" trueVal="Y"
                               falseVal="N"></fin-checkbox>
               </div>
-              <div class="form-group-check form-group-inline-20">
+              <div *ngIf="moduleId!=2" class="form-group-check form-group-inline-20">
                 <fin-checkbox label="2 Tier" [(model)]="sm.indicators.twoTier" trueVal="Y" falseVal="N"></fin-checkbox>
               </div>
-              <div class="form-group-check form-group-inline-20">
+              <div *ngIf="moduleId!=2" class="form-group-check form-group-inline-20">
                 <fin-checkbox label="Dual Gaap" [(model)]="sm.indicators.dualGaap" trueVal="Y"
                               falseVal="N"></fin-checkbox>
               </div>
@@ -327,11 +327,11 @@
               </div>
             </div>
             <div style="display:inline-block">
-              <div class="form-group-check form-group-inline-20">
+              <div class="form-group-check form-group-inline-20" *ngIf="moduleId!=2">
                 <fin-checkbox label="Corporate Revenue" [(model)]="sm.indicators.corpRevenue" trueVal="Y"
                               falseVal="N"></fin-checkbox>
               </div>
-              <div class="form-group-check form-group-inline-20">
+              <div class="form-group-check form-group-inline-20" *ngIf="moduleId!=2">
                 <fin-checkbox label="Service" [(model)]="sm.indicators.service" trueVal="Y" falseVal="N"
                               (change)="filterGroupingSubmeasuresIfService()" [inline]="true"></fin-checkbox>
               </div>
