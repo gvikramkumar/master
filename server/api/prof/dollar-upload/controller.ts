@@ -34,6 +34,23 @@ export default class DollarUploadController extends ControllerBase {
         return dups;
       });
   }
+
+  mongoToPgSyncRecords(pgRemoveFilter, objs, userId, dfa) {
+    if (pgRemoveFilter) { // syncMap.dfa_prof_input_amnt_upld
+      return super.mongoToPgSyncRecords(pgRemoveFilter, objs, userId);
+    } else { // syncMap.dfa_prof_input_amnt_upld_autosync
+      const keys = _.uniq(objs.map(sm => sm.submeasureKey));
+      let where;
+      // if we pass this where clause with "no keys", i.e. empty parenthesis, postgres throws an error,
+      // so pass an undefined where to syncRecordsReplaceAllWhere which will then ignore the delete statement
+      if (keys.length) {
+        where = `fiscal_month_id = ${dfa.fiscalMonths.prof} and sub_measure_key in (${keys})`;
+      }
+      return this.pgRepo.syncRecordsReplaceAllWhere(where, objs, userId, true)
+        .then(results => results.recordCount);
+    }
+  }
+
 }
 
 export function addFilterLevelColumnsForPgSync(tableName, sub, dum, dup, log, elog) {
