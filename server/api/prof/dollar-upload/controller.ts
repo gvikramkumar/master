@@ -36,7 +36,7 @@ export default class DollarUploadController extends ControllerBase {
   }
 
   mongoToPgSyncRecords(pgRemoveFilter, objs, userId, dfa) {
-    if (pgRemoveFilter) { // syncMap.dfa_prof_input_amnt_upld
+    if (Object.keys(pgRemoveFilter).length) { // syncMap.dfa_prof_input_amnt_upld
       return super.mongoToPgSyncRecords(pgRemoveFilter, objs, userId);
     } else { // syncMap.dfa_prof_input_amnt_upld_autosync
       const keys = _.uniq(objs.map(sm => sm.submeasureKey));
