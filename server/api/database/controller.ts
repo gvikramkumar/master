@@ -107,7 +107,7 @@ export default class DatabaseController {
         }
         if (syncMap.dfa_prof_input_amnt_upld_autosync) {
           promises.push(this.dollarUploadCtrl.mongoToPgSync('dfa_prof_input_amnt_upld', userId, log, elog,
-            {fiscalMonth: dfa.fiscalMonths.prof, submeasureName: {$in: data.submeasureNames}}, {fiscalMonth: dfa.fiscalMonths.prof}));
+            {fiscalMonth: dfa.fiscalMonths.prof, submeasureName: {$in: data.submeasureNames}}, undefined, dfa));
         }
         if (syncMap.dfa_prof_manual_map_upld) {
           promises.push(this.mappingUploadCtrl.mongoToPgSync('dfa_prof_manual_map_upld', userId, log, elog,
