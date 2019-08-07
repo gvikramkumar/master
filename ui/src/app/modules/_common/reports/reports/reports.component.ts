@@ -76,7 +76,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     },
     {
       type: 'valid-driver', hasNoChoices: true, text: 'Valid Driver', disabled: false,
-      filename: 'Valid_Driver_Report', invisible: this.moduleId == 2 ? true:false
+      filename: 'Valid_Driver_Report'
     },
     // REMEMBER, YOU HAVE TO CHANGE THE HTML PAGE TO INDEX 8 FROM 7 IN 2 PLACES OF ngFor
     // {
@@ -105,7 +105,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     },
     {
       type: 'input-data', hasMultiSmAndFiscalMonth: true, text: 'Input System Data', disabled: false,
-      filename: 'Input_System_Data_Report', invisible: this.moduleId == 2 ? true:false
+      filename: 'Input_System_Data_Report'
     },
     {
       type: 'mapping-upload', hasMultiSmAndFiscalMonth: true, text: 'Manual Mapping Split Percentage', disabled: false,
@@ -159,7 +159,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     private store: AppStore
   ) {
     super(store, route);
-    this.reports = this.reports.filter(report => report.invisible !== false);
+    this.reports = this.reports.filter(report => report.invisible !== true);
   }
 
 
