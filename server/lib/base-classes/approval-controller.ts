@@ -346,6 +346,7 @@ export default class ApprovalController extends ControllerBase {
 
   checkIfMoreThanReminderPeriod(now, lastReminderTime) {
     return now;
+    
     //return (now - lastReminderTime) > config.submitForApprovalReminderPeriod;
   }
 
