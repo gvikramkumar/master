@@ -100,16 +100,17 @@ export default class UploadController {
       .then(() => this.validateOther())
       .then(() => this.lookForTotalErrors())
       .then(() => this.importRows(this.userId))
-      .then(() => this.sendSuccessEmail())
+      //.then(() => this.sendSuccessEmail())
       .then(() => {
         return this.autoSync(req)
           .then(() => {
             if (!res.headersSent) {
+              this.sendSuccessEmail();
               res.json({status: 'success', uploadName: this.uploadName, rowCount: this.rows1.length});
             }
           })
           .catch(err => {
-            throw new ApiError(`Upload succeeded, but there was a sync error. Your data won't be visible in reports until the next allocation run.`, err);
+            throw new ApiError(`Upload succeeded, however data will be available in reports once allocation run or data loads complete.`, err);
           });
       })
       .catch(err => {
