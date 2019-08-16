@@ -345,9 +345,8 @@ export default class ApprovalController extends ControllerBase {
   }
 
   checkIfMoreThanReminderPeriod(now, lastReminderTime) {
-    return now;
-    
-    //return (now - lastReminderTime) > config.submitForApprovalReminderPeriod;
+    //return now;
+    return (now - lastReminderTime) > config.submitForApprovalReminderPeriod;
   }
 
   sendReminderEmail(adminEmails: string[], module, user, item, type: string) {
