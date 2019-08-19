@@ -110,7 +110,9 @@ export default class UploadController {
             }
           })
           .catch(err => {
-            throw new ApiError(`Upload succeeded, however data will be available in reports once allocation run or data loads complete.`, err);
+            this.sendSuccessSyncEmail();
+            res.json({status: 'successsync', uploadName: this.uploadName, rowCount: this.rows1.length});
+            //throw new ApiError(`Upload succeeded, however data will be available in reports once allocation run or data loads complete.`, err);
           });
       })
       .catch(err => {
@@ -266,6 +268,13 @@ export default class UploadController {
 
   sendSuccessEmail() {
     this.sendEmail(`${this.uploadName} - Success`, this.buildSuccessEmailBody());
+  }
+  sendSuccessSyncEmail(){
+    this.sendEmail(`${this.uploadName} - Success`, this.buildSuccessEmailBodySync());
+  }
+
+  buildSuccessEmailBodySync() {
+    return `<div>${this.rows1.length} rows have been processed, however data will be available in reports once allocation run or data loads complete.</div>`
   }
 
   buildSuccessEmailBody() {
