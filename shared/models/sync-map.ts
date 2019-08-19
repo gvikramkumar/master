@@ -33,8 +33,8 @@ export class SyncMap {
       this[key] = true;
     });
     // dollar upload will autoSync separately from the main sync. setSyncAll is for the main sync only
-    //this.dfa_prof_input_amnt_upld = false;
-    //this.dfa_prof_input_amnt_upld_autosync = false;
+    this.dfa_prof_input_amnt_upld = false;
+    this.dfa_prof_input_amnt_upld_autosync = false;
     
     return this;
   }
