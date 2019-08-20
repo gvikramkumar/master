@@ -65,7 +65,12 @@ export class DatabaseSyncComponent extends RoutingComponentBase {
 
   changeAll() {
     this.noChoices = false;
-    this.keys.forEach(key => this.syncMap[key] = this.allValue);
+    this.keys.forEach((key) => {
+      if(key !=='dfa_prof_input_amnt_upld_autosync'){
+        this.syncMap[key] = this.allValue
+      }
+        
+    });
   }
 
   change() {
