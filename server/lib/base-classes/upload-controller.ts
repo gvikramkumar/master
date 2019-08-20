@@ -100,11 +100,20 @@ export default class UploadController {
       .then(() => this.validateOther())
       .then(() => this.lookForTotalErrors())
       .then(() => this.importRows(this.userId))
+      //.then(() => this.sendSuccessEmail())
       .then(() => {
-        this.sendSuccessEmail();
-        if (!res.headersSent) {
-          res.json({status: 'success', uploadName: this.uploadName, rowCount: this.rows1.length});
-        }
+        return this.autoSync(req)
+          .then(() => {
+            if (!res.headersSent) {
+              this.sendSuccessEmail();
+              res.json({status: 'success', uploadName: this.uploadName, rowCount: this.rows1.length});
+            }
+          })
+          .catch(err => {
+            this.sendSuccessSyncEmail();
+            res.json({status: 'successsync', uploadName: this.uploadName, rowCount: this.rows1.length});
+            //throw new ApiError(`Upload succeeded, however data will be available in reports once allocation run or data loads complete.`, err);
+          });
       })
       .catch(err => {
         if (err && err.name === this.UploadValidationError) {
@@ -259,6 +268,13 @@ export default class UploadController {
 
   sendSuccessEmail() {
     this.sendEmail(`${this.uploadName} - Success`, this.buildSuccessEmailBody());
+  }
+  sendSuccessSyncEmail(){
+    this.sendEmail(`${this.uploadName} - Success`, this.buildSuccessEmailBodySync());
+  }
+
+  buildSuccessEmailBodySync() {
+    return `<div>${this.rows1.length} rows have been processed, however data will be available in reports once allocation run or data loads complete.</div>`
   }
 
   buildSuccessEmailBody() {
@@ -466,6 +482,9 @@ export default class UploadController {
     return syncMap;
   }
 
+  autoSync(req) {
+    return Promise.resolve();
+  }
 
   verifyProperties(data, arr) {
     const missingProps = [];

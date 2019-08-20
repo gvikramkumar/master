@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import AnyObj from './any-obj';
+import {shUtil} from '../misc/shared-util';
 
 export class SyncMap {
   // common
@@ -11,6 +12,7 @@ export class SyncMap {
   // module based
   dfa_prof_dept_acct_map_upld = false;
   dfa_prof_input_amnt_upld = false;
+  dfa_prof_input_amnt_upld_autosync = false;
   dfa_prof_manual_map_upld = false;
   dfa_prof_sales_split_pctmap_upld = false;
   dfa_prof_scms_triang_altsl2_map_upld = false;
@@ -29,6 +31,18 @@ export class SyncMap {
   setSyncAll(): SyncMap {
     Object.keys(this).forEach(key => {
       this[key] = true;
+    });
+    // dollar upload will autoSync separately from the main sync. setSyncAll is for the main sync only
+    this.dfa_prof_input_amnt_upld = false;
+    this.dfa_prof_input_amnt_upld_autosync = false;
+    
+    return this;
+  }
+
+  setSyncTableList(tables) {
+    shUtil.stringToArray(tables)
+      .forEach(table => {
+      this[table] = true;
     });
     return this;
   }

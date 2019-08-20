@@ -11,6 +11,8 @@ import {ApiError} from '../../../../lib/common/api-error';
 import OpenPeriodRepo from '../../../common/open-period/repo';
 import AnyObj from '../../../../../shared/models/any-obj';
 import PgLookupRepo from '../../../pg-lookup/repo';
+import DatabaseController from '../../../database/controller';
+import {SyncMap} from '../../../../../shared/models/sync-map';
 
 
 @injectable()
@@ -21,7 +23,8 @@ export default class DollarUploadUploadController extends InputFilterLevelUpload
     openPeriodRepo: OpenPeriodRepo,
     submeasureRepo: SubmeasureRepo,
     private sourceRepo: SourceRepo,
-    private pgLookupRepo: PgLookupRepo
+    private pgLookupRepo: PgLookupRepo,
+    private databaseController: DatabaseController
   ) {
     super(
       repo,
@@ -136,6 +139,16 @@ export default class DollarUploadUploadController extends InputFilterLevelUpload
       this.addErrorInvalid(this.PropNames.revenueClassification, this.temp.revenueClassification);
     }
     return Promise.resolve();
+  }
+
+  autoSync(req) {
+    return this.getImportArray()
+      .then(imports => {
+        const submeasureNames = _.uniq(imports.map(x => x.submeasureName));
+        const syncMap = new SyncMap().setSyncTableList('dfa_prof_input_amnt_upld_autosync');
+        const data = {syncMap, submeasureNames};
+        return this.databaseController.mongoToPgSyncPromise(req.dfa, data, req.user.id);
+      });
   }
 
 }

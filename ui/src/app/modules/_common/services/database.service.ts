@@ -15,12 +15,11 @@ export class DatabaseService {
   }
 
   mongoToPgSync(syncMap) {
-    return this.httpClient.post<SyncMap>(`${apiUrl}/api/run-job/databaseSync`, syncMap);
+    return this.httpClient.post<SyncMap>(`${apiUrl}/api/run-job/databaseSync`, {syncMap});
   }
 
   pgToMongoSync() {
     return this.httpClient.get<any>(`${endpointUrl}/pgToMongoSync`);
   }
-
 
 }

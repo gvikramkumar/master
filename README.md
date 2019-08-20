@@ -1,6 +1,6 @@
-#### fin-dfa
+##### fin-dfa
 ### Digital Finance Allocations
-  dank1
+  saggangu
 #### build and run                                     
 assume site root unless specified otherwise
 1. <code>git clone [-b branchName] https://gitscm.cisco.com/scm/it-cvc-ciscocommerce-findfaapp/fin-dfa.git</code>
