@@ -274,11 +274,14 @@ export default class UploadController {
   }
 
   buildSuccessEmailBodySync() {
-    return `<div>${this.rows1.length} rows have been processed, however data will be available in reports once allocation run or data loads complete.</div>`
+    return `<div>${this.rows1.length} rows have been processed, Data will be available in reports once allocation run or data loads complete.</div>`
   }
 
   buildSuccessEmailBody() {
-    return `<div>${this.rows1.length} rows successfully processed.</div>`
+    let body = `<div>${this.rows1.length} rows have been processed.</div>`
+    if(this.uploadName !== 'Dollar Upload')
+      body += ` Data will be available in reports after 30 mins.`;
+    return body;
   }
 
   buildErrorEmailBody(err) {
