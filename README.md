@@ -1,6 +1,6 @@
-##### fin-dfa
+### fin-dfa
 ### Digital Finance Allocations
-  saggangu
+  dank1
 #### build and run                                     
 assume site root unless specified otherwise
 1. <code>git clone [-b branchName] https://gitscm.cisco.com/scm/it-cvc-ciscocommerce-findfaapp/fin-dfa.git</code>
@@ -50,6 +50,5 @@ node runner:
 **javascript file:** node_modules/jasmine/bin/jasmine.js  
 **environment variabls:** NODE_ENV=unit (for e2e tests when we have a unit testing database)  
 ** use with <code>npm run watch</code>
-
 
 
