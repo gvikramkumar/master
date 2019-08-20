@@ -225,14 +225,14 @@ export default class RunJobController {
     }
     return this.databaseController.mongoToPgSyncPromise(req.dfa, {syncMap}, userId);
   }
-
-  approvalEmailReminder() {
-    Q.allSettled([
-      this.submeasureController.approvalEmailReminder('submeasure'),
-      this.ruleController.approvalEmailReminder('rule')
-    ])
-      .then(results => handleQAllSettled(null, 'qAllReject'));
-  }
+ /* Approval Remainder functionality was not tested later we will enable it*/
+  // approvalEmailReminder() {
+  //   Q.allSettled([
+  //     this.submeasureController.approvalEmailReminder('submeasure'),
+  //     this.ruleController.approvalEmailReminder('rule')
+  //   ])
+  //     .then(results => handleQAllSettled(null, 'qAllReject'));
+  // }
 
   // get runningJobs from lookup. If startup, remove this serverUrl from any that match.
   // If not startup, loop through all set values and ping servers, removing any values if server doesn't respond
