@@ -9,7 +9,8 @@ import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
 import PgLookupRepo from '../../../pg-lookup/repo';
 import DistiDirectUploadRepo from '../../disti-direct-upload/repo';
-
+import DatabaseController from '../../../database/controller';
+import { SyncMap } from '../../../../../shared/models/sync-map';
 @injectable()
 export default class DistiDirectUploadUploadController extends UploadController {
   imports: AnyObj[];
@@ -18,7 +19,8 @@ export default class DistiDirectUploadUploadController extends UploadController 
     repo: DistiDirectUploadRepo,
     private pgRepo: PgLookupRepo,
     openPeriodRepo: OpenPeriodRepo,
-    submeasureRepo: SubmeasureRepo
+    submeasureRepo: SubmeasureRepo,
+    private databaseController: DatabaseController
   ) {
     super(
       repo,
@@ -187,6 +189,13 @@ export default class DistiDirectUploadUploadController extends UploadController 
     }
     return Promise.resolve();
   }
-
+  autoSync(req) {
+    return this.getImportArray()
+      .then(imports => {
+        const syncMap = new SyncMap();
+        const data = {syncMap};
+        return this.databaseController.mongoToPgSyncPromise(req.dfa, data, req.user.id);
+      });
+  }
 }
 

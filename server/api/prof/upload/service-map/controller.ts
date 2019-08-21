@@ -9,7 +9,8 @@ import OpenPeriodRepo from '../../../common/open-period/repo';
 import {NamedApiError} from '../../../../lib/common/named-api-error';
 import ServiceMapUploadRepo from '../../service-map-upload/repo';
 import {svrUtil} from '../../../../lib/common/svr-util';
-
+import DatabaseController from '../../../database/controller';
+import { SyncMap } from '../../../../../shared/models/sync-map';
 @injectable()
 export default class ServiceMapUploadUploadController extends UploadController {
 imports: ServiceMapUploadImport[];
@@ -18,7 +19,8 @@ imports: ServiceMapUploadImport[];
     repo: ServiceMapUploadRepo,
     private pgRepo: PgLookupRepo,
     openPeriodRepo: OpenPeriodRepo,
-    submeasureRepo: SubmeasureRepo
+    submeasureRepo: SubmeasureRepo,
+    private databaseController: DatabaseController
   ) {
     super(
       repo,
@@ -130,5 +132,13 @@ imports: ServiceMapUploadImport[];
     return Promise.resolve();
   }
 
+  autoSync(req) {
+    return this.getImportArray()
+      .then(imports => {
+        const syncMap = new SyncMap();
+        const data = {syncMap};
+        return this.databaseController.mongoToPgSyncPromise(req.dfa, data, req.user.id);
+      });
+  }
 }
 

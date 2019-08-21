@@ -10,7 +10,8 @@ import PgLookupRepo from '../../../pg-lookup/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
 import AnyObj from '../../../../../shared/models/any-obj';
 import {mgc} from '../../../../lib/database/mongoose-conn';
-
+import DatabaseController from '../../../database/controller';
+import { SyncMap } from '../../../../../shared/models/sync-map';
 
 @injectable()
 export default class DeptUploadUploadController extends UploadController {
@@ -21,7 +22,8 @@ export default class DeptUploadUploadController extends UploadController {
     repo: DeptUploadRepo,
     openPeriodRepo: OpenPeriodRepo,
     submeasureRepo: SubmeasureRepo,
-    private pgRepo: PgLookupRepo
+    private pgRepo: PgLookupRepo,
+    private databaseController: DatabaseController
   ) {
     super(
       repo,
@@ -239,6 +241,13 @@ export default class DeptUploadUploadController extends UploadController {
     }
     return Promise.resolve();
   }
-
+  autoSync(req) {
+    return this.getImportArray()
+      .then(imports => {
+        const syncMap = new SyncMap();
+        const data = {syncMap};
+        return this.databaseController.mongoToPgSyncPromise(req.dfa, data, req.user.id);
+      });
+  }
 }
 
