@@ -9,7 +9,8 @@ import AnyObj from '../../../../../shared/models/any-obj';
 import {NamedApiError} from '../../../../lib/common/named-api-error';
 import _ from 'lodash';
 import {svrUtil} from '../../../../lib/common/svr-util';
-
+import DatabaseController from '../../../database/controller';
+import { SyncMap } from '../../../../../shared/models/sync-map';
 @injectable()
 export default class MappingUploadUploadController extends InputFilterLevelUploadController {
   imports: AnyObj[];
@@ -17,7 +18,8 @@ export default class MappingUploadUploadController extends InputFilterLevelUploa
   constructor(
     repo: MappingUploadRepo,
     openPeriodRepo: OpenPeriodRepo,
-    submeasureRepo: SubmeasureRepo
+    submeasureRepo: SubmeasureRepo,
+    private databaseController: DatabaseController
   ) {
     super(
       repo,
@@ -118,6 +120,13 @@ export default class MappingUploadUploadController extends InputFilterLevelUploa
     }
     return Promise.resolve();
   }
-
+  autoSync(req) {
+    return this.getImportArray()
+      .then(imports => {
+        const syncMap = new SyncMap();
+        const data = {syncMap};
+        return this.databaseController.mongoToPgSyncPromise(req.dfa, data, req.user.id);
+      });
+  }
 }
 
