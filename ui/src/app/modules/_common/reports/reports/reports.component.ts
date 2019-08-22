@@ -1,18 +1,18 @@
-import {Component, OnInit} from '@angular/core';
-import {RoutingComponentBase} from '../../../../core/base-classes/routing-component-base';
-import {ActivatedRoute, Router} from '@angular/router';
-import {AppStore} from '../../../../app/app-store';
-import {MeasureService} from '../../services/measure.service';
-import {Measure} from '../../models/measure';
-import {Submeasure} from '../../../../../../../shared/models/submeasure';
-import {SubmeasureService} from '../../services/submeasure.service';
-import {DollarUploadService} from '../../../prof/services/dollar-upload.service';
-import {MappingUploadService} from '../../../prof/services/mapping-upload.service';
-import {environment} from '../../../../../environments/environment';
+import { Component, OnInit } from '@angular/core';
+import { RoutingComponentBase } from '../../../../core/base-classes/routing-component-base';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AppStore } from '../../../../app/app-store';
+import { MeasureService } from '../../services/measure.service';
+import { Measure } from '../../models/measure';
+import { Submeasure } from '../../../../../../../shared/models/submeasure';
+import { SubmeasureService } from '../../services/submeasure.service';
+import { DollarUploadService } from '../../../prof/services/dollar-upload.service';
+import { MappingUploadService } from '../../../prof/services/mapping-upload.service';
+import { environment } from '../../../../../environments/environment';
 import _ from 'lodash';
-import {UiUtil} from '../../../../core/services/ui-util';
-import {shUtil} from '../../../../../../../shared/misc/shared-util';
-import {PgLookupService} from '../../services/pg-lookup.service';
+import { UiUtil } from '../../../../core/services/ui-util';
+import { shUtil } from '../../../../../../../shared/misc/shared-util';
+import { PgLookupService } from '../../services/pg-lookup.service';
 import moment from 'moment';
 
 interface ReportSettings {
@@ -23,6 +23,7 @@ interface ReportSettings {
   fiscalMonthMultiSels?: number[];
   excelFilename: string;
   moduleId: number;
+
 }
 
 interface Report {
@@ -38,6 +39,7 @@ interface Report {
   hasMultiFiscalMonthOnly: boolean;
   hasSmAndFiscalMonth: boolean;
   hasMultiSmAndFiscalMonth: boolean;
+  invisible: boolean;
 }
 
 @Component({
@@ -61,15 +63,16 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
   submeasuresInData: Submeasure[] = [];
   submeasures: Submeasure[] = [];
   disableDownload = true;
-
+  moduleId:number = this.store.module.moduleId;
   reports: any[] = [
+
     {
       type: 'product-hierarchy', hasNoChoices: true, text: 'Valid Product Hierarchy', disabled: false,
-      filename: 'Product_Hierarchy_Report'
+      filename: 'Product_Hierarchy_Report', invisible: this.moduleId == 2 ? true:false
     },
     {
       type: 'sales-hierarchy', hasNoChoices: true, text: 'Valid Sales Hierarchy', disabled: false,
-      filename: 'Sales_Hierarchy_Report'
+      filename: 'Sales_Hierarchy_Report', invisible: this.moduleId == 2 ? true:false
     },
     {
       type: 'valid-driver', hasNoChoices: true, text: 'Valid Driver', disabled: false,
@@ -82,23 +85,23 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     // },
     {
       type: 'submeasure', hasNoChoices: true, text: 'Sub-Measure Updates', disabled: false,
-      filename: 'Submeasure_Update_Report'
+      filename: 'Submeasure_Update_Report', invisible: this.moduleId == 2 ? true:false
     },
     {
       type: 'submeasure-grouping', hasNoChoices: true, text: 'Sub-Measure Grouping', disabled: false,
-      filename: 'Submeasure_Grouping_Report'
+      filename: 'Submeasure_Grouping_Report', invisible: this.moduleId == 2 ? true:false
     },
     {
       type: 'allocation-rule', hasNoChoices: true, text: 'Rule Updates', disabled: false,
-      filename: 'Rule_Update_Report'
+      filename: 'Rule_Update_Report', invisible: this.moduleId == 2 ? true:false
     },
     {
       type: 'rule-submeasure', hasMultiFiscalMonthOnly: true, text: 'Rule to Sub-Measure History', disabled: false,
-      filename: 'Rule_Submeasure_Report'
+      filename: 'Rule_Submeasure_Report', invisible: this.moduleId == 2 ? true:false
     },
     {
       type: 'dollar-upload', hasMultiSmAndFiscalMonth: true, text: 'Input Dollar Adjustments Data', disabled: false,
-      filename: 'Manual_Uploaded_Data_Report'
+      filename: 'Manual_Uploaded_Data_Report', invisible: this.moduleId == 2 ? true:false
     },
     {
       type: 'input-data', hasMultiSmAndFiscalMonth: true, text: 'Input System Data', disabled: false,
@@ -106,44 +109,45 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     },
     {
       type: 'mapping-upload', hasMultiSmAndFiscalMonth: true, text: 'Manual Mapping Split Percentage', disabled: false,
-      filename: 'Manual_Mapping_Data_Report'
+      filename: 'Manual_Mapping_Data_Report', invisible: this.moduleId == 2 ? true:false
     },
     {
       type: 'dept-upload', hasMultiSubmeasureOnly: true, text: 'Department/Account Exclusion Mapping', disabled: false,
-      filename: 'Department_Mapping_Data_Report'
+      filename: 'Department_Mapping_Data_Report', invisible: this.moduleId == 2 ? true:false
     },
     {
       type: 'sales-split-percentage', hasFiscalMonthOnly: true, text: 'Sales Level Split Percentage', disabled: false,
-      filename: 'Sales_Split_Percentage_Report'
+      filename: 'Sales_Split_Percentage_Report', invisible: this.moduleId == 2 ? true:false
     },
     {
       type: 'product-classification',
       hasFiscalMonthOnly: true,
       text: 'Product Classification (SW/HW Mix)',
       disabled: false,
-      filename: 'Product_Classification_Report'
+      filename: 'Product_Classification_Report', invisible: this.moduleId == 2 ? true:false
     },
     {
       type: 'alternate-sl2', hasFiscalMonthOnly: true, text: 'Alternate SL2 Mapping', disabled: false,
-      filename: 'Alternate_SL2_Report'
+      filename: 'Alternate_SL2_Report', invisible: this.moduleId == 2 ? true:false
     },
     {
       type: 'corp-adjustment', hasFiscalMonthOnly: true, text: 'Corp Adjustments Mapping', disabled: false,
-      filename: 'Corp_Adjustment_Report'
+      filename: 'Corp_Adjustment_Report', invisible: this.moduleId == 2 ? true:false
     },
     {
       type: 'disti-direct', hasFiscalMonthOnly: true, text: 'Disty to Direct Mapping', disabled: false,
-      filename: 'Disty_to_Direct_Mapping_Report'
+      filename: 'Disty_to_Direct_Mapping_Report', invisible: this.moduleId == 2 ? true:false
     },
     {
       type: 'service-map', hasFiscalMonthOnly: true, text: 'Service Mapping Split Percentage', disabled: false,
-      filename: 'Service_Mapping_Report'
+      filename: 'Service_Mapping_Report', invisible: this.moduleId == 2 ? true:false
     },
     {
       type: 'service-training', hasFiscalYearOnly: true, text: 'Service Training Split Percentage', disabled: false,
-      filename: 'Service_Training_Report'
+      filename: 'Service_Training_Report', invisible: this.moduleId == 2 ? true:false
     },
   ];
+
   report: Report;
 
   constructor(
@@ -155,7 +159,10 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     private store: AppStore
   ) {
     super(store, route);
+    this.reports = this.reports.filter(report => report.invisible !== true);
   }
+
+
 
   ngOnInit() {
     Promise.all([
@@ -238,14 +245,14 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
           this.store.showSpinner = false;
           if (prmFiscalMonth) {
             this.fiscalMonths = result.map(fm => Number(fm)).sort().reverse().slice(0, 24)
-              .map(fiscalMonth => ({name: shUtil.getFiscalMonthLongNameFromNumber(fiscalMonth), fiscalMonth}));
+              .map(fiscalMonth => ({ name: shUtil.getFiscalMonthLongNameFromNumber(fiscalMonth), fiscalMonth }));
             if (this.fiscalMonths.length) {
               this.fiscalMonth = this.fiscalMonths[0].fiscalMonth;
               this.disableDownload = false;
             }
           }
           if (prmFiscalYear) {
-            this.fiscalYears = result.map(fy => ({name: `FY${fy}`, value: fy}));
+            this.fiscalYears = result.map(fy => ({ name: `FY${fy}`, value: fy }));
             this.fiscalYears = _.orderBy(this.fiscalYears, ['value'], ['desc']);
             if (this.fiscalYears.length) {
               this.fiscalYear = this.fiscalYears[0].value;
@@ -275,7 +282,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     this.fiscalMonth = undefined;
     this.submeasures = [];
     this.fiscalMonths = [];
-    this.submeasures = _.filter(this.submeasuresInData, {measureId: this.measureId});
+    this.submeasures = _.filter(this.submeasuresInData, { measureId: this.measureId });
   }
 
   submeasureChange() {
@@ -317,18 +324,18 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     switch (this.report.type) {
       case 'dollar-upload':
       case 'valid-slpf-driver':
-        obs = this.pgLookupService.callRepoMethod('getDollarUploadFiscalMonthsFromSubmeasureKeys', {submeasureKeys: this.submeasureKeys});
+        obs = this.pgLookupService.callRepoMethod('getDollarUploadFiscalMonthsFromSubmeasureKeys', { submeasureKeys: this.submeasureKeys });
         break;
       case 'mapping-upload':
-        obs = this.pgLookupService.callRepoMethod('getMappingUploadFiscalMonthsFromSubmeasureKeys', {submeasureKeys: this.submeasureKeys});
+        obs = this.pgLookupService.callRepoMethod('getMappingUploadFiscalMonthsFromSubmeasureKeys', { submeasureKeys: this.submeasureKeys });
         break;
       case 'input-data':
-        obs = this.pgLookupService.callRepoMethod('getInputDataFiscalMonthsFromSubmeasureKeys', {submeasureKeys: this.submeasureKeys});
+        obs = this.pgLookupService.callRepoMethod('getInputDataFiscalMonthsFromSubmeasureKeys', { submeasureKeys: this.submeasureKeys });
         break;
     }
     obs.subscribe(fiscalMonths => {
       this.fiscalMonths = fiscalMonths.map(fm => Number(fm)).sort().reverse().slice(0, 24)
-        .map(fiscalMonth => ({name: shUtil.getFiscalMonthLongNameFromNumber(fiscalMonth), fiscalMonth}));
+        .map(fiscalMonth => ({ name: shUtil.getFiscalMonthLongNameFromNumber(fiscalMonth), fiscalMonth }));
       if (this.fiscalMonths.length) {
         this.fiscalMonth = this.fiscalMonths[0].fiscalMonth;
         this.disableDownload = false;
@@ -363,7 +370,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
 
   getFilename() {
     const dateStr = moment().format('YYYY-MM-DD');
-    const sm = this.submeasureKey ? _.find(this.submeasures, {submeasureKey: this.submeasureKey}) : null;
+    const sm = this.submeasureKey ? _.find(this.submeasures, { submeasureKey: this.submeasureKey }) : null;
     if (this.report.hasSmAndFiscalMonth) {
       return this.report.filename + `_${_.snakeCase(sm.name)}_${this.fiscalMonth}.xlsx`;
     } else if (this.report.hasSubmeasureOnly) {

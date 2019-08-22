@@ -63,6 +63,19 @@ export class LeftnavComponent {
           {route: '/prof/admin/approval', text: 'Approval', roles: 'profitability allocations:business admin'},
         ];
         break;
+      
+      case 'bkgm':
+      this.links = [
+        {route: '/bkgm/rule-management', text: 'Rule Management', roles: 'bookings misc allocations:business admin,bookings misc allocations:super user, bookings misc allocations:business user, bookings misc allocations:end user'},
+        {route: '/bkgm/submeasure', text: 'Sub-Measure', roles: 'bookings misc allocations:business admin,bookings misc allocations:super user, bookings misc allocations:business user, bookings misc allocations:end user'},
+        {route: '/bkgm/reports', text: 'Report', roles: 'bookings misc allocations:business admin, bookings misc allocations:super user, bookings misc allocations:business user, bookings misc allocations:end user'},
+      ];
+      this.alinks = [
+        {route: '/bkgm/admin/measure', text: 'Measure', roles: 'bookings misc allocations:business admin'},
+        {route: '/bkgm/admin/approval', text: 'Approval', roles: 'bookings misc allocations:business admin'},
+      ];
+      break;
+
       default:
         this.links = [];
         this.alinks = [];

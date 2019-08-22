@@ -29,7 +29,7 @@ export enum BusinessUploadFileType {
 
 export enum DfaModuleIds {
   prof = 1,
-  bkgm,
+  bkgm = 2,
   svct,
   tsct,
   ascg,
