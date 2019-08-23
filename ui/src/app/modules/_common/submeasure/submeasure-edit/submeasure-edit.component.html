@@ -69,12 +69,12 @@
         </div>
 
         <!--<div class="margin-top:10px; height: 0px;">&nbsp;</div>-->
-        <div class="border-and-padding form-group-max-width" [class.disabled]="isPassThrough()" *ngIf="moduleId!=2">
+        <div class="border-and-padding form-group-max-width" [class.disabled]="isPassThrough()">
           <div style="margin-bottom:-10px;">
             <div class="row" style="margin-top:1px; margin-bottom:15px;">
               <div class="col-6">
-                <fin-checkbox *ngIf="moduleId!=2" label="Is Grouping Sub-Measure" [(model)]="sm.indicators.groupFlag" trueVal="Y" falseVal="N"
-                              [disabled]="!!sm.groupingSubmeasureId" (modelChange)="handleGroupingChange()"></fin-checkbox>
+                <fin-checkbox label="Is Grouping Sub-Measure" [(model)]="sm.indicators.groupFlag" trueVal="Y" falseVal="N"
+                               (modelChange)="handleGroupingChange()"></fin-checkbox>
               </div>
               <div class="col-6">
                 <!-- this used to be ngIf groupFlag, but groupflag clears off properties now, so we need to allow them
@@ -83,7 +83,7 @@
                               trueVal="Y" falseVal="N" (modelChange)="handleAllocationRequiredChange()"></fin-checkbox>
               </div>
             </div>
-            <cui-select *ngIf="moduleId!=2" name="groupingSubmeasure" [(ngModel)]="sm.groupingSubmeasureId" [items]="groupingSubmeasures"
+            <cui-select name="groupingSubmeasure" [(ngModel)]="sm.groupingSubmeasureId" [items]="groupingSubmeasures"
                         label="Grouping Sub-Measure" empty="true" optionsKey="name"
                         optionsValue="submeasureKey" [disabled]="isGroupingParent()"></cui-select>
           </div>
@@ -189,11 +189,11 @@
           </div>
         </div>
 
-        <div class="col-lg-6 mm-right-side" [class.disabled]="isUnallocatedGroup() || isPassThrough()">
+        <div class="col-lg-6 mm-right-side" [class.disabled]="isUnallocatedGroup() || isPassThrough()" *ngIf="moduleId===1">
           <div class="form-group-max-width">
             <div class="border-and-padding" style="padding-bottom:58px;">
               <fieldset class="input-filter-level mm-fieldset">
-                <legend *ngIf="moduleId!=2">
+                <legend>
                   <fin-checkbox class="legend-checkbox" [(model)]="sm.indicators.manualMapping" label="Manual Mapping"
                                 trueVal="Y" falseVal="N" (modelChange)="mmSelect()"></fin-checkbox>
                 </legend>
@@ -209,25 +209,25 @@
                   </div>
                   <div class="row ifl-section"  [class.disabled]="!isManualMapping()">
                     <div class="col-6">
-                      <div class="check-wrap" *ngIf="moduleId!=2">
+                      <div class="check-wrap">
                         <fin-checkbox [(model)]="mm_switch_ibe" label="Internal Business Entity"
                                       (modelChange)="mmChange('ibe')" [disabled]="BeMmDisabled"></fin-checkbox>
                       </div>
                       <div class="check-wrap">
                         <fin-checkbox [(model)]="mm_switch_p" label="Product" (modelChange)="mmChange('p')" [disabled]="ProductMmDisabled"></fin-checkbox>
                       </div>
-                      <div class="check-wrap" *ngIf="moduleId!=2">
+                      <div class="check-wrap">
                         <fin-checkbox [(model)]="mm_switch_le" label="Legal Entity" (modelChange)="mmChange('le')" [disabled]="LegalMmDisabled"></fin-checkbox>
                       </div>
                       <div class="check-wrap">
                         <fin-checkbox [(model)]="mm_switch_s" label="Sales" (modelChange)="mmChange('s')" [disabled]="SalesMmDisabled"></fin-checkbox>
                       </div>
-                      <div class="check-wrap" *ngIf="moduleId!=2">
+                      <div class="check-wrap">
                         <fin-checkbox [(model)]="mm_switch_scms" label="SCMS" (modelChange)="mmChange('scms')" [disabled]="ScmsMmDisabled"></fin-checkbox>
                       </div>
                     </div>
                     <div class="col-6">
-                      <div class="sel-wrap" *ngIf="moduleId!=2">
+                      <div class="sel-wrap">
                         <cui-select  name="ibeLevelMM" [(ngModel)]="sm.manualMapping.internalBELevel" [required]="mm_switch_ibe" class="option"
                                     [items]="ibe_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!mm_switch_ibe"></cui-select>
                       </div>
@@ -235,7 +235,7 @@
                         <cui-select name="productLevelMM" [(ngModel)]="sm.manualMapping.productLevel" [required]="mm_switch_p" class="option"
                                     [items]="p_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!mm_switch_p"></cui-select>
                       </div>
-                      <div class="sel-wrap" *ngIf="moduleId!=2">
+                      <div class="sel-wrap">
                         <cui-select name="entityLevelMM" [(ngModel)]="sm.manualMapping.entityLevel" [required]="mm_switch_le" class="option"
                                     [items]="le_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!mm_switch_le"></cui-select>
                       </div>
@@ -243,7 +243,7 @@
                         <cui-select name="salesLevelMM" [(ngModel)]="sm.manualMapping.salesLevel" [required]="mm_switch_s" class="option"
                                     [items]="s_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!mm_switch_s"></cui-select>
                       </div>
-                      <div class="sel-wrap" *ngIf="moduleId!=2">
+                      <div class="sel-wrap">
                         <cui-select name="scmsLevelMM" [(ngModel)]="sm.manualMapping.scmsLevel" [required]="mm_switch_scms" class="option"
                                     [items]="scms_items" optionsKey="name" optionsValue="value" empty="true" [disabled]="!mm_switch_scms"></cui-select>
                       </div>
@@ -270,7 +270,7 @@
           <cui-select *ngIf="moduleId!=2" name="pnlnodeGrouping" [(ngModel)]="sm.pnlnodeGrouping" [items]="pnlNodes" label="P&L Node Grouping" empty="true"
                       optionsKey="pnlnode_grouping" optionsValue="pnlnode_grouping"></cui-select>
         </div>
-        <div class="col-lg-6" *ngIf="moduleId!=2">
+        <div class="col-lg-6">
           <fin-input name="reportingLevel{{level}}" type="text" *ngFor="let level of [1,2,3]; let idx=index;"
                      [(ngModel)]="sm.reportingLevels[idx]"
                      [disabled]="!currentMeasure.reportingLevelEnableds[idx]" label="Reporting Level {{level}}"></fin-input>
