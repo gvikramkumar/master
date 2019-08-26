@@ -452,7 +452,7 @@ export default class PgLookupRepo {
     sum(drv.usd_shipped_rev_amount * behier.prdt_family_allocation_pct) 
     from fpadfa.dfa_bkgm_driver_data drv, fpacon.vw_fpa_fiscal_month_to_year fm, 
          fpacon.vw_fpa_sales_hierarchy sh, fpacon.vw_fpa_products ph, fpacon.vw_fpa_be_hier_prdt_family_alloc behier  
-    where drv.fiscal_month_id = <fiscal period selected by user from UI dropdown> 
+    where drv.fiscal_month_id = ${dfa.fiscalMonths.bkgm}
     and drv.fiscal_month_id = fm.fiscal_year_month_int 
     and drv.driver_type = 'BKGMISC'
     and drv.sales_territory_key = sh.sales_territory_key

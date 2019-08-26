@@ -256,22 +256,17 @@ export default class ReportController extends ControllerBase {
             this.pgLookupRepo.getDriverSL3Report(req.dfa),
             this.pgLookupRepo.getShipmentDriverPFReport(req.dfa),
             this.pgLookupRepo.getRoll3DriverWithBEReport(req.dfa)
-          ]);  
+          ]);
         }else if(moduleId == 2){
           excelSheetname = ['Driver Data'];
-          excelHeaders = ['Fiscal Month Id', 'Driver Type', 'Sub Measure Key', 'External Theater', 'Sales Territory Code', 'Sales Node Level 1 Code', 'Sales Node Level 2 Code', 'Sales Node Level 3 Code', 'Sales Node Level 4 Code', 'Sales Node Level 5 Code', 'Sales Node Level 6 Code','Internal Be','Technology_Group','Business Unit','Product Family','Product Id','Shipped_Revenue'];
-          excelProperties = ['fiscal_month_id', 'driver_type', 'sub_measure_key', 'dd_external_theater_name', 'sales_territory_name_code', 'l1_sales_territory_name_code', 'l2_sales_territory_name_code', 'l3_sales_territory_name_code', 'l4_sales_territory_name_code', 'l5_sales_territory_name_code', 'l6_sales_territory_name_code','technology_group_id','business_unit_id','product_family_id','product_id','bk_business_entity_name'];
+          excelHeaders = ['Fiscal Month Id', 'Driver Type', 'Sub Measure Key', 'External Theater', 'Sales Territory Code', 'Sales Level1 Code', 'Sales Level2 Code', 'Sales Level3 Code', 'Sales Level4 Code', 'Sales Level5 Code', 'Sales Level6 Code', 'Internal BE' , 'Technology Group', 'Business Unit' ,'Product Family', 'Product Id', 'Shipped Revenue'];
+          excelProperties = ['fiscal_month_id', 'driver_type', 'sub_measure_key', 'dd_external_theater_name', 'sales_territory_name_code', 'l1_sales_territory_name_code', 'l2_sales_territory_name_code', 'l3_sales_territory_name_code', 'l4_sales_territory_name_code', 'l5_sales_territory_name_code', 'l6_sales_territory_name_code', 'technology_group_id' , 'business_unit_id', 'product_family_id' , 'product_id','bk_business_entity_name'];
           promise = Promise.all([
             this.pgLookupRepo.getRoll3DriverWithBEReportModuleBased(req.dfa)
-          ])
-            .then(results => {
-              this.measures = results[0];
-              this.submeasures = results[1];
-              const rtn = results[2].map(obj => this.transformAddMeasureAndSubmeasure(obj));
-              return _.sortBy(rtn, 'sm.name');
-            });
+          ]);
+
         }
-        
+
         break;
 
       case 'valid-slpf-driver':
