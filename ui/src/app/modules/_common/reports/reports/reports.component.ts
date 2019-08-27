@@ -233,7 +233,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
         prmMeasure = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_dept_acct_map_upld', 'sub_measure_key', true).toPromise();
         break;
       case 'input-data':
-        prmMeasure = this.pgLookupService.callRepoMethod('getSubmeasureForSystemInputData').toPromise();
+        prmMeasure = this.pgLookupService.callRepoMethod('getSubmeasureForSystemInputData', '', {params: this.moduleId, moduleAbbrev: this.store.module.abbrev}).toPromise();
         break;
     }
     const promises = [prmFiscalMonth, prmFiscalYear, prmMeasure].filter(x => !!x);
@@ -330,7 +330,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
         obs = this.pgLookupService.callRepoMethod('getMappingUploadFiscalMonthsFromSubmeasureKeys', { submeasureKeys: this.submeasureKeys });
         break;
       case 'input-data':
-        obs = this.pgLookupService.callRepoMethod('getInputDataFiscalMonthsFromSubmeasureKeys', { submeasureKeys: this.submeasureKeys });
+        obs = this.pgLookupService.callRepoMethod('getInputDataFiscalMonthsFromSubmeasureKeys', { submeasureKeys: this.submeasureKeys }, {params: this.moduleId, moduleAbbrev: this.store.module.abbrev});
         break;
     }
     obs.subscribe(fiscalMonths => {

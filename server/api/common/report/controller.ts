@@ -240,22 +240,33 @@ export default class ReportController extends ControllerBase {
         break;
 
       case 'valid-driver':
-        multiSheetReport = true;
-        excelSheetname = [['Adjustment PF Report'], ['Driver SL3 Report'], ['Shipment Driver PF Report'], ['Roll3 Driver With BE']],
-          excelHeaders = [['Tech Group', 'Business Unit', 'Product Family'],
-            ['Driver Type', 'Sales Level1 Code', 'Sales Level1 Description', 'Sales Level2 Code', 'Sales Level2 Description', 'Sales Level3 Code', 'Sales Level3 Description'],
-            ['Tech Group', 'Business Unit', 'Product Family'],
-            ['Driver Type', 'Tech Group', 'Business Unit', 'Product Family', 'Business Entity', 'Sub Business Entity']];
-        excelProperties = [['technology_group_id', 'business_unit_id', 'product_family_id'],
-          ['driver_type', 'l1_sales_territory_name_code', 'l1_sales_territory_descr', 'l2_sales_territory_name_code', 'l2_sales_territory_descr', 'l3_sales_territory_name_code', 'l3_sales_territory_descr'],
-          ['technology_group_id', 'business_unit_id', 'product_family_id'],
-          ['driver_type', 'technology_group_id', 'business_unit_id', 'product_family_id', 'bk_business_entity_name', 'sub_business_entity_name']];
-        promise = Promise.all([
-          this.pgLookupRepo.getAdjustmentPFReport(),
-          this.pgLookupRepo.getDriverSL3Report(req.dfa),
-          this.pgLookupRepo.getShipmentDriverPFReport(req.dfa),
-          this.pgLookupRepo.getRoll3DriverWithBEReport(req.dfa)
-        ]);
+        if(moduleId == 1){
+          multiSheetReport = true;
+          excelSheetname = [['Adjustment PF Report'], ['Driver SL3 Report'], ['Shipment Driver PF Report'], ['Roll3 Driver With BE']],
+            excelHeaders = [['Tech Group', 'Business Unit', 'Product Family'],
+              ['Driver Type', 'Sales Level1 Code', 'Sales Level1 Description', 'Sales Level2 Code', 'Sales Level2 Description', 'Sales Level3 Code', 'Sales Level3 Description'],
+              ['Tech Group', 'Business Unit', 'Product Family'],
+              ['Driver Type', 'Tech Group', 'Business Unit', 'Product Family', 'Business Entity', 'Sub Business Entity']];
+          excelProperties = [['technology_group_id', 'business_unit_id', 'product_family_id'],
+            ['driver_type', 'l1_sales_territory_name_code', 'l1_sales_territory_descr', 'l2_sales_territory_name_code', 'l2_sales_territory_descr', 'l3_sales_territory_name_code', 'l3_sales_territory_descr'],
+            ['technology_group_id', 'business_unit_id', 'product_family_id'],
+            ['driver_type', 'technology_group_id', 'business_unit_id', 'product_family_id', 'bk_business_entity_name', 'sub_business_entity_name']];
+          promise = Promise.all([
+            this.pgLookupRepo.getAdjustmentPFReport(),
+            this.pgLookupRepo.getDriverSL3Report(req.dfa),
+            this.pgLookupRepo.getShipmentDriverPFReport(req.dfa),
+            this.pgLookupRepo.getRoll3DriverWithBEReport(req.dfa)
+          ]);
+        }else if(moduleId == 2){
+          excelSheetname = ['Driver Data'];
+          excelHeaders = ['Fiscal Month Id', 'Driver Type', 'Sub Measure Key', 'External Theater', 'Sales Territory Code', 'Sales Level1 Code', 'Sales Level2 Code', 'Sales Level3 Code', 'Sales Level4 Code', 'Sales Level5 Code', 'Sales Level6 Code', 'Internal BE' , 'Technology Group', 'Business Unit' ,'Product Family', 'Product Id', 'Shipped Revenue'];
+          excelProperties = ['fiscal_month_id', 'driver_type', 'sub_measure_key', 'dd_external_theater_name', 'sales_territory_name_code', 'l1_sales_territory_name_code', 'l2_sales_territory_name_code', 'l3_sales_territory_name_code', 'l4_sales_territory_name_code', 'l5_sales_territory_name_code', 'l6_sales_territory_name_code', 'technology_group_id' , 'business_unit_id', 'product_family_id' , 'product_id','bk_business_entity_name'];
+          promise = Promise.all([
+            this.pgLookupRepo.getDriverReportBkgm(req.dfa)
+          ]);
+
+        }
+
         break;
 
       case 'valid-slpf-driver':
@@ -487,7 +498,7 @@ export default class ReportController extends ControllerBase {
         promise = Promise.all([
           this.measureRepo.getManyActive({moduleId}),
           this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
-          this.pgLookupRepo.getInputSystemDataReport(body.fiscalMonth, body.submeasureKeys)
+          this.pgLookupRepo.getInputSystemDataReport(body.fiscalMonth, body.submeasureKeys, moduleId)
         ])
           .then(results => {
             this.measures = results[0];
@@ -604,4 +615,3 @@ export default class ReportController extends ControllerBase {
   }
 
 }
-
