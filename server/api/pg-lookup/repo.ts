@@ -1055,19 +1055,33 @@ export default class PgLookupRepo {
 
   }
 
-  getSubmeasureForSystemInputData() {
-    const sql = `
-      select distinct sub_measure_id as col from fpadfa.dfa_prof_input_data 
+  getSubmeasureForSystemInputData(req?) {
+    let sql;
+    if(req.query.params === 1){
+        sql = `
+        select distinct sub_measure_id as col from fpadfa.dfa_prof_input_data 
+        where sub_measure_id is not null and source_system_type_code != 'EXCEL' 
+        order by sub_measure_id
+      `;
+    }else if(req.query.params === 2){
+      sql = `
+      select distinct sub_measure_id as col from fpadfa.dfa_bkgm_input_data 
       where sub_measure_id is not null and source_system_type_code != 'EXCEL' 
       order by sub_measure_id
     `;
+    }
     return pgc.pgdb.query(sql)
       .then(results => results.rows.map(row => Number(row.col)));
   }
 
   getInputDataFiscalMonthsFromSubmeasureKeys(req) {
-    return this.getListFromColumn('fpadfa.dfa_prof_input_data', 'fiscal_month_id',
+    if(req.query.params === 1){
+      return this.getListFromColumn('fpadfa.dfa_prof_input_data', 'fiscal_month_id',
       `sub_measure_id in ( ${req.body.submeasureKeys} )`);
+    }else if(req.query.params === 2){
+      return this.getListFromColumn('fpadfa.dfa_bkgm_input_data', 'fiscal_month_id',
+      `sub_measure_id in ( ${req.body.submeasureKeys} )`); 
+    }
   }
 
   getETLAndAllocationFlags() {
