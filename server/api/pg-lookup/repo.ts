@@ -442,7 +442,7 @@ export default class PgLookupRepo {
 
   getRoll3DriverWithBEReportModuleBased(dfa) {
     const sql = `
-    select drv.fiscal_month_id, drv.driver_type, 
+    select drv.fiscal_month_id, drv.driver_type, drv.sub_measure_key ,
     sh.l1_sales_territory_name_code, sh.l2_sales_territory_name_code, sh.l3_sales_territory_name_code,
     sh.l4_sales_territory_name_code, sh.l5_sales_territory_name_code, sh.l6_sales_territory_name_code,
     sh.sales_territory_name_code,
