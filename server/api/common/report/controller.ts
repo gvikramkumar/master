@@ -498,7 +498,7 @@ export default class ReportController extends ControllerBase {
         promise = Promise.all([
           this.measureRepo.getManyActive({moduleId}),
           this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
-          this.pgLookupRepo.getInputSystemDataReport(body.fiscalMonth, body.submeasureKeys,moduleId)
+          this.pgLookupRepo.getInputSystemDataReport(body.fiscalMonth, body.submeasureKeys, moduleId)
         ])
           .then(results => {
             this.measures = results[0];

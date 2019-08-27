@@ -460,7 +460,7 @@ export default class PgLookupRepo {
     and drv.product_key = behier.item_key
     and behier.fiscal_year_quarter_number_int = fm.fiscal_year_quarter_number_int 
     and behier.bk_business_entity_type_cd = 'I'
-    group by drv.fiscal_month_id, drv.driver_type, 
+    group by drv.fiscal_month_id, drv.driver_type, drv.sub_measure_key ,
     sh.l1_sales_territory_name_code, sh.l2_sales_territory_name_code, sh.l3_sales_territory_name_code,
     sh.l4_sales_territory_name_code, sh.l5_sales_territory_name_code, sh.l6_sales_territory_name_code,
     sh.sales_territory_name_code,
@@ -1027,9 +1027,10 @@ export default class PgLookupRepo {
       asm.sub_measure_name, 
       asd.input_product_value , 
       asd.input_sales_value , 
-      asd.input_internal_be_value,
+      asd.input_internal_be_value as input_entity_value,
       asd.ext_theater_name,  
-      sum(asd.amount)  
+      sum(asd.amount) as amount ,
+       asd.update_owner, asd.update_datetimestamp
       from fpadfa.dfa_bkgm_input_data asd,
           fpadfa.dfa_sub_measure asm, 
           fpadfa.dfa_measure cm
@@ -1044,7 +1045,8 @@ export default class PgLookupRepo {
       asd.input_product_value , 
       asd.input_sales_value , 
       asd.input_internal_be_value,
-      asd.ext_theater_name
+      asd.ext_theater_name,
+        asd.update_owner, asd.update_datetimestamp
       order by asd.measure_name, asm.sub_measure_name,
          asd.input_product_value , asd.input_sales_value , asd.input_internal_be_value, asd.ext_theater_name
       `;
@@ -1056,23 +1058,32 @@ export default class PgLookupRepo {
   }
 
   getSubmeasureForSystemInputData(req?) {
-    
+
+    let subMeasureId;
+
+    if (req.query.moduleAbbrev == 'prof') {
+      subMeasureId = 'sub_measure_id';
+
+    } else if (req.query.moduleAbbrev == 'bkgm') {
+      subMeasureId = 'sub_measure_key';
+    }
+
     const sql = `
-        select distinct sub_measure_id as col from fpadfa.dfa_${req.query.moduleAbbrev}_input_data 
-        where sub_measure_id is not null and source_system_type_code != 'EXCEL' 
-        order by sub_measure_id
+        select distinct ${subMeasureId} as col from fpadfa.dfa_${req.query.moduleAbbrev}_input_data 
+        where  ${subMeasureId} is not null and source_system_type_code != 'EXCEL' 
+        order by  ${subMeasureId}
       `;
     // let sql;
     // if(req.query.params === 1){
     //     sql = `
-    //     select distinct sub_measure_id as col from fpadfa.dfa_prof_input_data 
-    //     where sub_measure_id is not null and source_system_type_code != 'EXCEL' 
+    //     select distinct sub_measure_id as col from fpadfa.dfa_prof_input_data
+    //     where sub_measure_id is not null and source_system_type_code != 'EXCEL'
     //     order by sub_measure_id
     //   `;
     // }else if(req.query.params === 2){
     //   sql = `
-    //   select distinct sub_measure_id as col from fpadfa.dfa_bkgm_input_data 
-    //   where sub_measure_id is not null and source_system_type_code != 'EXCEL' 
+    //   select distinct sub_measure_id as col from fpadfa.dfa_bkgm_input_data
+    //   where sub_measure_id is not null and source_system_type_code != 'EXCEL'
     //   order by sub_measure_id
     // `;
     // }
@@ -1088,7 +1099,7 @@ export default class PgLookupRepo {
     //   `sub_measure_id in ( ${req.body.submeasureKeys} )`);
     // }else if(req.query.params === 2){
     //   return this.getListFromColumn('fpadfa.dfa_bkgm_input_data', 'fiscal_month_id',
-    //   `sub_measure_id in ( ${req.body.submeasureKeys} )`); 
+    //   `sub_measure_id in ( ${req.body.submeasureKeys} )`);
     // }
   }
 
