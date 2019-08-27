@@ -262,7 +262,7 @@ export default class ReportController extends ControllerBase {
           excelHeaders = ['Fiscal Month Id', 'Driver Type', 'Sub Measure Key', 'External Theater', 'Sales Territory Code', 'Sales Level1 Code', 'Sales Level2 Code', 'Sales Level3 Code', 'Sales Level4 Code', 'Sales Level5 Code', 'Sales Level6 Code', 'Internal BE' , 'Technology Group', 'Business Unit' ,'Product Family', 'Product Id', 'Shipped Revenue'];
           excelProperties = ['fiscal_month_id', 'driver_type', 'sub_measure_key', 'dd_external_theater_name', 'sales_territory_name_code', 'l1_sales_territory_name_code', 'l2_sales_territory_name_code', 'l3_sales_territory_name_code', 'l4_sales_territory_name_code', 'l5_sales_territory_name_code', 'l6_sales_territory_name_code', 'technology_group_id' , 'business_unit_id', 'product_family_id' , 'product_id','bk_business_entity_name'];
           promise = Promise.all([
-            this.pgLookupRepo.getRoll3DriverWithBEReportModuleBased(req.dfa)
+            this.pgLookupRepo.getDriverReportBkgm(req.dfa)
           ]);
 
         }
@@ -615,4 +615,3 @@ export default class ReportController extends ControllerBase {
   }
 
 }
-

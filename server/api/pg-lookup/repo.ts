@@ -440,7 +440,7 @@ export default class PgLookupRepo {
       .then(results => results.rows);
   }
 
-  getRoll3DriverWithBEReportModuleBased(dfa) {
+  getDriverReportBkgm(dfa) {
     const sql = `
     select drv.fiscal_month_id, drv.driver_type, drv.sub_measure_key ,
     sh.l1_sales_territory_name_code, sh.l2_sales_territory_name_code, sh.l3_sales_territory_name_code,
@@ -1058,7 +1058,23 @@ export default class PgLookupRepo {
   }
 
   getSubmeasureForSystemInputData(req?) {
+    let subMeasureId;
+    if (req.query.moduleAbbrev == 'prof') {
+      subMeasureId = 'sub_measure_id';
 
+    } else if (req.query.moduleAbbrev == 'bkgm') {
+      subMeasureId = 'sub_measure_key';
+    }
+    const sql = `
+        select distinct ${subMeasureId} as col from fpadfa.dfa_${req.query.moduleAbbrev}_input_data 
+        where  ${subMeasureId} is not null and source_system_type_code != 'EXCEL' 
+        order by  ${subMeasureId}
+      `;
+    return pgc.pgdb.query(sql)
+      .then(results => results.rows.map(row => Number(row.col)));
+  }
+
+  getInputDataFiscalMonthsFromSubmeasureKeys(req) {
     let subMeasureId;
 
     if (req.query.moduleAbbrev == 'prof') {
@@ -1068,39 +1084,8 @@ export default class PgLookupRepo {
       subMeasureId = 'sub_measure_key';
     }
 
-    const sql = `
-        select distinct ${subMeasureId} as col from fpadfa.dfa_${req.query.moduleAbbrev}_input_data 
-        where  ${subMeasureId} is not null and source_system_type_code != 'EXCEL' 
-        order by  ${subMeasureId}
-      `;
-    // let sql;
-    // if(req.query.params === 1){
-    //     sql = `
-    //     select distinct sub_measure_id as col from fpadfa.dfa_prof_input_data
-    //     where sub_measure_id is not null and source_system_type_code != 'EXCEL'
-    //     order by sub_measure_id
-    //   `;
-    // }else if(req.query.params === 2){
-    //   sql = `
-    //   select distinct sub_measure_id as col from fpadfa.dfa_bkgm_input_data
-    //   where sub_measure_id is not null and source_system_type_code != 'EXCEL'
-    //   order by sub_measure_id
-    // `;
-    // }
-    return pgc.pgdb.query(sql)
-      .then(results => results.rows.map(row => Number(row.col)));
-  }
-
-  getInputDataFiscalMonthsFromSubmeasureKeys(req) {
     return this.getListFromColumn(`fpadfa.dfa_${req.query.moduleAbbrev}_input_data`, 'fiscal_month_id',
-      `sub_measure_id in ( ${req.body.submeasureKeys} )`);
-    // if(req.query.params === 1){
-    //   return this.getListFromColumn('fpadfa.dfa_prof_input_data', 'fiscal_month_id',
-    //   `sub_measure_id in ( ${req.body.submeasureKeys} )`);
-    // }else if(req.query.params === 2){
-    //   return this.getListFromColumn('fpadfa.dfa_bkgm_input_data', 'fiscal_month_id',
-    //   `sub_measure_id in ( ${req.body.submeasureKeys} )`);
-    // }
+      `${subMeasureId} in ( ${req.body.submeasureKeys} )`);
   }
 
   getETLAndAllocationFlags() {
