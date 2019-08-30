@@ -73,6 +73,7 @@ export class LeftnavComponent {
       this.alinks = [
         {route: '/bkgm/admin/measure', text: 'Measure', roles: 'bookings misc allocations:business admin'},
         {route: '/bkgm/admin/approval', text: 'Approval', roles: 'bookings misc allocations:business admin'},
+        {route: '/bkgm/admin/processing-date-input', text: 'Processing Date - Input', roles: 'bookings misc allocations:business admin'}
       ];
       break;
 
