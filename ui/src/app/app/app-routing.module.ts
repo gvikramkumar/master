@@ -15,7 +15,7 @@ const routes: Routes = [
     path: '',
     component: HomeComponent,
     data: {
-      authorization: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:business user, profitability allocations:end user',
+      authorization: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:business user, profitability allocations:end user,bookings misc allocations:business admin, bookings misc allocations:super user, bookings misc allocations:business user, bookings misc allocations:end user',
       breadcrumbs: [{label: 'Home'}]
     },
     canActivate: [InitializationGuard, AuthorizationGuard]
