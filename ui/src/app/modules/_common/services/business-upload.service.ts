@@ -46,12 +46,13 @@ export class BusinessUploadService {
           title = 'Success';
           message = `${result.rowCount} rows have been processed.`;
           if (uploadType !== 'dollar-upload')
-            message += ` Data will not be viewable in report until 15 minutes after close of upload window.`;
+            message += ` Data will be available in reports after 30 mins.`;
         } else if(result.status === 'successsync'){
           title = 'Success';
-          message = `${result.rowCount} rows have been processed, however data will be available in reports once allocation run or data loads complete.`;
-          if (uploadType !== 'dollar-upload')
-            message += ` Data will not be viewable in report until 15 minutes after close of upload window.`;  
+          message = `${result.rowCount} rows have been processed, Data will be available in reports once allocation run or data loads complete.`;
+          // message = `${result.rowCount} rows have been processed, however data will be available in reports once allocation run or data loads complete.`;
+          // if (uploadType !== 'dollar-upload')
+          //   message += ` Data will not be viewable in report until 15 minutes after close of upload window.`;  
         }
         else if (result.status === 'failure') {
           // title = `${result.uploadName} - failure`;

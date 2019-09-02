@@ -11,6 +11,7 @@ import {RouterModule} from '@angular/router';
 import {MeasureComponent} from './admin/measure/measure/measure.component';
 import {ApprovalComponent} from './admin/approval/approval.component';
 import {MeasureEditComponent} from './admin/measure/measure-edit/measure-edit.component';
+import {ProcessingDateInputComponent} from './admin/processing-date-input/processing-date-input.component';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import {MeasureEditComponent} from './admin/measure/measure-edit/measure-edit.co
     ReportsComponent,
     MeasureComponent,
     MeasureEditComponent,
-    ApprovalComponent
+    ApprovalComponent,
+    ProcessingDateInputComponent
   ],
   exports: [
     SharedModule,
@@ -38,7 +40,8 @@ import {MeasureEditComponent} from './admin/measure/measure-edit/measure-edit.co
     BusinessUploadComponent,
     MeasureComponent,
     MeasureEditComponent,
-    ApprovalComponent
+    ApprovalComponent,
+    ProcessingDateInputComponent
   ]
 })
 export class DfaCommonModule { }

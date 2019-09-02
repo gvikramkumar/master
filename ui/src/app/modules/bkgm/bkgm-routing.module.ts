@@ -11,6 +11,7 @@ import {AuthorizationGuard} from '../../core/guards/authorization.guard';
 import {MeasureComponent} from '../_common/admin/measure/measure/measure.component';
 import {MeasureEditComponent} from '../_common/admin/measure/measure-edit/measure-edit.component';
 import {ApprovalComponent} from '../_common/admin/approval/approval.component';
+import {ProcessingDateInputComponent} from '../_common/admin/processing-date-input/processing-date-input.component';
 
 const routes: Routes = [
   {
@@ -74,6 +75,18 @@ const routes: Routes = [
                 desc: 'Handle Rule and Submeasure items submitted for approval'
               },
               breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Approval'}]
+            }
+          },
+          {
+            path: 'processing-date-input', component: ProcessingDateInputComponent,
+            canActivate: [AuthorizationGuard],
+            data: {
+              authorization: 'bookings misc allocations:business admin',
+              hero: {
+                title: 'Processing Date - Input',
+                desc: 'Handle Rule and Submeasure items submitted for approval'
+              },
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Processing Date - Input'}]
             }
           }
         ]

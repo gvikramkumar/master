@@ -9,7 +9,8 @@ import AnyObj from '../../../../../shared/models/any-obj';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
 import {svrUtil} from '../../../../lib/common/svr-util';
-
+import DatabaseController from '../../../database/controller';
+import { SyncMap } from '../../../../../shared/models/sync-map';
 @injectable()
 export default class ProductClassUploadUploadController extends UploadController {
   imports: AnyObj[];
@@ -17,7 +18,8 @@ export default class ProductClassUploadUploadController extends UploadController
   constructor(
     repo: ProductClassUploadRepo,
     openPeriodRepo: OpenPeriodRepo,
-    submeasureRepo: SubmeasureRepo
+    submeasureRepo: SubmeasureRepo,
+    private databaseController: DatabaseController
   ) {
     super(
       repo,
@@ -128,6 +130,13 @@ export default class ProductClassUploadUploadController extends UploadController
     }
     return Promise.resolve();
   }
-
+  autoSync(req) {
+    return this.getImportArray()
+      .then(imports => {
+        const syncMap = new SyncMap();
+        const data = {syncMap};
+        return this.databaseController.mongoToPgSyncPromise(req.dfa, data, req.user.id);
+      });
+  }
 }
 

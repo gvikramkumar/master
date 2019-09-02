@@ -23,7 +23,7 @@
         <fin-checkbox [(model)]="allValue" (modelChange)="changeAll()" label="Set All"></fin-checkbox>
       </div>
       <div *ngFor="let key of keys">
-        <fin-checkbox [(model)]="syncMap[key]" [label]="key" (modelChange)="change()"></fin-checkbox>
+        <fin-checkbox [(model)]="syncMap[key]" *ngIf="key!='dfa_prof_input_amnt_upld_autosync'" [label]="key" (modelChange)="change()"></fin-checkbox>
       </div>
 
     </div>

@@ -11,7 +11,8 @@ import DollarUploadImport from '../dollar/import';
 import DeptUploadImport from '../dept/import';
 import AnyObj from '../../../../../shared/models/any-obj';
 import {svrUtil} from '../../../../lib/common/svr-util';
-
+import DatabaseController from '../../../database/controller';
+import { SyncMap } from '../../../../../shared/models/sync-map';
 @injectable()
 export default class SalesSplitUploadUploadController extends UploadController {
   imports: AnyObj[];
@@ -20,7 +21,8 @@ export default class SalesSplitUploadUploadController extends UploadController {
     repo: SalesSplitUploadRepo,
     private pgRepo: PgLookupRepo,
     openPeriodRepo: OpenPeriodRepo,
-    submeasureRepo: SubmeasureRepo
+    submeasureRepo: SubmeasureRepo,
+    private databaseController: DatabaseController
   ) {
     super(
       repo,
@@ -164,6 +166,13 @@ export default class SalesSplitUploadUploadController extends UploadController {
     }
     return Promise.resolve();
   }
-
+  autoSync(req) {
+    return this.getImportArray()
+      .then(imports => {
+        const syncMap = new SyncMap();
+        const data = {syncMap};
+        return this.databaseController.mongoToPgSyncPromise(req.dfa, data, req.user.id);
+      });
+  }
 }
 

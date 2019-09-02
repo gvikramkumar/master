@@ -10,7 +10,8 @@ import OpenPeriodRepo from '../../../common/open-period/repo';
 import PgLookupRepo from '../../../pg-lookup/repo';
 import CorpAdjustmentsUploadRepo from '../../corp-adjustments-upload/repo';
 import DeptUploadImport from '../dept/import';
-
+import DatabaseController from '../../../database/controller';
+import { SyncMap } from '../../../../../shared/models/sync-map';
 @injectable()
 export default class CorpAdjustmentsUploadUploadController extends UploadController {
   imports: AnyObj[];
@@ -19,7 +20,8 @@ export default class CorpAdjustmentsUploadUploadController extends UploadControl
     repo: CorpAdjustmentsUploadRepo,
     private pgRepo: PgLookupRepo,
     openPeriodRepo: OpenPeriodRepo,
-    submeasureRepo: SubmeasureRepo
+    submeasureRepo: SubmeasureRepo,
+    private databaseController: DatabaseController
   ) {
     super(
       repo,
@@ -112,6 +114,13 @@ export default class CorpAdjustmentsUploadUploadController extends UploadControl
     }
     return Promise.resolve();
   }
-
+  autoSync(req) {
+    return this.getImportArray()
+      .then(imports => {
+        const syncMap = new SyncMap();
+        const data = {syncMap};
+        return this.databaseController.mongoToPgSyncPromise(req.dfa, data, req.user.id);
+      });
+  }
 }
 

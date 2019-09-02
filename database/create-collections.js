@@ -55,7 +55,8 @@ const collationCollections = [
   'dfa_prof_service_map_upld',
   'dfa_prof_service_trngsplit_pctmap_upld',
   'dfa_submeasure',
-  'dfa_user'
+  'dfa_user',
+  'dfa_bkgm_data_proc'
 ];
 
 collationCollections.forEach(coll => {
