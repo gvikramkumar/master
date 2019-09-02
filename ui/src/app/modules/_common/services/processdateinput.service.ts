@@ -13,7 +13,7 @@ const apiUrl = environment.apiUrl;
 export class ProcessDateInputService extends RestBase<ProcessDateInput> {
 
   constructor(httpClient: HttpClient, store: AppStore) {
-    super('processdateinput', httpClient, store, true);
+    super('bkgm/processing-date-input', httpClient, store, true);
   }
 
 

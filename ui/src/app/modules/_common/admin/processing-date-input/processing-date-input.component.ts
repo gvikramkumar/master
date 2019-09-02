@@ -19,7 +19,7 @@ export class ProcessingDateInputComponent extends RoutingComponentBase implement
     private router: Router,
     private route: ActivatedRoute,
     private uiUtil: UiUtil,
-    private processDateInputService: ProcessDateInputService,) {
+    private processDateInputService: ProcessDateInputService) {
     super(store, route);
    }
   
