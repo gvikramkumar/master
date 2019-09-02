@@ -1,7 +1,7 @@
-import {pgc} from '../../lib/database/postgres-conn';
+import { pgc } from '../../lib/database/postgres-conn';
 import _ from 'lodash';
-import {injectable} from 'inversify';
-import {ApiError} from '../../lib/common/api-error';
+import { injectable } from 'inversify';
+import { ApiError } from '../../lib/common/api-error';
 
 
 
@@ -149,7 +149,7 @@ export default class PgLookupRepo {
       }));
   }
 
-  getSubmeasurePNLNodes (req) {
+  getSubmeasurePNLNodes(req) {
     const sql = `
             select 
             distinct sm.measure_id::integer, ms.measure_name, sm.pnlnode_grouping 
@@ -440,6 +440,37 @@ export default class PgLookupRepo {
       .then(results => results.rows);
   }
 
+  getDriverReportBkgm(dfa) {
+    const sql = `
+    select drv.fiscal_month_id, drv.driver_type, drv.sub_measure_key ,
+    sh.l1_sales_territory_name_code, sh.l2_sales_territory_name_code, sh.l3_sales_territory_name_code,
+    sh.l4_sales_territory_name_code, sh.l5_sales_territory_name_code, sh.l6_sales_territory_name_code,
+    sh.sales_territory_name_code,
+    sh.dd_external_theater_name, sh.sales_coverage_code,
+    ph.technology_group_id, ph.business_unit_id, ph.product_family_id, ph.product_id,
+    behier.bk_business_entity_name,
+    sum(drv.usd_shipped_rev_amount * behier.prdt_family_allocation_pct) 
+    from fpadfa.dfa_bkgm_driver_data drv, fpacon.vw_fpa_fiscal_month_to_year fm, 
+         fpacon.vw_fpa_sales_hierarchy sh, fpacon.vw_fpa_products ph, fpacon.vw_fpa_be_hier_prdt_family_alloc behier  
+    where drv.fiscal_month_id = ${dfa.fiscalMonths.bkgm}
+    and drv.fiscal_month_id = fm.fiscal_year_month_int 
+    and drv.driver_type = 'BKGMISC'
+    and drv.sales_territory_key = sh.sales_territory_key
+    and drv.product_key = ph.item_key 
+    and drv.product_key = behier.item_key
+    and behier.fiscal_year_quarter_number_int = fm.fiscal_year_quarter_number_int 
+    and behier.bk_business_entity_type_cd = 'I'
+    group by drv.fiscal_month_id, drv.driver_type, drv.sub_measure_key ,
+    sh.l1_sales_territory_name_code, sh.l2_sales_territory_name_code, sh.l3_sales_territory_name_code,
+    sh.l4_sales_territory_name_code, sh.l5_sales_territory_name_code, sh.l6_sales_territory_name_code,
+    sh.sales_territory_name_code,
+    sh.dd_external_theater_name, sh.sales_coverage_code,
+    ph.technology_group_id, ph.business_unit_id, ph.product_family_id, ph.product_id,
+    behier.bk_business_entity_name
+     `;
+    return pgc.pgdb.query(sql)
+      .then(results => results.rows);
+  }
   getRoll3DriverWithBEReport(dfa) {
     const sql = `
             SELECT 
@@ -692,7 +723,7 @@ export default class PgLookupRepo {
       .then(results => results.rows[0].exists);
   }
 
-  checkForExistenceArray(table, column, arr, upper = true): Promise<{values: any[], exist: boolean}> {
+  checkForExistenceArray(table, column, arr, upper = true): Promise<{ values: any[], exist: boolean }> {
     if (!arr.length) {
       throw new ApiError('checkForExistenceArray: empty array.', null, 400);
     }
@@ -707,11 +738,11 @@ export default class PgLookupRepo {
     });
     return Promise.all(promises)
       .then(results => {
-        return {values: results, exist: !results.filter(x => x === null).length};
+        return { values: results, exist: !results.filter(x => x === null).length };
       });
   }
 
-  selectWhereIn(table, column, arr, conditional: 'in'|'not in' = 'in') {
+  selectWhereIn(table, column, arr, conditional: 'in' | 'not in' = 'in') {
     if (!arr.length) {
       throw new ApiError('selectWhereIn: empty array.', null, 400);
     }
@@ -963,47 +994,98 @@ export default class PgLookupRepo {
       .then(results => results.rows);
   }
 
-  getInputSystemDataReport(fiscalMonth, submeasureKeys) {
-    const sql = `
-    select 
-    asd.measure_name ,
-    asm.sub_measure_name, 
-    asd.input_product_value , asd.input_sales_value , asd.input_entity_value,
-    --asd.INPUT_BILLTO_CUST_VALUE , asd.INPUT_SHIPTO_CUST_VALUE , asd.INPUT_SOLDTO_CUST_VALUE, --BillTo, ShipTo and SoldTo fields are not available in DFA input table
-    asd.input_scms_value,
-    sum(asd.amount) as amount,
-    asd.update_owner, asd.update_datetimestamp
-    from fpadfa.dfa_prof_input_data asd,
-         fpadfa.dfa_sub_measure asm,
-         fpadfa.dfa_measure cm
-    where
-    asm.sub_measure_key in ( ${submeasureKeys} )
-    and asd.fiscal_month_id =  ${fiscalMonth}
-    and asd.sub_measure_id = asm.sub_measure_id
-    and asm.measure_id = cm.measure_id
-    group by asd.measure_name, asm.sub_measure_name,
-             asd.input_product_value , asd.input_sales_value , asd.input_entity_value,asd.input_scms_value,
-             asd.update_owner, asd.update_datetimestamp
-    order by asd.measure_name, asm.sub_measure_name,
-             asd.input_product_value , asd.input_sales_value , asd.input_entity_value,asd.input_scms_value
-    `;
+  getInputSystemDataReport(fiscalMonth, submeasureKeys, moduleId) {
+    let sql;
+    if (moduleId == '1') {
+      sql = `
+      select 
+      asd.measure_name ,
+      asm.sub_measure_name, 
+      asd.input_product_value , asd.input_sales_value , asd.input_entity_value,
+      --asd.INPUT_BILLTO_CUST_VALUE , asd.INPUT_SHIPTO_CUST_VALUE , asd.INPUT_SOLDTO_CUST_VALUE, --BillTo, ShipTo and SoldTo fields are not available in DFA input table
+      asd.input_scms_value,
+      sum(asd.amount) as amount,
+      asd.update_owner, asd.update_datetimestamp
+      from fpadfa.dfa_prof_input_data asd,
+           fpadfa.dfa_sub_measure asm,
+           fpadfa.dfa_measure cm
+      where
+      asm.sub_measure_key in ( ${submeasureKeys} )
+      and asd.fiscal_month_id =  ${fiscalMonth}
+      and asd.sub_measure_id = asm.sub_measure_id
+      and asm.measure_id = cm.measure_id
+      group by asd.measure_name, asm.sub_measure_name,
+               asd.input_product_value , asd.input_sales_value , asd.input_entity_value,asd.input_scms_value,
+               asd.update_owner, asd.update_datetimestamp
+      order by asd.measure_name, asm.sub_measure_name,
+               asd.input_product_value , asd.input_sales_value , asd.input_entity_value,asd.input_scms_value
+      `;
+    } else if (moduleId == '2') {
+      sql = `
+      select  
+      asd.measure_name , 
+      asm.sub_measure_name, 
+      asd.input_product_value , 
+      asd.input_sales_value , 
+      asd.input_internal_be_value as input_entity_value,
+      asd.ext_theater_name,  
+      sum(asd.amount) as amount ,
+       asd.update_owner, asd.update_datetimestamp
+      from fpadfa.dfa_bkgm_input_data asd,
+          fpadfa.dfa_sub_measure asm, 
+          fpadfa.dfa_measure cm
+      where 1=1 
+      and asm.sub_measure_key in ( ${submeasureKeys} )
+      and asd.fiscal_month_id =  ${fiscalMonth}
+      and asd.sub_measure_key = asm.sub_measure_key
+      and asm.measure_id = cm.measure_id
+      and cm.module_id = 2 
+      group by asd.measure_name , 
+      asm.sub_measure_name, 
+      asd.input_product_value , 
+      asd.input_sales_value , 
+      asd.input_internal_be_value,
+      asd.ext_theater_name,
+        asd.update_owner, asd.update_datetimestamp
+      order by asd.measure_name, asm.sub_measure_name,
+         asd.input_product_value , asd.input_sales_value , asd.input_internal_be_value, asd.ext_theater_name
+      `;
+    }
+
     return pgc.pgdb.query(sql)
       .then(results => results.rows);
+
   }
 
-  getSubmeasureForSystemInputData() {
+  getSubmeasureForSystemInputData(req?) {
+    let subMeasureId;
+    if (req.query.moduleAbbrev == 'prof') {
+      subMeasureId = 'sub_measure_id';
+
+    } else if (req.query.moduleAbbrev == 'bkgm') {
+      subMeasureId = 'sub_measure_key';
+    }
     const sql = `
-      select distinct sub_measure_id as col from fpadfa.dfa_prof_input_data 
-      where sub_measure_id is not null and source_system_type_code != 'EXCEL' 
-      order by sub_measure_id
-    `;
+        select distinct ${subMeasureId} as col from fpadfa.dfa_${req.query.moduleAbbrev}_input_data 
+        where  ${subMeasureId} is not null and source_system_type_code != 'EXCEL' 
+        order by  ${subMeasureId}
+      `;
     return pgc.pgdb.query(sql)
       .then(results => results.rows.map(row => Number(row.col)));
   }
 
   getInputDataFiscalMonthsFromSubmeasureKeys(req) {
-    return this.getListFromColumn('fpadfa.dfa_prof_input_data', 'fiscal_month_id',
-      `sub_measure_id in ( ${req.body.submeasureKeys} )`);
+    let subMeasureId;
+
+    if (req.query.moduleAbbrev == 'prof') {
+      subMeasureId = 'sub_measure_id';
+
+    } else if (req.query.moduleAbbrev == 'bkgm') {
+      subMeasureId = 'sub_measure_key';
+    }
+
+    return this.getListFromColumn(`fpadfa.dfa_${req.query.moduleAbbrev}_input_data`, 'fiscal_month_id',
+      `${subMeasureId} in ( ${req.body.submeasureKeys} )`);
   }
 
   getETLAndAllocationFlags() {

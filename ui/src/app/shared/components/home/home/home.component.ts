@@ -26,7 +26,11 @@ export class HomeComponent extends RoutingComponentBase implements OnInit {
     {generic: 'biz-admin', actual: 'profitability allocations:business admin'},
     {generic: 'super-user', actual: 'profitability allocations:super user'},
     {generic: 'biz-user', actual: 'profitability allocations:business user'},
-    {generic: 'end-user', actual: 'profitability allocations:end user'}
+    {generic: 'end-user', actual: 'profitability allocations:end user'},
+    {generic: 'biz-admin', actual: 'bookings misc allocations:business admin'},
+    {generic: 'super-user', actual: 'bookings misc allocations:super user'},
+    {generic: 'biz-user', actual: 'bookings misc allocations:business user'},
+    {generic: 'end-user', actual: 'bookings misc allocations:end user'}
     ];
   selectedRole: string;
 
@@ -41,7 +45,14 @@ export class HomeComponent extends RoutingComponentBase implements OnInit {
     if (this.store.module) {
       this.selectedModule = this.store.module;
     } else {
-      this.moduleChange(this.store.modules[0]);
+      let moduleName = this.selectedRole.split(':');
+      if(moduleName[0] === 'bookings misc allocations'){
+        this.moduleChange(this.store.modules[1]);
+      }
+      else {
+        this.moduleChange(this.store.modules[0]);
+      }
+        
     }
   }
 
