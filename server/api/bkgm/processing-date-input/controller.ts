@@ -2,6 +2,7 @@ import {injectable} from 'inversify';
 import ProcessDateInputRepo from './repo';
 import {ApiError} from '../../../lib/common/api-error';
 import ControllerBase from '../../../lib/base-classes/controller-base';
+import { ProcessDateInputPgRepo } from './pgrepo';
 
 @injectable()
 export default class ProcessDateInputController extends ControllerBase {
@@ -9,8 +10,9 @@ export default class ProcessDateInputController extends ControllerBase {
   // constructor(private repo: ProcessDateInputRepo) {
   // }
   constructor(
-    repo: ProcessDateInputRepo) {
-    super(repo);
+    repo: ProcessDateInputRepo,
+    pgRepo: ProcessDateInputPgRepo) {
+    super(repo, pgRepo);
   }
 
   add(req, res, next){

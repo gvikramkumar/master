@@ -27,6 +27,7 @@ import {svrUtil} from '../../lib/common/svr-util';
 import {shUtil} from '../../../shared/misc/shared-util';
 import PgLookupRepo from '../pg-lookup/repo';
 import AnyObj from '../../../shared/models/any-obj';
+import ProcessDateInputController from '../bkgm/processing-date-input/controller';
 
 @injectable()
 export default class DatabaseController {
@@ -54,6 +55,7 @@ export default class DatabaseController {
     private distiDirectUploadController: DistiDirectUploadController,
     private serviceMapUploadController: ServiceMapUploadController,
     private serviceTrainingUploadController: ServiceTrainingUploadController,
+    private ProcessDateInputController : ProcessDateInputController,
     private lookupRepo: LookupRepo,
     private pgLookupRepo: PgLookupRepo
   ) {
@@ -141,6 +143,11 @@ export default class DatabaseController {
           const fiscalYear = shUtil.fiscalYearFromFiscalMonth(dfa.fiscalMonths.prof);
           promises.push(this.serviceTrainingUploadController.mongoToPgSync('dfa_prof_service_trngsplit_pctmap_upld', userId, log, elog,
             {fiscalYear}, {fiscalYear}));
+        }
+        if (syncMap.dfa_bkgm_data_proc) {
+          console.log("call the data functoin");
+          //const fiscalYear = shUtil.fiscalYearFromFiscalMonth(dfa.fiscalMonths.prof);
+          promises.push(this.ProcessDateInputController.mongoToPgSync('dfa_bkgm_data_proc', userId, log, elog,undefined,undefined));
         }
 
         return Promise.resolve() // must be in "then()" to catch thrown errors, use shUtil.promiseChain when merged in

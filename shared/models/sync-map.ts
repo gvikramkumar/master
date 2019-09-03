@@ -10,6 +10,7 @@ export class SyncMap {
   dfa_open_period = false;
   dfa_sub_measure = false;
   // module based
+  //prof module
   dfa_prof_dept_acct_map_upld = false;
   dfa_prof_input_amnt_upld = false;
   dfa_prof_input_amnt_upld_autosync = false;
@@ -21,6 +22,8 @@ export class SyncMap {
   dfa_prof_disti_to_direct_map_upld = false;
   dfa_prof_service_map_upld = false;
   dfa_prof_service_trngsplit_pctmap_upld = false;
+  // bkgm module
+  dfa_bkgm_data_proc = false;
 
   constructor(data?: AnyObj) {
     if (data) {
