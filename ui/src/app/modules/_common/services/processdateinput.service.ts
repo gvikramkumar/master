@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
-import {ProcessDateInput} from '..//models/processdateinput';
+import {ProcessDateInput} from '../models/processdateinput';
 import {AppStore} from '../../../app/app-store';
 import {RestBase} from '../../../core/base-classes/rest-base';
 
