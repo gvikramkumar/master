@@ -1,0 +1,38 @@
+<div class="fin-container">
+  <form #form="ngForm">
+    <div class="row">
+      <div class="col-4 col-lg-4 col-xl-3">
+        <div class="module-name">
+          Process Start Date
+        </div>
+      </div>
+      <div class="col-6 col-lg-4">
+          <cui-input type="date" name="processStartDate" [(ngModel)]="processDateInput.bkgm_process_start_date"></cui-input>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4 col-lg-4 col-xl-3">
+        <div class="module-name">
+          Process End Date
+        </div>
+      </div>
+  
+      <div class="col-6 col-lg-4">
+          <cui-input type="date" name="processEndDate" [(ngModel)]="processDateInput.bkgm_process_end_date"></cui-input>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4 col-lg-4 col-xl-3">
+      </div>
+      <div class="col-6 col-lg-4">
+        <div class="fin-footer-buttons">
+          <button cuiButton color="primary" (click)="save()" [disabled]="!processDateInput.bkgm_process_start_date || !processDateInput.bkgm_process_end_date">Submit</button>
+        </div>
+      </div>
+    </div> 
+  </form>
+
+
+  
+
+</div>

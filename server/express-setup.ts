@@ -36,6 +36,7 @@ import {runJobRouter} from './api/run-job/router';
 import AnyObj from '../shared/models/any-obj';
 import Q from 'q';
 import {svrUtil} from './lib/common/svr-util';
+import { processDateRouter } from './api/bkgm/processing-date-input/router';
 
 
 export const app = express();
@@ -148,6 +149,9 @@ if (!svrUtil.isUnitEnv()) {
   app.use('/api/prof/sales-split-upload', salesSplitUploadRouter);
   app.use('/api/prof/upload', profUploadRouter);
   app.use('/api/prof/disti-direct-upload', distiDirectUploadRouter);
+
+  //bkgm:
+  app.use('/api/bkgm/processing-date-input', processDateRouter);
 
   app.use(notFound());
   app.use(errorHandler({showStack: config.showStack}));

@@ -279,6 +279,7 @@ export default class RepoBase {
       });
   }
 
+
   // so far only diff is "don't bump up the autoIncrement field as we're updating and existing rule/submeasure
   copyOne(data, userId, validate = true) {
     // if versioning items, our edits will actually be adds, so dump the ids in that case
@@ -694,6 +695,24 @@ export default class RepoBase {
       }
     });
   }
-
+  getFilteredDate(item){
+    let filter = this.getProcessedDate(item);
+    return this.Model.find(filter).exec();
+  }
+  getProcessedDate(item){
+      let filter = {};
+      let dateRange = {
+        bkgm_process_start_date: {
+          $gte: new Date(item.bkgm_process_start_date),
+          $lte: new Date(item.bkgm_process_end_date)
+        },
+        bkgm_process_end_date :{
+          $gte: new Date(item.bkgm_process_start_date),
+          $lte: new Date(item.bkgm_process_end_date)
+        }
+      };
+      filter = Object.assign(filter, dateRange);
+    return filter;
+  }
 }
 
