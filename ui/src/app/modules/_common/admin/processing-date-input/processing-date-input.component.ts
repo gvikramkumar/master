@@ -3,7 +3,7 @@ import { RoutingComponentBase } from '../../../../core/base-classes/routing-comp
 import { AppStore } from '../../../../app/app-store';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UiUtil } from '../../../../core/services/ui-util';
-import { ProcessDateInput } from '../../models/processDateInput';
+import { ProcessDateInput } from '../../models/process-date-input';
 import { Observable, of } from 'rxjs';
 import { ProcessDateInputService } from '../../services/processdateinput.service';
 
