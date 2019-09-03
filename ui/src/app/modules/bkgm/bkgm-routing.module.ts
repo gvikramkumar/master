@@ -84,7 +84,7 @@ const routes: Routes = [
               authorization: 'bookings misc allocations:business admin',
               hero: {
                 title: 'Processing Date - Input',
-                desc: 'Handle Rule and Submeasure items submitted for approval'
+                desc: 'Enter Processed Start & End Date for allocations'
               },
               breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Processing Date - Input'}]
             }

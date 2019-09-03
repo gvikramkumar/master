@@ -26,7 +26,7 @@
       </div>
       <div class="col-6 col-lg-4">
         <div class="fin-footer-buttons">
-          <button cuiButton color="primary" (click)="save()">Submit</button>
+          <button cuiButton color="primary" (click)="save()" [disabled]="!processDateInput.bkgm_process_start_date || !processDateInput.bkgm_process_end_date">Submit</button>
         </div>
       </div>
     </div> 
