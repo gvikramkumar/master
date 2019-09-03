@@ -695,6 +695,24 @@ export default class RepoBase {
       }
     });
   }
-
+  getFilteredDate(item){
+    let filter = this.getProcessedDate(item);
+    return this.Model.find(filter).exec();
+  }
+  getProcessedDate(item){
+      let filter = {};
+      let dateRange = {
+        bkgm_process_start_date: {
+          $gte: new Date(item.bkgm_process_start_date),
+          $lte: new Date(item.bkgm_process_end_date)
+        },
+        bkgm_process_end_date :{
+          $gte: new Date(item.bkgm_process_start_date),
+          $lte: new Date(item.bkgm_process_end_date)
+        }
+      };
+      filter = Object.assign(filter, dateRange);
+    return filter;
+  }
 }
 
