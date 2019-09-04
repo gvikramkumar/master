@@ -147,7 +147,7 @@ export default class DatabaseController {
         if (syncMap.dfa_bkgm_data_proc) {
           console.log("call the data functoin");
           //const fiscalYear = shUtil.fiscalYearFromFiscalMonth(dfa.fiscalMonths.prof);
-          promises.push(this.ProcessDateInputController.mongoToPgSync('dfa_bkgm_data_proc', userId, log, elog,undefined,undefined));
+          promises.push(this.ProcessDateInputController.mongoToPgSync('dfa_bkgm_data_proc', userId, log, elog,{"setLimit":1,"setSort":{"updatedDate":-1}},undefined));
         }
 
         return Promise.resolve() // must be in "then()" to catch thrown errors, use shUtil.promiseChain when merged in

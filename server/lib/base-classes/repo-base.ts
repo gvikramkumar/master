@@ -702,14 +702,20 @@ export default class RepoBase {
   getProcessedDate(item){
       let filter = {};
       let dateRange = {
-        bkgm_process_start_date: {
-          $gte: new Date(item.bkgm_process_start_date),
-          $lte: new Date(item.bkgm_process_end_date)
-        },
-        bkgm_process_end_date :{
-          $gte: new Date(item.bkgm_process_start_date),
-          $lte: new Date(item.bkgm_process_end_date)
-        }
+        $or:[
+          {
+            bkgm_process_start_date: {
+              $gte: new Date(item.bkgm_process_start_date),  /// 2019-09-03T00:00:00.000Z  // 2
+              $lte: new Date(item.bkgm_process_end_date) // 2019-09-06T00:00:00.000Z // 7
+            }
+          },{
+            bkgm_process_end_date :{
+              $gte: new Date(item.bkgm_process_start_date), /// 2019-09-03T00:00:00.000Z //2
+              $lte: new Date(item.bkgm_process_end_date) // 2019-09-06T00:00:00.000Z // 7
+            }
+          }
+        ]
+        
       };
       filter = Object.assign(filter, dateRange);
     return filter;
