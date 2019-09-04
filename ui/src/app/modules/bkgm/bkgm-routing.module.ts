@@ -83,10 +83,10 @@ const routes: Routes = [
             data: {
               authorization: 'bookings misc allocations:business admin',
               hero: {
-                title: 'Processing Date - Input',
-                desc: 'Enter Processed Start & End Date for allocations'
+                title: 'Process Date Input',
+                desc: 'Enter Process Start & End Date for allocations'
               },
-              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Processing Date - Input'}]
+              breadcrumbs: [{label: 'Home', routerUrl: '/'}, {label: 'Process Date Input'}]
             }
           }
         ]
