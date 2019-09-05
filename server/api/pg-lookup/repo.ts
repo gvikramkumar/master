@@ -454,7 +454,6 @@ export default class PgLookupRepo {
          fpacon.vw_fpa_sales_hierarchy sh, fpacon.vw_fpa_products ph, fpacon.vw_fpa_be_hier_prdt_family_alloc behier  
     where drv.fiscal_month_id = ${dfa.fiscalMonths.bkgm}
     and drv.fiscal_month_id = fm.fiscal_year_month_int 
-    and drv.driver_type ='BKGMISC'
     and drv.sales_territory_key = sh.sales_territory_key
     and drv.product_key = ph.item_key 
     and drv.product_key = behier.item_key
