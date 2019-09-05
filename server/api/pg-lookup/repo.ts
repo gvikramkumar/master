@@ -443,29 +443,14 @@ export default class PgLookupRepo {
   getDriverReportBkgm(dfa) {
     const sql = `
     select drv.fiscal_month_id, drv.driver_type, drv.sub_measure_key ,
-    sh.l1_sales_territory_name_code, sh.l2_sales_territory_name_code, sh.l3_sales_territory_name_code,
-    sh.l4_sales_territory_name_code, sh.l5_sales_territory_name_code, sh.l6_sales_territory_name_code,
-    sh.sales_territory_name_code,
-    sh.dd_external_theater_name, sh.sales_coverage_code,
-    ph.technology_group_id, ph.business_unit_id, ph.product_family_id, ph.product_id,
-    behier.bk_business_entity_name,
-    sum(drv.usd_shipped_rev_amount * behier.prdt_family_allocation_pct) as shipped_revenue
-    from fpadfa.dfa_bkgm_driver_data drv, fpacon.vw_fpa_fiscal_month_to_year fm, 
-         fpacon.vw_fpa_sales_hierarchy sh, fpacon.vw_fpa_products ph, fpacon.vw_fpa_be_hier_prdt_family_alloc behier  
-    where drv.fiscal_month_id = ${dfa.fiscalMonths.bkgm}
-    and drv.fiscal_month_id = fm.fiscal_year_month_int 
-    and drv.sales_territory_key = sh.sales_territory_key
-    and drv.product_key = ph.item_key 
-    and drv.product_key = behier.item_key
-    and behier.fiscal_year_quarter_number_int = fm.fiscal_year_quarter_number_int 
-    and behier.bk_business_entity_type_cd = 'I'
+    drv.sales_node_level_1_code,  drv.sales_node_level_2_code,
+    drv.technology_group, drv.business_unit, drv.product_family,
+    sum(drv.usd_shipped_rev_amount ) as shipped_revenue   
+    from fpadfa.dfa_bkgm_driver_data drv 
+    where drv.fiscal_month_id ='${dfa.fiscalMonths.bkgm}'
     group by drv.fiscal_month_id, drv.driver_type, drv.sub_measure_key ,
-    sh.l1_sales_territory_name_code, sh.l2_sales_territory_name_code, sh.l3_sales_territory_name_code,
-    sh.l4_sales_territory_name_code, sh.l5_sales_territory_name_code, sh.l6_sales_territory_name_code,
-    sh.sales_territory_name_code,
-    sh.dd_external_theater_name, sh.sales_coverage_code,
-    ph.technology_group_id, ph.business_unit_id, ph.product_family_id, ph.product_id,
-    behier.bk_business_entity_name
+    drv.sales_node_level_1_code,  drv.sales_node_level_2_code,
+    drv.technology_group, drv.business_unit, drv.product_family
      `;
     return pgc.pgdb.query(sql)
       .then(results => results.rows);
@@ -1026,8 +1011,8 @@ export default class PgLookupRepo {
       asm.sub_measure_name, 
       asd.input_product_value , 
       asd.input_sales_value , 
-      asd.input_internal_be_value as input_entity_value,
-      asd.ext_theater_name,  
+      --asd.input_internal_be_value as input_entity_value,
+      --asd.ext_theater_name,  
       sum(asd.amount) as amount ,
        asd.update_owner, asd.update_datetimestamp
       from fpadfa.dfa_bkgm_input_data asd,
@@ -1043,11 +1028,13 @@ export default class PgLookupRepo {
       asm.sub_measure_name, 
       asd.input_product_value , 
       asd.input_sales_value , 
-      asd.input_internal_be_value,
-      asd.ext_theater_name,
+      --asd.input_internal_be_value,
+      --asd.ext_theater_name,
         asd.update_owner, asd.update_datetimestamp
       order by asd.measure_name, asm.sub_measure_name,
-         asd.input_product_value , asd.input_sales_value , asd.input_internal_be_value, asd.ext_theater_name
+         asd.input_product_value , asd.input_sales_value 
+         --, asd.input_internal_be_value
+         --, asd.ext_theater_name
       `;
     }
 

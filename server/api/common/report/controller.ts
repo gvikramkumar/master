@@ -259,8 +259,8 @@ export default class ReportController extends ControllerBase {
           ]);
         }else if(moduleId == 2){
           excelSheetname = ['Driver Data'];
-          excelHeaders = ['Fiscal Month Id', 'Driver Type', 'Sub Measure Key', 'External Theater', 'Sales Territory Code', 'Sales Level1 Code', 'Sales Level2 Code', 'Sales Level3 Code', 'Sales Level4 Code', 'Sales Level5 Code', 'Sales Level6 Code', 'Internal BE' , 'Technology Group', 'Business Unit' , 'Product Family' , 'Product Id', 'Shipped Revenue'];
-          excelProperties = ['fiscal_month_id', 'driver_type', 'sub_measure_key', 'dd_external_theater_name', 'sales_territory_name_code', 'l1_sales_territory_name_code', 'l2_sales_territory_name_code', 'l3_sales_territory_name_code', 'l4_sales_territory_name_code', 'l5_sales_territory_name_code', 'l6_sales_territory_name_code', 'bk_business_entity_name' , 'technology_group_id' , 'business_unit_id', 'product_family_id' , 'product_id', 'shipped_revenue' ];
+          excelHeaders = ['Fiscal Month Id', 'Driver Type', 'Sub Measure Key', 'Sales Level1 Code', 'Sales Level2 Code', 'Technology Group', 'Business Unit' , 'Product Family' , 'Shipped Revenue'];
+          excelProperties = ['fiscal_month_id', 'driver_type', 'sub_measure_key', 'sales_node_level_1_code', 'sales_node_level_2_code', 'technology_group' , 'business_unit', 'product_family' , 'shipped_revenue' ];
           promise = this.pgLookupRepo.getDriverReportBkgm(req.dfa);
         /*  promise = Promise.all([
             this.pgLookupRepo.getDriverReportBkgm(req.dfa)
@@ -494,8 +494,15 @@ export default class ReportController extends ControllerBase {
 
       case 'input-data':
         excelSheetname = ['Input System Data'];
-        excelHeaders = ['Measure Name', 'Sub Measure Name', 'Product', 'Sales', 'Entity', 'SCMS', 'Amount', 'Uploaded By', 'Last Updated Date'];
-        excelProperties = ['measure_name', 'sub_measure_name', 'input_product_value', 'input_sales_value', 'input_entity_value', 'input_scms_value', 'amount', 'update_owner', 'update_datetimestamp'];
+        if(moduleId === 1){
+          excelHeaders = ['Measure Name', 'Sub Measure Name', 'Product', 'Sales', 'Entity', 'SCMS', 'Amount', 'Uploaded By', 'Last Updated Date'];
+          excelProperties = ['measure_name', 'sub_measure_name', 'input_product_value', 'input_sales_value', 'input_entity_value', 'input_scms_value', 'amount', 'update_owner', 'update_datetimestamp'];
+        }
+        if(moduleId === 2){
+          excelHeaders = ['Measure Name', 'Sub Measure Name', 'Product', 'Sales', 'Amount', 'Uploaded By', 'Last Updated Date'];
+          excelProperties = ['measure_name', 'sub_measure_name', 'input_product_value', 'input_sales_value', 'amount', 'update_owner', 'update_datetimestamp'];
+        }      
+        
         promise = Promise.all([
           this.measureRepo.getManyActive({moduleId}),
           this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
