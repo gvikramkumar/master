@@ -494,8 +494,15 @@ export default class ReportController extends ControllerBase {
 
       case 'input-data':
         excelSheetname = ['Input System Data'];
-        excelHeaders = ['Measure Name', 'Sub Measure Name', 'Product', 'Sales', 'Entity', 'SCMS', 'Amount', 'Uploaded By', 'Last Updated Date'];
-        excelProperties = ['measure_name', 'sub_measure_name', 'input_product_value', 'input_sales_value', 'input_entity_value', 'input_scms_value', 'amount', 'update_owner', 'update_datetimestamp'];
+        if(moduleId === 1){
+          excelHeaders = ['Measure Name', 'Sub Measure Name', 'Product', 'Sales', 'Entity', 'SCMS', 'Amount', 'Uploaded By', 'Last Updated Date'];
+          excelProperties = ['measure_name', 'sub_measure_name', 'input_product_value', 'input_sales_value', 'input_entity_value', 'input_scms_value', 'amount', 'update_owner', 'update_datetimestamp'];
+        }
+        if(moduleId === 2){
+          excelHeaders = ['Measure Name', 'Sub Measure Name', 'Product', 'Sales', 'Amount', 'Uploaded By', 'Last Updated Date'];
+          excelProperties = ['measure_name', 'sub_measure_name', 'input_product_value', 'input_sales_value', 'amount', 'update_owner', 'update_datetimestamp'];
+        }      
+        
         promise = Promise.all([
           this.measureRepo.getManyActive({moduleId}),
           this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),

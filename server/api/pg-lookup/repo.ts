@@ -1026,8 +1026,8 @@ export default class PgLookupRepo {
       asm.sub_measure_name, 
       asd.input_product_value , 
       asd.input_sales_value , 
-      asd.input_internal_be_value as input_entity_value,
-      asd.ext_theater_name,  
+      --asd.input_internal_be_value as input_entity_value,
+      --asd.ext_theater_name,  
       sum(asd.amount) as amount ,
        asd.update_owner, asd.update_datetimestamp
       from fpadfa.dfa_bkgm_input_data asd,
@@ -1043,11 +1043,13 @@ export default class PgLookupRepo {
       asm.sub_measure_name, 
       asd.input_product_value , 
       asd.input_sales_value , 
-      asd.input_internal_be_value,
-      asd.ext_theater_name,
+      --asd.input_internal_be_value,
+      --asd.ext_theater_name,
         asd.update_owner, asd.update_datetimestamp
       order by asd.measure_name, asm.sub_measure_name,
-         asd.input_product_value , asd.input_sales_value , asd.input_internal_be_value, asd.ext_theater_name
+         asd.input_product_value , asd.input_sales_value 
+         --, asd.input_internal_be_value
+         --, asd.ext_theater_name
       `;
     }
 
