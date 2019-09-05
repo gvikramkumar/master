@@ -43,7 +43,7 @@ export class ProcessingDateInputComponent extends RoutingComponentBase implement
             if (response.CREATE_OWNER) {
               this.uiUtil.genericDialog('This is not a valid scenario as it falls within already inputted range');
             } else {
-              //history.go(-1);
+              this.uiUtil.toast('Process Dates saved.');
               console.log(response);
             }
           });
