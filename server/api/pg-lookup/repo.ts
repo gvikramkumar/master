@@ -442,15 +442,22 @@ export default class PgLookupRepo {
 
   getDriverReportBkgm(dfa) {
     const sql = `
-    select drv.fiscal_month_id, drv.driver_type, drv.sub_measure_key ,
+     select drv.fiscal_month_id, drv.driver_type, drv.sub_measure_key ,
     drv.sales_node_level_1_code,  drv.sales_node_level_2_code,
     drv.technology_group, drv.business_unit, drv.product_family,
     sum(drv.usd_shipped_rev_amount ) as shipped_revenue   
     from fpadfa.dfa_bkgm_driver_data drv 
-    where drv.fiscal_month_id ='${dfa.fiscalMonths.bkgm}'
+    where drv.fiscal_month_id in ( SELECT fiscal_year_month_int 
+                  FROM (SELECT fiscal_year_month_int 
+                  FROM fpacon.vw_fpa_fiscal_month_to_year  
+                  WHERE fiscal_year_month_int  <=  ${dfa.fiscalMonths.bkgm}
+                  order by fiscal_year_month_int desc) as fm 
+                  limit 3)
     group by drv.fiscal_month_id, drv.driver_type, drv.sub_measure_key ,
     drv.sales_node_level_1_code,  drv.sales_node_level_2_code,
     drv.technology_group, drv.business_unit, drv.product_family
+    ORDER BY
+    drv.driver_type,  drv.sales_node_level_1_code,  drv.sales_node_level_2_code,drv.fiscal_month_id  
      `;
     return pgc.pgdb.query(sql)
       .then(results => results.rows);
