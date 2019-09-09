@@ -1083,17 +1083,18 @@ export default class PgLookupRepo {
 
   getETLAndAllocationFlags() {
     const sql = `
-      select dl_processed_flag, alloc_processed_flag 
+      select module_id, dl_processed_flag, alloc_processed_flag 
       from fpadfa.dfa_data_ctrl
-      where module_id = 1
+      --where module_id = 1
       `;
     return pgc.pgdb.query(sql)
       .then(results => {
-        const flags = results.rows[0] || {};
-        return {
-          etlRunning: flags.dl_processed_flag !== 'Y',
-          allocationRunning: flags.alloc_processed_flag !== 'Y'
-        };
+        const flags = results.rows || {};
+        return flags;
+        // return {
+        //   etlRunning: flags.dl_processed_flag !== 'Y',
+        //   allocationRunning: flags.alloc_processed_flag !== 'Y'
+        // };
       });
   }
 
