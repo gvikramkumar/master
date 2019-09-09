@@ -31,6 +31,7 @@ mg.connect(uri, {useNewUrlParser: true})
       {fileName: 'disty_to_direct_upload_template.xlsx', buUploadType: 'disti-direct-upload'},
       {fileName: 'service_map_upload_template.xlsx', buUploadType: 'service-map-upload'},
       {fileName: 'service_training_split_upload_template.xlsx', buUploadType: 'service-training-upload'},
+      {fileName: 'scms_triangulation_upload.xlsx', buUploadType: 'scms-triangulation-upload'}
     ]
 
     buTemplates.forEach(template => {

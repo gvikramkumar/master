@@ -37,7 +37,7 @@ import AnyObj from '../shared/models/any-obj';
 import Q from 'q';
 import {svrUtil} from './lib/common/svr-util';
 import { processDateRouter } from './api/bkgm/processing-date-input/router';
-
+import { scmsTriangulationUploadRouter } from './api/prof/scms-triangulation-upload/router';
 
 export const app = express();
 
@@ -149,6 +149,7 @@ if (!svrUtil.isUnitEnv()) {
   app.use('/api/prof/sales-split-upload', salesSplitUploadRouter);
   app.use('/api/prof/upload', profUploadRouter);
   app.use('/api/prof/disti-direct-upload', distiDirectUploadRouter);
+  app.use('/api/prof/scms-triangulation-upload', scmsTriangulationUploadRouter);
 
   //bkgm:
   app.use('/api/bkgm/processing-date-input', processDateRouter);
