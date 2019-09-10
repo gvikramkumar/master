@@ -32,12 +32,10 @@ imports: AnyObj[];
     this.uploadName = 'Misc Exception Upload';
 
     this.PropNames = {
-      salesTerritoryCode: 'Sales Territory Code',
-      salesNodeLevel3Code: 'Sales Level 3 Code',
-      extTheaterName: 'External Theater',
-      salesCountryName: 'Sales Country',
-      productFamily: 'Product Family',
-      splitPercentage: 'Split Percentage'
+      
+      salesNodeLevel2Code: 'Sales Level 2 Code',
+      scmsValue: 'Scms Value',
+      salesTerritoryCode: 'Sales Territory Code'
     };
   }
 
