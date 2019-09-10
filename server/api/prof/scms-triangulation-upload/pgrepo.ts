@@ -15,7 +15,7 @@ const ormMap: OrmMap[] = [
 
 @injectable()
 export class ScmsTriangulationUploadPgRepo extends PgRepoBase {
-  table = 'fpadfa.dfa_prof_scms_triangulation_upld';
+  table = 'fpadfa.dfa_prof_scms_triang_miscexcep_map_upld';
 
   constructor() {
     super(new Orm(ormMap));

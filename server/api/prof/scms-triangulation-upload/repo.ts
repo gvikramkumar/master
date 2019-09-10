@@ -14,7 +14,7 @@ const schema = new Schema(
     updatedBy: {type: String, required: true},
     updatedDate: {type: Date, required: true}
   },
-  {collection: 'dfa_prof_scms_triangulation_upld'}
+  {collection: 'dfa_prof_scms_triang_miscexcep_map_upld'}
 );
 
 @injectable()
