@@ -151,7 +151,8 @@ export default class DatabaseController {
           const fiscalYear = shUtil.fiscalYearFromFiscalMonth(dfa.fiscalMonths.prof);
           console.log("fiscalYear : " + fiscalYear);
           promises.push(this.miscExceptionUploadController.mongoToPgSync('dfa_prof_scms_triang_miscexcep_map_upld', userId, log, elog,
-            {fiscalYear}, {fiscalYear}));
+          {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}));
+          //{fiscalYear}, {fiscalYear}));
         }
         if (syncMap.dfa_bkgm_data_proc) {
           console.log("call the data functoin");

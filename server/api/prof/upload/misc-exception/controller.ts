@@ -69,7 +69,7 @@ imports: AnyObj[];
 
   validate() {
     // sort by submeasureName, add up splitPercentage, error if not 1.0
-    this.imports = this.rows1.map(row => new MiscExceptionUploadImport(row));
+    this.imports = this.rows1.map(row => new MiscExceptionUploadImport(row, this.fiscalMonth));
     // const obj = {};
     // this.imports.forEach(val => {
     //   const productFamily = val.productFamily.toUpperCase();

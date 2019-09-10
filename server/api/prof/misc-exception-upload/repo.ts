@@ -5,6 +5,7 @@ import RepoBase from '../../../lib/base-classes/repo-base';
 const schema = new Schema(
   {
     transactionId: {type: SchemaTypes.ObjectId, required: true},
+    fiscalMonth: {type: Number, required: true},
     salesNodeLevel2Code: {type: String, required: true},
     scmsValue: {type: String, required: true},
     salesTerritoryCode: {type: String, required: true},
