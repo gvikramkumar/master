@@ -1,9 +1,9 @@
 import {injectable} from 'inversify';
 import UploadController from '../../../../lib/base-classes/upload-controller';
 import PgLookupRepo from '../../../pg-lookup/repo';
-import ScmsTriangulationUploadTemplate from './template';
+import MiscExceptionUploadTemplate from './template';
 import _ from 'lodash';
-import ScmsTriangulationUploadImport from './import';
+import MiscExceptionUploadImport from './import';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
 import {NamedApiError} from '../../../../lib/common/named-api-error';
@@ -12,13 +12,13 @@ import {shUtil} from '../../../../../shared/misc/shared-util';
 import DatabaseController from '../../../database/controller';
 import { SyncMap } from '../../../../../shared/models/sync-map';
 import AnyObj from '../../../../../shared/models/any-obj';
-import ScmsTriangulationUploadRepo from '../../scms-triangulation-upload/repo';
+import MiscExceptionUploadRepo from '../../misc-exception-upload/repo';
 @injectable()
-export default class ScmsTriangulationUploadUploadController extends UploadController {
+export default class MiscExceptionUploadUploadController extends UploadController {
 //imports: ScmsTriangulationUploadImport[];
 imports: AnyObj[];
   constructor(
-    repo: ScmsTriangulationUploadRepo,
+    repo: MiscExceptionUploadRepo,
     private pgRepo: PgLookupRepo,
     openPeriodRepo: OpenPeriodRepo,
     submeasureRepo: SubmeasureRepo,
@@ -29,7 +29,7 @@ imports: AnyObj[];
       openPeriodRepo,
       submeasureRepo
     );
-    this.uploadName = 'Scms Triangulation Upload';
+    this.uploadName = 'Misc Exception Upload';
 
     this.PropNames = {
       salesTerritoryCode: 'Sales Territory Code',
@@ -59,7 +59,7 @@ imports: AnyObj[];
   }
 
   validateRow1(row) {
-    this.temp = new ScmsTriangulationUploadTemplate(row);
+    this.temp = new MiscExceptionUploadTemplate(row);
     return Promise.all([
       this.validateProperty(this.temp, 'salesTerritoryCode', this.data.salesTerritoryNames, true),
       this.validateProperty(this.temp, 'salesNodeLevel3Code', this.data.salesTerritoryNameCodes3, true),
@@ -73,7 +73,7 @@ imports: AnyObj[];
 
   validate() {
     // sort by submeasureName, add up splitPercentage, error if not 1.0
-    this.imports = this.rows1.map(row => new ScmsTriangulationUploadTemplate(row));
+    this.imports = this.rows1.map(row => new MiscExceptionUploadTemplate(row));
     const obj = {};
     this.imports.forEach(val => {
       const productFamily = val.productFamily.toUpperCase();
@@ -99,7 +99,7 @@ imports: AnyObj[];
     return Promise.resolve(this.imports);
   }
 
-  removeDuplicatesFromDatabase(imports: ScmsTriangulationUploadTemplate[]) {
+  removeDuplicatesFromDatabase(imports: MiscExceptionUploadTemplate[]) {
     return this.repo.removeMany({});
   }
 

@@ -1,11 +1,11 @@
-import ScmsTriangulationUploadController from './controller';
+import MiscExceptionUploadController from './controller';
 import {Router} from 'express';
 import {injector} from '../../../lib/common/inversify.config';
 import {authorize} from '../../../lib/middleware/authorize';
 
-const ctrl = injector.get(ScmsTriangulationUploadController);
+const ctrl = injector.get(MiscExceptionUploadController);
 
-export const scmsTriangulationUploadRouter = Router()
+export const miscExceptionUploadRouter = Router()
   .get('/', ctrl.getMany.bind(ctrl))
   .post('/', ctrl.addOne.bind(ctrl))
   .get('/:id', ctrl.getOne.bind(ctrl))

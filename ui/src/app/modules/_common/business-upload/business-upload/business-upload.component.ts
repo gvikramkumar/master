@@ -46,7 +46,7 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
     {type: 'disti-direct-upload', text: 'Disty to Direct Mapping', disabled: false},
     {type: 'service-map-upload', text: 'Service Mapping Split Percentage', disabled: false},
     {type: 'service-training-upload', text: 'Service Training Mapping Split Percentage', disabled: false},
-    {type:'scms-triangulation-upload',text:'Misc Exception Mapping', disabled: false}
+    {type:'misc-exception-upload',text:'Misc Exception Mapping', disabled: false}
   ];
   uploadType: UploadType;
 

@@ -5,7 +5,6 @@ import RepoBase from '../../../lib/base-classes/repo-base';
 const schema = new Schema(
   {
     transactionId: {type: SchemaTypes.ObjectId, required: true},
-    fiscalMonth: {type: Number, required: true},
     salesNodeLevel2Code: {type: String, required: true},
     scmsValue: {type: String, required: true},
     salesTerritoryCode: {type: String, required: true},
@@ -18,9 +17,9 @@ const schema = new Schema(
 );
 
 @injectable()
-export default class ScmsTriangulationUploadRepo extends RepoBase {
+export default class MiscExceptionUploadRepo extends RepoBase {
   constructor() {
-    super(schema, 'ScmsTriangulationUpload');
+    super(schema, 'MiscExceptionUpload');
   }
 
 }

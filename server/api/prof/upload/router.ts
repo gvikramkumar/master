@@ -11,7 +11,8 @@ import CorpAdjustmentsUploadUploadController from './corp-adjustments/controller
 import DistiDirectUploadUploadController from './disti-direct/controller';
 import ServiceMapUploadUploadController from './service-map/controller';
 import ServiceTrainingUploadUploadController from './service-training/controller';
-import ScmsTriangulationUploadUploadController from './scms-triangulation/controller';
+//import ScmsTriangulationUploadUploadController from './scms-triangulation/controller';
+import MiscExceptionUploadUploadController from './misc-exception/controller';
 
 const dollarUploadCtrl = injector.get(DollarUploadUploadController);
 const mappingUploadCtrl = injector.get(MappingUploadUploadController);
@@ -23,7 +24,8 @@ const corpAdjustmentsUploadCtrl = injector.get(CorpAdjustmentsUploadUploadContro
 const distiDirectUploadCtrl = injector.get(DistiDirectUploadUploadController);
 const serviceMapUploadUploadController = injector.get(ServiceMapUploadUploadController);
 const serviceTrainingUploadUploadController = injector.get(ServiceTrainingUploadUploadController);
-const scmsTriangulationUploadUploadController = injector.get(ScmsTriangulationUploadUploadController);
+//const scmsTriangulationUploadUploadController = injector.get(ScmsTriangulationUploadUploadController);
+const miscExceptionUploadUploadController = injector.get(MiscExceptionUploadUploadController);
 export const profUploadRouter = Router()
   .post('/dollar-upload', upload.single('fileUploadField'), dollarUploadCtrl.upload.bind(dollarUploadCtrl))
   .post('/mapping-upload', upload.single('fileUploadField'), mappingUploadCtrl.upload.bind(mappingUploadCtrl))
@@ -35,4 +37,4 @@ export const profUploadRouter = Router()
   .post('/disti-direct-upload', upload.single('fileUploadField'), distiDirectUploadCtrl.upload.bind(distiDirectUploadCtrl))
   .post('/service-map-upload', upload.single('fileUploadField'), serviceMapUploadUploadController.upload.bind(serviceMapUploadUploadController))
   .post('/service-training-upload', upload.single('fileUploadField'), serviceTrainingUploadUploadController.upload.bind(serviceTrainingUploadUploadController))
-  .post('/scms-triangulation-upload', upload.single('fileUploadField'), scmsTriangulationUploadUploadController.upload.bind(scmsTriangulationUploadUploadController));
+  .post('/misc-exception-upload', upload.single('fileUploadField'), miscExceptionUploadUploadController.upload.bind(miscExceptionUploadUploadController));
