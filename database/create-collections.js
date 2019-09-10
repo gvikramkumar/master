@@ -56,7 +56,8 @@ const collationCollections = [
   'dfa_prof_service_trngsplit_pctmap_upld',
   'dfa_submeasure',
   'dfa_user',
-  'dfa_bkgm_data_proc'
+  'dfa_bkgm_data_proc',
+  'dfa_prof_scms_triang_miscexcep_map_upld'
 ];
 
 collationCollections.forEach(coll => {
@@ -101,7 +102,7 @@ db.dfa_prof_input_amnt_upld.createIndex({submeasureName: 1, fiscalMonth: -1});
 db.dfa_prof_manual_map_upld.createIndex({submeasureName: 1, fiscalMonth: -1});
 db.dfa_prof_swalloc_manualmix_upld.createIndex({submeasureName: 1, fiscalMonth: -1});
 db.dfa_submeasure.createIndex({name: 1, updatedDate: -1});
-
+db.dfa_prof_scms_triang_miscexcep_map_upld.createIndex({submeasureName: 1, fiscalMonth: -1});
 print('>>>>>>>>>>>> create-collections complete');
 // unique constraints
 
