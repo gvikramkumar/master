@@ -19,6 +19,7 @@ import {ApiDfaData} from '../../lib/middleware/add-global-data';
 import DistiDirectUploadController from '../prof/disti-direct-upload/controller';
 import ServiceMapUploadController from '../prof/service-map-upload/controller';
 import ServiceTrainingUploadController from '../prof/service-training-upload/controller';
+import MiscExceptionUploadController from '../prof/misc-exception-upload/controller';
 import {handleQAllSettled} from '../../lib/common/q-allSettled';
 import Q from 'q';
 import config from '../../config/get-config';
@@ -55,6 +56,7 @@ export default class DatabaseController {
     private distiDirectUploadController: DistiDirectUploadController,
     private serviceMapUploadController: ServiceMapUploadController,
     private serviceTrainingUploadController: ServiceTrainingUploadController,
+    private miscExceptionUploadController: MiscExceptionUploadController,
     private ProcessDateInputController : ProcessDateInputController,
     private lookupRepo: LookupRepo,
     private pgLookupRepo: PgLookupRepo
@@ -142,6 +144,13 @@ export default class DatabaseController {
         if (syncMap.dfa_prof_service_trngsplit_pctmap_upld) {
           const fiscalYear = shUtil.fiscalYearFromFiscalMonth(dfa.fiscalMonths.prof);
           promises.push(this.serviceTrainingUploadController.mongoToPgSync('dfa_prof_service_trngsplit_pctmap_upld', userId, log, elog,
+            {fiscalYear}, {fiscalYear}));
+        }
+        if (syncMap.dfa_prof_scms_triang_miscexcep_map_upld) {
+          console.log("*********************  sync called for dfa_prof_scms_triang_miscexcep_map_upld *************");
+          const fiscalYear = shUtil.fiscalYearFromFiscalMonth(dfa.fiscalMonths.prof);
+          console.log("fiscalYear : " + fiscalYear);
+          promises.push(this.miscExceptionUploadController.mongoToPgSync('dfa_prof_scms_triang_miscexcep_map_upld', userId, log, elog,
             {fiscalYear}, {fiscalYear}));
         }
         if (syncMap.dfa_bkgm_data_proc) {

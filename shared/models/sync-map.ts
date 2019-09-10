@@ -22,6 +22,7 @@ export class SyncMap {
   dfa_prof_disti_to_direct_map_upld = false;
   dfa_prof_service_map_upld = false;
   dfa_prof_service_trngsplit_pctmap_upld = false;
+  dfa_prof_scms_triang_miscexcep_map_upld = false;
   // bkgm module
   dfa_bkgm_data_proc = false;
 
