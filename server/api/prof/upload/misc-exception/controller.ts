@@ -31,28 +31,23 @@ imports: AnyObj[];
     );
     this.uploadName = 'Misc Exception Upload';
 
-    this.PropNames = {
-      
+    this.PropNames = {      
       salesNodeLevel2Code: 'Sales Level 2 Code',
-      scmsValue: 'Scms Value',
+      scmsValue: 'SCMS Value',
       salesTerritoryCode: 'Sales Territory Code'
     };
   }
 
   getValidationAndImportData() {
     return Promise.all([
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_territory_name'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l3_sales_territory_name_code'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'dd_external_theater_name'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_iso_country', 'iso_country_name'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_products', 'product_family_id'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l2_sales_territory_name_code'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_coverage_code'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_territory_name_code')
     ])
       .then(results => {
-        this.data.salesTerritoryNames = results[0];
-        this.data.salesTerritoryNameCodes3 = results[1];
-        this.data.extTheaters = results[2];
-        this.data.salesCountries = results[3];
-        this.data.productFamilies = results[4];
+        this.data.salesTerritoryNameCodes2 = results[0];
+        this.data.salesCoverageCodes = results[1];
+        this.data.salesTerritoryCodes = results[2];
       });
   }
 
