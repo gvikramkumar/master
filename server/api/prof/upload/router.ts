@@ -23,7 +23,7 @@ const corpAdjustmentsUploadCtrl = injector.get(CorpAdjustmentsUploadUploadContro
 const distiDirectUploadCtrl = injector.get(DistiDirectUploadUploadController);
 const serviceMapUploadUploadController = injector.get(ServiceMapUploadUploadController);
 const serviceTrainingUploadUploadController = injector.get(ServiceTrainingUploadUploadController);
-const ScmsTriangulationUploadController = injector.get(ScmsTriangulationUploadUploadController);
+const scmsTriangulationUploadUploadController = injector.get(ScmsTriangulationUploadUploadController);
 export const profUploadRouter = Router()
   .post('/dollar-upload', upload.single('fileUploadField'), dollarUploadCtrl.upload.bind(dollarUploadCtrl))
   .post('/mapping-upload', upload.single('fileUploadField'), mappingUploadCtrl.upload.bind(mappingUploadCtrl))
@@ -35,4 +35,4 @@ export const profUploadRouter = Router()
   .post('/disti-direct-upload', upload.single('fileUploadField'), distiDirectUploadCtrl.upload.bind(distiDirectUploadCtrl))
   .post('/service-map-upload', upload.single('fileUploadField'), serviceMapUploadUploadController.upload.bind(serviceMapUploadUploadController))
   .post('/service-training-upload', upload.single('fileUploadField'), serviceTrainingUploadUploadController.upload.bind(serviceTrainingUploadUploadController))
-  .post('/scms-triangulation-upload', upload.single('fileUploadField'), ScmsTriangulationUploadController.upload.bind(ScmsTriangulationUploadUploadController));
+  .post('/scms-triangulation-upload', upload.single('fileUploadField'), scmsTriangulationUploadUploadController.upload.bind(scmsTriangulationUploadUploadController));

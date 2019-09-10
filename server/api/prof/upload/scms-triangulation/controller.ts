@@ -7,17 +7,18 @@ import ScmsTriangulationUploadImport from './import';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
 import {NamedApiError} from '../../../../lib/common/named-api-error';
-import ServiceTrainingUploadRepo from '../../service-training-upload/repo';
 import {svrUtil} from '../../../../lib/common/svr-util';
 import {shUtil} from '../../../../../shared/misc/shared-util';
 import DatabaseController from '../../../database/controller';
 import { SyncMap } from '../../../../../shared/models/sync-map';
+import AnyObj from '../../../../../shared/models/any-obj';
+import ScmsTriangulationUploadRepo from '../../scms-triangulation-upload/repo';
 @injectable()
 export default class ScmsTriangulationUploadUploadController extends UploadController {
-imports: ScmsTriangulationUploadImport[];
-
+//imports: ScmsTriangulationUploadImport[];
+imports: AnyObj[];
   constructor(
-    repo: ServiceTrainingUploadRepo,
+    repo: ScmsTriangulationUploadRepo,
     private pgRepo: PgLookupRepo,
     openPeriodRepo: OpenPeriodRepo,
     submeasureRepo: SubmeasureRepo,
@@ -28,7 +29,7 @@ imports: ScmsTriangulationUploadImport[];
       openPeriodRepo,
       submeasureRepo
     );
-    this.uploadName = 'Service Training Upload';
+    this.uploadName = 'Scms Triangulation Upload';
 
     this.PropNames = {
       salesTerritoryCode: 'Sales Territory Code',
