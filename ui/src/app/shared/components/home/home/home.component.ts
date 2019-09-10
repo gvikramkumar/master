@@ -49,10 +49,13 @@ export class HomeComponent extends RoutingComponentBase implements OnInit {
       if(moduleName[0] === 'bookings misc allocations'){
         this.moduleChange(this.store.modules[1]);
       }
+      else  if(moduleName[0] === 'tss cogs triangulation'){
+        this.moduleChange(this.store.modules[1]);
+      }
       else {
         this.moduleChange(this.store.modules[0]);
       }
-        
+
     }
   }
 

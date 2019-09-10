@@ -31,7 +31,7 @@ export enum DfaModuleIds {
   prof = 1,
   bkgm = 2,
   svct,
-  tsct,
+  tsct = 4,
   ascg,
   cisc,
   opex,
