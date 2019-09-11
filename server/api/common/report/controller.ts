@@ -518,12 +518,11 @@ export default class ReportController extends ControllerBase {
 
       case 'misc-exception':
         excelSheetname = ['Misc Exception'];
-        excelHeaders = ['Sales Level 2 Code', 'SCMS Value', 'Sales Territory Name'];
-        excelProperties = ['sales_node_level_2_code', 'input_scms_value', 'sales_territory_name_code'];
-        promise = this.pgLookupRepo.getMiscExceptionDataReport(body.fiscalMonth, body.submeasureKeys, moduleId)
-      //promise = this.pgLookupRepo.getSalesHierarchyReport();
+        excelHeaders = ['Fiscal Month Id', 'Sales Level 2 Code', 'SCMS Value', 'Sales Territory Name', 'Created By', 'Creation Date', 'Updated By', 'Update Date'];
+        excelProperties = ['fiscal_month_id' , 'sales_node_level_2_code' , 'scms_value', 'sales_territory_code', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
+        promise = this.pgLookupRepo.getMiscExceptionDataReport(body.fiscalMonth)
         break;
-        
+
       default:
         next(new ApiError('Bad report type.', null, 400));
         return;

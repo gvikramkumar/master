@@ -1110,12 +1110,17 @@ export default class PgLookupRepo {
     }
   }
 
-  getMiscExceptionDataReport(fiscalMonth, submeasureKeys, moduleId) {
+  getMiscExceptionDataReport(fiscalMonth) {
     return pgc.pgdb.query(`
       select 
       asd.fiscal_month_id,
       asd.sales_node_level_2_code,
-      asd.scms_value
+      asd.scms_value,
+      asd.sales_territory_code,
+      asd.create_owner,
+      asd.create_datetimestamp,
+      asd.update_owner,
+      asd.update_datetimestamp
       from fpadfa.dfa_prof_scms_triang_miscexcep_map_upld asd
       where
        asd.fiscal_month_id =  ${fiscalMonth}

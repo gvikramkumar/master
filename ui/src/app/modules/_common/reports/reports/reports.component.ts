@@ -147,7 +147,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       filename: 'Service_Training_Report', invisible: this.moduleId == 2 ? true:false
     },
     {
-      type: 'misc-exception', hasFiscalMonthOnly: true, text: 'Misc Exception', disabled: false,
+      type: 'misc-exception', hasFiscalMonthOnly: true, text: 'Misc Exception Mapping', disabled: false,
       filename: 'Misc_Exception_Report', invisible: this.moduleId == 2 ? true:false
     },
   ];
@@ -241,7 +241,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
         break;
       case 'misc-exception':
           prmFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_scms_triang_miscexcep_map_upld', 'fiscal_month_id').toPromise();
-          break;  
+          break;
     }
     const promises = [prmFiscalMonth, prmFiscalYear, prmMeasure].filter(x => !!x);
     if (promises.length) {
