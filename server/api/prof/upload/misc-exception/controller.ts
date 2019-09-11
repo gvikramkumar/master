@@ -29,69 +29,65 @@ imports: AnyObj[];
       openPeriodRepo,
       submeasureRepo
     );
-    this.uploadName = 'Misc Exception Upload';
+    this.uploadName = 'Misc Exception Mapping';
 
-    this.PropNames = {
-      salesTerritoryCode: 'Sales Territory Code',
-      salesNodeLevel3Code: 'Sales Level 3 Code',
-      extTheaterName: 'External Theater',
-      salesCountryName: 'Sales Country',
-      productFamily: 'Product Family',
-      splitPercentage: 'Split Percentage'
+    this.PropNames = {      
+      salesNodeLevel2Code: 'Sales Level 2 Code',
+      scmsValue: 'SCMS Value',
+      salesTerritoryCode: 'Sales Territory Code'
     };
   }
 
   getValidationAndImportData() {
     return Promise.all([
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_territory_name'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l3_sales_territory_name_code'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'dd_external_theater_name'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_iso_country', 'iso_country_name'),
-      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_products', 'product_family_id'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l2_sales_territory_name_code'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_coverage_code'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_territory_name_code')
     ])
       .then(results => {
-        this.data.salesTerritoryNames = results[0];
-        this.data.salesTerritoryNameCodes3 = results[1];
-        this.data.extTheaters = results[2];
-        this.data.salesCountries = results[3];
-        this.data.productFamilies = results[4];
+        this.data.salesTerritoryNameCodes2 = results[0];
+        this.data.salesCoverageCodes = results[1];
+        this.data.salesTerritoryCodes = results[2];
       });
   }
 
   validateRow1(row) {
     this.temp = new MiscExceptionUploadTemplate(row);
     return Promise.all([
-      this.validateProperty(this.temp, 'salesTerritoryCode', this.data.salesTerritoryNames, true),
-      this.validateProperty(this.temp, 'salesNodeLevel3Code', this.data.salesTerritoryNameCodes3, true),
-      this.validateProperty(this.temp, 'extTheaterName', this.data.extTheaters, false),
-      this.validateProperty(this.temp, 'salesCountryName', this.data.salesCountries, false),
-      this.validateProperty(this.temp, 'productFamily', this.data.productFamilies, false),
-      this.validateSplitPercentage(),
+      this.validateProperty(this.temp, 'salesNodeLevel2Code', this.data.salesTerritoryNameCodes2, false),
+      this.validateScmsValue(),
+      this.validateSalesTerritoryCode()
+
+      // this.validateProperty(this.temp, 'salesNodeLevel2Code', this.data.salesTerritoryNameCodes2, true),
+      // this.validateProperty(this.temp, 'scmsValue', this.data.salesTerritoryNameCodes2, true),
+      // this.validateProperty(this.temp, 'salesTerritoryCode', this.data.salesTerritoryNameCodes2, true)
+      // this.validateScmsValue(),
+      // this.validateSalesTerritoryCode()
     ])
       .then(() => this.lookForErrors());
   }
 
   validate() {
     // sort by submeasureName, add up splitPercentage, error if not 1.0
-    this.imports = this.rows1.map(row => new MiscExceptionUploadTemplate(row));
-    const obj = {};
-    this.imports.forEach(val => {
-      const productFamily = val.productFamily.toUpperCase();
-      if (obj[productFamily] !== undefined) {
-        obj[productFamily] += val.splitPercentage;
-      } else {
-        obj[productFamily] = val.splitPercentage;
-      }
-    });
-    _.forEach(obj, (val, sl3) => {
-      if (svrUtil.toFixed8(val) !== 1.0) {
-        this.addError(`${sl3}`, val);
-      }
-    });
+    this.imports = this.rows1.map(row => new MiscExceptionUploadImport(row, this.fiscalMonth));
+    // const obj = {};
+    // this.imports.forEach(val => {
+    //   const productFamily = val.productFamily.toUpperCase();
+    //   if (obj[productFamily] !== undefined) {
+    //     obj[productFamily] += val.splitPercentage;
+    //   } else {
+    //     obj[productFamily] = val.splitPercentage;
+    //   }
+    // });
+    // _.forEach(obj, (val, sl3) => {
+    //   if (svrUtil.toFixed8(val) !== 1.0) {
+    //     this.addError(`${sl3}`, val);
+    //   }
+    // });
 
-    if (this.errors.length) {
-      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Product Family percentage values not 100%', this.errors));
-    }
+    // if (this.errors.length) {
+    //   return Promise.reject(new NamedApiError(this.UploadValidationError, 'Product Family percentage values not 100%', this.errors));
+    // }
     return Promise.resolve();
   }
 
@@ -106,6 +102,22 @@ imports: AnyObj[];
   validateSplitPercentage() {
     if (this.validatePercentageValue(this.PropNames.splitPercentage, this.temp.splitPercentage, true)) {
       this.temp.splitPercentage = Number(this.temp.splitPercentage);
+    }
+    return Promise.resolve();
+  }
+  validateSalesTerritoryCode() {
+    if (!this.temp.salesTerritoryCode) {
+      this.addErrorRequired(this.PropNames.salesTerritoryCode);
+    } else if (this.notExists(this.data.salesTerritoryCodes, this.temp.salesTerritoryCode)) {
+      this.addErrorInvalid(this.PropNames.salesTerritoryCode, this.temp.salesTerritoryCode);
+    }
+    return Promise.resolve();
+  }
+  validateScmsValue() {
+    if (!this.temp.scmsValue) {
+      this.addErrorRequired(this.PropNames.scmsValue);
+    } else if (this.notExists(this.data.salesCoverageCodes, this.temp.scmsValue)) {
+      this.addErrorInvalid(this.PropNames.scmsValue, this.temp.scmsValue);
     }
     return Promise.resolve();
   }

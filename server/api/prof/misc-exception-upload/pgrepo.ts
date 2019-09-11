@@ -3,6 +3,7 @@ import {PgRepoBase} from '../../../lib/base-classes/pg-repo-base';
 import {Orm, OrmMap, OrmTypes} from '../../../lib/base-classes/Orm';
 
 const ormMap: OrmMap[] = [
+  {prop: 'fiscalMonth', field: 'fiscal_month_id', type: OrmTypes.number},
   {prop: 'salesNodeLevel2Code', field: 'sales_node_level_2_code'},
   {prop: 'scmsValue', field: 'scms_value'},
   {prop: 'salesTerritoryCode', field: 'sales_territory_code'},
