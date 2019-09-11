@@ -11,7 +11,6 @@ import {AuthorizationGuard} from '../../core/guards/authorization.guard';
 import {MeasureComponent} from '../_common/admin/measure/measure/measure.component';
 import {MeasureEditComponent} from '../_common/admin/measure/measure-edit/measure-edit.component';
 import {ApprovalComponent} from '../_common/admin/approval/approval.component';
-import {ProcessingDateInputComponent} from '../_common/admin/processing-date-input/processing-date-input.component';
 import {BusinessUploadComponent} from '../_common/business-upload/business-upload/business-upload.component';
 
 const routes: Routes = [
