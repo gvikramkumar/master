@@ -85,11 +85,6 @@ export default class UploadController {
     }
     const propNames = _.values(this.PropNames).map(x => x.trim().toLowerCase());
     headerRow = _.map(headerRow, (str) => str.replace(/(\*)/g, '').replace(/(\-)/g, ' ').trim().toLowerCase());
-    console.log(headerRow);
-    console.log("+++++++++++++++++++++++++++++");
-    console.log(propNames);
-    console.log("-----------------------------------");
-    console.log(headerRow.length,_.intersection(headerRow, propNames).length);
     if (headerRow.length !== _.intersection(headerRow, propNames).length) {
       next(new ApiError('Wrong template uploaded. Please use the appropriate upload template.', null, 400));
       return;
