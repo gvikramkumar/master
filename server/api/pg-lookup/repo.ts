@@ -1083,17 +1083,18 @@ export default class PgLookupRepo {
 
   getETLAndAllocationFlags() {
     const sql = `
-      select dl_processed_flag, alloc_processed_flag 
+      select module_id, dl_processed_flag, alloc_processed_flag 
       from fpadfa.dfa_data_ctrl
-      where module_id = 1
+      --where module_id = 1
       `;
     return pgc.pgdb.query(sql)
       .then(results => {
-        const flags = results.rows[0] || {};
-        return {
-          etlRunning: flags.dl_processed_flag !== 'Y',
-          allocationRunning: flags.alloc_processed_flag !== 'Y'
-        };
+        const flags = results.rows || {};
+        return flags;
+        // return {
+        //   etlRunning: flags.dl_processed_flag !== 'Y',
+        //   allocationRunning: flags.alloc_processed_flag !== 'Y'
+        // };
       });
   }
 
@@ -1107,6 +1108,24 @@ export default class PgLookupRepo {
     if (missingProps.length) {
       throw new ApiError(`Properties missing: ${missingProps.join(', ')}.`, data, 400);
     }
+  }
+
+  getMiscExceptionDataReport(fiscalMonth) {
+    return pgc.pgdb.query(`
+      select 
+      asd.fiscal_month_id,
+      asd.sales_node_level_2_code,
+      asd.scms_value,
+      asd.sales_territory_code,
+      asd.create_owner,
+      asd.create_datetimestamp,
+      asd.update_owner,
+      asd.update_datetimestamp
+      from fpadfa.dfa_prof_scms_triang_miscexcep_map_upld asd
+      where
+       asd.fiscal_month_id =  ${fiscalMonth}
+          `)
+      .then(results => results.rows);
   }
 
 }

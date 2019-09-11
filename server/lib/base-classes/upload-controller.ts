@@ -474,6 +474,7 @@ export default class UploadController {
         {type: 'disti-direct-upload', syncMapProp: 'dfa_prof_disti_to_direct_map_upld'},
         {type: 'service-map-upload', syncMapProp: 'dfa_prof_service_map_upld'},
         {type: 'service-training-upload', syncMapProp: 'dfa_prof_service_trngsplit_pctmap_upld'},
+        {type: 'misc-exception-upload', syncMapProp: 'dfa_prof_scms_triang_miscexcep_map_upld'}
       ]
     };
     const syncMap = new SyncMap();
