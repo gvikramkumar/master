@@ -31,7 +31,7 @@ imports: AnyObj[];
     );
     this.uploadName = 'Misc Exception Mapping';
 
-    this.PropNames = {      
+    this.PropNames = {
       salesNodeLevel2Code: 'Sales Level 2 Code',
       scmsValue: 'SCMS Value',
       salesTerritoryCode: 'Sales Territory Code'
@@ -57,37 +57,12 @@ imports: AnyObj[];
       this.validateProperty(this.temp, 'salesNodeLevel2Code', this.data.salesTerritoryNameCodes2, false),
       this.validateScmsValue(),
       this.validateSalesTerritoryCode()
-
-      // this.validateProperty(this.temp, 'salesNodeLevel2Code', this.data.salesTerritoryNameCodes2, true),
-      // this.validateProperty(this.temp, 'scmsValue', this.data.salesTerritoryNameCodes2, true),
-      // this.validateProperty(this.temp, 'salesTerritoryCode', this.data.salesTerritoryNameCodes2, true)
-      // this.validateScmsValue(),
-      // this.validateSalesTerritoryCode()
     ])
       .then(() => this.lookForErrors());
   }
 
   validate() {
-    // sort by submeasureName, add up splitPercentage, error if not 1.0
     this.imports = this.rows1.map(row => new MiscExceptionUploadImport(row, this.fiscalMonth));
-    // const obj = {};
-    // this.imports.forEach(val => {
-    //   const productFamily = val.productFamily.toUpperCase();
-    //   if (obj[productFamily] !== undefined) {
-    //     obj[productFamily] += val.splitPercentage;
-    //   } else {
-    //     obj[productFamily] = val.splitPercentage;
-    //   }
-    // });
-    // _.forEach(obj, (val, sl3) => {
-    //   if (svrUtil.toFixed8(val) !== 1.0) {
-    //     this.addError(`${sl3}`, val);
-    //   }
-    // });
-
-    // if (this.errors.length) {
-    //   return Promise.reject(new NamedApiError(this.UploadValidationError, 'Product Family percentage values not 100%', this.errors));
-    // }
     return Promise.resolve();
   }
 

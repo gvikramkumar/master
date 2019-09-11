@@ -74,10 +74,10 @@ export default class DatabaseController {
     // }
 
     // this is to make sure we don't accidentally sync to dev/stage pg with local mongo database, use ldev env to sync to local postgres
-    if (svrUtil.isLocalEnv() && config.postgres.host !== 'localhost') {
+ /*   if (svrUtil.isLocalEnv() && config.postgres.host !== 'localhost') {
       return Promise.resolve({success: {message: 'Syncing local mongo to non-local postgres.'}});
     }
-
+*/
     return shUtil.promiseChain(this.pgLookupRepo.getETLAndAllocationFlags())
       .then(flags => {
         if (flags.etlRunning || flags.allocationRunning) {
@@ -147,17 +147,11 @@ export default class DatabaseController {
             {fiscalYear}, {fiscalYear}));
         }
         if (syncMap.dfa_prof_scms_triang_miscexcep_map_upld) {
-          console.log("*********************  sync called for dfa_prof_scms_triang_miscexcep_map_upld *************");
-          const fiscalYear = shUtil.fiscalYearFromFiscalMonth(dfa.fiscalMonths.prof);
-          console.log("fiscalYear : " + fiscalYear);
           promises.push(this.miscExceptionUploadController.mongoToPgSync('dfa_prof_scms_triang_miscexcep_map_upld', userId, log, elog,
           {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}));
-          //{fiscalYear}, {fiscalYear}));
         }
         if (syncMap.dfa_bkgm_data_proc) {
-          console.log("call the data functoin");
-          //const fiscalYear = shUtil.fiscalYearFromFiscalMonth(dfa.fiscalMonths.prof);
-          promises.push(this.ProcessDateInputController.mongoToPgSync('dfa_bkgm_data_proc', userId, log, elog,{"setLimit":1,"setSort":{"updatedDate":-1}},undefined));
+          promises.push(this.ProcessDateInputController.mongoToPgSync('dfa_bkgm_data_proc', userId, log, elog,{"setLimit":1,"setSort":{"updatedDate":-1}}, undefined));
         }
 
         return Promise.resolve() // must be in "then()" to catch thrown errors, use shUtil.promiseChain when merged in
