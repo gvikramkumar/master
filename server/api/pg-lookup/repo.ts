@@ -1118,7 +1118,7 @@ export default class PgLookupRepo {
       asd.scms_value
       from fpadfa.dfa_prof_scms_triang_miscexcep_map_upld asd
       where
-      and asd.fiscal_month_id =  ${fiscalMonth}
+       asd.fiscal_month_id =  ${fiscalMonth}
           `)
       .then(results => results.rows);
   }
