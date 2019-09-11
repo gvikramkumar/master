@@ -1110,4 +1110,17 @@ export default class PgLookupRepo {
     }
   }
 
+  getMiscExceptionDataReport(fiscalMonth, submeasureKeys, moduleId) {
+    return pgc.pgdb.query(`
+      select 
+      asd.fiscal_month_id,
+      asd.sales_node_level_2_code,
+      asd.scms_value
+      from fpadfa.dfa_prof_scms_triang_miscexcep_map_upld asd
+      where
+      and asd.fiscal_month_id =  ${fiscalMonth}
+          `)
+      .then(results => results.rows);
+  }
+
 }

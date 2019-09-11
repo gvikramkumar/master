@@ -146,6 +146,10 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       type: 'service-training', hasFiscalYearOnly: true, text: 'Service Training Split Percentage', disabled: false,
       filename: 'Service_Training_Report', invisible: this.moduleId == 2 ? true:false
     },
+    {
+      type: 'misc-exception', hasFiscalMonthOnly: true, text: 'Misc Exception', disabled: false,
+      filename: 'Misc_Exception_Report', invisible: this.moduleId == 2 ? true:false
+    },
   ];
 
   report: Report;
@@ -235,6 +239,9 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       case 'input-data':
         prmMeasure = this.pgLookupService.callRepoMethod('getSubmeasureForSystemInputData', '', {params: this.moduleId, moduleAbbrev: this.store.module.abbrev}).toPromise();
         break;
+      case 'misc-exception':
+          prmFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_scms_triang_miscexcep_map_upld', 'fiscal_month_id').toPromise();
+          break;  
     }
     const promises = [prmFiscalMonth, prmFiscalYear, prmMeasure].filter(x => !!x);
     if (promises.length) {
