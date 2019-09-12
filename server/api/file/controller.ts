@@ -64,7 +64,7 @@ export default class FileController {
         res.set('Content-Disposition', 'attachment; filename="' + fileInfo.metadata.fileName + '"');
         const gfs = new mgc.mongo.GridFSBucket(mgc.db);
         const readStream = gfs.openDownloadStream(new mgc.mongo.ObjectID(id));
-        //readStream.on('error', next);
+        readStream.on('error', next);
         readStream.pipe(res);
       })
       .catch(next);
