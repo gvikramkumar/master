@@ -1,5 +1,5 @@
 ### fin-dfa
-### Digital Finance Allocations
+#### Digital Finance Allocations
   dank1
 #### build and run                                     
 assume site root unless specified otherwise
