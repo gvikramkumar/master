@@ -259,8 +259,8 @@ export default class ReportController extends ControllerBase {
           ]);
         } else if (moduleId == 2) {
           excelSheetname = ['Driver Data'];
-          excelHeaders = ['Fiscal Month Id', 'Driver Type', 'Sub Measure Key', 'Sales Level1 Code', 'Sales Level2 Code', 'Technology Group', 'Business Unit', 'Product Family', 'Shipped Revenue'];
-          excelProperties = ['fiscal_month_id', 'driver_type', 'sub_measure_key', 'sales_node_level_1_code', 'sales_node_level_2_code', 'technology_group', 'business_unit', 'product_family', 'shipped_revenue'];
+          excelHeaders = ['Fiscal Month Id', 'Driver Type', 'Sales Level1 Code', 'Sales Level2 Code', 'Technology Group', 'Business Unit', 'Product Family', 'Shipped Revenue'];
+          excelProperties = ['fiscal_month_id', 'driver_type', 'sales_node_level_1_code', 'sales_node_level_2_code', 'technology_group', 'business_unit', 'product_family', 'shipped_revenue'];
           promise = this.pgLookupRepo.getDriverReportBkgm(req.dfa);
           /*  promise = Promise.all([
               this.pgLookupRepo.getDriverReportBkgm(req.dfa)
