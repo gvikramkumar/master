@@ -81,7 +81,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   prodTgChoices: { name: string }[] = [];
   scmsChoices: { name: string }[] = [];
   internalBeChoices: { name: string }[] = [];
-
+  moduleId:number;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -102,6 +102,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     this.viewMode = this.route.snapshot.params.mode === 'view';
     this.editMode = this.route.snapshot.params.mode === 'edit';
     this.copyMode = this.route.snapshot.params.mode === 'copy';
+    this.moduleId = this.store.module.moduleId;
   }
 
   public ngOnInit(): void {

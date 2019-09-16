@@ -13,6 +13,7 @@ import {ApprovalComponent} from './admin/approval/approval.component';
 import {MeasureEditComponent} from './admin/measure/measure-edit/measure-edit.component';
 import {ProcessingDateInputComponent} from './admin/processing-date-input/processing-date-input.component';
 
+import { moduleBasedPipe } from './pipes/module-based.pipe';
 @NgModule({
   imports: [
     CommonModule,
@@ -29,7 +30,8 @@ import {ProcessingDateInputComponent} from './admin/processing-date-input/proces
     MeasureComponent,
     MeasureEditComponent,
     ApprovalComponent,
-    ProcessingDateInputComponent
+    ProcessingDateInputComponent,
+    moduleBasedPipe
   ],
   exports: [
     SharedModule,
@@ -41,7 +43,8 @@ import {ProcessingDateInputComponent} from './admin/processing-date-input/proces
     MeasureComponent,
     MeasureEditComponent,
     ApprovalComponent,
-    ProcessingDateInputComponent
+    ProcessingDateInputComponent,
+    moduleBasedPipe
   ]
 })
 export class DfaCommonModule { }
