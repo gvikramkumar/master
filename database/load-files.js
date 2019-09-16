@@ -20,8 +20,9 @@ mg.connect(uri, {useNewUrlParser: true})
     const dirPath = 'files/prof/business-upload/';
     const meta = {directory: 'prof.bu', buFileType: 'template'};
     const promises = [];
+    // Please add required files in the below. These will be inserted to fs.files collection
     const buTemplates = [
-      {fileName: 'dollar_upload_template.xlsx', buUploadType: 'dollar-upload'},
+   /*   {fileName: 'dollar_upload_template.xlsx', buUploadType: 'dollar-upload'},
       {fileName: 'manual_mapping_upload_template.xlsx', buUploadType: 'mapping-upload'},
       {fileName: 'department_upload_template.xlsx', buUploadType: 'dept-upload'},
       {fileName: 'sales_level_split_upload_template.xlsx', buUploadType: 'sales-split-upload'},
@@ -30,7 +31,7 @@ mg.connect(uri, {useNewUrlParser: true})
       {fileName: 'corp_adjustments_upload_template.xlsx', buUploadType: 'corp-adjustments-upload'},
       {fileName: 'disty_to_direct_upload_template.xlsx', buUploadType: 'disti-direct-upload'},
       {fileName: 'service_map_upload_template.xlsx', buUploadType: 'service-map-upload'},
-      {fileName: 'service_training_split_upload_template.xlsx', buUploadType: 'service-training-upload'},
+      {fileName: 'service_training_split_upload_template.xlsx', buUploadType: 'service-training-upload'}, */
       {fileName: 'misc_exception_mapping_template.xlsx', buUploadType: 'misc-exception-upload'}
     ]
 
