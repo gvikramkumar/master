@@ -20,7 +20,7 @@ mg.connect(uri, {useNewUrlParser: true})
     const dirPath = 'files/prof/business-upload/';
     const meta = {directory: 'prof.bu', buFileType: 'template'};
     const promises = [];
-    // Please add required files in the below. These will be inserted to
+    // Please add required files in the below. These will be inserted to fs.files collection
     const buTemplates = [
    /*   {fileName: 'dollar_upload_template.xlsx', buUploadType: 'dollar-upload'},
       {fileName: 'manual_mapping_upload_template.xlsx', buUploadType: 'mapping-upload'},
