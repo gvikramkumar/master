@@ -15,7 +15,7 @@
         <label class="radio" [class.disabled]="utype.disabled">
           <input type="radio" name="uploadType" [value]="utype" [(ngModel)]="uploadType" (change)="changeUploadType()">
           <span class="radio__input"></span>
-          <span class="radio__label">{{utype.text}}</span>
+          <span class="radio__label">{{utype.text}}-----{{moduleId}}</span>
         </label>
       </div>
 
