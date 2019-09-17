@@ -82,10 +82,11 @@ export default class DatabaseController {
         
         flags.forEach(element => {
           if ((element.dl_processed_flag === 'N' || element.alloc_processed_flag === 'N') && (syncMap.dfa_prof_dept_acct_map_upld || syncMap.dfa_prof_input_amnt_upld || syncMap.dfa_prof_input_amnt_upld_autosync || syncMap.dfa_prof_manual_map_upld || syncMap.dfa_prof_scms_triang_altsl2_map_upld || syncMap.dfa_prof_scms_triang_corpadj_map_upld || syncMap.dfa_prof_swalloc_manualmix_upld || syncMap.dfa_prof_sales_split_pctmap_upld || syncMap.dfa_prof_disti_to_direct_map_upld || syncMap.dfa_prof_service_map_upld || syncMap.dfa_prof_service_trngsplit_pctmap_upld || syncMap.dfa_prof_scms_triang_miscexcep_map_upld) && element.module_id ==='1'){
-            //throw new Error('ETL or Allocation currently processing.');  
             log.push(`ETL or Allocation currently processing for module - ${element.module_id}`);
+            throw new Error(`ETL or Allocation currently processing for module - ${element.module_id}`);              
           }else if((element.dl_processed_flag === 'N' || element.alloc_processed_flag === 'N') && (syncMap.dfa_bkgm_data_proc) && element.module_id ==='2'){
             log.push(`ETL or Allocation currently processing for module - ${element.module_id}`) 
+            throw new Error(`ETL or Allocation currently processing for module - ${element.module_id}`);  
           }
           else{
             if (syncMap.dfa_prof_dept_acct_map_upld && element.module_id === "1") {
