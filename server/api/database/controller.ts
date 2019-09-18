@@ -77,16 +77,18 @@ export default class DatabaseController {
     if (svrUtil.isLocalEnv() && config.postgres.host !== 'localhost') {
       return Promise.resolve({success: {message: 'Syncing local mongo to non-local postgres.'}});
     }
+
     return shUtil.promiseChain(this.pgLookupRepo.getETLAndAllocationFlags())
       .then(flags => {
-        
         flags.forEach(element => {
           if ((element.dl_processed_flag === 'N' || element.alloc_processed_flag === 'N') && (syncMap.dfa_prof_dept_acct_map_upld || syncMap.dfa_prof_input_amnt_upld || syncMap.dfa_prof_input_amnt_upld_autosync || syncMap.dfa_prof_manual_map_upld || syncMap.dfa_prof_scms_triang_altsl2_map_upld || syncMap.dfa_prof_scms_triang_corpadj_map_upld || syncMap.dfa_prof_swalloc_manualmix_upld || syncMap.dfa_prof_sales_split_pctmap_upld || syncMap.dfa_prof_disti_to_direct_map_upld || syncMap.dfa_prof_service_map_upld || syncMap.dfa_prof_service_trngsplit_pctmap_upld || syncMap.dfa_prof_scms_triang_miscexcep_map_upld) && element.module_id ==='1'){
             log.push(`ETL or Allocation currently processing for module - ${element.module_id}`);
-            throw new Error(`ETL or Allocation currently processing for module - ${element.module_id}`);              
+            if(syncMap.dfa_prof_input_amnt_upld_autosync){
+              throw new Error('ETL or Allocation currently processing.'); 
+            }
           }else if((element.dl_processed_flag === 'N' || element.alloc_processed_flag === 'N') && (syncMap.dfa_bkgm_data_proc) && element.module_id ==='2'){
-            log.push(`ETL or Allocation currently processing for module - ${element.module_id}`) 
-            throw new Error(`ETL or Allocation currently processing for module - ${element.module_id}`);  
+            log.push(`ETL or Allocation currently processing for module - ${element.module_id}`);
+            //throw new Error('ETL or Allocation currently processing.');   
           }
           else{
             if (syncMap.dfa_prof_dept_acct_map_upld && element.module_id === "1") {
@@ -145,22 +147,25 @@ export default class DatabaseController {
         });
       })
       .then(()=>{
-        if (syncMap.dfa_data_sources) {
-          promises.push(this.moduleSourceCtrl.mongoToPgSync('dfa_data_sources', userId, log, elog));
+        if(log.length<=0){
+          if (syncMap.dfa_data_sources) {
+            promises.push(this.moduleSourceCtrl.mongoToPgSync('dfa_data_sources', userId, log, elog));
+          }
+          if (syncMap.dfa_measure) {
+            promises.push(this.measureCtrl.mongoToPgSync('dfa_measure', userId, log, elog, {moduleId: -1}));
+          }
+          if (syncMap.dfa_module) {
+            promises.push(this.moduleCtrl.mongoToPgSync('dfa_module', userId, log, elog, {abbrev: {$ne: 'admn'}}));
+          }
+          if (syncMap.dfa_open_period) {
+            promises.push(this.openPeriodCtrl.mongoToPgSync('dfa_open_period', userId, log, elog));
+          }
+          if (syncMap.dfa_sub_measure) {
+            promises.push(this.submeasureCtrl.mongoToPgSync('dfa_sub_measure', userId, log, elog,
+              this.submeasureRepo.getManyLatestGroupByNameActiveInactive(-1)));
+          }
         }
-        if (syncMap.dfa_measure) {
-          promises.push(this.measureCtrl.mongoToPgSync('dfa_measure', userId, log, elog, {moduleId: -1}));
-        }
-        if (syncMap.dfa_module) {
-          promises.push(this.moduleCtrl.mongoToPgSync('dfa_module', userId, log, elog, {abbrev: {$ne: 'admn'}}));
-        }
-        if (syncMap.dfa_open_period) {
-          promises.push(this.openPeriodCtrl.mongoToPgSync('dfa_open_period', userId, log, elog));
-        }
-        if (syncMap.dfa_sub_measure) {
-          promises.push(this.submeasureCtrl.mongoToPgSync('dfa_sub_measure', userId, log, elog,
-            this.submeasureRepo.getManyLatestGroupByNameActiveInactive(-1)));
-        }
+        
       })
       .then(() => {
         return Promise.resolve() // must be in "then()" to catch thrown errors, use shUtil.promiseChain when merged in
