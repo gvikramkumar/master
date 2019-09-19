@@ -17,20 +17,23 @@ mg.connect(uri, {useNewUrlParser: true})
     console.log('loading files...');
 
     const gfs = new mongo.GridFSBucket(db);
-    const dirPath = 'files/prof/business-upload/';
-    const meta = {directory: 'prof.bu', buFileType: 'template'};
+ //   const dirPath = 'files/tsct/business-upload/';
+  //  const meta = {directory: 'tsct.bu', buFileType: 'template'};
+    const meta = { buFileType: 'template'};
     const promises = [];
     const buTemplates = [
-      {fileName: 'dollar_upload_template.xlsx', buUploadType: 'dollar-upload'},
-      {fileName: 'manual_mapping_upload_template.xlsx', buUploadType: 'mapping-upload'},
-      {fileName: 'department_upload_template.xlsx', buUploadType: 'dept-upload'},
-      {fileName: 'sales_level_split_upload_template.xlsx', buUploadType: 'sales-split-upload'},
-      {fileName: 'product_classification_upload_template.xlsx', buUploadType: 'product-class-upload'},
-      {fileName: 'alternate_sl2_upload_template.xlsx', buUploadType: 'alternate-sl2-upload'},
-      {fileName: 'corp_adjustments_upload_template.xlsx', buUploadType: 'corp-adjustments-upload'},
-      {fileName: 'disty_to_direct_upload_template.xlsx', buUploadType: 'disti-direct-upload'},
-      {fileName: 'service_map_upload_template.xlsx', buUploadType: 'service-map-upload'},
-      {fileName: 'service_training_split_upload_template.xlsx', buUploadType: 'service-training-upload'},
+      {fileName: 'dollar_upload_template.xlsx', buUploadType: 'dollar-upload', directory: 'prof.bu',dirPath : 'files/prof/business-upload/'},
+      {fileName: 'manual_mapping_upload_template.xlsx', buUploadType: 'mapping-upload', directory: 'prof.bu',dirPath : 'files/prof/business-upload/'},
+      {fileName: 'department_upload_template.xlsx', buUploadType: 'dept-upload', directory: 'prof.bu',dirPath : 'files/prof/business-upload/'},
+      {fileName: 'sales_level_split_upload_template.xlsx', buUploadType: 'sales-split-upload', directory: 'prof.bu',dirPath : 'files/prof/business-upload/'},
+      {fileName: 'product_classification_upload_template.xlsx', buUploadType: 'product-class-upload', directory: 'prof.bu',dirPath : 'files/prof/business-upload/'},
+      {fileName: 'alternate_sl2_upload_template.xlsx', buUploadType: 'alternate-sl2-upload', directory: 'prof.bu',dirPath : 'files/prof/business-upload/'},
+      {fileName: 'corp_adjustments_upload_template.xlsx', buUploadType: 'corp-adjustments-upload', directory: 'prof.bu',dirPath : 'files/prof/business-upload/'},
+      {fileName: 'disty_to_direct_upload_template.xlsx', buUploadType: 'disti-direct-upload', directory: 'prof.bu',dirPath : 'files/prof/business-upload/'},
+      {fileName: 'service_map_upload_template.xlsx', buUploadType: 'service-map-upload', directory: 'prof.bu',dirPath : 'files/prof/business-upload/'},
+      {fileName: 'service_training_split_upload_template.xlsx', buUploadType: 'service-training-upload', directory: 'prof.bu',dirPath : 'files/prof/business-upload/'},
+      {fileName: 'misc_exception_mapping_template.xlsx', buUploadType: 'misc-exception-upload', directory: 'prof.bu',dirPath : 'files/prof/business-upload/'},
+      {fileName: 'disti_to_direct_upload_template.xlsx', buUploadType: 'disti-sl3-to-direct-sl2-mapping-upload', directory: 'tsct.bu',dirPath : 'files/tsct/business-upload/'}
     ]
 
     buTemplates.forEach(template => {
@@ -39,6 +42,8 @@ mg.connect(uri, {useNewUrlParser: true})
       const contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
       metadata.fileName = fileName;
       metadata.buUploadType = template.buUploadType;
+      metadata.directory=template.directory;
+      const dirPath = template.dirPath;
       // console.log(fileName, metadata);
       const promise = new Promise((resolve, reject) => {
         fs.createReadStream(dirPath + fileName).pipe(gfs.openUploadStream(fileName, {metadata, contentType}))
