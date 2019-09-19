@@ -44,6 +44,8 @@ const schema = new Schema({
     reportingLevels: [String],
     indicators: indicatorsSchema,
     rules: [String],
+    countryMatch: String,
+    extTheaterMatch: String,
     categoryType: String,
     groupingSubmeasureId: Number,
     sourceSystemAdjTypeId: Number,

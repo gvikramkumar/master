@@ -27,6 +27,8 @@ const schema = new Schema(
     prodTGSelect: String,
     scmsSelect: String,
     beSelect: String,
+    countrySelect:String,
+    externalTheaterSelect:String,
     activeStatus: {type: String, enum: ['A', 'I'], required: true},
     status: {type: String, enum: ['D', 'P', 'A', 'I'], required: true},
     approvedOnce: {type: String, enum: ['Y', 'N'], required: true},

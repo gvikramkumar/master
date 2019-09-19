@@ -331,12 +331,14 @@
           </fieldset>
         </div>
       </div>
-      <cui-select name="cntyMatch"   dropdownMaxHeight="300"
-        optionsKey="name" optionsValue="value" empty="true" label="Country" >
+
+      <cui-select name="cntyMatch"  *ngIf="moduleId!=1 && moduleId!=2"  dropdownMaxHeight="300"
+        optionsKey="name" optionsValue="value" empty="true" label="Country" [(ngModel)]="sm.countryMatch" [items]="countryMatches" >
       </cui-select>
-      <cui-select name="extTheaterMatch"  
-        optionsKey="name" optionsValue="value" empty="true" label="External Theater" >
+      <cui-select name="extTheaterMatch"  *ngIf="moduleId!=1 && moduleId!=2" dropdownMaxHeight="300"
+        optionsKey="name" optionsValue="value" empty="true" [(ngModel)]="sm.extTheaterMatch" label="External Theater" [items]="extTheaterMatches">
       </cui-select>
+
       <div class="row" [class.disabled]="viewMode">
         <div class="col-12">
           <div class="inline-check-row">
