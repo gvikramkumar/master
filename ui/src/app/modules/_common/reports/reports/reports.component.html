@@ -14,7 +14,7 @@
         </div>
       </div>
 
-      <div class="border-and-padding report-group" *ngIf="moduleId != 2">
+      <div class="border-and-padding report-group" *ngIf="moduleId == 1">
         <div class="form-group  form-group--loose" *ngFor="let rpt of reports.slice(7)">
           <label class="radio" [class.disabled]="rpt.disabled">
             <input type="radio" name="uploadType" [value]="rpt" [(ngModel)]="report" (change)="reset()">
