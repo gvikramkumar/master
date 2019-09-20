@@ -7,7 +7,7 @@ import {RestBase} from '../../../core/base-classes/rest-base';
 import {UploadResults} from '../models/upload-results';
 import {UiUtil} from '../../../core/services/ui-util';
 import AnyObj from '../../../../../../shared/models/any-obj';
-
+import {DfaModuleIds} from '../../../../../../shared/misc/enums';
 const apiUrl = environment.apiUrl;
 
 @Injectable({
@@ -35,7 +35,7 @@ export class BusinessUploadService {
       params.submeasureName = submeasureName;
     }
     const options = {headers: {Accept: 'application/json'}, params};
-    const url = `${apiUrl}/api/prof/upload/${uploadType}`;
+    const url = `${apiUrl}/api/${DfaModuleIds[this.store.module.moduleId]}/upload/${uploadType}`;
     this.uiUtil.toastHide();
     return this.httpClient.post<{ status: string, numRows?: number }>(url, formData, options).toPromise()
       .then((result: UploadResults) => {
