@@ -1,14 +1,14 @@
 import {svrUtil} from '../../../../lib/common/svr-util';
 
 export default class Distisl3ToDirectsl2UploadTemplate {
-  submeasureName: string;
-  splitCategory: string;
-  splitPercentage: number;
+  driverSl2: string;
+  sourceSl2: string;
+  externalTheater: string;
 
   constructor(row) {
-    this.submeasureName = row[0] && String(row[0]);
-    this.splitCategory = row[1] && String(row[1]);
-    this.splitPercentage = row[2] && Number(row[2]);
+    this.driverSl2 = row[0] && String(row[0]);
+    this.sourceSl2 = row[1] && String(row[1]);
+    this.externalTheater = row[2] && String(row[2]);
 
     svrUtil.trimStringProperties(this);
   }

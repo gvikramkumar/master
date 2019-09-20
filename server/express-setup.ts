@@ -31,6 +31,8 @@ import {databaseRouter} from './api/database/router';
 import {addGlobalData} from './lib/middleware/add-global-data';
 import {healthcheck} from './lib/middleware/healthcheck';
 import {distiDirectUploadRouter} from './api/prof/disti-direct-upload/router';
+import {tsctUploadRouter} from './api/tsct/upload/router';
+
 import {timeoutHandler} from './lib/middleware/timeout-handler';
 import {runJobRouter} from './api/run-job/router';
 import AnyObj from '../shared/models/any-obj';
@@ -152,6 +154,9 @@ if (!svrUtil.isUnitEnv()) {
 
   //bkgm:
   app.use('/api/bkgm/processing-date-input', processDateRouter);
+
+  //tsct:
+  app.use('/api/tsct/distisl3-to-directsl2-mapping-upload', tsctUploadRouter);
 
   app.use(notFound());
   app.use(errorHandler({showStack: config.showStack}));

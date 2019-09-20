@@ -1,24 +1,24 @@
 import {injectable} from 'inversify';
 import ControllerBase from '../../../lib/base-classes/controller-base';
-import ProductClassUploadRepo from './repo';
+import Distisl3ToDirectsl2UploadRepo from './repo';
 import {DfaModuleIds} from '../../../../shared/misc/enums';
 import {ApiError} from '../../../lib/common/api-error';
 import SubmeasureRepo from '../../common/submeasure/repo';
-import {ProductClassUploadPgRepo} from './pgrepo';
+import {Distisl3ToDirectsl2UploadPgRepo} from './pgrepo';
 import _ from 'lodash';
 
 
 @injectable()
-export default class ProductClassUploadController extends ControllerBase {
+export default class Distisl3ToDirectsl2UploadController extends ControllerBase {
   constructor(
-    repo: ProductClassUploadRepo,
-    pgRepo: ProductClassUploadPgRepo,
+    repo: Distisl3ToDirectsl2UploadRepo,
+    pgRepo: Distisl3ToDirectsl2UploadPgRepo,
     private submeasureRepo: SubmeasureRepo) {
     super(repo, pgRepo);
   }
 
   mongoToPgSyncTransform(objs, userId, log, elog) {
-    const tableName = 'dfa_prof_swalloc_manualmix_upld';
+    const tableName = 'dfa_tsct_distysl3_to_distysl2_upld';
     const records = [];
     return this.submeasureRepo.getManyLatestGroupByNameActive(DfaModuleIds.prof)
       .then(subs => {

@@ -1,11 +1,11 @@
-import ProductClassUploadController from './controller';
+import Distisl3ToDirectsl2UploadController from './controller';
 import {injector} from '../../../lib/common/inversify.config';
 import {Router} from 'express';
 import {authorize} from '../../../lib/middleware/authorize';
 
-const ctrl = injector.get(ProductClassUploadController);
+const ctrl = injector.get(Distisl3ToDirectsl2UploadController);
 
-export const productClassUploadRouter = Router()
+export const distisl3ToDistysl2UploadRouter = Router()
   .get('/', ctrl.getMany.bind(ctrl))
   .post('/call-method/:method', ctrl.callMethod.bind(ctrl))
   .post('/', ctrl.addOne.bind(ctrl))

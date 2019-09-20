@@ -1,7 +1,7 @@
 import {injectable} from 'inversify';
 import _ from 'lodash';
 import UploadController from '../../../../lib/base-classes/upload-controller';
-import ProductClassUploadRepo from '../../distisl3-to-directsl2-upload/repo';
+import Distisl3ToDirectsl2UploadRepo from '../../distisl3-to-directsl2-upload/repo';
 import Distisl3ToDirectsl2UploadTemplate from './template';
 import Distisl3ToDirectsl2UploadImport from './import';
 import {NamedApiError} from '../../../../lib/common/named-api-error';
@@ -16,7 +16,7 @@ export default class Distisl3ToDirectsl2UploadUploadController extends UploadCon
   imports: AnyObj[];
 
   constructor(
-    repo: ProductClassUploadRepo,
+    repo: Distisl3ToDirectsl2UploadRepo,
     openPeriodRepo: OpenPeriodRepo,
     submeasureRepo: SubmeasureRepo,
     private databaseController: DatabaseController
@@ -26,12 +26,12 @@ export default class Distisl3ToDirectsl2UploadUploadController extends UploadCon
       openPeriodRepo,
       submeasureRepo
     );
-    this.uploadName = 'Product Classification Upload';
+    this.uploadName = 'Disty SL3 to Direct SL2 Mapping';
 
     this.PropNames = {
-      submeasureName: 'Sub Measure Name',
-      splitCategory: 'Split Category',
-      splitPercentage: 'Split Percentage'
+      driverSl2: 'Driver SL2',
+      sourceSl2: 'Source SL3',
+      externalTheater: 'External Theater'
     }
   }
 
