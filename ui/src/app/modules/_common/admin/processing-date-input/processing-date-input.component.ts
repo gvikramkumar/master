@@ -6,7 +6,7 @@ import { UiUtil } from '../../../../core/services/ui-util';
 import { ProcessDateInput } from '../../models/process-date-input';
 import { Observable, of } from 'rxjs';
 import { ProcessDateInputService } from '../../services/processdateinput.service';
-
+import moment from 'moment';
 @Component({
   selector: 'fin-processing-date-input',
   templateUrl: './processing-date-input.component.html',
@@ -30,7 +30,10 @@ export class ProcessingDateInputComponent extends RoutingComponentBase implement
 
   validateDates(sDate: Date, eDate: Date){
     this.isValidDate = true;
-    if((sDate != null && eDate !=null) && (eDate) < (sDate)){
+    if(moment(sDate, 'MM/DD/YYYY',false).isValid() || moment(eDate, 'MM/DD/YYYY',false).isValid()){
+      this.uiUtil.errorDialog('Date is not valid');
+    }
+    else if((sDate != null && eDate !=null) && (eDate) < (sDate)){
       //this.error={isError:true,errorMessage:'End date should be grater then start date.'};
       this.isValidDate = false;
       //throw new Error('End date should be grater then start date');
