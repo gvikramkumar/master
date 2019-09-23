@@ -147,7 +147,11 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       filename: 'Service_Training_Report', invisible:  this.moduleId == 1 ? false:true
     },
     {
-      type: 'distisl3-directsl2-mapping', hasFiscalYearOnly: true, text: 'Disti SL3 to Direct SL2 Mapping', disabled: false,
+      type: 'misc-exception', hasFiscalMonthOnly: true, text: 'Misc Exception Mapping', disabled: false,
+      filename: 'Misc_Exception_Report', invisible: this.moduleId == 1 ? false: true
+    },
+    {
+      type: 'distisl3-directsl2-mapping', hasFiscalMonthOnly: true, text: 'Service Disti to Direct Mapping', disabled: false,
       filename: 'DistiSL3_DirectSL2_Mapping_Report', invisible:  this.moduleId == 4 ? false:true
     }
   ];
@@ -238,6 +242,13 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
         break;
       case 'input-data':
         prmMeasure = this.pgLookupService.callRepoMethod('getSubmeasureForSystemInputData', '', {params: this.moduleId, moduleAbbrev: this.store.module.abbrev}).toPromise();
+        break;
+      case 'misc-exception':
+        prmFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_scms_triang_miscexcep_map_upld', 'fiscal_month_id').toPromise();
+        break;
+        //Change Table name once we get it
+      case 'distisl3-directsl2-mapping':
+        prmFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_scms_triang_miscexcep_map_upld', 'fiscal_month_id').toPromise();
         break;
     }
     const promises = [prmFiscalMonth, prmFiscalYear, prmMeasure].filter(x => !!x);
