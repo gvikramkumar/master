@@ -33,7 +33,7 @@ mg.connect(uri, {useNewUrlParser: true})
       {fileName: 'service_map_upload_template.xlsx', buUploadType: 'service-map-upload', directory: 'prof.bu',dirPath : 'files/prof/business-upload/'},
       {fileName: 'service_training_split_upload_template.xlsx', buUploadType: 'service-training-upload', directory: 'prof.bu',dirPath : 'files/prof/business-upload/'},
       {fileName: 'misc_exception_mapping_template.xlsx', buUploadType: 'misc-exception-upload', directory: 'prof.bu',dirPath : 'files/prof/business-upload/'},
-      {fileName: 'disti_to_direct_upload_template.xlsx', buUploadType: 'disti-sl3-to-direct-sl2-mapping-upload', directory: 'tsct.bu',dirPath : 'files/tsct/business-upload/'}
+      {fileName: 'disti_to_direct_upload_template.xlsx', buUploadType: 'distisl3-to-directsl2-mapping-upload', directory: 'tsct.bu',dirPath : 'files/tsct/business-upload/'}
     ]
 
     buTemplates.forEach(template => {

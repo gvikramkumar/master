@@ -15,7 +15,9 @@ export enum Statuses {
 
 export enum Directory {
   profBusinessUpload = 'prof.bu',
-  profSubmeasure = 'prof.sm'
+  profSubmeasure = 'prof.sm',
+
+  tsctBusinessUpload = 'tsct.bu'
 }
 
 export enum FileTypes {

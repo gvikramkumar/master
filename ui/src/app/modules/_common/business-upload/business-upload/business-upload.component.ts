@@ -65,10 +65,16 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
   ngOnInit() {
     Promise.all([
       this.fsFileService.getInfoMany({directory: Directory.profBusinessUpload, buFileType: BusinessUploadFileType.template}).toPromise(),
-      this.openPeriodService.getQueryOne({moduleId: this.store.module.moduleId}).toPromise()
+      this.openPeriodService.getQueryOne({moduleId: this.store.module.moduleId}).toPromise(),
+      this.fsFileService.getInfoMany({directory: Directory.tsctBusinessUpload, buFileType: BusinessUploadFileType.template}).toPromise()
     ])
       .then(results => {
-        this.templates = results[0];
+        if(results[2].length){
+          results[0] = results[0].concat(results[2]);
+          this.templates = results[0];
+        }else{
+          this.templates = results[0];
+        }
         if (this.templates.length !== this.uploadTypes.length) {
           this.uiUtil.genericDialog('Template count mismatch');
         }

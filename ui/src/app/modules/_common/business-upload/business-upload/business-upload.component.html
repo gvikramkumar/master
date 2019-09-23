@@ -39,7 +39,7 @@
             </div>
           </div>
           <br><br>
-          <a [href]="getDownloadUri()">Download Template</a>
+          <a [href]="getDownloadUri()" *ngIf="uploadType?.text">Download Template</a>
 
         </div>
       </div>

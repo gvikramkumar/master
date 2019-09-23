@@ -201,6 +201,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   pnlNodesAll = [];
   pnlNodes = [];
   moduleId:number;
+  countryMatches = [{name: 'Sales Country Name', value: 'sales_country_name', abbrev: 'CNT'}];
+  extTheaterMatches = [{name: 'External Theater Name', value: 'ext_theater_name', abbrev: 'EXT'}];
   constructor(
     private route: ActivatedRoute,
     private router: Router,
