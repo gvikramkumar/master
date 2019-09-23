@@ -11,12 +11,14 @@ import OpenPeriodRepo from '../../../common/open-period/repo';
 import {svrUtil} from '../../../../lib/common/svr-util';
 import DatabaseController from '../../../database/controller';
 import { SyncMap } from '../../../../../shared/models/sync-map';
+import PgLookupRepo from '../../../pg-lookup/repo';
 @injectable()
 export default class Distisl3ToDirectsl2UploadUploadController extends UploadController {
   imports: AnyObj[];
 
   constructor(
     repo: Distisl3ToDirectsl2UploadRepo,
+    private pgRepo: PgLookupRepo,
     openPeriodRepo: OpenPeriodRepo,
     submeasureRepo: SubmeasureRepo,
     private databaseController: DatabaseController
@@ -32,104 +34,45 @@ export default class Distisl3ToDirectsl2UploadUploadController extends UploadCon
       driverSl2: 'Driver SL2',
       sourceSl2: 'Source SL3',
       externalTheater: 'External Theater'
-    }
+    };
+  }
+
+  getValidationAndImportData() {
+    return Promise.all([
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l2_sales_territory_name_code'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'l3_sales_territory_name_code'),
+      this.pgRepo.getSortedUpperListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'dd_external_theater_name'),
+    ])
+      .then(results => {
+        this.data.salesTerritoryNameCodes2 = results[0];
+        this.data.salesTerritoryNameCodes3 = results[1];
+        this.data.extTheaters = results[2];
+      });
   }
 
   validateRow1(row) {
     this.temp = new Distisl3ToDirectsl2UploadTemplate(row);
-    return this.getSubmeasure()
-      .then(() => this.validateSubmeasure())
-      .then(() => this.lookForErrors())
-      .then(() => Promise.all([
-        // this.validateMeasureAccess(),
-        this.validateCanProductClassUpload(),
-      ]))
-      .then(() => this.lookForErrors())
-      .then(() => Promise.all([
-        this.validateSplitCategory(),
-        this.validateSplitPercentage(),
-      ]))
+    return Promise.all([
+      this.validateProperty(this.temp, 'driverSl2', this.data.salesTerritoryNames, true),
+      this.validateProperty(this.temp, 'sourceSl2', this.data.salesTerritoryNameCodes3, true),
+      this.validateProperty(this.temp, 'externalTheater', this.data.extTheaters, false),
+    ])
       .then(() => this.lookForErrors());
   }
 
   validate() {
-    // sort by submeasureName, add up splitPercentage, error if not 1.0
-    this.imports =
-      _.sortBy(this.rows1.map(row => new Distisl3ToDirectsl2UploadImport(row, this.fiscalMonth)), 'submeasureName');
-
-    let obj = {};
-    this.imports.forEach(val => {
-      if (!obj[val.submeasureName]) {
-        obj[val.submeasureName] = {hw: 0, sw: 0};
-      }
-      if (val.splitCategory === 'HARDWARE') {
-        obj[val.submeasureName].hw++;
-      } else if (val.splitCategory === 'SOFTWARE') {
-        obj[val.submeasureName].sw++;
-      }
-    });
-    _.forEach(obj, (val, key) => {
-      if (val.hw > 1 || val.sw > 1) {
-        this.addErrorMessageOnly(key);
-      }
-    });
-
-    if (this.errors.length) {
-      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Submeasures with duplicate HW/SW entries', this.errors));
-    }
-
-    obj = {};
-    this.imports.forEach(val => {
-      if (obj[val.submeasureName]) {
-        obj[val.submeasureName] += val.splitPercentage;
-      } else {
-        obj[val.submeasureName] = val.splitPercentage;
-      }
-    });
-    _.forEach(obj, (val, key) => {
-      if (svrUtil.toFixed8(val) !== 1.0) {
-        this.addError(key, val); // resuse (prop, error) error list for (submeasureName, total)
-      }
-    });
-
-    if (this.errors.length) {
-      return Promise.reject(new NamedApiError(this.UploadValidationError, 'Submeasure percentage values not 100%', this.errors));
-    }
-
+    this.imports = this.rows1.map(row => new Distisl3ToDirectsl2UploadImport(row, this.fiscalMonth));
     return Promise.resolve();
   }
 
   getImportArray() {
-    // we already put the imports together in validate() so just use them
     return Promise.resolve(this.imports);
   }
 
-  removeDuplicatesFromDatabase(imports) {
-    return this.removeSubmeasureNameDuplicatesFromDatabase(imports);
+  removeDuplicatesFromDatabase(imports: Distisl3ToDirectsl2UploadImport[]) {
+    return this.repo.removeMany({});
   }
 
-  validateCanProductClassUpload() {
-    if (this.submeasure.categoryType !== 'Manual Mix') {
-      this.addErrorMessageOnly(`Sub Measure doesn't allow product classification upload`);
-    }
-    return Promise.resolve();
-  }
-
-  validateSplitCategory() {
-    if (!this.temp.splitCategory) {
-      this.addErrorRequired(this.PropNames.splitCategory);
-    } else if (!_.includes(['HARDWARE', 'SOFTWARE'], this.temp.splitCategory.toUpperCase())) {
-      this.addErrorInvalid(this.PropNames.splitCategory, this.temp.splitCategory, 'HARDWARE/SOFTWARE');
-    }
-    return Promise.resolve();
-  }
-
-  validateSplitPercentage() {
-    if (this.validatePercentageValue(this.PropNames.splitPercentage, this.temp.splitPercentage, true)) {
-      this.temp.splitPercentage = Number(this.temp.splitPercentage);
-    }
-    return Promise.resolve();
-  }
   autoSync(req) {
     return this.getImportArray()
       .then(imports => {
@@ -139,4 +82,5 @@ export default class Distisl3ToDirectsl2UploadUploadController extends UploadCon
       });
   }
 }
+
 
