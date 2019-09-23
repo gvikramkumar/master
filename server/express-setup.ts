@@ -39,6 +39,7 @@ import AnyObj from '../shared/models/any-obj';
 import Q from 'q';
 import {svrUtil} from './lib/common/svr-util';
 import { processDateRouter } from './api/bkgm/processing-date-input/router';
+import {distisl3ToDistysl2UploadRouter} from './api/tsct/distisl3-to-directsl2-upload/router';
 
 
 export const app = express();
@@ -156,7 +157,9 @@ if (!svrUtil.isUnitEnv()) {
   app.use('/api/bkgm/processing-date-input', processDateRouter);
 
   //tsct:
-  app.use('/api/tsct/distisl3-to-directsl2-mapping-upload', tsctUploadRouter);
+  app.use('/api/tsct/upload', tsctUploadRouter);
+  app.use('/api/tsct/distisl3-to-directsl2-mapping-upload', distisl3ToDistysl2UploadRouter);
+
 
   app.use(notFound());
   app.use(errorHandler({showStack: config.showStack}));
