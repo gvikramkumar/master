@@ -6,8 +6,8 @@ import RepoBase from '../../../lib/base-classes/repo-base';
 const schema = new Schema(
   {
     moduleId: {type: Number, required: true},
-    bkgm_process_start_date: {type: String, required: true},
-    bkgm_process_end_date: {type: String, required: true},
+    bkgm_process_start_date: {type: Date, required: true},
+    bkgm_process_end_date: {type: Date, required: true},
     createdBy: {type: String, required: true},
     createdDate: {type: Date, required: true},
     updatedBy: {type: String, required: true},
