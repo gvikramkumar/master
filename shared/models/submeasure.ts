@@ -6,6 +6,8 @@ export class SubmeasureInputFilterLevel {
   internalBELevel: string;
   entityLevel: string;
   glSegLevel: string[] = [];
+  countryLevel:string;
+  externalTheaterLevel:string;
 }
 
 export class SubmeasureIndicators {

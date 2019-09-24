@@ -73,7 +73,7 @@
               <div style="margin-bottom:-10px;">
                 <div class="right text-center half-margin-bottom form-group-max-width">Selection Criteria</div>
                 <div class="row">
-                  <div class="col-1">
+                  <div class="col-2">
                     <div class="form-group-text">SL1</div>
                     <div class="form-group-text">SL2</div>
                     <div class="form-group-text">SL3</div>
@@ -82,8 +82,8 @@
                     <div *ngIf="moduleId!=4" class="form-group-text">PF</div>
                     <div class="form-group-text">SCMS</div>
                     <div *ngIf="moduleId!=4" class="form-group-text">BE</div>
-                    <div *ngIf="moduleId!=1 && moduleId!=2" class="form-group-text">Ctry</div>
-                    <div *ngIf="moduleId!=1 && moduleId!=2" class="form-group-text">ETH</div>
+                    <div *ngIf="moduleId!=1 && moduleId!=2" class="form-group-text">Country</div>
+                    <div *ngIf="moduleId!=1 && moduleId!=2" class="form-group-text">Ext Theater</div>
                   </div>
                   <div class="col-3">
                     <cui-select name="salesSL1Cond" class="replace-label-space" [(ngModel)]="rule.salesSL1CritCond" [items]="conditionalOperators"
@@ -107,7 +107,7 @@
                     <cui-select *ngIf="moduleId!=1 && moduleId!=2" name="externalTheaterCond" class="replace-label-space" [(ngModel)]="rule.externalTheaterCritCond" [items]="conditionalOperators"
                                 empty="true"  [required]="!!rule.externalTheaterCritChoices.length"  optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>  
                     </div>
-                  <div class="col-8">
+                  <div class="col-7">
                     <cui-multiselect name="sl1SalesChoice" [(ngModel)]="rule.salesSL1CritChoices" [items]="salesSL1Choices" class="replace-label-space" optionsKey="name" optionsValue="name"
                                      empty="true" (ngModelChange)="valueChange();sl2Select.blurInput()" [required]="!!rule.salesSL1CritCond"></cui-multiselect>
                     <fin-input #sl2Select name="sl2SalesChoice" [(ngModel)]="rule.salesSL2CritChoices" [ngModelOptions]="{updateOn: 'blur'}"

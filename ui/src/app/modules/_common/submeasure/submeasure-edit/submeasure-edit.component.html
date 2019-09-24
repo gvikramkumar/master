@@ -168,6 +168,16 @@
                         matTooltip="Gl Segments only available for source Rapid Revenue"
                         [matTooltipDisabled]="hasSourceRapidRevenue()" matTooltipShowDelay="1000"></fin-checkbox>
                     </div>
+                    <div class="check-wrap"  *ngIf="moduleId!=1 && moduleId!=2">
+                      <fin-checkbox [(model)]="ifl_switch_country" label="Country" 
+                        (modelChange)="iflChange('country')" [disabled]="CountryIflDisabled || isPassThrough()">
+                      </fin-checkbox>
+                    </div>
+                    <div class="check-wrap"  *ngIf="moduleId!=1 && moduleId!=2">
+                      <fin-checkbox [(model)]="ifl_switch_ext" label="External Theater"
+                        (modelChange)="iflChange('ext')" [disabled]="ExtIflDisabled || isPassThrough()">
+                      </fin-checkbox>
+                    </div>
                   </div>
                   <div class="col-6">
                     <div class="sel-wrap" *ngIf="moduleId!=2 && moduleId!=4">
@@ -199,6 +209,18 @@
                       <cui-multiselect name="glSegLevel" [(ngModel)]="sm.inputFilterLevel.glSegLevel"
                         [required]="ifl_switch_glseg" class="option" [items]="glseg_items" optionsKey="name"
                         optionsValue="value" empty="true" [disabled]="!ifl_switch_glseg"></cui-multiselect>
+                    </div>
+                    <div class="sel-wrap"  *ngIf="moduleId!=1 && moduleId!=2">
+                      <cui-select name="cntyMatch"  dropdownMaxHeight="300" [required]="ifl_switch_country"
+                        optionsKey="name" optionsValue="value" empty="true" 
+                        [(ngModel)]="sm.inputFilterLevel.countryLevel" [items]="countryMatches" [disabled]="!ifl_switch_country">
+                      </cui-select>
+                    </div>
+                    <div class="sel-wrap"  *ngIf="moduleId!=1 && moduleId!=2">
+                      <cui-select name="extTheaterMatch" dropdownMaxHeight="300" [required]="ifl_switch_ext"
+                        optionsKey="name" optionsValue="value" empty="true" [(ngModel)]="sm.inputFilterLevel.externalTheaterLevel"
+                        [items]="extTheaterMatches" [disabled]="!ifl_switch_ext">
+                      </cui-select>
                     </div>
                   </div>
                 </div>
@@ -331,14 +353,6 @@
           </fieldset>
         </div>
       </div>
-
-      <cui-select name="cntyMatch"  *ngIf="moduleId!=1 && moduleId!=2"  dropdownMaxHeight="300"
-        optionsKey="name" optionsValue="value" empty="true" label="Country" [(ngModel)]="sm.countryMatch" [items]="countryMatches" >
-      </cui-select>
-      <cui-select name="extTheaterMatch"  *ngIf="moduleId!=1 && moduleId!=2" dropdownMaxHeight="300"
-        optionsKey="name" optionsValue="value" empty="true" [(ngModel)]="sm.extTheaterMatch" label="External Theater" [items]="extTheaterMatches">
-      </cui-select>
-
       <div class="row" [class.disabled]="viewMode">
         <div class="col-12">
           <div class="inline-check-row">
