@@ -14,6 +14,8 @@ db.dfa_allocation_rule.updateMany({}, {$unset: {
     prodTGCritCond: '',
     scmsCritCond: '',
     beCritCond: '',
+    countryCritCond: '',
+    externalTheaterCritCond: '',
     salesSL1CritChoices: '',
     salesSL2CritChoices: '',
     salesSL3CritChoices: '',
@@ -22,6 +24,8 @@ db.dfa_allocation_rule.updateMany({}, {$unset: {
     prodTGCritChoices: '',
     scmsCritChoices: '',
     beCritChoices: '',
+    countryCritChoices: '',
+    externalTheaterCritChoices: ''
   }});
 
 

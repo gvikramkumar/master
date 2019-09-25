@@ -730,13 +730,13 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       this.rule.beSelect = undefined;
     }
 
-    if (this.rule.countryCritCond && this.rule.countryCritChoices.length) {
+    if (this.rule.countryCritCond && (this.rule.countryCritChoices && this.rule.countryCritChoices.length)) {
       this.rule.countrySelect = ruleUtil.createSelect(this.rule.countryCritCond, this.rule.countryCritChoices);
     } else {
       this.rule.countrySelect = undefined;
     }
 
-    if (this.rule.externalTheaterCritCond && this.rule.externalTheaterCritChoices.length) {
+    if (this.rule.externalTheaterCritCond && (this.rule.externalTheaterCritChoices && this.rule.externalTheaterCritChoices.length)) {
       this.rule.externalTheaterSelect = ruleUtil.createSelect(this.rule.externalTheaterCritCond, this.rule.externalTheaterCritChoices);
     } else {
       this.rule.externalTheaterSelect = undefined;

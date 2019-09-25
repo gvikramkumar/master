@@ -93,4 +93,16 @@ function updateSelectStatements(rule) {
     rule.beSelect = undefined;
   }
 
+  if (rule.countryCritCond && rule.countryCritChoices.length) {
+    rule.countrySelect = ruleUtil.createSelect(rule.countryCritCond, rule.countryCritChoices);
+  } else {
+    rule.countrySelect = undefined;
+  }
+
+  if (rule.externalTheaterCritCond && rule.externalTheaterCritChoices.length) {
+    rule.externalTheaterSelect = ruleUtil.createSelect(rule.externalTheaterCritCond, rule.externalTheaterCritChoices);
+  } else {
+    rule.externalTheaterSelect = undefined;
+  }
+
 }

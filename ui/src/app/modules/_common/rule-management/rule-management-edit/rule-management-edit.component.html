@@ -103,9 +103,9 @@
                     <cui-select *ngIf="moduleId!=4" name="beCond" class="replace-label-space" [(ngModel)]="rule.beCritCond" [items]="conditionalOperators"
                                 empty="true" [required]="!!rule.beCritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
                     <cui-select *ngIf="moduleId!=1 && moduleId!=2" name="countryCond" class="replace-label-space" [(ngModel)]="rule.countryCritCond" [items]="conditionalOperators"
-                                empty="true" [required]="!!rule.countryCritChoices.length"  optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
+                                empty="true" [required]="!!(rule.countryCritChoices && rule.countryCritChoices.length)"  optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
                     <cui-select *ngIf="moduleId!=1 && moduleId!=2" name="externalTheaterCond" class="replace-label-space" [(ngModel)]="rule.externalTheaterCritCond" [items]="conditionalOperators"
-                                empty="true"  [required]="!!rule.externalTheaterCritChoices.length"  optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>  
+                                empty="true"  [required]="!!(rule.externalTheaterCritChoices && rule.externalTheaterCritChoices.length)"  optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>  
                     </div>
                   <div class="col-7">
                     <cui-multiselect name="sl1SalesChoice" [(ngModel)]="rule.salesSL1CritChoices" [items]="salesSL1Choices" class="replace-label-space" optionsKey="name" optionsValue="name"
