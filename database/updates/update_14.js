@@ -23,9 +23,9 @@ db.dfa_allocation_rule.updateMany({}, {$unset: {
     prodBUCritChoices: '',
     prodTGCritChoices: '',
     scmsCritChoices: '',
-    beCritChoices: '',
-    countryCritChoices: '',
-    externalTheaterCritChoices: ''
+    beCritChoices: ''
+    // countryCritChoices: '',
+    // externalTheaterCritChoices: ''
   }});
 
 

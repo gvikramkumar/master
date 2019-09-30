@@ -16,8 +16,8 @@ export class SelectExceptionMap {
   pfIdx = 0;
   scmsIdx = 0;
   ibeIdx = 0;
-  countryIdx = 0;
-  externalTheaterIdx = 0;
+  // countryIdx = 0;
+  // externalTheaterIdx = 0;
   sl1Map: SelectExceptionIndexMap[] = [];
   sl2Map: SelectExceptionIndexMap[] = [];
   sl3Map: SelectExceptionIndexMap[] = [];
@@ -26,8 +26,8 @@ export class SelectExceptionMap {
   pfMap: SelectExceptionIndexMap[] = [];
   scmsMap: SelectExceptionIndexMap[] = [];
   ibeMap: SelectExceptionIndexMap[] = [];
-  countryMap: SelectExceptionIndexMap[] = [];
-  externalTheaterMap: SelectExceptionIndexMap[] = [];
+  // countryMap: SelectExceptionIndexMap[] = [];
+  // externalTheaterMap: SelectExceptionIndexMap[] = [];
 
   getSelectArray(cond, choices) {
     return ([cond].concat(choices)).map(x => x.toUpperCase());
@@ -101,10 +101,10 @@ export class SelectExceptionMap {
           return ([rule.scmsCritCond].concat(rule.scmsCritChoices)).map(x => x.toUpperCase());
         case 'ibe':
           return ([rule.beCritCond].concat(rule.beCritChoices)).map(x => x.toUpperCase());
-        case 'country':
-          return ([rule.countryCritCond].concat(rule.countryCritChoices)).map(x => x.toUpperCase());
-        case 'externalTheater':
-          return ([rule.externalTheaterCritCond].concat(rule.externalTheaterCritChoices)).map(x => x.toUpperCase());
+        // case 'country':
+        //   return ([rule.countryCritCond].concat(rule.countryCritChoices)).map(x => x.toUpperCase());
+        // case 'externalTheater':
+        //   return ([rule.externalTheaterCritCond].concat(rule.externalTheaterCritChoices)).map(x => x.toUpperCase());
         default:
           throw Error(`SelectExceptionMap.getSelectArray: no case for prefix: ${prefix} for rule name: ${rule.name}`);
       }

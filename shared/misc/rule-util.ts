@@ -125,8 +125,8 @@ function addSelects(rule, selectMap) {
   const pf = selectMap.getSelectString('pf', rule.prodPFCritCond, rule.prodPFCritChoices);
   const scms = selectMap.getSelectString('scms', rule.scmsCritCond, rule.scmsCritChoices);
   const ibe = selectMap.getSelectString('ibe', rule.beCritCond, rule.beCritChoices);
-  const country = selectMap.getSelectString('country', rule.countryCritCond, rule.countryCritChoices);
-  const et = selectMap.getSelectString('externalTheater', rule.externalTheaterCritCond, rule.externalTheaterCritChoices);
+  // const country = selectMap.getSelectString('country', rule.countryCritCond, rule.countryCritChoices);
+  // const et = selectMap.getSelectString('externalTheater', rule.externalTheaterCritCond, rule.externalTheaterCritChoices);
   str += sl1 ? `-${sl1}` : '';
   str += sl2 ? `-${sl2}` : '';
   str += sl3 ? `-${sl3}` : '';
@@ -135,8 +135,8 @@ function addSelects(rule, selectMap) {
   str += pf ? `-${pf}` : '';
   str += scms ? `-${scms}` : '';
   str += ibe ? `-${ibe}` : '';
-  str += country ? `-${country}` : '';
-  str += et ? `-${et}` : '';
+  // str += country ? `-${country}` : '';
+  // str += et ? `-${et}` : '';
   if (str) {
     rule.name += str;
   }
@@ -202,13 +202,13 @@ function createSelectArrays(rule) {
   rule.beCritCond = parse.cond;
   rule.beCritChoices = parse.arr;
 
-  parse = parseSelect(rule.countrySelect);
-  rule.countryCritCond = parse.cond;
-  rule.countryCritChoices = parse.arr;
+  // parse = parseSelect(rule.countrySelect);
+  // rule.countryCritCond = parse.cond;
+  // rule.countryCritChoices = parse.arr;
 
-  parse = parseSelect(rule.externalTheaterSelect);
-  rule.externalTheaterCritCond = parse.cond;
-  rule.externalTheaterCritChoices = parse.arr;
+  // parse = parseSelect(rule.externalTheaterSelect);
+  // rule.externalTheaterCritCond = parse.cond;
+  // rule.externalTheaterCritChoices = parse.arr;
 }
 
 function parseSelect(_str) {

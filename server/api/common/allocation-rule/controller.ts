@@ -26,7 +26,7 @@ export default class AllocationRuleController extends ApprovalController {
     const omitProperties = ['_id', 'id', '__v', 'status', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate', 'approvedOnce',
       'salesSL1CritCond', 'salesSL1CritChoices', 'salesSL2CritCond', 'salesSL2CritChoices', 'salesSL3CritCond', 'salesSL3CritChoices',
       'prodPFCritCond', 'prodPFCritChoices', 'prodBUCritCond', 'prodBUCritChoices', 'prodTGCritCond', 'prodTGCritChoices',
-      'scmsCritCond', 'scmsCritChoices', 'countryCritCond', 'countryCritChoices', 'externalTheaterCritCond', 'externalTheaterCritChoices', 'beCritCond', 'beCritChoices', 'approvalUrl', 'approvalReminderTime'
+      'scmsCritCond', 'scmsCritChoices', 'beCritCond', 'beCritChoices', 'approvalUrl', 'approvalReminderTime'
     ];
     return this.sendApprovalEmailBase(approveRejectMessage, req, mode, item, 'rule', omitProperties);
   }

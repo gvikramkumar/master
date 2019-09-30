@@ -31,10 +31,10 @@ export class AllocationRule {
   prodBUCritCond?: string;
   prodTGCritCond?: string;
   scmsCritCond?: string;
-  countryCritCond?: string;
-  countryCritChoices?: string[] = [];
-  externalTheaterCritCond?:string;
-  externalTheaterCritChoices?: string[] = [];
+  // countryCritCond?: string;
+  // countryCritChoices?: string[] = [];
+  // externalTheaterCritCond?:string;
+  // externalTheaterCritChoices?: string[] = [];
   beCritCond?: string;
   salesSL1CritChoices?: string[] = [];
   salesSL2CritChoices?: string[] = [];

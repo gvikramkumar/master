@@ -82,8 +82,8 @@
                     <div *ngIf="moduleId!=4" class="form-group-text">PF</div>
                     <div class="form-group-text">SCMS</div>
                     <div *ngIf="moduleId!=4" class="form-group-text">BE</div>
-                    <div *ngIf="moduleId!=1 && moduleId!=2" class="form-group-text">Country</div>
-                    <div *ngIf="moduleId!=1 && moduleId!=2" class="form-group-text">Ext Theater</div>
+                    <!-- <div *ngIf="moduleId!=1 && moduleId!=2" class="form-group-text">Country</div>
+                    <div *ngIf="moduleId!=1 && moduleId!=2" class="form-group-text">Ext Theater</div> -->
                   </div>
                   <div class="col-3">
                     <cui-select name="salesSL1Cond" class="replace-label-space" [(ngModel)]="rule.salesSL1CritCond" [items]="conditionalOperators"
@@ -102,10 +102,10 @@
                                 empty="true" [required]="!!rule.scmsCritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
                     <cui-select *ngIf="moduleId!=4" name="beCond" class="replace-label-space" [(ngModel)]="rule.beCritCond" [items]="conditionalOperators"
                                 empty="true" [required]="!!rule.beCritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
-                    <cui-select *ngIf="moduleId!=1 && moduleId!=2" name="countryCond" class="replace-label-space" [(ngModel)]="rule.countryCritCond" [items]="conditionalOperators"
+                    <!-- <cui-select *ngIf="moduleId!=1 && moduleId!=2" name="countryCond" class="replace-label-space" [(ngModel)]="rule.countryCritCond" [items]="conditionalOperators"
                                 empty="true" [required]="!!(rule.countryCritChoices && rule.countryCritChoices.length)"  optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
                     <cui-select *ngIf="moduleId!=1 && moduleId!=2" name="externalTheaterCond" class="replace-label-space" [(ngModel)]="rule.externalTheaterCritCond" [items]="conditionalOperators"
-                                empty="true"  [required]="!!(rule.externalTheaterCritChoices && rule.externalTheaterCritChoices.length)"  optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>  
+                                empty="true"  [required]="!!(rule.externalTheaterCritChoices && rule.externalTheaterCritChoices.length)"  optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>   -->
                     </div>
                   <div class="col-7">
                     <cui-multiselect name="sl1SalesChoice" [(ngModel)]="rule.salesSL1CritChoices" [items]="salesSL1Choices" class="replace-label-space" optionsKey="name" optionsValue="name"
@@ -130,11 +130,11 @@
                     <cui-multiselect *ngIf="moduleId!=4" name="beChoice" [(ngModel)]="rule.beCritChoices" [items]="internalBeChoices" optionsKey="name"
                                      optionsValue="name" dropdownMaxHeight="300"
                                      class="replace-label-space" empty="true" (ngModelChange)="valueChange()" [required]="!!rule.beCritCond"></cui-multiselect>
-                    <fin-input *ngIf="moduleId!=1 && moduleId!=2" #cs name="countryCritChoice" [(ngModel)]="rule.countryCritChoices" [ngModelOptions]="{updateOn: 'blur'}"
+                    <!-- <fin-input *ngIf="moduleId!=1 && moduleId!=2" #cs name="countryCritChoice" [(ngModel)]="rule.countryCritChoices" [ngModelOptions]="{updateOn: 'blur'}"
                                      class="replace-label-space" placeholder="comma separated values"
-                                     [stringToArray]="true" [options]="countryChoiceOptions" (ngModelChange)="valueChange()" [required]="!!rule.countryCritCond"></fin-input>                 
-                    <cui-multiselect *ngIf="moduleId!=1 && moduleId!=2" #externalTheaterSelect name="externalTheaterChoice" [(ngModel)]="rule.externalTheaterCritChoices" [items]="externalTheaterChoices" optionsKey="name"
-                                     class="replace-label-space" optionsValue="name" empty="true" (ngModelChange)="valueChange();" [required]="!!rule.externalTheaterCritCond"></cui-multiselect>
+                                     [stringToArray]="true" [options]="countryChoiceOptions" (ngModelChange)="valueChange()" [required]="!!rule.countryCritCond"></fin-input>                  -->
+                    <!-- <cui-multiselect *ngIf="moduleId!=1 && moduleId!=2" #externalTheaterSelect name="externalTheaterChoice" [(ngModel)]="rule.externalTheaterCritChoices" [items]="externalTheaterChoices" optionsKey="name" -->
+                                     <!-- class="replace-label-space" optionsValue="name" empty="true" (ngModelChange)="valueChange();" [required]="!!rule.externalTheaterCritCond"></cui-multiselect> -->
                     
                   </div>
                 </div>
