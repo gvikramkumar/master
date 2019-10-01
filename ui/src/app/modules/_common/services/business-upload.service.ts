@@ -7,6 +7,7 @@ import {RestBase} from '../../../core/base-classes/rest-base';
 import {UploadResults} from '../models/upload-results';
 import {UiUtil} from '../../../core/services/ui-util';
 import AnyObj from '../../../../../../shared/models/any-obj';
+import {PgLookupService} from '../../_common/services/pg-lookup.service';
 
 const apiUrl = environment.apiUrl;
 
@@ -15,7 +16,7 @@ const apiUrl = environment.apiUrl;
 })
 export class BusinessUploadService {
 
-  constructor(private httpClient: HttpClient, private store: AppStore, private uiUtil: UiUtil) {
+  constructor(private httpClient: HttpClient, private store: AppStore, private uiUtil: UiUtil, private pgLookupService: PgLookupService) {
   }
 
   // submeasureName is for submeasure mode
@@ -23,6 +24,10 @@ export class BusinessUploadService {
     if (!fileInput.files.length) {
       return;
     }
+
+    this.pgLookupService.callRepoMethod('getEtlFlags', '', {moduleId:this.store.module.moduleId}).toPromise().then(results => {
+      console.log(" ---  results ---- " + results);
+    });
     const file = fileInput.files[0];
     fileInput.value = null;
     const formData: FormData = new FormData();

@@ -41,8 +41,8 @@ export class OpenPeriodComponent  extends RoutingComponentBase implements OnInit
   //  this.fiscalMonths = shUtil.getFiscalMonthListForCurYearAndLast();
   // @ts-ignore
     this.pgLookupService.callRepoMethod('getOpenPeriod', '', '').toPromise().then(results => {
-    this.fiscalMonths = results;
- });
+      this.fiscalMonths = results;
+    });
 
     this.refresh();
   }
