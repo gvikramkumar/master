@@ -96,8 +96,6 @@ export class Orm {
         record[map.field] = val;
       }
     });
-    console.log('---------------');
-    console.log(record);
     return record;
   }
 
