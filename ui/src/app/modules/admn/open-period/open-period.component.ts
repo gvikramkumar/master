@@ -37,8 +37,13 @@ export class OpenPeriodComponent  extends RoutingComponentBase implements OnInit
   }
 
   ngOnInit() {
-    this.modules = this.store.nonAdminModules;
-    this.fiscalMonths = shUtil.getFiscalMonthListForCurYearAndLast();
+   this.modules = this.store.nonAdminModules;
+  //  this.fiscalMonths = shUtil.getFiscalMonthListForCurYearAndLast();
+  // @ts-ignore
+    this.pgLookupService.callRepoMethod('getOpenPeriod', '', '').toPromise().then(results => {
+    this.fiscalMonths = results;
+ });
+
     this.refresh();
   }
 

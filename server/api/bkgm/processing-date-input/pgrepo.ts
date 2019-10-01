@@ -5,8 +5,8 @@ import {Orm, OrmMap, OrmTypes} from '../../../lib/base-classes/Orm';
 
 const ormMap: OrmMap[] = [
   {prop: 'moduleId', field: 'module_id', type: OrmTypes.number},
-  {prop: 'bkgm_process_start_date', field: 'bkgm_process_start_date'},
-  {prop: 'bkgm_process_end_date', field: 'bkgm_process_end_date'},
+  {prop: 'bkgm_process_start_date', field: 'bkgm_process_start_date', type: OrmTypes.dateString},
+  {prop: 'bkgm_process_end_date', field: 'bkgm_process_end_date', type: OrmTypes.dateString},
   {prop: 'createdBy', field: 'create_owner'},
   {prop: 'createdDate', field: 'create_datetimestamp', type: OrmTypes.date},
   {prop: 'updatedBy', field: 'update_owner'},

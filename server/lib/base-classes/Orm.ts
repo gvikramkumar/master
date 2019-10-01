@@ -6,7 +6,8 @@ import {svrUtil} from '../common/svr-util';
 export enum OrmTypes {
   string = 1,
   number,
-  date
+  date,
+  dateString
 }
 
 export interface OrmMap {
@@ -85,6 +86,8 @@ export class Orm {
         record[map.field] = map.pgDefault;
       } else if (map.type === OrmTypes.date) {
         record[map.field] = this.getPgDateString(_.get(obj, map.prop));
+      } else if (map.type === OrmTypes.dateString) {
+        record[map.field] = this.getPgDate(_.get(obj, map.prop));
       } else {
         let val = _.get(obj, map.prop);
         if (val && typeof val === 'string') {
@@ -127,7 +130,22 @@ export class Orm {
     return this.dateToString(dt);
 
   }
+  getPgDate(val) {
+    if (!val) {
+      return undefined;
+    }
+    let dt: Date;
+    if (val instanceof Date) {
+      dt = val;
+    } else {
+      dt = new Date(val);
+    }
+    let ret = this.pad(dt.getFullYear(), 4) + '-' +
+      this.pad(dt.getMonth() + 1, 2) + '-' +
+      this.pad(dt.getDate(), 2)
+    return ret;
 
+  }
   getPgField(idProp) {
     const map = _.find(this.maps, {prop: idProp});
     if (!map) {
