@@ -37,13 +37,13 @@ export class ProcessingDateInputComponent extends RoutingComponentBase implement
       //this.error={isError:true,errorMessage:'End date should be grater then start date.'};
       this.isValidDate = false;
       //throw new Error('End date should be grater then start date');
-      this.uiUtil.errorDialog('End date should be grater then start date');
+      this.uiUtil.errorDialog('End date should be greater then start date');
     }
     return this.isValidDate;
   }
 
   save() {
-    
+
     this.isValidDate = this.validateDates(this.processDateInput.bkgm_process_start_date, this.processDateInput.bkgm_process_end_date);
     if(this.isValidDate){
     this.uiUtil.confirmSave()
