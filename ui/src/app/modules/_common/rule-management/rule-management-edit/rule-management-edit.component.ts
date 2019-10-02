@@ -34,6 +34,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   salesSL3ChoiceOptions: ValidationInputOptions;
   prodPFChoiceOptions: ValidationInputOptions;
   prodBUChoiceOptions: ValidationInputOptions;
+  countryChoiceOptions: ValidationInputOptions;
+  
   @ViewChild('form') form: NgForm;
   UiUtil = UiUtil;
   addMode = false;
@@ -80,8 +82,9 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   salesSL1Choices: { name: string }[] = [];
   prodTgChoices: { name: string }[] = [];
   scmsChoices: { name: string }[] = [];
+  externalTheaterChoices:{name:String}[] = [];
   internalBeChoices: { name: string }[] = [];
-
+  moduleId:number;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -102,6 +105,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     this.viewMode = this.route.snapshot.params.mode === 'view';
     this.editMode = this.route.snapshot.params.mode === 'edit';
     this.copyMode = this.route.snapshot.params.mode === 'copy';
+    this.moduleId = this.store.module.moduleId;
   }
 
   public ngOnInit(): void {
@@ -111,7 +115,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       this.pgLookupService.callRepoMethod('getDistincTGBUPFIdsFromProductHierarchy').toPromise(),
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_coverage_code').toPromise(),
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_be_hierarchy', 'business_entity_descr').toPromise(),
-      this.lookupService.getValues(['drivers', 'periods']).toPromise()
+      this.lookupService.getValues(['drivers', 'periods']).toPromise(),
+      this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'dd_external_theater_name').toPromise()
     ];
     if (this.viewMode || this.editMode || this.copyMode) {
       promises.push(
@@ -121,6 +126,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     }
     Promise.all(promises)
       .then(results => {
+        console.log(results);
         // assign to your local arrays here, then:
         // map result string arrays to object arrays for use in dropdowns
         this.sl1Sl2Sl3NameCodes = results[0];
@@ -131,10 +137,11 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         this.internalBeChoices = results[3].map(x => ({name: x}));
         this.drivers = _.sortBy(results[4][0], 'name');
         this.periods = results[4][1];
+        this.externalTheaterChoices = results[5].map(x => ({name: x}));
 
         if (this.viewMode || this.editMode || this.copyMode) {
-          this.rule = results[5];
-          this.submeasuresAll = results[6];
+          this.rule = results[6];
+          this.submeasuresAll = results[7];
           this.editModeAI = this.editMode && _.includes(['A', 'I'], this.rule.status);
           this.editModeDPApprovedOnce = this.editMode && _.includes(['D', 'P'], this.rule.status) && this.rule.approvedOnce === 'Y';
           this.editModeDPNotApprovedOnce = this.editMode && _.includes(['D', 'P'], this.rule.status) && this.rule.approvedOnce !== 'Y';
@@ -200,6 +207,16 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
             }
           ]
         };
+
+        // this.countryChoiceOptions = {
+        //   validations: [
+        //     {
+        //       name: 'countryCritChoice',
+        //       message: 'Invalid Country values: %s',
+        //       fcn: this.countryChoicesValidator()
+        //     }
+        //   ]
+        // };
 
         this.init(true);
       })
@@ -713,6 +730,18 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       this.rule.beSelect = undefined;
     }
 
+    // if (this.rule.countryCritCond && (this.rule.countryCritChoices && this.rule.countryCritChoices.length)) {
+    //   this.rule.countrySelect = ruleUtil.createSelect(this.rule.countryCritCond, this.rule.countryCritChoices);
+    // } else {
+    //   this.rule.countrySelect = undefined;
+    // }
+
+    // if (this.rule.externalTheaterCritCond && (this.rule.externalTheaterCritChoices && this.rule.externalTheaterCritChoices.length)) {
+    //   this.rule.externalTheaterSelect = ruleUtil.createSelect(this.rule.externalTheaterCritCond, this.rule.externalTheaterCritChoices);
+    // } else {
+    //   this.rule.externalTheaterSelect = undefined;
+    // }
+    
   }
 
   isApprovedOnce() {
@@ -754,4 +783,38 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     return this.isInUse() && (this.rule && this.rule.activeStatus === 'A');
   }
 
+
+  // countryChoicesValidator(): ValidatorFn {
+  //   const fcn = (control: AbstractControl): ValidationErrors | null => {
+  //     if (!control.value || !control.value.length) {
+  //       return null;
+  //     }
+  //     const selections = shUtil.arrayFilterUndefinedAndEmptyStrings(control.value);
+  //     const available = this.getTgBuPfProductIdsFilteredForTg();
+  //     const actuals = [];
+  //     const notFound = [];
+  //     selections.forEach(sel => {
+  //       const found = _.find(available, x => sel.toUpperCase() === x.bu.toUpperCase());
+  //       if (found) {
+  //         actuals.push(found.bu);
+  //       } else {
+  //         notFound.push(sel);
+  //       }
+  //     });
+  //     if (notFound.length) {
+  //       return {prodBUChoices: {value: notFound.join(', ')}};
+  //     } else {
+  //       // no need updating unless case has changed, if you pull this out, angualar will freeze with the circulare detectChanges?
+  //       // bug: was all caps, then you changed to first letter lowercase, but acutals all caps again so no change so doesn't update value,
+  //       // it's for that reason you had to add the part after the OR looking at selections as well
+  //       if (!_.isEqual(this.rule.prodBUCritChoices, actuals) || !_.isEqual(this.rule.prodBUCritChoices, selections)) {
+  //         this.rule.prodBUCritChoices = actuals;
+  //         this.changeDetectorRef.detectChanges();
+  //       }
+  //       return null;
+  //     }
+  //   };
+  //   // if in control and hit save button (which calls triggerBlur(), we'll get double hits on this, shut that down
+  //   return _.throttle(fcn.bind(this), 400, {trailing: false});
+  // }
 }

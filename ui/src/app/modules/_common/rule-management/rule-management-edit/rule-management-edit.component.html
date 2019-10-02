@@ -48,19 +48,19 @@
                 <div class="left text-center half-margin-bottom form-group-max-width">Matching Criteria</div>
                 <cui-select name="salesMatch" [(ngModel)]="rule.salesMatch" [items]="salesMatches" label="Sales" empty="true"
                             optionsKey="name" optionsValue="value" (ngModelChange)="valueChange()"></cui-select>
-                <cui-select name="productMatch" [disabled]="!!rule.beMatch" [(ngModel)]="rule.productMatch" [items]="productMatches" label="Product"
+                <cui-select *ngIf="moduleId!=4" name="productMatch" [disabled]="!!rule.beMatch" [(ngModel)]="rule.productMatch" [items]="productMatches" label="Product"
                             empty="true" optionsKey="name" optionsValue="value" (ngModelChange)="valueChange()"></cui-select>
                 <cui-select name="scmsMatch" [(ngModel)]="rule.scmsMatch" [items]="scmsMatches" label="SCMS"
                             empty="true" optionsKey="match" optionsValue="match" (ngModelChange)="valueChange()"></cui-select>
-                <cui-select name="beMatch" [disabled]="!!rule.productMatch" [(ngModel)]="rule.beMatch" [items]="beMatches" label="Internal Business Entity"
+                <cui-select *ngIf="moduleId!=4" name="beMatch" [disabled]="!!rule.productMatch" [(ngModel)]="rule.beMatch" [items]="beMatches" label="Internal Business Entity"
                             empty="true" optionsKey="name" optionsValue="value" (ngModelChange)="valueChange()"></cui-select>
-                <cui-select name="leMatch" [(ngModel)]="rule.legalEntityMatch" [items]="legalEntityMatches" label="Legal Entity"
+                <cui-select *ngIf="moduleId!=4" name="leMatch"  [(ngModel)]="rule.legalEntityMatch" [items]="legalEntityMatches" label="Legal Entity"
                             empty="true" optionsKey="match" optionsValue="match" (ngModelChange)="valueChange()"></cui-select>
                 <cui-select name="cntyMatch" [(ngModel)]="rule.countryMatch" [items]="countryMatches" dropdownMaxHeight="300"
                             optionsKey="name" optionsValue="value" empty="true" label="Country" (ngModelChange)="valueChange()"></cui-select>
                 <cui-select name="extTheaterMatch" [(ngModel)]="rule.extTheaterMatch" [items]="extTheaterMatches"
                             optionsKey="name" optionsValue="value" empty="true" label="External Theater" (ngModelChange)="valueChange()"></cui-select>
-                <cui-multiselect name="glSegmentsMatch" [(ngModel)]="rule.glSegmentsMatch" [items]="glSegmentMatches"
+                <cui-multiselect *ngIf="moduleId!=4" name="glSegmentsMatch"  [(ngModel)]="rule.glSegmentsMatch" [items]="glSegmentMatches"
                                  optionsKey="name" optionsValue="value" empty="true" label="GL Segments" (ngModelChange)="valueChange()"></cui-multiselect>
               </div>
             </div>
@@ -73,15 +73,17 @@
               <div style="margin-bottom:-10px;">
                 <div class="right text-center half-margin-bottom form-group-max-width">Selection Criteria</div>
                 <div class="row">
-                  <div class="col-1">
+                  <div class="col-2">
                     <div class="form-group-text">SL1</div>
                     <div class="form-group-text">SL2</div>
                     <div class="form-group-text">SL3</div>
-                    <div class="form-group-text">TG</div>
-                    <div class="form-group-text">BU</div>
-                    <div class="form-group-text">PF</div>
+                    <div *ngIf="moduleId!=4" class="form-group-text">TG</div>
+                    <div *ngIf="moduleId!=4" class="form-group-text">BU</div>
+                    <div *ngIf="moduleId!=4" class="form-group-text">PF</div>
                     <div class="form-group-text">SCMS</div>
-                    <div class="form-group-text">BE</div>
+                    <div *ngIf="moduleId!=4" class="form-group-text">BE</div>
+                    <!-- <div *ngIf="moduleId!=1 && moduleId!=2" class="form-group-text">Country</div>
+                    <div *ngIf="moduleId!=1 && moduleId!=2" class="form-group-text">Ext Theater</div> -->
                   </div>
                   <div class="col-3">
                     <cui-select name="salesSL1Cond" class="replace-label-space" [(ngModel)]="rule.salesSL1CritCond" [items]="conditionalOperators"
@@ -90,18 +92,22 @@
                                 empty="true" [required]="!!rule.salesSL2CritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange();sl3Select.blurInput()"></cui-select>
                     <cui-select name="salesSL3Cond" class="replace-label-space" [(ngModel)]="rule.salesSL3CritCond" [items]="conditionalOperators"
                                 empty="true" [required]="!!rule.salesSL3CritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
-                    <cui-select name="prodTGCond" class="replace-label-space" [(ngModel)]="rule.prodTGCritCond" [items]="conditionalOperators"
+                    <cui-select *ngIf="moduleId!=4" name="prodTGCond" class="replace-label-space" [(ngModel)]="rule.prodTGCritCond" [items]="conditionalOperators"
                                 empty="true" [required]="!!rule.prodTGCritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange();buSelect.blurInput()"></cui-select>
-                    <cui-select name="prodBUCond" class="replace-label-space" [(ngModel)]="rule.prodBUCritCond" [items]="conditionalOperators"
+                    <cui-select *ngIf="moduleId!=4" name="prodBUCond" class="replace-label-space" [(ngModel)]="rule.prodBUCritCond" [items]="conditionalOperators"
                                 empty="true" [required]="!!rule.prodBUCritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange();pfSelect.blurInput()"></cui-select>
-                    <cui-select name="prodPFCond" class="replace-label-space" [(ngModel)]="rule.prodPFCritCond" [items]="conditionalOperators"
+                    <cui-select *ngIf="moduleId!=4" name="prodPFCond" class="replace-label-space" [(ngModel)]="rule.prodPFCritCond" [items]="conditionalOperators"
                                 empty="true" [required]="!!rule.prodPFCritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
                     <cui-select name="scmsCond" class="replace-label-space" [(ngModel)]="rule.scmsCritCond" [items]="conditionalOperators"
                                 empty="true" [required]="!!rule.scmsCritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
-                    <cui-select name="beCond" class="replace-label-space" [(ngModel)]="rule.beCritCond" [items]="conditionalOperators"
+                    <cui-select *ngIf="moduleId!=4" name="beCond" class="replace-label-space" [(ngModel)]="rule.beCritCond" [items]="conditionalOperators"
                                 empty="true" [required]="!!rule.beCritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
-                  </div>
-                  <div class="col-8">
+                    <!-- <cui-select *ngIf="moduleId!=1 && moduleId!=2" name="countryCond" class="replace-label-space" [(ngModel)]="rule.countryCritCond" [items]="conditionalOperators"
+                                empty="true" [required]="!!(rule.countryCritChoices && rule.countryCritChoices.length)"  optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
+                    <cui-select *ngIf="moduleId!=1 && moduleId!=2" name="externalTheaterCond" class="replace-label-space" [(ngModel)]="rule.externalTheaterCritCond" [items]="conditionalOperators"
+                                empty="true"  [required]="!!(rule.externalTheaterCritChoices && rule.externalTheaterCritChoices.length)"  optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>   -->
+                    </div>
+                  <div class="col-7">
                     <cui-multiselect name="sl1SalesChoice" [(ngModel)]="rule.salesSL1CritChoices" [items]="salesSL1Choices" class="replace-label-space" optionsKey="name" optionsValue="name"
                                      empty="true" (ngModelChange)="valueChange();sl2Select.blurInput()" [required]="!!rule.salesSL1CritCond"></cui-multiselect>
                     <fin-input #sl2Select name="sl2SalesChoice" [(ngModel)]="rule.salesSL2CritChoices" [ngModelOptions]="{updateOn: 'blur'}"
@@ -110,20 +116,26 @@
                     <fin-input #sl3Select name="sl3SalesChoice" [(ngModel)]="rule.salesSL3CritChoices" [ngModelOptions]="{updateOn: 'blur'}"
                                class="replace-label-space" placeholder="comma separated values"
                                [stringToArray]="true" [options]="salesSL3ChoiceOptions" (ngModelChange)="valueChange()" [required]="!!rule.salesSL3CritCond"></fin-input>
-                    <cui-multiselect name="prodTGChoice" [(ngModel)]="rule.prodTGCritChoices" [items]="prodTgChoices" optionsKey="name"
+                    <cui-multiselect *ngIf="moduleId!=4" name="prodTGChoice" [(ngModel)]="rule.prodTGCritChoices" [items]="prodTgChoices" optionsKey="name"
                                      class="replace-label-space" optionsValue="name" dropdownMaxHeight="300"
                                      empty="true" (ngModelChange)="valueChange();buSelect.blurInput()" [required]="!!rule.prodTGCritCond"></cui-multiselect>
-                    <fin-input #buSelect name="prodBUChoice" [(ngModel)]="rule.prodBUCritChoices" [ngModelOptions]="{updateOn: 'blur'}"
+                    <fin-input *ngIf="moduleId!=4" #buSelect name="prodBUChoice" [(ngModel)]="rule.prodBUCritChoices" [ngModelOptions]="{updateOn: 'blur'}"
                                class="replace-label-space" placeholder="comma separated values"
                                [stringToArray]="true" [options]="prodBUChoiceOptions" (ngModelChange)="valueChange();pfSelect.blurInput()" [required]="!!rule.prodBUCritCond"></fin-input>
-                    <fin-input #pfSelect name="prodPFChoice" [(ngModel)]="rule.prodPFCritChoices" [ngModelOptions]="{updateOn: 'blur'}"
+                    <fin-input *ngIf="moduleId!=4" #pfSelect name="prodPFChoice" [(ngModel)]="rule.prodPFCritChoices" [ngModelOptions]="{updateOn: 'blur'}"
                                class="replace-label-space" placeholder="comma separated values"
                                [stringToArray]="true" [options]="prodPFChoiceOptions" (ngModelChange)="valueChange()" [required]="!!rule.prodPFCritCond"></fin-input>
                     <cui-multiselect name="scmsChoice" [(ngModel)]="rule.scmsCritChoices" [items]="scmsChoices" optionsKey="name"
                                      class="replace-label-space" optionsValue="name" empty="true" (ngModelChange)="valueChange()" [required]="!!rule.scmsCritCond"></cui-multiselect>
-                    <cui-multiselect name="beChoice" [(ngModel)]="rule.beCritChoices" [items]="internalBeChoices" optionsKey="name"
+                    <cui-multiselect *ngIf="moduleId!=4" name="beChoice" [(ngModel)]="rule.beCritChoices" [items]="internalBeChoices" optionsKey="name"
                                      optionsValue="name" dropdownMaxHeight="300"
                                      class="replace-label-space" empty="true" (ngModelChange)="valueChange()" [required]="!!rule.beCritCond"></cui-multiselect>
+                    <!-- <fin-input *ngIf="moduleId!=1 && moduleId!=2" #cs name="countryCritChoice" [(ngModel)]="rule.countryCritChoices" [ngModelOptions]="{updateOn: 'blur'}"
+                                     class="replace-label-space" placeholder="comma separated values"
+                                     [stringToArray]="true" [options]="countryChoiceOptions" (ngModelChange)="valueChange()" [required]="!!rule.countryCritCond"></fin-input>                  -->
+                    <!-- <cui-multiselect *ngIf="moduleId!=1 && moduleId!=2" #externalTheaterSelect name="externalTheaterChoice" [(ngModel)]="rule.externalTheaterCritChoices" [items]="externalTheaterChoices" optionsKey="name" -->
+                                     <!-- class="replace-label-space" optionsValue="name" empty="true" (ngModelChange)="valueChange();" [required]="!!rule.externalTheaterCritCond"></cui-multiselect> -->
+                    
                   </div>
                 </div>
               </div>

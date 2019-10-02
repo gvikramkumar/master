@@ -63,7 +63,7 @@ export class LeftnavComponent {
           {route: '/prof/admin/approval', text: 'Approval', roles: 'profitability allocations:business admin'},
         ];
         break;
-      
+
       case 'bkgm':
       this.links = [
         {route: '/bkgm/rule-management', text: 'Rule Management', roles: 'bookings misc allocations:business admin,bookings misc allocations:super user, bookings misc allocations:business user, bookings misc allocations:end user'},
@@ -76,6 +76,18 @@ export class LeftnavComponent {
         {route: '/bkgm/admin/processing-date-input', text: 'Process Date Input', roles: 'bookings misc allocations:business admin'}
       ];
       break;
+      case 'tsct':
+        this.links = [
+          {route: '/tsct/rule-management', text: 'Rule Management', roles: 'tss cogs triangulation:business admin,tss cogs triangulation:super user,tss cogs triangulation:business user, tss cogs triangulation:end user'},
+          {route: '/tsct/submeasure', text: 'Sub-Measure', roles: 'tss cogs triangulation:business admin,tss cogs triangulation:super user, tss cogs triangulation:business user, tss cogs triangulation:end user'},
+          {route: '/tsct/business-upload', text: 'Business Upload', roles: 'tss cogs triangulation:business admin, tss cogs triangulation:super user, tss cogs triangulation:business user'},
+          {route: '/tsct/reports', text: 'Report', roles: 'tss cogs triangulation:business admin, tss cogs triangulation:super user, tss cogs triangulation:business user,tss cogs triangulation:end user'},
+        ];
+        this.alinks = [
+          {route: '/tsct/admin/measure', text: 'Measure', roles: 'tss cogs triangulation:business admin'},
+          {route: '/tsct/admin/approval', text: 'Approval', roles: 'tss cogs triangulation:business admin'},
+        ];
+        break;
 
       default:
         this.links = [];

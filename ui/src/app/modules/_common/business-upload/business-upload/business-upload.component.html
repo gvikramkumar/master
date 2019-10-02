@@ -11,7 +11,7 @@
 
     <div class="col-md-auto col-xl-5 base-padding-top left-side">
 
-      <div class="form-group radio-list"  *ngFor="let utype of uploadTypes">
+      <div class="form-group radio-list"  *ngFor="let utype of uploadTypes|moduleBasedPipe:moduleId">
         <label class="radio" [class.disabled]="utype.disabled">
           <input type="radio" name="uploadType" [value]="utype" [(ngModel)]="uploadType" (change)="changeUploadType()">
           <span class="radio__input"></span>
@@ -39,7 +39,7 @@
             </div>
           </div>
           <br><br>
-          <a [href]="getDownloadUri()">Download Template</a>
+          <a [href]="getDownloadUri()" *ngIf="uploadType?.text">Download Template</a>
 
         </div>
       </div>

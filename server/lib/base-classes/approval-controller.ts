@@ -13,7 +13,7 @@ import {ModuleRepo} from '../../api/common/module/repo';
 import config from '../../config/get-config';
 import {mail} from '../common/mail';
 import SourceRepo from '../../api/common/source/repo';
-
+import {DfaModuleIds} from '../../../shared/misc/enums';
 interface Updates {
   oldPath: string;
   newPath: string;
@@ -58,7 +58,7 @@ export default class ApprovalController extends ControllerBase {
     }
     promise
       .then(item => {
-        item.approvalUrl = `${req.headers.origin}/prof/${req.query.type}/edit/${item.id};mode=view`;
+        item.approvalUrl = `${req.headers.origin}/${DfaModuleIds[req.body.moduleId]}/${req.query.type}/edit/${item.id};mode=view`;
         return this.repo.update(item, '', true, true, false)
           .then(updatedItem => {
             return this.sendApprovalEmail(null, req, ApprovalMode.submit, updatedItem)

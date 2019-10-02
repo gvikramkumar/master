@@ -15,7 +15,9 @@ export enum Statuses {
 
 export enum Directory {
   profBusinessUpload = 'prof.bu',
-  profSubmeasure = 'prof.sm'
+  profSubmeasure = 'prof.sm',
+
+  tsctBusinessUpload = 'tsct.bu'
 }
 
 export enum FileTypes {
@@ -31,7 +33,7 @@ export enum DfaModuleIds {
   prof = 1,
   bkgm = 2,
   svct,
-  tsct,
+  tsct = 4,
   ascg,
   cisc,
   opex,

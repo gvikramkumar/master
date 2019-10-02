@@ -15,7 +15,7 @@ const routes: Routes = [
     path: '',
     component: HomeComponent,
     data: {
-      authorization: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:business user, profitability allocations:end user,bookings misc allocations:business admin, bookings misc allocations:super user, bookings misc allocations:business user, bookings misc allocations:end user',
+      authorization: 'profitability allocations:business admin, profitability allocations:super user, profitability allocations:business user, profitability allocations:end user,bookings misc allocations:business admin, bookings misc allocations:super user, bookings misc allocations:business user, bookings misc allocations:end user , tss cogs triangulation:business admin, tss cogs triangulation:super user, tss cogs triangulation:business user, tss cogs triangulation:end user',
       breadcrumbs: [{label: 'Home'}]
     },
     canActivate: [InitializationGuard, AuthorizationGuard]
@@ -41,6 +41,14 @@ const routes: Routes = [
     loadChildren: '../modules/bkgm/bkgm.module#BkgmModule',
     data: {
       authorization: 'bookings misc allocations:business admin, bookings misc allocations:super user, bookings misc allocations:business user, bookings misc allocations:end user'
+    },
+    canActivate: [InitializationGuard, AuthorizationGuard]
+  },
+  {
+    path: 'tsct',
+    loadChildren: '../modules/tsct/tsct.module#TsctModule',
+    data: {
+      authorization: 'tss cogs triangulation:business admin, tss cogs triangulation:super user, tss cogs triangulation:business user, tss cogs triangulation:end user'
     },
     canActivate: [InitializationGuard, AuthorizationGuard]
   },

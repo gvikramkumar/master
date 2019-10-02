@@ -68,15 +68,15 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
 
     {
       type: 'product-hierarchy', hasNoChoices: true, text: 'Valid Product Hierarchy', disabled: false,
-      filename: 'Product_Hierarchy_Report', invisible: this.moduleId == 2 ? true:false
+      filename: 'Product_Hierarchy_Report', invisible: this.moduleId == 1 ? false:true
     },
     {
       type: 'sales-hierarchy', hasNoChoices: true, text: 'Valid Sales Hierarchy', disabled: false,
-      filename: 'Sales_Hierarchy_Report', invisible: this.moduleId == 2 ? true:false
+      filename: 'Sales_Hierarchy_Report', invisible: this.moduleId == 1 ? false:true
     },
     {
       type: 'valid-driver', hasNoChoices: true, text: 'Valid Driver', disabled: false,
-      filename: 'Valid_Driver_Report'
+      filename: 'Valid_Driver_Report', invisible: this.moduleId == 4 ? true:false
     },
     // REMEMBER, YOU HAVE TO CHANGE THE HTML PAGE TO INDEX 8 FROM 7 IN 2 PLACES OF ngFor
     // {
@@ -85,23 +85,23 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     // },
     {
       type: 'submeasure', hasNoChoices: true, text: 'Sub-Measure Updates', disabled: false,
-      filename: 'Submeasure_Update_Report', invisible: this.moduleId == 2 ? true:false
+      filename: 'Submeasure_Update_Report', invisible: this.moduleId == 1 ? false:true
     },
     {
       type: 'submeasure-grouping', hasNoChoices: true, text: 'Sub-Measure Grouping', disabled: false,
-      filename: 'Submeasure_Grouping_Report', invisible: this.moduleId == 2 ? true:false
+      filename: 'Submeasure_Grouping_Report', invisible: this.moduleId == 1 ? false:true
     },
     {
       type: 'allocation-rule', hasNoChoices: true, text: 'Rule Updates', disabled: false,
-      filename: 'Rule_Update_Report', invisible: this.moduleId == 2 ? true:false
+      filename: 'Rule_Update_Report', invisible:  this.moduleId == 1 ? false:true
     },
     {
       type: 'rule-submeasure', hasMultiFiscalMonthOnly: true, text: 'Rule to Sub-Measure History', disabled: false,
-      filename: 'Rule_Submeasure_Report', invisible: this.moduleId == 2 ? true:false
+      filename: 'Rule_Submeasure_Report', invisible:  this.moduleId == 1 ? false:true
     },
     {
       type: 'dollar-upload', hasMultiSmAndFiscalMonth: true, text: 'Input Dollar Adjustments Data', disabled: false,
-      filename: 'Manual_Uploaded_Data_Report', invisible: this.moduleId == 2 ? true:false
+      filename: 'Manual_Uploaded_Data_Report', invisible: this.moduleId == 1 ? false:true
     },
     {
       type: 'input-data', hasMultiSmAndFiscalMonth: true, text: 'Input System Data', disabled: false,
@@ -109,47 +109,51 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     },
     {
       type: 'mapping-upload', hasMultiSmAndFiscalMonth: true, text: 'Manual Mapping Split Percentage', disabled: false,
-      filename: 'Manual_Mapping_Data_Report', invisible: this.moduleId == 2 ? true:false
+      filename: 'Manual_Mapping_Data_Report', invisible:  this.moduleId == 1 ? false:true
     },
     {
       type: 'dept-upload', hasMultiSubmeasureOnly: true, text: 'Department/Account Exclusion Mapping', disabled: false,
-      filename: 'Department_Mapping_Data_Report', invisible: this.moduleId == 2 ? true:false
+      filename: 'Department_Mapping_Data_Report', invisible: this.moduleId == 1 ? false:true
     },
     {
       type: 'sales-split-percentage', hasFiscalMonthOnly: true, text: 'Sales Level Split Percentage', disabled: false,
-      filename: 'Sales_Split_Percentage_Report', invisible: this.moduleId == 2 ? true:false
+      filename: 'Sales_Split_Percentage_Report', invisible:  this.moduleId == 1 ? false:true
     },
     {
       type: 'product-classification',
       hasFiscalMonthOnly: true,
       text: 'Product Classification (SW/HW Mix)',
       disabled: false,
-      filename: 'Product_Classification_Report', invisible: this.moduleId == 2 ? true:false
+      filename: 'Product_Classification_Report', invisible: this.moduleId == 1 ? false:true
     },
     {
       type: 'alternate-sl2', hasFiscalMonthOnly: true, text: 'Alternate SL2 Mapping', disabled: false,
-      filename: 'Alternate_SL2_Report', invisible: this.moduleId == 2 ? true:false
+      filename: 'Alternate_SL2_Report', invisible:  this.moduleId == 1 ? false:true
     },
     {
       type: 'corp-adjustment', hasFiscalMonthOnly: true, text: 'Corp Adjustments Mapping', disabled: false,
-      filename: 'Corp_Adjustment_Report', invisible: this.moduleId == 2 ? true:false
+      filename: 'Corp_Adjustment_Report', invisible:  this.moduleId == 1 ? false:true
     },
     {
       type: 'disti-direct', hasFiscalMonthOnly: true, text: 'Disty to Direct Mapping', disabled: false,
-      filename: 'Disty_to_Direct_Mapping_Report', invisible: this.moduleId == 2 ? true:false
+      filename: 'Disty_to_Direct_Mapping_Report', invisible:  this.moduleId == 1 ? false:true
     },
     {
       type: 'service-map', hasFiscalMonthOnly: true, text: 'Service Mapping Split Percentage', disabled: false,
-      filename: 'Service_Mapping_Report', invisible: this.moduleId == 2 ? true:false
+      filename: 'Service_Mapping_Report', invisible:  this.moduleId == 1 ? false:true
     },
     {
       type: 'service-training', hasFiscalYearOnly: true, text: 'Service Training Split Percentage', disabled: false,
-      filename: 'Service_Training_Report', invisible: this.moduleId == 2 ? true:false
+      filename: 'Service_Training_Report', invisible:  this.moduleId == 1 ? false:true
     },
     {
       type: 'misc-exception', hasFiscalMonthOnly: true, text: 'Misc Exception Mapping', disabled: false,
-      filename: 'Misc_Exception_Report', invisible: this.moduleId == 2 ? true:false
+      filename: 'Misc_Exception_Report', invisible: this.moduleId == 1 ? false: true
     },
+    {
+      type: 'distisl3-directsl2-mapping', hasFiscalMonthOnly: true, text: 'Service Disti to Direct Mapping', disabled: false,
+      filename: 'DistiSL3_DirectSL2_Mapping_Report', invisible:  this.moduleId == 4 ? false:true
+    }
   ];
 
   report: Report;
@@ -240,8 +244,12 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
         prmMeasure = this.pgLookupService.callRepoMethod('getSubmeasureForSystemInputData', '', {params: this.moduleId, moduleAbbrev: this.store.module.abbrev}).toPromise();
         break;
       case 'misc-exception':
-          prmFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_scms_triang_miscexcep_map_upld', 'fiscal_month_id').toPromise();
-          break;
+        prmFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_scms_triang_miscexcep_map_upld', 'fiscal_month_id').toPromise();
+        break;
+        //Change Table name once we get it
+      case 'distisl3-directsl2-mapping':
+        prmFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_scms_triang_miscexcep_map_upld', 'fiscal_month_id').toPromise();
+        break;
     }
     const promises = [prmFiscalMonth, prmFiscalYear, prmMeasure].filter(x => !!x);
     if (promises.length) {

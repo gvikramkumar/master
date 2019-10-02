@@ -92,6 +92,14 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   mm_switch_p = false;
   mm_switch_s = false;
   mm_switch_scms = false;
+  ifl_switch_country = false;
+  CountryIflDisabled = false;
+  ifl_switch_ext = false;
+  ExtIflDisabled = false;
+  mm_switch_country = false;
+  mm_switch_ext = false;
+  CountryMmDisabled = false;
+  ExtMmlDisabled = false;
   categoryTypes = [
     {
       name: 'Hardware',
@@ -201,6 +209,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
   pnlNodesAll = [];
   pnlNodes = [];
   moduleId:number;
+  countryMatches = [{name: 'Sales Country Name', value: 'sales_country_name', abbrev: 'CNT'}];
+  extTheaterMatches = [{name: 'External Theater Name', value: 'ext_theater_name', abbrev: 'EXT'}];
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -561,6 +571,22 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           this.sm.inputFilterLevel.glSegLevel = [];
         }
         break;
+      case 'country':
+        if (this.ifl_switch_country) {
+          this.CountryMmDisabled = true;
+        } else {
+          this.sm.inputFilterLevel.countryLevel = undefined;
+          this.CountryMmDisabled = false;
+        }
+        break; 
+      case 'ext':
+        if (this.ifl_switch_ext) {
+          this.ExtMmlDisabled = true;
+        } else {
+          this.sm.inputFilterLevel.externalTheaterLevel = undefined;
+          this.ExtMmlDisabled = false;
+        }
+        break;    
     }
   }
 
@@ -623,6 +649,22 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
           this.ScmsIflDisabled = false;
         }
         break;
+      case 'country' :
+        if (this.mm_switch_country) {
+          this.CountryIflDisabled = true;
+        } else {
+          this.sm.manualMapping.countryLevel = undefined;
+          this.CountryIflDisabled = false;
+        }
+        break;  
+      case 'ext' :
+        if (this.mm_switch_ext) {
+          this.ExtIflDisabled = true;
+        } else {
+          this.sm.manualMapping.externalTheaterLevel = undefined;
+          this.ExtIflDisabled = false;
+        }
+        break;    
     }
   }
 
@@ -635,12 +677,16 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
       this.mm_switch_le = false;
       this.mm_switch_s = false;
       this.mm_switch_scms = false;
+      this.mm_switch_country = false;
+      this.mm_switch_ext = false;
 
       this.mmChange('ibe');
       this.mmChange('p');
       this.mmChange('le');
       this.mmChange('s');
       this.mmChange('scms');
+      this.mmChange('country');
+      this.mmChange('ext');
     }
   }
 
@@ -651,6 +697,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.ifl_switch_s = !!this.sm.inputFilterLevel.salesLevel;
     this.ifl_switch_scms = !!this.sm.inputFilterLevel.scmsLevel;
     this.ifl_switch_glseg = !!this.sm.inputFilterLevel.glSegLevel.length;
+    this.ifl_switch_country = !!this.sm.inputFilterLevel.countryLevel;
+    this.ifl_switch_ext = !!this.sm.inputFilterLevel.externalTheaterLevel;
   }
 
   syncManualMapSwitches() {
@@ -659,6 +707,8 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.mm_switch_le = !!this.sm.manualMapping.entityLevel;
     this.mm_switch_s = !!this.sm.manualMapping.salesLevel;
     this.mm_switch_scms = !!this.sm.manualMapping.scmsLevel;
+    this.ifl_switch_country = !!this.sm.inputFilterLevel.countryLevel;
+    this.ifl_switch_ext = !!this.sm.inputFilterLevel.externalTheaterLevel;
   }
 
   cleanIflSwitchChoices() {
@@ -676,6 +726,14 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     }
     if (!this.ifl_switch_scms) {
       delete this.sm.inputFilterLevel.scmsLevel;
+    }
+    
+    if (!this.ifl_switch_country) {
+      delete this.sm.inputFilterLevel.countryLevel;
+    }
+    
+    if (!this.ifl_switch_ext) {
+      delete this.sm.inputFilterLevel.externalTheaterLevel;
     }
     if (!this.ifl_switch_glseg) {
       this.sm.inputFilterLevel.glSegLevel = [];
@@ -698,6 +756,13 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     if (!this.isManualMapping() || !this.mm_switch_scms) {
       delete this.sm.manualMapping.scmsLevel;
     }
+    if (!this.isManualMapping() || !this.mm_switch_country) {
+      delete this.sm.manualMapping.countryLevel;
+    }
+    if (!this.isManualMapping() || !this.mm_switch_ext) {
+      delete this.sm.manualMapping.externalTheaterLevel;
+    }
+    
   }
 // we need to remove undefined, empty string or string with spaces
   getExistingArrRules() {
@@ -731,21 +796,29 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.ifl_switch_s = false;
     this.ifl_switch_scms = false;
     this.ifl_switch_glseg = false;
-    ['ibe', 'p', 'le', 's', 'scms', 'glseg'].forEach(val => this.iflChange(val));
-    ['ibe', 'p', 'le', 's', 'scms'].forEach(val => this.mmChange(val));
+    this.ifl_switch_country = false;
+    this.ifl_switch_ext = false;
+    ['ibe', 'p', 'le', 's', 'scms', 'glseg','country','ext'].forEach(val => this.iflChange(val));
+    ['ibe', 'p', 'le', 's', 'scms','country','ext'].forEach(val => this.mmChange(val));
   }
 
   clearInputFilterLevelsPassThrough() {
     delete this.sm.inputFilterLevel.internalBELevel;
     delete this.sm.inputFilterLevel.entityLevel;
     delete this.sm.inputFilterLevel.scmsLevel;
+
+    delete this.sm.inputFilterLevel.countryLevel;
+    delete this.sm.inputFilterLevel.externalTheaterLevel;
     this.sm.inputFilterLevel.glSegLevel = [];
     this.ifl_switch_ibe = false;
     this.ifl_switch_le = false;
     this.ifl_switch_scms = false;
     this.ifl_switch_glseg = false;
-    ['ibe', 'p', 'le', 's', 'scms', 'glseg'].forEach(val => this.iflChange(val));
-    ['ibe', 'p', 'le', 's', 'scms'].forEach(val => this.mmChange(val));
+
+    this.mm_switch_country = false;
+    this.mm_switch_ext = false;
+    ['ibe', 'p', 'le', 's', 'scms', 'glseg','country','ext'].forEach(val => this.iflChange(val));
+    ['ibe', 'p', 'le', 's', 'scms','country','ext'].forEach(val => this.mmChange(val));
   }
 
   clearManualMappingLevels() {
@@ -755,8 +828,11 @@ export class SubmeasureEditComponent extends RoutingComponentBase implements OnI
     this.mm_switch_le = false;
     this.mm_switch_s = false;
     this.mm_switch_scms = false;
-    ['ibe', 'p', 'le', 's', 'scms', 'glseg'].forEach(val => this.iflChange(val));
-    ['ibe', 'p', 'le', 's', 'scms'].forEach(val => this.mmChange(val));
+
+    this.mm_switch_country = false;
+    this.mm_switch_ext = false;
+    ['ibe', 'p', 'le', 's', 'scms', 'glseg','country','ext'].forEach(val => this.iflChange(val));
+    ['ibe', 'p', 'le', 's', 'scms','country','ext'].forEach(val => this.mmChange(val));
   }
 
   clearPropertiesForUnallocatedGroup() {
