@@ -25,7 +25,7 @@ export class BusinessUploadService {
       return;
     }
 
-    this.pgLookupService.callRepoMethod('getEtlFlags', '', {moduleId:this.store.module.moduleId}).toPromise().then(results => {
+    this.pgLookupService.callRepoMethod('getETLAndAllocationFlags', '', {moduleId:this.store.module.moduleId}).toPromise().then(results => {
       console.log(" ---  results ---- " + results);
     });
     const file = fileInput.files[0];
