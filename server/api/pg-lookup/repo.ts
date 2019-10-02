@@ -1129,7 +1129,7 @@ export default class PgLookupRepo {
   }
   getOpenPeriod() {
     return pgc.pgdb.query(`
-    select fiscal_year_month_int, fiscal_year_month_int||' '||fiscal_month_name from
+    select fiscal_year_month_int as "fiscalMonth", fiscal_year_month_int||' '||fiscal_month_name as "fiscalMonthName" from
     fpacon.vw_fpa_fiscal_month_to_year
     WHERE FISCAL_YEAR_MONTH_INT <= (
     SELECT FISCAL_YEAR_MONTH_INT FROM fpacon.vw_fpa_fiscal_month_to_year where current_fiscal_month_flag='Y' )
