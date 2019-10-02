@@ -1147,23 +1147,5 @@ AND FISCAL_YEAR_number_INT >= (
 SELECT FISCAL_YEAR_number_INT-1 FROM fpacon.vw_fpa_fiscal_month_to_year where current_fiscal_month_flag='Y' )
 order by FISCAL_YEAR_MONTH_INT desc `)
       .then(results => results.rows);
-  }
-
-  getETLFlags(req) {
-    console.log(" getETLFlags : " + req.params.moduleId);
-    const sql = `
-      select module_id, dl_processed_flag, alloc_processed_flag 
-      from fpadfa.dfa_data_ctrl
-      where module_id = ${req.params.moduleId}
-      `;
-    return pgc.pgdb.query(sql)
-      .then(results => {
-        const flags = results.rows || {};
-        return flags;
-        // return {
-        //   etlRunning: flags.dl_processed_flag !== 'Y',
-        //   allocationRunning: flags.alloc_processed_flag !== 'Y'
-        // };
-      });
-  }
+  }  
 }
