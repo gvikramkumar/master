@@ -1129,23 +1129,13 @@ export default class PgLookupRepo {
   }
   getOpenPeriod() {
     return pgc.pgdb.query(`
-  SELECT 
-FISCAL_YEAR_MONTH_INT as "fiscalMonth" ,FISCAL_YEAR_MONTH_INT||' '||(case when fiscal_month_number_int=1 then 'Aug'
-when fiscal_month_number_int=2 then 'Sep'
-when fiscal_month_number_int=3 then 'Oct'
-when fiscal_month_number_int=4 then 'Nov'
-when fiscal_month_number_int= 5 then 'Dec'
-when fiscal_month_number_int=6 then 'Jan'
-when fiscal_month_number_int= 7 then 'Feb'
-when fiscal_month_number_int= 8 then 'Mar'
-when fiscal_month_number_int= 9 then 'Apr'
-when fiscal_month_number_int= 10 then 'May'
-when fiscal_month_number_int= 11 then 'Jun'
-when fiscal_month_number_int= 12 then 'Jul' end)||' '||'FY'||FISCAL_YEAR_number_INT as "fiscalMonthName"\t FROM fpacon.vw_fpa_fiscal_month_to_year a WHERE FISCAL_YEAR_MONTH_INT <= (
-SELECT FISCAL_YEAR_MONTH_INT FROM fpacon.vw_fpa_fiscal_month_to_year where current_fiscal_month_flag='Y' )
-AND FISCAL_YEAR_number_INT >= (
-SELECT FISCAL_YEAR_number_INT-1 FROM fpacon.vw_fpa_fiscal_month_to_year where current_fiscal_month_flag='Y' )
-order by FISCAL_YEAR_MONTH_INT desc `)
+    select fiscal_year_month_int, fiscal_year_month_int||' '||fiscal_month_name from
+    fpacon.vw_fpa_fiscal_month_to_year
+    WHERE FISCAL_YEAR_MONTH_INT <= (
+    SELECT FISCAL_YEAR_MONTH_INT FROM fpacon.vw_fpa_fiscal_month_to_year where current_fiscal_month_flag='Y' )
+    AND FISCAL_YEAR_number_INT >= (
+    SELECT FISCAL_YEAR_number_INT-1 FROM fpacon.vw_fpa_fiscal_month_to_year where current_fiscal_month_flag='Y' )
+    order by FISCAL_YEAR_MONTH_INT desc `)
       .then(results => results.rows);
   }  
 }
