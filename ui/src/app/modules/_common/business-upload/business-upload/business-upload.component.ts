@@ -89,7 +89,7 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
         }
       } 
       if(isEtlInProgress){
-        this.uiUtil.genericDialog(`ETL or Allocation currently processing for module ${this.store.module.moduleId}`);        
+        this.uiUtil.genericDialog(`Upload Failed, as currently either ETL data loads or allocation process is running.`);        
       }
       else{
         this.businessUploadService.uploadFile(fileInput, this.uploadType.type);
