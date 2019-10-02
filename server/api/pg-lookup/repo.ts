@@ -1110,4 +1110,32 @@ export default class PgLookupRepo {
     }
   }
 
+  getMiscExceptionDataReport(fiscalMonth) {
+    return pgc.pgdb.query(`
+      select 
+      asd.fiscal_month_id,
+      asd.sales_node_level_2_code,
+      asd.scms_value,
+      asd.sales_territory_code,
+      asd.create_owner,
+      asd.create_datetimestamp,
+      asd.update_owner,
+      asd.update_datetimestamp
+      from fpadfa.dfa_prof_scms_triang_miscexcep_map_upld asd
+      where
+       asd.fiscal_month_id =  ${fiscalMonth}
+          `)
+      .then(results => results.rows);
+  }
+  getOpenPeriod() {
+    return pgc.pgdb.query(`
+    select fiscal_year_month_int as "fiscalMonth", fiscal_year_month_int||' '||fiscal_month_name as "fiscalMonthName" from
+    fpacon.vw_fpa_fiscal_month_to_year
+    WHERE FISCAL_YEAR_MONTH_INT <= (
+    SELECT FISCAL_YEAR_MONTH_INT FROM fpacon.vw_fpa_fiscal_month_to_year where current_fiscal_month_flag='Y' )
+    AND FISCAL_YEAR_number_INT >= (
+    SELECT FISCAL_YEAR_number_INT-1 FROM fpacon.vw_fpa_fiscal_month_to_year where current_fiscal_month_flag='Y' )
+    order by FISCAL_YEAR_MONTH_INT desc `)
+      .then(results => results.rows);
+  }  
 }

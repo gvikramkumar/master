@@ -41,6 +41,7 @@ import {svrUtil} from './lib/common/svr-util';
 import { processDateRouter } from './api/bkgm/processing-date-input/router';
 import {distisl3ToDistysl2UploadRouter} from './api/tsct/distisl3-to-directsl2-upload/router';
 
+import { miscExceptionUploadRouter } from './api/prof/misc-exception-upload/router';
 
 export const app = express();
 
@@ -152,6 +153,7 @@ if (!svrUtil.isUnitEnv()) {
   app.use('/api/prof/sales-split-upload', salesSplitUploadRouter);
   app.use('/api/prof/upload', profUploadRouter);
   app.use('/api/prof/disti-direct-upload', distiDirectUploadRouter);
+  app.use('/api/prof/misc-exception-upload', miscExceptionUploadRouter);
 
   //bkgm:
   app.use('/api/bkgm/processing-date-input', processDateRouter);

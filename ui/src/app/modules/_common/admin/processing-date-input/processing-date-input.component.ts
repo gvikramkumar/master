@@ -6,7 +6,7 @@ import { UiUtil } from '../../../../core/services/ui-util';
 import { ProcessDateInput } from '../../models/process-date-input';
 import { Observable, of } from 'rxjs';
 import { ProcessDateInputService } from '../../services/processdateinput.service';
-
+import moment from 'moment';
 @Component({
   selector: 'fin-processing-date-input',
   templateUrl: './processing-date-input.component.html',
@@ -24,11 +24,29 @@ export class ProcessingDateInputComponent extends RoutingComponentBase implement
   }
 
 
-
+  isValidDate:any;
   ngOnInit() {
   }
 
+  validateDates(sDate: Date, eDate: Date){
+    this.isValidDate = true;
+    if(moment(sDate, 'MM/DD/YYYY',false).isValid() || moment(eDate, 'MM/DD/YYYY',false).isValid()){
+      this.uiUtil.errorDialog('Date is not valid');
+    }
+    else if((sDate != null && eDate !=null) && (eDate) < (sDate)){
+      //this.error={isError:true,errorMessage:'End date should be grater then start date.'};
+      this.isValidDate = false;
+      //throw new Error('End date should be grater then start date');
+
+      this.uiUtil.errorDialog('End date should be greater then start date');
+    }
+    return this.isValidDate;
+  }
+
   save() {
+
+    this.isValidDate = this.validateDates(this.processDateInput.bkgm_process_start_date, this.processDateInput.bkgm_process_end_date);
+    if(this.isValidDate){
     this.uiUtil.confirmSave()
       .subscribe(resp => {
         if (resp) {
@@ -51,5 +69,6 @@ export class ProcessingDateInputComponent extends RoutingComponentBase implement
         }
       });
   }
+}
 
 }

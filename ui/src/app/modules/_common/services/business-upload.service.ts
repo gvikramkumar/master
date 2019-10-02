@@ -8,6 +8,8 @@ import {UploadResults} from '../models/upload-results';
 import {UiUtil} from '../../../core/services/ui-util';
 import AnyObj from '../../../../../../shared/models/any-obj';
 import {DfaModuleIds} from '../../../../../../shared/misc/enums';
+import {PgLookupService} from '../../_common/services/pg-lookup.service';
+
 const apiUrl = environment.apiUrl;
 
 @Injectable({
@@ -15,7 +17,7 @@ const apiUrl = environment.apiUrl;
 })
 export class BusinessUploadService {
 
-  constructor(private httpClient: HttpClient, private store: AppStore, private uiUtil: UiUtil) {
+  constructor(private httpClient: HttpClient, private store: AppStore, private uiUtil: UiUtil, private pgLookupService: PgLookupService) {
   }
 
   // submeasureName is for submeasure mode
@@ -23,6 +25,7 @@ export class BusinessUploadService {
     if (!fileInput.files.length) {
       return;
     }
+
     const file = fileInput.files[0];
     fileInput.value = null;
     const formData: FormData = new FormData();

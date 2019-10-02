@@ -21,6 +21,7 @@ mg.connect(uri, {useNewUrlParser: true})
   //  const meta = {directory: 'tsct.bu', buFileType: 'template'};
     const meta = { buFileType: 'template'};
     const promises = [];
+    // Please add required files in the below. These will be inserted to fs.files collection
     const buTemplates = [
       {fileName: 'dollar_upload_template.xlsx', buUploadType: 'dollar-upload', directory: 'prof.bu',dirPath : 'files/prof/business-upload/'},
       {fileName: 'manual_mapping_upload_template.xlsx', buUploadType: 'mapping-upload', directory: 'prof.bu',dirPath : 'files/prof/business-upload/'},

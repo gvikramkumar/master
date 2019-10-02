@@ -1,21 +1,21 @@
 /*tslint:disable max-line-length  */
-import {injectable} from 'inversify';
+import { injectable } from 'inversify';
 import _ from 'lodash';
 import PgLookupRepo from '../../pg-lookup/repo';
-import {ApiError} from '../../../lib/common/api-error';
-import {svrUtil} from '../../../lib/common/svr-util';
+import { ApiError } from '../../../lib/common/api-error';
+import { svrUtil } from '../../../lib/common/svr-util';
 import xlsx from 'node-xlsx';
 import ControllerBase from '../../../lib/base-classes/controller-base';
-import {shUtil} from '../../../../shared/misc/shared-util';
+import { shUtil } from '../../../../shared/misc/shared-util';
 import SubmeasureRepo from '../submeasure/repo';
 import AllocationRuleRepo from '../allocation-rule/repo';
 import MeasureRepo from '../measure/repo';
 import SourceRepo from '../source/repo';
 import AnyObj from '../../../../shared/models/any-obj';
-import {DollarUploadPgRepo} from '../../prof/dollar-upload/pgrepo';
-import {MappingUploadPgRepo} from '../../prof/mapping-upload/pgrepo';
-import {DeptUploadPgRepo} from '../../prof/dept-upload/pgrepo';
-import {ProductClassUploadPgRepo} from '../../prof/product-class-upload/pgrepo';
+import { DollarUploadPgRepo } from '../../prof/dollar-upload/pgrepo';
+import { MappingUploadPgRepo } from '../../prof/mapping-upload/pgrepo';
+import { DeptUploadPgRepo } from '../../prof/dept-upload/pgrepo';
+import { ProductClassUploadPgRepo } from '../../prof/product-class-upload/pgrepo';
 
 
 @injectable()
@@ -47,7 +47,7 @@ export default class ReportController extends ControllerBase {
     // const option = {'!merges': [ range ]};
 
     // const buffer = xlsx.build([{name: "mySheetName", data: data}], option);
-    const buffer = xlsx.build([{name: 'mySheetName', data: data1}, {name: 'sheet2', data: data2}]);
+    const buffer = xlsx.build([{ name: 'mySheetName', data: data1 }, { name: 'sheet2', data: data2 }]);
     res.set('Content-Type', 'application/vnd.ms-excel');
     res.set('Content-Disposition', 'attachment; filename="' + 'myFileName.xlsx' + '"');
     svrUtil.bufferToStream(buffer).pipe(res);
@@ -82,7 +82,7 @@ export default class ReportController extends ControllerBase {
         excelProperties = ['measure.name', 'sm.name', 'input_product_value', 'input_sales_value', 'input_entity_value', 'input_internal_be_value',
           'input_scms_value', 'amount_value', 'gross_unbilled_accrued_rev_flg', 'deal_id', 'revenue_classification', 'fiscal_month_id', 'update_owner', 'update_datetimestamp'];
         promise = Promise.all([
-          this.measureRepo.getManyActive({moduleId}),
+          this.measureRepo.getManyActive({ moduleId }),
           this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
           this.pgLookupRepo.getDollarUploadReport(body.fiscalMonth, body.submeasureKeys)
         ])
@@ -100,7 +100,7 @@ export default class ReportController extends ControllerBase {
         excelProperties = ['measure.name', 'sm.name', 'input_product_value', 'input_sales_value', 'input_entity_value', 'input_internal_be_value',
           'input_scms_value', 'percentage_value', 'fiscal_month_id', 'update_owner', 'update_datetimestamp'];
         promise = Promise.all([
-          this.measureRepo.getManyActive({moduleId}),
+          this.measureRepo.getManyActive({ moduleId }),
           this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
           this.pgLookupRepo.getMappingUploadReport(body.fiscalMonth, body.submeasureKeys)
         ])
@@ -136,7 +136,7 @@ export default class ReportController extends ControllerBase {
         excelProperties = ['measure.name', 'sm.name', 'sm.desc', 'sm.submeasureKey', 'node_value', 'gl_account', 'startAccount', 'endAccount', 'sm.reportingLevels[0]', 'sm.reportingLevels[1]', 'sm.reportingLevels[2]',
           'update_owner', 'update_datetimestamp'];
         promise = Promise.all([
-          this.measureRepo.getManyActive({moduleId}),
+          this.measureRepo.getManyActive({ moduleId }),
           this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
           this.pgLookupRepo.getDeptUploadReport(body.submeasureKeys)
         ])
@@ -157,7 +157,7 @@ export default class ReportController extends ControllerBase {
         excelHeaders = ['Measure Name', 'Sub-Measure Name', 'Split Category', 'Split Percentage', 'Fiscal Month', 'Uploaded By', 'Uploaded Date'];
         excelProperties = ['measure.name', 'sm.name', 'splitCategory', 'splitPercentage', 'fiscalMonth', 'updatedBy', 'updatedDate'];
         promise = Promise.all([
-          this.measureRepo.getManyActive({moduleId}),
+          this.measureRepo.getManyActive({ moduleId }),
           this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
           this.productClassUploadPgRepo.getMany(body)
         ])
@@ -179,7 +179,7 @@ export default class ReportController extends ControllerBase {
         excelHeaders = ['Measure Name', 'Sub-Measure Name', 'Group Sub-Measure Name', 'Created By', 'Create Time', 'Updated By', 'Update Time'];
         excelProperties = ['measureName', 'name', 'groupingSubmeasureName', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'];
         promise = Promise.all([
-          this.measureRepo.getManyActive({moduleId}),
+          this.measureRepo.getManyActive({ moduleId }),
           this.submeasureRepo.getManyLatestGroupByNameActive(moduleId)
         ])
           .then(results => {
@@ -240,31 +240,31 @@ export default class ReportController extends ControllerBase {
         break;
 
       case 'valid-driver':
-        if(moduleId == 1){
+        if (moduleId == 1) {
           multiSheetReport = true;
           excelSheetname = [['Adjustment PF Report'], ['Driver SL3 Report'], ['Shipment Driver PF Report'], ['Roll3 Driver With BE']],
             excelHeaders = [['Tech Group', 'Business Unit', 'Product Family'],
-              ['Driver Type', 'Sales Level1 Code', 'Sales Level1 Description', 'Sales Level2 Code', 'Sales Level2 Description', 'Sales Level3 Code', 'Sales Level3 Description'],
-              ['Tech Group', 'Business Unit', 'Product Family'],
-              ['Driver Type', 'Tech Group', 'Business Unit', 'Product Family', 'Business Entity', 'Sub Business Entity']];
+            ['Driver Type', 'Sales Level1 Code', 'Sales Level1 Description', 'Sales Level2 Code', 'Sales Level2 Description', 'Sales Level3 Code', 'Sales Level3 Description'],
+            ['Tech Group', 'Business Unit', 'Product Family'],
+            ['Driver Type', 'Tech Group', 'Business Unit', 'Product Family', 'Business Entity', 'Sub Business Entity']];
           excelProperties = [['technology_group_id', 'business_unit_id', 'product_family_id'],
-            ['driver_type', 'l1_sales_territory_name_code', 'l1_sales_territory_descr', 'l2_sales_territory_name_code', 'l2_sales_territory_descr', 'l3_sales_territory_name_code', 'l3_sales_territory_descr'],
-            ['technology_group_id', 'business_unit_id', 'product_family_id'],
-            ['driver_type', 'technology_group_id', 'business_unit_id', 'product_family_id', 'bk_business_entity_name', 'sub_business_entity_name']];
+          ['driver_type', 'l1_sales_territory_name_code', 'l1_sales_territory_descr', 'l2_sales_territory_name_code', 'l2_sales_territory_descr', 'l3_sales_territory_name_code', 'l3_sales_territory_descr'],
+          ['technology_group_id', 'business_unit_id', 'product_family_id'],
+          ['driver_type', 'technology_group_id', 'business_unit_id', 'product_family_id', 'bk_business_entity_name', 'sub_business_entity_name']];
           promise = Promise.all([
             this.pgLookupRepo.getAdjustmentPFReport(),
             this.pgLookupRepo.getDriverSL3Report(req.dfa),
             this.pgLookupRepo.getShipmentDriverPFReport(req.dfa),
             this.pgLookupRepo.getRoll3DriverWithBEReport(req.dfa)
           ]);
-        }else if(moduleId == 2){
+        } else if (moduleId == 2) {
           excelSheetname = ['Driver Data'];
-          excelHeaders = ['Fiscal Month Id', 'Driver Type', 'Sub Measure Key', 'Sales Level1 Code', 'Sales Level2 Code', 'Technology Group', 'Business Unit' , 'Product Family' , 'Shipped Revenue'];
-          excelProperties = ['fiscal_month_id', 'driver_type', 'sub_measure_key', 'sales_node_level_1_code', 'sales_node_level_2_code', 'technology_group' , 'business_unit', 'product_family' , 'shipped_revenue' ];
+          excelHeaders = ['Fiscal Month Id', 'Driver Type', 'Sales Level1 Code', 'Sales Level2 Code', 'Technology Group', 'Business Unit', 'Product Family', 'Shipped Revenue'];
+          excelProperties = ['fiscal_month_id', 'driver_type', 'sales_node_level_1_code', 'sales_node_level_2_code', 'technology_group', 'business_unit', 'product_family', 'shipped_revenue'];
           promise = this.pgLookupRepo.getDriverReportBkgm(req.dfa);
-        /*  promise = Promise.all([
-            this.pgLookupRepo.getDriverReportBkgm(req.dfa)
-          ]); */
+          /*  promise = Promise.all([
+              this.pgLookupRepo.getDriverReportBkgm(req.dfa)
+            ]); */
 
         }
 
@@ -272,10 +272,10 @@ export default class ReportController extends ControllerBase {
 
       case 'valid-slpf-driver':
         excelSheetname = ['SLPF Validation'];
-        excelHeaders = ['Measure Name', 'Sub-Measure Name', 'Sales Value', 'Product Value',	'SCMS Value',	'Business Entity Value', 'Internal BE Value'];
+        excelHeaders = ['Measure Name', 'Sub-Measure Name', 'Sales Value', 'Product Value', 'SCMS Value', 'Business Entity Value', 'Internal BE Value'];
         excelProperties = ['measure.name', 'sm.name', 'input_sales_value', 'input_product_value', 'input_scms_value', 'input_entity_value', 'input_internal_be_value'];
         promise = Promise.all([
-          this.measureRepo.getManyActive({moduleId}),
+          this.measureRepo.getManyActive({ moduleId }),
           this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
           this.pgLookupRepo.getSLPFDriverReport(body.fiscalMonth, body.submeasureKeys)
         ])
@@ -297,21 +297,21 @@ export default class ReportController extends ControllerBase {
           'Is Group Sub-Measure', 'Is Group - Allocation Required', 'Grouping Sub-Measure', 'Sub-Measure Type', 'Retained Earnings', 'Transition', 'Service', 'Pass Through', 'Corp Revenue', 'DualGaap', '2Tier'
           , 'Status', 'Approval Status', 'Approved By', 'Approved Date', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'],
 
-          ['Measure Name', 'Sub-Measure Key', 'Sub-Measure Name', 'Description', 'Source',
-            'IFL Sales Level', 'IFL Product Level', 'IFL SCMS Level', 'IFL Legal Entity Level', 'IFL IBE Level', 'IFL GL Segments',
-            'Effective Month', 'End Month', 'Frequency/Timing of Sub-measure Processing', 'P/L Node', 'Reporting Level 1', 'Reporting Level 2', 'Reporting Level 3',
-            'Manual Mapping', 'MM Sales Level', 'MM Product Level', 'MM SCMS Level', 'MM Legal Entity Level', 'MM IBE Level',
-            'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Rule 6', 'Rule 7', 'Rule 8', 'Rule 9', 'Rule 10', 'Rule 11', 'Rule 12', 'Rule 13', 'Rule 14', 'Rule 15',
-            'Is Group Sub-Measure', 'Is Group - Allocation Required', 'Grouping Sub-Measure', 'Sub-Measure Type', 'Retained Earnings', 'Transition', 'Service', 'Pass Through', 'Corp Revenue', 'DualGaap', '2Tier'
-            , 'Status', 'Approval Status', 'Approved By', 'Approved Date', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'],
+        ['Measure Name', 'Sub-Measure Key', 'Sub-Measure Name', 'Description', 'Source',
+          'IFL Sales Level', 'IFL Product Level', 'IFL SCMS Level', 'IFL Legal Entity Level', 'IFL IBE Level', 'IFL GL Segments',
+          'Effective Month', 'End Month', 'Frequency/Timing of Sub-measure Processing', 'P/L Node', 'Reporting Level 1', 'Reporting Level 2', 'Reporting Level 3',
+          'Manual Mapping', 'MM Sales Level', 'MM Product Level', 'MM SCMS Level', 'MM Legal Entity Level', 'MM IBE Level',
+          'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Rule 6', 'Rule 7', 'Rule 8', 'Rule 9', 'Rule 10', 'Rule 11', 'Rule 12', 'Rule 13', 'Rule 14', 'Rule 15',
+          'Is Group Sub-Measure', 'Is Group - Allocation Required', 'Grouping Sub-Measure', 'Sub-Measure Type', 'Retained Earnings', 'Transition', 'Service', 'Pass Through', 'Corp Revenue', 'DualGaap', '2Tier'
+          , 'Status', 'Approval Status', 'Approved By', 'Approved Date', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date'],
 
-          ['Measure Name', 'Sub-Measure Key', 'Sub-Measure Name', 'Description', 'Source',
-            'IFL Sales Level', 'IFL Product Level', 'IFL SCMS Level', 'IFL Legal Entity Level', 'IFL IBE Level', 'IFL GL Segments',
-            'Effective Month', 'End Month', 'Frequency/Timing of Sub-measure Processing', 'P/L Node', 'Reporting Level 1', 'Reporting Level 2', 'Reporting Level 3',
-            'Manual Mapping', 'MM Sales Level', 'MM Product Level', 'MM SCMS Level', 'MM Legal Entity Level', 'MM IBE Level',
-            'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Rule 6', 'Rule 7', 'Rule 8', 'Rule 9', 'Rule 10', 'Rule 11', 'Rule 12', 'Rule 13', 'Rule 14', 'Rule 15',
-            'Is Group Sub-Measure', 'Is Group - Allocation Required', 'Grouping Sub-Measure', 'Sub-Measure Type', 'Retained Earnings', 'Transition', 'Service', 'Pass Through', 'Corp Revenue', 'DualGaap', '2Tier'
-            , 'Status', 'Approval Status', 'Approved By', 'Approved Date', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date']];
+        ['Measure Name', 'Sub-Measure Key', 'Sub-Measure Name', 'Description', 'Source',
+          'IFL Sales Level', 'IFL Product Level', 'IFL SCMS Level', 'IFL Legal Entity Level', 'IFL IBE Level', 'IFL GL Segments',
+          'Effective Month', 'End Month', 'Frequency/Timing of Sub-measure Processing', 'P/L Node', 'Reporting Level 1', 'Reporting Level 2', 'Reporting Level 3',
+          'Manual Mapping', 'MM Sales Level', 'MM Product Level', 'MM SCMS Level', 'MM Legal Entity Level', 'MM IBE Level',
+          'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Rule 6', 'Rule 7', 'Rule 8', 'Rule 9', 'Rule 10', 'Rule 11', 'Rule 12', 'Rule 13', 'Rule 14', 'Rule 15',
+          'Is Group Sub-Measure', 'Is Group - Allocation Required', 'Grouping Sub-Measure', 'Sub-Measure Type', 'Retained Earnings', 'Transition', 'Service', 'Pass Through', 'Corp Revenue', 'DualGaap', '2Tier'
+          , 'Status', 'Approval Status', 'Approved By', 'Approved Date', 'Created By', 'Created Date', 'Last Modified By', 'Last Modified Date']];
 
         excelProperties = [['measureName', 'submeasureKey', 'name', 'desc', 'sourceName',
           'inputFilterLevel.salesLevel', 'inputFilterLevel.productLevel', 'inputFilterLevel.scmsLevel', 'inputFilterLevel.entityLevel', 'inputFilterLevel.internalBELevel', 'inputFilterLevel.glSegLevel',
@@ -320,29 +320,29 @@ export default class ReportController extends ControllerBase {
           'rules[0]', 'rules[1]', 'rules[2]', 'rules[3]', 'rules[4]', 'rules[5]', 'rules[6]', 'rules[7]', 'rules[8]', 'rules[9]', 'rules[10]', 'rules[11]', 'rules[12]', 'rules[13]', 'rules[14]',
           'indicators.groupFlag', 'indicators.allocationRequired', 'groupingSubmeasureName', 'categoryType', 'indicators.retainedEarnings', 'indicators.transition', 'indicators.service', 'indicators.passThrough', 'indicators.corpRevenue', 'indicators.dualGaap', 'indicators.twoTier', 'status', 'approvedOnce', 'approvedBy', 'approvedDate', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'],
 
-          ['measureName', 'submeasureKey', 'name', 'desc', 'sourceName',
-            'inputFilterLevel.salesLevel', 'inputFilterLevel.productLevel', 'inputFilterLevel.scmsLevel', 'inputFilterLevel.entityLevel', 'inputFilterLevel.internalBELevel', 'inputFilterLevel.glSegLevel',
-            'startFiscalMonth', 'endFiscalMonth', 'processingTime', 'pnlnodeGrouping', 'reportingLevels[0]', 'reportingLevels[1]', 'reportingLevels[2]',
-            'indicators.manualMapping', 'manualMapping.salesLevel', 'manualMapping.productLevel', 'manualMapping.scmsLevel', 'manualMapping.entityLevel', 'manualMapping.internalBELevel',
-            'rules[0]', 'rules[1]', 'rules[2]', 'rules[3]', 'rules[4]', 'rules[5]', 'rules[6]', 'rules[7]', 'rules[8]', 'rules[9]', 'rules[10]', 'rules[11]', 'rules[12]', 'rules[13]', 'rules[14]',
-            'indicators.groupFlag', 'indicators.allocationRequired', 'groupingSubmeasureName', 'categoryType', 'indicators.retainedEarnings', 'indicators.transition', 'indicators.service', 'indicators.passThrough', 'indicators.corpRevenue', 'indicators.dualGaap', 'indicators.twoTier', 'status', 'approvedOnce', 'approvedBy', 'approvedDate', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'],
+        ['measureName', 'submeasureKey', 'name', 'desc', 'sourceName',
+          'inputFilterLevel.salesLevel', 'inputFilterLevel.productLevel', 'inputFilterLevel.scmsLevel', 'inputFilterLevel.entityLevel', 'inputFilterLevel.internalBELevel', 'inputFilterLevel.glSegLevel',
+          'startFiscalMonth', 'endFiscalMonth', 'processingTime', 'pnlnodeGrouping', 'reportingLevels[0]', 'reportingLevels[1]', 'reportingLevels[2]',
+          'indicators.manualMapping', 'manualMapping.salesLevel', 'manualMapping.productLevel', 'manualMapping.scmsLevel', 'manualMapping.entityLevel', 'manualMapping.internalBELevel',
+          'rules[0]', 'rules[1]', 'rules[2]', 'rules[3]', 'rules[4]', 'rules[5]', 'rules[6]', 'rules[7]', 'rules[8]', 'rules[9]', 'rules[10]', 'rules[11]', 'rules[12]', 'rules[13]', 'rules[14]',
+          'indicators.groupFlag', 'indicators.allocationRequired', 'groupingSubmeasureName', 'categoryType', 'indicators.retainedEarnings', 'indicators.transition', 'indicators.service', 'indicators.passThrough', 'indicators.corpRevenue', 'indicators.dualGaap', 'indicators.twoTier', 'status', 'approvedOnce', 'approvedBy', 'approvedDate', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'],
 
-          ['measureName', 'submeasureKey', 'name', 'desc', 'sourceName',
-            'inputFilterLevel.salesLevel', 'inputFilterLevel.productLevel', 'inputFilterLevel.scmsLevel', 'inputFilterLevel.entityLevel', 'inputFilterLevel.internalBELevel', 'inputFilterLevel.glSegLevel',
-            'startFiscalMonth', 'endFiscalMonth', 'processingTime', 'pnlnodeGrouping', 'reportingLevels[0]', 'reportingLevels[1]', 'reportingLevels[2]',
-            'indicators.manualMapping', 'manualMapping.salesLevel', 'manualMapping.productLevel', 'manualMapping.scmsLevel', 'manualMapping.entityLevel', 'manualMapping.internalBELevel',
-            'rules[0]', 'rules[1]', 'rules[2]', 'rules[3]', 'rules[4]', 'rules[5]', 'rules[6]', 'rules[7]', 'rules[8]', 'rules[9]', 'rules[10]', 'rules[11]', 'rules[12]', 'rules[13]', 'rules[14]',
-            'indicators.groupFlag', 'indicators.allocationRequired', 'groupingSubmeasureName', 'categoryType', 'indicators.retainedEarnings', 'indicators.transition', 'indicators.service', 'indicators.passThrough', 'indicators.corpRevenue', 'indicators.dualGaap', 'indicators.twoTier', 'status', 'approvedOnce', 'approvedBy', 'approvedDate', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate']];
+        ['measureName', 'submeasureKey', 'name', 'desc', 'sourceName',
+          'inputFilterLevel.salesLevel', 'inputFilterLevel.productLevel', 'inputFilterLevel.scmsLevel', 'inputFilterLevel.entityLevel', 'inputFilterLevel.internalBELevel', 'inputFilterLevel.glSegLevel',
+          'startFiscalMonth', 'endFiscalMonth', 'processingTime', 'pnlnodeGrouping', 'reportingLevels[0]', 'reportingLevels[1]', 'reportingLevels[2]',
+          'indicators.manualMapping', 'manualMapping.salesLevel', 'manualMapping.productLevel', 'manualMapping.scmsLevel', 'manualMapping.entityLevel', 'manualMapping.internalBELevel',
+          'rules[0]', 'rules[1]', 'rules[2]', 'rules[3]', 'rules[4]', 'rules[5]', 'rules[6]', 'rules[7]', 'rules[8]', 'rules[9]', 'rules[10]', 'rules[11]', 'rules[12]', 'rules[13]', 'rules[14]',
+          'indicators.groupFlag', 'indicators.allocationRequired', 'groupingSubmeasureName', 'categoryType', 'indicators.retainedEarnings', 'indicators.transition', 'indicators.service', 'indicators.passThrough', 'indicators.corpRevenue', 'indicators.dualGaap', 'indicators.twoTier', 'status', 'approvedOnce', 'approvedBy', 'approvedDate', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate']];
         if (req.dfa.module.moduleId === 1) {
           excelHeaders[2].splice(43, 0, 'HW Split %', 'SW Split %');
           excelProperties[2].splice(43, 0, 'manualMixHw', 'manualMixSw');
         }
 
         promise = Promise.all([
-          this.measureRepo.getManyActive({moduleId}),
+          this.measureRepo.getManyActive({ moduleId }),
           this.sourceRepo.getManyActive(),
           this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
-          this.productClassUploadPgRepo.getMany({fiscalMonth: req.dfa.module.fiscalMonth})
+          this.productClassUploadPgRepo.getMany({ fiscalMonth: req.dfa.module.fiscalMonth })
         ])
           .then(results => {
             this.measures = results[0];
@@ -353,7 +353,7 @@ export default class ReportController extends ControllerBase {
               this.submeasureRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
                 .then(docs => docs.map(doc => this.transformSubmeasure(doc)))
                 .then(vals => _.orderBy(vals, ['measureName', 'name'])),
-              this.submeasureRepo.getMany({setSort: 'name', moduleId})
+              this.submeasureRepo.getMany({ setSort: 'name', moduleId })
                 .then(docs => docs.map(doc => this.transformSubmeasure(doc)))
                 .then(vals => _.orderBy(vals, ['measureName', 'name'])),
               this.submeasureRepo.getManyLatestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
@@ -377,61 +377,61 @@ export default class ReportController extends ControllerBase {
           'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'IBE Select',
           'Status', 'Approval Status', 'Approved By', 'Approved Date', 'Created By', 'Created Date', 'Updated By', 'Updated Date'],
 
-          ['Rule Name', 'Old Name', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'IBE Match', 'Legal Entity Match', 'Country', 'External Theater', 'GL Segments',
-            'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'IBE Select',
-            'Status', 'Approval Status', 'Approved By', 'Approved Date', 'Created By', 'Created Date', 'Updated By', 'Updated Date'],
+        ['Rule Name', 'Old Name', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'IBE Match', 'Legal Entity Match', 'Country', 'External Theater', 'GL Segments',
+          'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'IBE Select',
+          'Status', 'Approval Status', 'Approved By', 'Approved Date', 'Created By', 'Created Date', 'Updated By', 'Updated Date'],
 
-          ['Rule Name', 'Old Name', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'IBE Match', 'Legal Entity Match', 'Country', 'External Theater', 'GL Segments',
-            'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'IBE Select', 'In Use', 'In Use By',
-            'Status', 'Approval Status', 'Approved By', 'Approved Date', 'Created By', 'Created Date', 'Updated By', 'Updated Date']];
+        ['Rule Name', 'Old Name', 'Driver Name', 'Driver Period', 'Sales Match', 'Product Match', 'SCMS Match', 'IBE Match', 'Legal Entity Match', 'Country', 'External Theater', 'GL Segments',
+          'SL1 Select', 'SL2 Select', 'SL3 Select', 'TG Select', 'BU Select', 'PF Select', 'SCMS Select', 'IBE Select', 'In Use', 'In Use By',
+          'Status', 'Approval Status', 'Approved By', 'Approved Date', 'Created By', 'Created Date', 'Updated By', 'Updated Date']];
 
         excelProperties = [['name', 'oldName', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'beMatch', 'legalEntityMatch', 'countryMatch', 'extTheaterMatch', 'glSegmentsMatch',
           'sl1Select', 'sl2Select', 'sl3Select', 'prodTGSelect', 'prodBUSelect', 'prodPFSelect', 'scmsSelect', 'beSelect',
           'status', 'approvedOnce', 'approvedBy', 'approvedDate', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'],
 
-          ['name', 'oldName', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'beMatch', 'legalEntityMatch', 'countryMatch', 'extTheaterMatch', 'glSegmentsMatch',
-            'sl1Select', 'sl2Select', 'sl3Select', 'prodTGSelect', 'prodBUSelect', 'prodPFSelect', 'scmsSelect', 'beSelect',
-            'status', 'approvedOnce', 'approvedBy', 'approvedDate', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'],
+        ['name', 'oldName', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'beMatch', 'legalEntityMatch', 'countryMatch', 'extTheaterMatch', 'glSegmentsMatch',
+          'sl1Select', 'sl2Select', 'sl3Select', 'prodTGSelect', 'prodBUSelect', 'prodPFSelect', 'scmsSelect', 'beSelect',
+          'status', 'approvedOnce', 'approvedBy', 'approvedDate', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate'],
 
-          ['name', 'oldName', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'beMatch', 'legalEntityMatch', 'countryMatch', 'extTheaterMatch', 'glSegmentsMatch',
-            'sl1Select', 'sl2Select', 'sl3Select', 'prodTGSelect', 'prodBUSelect', 'prodPFSelect', 'scmsSelect', 'beSelect', 'inUse', 'inUseBy',
-            'status', 'approvedOnce', 'approvedBy', 'approvedDate', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate']];
+        ['name', 'oldName', 'driverName', 'period', 'salesMatch', 'productMatch', 'scmsMatch', 'beMatch', 'legalEntityMatch', 'countryMatch', 'extTheaterMatch', 'glSegmentsMatch',
+          'sl1Select', 'sl2Select', 'sl3Select', 'prodTGSelect', 'prodBUSelect', 'prodPFSelect', 'scmsSelect', 'beSelect', 'inUse', 'inUseBy',
+          'status', 'approvedOnce', 'approvedBy', 'approvedDate', 'createdBy', 'createdDate', 'updatedBy', 'updatedDate']];
         const rulePromises = [
           this.allocationRuleRepo.getManyEarliestGroupByNameActive(moduleId).then(docs => _.sortBy(docs, 'name'))
             .then(docs => docs.map(doc => this.transformRule(doc)))
             .then(vals => _.orderBy(vals, ['name'])),
-          this.allocationRuleRepo.getMany({setSort: 'name', moduleId})
+          this.allocationRuleRepo.getMany({ setSort: 'name', moduleId })
             .then(docs => docs.map(doc => this.transformRule(doc)))
             .then(vals => _.orderBy(vals, ['name']))
         ];
 
         rulePromises.push(Promise.all([
-            this.allocationRuleRepo.getManyLatestGroupByNameActive(moduleId),
-            this.submeasureRepo.getManyLatestGroupByNameActive(moduleId)
-          ]).then(results => {
-            const rules = results[0];
-            const sms = results[1];
-            rules.forEach(rule => {
-              const smsUsingRule = [];
-              sms.forEach(sm => {
-                if (_.includes(sm.rules, rule.name)) {
-                  smsUsingRule.push(sm.name);
-                }
-              });
-              rule['inUse'] = smsUsingRule.length || '';
-              rule['inUseBy'] = smsUsingRule;
+          this.allocationRuleRepo.getManyLatestGroupByNameActive(moduleId),
+          this.submeasureRepo.getManyLatestGroupByNameActive(moduleId)
+        ]).then(results => {
+          const rules = results[0];
+          const sms = results[1];
+          rules.forEach(rule => {
+            const smsUsingRule = [];
+            sms.forEach(sm => {
+              if (_.includes(sm.rules, rule.name)) {
+                smsUsingRule.push(sm.name);
+              }
             });
-            return rules;
-          }).then(docs => _.sortBy(docs, 'name'))
-            .then(docs => docs.map(doc => this.transformRule(doc)))
-            .then(vals => _.orderBy(vals, ['name']))
+            rule['inUse'] = smsUsingRule.length || '';
+            rule['inUseBy'] = smsUsingRule;
+          });
+          return rules;
+        }).then(docs => _.sortBy(docs, 'name'))
+          .then(docs => docs.map(doc => this.transformRule(doc)))
+          .then(vals => _.orderBy(vals, ['name']))
         );
         promise = Promise.all(rulePromises);
         break;
 
       case 'rule-submeasure':
         excelSheetname = ['History'];
-        excelHeaders = ['Fiscal Month', 'Start Fiscal Month', 'End Fiscal Month', 'Sub-Measure Key', 'Sub-Measure Name', 'Description',  'Measure Name', 'Source System',
+        excelHeaders = ['Fiscal Month', 'Start Fiscal Month', 'End Fiscal Month', 'Sub-Measure Key', 'Sub-Measure Name', 'Description', 'Measure Name', 'Source System',
           'IFL Sales Level', 'IFL Product Level', 'IFL SCMS Level', 'IFL Legal Entity Level', 'IFL IBE Level', 'IFL GL Segments', 'Frequency/Timing of Sub-measure Processing',
           'Manual Mapping', 'MM Sales Level', 'MM Product Level', 'MM SCMS Level', 'MM Legal Entity Level', 'MM IBE Level',
           'Rule 1', 'Rule 2', 'Rule 3', 'Rule 4', 'Rule 5', 'Rule 6', 'Rule 7', 'Rule 8', 'Rule 9', 'Rule 10', 'Rule 11', 'Rule 12', 'Rule 13', 'Rule 14', 'Rule 15',
@@ -455,7 +455,7 @@ export default class ReportController extends ControllerBase {
         }
 
         promise = Promise.all([
-          this.measureRepo.getManyActive({moduleId}),
+          this.measureRepo.getManyActive({ moduleId }),
           this.sourceRepo.getManyActive()
         ])
           .then(results => {
@@ -468,8 +468,8 @@ export default class ReportController extends ControllerBase {
               // refactor getManyLatestGroupByNameActive to take filter or do new function or just use getmanyLatest
               promises.push(Promise.all([
                 Promise.resolve(fimo),
-                this.submeasureRepo.getManyLatestGroupByNameActive(moduleId, {updatedDate: {$lt: new Date(shUtil.getCutoffDateStrFromFiscalMonth(fimo))}}),
-                this.productClassUploadPgRepo.getMany({fiscalMonth: fimo})
+                this.submeasureRepo.getManyLatestGroupByNameActive(moduleId, { updatedDate: { $lt: new Date(shUtil.getCutoffDateStrFromFiscalMonth(fimo)) } }),
+                this.productClassUploadPgRepo.getMany({ fiscalMonth: fimo })
               ]));
             });
             return Promise.all(promises);
@@ -485,7 +485,7 @@ export default class ReportController extends ControllerBase {
                 sms = this.submeasures.map(sm => this.transformAddManualMix(sm, pgManualMixes));
               }
               sms.forEach(sm => {
-                rows.push({fiscalMonth, sm});
+                rows.push({ fiscalMonth, sm });
               });
             });
             return _.orderBy(rows, ['fiscalMonth', 'sm.measureName', 'sm.name']);
@@ -494,17 +494,17 @@ export default class ReportController extends ControllerBase {
 
       case 'input-data':
         excelSheetname = ['Input System Data'];
-        if(moduleId === 1){
+        if (moduleId === 1) {
           excelHeaders = ['Measure Name', 'Sub Measure Name', 'Product', 'Sales', 'Entity', 'SCMS', 'Amount', 'Uploaded By', 'Last Updated Date'];
           excelProperties = ['measure_name', 'sub_measure_name', 'input_product_value', 'input_sales_value', 'input_entity_value', 'input_scms_value', 'amount', 'update_owner', 'update_datetimestamp'];
         }
-        if(moduleId === 2){
+        if (moduleId === 2) {
           excelHeaders = ['Measure Name', 'Sub Measure Name', 'Product', 'Sales', 'Amount', 'Uploaded By', 'Last Updated Date'];
           excelProperties = ['measure_name', 'sub_measure_name', 'input_product_value', 'input_sales_value', 'amount', 'update_owner', 'update_datetimestamp'];
-        }      
-        
+        }
+
         promise = Promise.all([
-          this.measureRepo.getManyActive({moduleId}),
+          this.measureRepo.getManyActive({ moduleId }),
           this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
           this.pgLookupRepo.getInputSystemDataReport(body.fiscalMonth, body.submeasureKeys, moduleId)
         ])
@@ -515,6 +515,14 @@ export default class ReportController extends ControllerBase {
             return _.sortBy(rtn, 'sm.name');
           });
         break;
+
+      case 'misc-exception':
+        excelSheetname = ['Misc Exception'];
+        excelHeaders = ['Fiscal Month Id', 'Sales Level 2 Code', 'SCMS Value', 'Sales Territory Name', 'Created By', 'Creation Date', 'Updated By', 'Update Date'];
+        excelProperties = ['fiscal_month_id' , 'sales_node_level_2_code' , 'scms_value', 'sales_territory_code', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
+        promise = this.pgLookupRepo.getMiscExceptionDataReport(body.fiscalMonth)
+        break;
+
       default:
         next(new ApiError('Bad report type.', null, 400));
         return;
@@ -545,7 +553,7 @@ export default class ReportController extends ControllerBase {
               data.push(excelHeaders[idx]);
             }
             data = data.concat(objs);
-            sheetArr.push({name: excelSheetname[idx], data});
+            sheetArr.push({ name: excelSheetname[idx], data });
           });
           const buffer = xlsx.build(sheetArr);
           res.set('Content-Type', 'application/vnd.ms-excel');
@@ -571,7 +579,7 @@ export default class ReportController extends ControllerBase {
             data.push(excelHeaders);
           }
           data = data.concat(objs);
-          const buffer = xlsx.build([{name: excelSheetname, data}]);
+          const buffer = xlsx.build([{ name: excelSheetname, data }]);
           res.set('Content-Type', 'application/vnd.ms-excel');
           res.set('Content-Disposition', 'attachment; filename="' + excelFilename + '"');
           svrUtil.bufferToStream(buffer).pipe(res);
@@ -586,21 +594,21 @@ export default class ReportController extends ControllerBase {
   transformAddMeasureAndSubmeasure(obj) {
     obj = svrUtil.docToObject(obj);
     // sm could be from pg  query or mongo so check for both keys
-    obj.sm = _.find(this.submeasures, {submeasureKey: obj.submeasureKey || Number(obj.sub_measure_key)});
+    obj.sm = _.find(this.submeasures, { submeasureKey: obj.submeasureKey || Number(obj.sub_measure_key) });
     // some tables have measure_id (dollar), some don't (dept), so get it from sm always
-    obj.measure = _.find(this.measures, {measureId: obj.sm && obj.sm.measureId});
+    obj.measure = _.find(this.measures, { measureId: obj.sm && obj.sm.measureId });
     return obj;
   }
 
   // mongo sm
   transformSubmeasure(sm) {
     sm = svrUtil.docToObject(sm);
-    const measure = _.find(this.measures, {measureId: sm.measureId});
-    const source = _.find(this.sources, {sourceId: sm.sourceId});
+    const measure = _.find(this.measures, { measureId: sm.measureId });
+    const source = _.find(this.sources, { sourceId: sm.sourceId });
     sm.measureName = measure && measure.name;
     sm.sourceName = source && source.name;
     if (sm.groupingSubmeasureId) {
-      const parent = _.find(this.submeasures, {submeasureKey: sm.groupingSubmeasureId});
+      const parent = _.find(this.submeasures, { submeasureKey: sm.groupingSubmeasureId });
       sm.groupingSubmeasureName = parent && parent.name;
     }
     return sm;
@@ -608,8 +616,8 @@ export default class ReportController extends ControllerBase {
 
   transformAddManualMix(sm, manualMixes) {
     if (shUtil.isManualMix(sm)) {
-      const recHw = _.find(manualMixes, {submeasureKey: sm.submeasureKey, splitCategory: 'HARDWARE'});
-      const recSw = _.find(manualMixes, {submeasureKey: sm.submeasureKey, splitCategory: 'SOFTWARE'});
+      const recHw = _.find(manualMixes, { submeasureKey: sm.submeasureKey, splitCategory: 'HARDWARE' });
+      const recSw = _.find(manualMixes, { submeasureKey: sm.submeasureKey, splitCategory: 'SOFTWARE' });
       sm.manualMixHw = recHw && recHw.splitPercentage * 100;
       sm.manualMixSw = recSw && recSw.splitPercentage * 100;
     }

@@ -19,6 +19,7 @@ import {ApiDfaData} from '../../lib/middleware/add-global-data';
 import DistiDirectUploadController from '../prof/disti-direct-upload/controller';
 import ServiceMapUploadController from '../prof/service-map-upload/controller';
 import ServiceTrainingUploadController from '../prof/service-training-upload/controller';
+import MiscExceptionUploadController from '../prof/misc-exception-upload/controller';
 import {handleQAllSettled} from '../../lib/common/q-allSettled';
 import Q from 'q';
 import config from '../../config/get-config';
@@ -55,6 +56,7 @@ export default class DatabaseController {
     private distiDirectUploadController: DistiDirectUploadController,
     private serviceMapUploadController: ServiceMapUploadController,
     private serviceTrainingUploadController: ServiceTrainingUploadController,
+    private miscExceptionUploadController: MiscExceptionUploadController,
     private ProcessDateInputController : ProcessDateInputController,
     private lookupRepo: LookupRepo,
     private pgLookupRepo: PgLookupRepo
@@ -79,77 +81,91 @@ export default class DatabaseController {
     return shUtil.promiseChain(this.pgLookupRepo.getETLAndAllocationFlags())
       .then(flags => {
         flags.forEach(element => {
-          if (element.dl_processed_flag === 'N' || element.alloc_processed_flag === 'N'){
-            throw new Error('ETL or Allocation currently processing.');  
+          if ((element.dl_processed_flag === 'N' || element.alloc_processed_flag === 'N') && (syncMap.dfa_prof_dept_acct_map_upld || syncMap.dfa_prof_input_amnt_upld || syncMap.dfa_prof_input_amnt_upld_autosync || syncMap.dfa_prof_manual_map_upld || syncMap.dfa_prof_scms_triang_altsl2_map_upld || syncMap.dfa_prof_scms_triang_corpadj_map_upld || syncMap.dfa_prof_swalloc_manualmix_upld || syncMap.dfa_prof_sales_split_pctmap_upld || syncMap.dfa_prof_disti_to_direct_map_upld || syncMap.dfa_prof_service_map_upld || syncMap.dfa_prof_service_trngsplit_pctmap_upld || syncMap.dfa_prof_scms_triang_miscexcep_map_upld) && element.module_id ==='1'){
+            log.push(`ETL or Allocation currently processing for module - ${element.module_id}`);
+            if(syncMap.dfa_prof_input_amnt_upld_autosync){
+              throw new Error('ETL or Allocation currently processing.'); 
+            }
+          }else if((element.dl_processed_flag === 'N' || element.alloc_processed_flag === 'N') && (syncMap.dfa_bkgm_data_proc) && element.module_id ==='2'){
+            log.push(`ETL or Allocation currently processing for module - ${element.module_id}`);
+            //throw new Error('ETL or Allocation currently processing.');   
           }
           else{
-            if (syncMap.dfa_prof_dept_acct_map_upld && element.module_id === 1) {
+            if (syncMap.dfa_prof_dept_acct_map_upld && element.module_id === "1") {
               promises.push(this.deptUploadCtrl.mongoToPgSync('dfa_prof_dept_acct_map_upld', userId, log, elog,
-                {temp: 'N'})); // deletes all on pgsync
+               {temp: 'N'})); // deletes all on pgsync
             }
-            if (syncMap.dfa_prof_input_amnt_upld && element.module_id === 1) {
+            if (syncMap.dfa_prof_input_amnt_upld && element.module_id === "1") {
               promises.push(this.dollarUploadCtrl.mongoToPgSync('dfa_prof_input_amnt_upld', userId, log, elog,
                 {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}));
             }
-            if (syncMap.dfa_prof_input_amnt_upld_autosync && element.module_id === 1) {
+            if (syncMap.dfa_prof_input_amnt_upld_autosync && element.module_id === "1") {
               promises.push(this.dollarUploadCtrl.mongoToPgSync('dfa_prof_input_amnt_upld', userId, log, elog,
                 {fiscalMonth: dfa.fiscalMonths.prof, submeasureName: {$in: data.submeasureNames}}, undefined, dfa));
             }
-            if (syncMap.dfa_prof_manual_map_upld && element.module_id === 1) {
+            if (syncMap.dfa_prof_manual_map_upld && element.module_id === "1") {
               promises.push(this.mappingUploadCtrl.mongoToPgSync('dfa_prof_manual_map_upld', userId, log, elog,
                 {fiscalMonth: dfa.fiscalMonths.prof}, undefined, dfa));
             }
-            if (syncMap.dfa_prof_scms_triang_altsl2_map_upld && element.module_id === 1) {
+            if (syncMap.dfa_prof_scms_triang_altsl2_map_upld && element.module_id === "1") {
               promises.push(this.alternateSl2UploadCtrl.mongoToPgSync('dfa_prof_scms_triang_altsl2_map_upld', userId, log, elog,
                 {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}));
             }
-            if (syncMap.dfa_prof_scms_triang_corpadj_map_upld && element.module_id === 1) {
+            if (syncMap.dfa_prof_scms_triang_corpadj_map_upld && element.module_id === "1") {
               promises.push(this.corpAdjustmentsUploadCtrl.mongoToPgSync('dfa_prof_scms_triang_corpadj_map_upld', userId, log, elog,
                 {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}));
             }
-            if (syncMap.dfa_prof_swalloc_manualmix_upld && element.module_id === 1) {
+            if (syncMap.dfa_prof_swalloc_manualmix_upld && element.module_id === "1") {
               promises.push(this.productClassUploadCtrl.mongoToPgSync('dfa_prof_swalloc_manualmix_upld', userId, log, elog,
                 {fiscalMonth: dfa.fiscalMonths.prof}, undefined, dfa));
             }
-            if (syncMap.dfa_prof_sales_split_pctmap_upld && element.module_id === 1) {
+            if (syncMap.dfa_prof_sales_split_pctmap_upld && element.module_id === "1") {
               promises.push(this.salesSplitUploadCtrl.mongoToPgSync('dfa_prof_sales_split_pctmap_upld', userId, log, elog,
                 {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}, dfa));
             }
-            if (syncMap.dfa_prof_disti_to_direct_map_upld && element.module_id === 1) {
+            if (syncMap.dfa_prof_disti_to_direct_map_upld && element.module_id === "1") {
               promises.push(this.distiDirectUploadController.mongoToPgSync('dfa_prof_disti_to_direct_map_upld', userId, log, elog,
                 {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}, dfa));
             }
-            if (syncMap.dfa_prof_service_map_upld && element.module_id === 1) {
+            if (syncMap.dfa_prof_service_map_upld && element.module_id === "1") {
               promises.push(this.serviceMapUploadController.mongoToPgSync('dfa_prof_service_map_upld', userId, log, elog,
                 {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}));
             }
-            if (syncMap.dfa_prof_service_trngsplit_pctmap_upld && element.module_id === 1) {
+            if (syncMap.dfa_prof_service_trngsplit_pctmap_upld && element.module_id === "1") {
               const fiscalYear = shUtil.fiscalYearFromFiscalMonth(dfa.fiscalMonths.prof);
               promises.push(this.serviceTrainingUploadController.mongoToPgSync('dfa_prof_service_trngsplit_pctmap_upld', userId, log, elog,
                 {fiscalYear}, {fiscalYear}));
             }
-            if (syncMap.dfa_bkgm_data_proc && element.module_id === 2) {
+            if (syncMap.dfa_prof_scms_triang_miscexcep_map_upld && element.module_id === "1") {
+              promises.push(this.miscExceptionUploadController.mongoToPgSync('dfa_prof_scms_triang_miscexcep_map_upld', userId, log, elog,
+              {fiscalMonth: dfa.fiscalMonths.prof}, {fiscalMonth: dfa.fiscalMonths.prof}));
+            }
+            if (syncMap.dfa_bkgm_data_proc && element.module_id === "2") {
               promises.push(this.ProcessDateInputController.mongoToPgSync('dfa_bkgm_data_proc', userId, log, elog,{"setLimit":1,"setSort":{"updatedDate":-1}},undefined));
             }
           } 
         });
-      }).then(()=>{
-        if (syncMap.dfa_data_sources) {
-          promises.push(this.moduleSourceCtrl.mongoToPgSync('dfa_data_sources', userId, log, elog));
+      })
+      .then(()=>{
+        if(log.length<=0){
+          if (syncMap.dfa_data_sources) {
+            promises.push(this.moduleSourceCtrl.mongoToPgSync('dfa_data_sources', userId, log, elog));
+          }
+          if (syncMap.dfa_measure) {
+            promises.push(this.measureCtrl.mongoToPgSync('dfa_measure', userId, log, elog, {moduleId: -1}));
+          }
+          if (syncMap.dfa_module) {
+            promises.push(this.moduleCtrl.mongoToPgSync('dfa_module', userId, log, elog, {abbrev: {$ne: 'admn'}}));
+          }
+          if (syncMap.dfa_open_period) {
+            promises.push(this.openPeriodCtrl.mongoToPgSync('dfa_open_period', userId, log, elog));
+          }
+          if (syncMap.dfa_sub_measure) {
+            promises.push(this.submeasureCtrl.mongoToPgSync('dfa_sub_measure', userId, log, elog,
+              this.submeasureRepo.getManyLatestGroupByNameActiveInactive(-1)));
+          }
         }
-        if (syncMap.dfa_measure) {
-          promises.push(this.measureCtrl.mongoToPgSync('dfa_measure', userId, log, elog, {moduleId: -1}));
-        }
-        if (syncMap.dfa_module) {
-          promises.push(this.moduleCtrl.mongoToPgSync('dfa_module', userId, log, elog, {abbrev: {$ne: 'admn'}}));
-        }
-        if (syncMap.dfa_open_period) {
-          promises.push(this.openPeriodCtrl.mongoToPgSync('dfa_open_period', userId, log, elog));
-        }
-        if (syncMap.dfa_sub_measure) {
-          promises.push(this.submeasureCtrl.mongoToPgSync('dfa_sub_measure', userId, log, elog,
-            this.submeasureRepo.getManyLatestGroupByNameActiveInactive(-1)));
-        }
+        
       })
       .then(() => {
         return Promise.resolve() // must be in "then()" to catch thrown errors, use shUtil.promiseChain when merged in
@@ -158,12 +174,18 @@ export default class DatabaseController {
               .then(handleQAllSettled(null, 'qAllReject'))
               .then(results => {
                 if (elog.length) {
-                  throw new Error('handled in catch');
+                  //throw new Error('handled in catch');
+                  return 'error:handled in catch';
                 }
-                return {success: log};
+                // log.map(function(item) {
+                //   return item;
+                // }).join('\n');
+                return 'success:'+log;
+                //return {success: log};
               })
               .catch(err => {
-                throw new ApiError('MongoToPgSync Errors.', {success: log, errors: elog});
+                //throw new ApiError('MongoToPgSync Errors.', {success: log, errors: elog});
+                return 'MongoToPgSync Errors.'+{success: log, errors: elog};
               });
           });
       });
@@ -191,4 +213,5 @@ export default class DatabaseController {
   }
 
 }
+
 
