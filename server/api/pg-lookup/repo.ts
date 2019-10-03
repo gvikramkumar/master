@@ -1137,5 +1137,21 @@ export default class PgLookupRepo {
     SELECT FISCAL_YEAR_number_INT-1 FROM fpacon.vw_fpa_fiscal_month_to_year where current_fiscal_month_flag='Y' )
     order by FISCAL_YEAR_MONTH_INT desc `)
       .then(results => results.rows);
-  }  
+  }
+  getServiceDistiToDirectMappingReport(fiscalMonth) {
+    return pgc.pgdb.query(`
+    select fiscal_month_id,
+    sales_node_level_3_code ,
+    sales_node_level_2_code ,
+    ext_theater_name ,
+    create_owner ,
+    create_datetimestamp ,
+    update_owner ,
+    update_datetimestamp
+    from fpadfa.dfa_tsct_disti_to_direct_map_upld
+      where
+      fiscal_month_id =  ${fiscalMonth}
+          `)
+      .then(results => results.rows);
+  }
 }

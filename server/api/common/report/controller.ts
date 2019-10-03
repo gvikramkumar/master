@@ -522,6 +522,13 @@ export default class ReportController extends ControllerBase {
         excelProperties = ['fiscal_month_id' , 'sales_node_level_2_code' , 'scms_value', 'sales_territory_code', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
         promise = this.pgLookupRepo.getMiscExceptionDataReport(body.fiscalMonth)
         break;
+      case 'distisl3-directsl2-mapping':
+        excelSheetname = ['Disti SL3 to Direct SL2 Mapping'];
+        excelHeaders = ['Fiscal Month Id', 'Driver SL2', 'Source SL3', 'External Theater', 'Created By', 'Creation Date', 'Updated By', 'Update Date'];
+        excelProperties = ['fiscal_month_id' , 'sales_node_level_3_code', 'sales_node_level_2_code' , 'ext_theater_name', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
+        promise = this.pgLookupRepo.getServiceDistiToDirectMappingReport(body.fiscalMonth)
+        break;
+
 
       default:
         next(new ApiError('Bad report type.', null, 400));

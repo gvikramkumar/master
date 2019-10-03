@@ -32,15 +32,15 @@ export enum BusinessUploadFileType {
 export enum DfaModuleIds {
   prof = 1,
   bkgm = 2,
-  svct,
-  tsct = 4,
+  svct = 4,
+  tsct = 3,
   ascg,
-  cisc,
-  opex,
+//  cisc,
+//  opex,
   defr,
   gubr,
   bkir,
-  rrev,
+//  rrev,
   admn = 99
 }
 
@@ -50,12 +50,12 @@ export enum DfaModuleAbbrev {
   svct = 'svct',
   tsct = 'tsct',
   ascg = 'ascg',
-  cisc = 'cisc',
-  opex = 'opex',
+//  cisc = 'cisc',
+//  opex = 'opex',
   defr = 'defr',
   gubr = 'gubr',
   bkir = 'bkir',
-  rrev = 'rrev',
+//  rrev = 'rrev',
   admn = 99
 }
 
