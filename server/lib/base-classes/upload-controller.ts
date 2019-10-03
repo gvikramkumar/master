@@ -66,6 +66,10 @@ export default class UploadController {
     this.setUploadType();
     this.startUpload = Date.now();
     this.userId = req.user.id;
+    if(req.query.isEtlInProgress === 'isEtlInProgress'){
+      this.sendisEtlInProgressEmail();
+      res.json({status: 'isetlinprogress', uploadName: this.uploadName});
+    }else{
     const sheets = xlsx.parse(req.file.buffer);
     let headerRow = sheets[0].data[4];
     this.rows1 = sheets[0].data.slice(5).filter(row => row.length > 0);
@@ -134,6 +138,8 @@ export default class UploadController {
           next(_err);
         }
       });
+    }
+    
   }
 
   getInitialData(): Promise<any> {
@@ -501,6 +507,13 @@ export default class UploadController {
       throw new ApiError(`Properties missing: ${missingProps.join(', ')}.`, data, 400);
     }
   }
-
+  sendisEtlInProgressEmail(){
+    this.sendEmail(`${this.uploadName} - Failure`, this.buildisEtlInProgressEmailBody());
+  }
+  buildisEtlInProgressEmailBody()
+  {
+    let body = `<div>Upload Failed, as currently either ETL data loads or allocation process is running.Please contact DFA Support team for any questions.</div>`
+    return body;
+  }
 }
 

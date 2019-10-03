@@ -30,9 +30,15 @@ export class ProcessingDateInputComponent extends RoutingComponentBase implement
 
   validateDates(sDate: Date, eDate: Date){
     this.isValidDate = true;
+    var startDate = new Date(sDate);
+    var startDateYear = startDate.getFullYear();
+    var endDate = new Date(eDate);
+    var endDateYear = endDate.getFullYear();
     if(moment(sDate, 'MM/DD/YYYY',false).isValid() || moment(eDate, 'MM/DD/YYYY',false).isValid()){
       this.uiUtil.errorDialog('Date is not valid');
-    }
+    }else if(startDateYear.toString().length>4 || endDateYear.toString().length>4){
+      this.uiUtil.errorDialog('Date is not valid');  
+    } 
     else if((sDate != null && eDate !=null) && (eDate) < (sDate)){
       //this.error={isError:true,errorMessage:'End date should be grater then start date.'};
       this.isValidDate = false;
