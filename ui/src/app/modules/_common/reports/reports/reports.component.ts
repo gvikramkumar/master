@@ -76,7 +76,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     },
     {
       type: 'valid-driver', hasNoChoices: true, text: 'Valid Driver', disabled: false,
-      filename: 'Valid_Driver_Report', invisible: this.moduleId == 4 ? true:false
+      filename: 'Valid_Driver_Report', invisible: this.moduleId == 3 ? true:false
     },
     // REMEMBER, YOU HAVE TO CHANGE THE HTML PAGE TO INDEX 8 FROM 7 IN 2 PLACES OF ngFor
     // {
@@ -152,7 +152,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     },
     {
       type: 'distisl3-directsl2-mapping', hasFiscalMonthOnly: true, text: 'Service Disti to Direct Mapping', disabled: false,
-      filename: 'DistiSL3_DirectSL2_Mapping_Report', invisible:  this.moduleId == 4 ? false:true
+      filename: 'DistiSL3_DirectSL2_Mapping_Report', invisible:  this.moduleId == 3 ? false:true
     }
   ];
 
@@ -246,9 +246,8 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       case 'misc-exception':
         prmFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_scms_triang_miscexcep_map_upld', 'fiscal_month_id').toPromise();
         break;
-        //Change Table name once we get it
       case 'distisl3-directsl2-mapping':
-        prmFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_scms_triang_miscexcep_map_upld', 'fiscal_month_id').toPromise();
+        prmFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_tsct_disti_to_direct_map_upld', 'fiscal_month_id').toPromise();
         break;
     }
     const promises = [prmFiscalMonth, prmFiscalYear, prmMeasure].filter(x => !!x);
