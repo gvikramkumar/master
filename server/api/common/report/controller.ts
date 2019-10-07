@@ -502,6 +502,10 @@ export default class ReportController extends ControllerBase {
           excelHeaders = ['Measure Name', 'Sub Measure Name', 'Product', 'Sales', 'Amount', 'Uploaded By', 'Last Updated Date'];
           excelProperties = ['measure_name', 'sub_measure_name', 'input_product_value', 'input_sales_value', 'amount', 'update_owner', 'update_datetimestamp'];
         }
+        if (moduleId === 3) {
+          excelHeaders = ['Fiscal Month Id', 'Input Type', 'Sales Level1 Code', 'Sales Level2 Code', 'Sales Level3 Code', 'Sales County Name', 'SCMS', 'External Theater Name', 'Amount'];
+          excelProperties = ['fiscal_month_id', 'source_system_type_code', 'sales_node_level_1_code', 'sales_node_level_2_code', 'sales_node_level_3_code', 'sales_country_name', 'scms', 'c3_customer_theater_name', 'amount'];
+        }
 
         promise = Promise.all([
           this.measureRepo.getManyActive({ moduleId }),
@@ -520,13 +524,13 @@ export default class ReportController extends ControllerBase {
         excelSheetname = ['Misc Exception'];
         excelHeaders = ['Fiscal Month Id', 'Sales Level 2 Code', 'SCMS Value', 'Sales Territory Name', 'Created By', 'Creation Date', 'Updated By', 'Update Date'];
         excelProperties = ['fiscal_month_id' , 'sales_node_level_2_code' , 'scms_value', 'sales_territory_code', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
-        promise = this.pgLookupRepo.getMiscExceptionDataReport(body.fiscalMonth)
+        promise = this.pgLookupRepo.getMiscExceptionDataReport(body.fiscalMonth);
         break;
       case 'distisl3-directsl2-mapping':
         excelSheetname = ['Disti SL3 to Direct SL2 Mapping'];
         excelHeaders = ['Fiscal Month Id', 'Driver SL2', 'Source SL3', 'External Theater', 'Created By', 'Creation Date', 'Updated By', 'Update Date'];
         excelProperties = ['fiscal_month_id' , 'sales_node_level_3_code', 'sales_node_level_2_code' , 'ext_theater_name', 'create_owner', 'create_datetimestamp', 'update_owner', 'update_datetimestamp'];
-        promise = this.pgLookupRepo.getServiceDistiToDirectMappingReport(body.fiscalMonth)
+        promise = this.pgLookupRepo.getServiceDistiToDirectMappingReport(body.fiscalMonth);
         break;
 
 
