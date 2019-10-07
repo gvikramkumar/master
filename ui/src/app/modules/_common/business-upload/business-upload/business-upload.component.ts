@@ -102,7 +102,6 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
       if(isEtlInProgress){
         let isEtlInProgress = true;
         this.businessUploadService.uploadFile(fileInput, this.uploadType.type,undefined,isEtlInProgress);
-        this.uiUtil.toastPerm(`Upload Failed, as currently either ETL data loads or allocation process is running.Please contact DFA Support team for any questions.`, "Failure");        
       }
       else{
         this.businessUploadService.uploadFile(fileInput, this.uploadType.type);
