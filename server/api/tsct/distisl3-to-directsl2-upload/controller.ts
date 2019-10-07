@@ -20,7 +20,7 @@ export default class Distisl3ToDirectsl2UploadController extends ControllerBase 
   mongoToPgSyncTransform(objs, userId, log, elog) {
     const tableName = 'dfa_tsct_distysl3_to_distysl2_upld';
     const records = [];
-    return this.submeasureRepo.getManyLatestGroupByNameActive(DfaModuleIds.prof)
+    return this.submeasureRepo.getManyLatestGroupByNameActive(DfaModuleIds.tsct)
       .then(subs => {
         objs.forEach(obj => {
           const sub = _.find(subs, x => x.name.toLowerCase() === obj.submeasureName.toLowerCase());
@@ -39,7 +39,7 @@ export default class Distisl3ToDirectsl2UploadController extends ControllerBase 
     // if we pass this where clause with "no keys", i.e. empty parenthesis, postgres throws an error,
     // so pass an undefined where to syncRecordsReplaceAllWhere which will then ignore the delete statement
     if (keys.length) {
-      where = `fiscal_month_id = ${dfa.fiscalMonths.prof} and sub_measure_key in (${keys})`;
+      where = `fiscal_month_id = ${dfa.fiscalMonths.tsct} and sub_measure_key in (${keys})`;
     }
     return this.pgRepo.syncRecordsReplaceAllWhere(where, objs, userId, true)
       .then(results => results.recordCount);

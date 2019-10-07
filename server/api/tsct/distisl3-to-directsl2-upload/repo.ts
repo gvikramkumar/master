@@ -12,13 +12,12 @@ const schema = new Schema(
     driverSl2: {type: Number, required: true},
     sourceSl3: {type: String, enum: ['Direct SL2', 'Disti SL3'], required: true},
     externalTheater: {type: String, required: true},
-
     createdBy: {type: String, required: true},
     createdDate: {type: Date, required: true},
     updatedBy: {type: String, required: true},
     updatedDate: {type: Date, required: true}
   },
-  {collection: 'dfa_tsct_distysl3_to_distysl2_upld'}
+  {collection: 'dfa_tsct_disti_to_direct_map_upld'}
 );
 
 @injectable()
