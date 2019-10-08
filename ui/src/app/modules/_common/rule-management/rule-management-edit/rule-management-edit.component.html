@@ -48,19 +48,19 @@
                 <div class="left text-center half-margin-bottom form-group-max-width">Matching Criteria</div>
                 <cui-select name="salesMatch" [(ngModel)]="rule.salesMatch" [items]="salesMatches" label="Sales" empty="true"
                             optionsKey="name" optionsValue="value" (ngModelChange)="valueChange()"></cui-select>
-                <cui-select *ngIf="moduleId!=4" name="productMatch" [disabled]="!!rule.beMatch" [(ngModel)]="rule.productMatch" [items]="productMatches" label="Product"
+                <cui-select *ngIf="moduleId!=3" name="productMatch" [disabled]="!!rule.beMatch" [(ngModel)]="rule.productMatch" [items]="productMatches" label="Product"
                             empty="true" optionsKey="name" optionsValue="value" (ngModelChange)="valueChange()"></cui-select>
                 <cui-select name="scmsMatch" [(ngModel)]="rule.scmsMatch" [items]="scmsMatches" label="SCMS"
                             empty="true" optionsKey="match" optionsValue="match" (ngModelChange)="valueChange()"></cui-select>
-                <cui-select *ngIf="moduleId!=4" name="beMatch" [disabled]="!!rule.productMatch" [(ngModel)]="rule.beMatch" [items]="beMatches" label="Internal Business Entity"
+                <cui-select *ngIf="moduleId!=3" name="beMatch" [disabled]="!!rule.productMatch" [(ngModel)]="rule.beMatch" [items]="beMatches" label="Internal Business Entity"
                             empty="true" optionsKey="name" optionsValue="value" (ngModelChange)="valueChange()"></cui-select>
-                <cui-select *ngIf="moduleId!=4" name="leMatch"  [(ngModel)]="rule.legalEntityMatch" [items]="legalEntityMatches" label="Legal Entity"
+                <cui-select *ngIf="moduleId!=3" name="leMatch"  [(ngModel)]="rule.legalEntityMatch" [items]="legalEntityMatches" label="Legal Entity"
                             empty="true" optionsKey="match" optionsValue="match" (ngModelChange)="valueChange()"></cui-select>
                 <cui-select name="cntyMatch" [(ngModel)]="rule.countryMatch" [items]="countryMatches" dropdownMaxHeight="300"
                             optionsKey="name" optionsValue="value" empty="true" label="Country" (ngModelChange)="valueChange()"></cui-select>
                 <cui-select name="extTheaterMatch" [(ngModel)]="rule.extTheaterMatch" [items]="extTheaterMatches"
                             optionsKey="name" optionsValue="value" empty="true" label="External Theater" (ngModelChange)="valueChange()"></cui-select>
-                <cui-multiselect *ngIf="moduleId!=4" name="glSegmentsMatch"  [(ngModel)]="rule.glSegmentsMatch" [items]="glSegmentMatches"
+                <cui-multiselect *ngIf="moduleId!=3" name="glSegmentsMatch"  [(ngModel)]="rule.glSegmentsMatch" [items]="glSegmentMatches"
                                  optionsKey="name" optionsValue="value" empty="true" label="GL Segments" (ngModelChange)="valueChange()"></cui-multiselect>
               </div>
             </div>

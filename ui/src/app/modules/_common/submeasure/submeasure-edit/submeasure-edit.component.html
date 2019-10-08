@@ -43,7 +43,7 @@
           </fin-input>
         </div>
 
-        <div class="col-lg-6" *ngIf="moduleId!=4">
+        <div class="col-lg-6" *ngIf="moduleId!=3">
           <div [class.disabled]="disableCategories || isUnallocatedGroup()">
             <cui-select *ngIf="moduleId!=2" name="category" [(ngModel)]="sm.categoryType" [items]="categoryTypes"
               [required]="isCogsMeasure() && !isUnallocatedGroup()"
@@ -142,15 +142,15 @@
                 </div>
                 <div class="row ifl-section">
                   <div class="col-6">
-                    <div class="check-wrap" *ngIf="moduleId!=2 && moduleId!=4">
+                    <div class="check-wrap" *ngIf="moduleId!=2 && moduleId!=3">
                       <fin-checkbox [(model)]="ifl_switch_ibe" label="Internal Business Entity"
                         (modelChange)="iflChange('ibe')" [disabled]="BeIflDisabled || isPassThrough()"></fin-checkbox>
                     </div>
-                    <div class="check-wrap" *ngIf="moduleId!=4">
+                    <div class="check-wrap" *ngIf="moduleId!=3">
                       <fin-checkbox [(model)]="ifl_switch_p" label="Product" (modelChange)="iflChange('p')"
                         [disabled]="ProductIflDisabled"></fin-checkbox>
                     </div>
-                    <div class="check-wrap" *ngIf="moduleId!=2 && moduleId!=4">
+                    <div class="check-wrap" *ngIf="moduleId!=2 && moduleId!=3">
                       <fin-checkbox [(model)]="ifl_switch_le" label="Legal Entity" (modelChange)="iflChange('le')"
                         [disabled]="LegalIflDisabled || isPassThrough()"></fin-checkbox>
                     </div>
@@ -162,14 +162,14 @@
                       <fin-checkbox [(model)]="ifl_switch_scms" label="SCMS" (modelChange)="iflChange('scms')"
                         [disabled]="ScmsIflDisabled || isPassThrough()"></fin-checkbox>
                     </div>
-                    <div class="check-wrap" *ngIf="moduleId!=2 && moduleId!=4">
+                    <div class="check-wrap" *ngIf="moduleId!=2 && moduleId!=3">
                       <fin-checkbox [(model)]="ifl_switch_glseg" label="GL Segments" (modelChange)="iflChange('glseg')"
                         [disabled]="!hasSourceRapidRevenue() || isPassThrough()"
                         matTooltip="Gl Segments only available for source Rapid Revenue"
                         [matTooltipDisabled]="hasSourceRapidRevenue()" matTooltipShowDelay="1000"></fin-checkbox>
                     </div>
                     <div class="check-wrap"  *ngIf="moduleId!=1 && moduleId!=2">
-                      <fin-checkbox [(model)]="ifl_switch_country" label="Country" 
+                      <fin-checkbox [(model)]="ifl_switch_country" label="Country"
                         (modelChange)="iflChange('country')" [disabled]="CountryIflDisabled || isPassThrough()">
                       </fin-checkbox>
                     </div>
@@ -180,17 +180,17 @@
                     </div>
                   </div>
                   <div class="col-6">
-                    <div class="sel-wrap" *ngIf="moduleId!=2 && moduleId!=4">
+                    <div class="sel-wrap" *ngIf="moduleId!=2 && moduleId!=3">
                       <cui-select name="ibeLevel" [(ngModel)]="sm.inputFilterLevel.internalBELevel"
                         [required]="ifl_switch_ibe" class="option" [items]="ibe_items" optionsKey="name"
                         optionsValue="value" empty="true" [disabled]="!ifl_switch_ibe"></cui-select>
                     </div>
-                    <div class="sel-wrap" *ngIf="moduleId!=4">
+                    <div class="sel-wrap" *ngIf="moduleId!=3">
                       <cui-select name="productLevel" [(ngModel)]="sm.inputFilterLevel.productLevel"
                         [required]="ifl_switch_p" class="option" [items]="p_items" optionsKey="name"
                         optionsValue="value" empty="true" [disabled]="!ifl_switch_p"></cui-select>
                     </div>
-                    <div class="sel-wrap" *ngIf="moduleId!=2 && moduleId!=4">
+                    <div class="sel-wrap" *ngIf="moduleId!=2 && moduleId!=3">
                       <cui-select name="entityLevel" [(ngModel)]="sm.inputFilterLevel.entityLevel"
                         [required]="ifl_switch_le" class="option" [items]="le_items" optionsKey="name"
                         optionsValue="value" empty="true" [disabled]="!ifl_switch_le"></cui-select>
@@ -205,14 +205,14 @@
                         [required]="ifl_switch_scms" class="option" [items]="scms_items" optionsKey="name"
                         optionsValue="value" empty="true" [disabled]="!ifl_switch_scms"></cui-select>
                     </div>
-                    <div class="sel-wrap" *ngIf="moduleId!=2 && moduleId!=4">
+                    <div class="sel-wrap" *ngIf="moduleId!=2 && moduleId!=3">
                       <cui-multiselect name="glSegLevel" [(ngModel)]="sm.inputFilterLevel.glSegLevel"
                         [required]="ifl_switch_glseg" class="option" [items]="glseg_items" optionsKey="name"
                         optionsValue="value" empty="true" [disabled]="!ifl_switch_glseg"></cui-multiselect>
                     </div>
                     <div class="sel-wrap"  *ngIf="moduleId!=1 && moduleId!=2">
                       <cui-select name="cntyMatch"  dropdownMaxHeight="300" [required]="ifl_switch_country"
-                        optionsKey="name" optionsValue="value" empty="true" 
+                        optionsKey="name" optionsValue="value" empty="true"
                         [(ngModel)]="sm.inputFilterLevel.countryLevel" [items]="countryMatches" [disabled]="!ifl_switch_country">
                       </cui-select>
                     </div>
@@ -318,11 +318,11 @@
           <cui-select name="processingTime" [(ngModel)]="sm.processingTime" [items]="timings" label="Processing Timing"
             empty="true" optionsKey="name" optionsValue="name"></cui-select>
 
-          <cui-select *ngIf="moduleId!=2 && moduleId!=4" name="pnlnodeGrouping" [(ngModel)]="sm.pnlnodeGrouping"
+          <cui-select *ngIf="moduleId!=2 && moduleId!=3" name="pnlnodeGrouping" [(ngModel)]="sm.pnlnodeGrouping"
             [items]="pnlNodes" label="P&L Node Grouping" empty="true" optionsKey="pnlnode_grouping"
             optionsValue="pnlnode_grouping"></cui-select>
         </div>
-        <div class="col-lg-6" *ngIf="moduleId!=2 && moduleId!=4">
+        <div class="col-lg-6" *ngIf="moduleId!=2 && moduleId!=3">
           <fin-input name="reportingLevel{{level}}" type="text" *ngFor="let level of [1,2,3]; let idx=index;"
             [(ngModel)]="sm.reportingLevels[idx]" [disabled]="!currentMeasure.reportingLevelEnableds[idx]"
             label="Reporting Level {{level}}"></fin-input>
@@ -357,18 +357,18 @@
         <div class="col-12">
           <div class="inline-check-row">
             <div [class.disabled]="isUnallocatedGroup()" style="display:inline-block">
-              <div *ngIf="moduleId!=2 && moduleId!=4" class="form-group-check form-group-inline-20">
+              <div *ngIf="moduleId!=2 && moduleId!=3" class="form-group-check form-group-inline-20">
                 <fin-checkbox label="Retained Earnings" [(model)]="sm.indicators.retainedEarnings" trueVal="Y"
                   falseVal="N"></fin-checkbox>
               </div>
-              <div *ngIf="moduleId!=2 && moduleId!=4" class="form-group-check form-group-inline-20">
+              <div *ngIf="moduleId!=2 && moduleId!=3" class="form-group-check form-group-inline-20">
                 <fin-checkbox label="Transition" [(model)]="sm.indicators.transition" trueVal="Y" falseVal="N">
                 </fin-checkbox>
               </div>
-              <div *ngIf="moduleId!=2 && moduleId!=4" class="form-group-check form-group-inline-20">
+              <div *ngIf="moduleId!=2 && moduleId!=3" class="form-group-check form-group-inline-20">
                 <fin-checkbox label="2 Tier" [(model)]="sm.indicators.twoTier" trueVal="Y" falseVal="N"></fin-checkbox>
               </div>
-              <div *ngIf="moduleId!=2 && moduleId!=4" class="form-group-check form-group-inline-20">
+              <div *ngIf="moduleId!=2 && moduleId!=3" class="form-group-check form-group-inline-20">
                 <fin-checkbox label="Dual Gaap" [(model)]="sm.indicators.dualGaap" trueVal="Y" falseVal="N">
                 </fin-checkbox>
               </div>
@@ -378,11 +378,11 @@
               </div>
             </div>
             <div style="display:inline-block">
-              <div class="form-group-check form-group-inline-20" *ngIf="moduleId!=2 && moduleId!=4">
+              <div class="form-group-check form-group-inline-20" *ngIf="moduleId!=2 && moduleId!=3">
                 <fin-checkbox label="Corporate Revenue" [(model)]="sm.indicators.corpRevenue" trueVal="Y" falseVal="N">
                 </fin-checkbox>
               </div>
-              <div class="form-group-check form-group-inline-20" *ngIf="moduleId!=2 && moduleId!=4">
+              <div class="form-group-check form-group-inline-20" *ngIf="moduleId!=2 && moduleId!=3">
                 <fin-checkbox label="Service" [(model)]="sm.indicators.service" trueVal="Y" falseVal="N"
                   (change)="filterGroupingSubmeasuresIfService()" [inline]="true"></fin-checkbox>
               </div>
