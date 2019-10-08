@@ -21,7 +21,7 @@ export class BusinessUploadService {
   }
 
   // submeasureName is for submeasure mode
-  uploadFile(fileInput, uploadType, submeasureName?) {
+  uploadFile(fileInput, uploadType, submeasureName?,isEtlInProgress?) {
     if (!fileInput.files.length) {
       return;
     }
@@ -36,6 +36,9 @@ export class BusinessUploadService {
     }
     if (submeasureName) {
       params.submeasureName = submeasureName;
+    }
+    if(isEtlInProgress){
+      params.isEtlInProgress = 'isEtlInProgress';
     }
     const options = {headers: {Accept: 'application/json'}, params};
     const url = `${apiUrl}/api/${DfaModuleIds[this.store.module.moduleId]}/upload/${uploadType}`;
@@ -55,17 +58,19 @@ export class BusinessUploadService {
           message = `${result.rowCount} rows have been processed, Data will be available in reports once allocation run or data loads complete.`;
           // message = `${result.rowCount} rows have been processed, however data will be available in reports once allocation run or data loads complete.`;
           // if (uploadType !== 'dollar-upload')
-          //   message += ` Data will not be viewable in report until 15 minutes after close of upload window.`;  
+          //   message += ` Data will not be viewable in report until 15 minutes after close of upload window.`;
         }
         else if (result.status === 'failure') {
           // title = `${result.uploadName} - failure`;
           title = 'Failure';
           message = 'Errors have been emailed to your email account.';
+        }else if(result.status === 'isetlinprogress'){
+          title = 'Failure';
+          message = 'Upload Failed, as currently either ETL data loads or allocation process is running.Please contact DFA Support team for any questions.';
         }
         this.uiUtil.toastPerm(message, title);
         return result;
       });
   }
-
 
 }

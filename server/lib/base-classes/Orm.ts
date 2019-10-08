@@ -85,8 +85,11 @@ export class Orm {
         }
         record[map.field] = map.pgDefault;
       } else if (map.type === OrmTypes.date) {
+
+
         record[map.field] = this.getPgDateString(_.get(obj, map.prop));
       } else if (map.type === OrmTypes.dateString) {
+
         record[map.field] = this.getPgDate(_.get(obj, map.prop));
       } else {
         let val = _.get(obj, map.prop);
@@ -118,6 +121,7 @@ export class Orm {
   }
 
   getPgDateString(val) {
+
     if (!val) {
       return undefined;
     }
@@ -131,18 +135,23 @@ export class Orm {
 
   }
   getPgDate(val) {
+
     if (!val) {
       return undefined;
     }
     let dt: Date;
-    if (val instanceof Date) {
-      dt = val;
-    } else {
-      dt = new Date(val);
-    }
-    let ret = this.pad(dt.getFullYear(), 4) + '-' +
-      this.pad(dt.getMonth() + 1, 2) + '-' +
-      this.pad(dt.getDate(), 2)
+    dt = val;
+
+    /* if (val instanceof Date) {
+        dt = val;
+      } else {
+        dt = new Date(val);
+      }
+  */
+    let ret = this.pad(val.getFullYear(), 4) + '-' +
+      this.pad(val.getMonth() + 1, 2) + '-' +
+      this.pad(val.getDate(), 2)
+
     return ret;
 
   }
@@ -227,5 +236,4 @@ export class Orm {
   }
 
 }
-
 
