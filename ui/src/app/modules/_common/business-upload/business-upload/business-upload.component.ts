@@ -16,8 +16,8 @@ import {UploadResults} from '../../models/upload-results';
 import {BusinessUploadService} from '../../services/business-upload.service';
 import {PgLookupService} from '../../../_common/services/pg-lookup.service';
 import {ApiDfaData} from '../../../../../../../server/lib/middleware/add-global-data';
-import {mail} from '../../../../../../../server/lib/common/mail';
-import {svrUtil} from '../../../../../../../server/lib/common/svr-util';
+//import {mail} from '../../../../../../../server/lib/common/mail';
+//import {svrUtil} from '../../../../../../../server/lib/common/svr-util';
 
 const apiUrl = environment.apiUrl;
 
@@ -100,8 +100,8 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
         }
       }
       if(isEtlInProgress){
-        // this.sendEmail(`${this.uploadType.type} - Failuer`, "Upload Failed, as currently either ETL data loads or allocation process is running.Please contact DFA Support team for any questions.");
-        this.uiUtil.toastPerm(`Upload Failed, as currently either ETL data loads or allocation process is running.Please contact DFA Support team for any questions.`, "Failure");
+        let isEtlInProgress = true;
+        this.businessUploadService.uploadFile(fileInput, this.uploadType.type,undefined,isEtlInProgress);
       }
       else{
         this.businessUploadService.uploadFile(fileInput, this.uploadType.type);
