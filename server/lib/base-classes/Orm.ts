@@ -142,12 +142,12 @@ export class Orm {
     let dt: Date;
     dt = val;
 
-  /* if (val instanceof Date) {
-      dt = val;
-    } else {
-      dt = new Date(val);
-    }
-*/
+    /* if (val instanceof Date) {
+        dt = val;
+      } else {
+        dt = new Date(val);
+      }
+  */
     let ret = this.pad(val.getFullYear(), 4) + '-' +
       this.pad(val.getMonth() + 1, 2) + '-' +
       this.pad(val.getDate(), 2)
@@ -236,5 +236,4 @@ export class Orm {
   }
 
 }
-
 

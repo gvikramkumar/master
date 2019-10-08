@@ -1044,7 +1044,23 @@ export default class PgLookupRepo {
          --, asd.ext_theater_name
       `;
     }
-
+    else if (moduleId == '3') {
+      sql = `
+     select fiscal_month_id,
+     source_system_type_code,
+sales_node_level_1_code,
+sales_node_level_2_code,
+sales_node_level_3_code,
+sales_country_name,
+c3_customer_theater_name,
+scms,
+update_owner,
+update_datetimestamp
+from fpadfa.dfa_tsct_input_data
+where sub_measure_key in ( ${submeasureKeys} )
+      and fiscal_month_id =  ${fiscalMonth}
+      `;
+    }
     return pgc.pgdb.query(sql)
       .then(results => results.rows);
 
@@ -1055,7 +1071,7 @@ export default class PgLookupRepo {
     if (req.query.moduleAbbrev == 'prof') {
       subMeasureId = 'sub_measure_id';
 
-    } else if (req.query.moduleAbbrev == 'bkgm') {
+    } else if (req.query.moduleAbbrev == 'bkgm' || req.query.moduleAbbrev == 'tsct') {
       subMeasureId = 'sub_measure_key';
     }
     const sql = `
@@ -1073,7 +1089,7 @@ export default class PgLookupRepo {
     if (req.query.moduleAbbrev == 'prof') {
       subMeasureId = 'sub_measure_id';
 
-    } else if (req.query.moduleAbbrev == 'bkgm') {
+    } else if (req.query.moduleAbbrev == 'bkgm' || req.query.moduleAbbrev == 'tsct') {
       subMeasureId = 'sub_measure_key';
     }
 

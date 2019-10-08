@@ -16,10 +16,10 @@ export class ProcessingDateInputComponent extends RoutingComponentBase implement
 
   processDateInput = new ProcessDateInput();
   constructor(private store: AppStore,
-    private router: Router,
-    private route: ActivatedRoute,
-    private uiUtil: UiUtil,
-    private processDateInputService: ProcessDateInputService) {
+              private router: Router,
+              private route: ActivatedRoute,
+              private uiUtil: UiUtil,
+              private processDateInputService: ProcessDateInputService) {
     super(store, route);
   }
 
@@ -37,8 +37,8 @@ export class ProcessingDateInputComponent extends RoutingComponentBase implement
     if(moment(sDate, 'MM/DD/YYYY',false).isValid() || moment(eDate, 'MM/DD/YYYY',false).isValid()){
       this.uiUtil.genericDialog('Date is not valid');
     }else if(startDateYear.toString().length>4 || endDateYear.toString().length>4){
-      this.uiUtil.genericDialog('Date is not valid');  
-    } 
+      this.uiUtil.genericDialog('Date is not valid');
+    }
     else if((sDate != null && eDate !=null) && (eDate) < (sDate)){
       //this.error={isError:true,errorMessage:'End date should be grater then start date.'};
       this.isValidDate = false;
@@ -53,28 +53,28 @@ export class ProcessingDateInputComponent extends RoutingComponentBase implement
 
     this.isValidDate = this.validateDates(this.processDateInput.bkgm_process_start_date, this.processDateInput.bkgm_process_end_date);
     if(this.isValidDate){
-    this.uiUtil.confirmSave()
-      .subscribe(resp => {
-        if (resp) {
-          let obs: Observable<ProcessDateInput>;
-          //if (this.editMode) {
-          //obs = this.processDateInputService.update(this.measure);
-          //} else {
-          obs = this.processDateInputService.add(this.processDateInput);
-          //this.uiUtil.genericDialog('This is not a valid scenario as it falls within already inputted range');
-          //}
-          obs.subscribe(response => {
-            if (response.CREATE_OWNER) {
-              this.uiUtil.genericDialog('This is not a valid scenario as it falls within already inputted range');
-            } else {
-              this.uiUtil.toast('Process Dates saved.');
-              console.log(response);
-            }
-          });
+      this.uiUtil.confirmSave()
+        .subscribe(resp => {
+          if (resp) {
+            let obs: Observable<ProcessDateInput>;
+            //if (this.editMode) {
+            //obs = this.processDateInputService.update(this.measure);
+            //} else {
+            obs = this.processDateInputService.add(this.processDateInput);
+            //this.uiUtil.genericDialog('This is not a valid scenario as it falls within already inputted range');
+            //}
+            obs.subscribe(response => {
+              if (response.CREATE_OWNER) {
+                this.uiUtil.genericDialog('This is not a valid scenario as it falls within already inputted range');
+              } else {
+                this.uiUtil.toast('Process Dates saved.');
+                console.log(response);
+              }
+            });
 
-        }
-      });
+          }
+        });
+    }
   }
-}
 
 }
