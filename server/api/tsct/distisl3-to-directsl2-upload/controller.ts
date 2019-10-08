@@ -18,7 +18,7 @@ export default class Distisl3ToDirectsl2UploadController extends ControllerBase 
   }
 
   mongoToPgSyncTransform(objs, userId, log, elog) {
-    const tableName = 'dfa_tsct_distysl3_to_distysl2_upld';
+    const tableName = 'dfa_tsct_disti_to_direct_map_upld';
     const records = [];
     return this.submeasureRepo.getManyLatestGroupByNameActive(DfaModuleIds.tsct)
       .then(subs => {
