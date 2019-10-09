@@ -112,22 +112,34 @@ function updateSelectStatements(rule) {
     rule.scmsSelect = undefined;
   }
 
+  if (rule.scmsIpCritCond && rule.scmsIpCritChoices.length) {
+    rule.scmsIpSelect = ruleUtil.createSelect(rule.scmsIpCritCond, rule.scmsIpCritChoices);
+  } else {
+    rule.scmsIpSelect = undefined;
+  }
+
   if (rule.beCritCond && rule.beCritChoices.length) {
     rule.beSelect = ruleUtil.createSelect(rule.beCritCond, rule.beCritChoices);
   } else {
     rule.beSelect = undefined;
   }
 
-  // if (rule.countryCritCond && rule.countryCritChoices.length) {
-  //   rule.countrySelect = ruleUtil.createSelect(rule.countryCritCond, rule.countryCritChoices);
-  // } else {
-  //   rule.countrySelect = undefined;
-  // }
+  if (rule.beIpCritCond && rule.beIpCritChoices.length) {
+    rule.beIpSelect = ruleUtil.createSelect(rule.beIpCritCond, rule.beIpCritChoices);
+  } else {
+    rule.beIpSelect = undefined;
+  }
 
-  // if (rule.externalTheaterCritCond && rule.externalTheaterCritChoices.length) {
-  //   rule.externalTheaterSelect = ruleUtil.createSelect(rule.externalTheaterCritCond, rule.externalTheaterCritChoices);
-  // } else {
-  //   rule.externalTheaterSelect = undefined;
-  // }
+  if (rule.countryIpCritCond && rule.countryIpCritChoices.length) {
+    rule.countryIpSelect = ruleUtil.createSelect(rule.countryIpCritCond, rule.countryIpCritChoices);
+  } else {
+    rule.countryIpSelect = undefined;
+  }
+
+  if (rule.externalTheaterIpCritCond && rule.externalTheaterIpCritChoices.length) {
+    rule.externalTheaterIpSelect = ruleUtil.createSelect(rule.externalTheaterIpCritCond, rule.externalTheaterIpCritChoices);
+  } else {
+    rule.externalTheaterIpSelect = undefined;
+  }
 
 }

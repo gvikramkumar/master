@@ -28,7 +28,7 @@ const schema = new Schema(
     prodPFSelect: String,
     prodBUSelect: String,
     prodTGSelect: String,
-    prodIpTGSelect: String,
+    prodTGIpSelect: String,
     scmsSelect: String,
     scmsIpSelect: String,
     beSelect: String,

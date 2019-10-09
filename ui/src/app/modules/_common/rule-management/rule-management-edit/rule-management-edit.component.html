@@ -90,8 +90,8 @@
                                       empty="true" [required]="!!rule.salesSL2IpCritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange();sl3IpCond.blurInput()"></cui-select>
                           <cui-select name="salesSL3IPCond" class="replace-label-space" [(ngModel)]="rule.salesSL3IpCritCond" [items]="conditionalOperators"
                                       empty="true" [required]="!!rule.salesSL3IpCritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
-                          <cui-select name="prodTGIPCond" class="replace-label-space" [(ngModel)]="rule.prodTGIPCritCond" [items]="conditionalOperators"
-                                      empty="true" [required]="!!rule.prodTGIpCritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange();buSelect.blurInput()"></cui-select>                                      
+                          <cui-select name="prodTGIPCond" class="replace-label-space" [(ngModel)]="rule.prodTGIpCritCond" [items]="conditionalOperators"
+                                      empty="true" [required]="!!rule.prodTGIpCritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange();"></cui-select>                                      
                           <cui-select name="countryIPCond" class="replace-label-space" [(ngModel)]="rule.countryIpCritCond" [items]="conditionalOperators"
                                       empty="true" [required]="!!(rule.countryIpCritChoices && rule.countryIpCritChoices.length)"  optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
                           <cui-select name="externalTheaterIpCond" class="replace-label-space" [(ngModel)]="rule.externalTheaterIpCritCond" [items]="conditionalOperators"
@@ -112,7 +112,7 @@
                                       [stringToArray]="true" [options]="salesSL3IpChoiceOptions" (ngModelChange)="valueChange()" [required]="!!rule.salesSL3IpCritCond"></fin-input>
                           <cui-multiselect name="prodTGIPChoice" [(ngModel)]="rule.prodTGIpCritChoices" [items]="prodTgChoices" optionsKey="name"
                                       class="replace-label-space" optionsValue="name" dropdownMaxHeight="300"
-                                      empty="true" (ngModelChange)="valueChange();buSelect.blurInput()" [required]="!!rule.prodTGIpCritCond"></cui-multiselect>
+                                      empty="true" (ngModelChange)="valueChange();" [required]="!!rule.prodTGIpCritCond"></cui-multiselect>
                           <!-- <fin-input #cs name="countryIpCritChoice" [(ngModel)]="rule.countryIpCritChoices" [ngModelOptions]="{updateOn: 'blur'}"
                                      class="replace-label-space" placeholder="comma separated values"
                                      [stringToArray]="true" [options]="countryIpChoiceOptions" (ngModelChange)="valueChange()" [required]="!!rule.countryIpCritCond"></fin-input> -->

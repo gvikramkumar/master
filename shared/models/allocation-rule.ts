@@ -15,9 +15,9 @@ export class AllocationRule {
   beIpMatch?: string;
   legalEntityMatch?: string;
   countryMatch?: string;
-  countryIpMatch?: string;
+  // countryIpMatch?: string;
   extTheaterMatch?: string;
-  extTheaterIpMatch?: string;
+  // extTheaterIpMatch?: string;
   glSegmentsMatch: string[] = [];
   glSegmentsIpMatch: string[] = [];
   sl1Select?: string;

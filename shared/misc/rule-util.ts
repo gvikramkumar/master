@@ -121,32 +121,39 @@ function addSelects(rule, selectMap) {
   const sl2 = selectMap.getSelectString('sl2', rule.salesSL2CritCond, rule.salesSL2CritChoices);
   const sl3 = selectMap.getSelectString('sl3', rule.salesSL3CritCond, rule.salesSL3CritChoices);
   // Input Critiria 
-  const sl1Ip = selectMap.getSelectString('sl1ip', rule.salesSL1IpCritCond, rule.salesSL1IpCritChoices);
-  const sl2Ip = selectMap.getSelectString('sl2ip', rule.salesSL2IpCritCond, rule.salesSL2IpCritChoices);
-  const sl3Ip = selectMap.getSelectString('sl3ip', rule.salesSL3IpCritCond, rule.salesSL3IpCritChoices);
+  const sl1Ip = selectMap.getSelectString('sl1ip', rule.salesSL1IpCritCond, rule.salesSL1IpCritChoices, 'ip');
+  const sl2Ip = selectMap.getSelectString('sl2ip', rule.salesSL2IpCritCond, rule.salesSL2IpCritChoices, 'ip');
+  const sl3Ip = selectMap.getSelectString('sl3ip', rule.salesSL3IpCritCond, rule.salesSL3IpCritChoices, 'ip');
+  const tgip = selectMap.getSelectString('tgip', rule.prodTGIpCritCond, rule.prodTGIpCritChoices, 'ip');
+  const scmsip = selectMap.getSelectString('scmsip', rule.scmsIpCritCond, rule.scmsCritChoices, 'ip');
+  const ibeip = selectMap.getSelectString('ibeip', rule.beIpCritCond, rule.beIpCritChoices, 'ip');
+  const countryip = selectMap.getSelectString('countryip', rule.countryIpCritCond, rule.countryIpCritChoices, 'ip');
+  const etip = selectMap.getSelectString('externaltheaterip', rule.externalTheaterIpCritCond, rule.externalTheaterIpCritChoices, 'ip');
 
   const tg = selectMap.getSelectString('tg', rule.prodTGCritCond, rule.prodTGCritChoices);
   const bu = selectMap.getSelectString('bu', rule.prodBUCritCond, rule.prodBUCritChoices);
   const pf = selectMap.getSelectString('pf', rule.prodPFCritCond, rule.prodPFCritChoices);
   const scms = selectMap.getSelectString('scms', rule.scmsCritCond, rule.scmsCritChoices);
   const ibe = selectMap.getSelectString('ibe', rule.beCritCond, rule.beCritChoices);
-  // const country = selectMap.getSelectString('country', rule.countryCritCond, rule.countryCritChoices);
-  // const et = selectMap.getSelectString('externalTheater', rule.externalTheaterCritCond, rule.externalTheaterCritChoices);
+  
+  
   str += sl1Ip ? `-${sl1Ip}` : '';
   str += sl2Ip ? `-${sl2Ip}` : '';
   str += sl3Ip ? `-${sl3Ip}` : '';
+  str += tgip ? `-${tgip}` : '';
+  str += countryip ? `-${countryip}` : '';
+  str += etip ? `-${etip}` : '';
+  str += scmsip ? `-${scmsip}` : '';
+  str += ibeip ? `-${ibeip}` : '';
   
   str += sl1 ? `-${sl1}` : '';
   str += sl2 ? `-${sl2}` : '';
   str += sl3 ? `-${sl3}` : '';
-  
   str += tg ? `-${tg}` : '';
   str += bu ? `-${bu}` : '';
   str += pf ? `-${pf}` : '';
   str += scms ? `-${scms}` : '';
   str += ibe ? `-${ibe}` : '';
-  // str += country ? `-${country}` : '';
-  // str += et ? `-${et}` : '';
   if (str) {
     rule.name += str;
   }
@@ -170,11 +177,13 @@ function  addDescription(rule, driver, period) {
   desc += rule.sl1IpCond ? `\nSL1 IP Condition:  ${rule.sl1IpCond}` : '';
   desc += rule.sl2IpCond ? `\nSL2 Ip Condition:  ${rule.sl2IpCond}` : '';
   desc += rule.sl3IpCond ? `\nSL3 IP Condition:  ${rule.sl3IpCond}` : '';
+  desc += rule.prodTGIpSelect ? `\nTG IP Select:  ${rule.prodTGIpSelect}` : '';
+  desc += rule.scmsIpSelect ? `\nSCMS IP Select:  ${rule.scmsIpSelect}` : '';
+  desc += rule.beIpSelect ? `\nIBE IP Select:  ${rule.beIpSelect}` : '';
 
   desc += rule.sl1Select ? `\nSL1 Select:  ${rule.sl1Select}` : '';
   desc += rule.sl2Select ? `\nSL2 Select:  ${rule.sl2Select}` : '';
-  desc += rule.sl3Select ? `\nSL3 Select:  ${rule.sl3Select}` : '';  
-
+  desc += rule.sl3Select ? `\nSL3 Select:  ${rule.sl3Select}` : ''; 
   desc += rule.prodTGSelect ? `\nTG Select:  ${rule.prodTGSelect}` : '';
   desc += rule.prodBUSelect ? `\nBU Select:  ${rule.prodBUSelect}` : '';
   desc += rule.prodPFSelect ? `\nPF Select:  ${rule.prodPFSelect}` : '';
@@ -213,9 +222,9 @@ function createSelectArrays(rule) {
   rule.prodTGCritCond = parse.cond;
   rule.prodTGCritChoices = parse.arr;
 
-  parse = parseSelect(rule.prodIpTGSelect);
-  rule.prodTGCritCond = parse.cond;
-  rule.prodTGCritChoices = parse.arr;
+  parse = parseSelect(rule.prodTGIpSelect);
+  rule.prodTGIpCritCond = parse.cond;
+  rule.prodTGIpCritChoices = parse.arr;
 
   parse = parseSelect(rule.prodBUSelect);
   rule.prodBUCritCond = parse.cond;
@@ -229,17 +238,25 @@ function createSelectArrays(rule) {
   rule.scmsCritCond = parse.cond;
   rule.scmsCritChoices = parse.arr;
 
+  parse = parseSelect(rule.scmsIpSelect);
+  rule.scmsIpCritCond = parse.cond;
+  rule.scmsIpCritChoices = parse.arr;
+
   parse = parseSelect(rule.beSelect);
   rule.beCritCond = parse.cond;
   rule.beCritChoices = parse.arr;
 
-  // parse = parseSelect(rule.countrySelect);
-  // rule.countryCritCond = parse.cond;
-  // rule.countryCritChoices = parse.arr;
+  parse = parseSelect(rule.beIpSelect);
+  rule.beIpCritCond = parse.cond;
+  rule.beIpCritChoices = parse.arr;
 
-  // parse = parseSelect(rule.externalTheaterSelect);
-  // rule.externalTheaterCritCond = parse.cond;
-  // rule.externalTheaterCritChoices = parse.arr;
+  parse = parseSelect(rule.countryIpSelect);
+  rule.countryIpCritCond = parse.cond;
+  rule.countryIpCritChoices = parse.arr;
+
+  parse = parseSelect(rule.externalTheaterIpSelect);
+  rule.externalTheaterIpCritCond = parse.cond;
+  rule.externalTheaterIpCritChoices = parse.arr;
 }
 
 function parseSelect(_str) {

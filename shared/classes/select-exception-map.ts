@@ -19,8 +19,12 @@ export class SelectExceptionMap {
   sl1ipIdx = 0;
   sl2ipIdx = 0;
   sl3ipIdx = 0;
-  // countryIdx = 0;
-  // externalTheaterIdx = 0;
+  tgipIdx = 0;
+  scmsipIdx = 0;
+  ibeipIdx = 0;
+  countryipIdx = 0;
+  externaltheateripIdx = 0;
+
   sl1Map: SelectExceptionIndexMap[] = [];
   sl2Map: SelectExceptionIndexMap[] = [];
   sl3Map: SelectExceptionIndexMap[] = [];
@@ -32,14 +36,17 @@ export class SelectExceptionMap {
   pfMap: SelectExceptionIndexMap[] = [];
   scmsMap: SelectExceptionIndexMap[] = [];
   ibeMap: SelectExceptionIndexMap[] = [];
-  // countryMap: SelectExceptionIndexMap[] = [];
-  // externalTheaterMap: SelectExceptionIndexMap[] = [];
+  tgipMap: SelectExceptionIndexMap[] = [];  
+  scmsipMap: SelectExceptionIndexMap[] = [];
+  ibeipMap: SelectExceptionIndexMap[] = [];
+  countryipMap: SelectExceptionIndexMap[] = [];
+  externaltheateripMap: SelectExceptionIndexMap[] = [];
 
   getSelectArray(cond, choices) {
     return ([cond].concat(choices)).map(x => x.toUpperCase());
   }
 
-  getSelectString(prop, cond, choices) {
+  getSelectString(prop, cond, choices, criteria) {
     const mapArr = this[`${prop}Map`];
     const prefix = prop.toUpperCase();
     if (!cond || !choices.length) {
@@ -51,10 +58,19 @@ export class SelectExceptionMap {
     }
     const map = this.findSelectInMapArray(mapArr, selectArr);
     if (map) {
-      return `${prefix}E${map.index}`;
+      if(criteria === 'ip'){
+        return `${prefix.substring(0, prefix.length - 2)}C${map.index}`;
+      }else{
+        return `${prefix}E${map.index}`;
+      }      
     } else {
       mapArr.push(new SelectExceptionIndexMap(selectArr, ++this[`${prop}Idx`]));
-      return `${prefix}E${this[`${prop}Idx`]}`;
+      if(criteria === 'ip'){
+        return `${prefix.substring(0, prefix.length - 2)}C${this[`${prop}Idx`]}`;
+      }else{
+        return `${prefix}E${this[`${prop}Idx`]}`;
+      }
+      
     }
   }
 
@@ -67,7 +83,7 @@ export class SelectExceptionMap {
       const exceptions = this.getExceptionsFromName(rule.name);
       exceptions.forEach(ex => {
         const prefix = ex.substring(0, ex.lastIndexOf('E')).toLowerCase();
-        if (!_.includes(['sl1', 'sl2', 'sl3', 'tg', 'bu', 'pf', 'scms', 'ibe', 'sl1ip', 'sl2ip', 'sl3ip'], prefix)) {
+        if (!_.includes(['sl1', 'sl2', 'sl3', 'tg', 'tgip', 'bu', 'pf', 'scms', 'ibe', 'sl1ip', 'sl2ip', 'sl3ip', 'countryip', 'externaltheaterip'], prefix)) {
           throw new Error(`SelectExceptionMap.parseRules: bad prefix, exception: ${ex}, rule name: ${rule.name}`);
         }
         const idx = Number(ex.substring(ex.lastIndexOf('E') + 1));
@@ -105,18 +121,24 @@ export class SelectExceptionMap {
           return ([rule.salesSL3IpCritCond].concat(rule.salesSL3IpCritChoices)).map(x => x.toUpperCase());
         case 'tg':
           return ([rule.prodTGCritCond].concat(rule.prodTGCritChoices)).map(x => x.toUpperCase());
+        case 'tgip':
+          return ([rule.prodTGIpCritCond].concat(rule.prodTGIpCritChoices)).map(x => x.toUpperCase());
         case 'bu':
           return ([rule.prodBUCritCond].concat(rule.prodBUCritChoices)).map(x => x.toUpperCase());
         case 'pf':
           return ([rule.prodPFCritCond].concat(rule.prodPFCritChoices)).map(x => x.toUpperCase());
         case 'scms':
           return ([rule.scmsCritCond].concat(rule.scmsCritChoices)).map(x => x.toUpperCase());
+        case 'scmsip':
+          return ([rule.scmsIpCritCond].concat(rule.scmsIpCritChoices)).map(x => x.toUpperCase());
         case 'ibe':
           return ([rule.beCritCond].concat(rule.beCritChoices)).map(x => x.toUpperCase());
-        // case 'country':
-        //   return ([rule.countryCritCond].concat(rule.countryCritChoices)).map(x => x.toUpperCase());
-        // case 'externalTheater':
-        //   return ([rule.externalTheaterCritCond].concat(rule.externalTheaterCritChoices)).map(x => x.toUpperCase());
+        case 'ibeip':
+          return ([rule.beIpCritCond].concat(rule.beIpCritChoices)).map(x => x.toUpperCase());
+        case 'countryip':
+          return ([rule.countryIpCritCond].concat(rule.countryetIpCritChoices)).map(x => x.toUpperCase());
+        case 'externaltheaterip':
+          return ([rule.externalTheateretIpCritCond].concat(rule.externalTheateretIpCritChoices)).map(x => x.toUpperCase());
         default:
           throw Error(`SelectExceptionMap.getSelectArray: no case for prefix: ${prefix} for rule name: ${rule.name}`);
       }
