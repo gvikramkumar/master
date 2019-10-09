@@ -43,9 +43,9 @@
           </fin-input>
         </div>
 
-        <div class="col-lg-6" *ngIf="moduleId!=3">
+        <div class="col-lg-6" > <!--*ngIf="moduleId!=3"-->
           <div [class.disabled]="disableCategories || isUnallocatedGroup()">
-            <cui-select *ngIf="moduleId!=2" name="category" [(ngModel)]="sm.categoryType" [items]="categoryTypes"
+            <cui-select *ngIf="moduleId!=2 && moduleId!=3" name="category" [(ngModel)]="sm.categoryType" [items]="categoryTypes"
               [required]="isCogsMeasure() && !isUnallocatedGroup()"
               [label]="isCogsMeasure() && !isUnallocatedGroup()? 'Sub-Measure Category Type*':'Sub-Measure Category Type'"
               empty="true" optionsKey="name" optionsValue="value" [class.cat-type]="isManualMix()"></cui-select>
