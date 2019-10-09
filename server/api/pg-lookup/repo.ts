@@ -968,6 +968,18 @@ export default class PgLookupRepo {
       .then(results => results.rows);
   }
 
+  getCountry(){
+    const sql = `select distinct iso.iso_country_name country_name
+    from 
+    fpacon.vw_fpa_sales_hierarchy sh
+    ,fpacon.vw_fpa_iso_country iso 
+    where 
+        sh.sales_territory_type_code in ('CORP. REVENUE','UNKNOWN')
+    and sh.iso_country_code = iso.bk_iso_country_code order by iso.iso_country_name asc`;
+    return pgc.pgdb.query(sql)
+      .then(results => results.rows);
+  }
+
   getDistincTGBUPFIdsFromProductHierarchy() {
     const sql = `
       select distinct 

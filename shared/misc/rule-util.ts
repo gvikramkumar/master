@@ -120,6 +120,11 @@ function addSelects(rule, selectMap) {
   const sl1 = selectMap.getSelectString('sl1', rule.salesSL1CritCond, rule.salesSL1CritChoices);
   const sl2 = selectMap.getSelectString('sl2', rule.salesSL2CritCond, rule.salesSL2CritChoices);
   const sl3 = selectMap.getSelectString('sl3', rule.salesSL3CritCond, rule.salesSL3CritChoices);
+  // Input Critiria 
+  const sl1Ip = selectMap.getSelectString('sl1ip', rule.salesSL1IpCritCond, rule.salesSL1IpCritChoices);
+  const sl2Ip = selectMap.getSelectString('sl2ip', rule.salesSL2IpCritCond, rule.salesSL2IpCritChoices);
+  const sl3Ip = selectMap.getSelectString('sl3ip', rule.salesSL3IpCritCond, rule.salesSL3IpCritChoices);
+
   const tg = selectMap.getSelectString('tg', rule.prodTGCritCond, rule.prodTGCritChoices);
   const bu = selectMap.getSelectString('bu', rule.prodBUCritCond, rule.prodBUCritChoices);
   const pf = selectMap.getSelectString('pf', rule.prodPFCritCond, rule.prodPFCritChoices);
@@ -127,9 +132,14 @@ function addSelects(rule, selectMap) {
   const ibe = selectMap.getSelectString('ibe', rule.beCritCond, rule.beCritChoices);
   // const country = selectMap.getSelectString('country', rule.countryCritCond, rule.countryCritChoices);
   // const et = selectMap.getSelectString('externalTheater', rule.externalTheaterCritCond, rule.externalTheaterCritChoices);
+  str += sl1Ip ? `-${sl1Ip}` : '';
+  str += sl2Ip ? `-${sl2Ip}` : '';
+  str += sl3Ip ? `-${sl3Ip}` : '';
+  
   str += sl1 ? `-${sl1}` : '';
   str += sl2 ? `-${sl2}` : '';
   str += sl3 ? `-${sl3}` : '';
+  
   str += tg ? `-${tg}` : '';
   str += bu ? `-${bu}` : '';
   str += pf ? `-${pf}` : '';
@@ -157,9 +167,14 @@ function  addDescription(rule, driver, period) {
   desc += rule.extTheaterMatch ? `\nExternal Theater:  ${rule.extTheaterMatch}` : '';
   desc += rule.glSegmentsMatch && rule.glSegmentsMatch.length ? `\nGL Segments:  ${rule.glSegmentsMatch}` : '';
 
+  desc += rule.sl1IpCond ? `\nSL1 IP Condition:  ${rule.sl1IpCond}` : '';
+  desc += rule.sl2IpCond ? `\nSL2 Ip Condition:  ${rule.sl2IpCond}` : '';
+  desc += rule.sl3IpCond ? `\nSL3 IP Condition:  ${rule.sl3IpCond}` : '';
+
   desc += rule.sl1Select ? `\nSL1 Select:  ${rule.sl1Select}` : '';
   desc += rule.sl2Select ? `\nSL2 Select:  ${rule.sl2Select}` : '';
-  desc += rule.sl3Select ? `\nSL3 Select:  ${rule.sl3Select}` : '';
+  desc += rule.sl3Select ? `\nSL3 Select:  ${rule.sl3Select}` : '';  
+
   desc += rule.prodTGSelect ? `\nTG Select:  ${rule.prodTGSelect}` : '';
   desc += rule.prodBUSelect ? `\nBU Select:  ${rule.prodBUSelect}` : '';
   desc += rule.prodPFSelect ? `\nPF Select:  ${rule.prodPFSelect}` : '';
@@ -181,6 +196,18 @@ function createSelectArrays(rule) {
   parse = parseSelect(rule.sl3Select);
   rule.salesSL3CritCond = parse.cond;
   rule.salesSL3CritChoices = parse.arr;
+// Input Critiria 
+  parse = parseSelect(rule.sl1IpCond);
+  rule.salesSL1IpCritCond = parse.cond;
+  rule.salesSL1IpCritChoices = parse.arr;
+
+  parse = parseSelect(rule.sl2IpCond);
+  rule.salesSL2IpCritCond = parse.cond;
+  rule.salesSL2IpCritChoices = parse.arr;
+
+  parse = parseSelect(rule.sl3IpCond);
+  rule.salesSL3IpCritCond = parse.cond;
+  rule.salesSL3IpCritChoices = parse.arr;
 
   parse = parseSelect(rule.prodTGSelect);
   rule.prodTGCritCond = parse.cond;

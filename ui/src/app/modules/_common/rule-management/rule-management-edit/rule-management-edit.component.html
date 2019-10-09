@@ -41,7 +41,7 @@
       <br>
 
       <div class="row">
-        <div class="col-lg-6">
+        <div [ngClass]="{'col-lg-4':moduleId===3, 'col-lg-6':moduleId!=3}">
           <div class="form-group-max-width">
             <div class="border-and-padding">
               <div style="margin-bottom:-10px;">
@@ -67,7 +67,74 @@
           </div>
         </div>
 
-        <div class="col-lg-6 conditional-div">
+        <div *ngIf="moduleId===3" class="col-lg-4 conditional-div">
+            <div class="form-group-max-width">
+                <div class="border-and-padding">
+                  <div style="margin-bottom:-10px;">
+                    <div class="right text-center half-margin-bottom form-group-max-width">Input Criteria</div>
+                    <div class="row">
+                      <div class="col-2">
+                          <div class="form-group-text">SL1</div>
+                          <div class="form-group-text">SL2</div>
+                          <div class="form-group-text">SL3</div>
+                          <div class="form-group-text">TG</div>
+                          <div class="form-group-text">Country</div>
+                          <div class="form-group-text">External Theater</div>
+                          <div class="form-group-text">SCMS</div>
+                          <div class="form-group-text">BE</div>
+                      </div>
+                      <div class="col-3">
+                          <cui-select name="salesSL1IPCond" class="replace-label-space" [(ngModel)]="rule.salesSL1IpCritCond" [items]="conditionalOperators"
+                                      empty="true" [required]="!!rule.salesSL1IpCritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange();sl2IpCond.blurInput()"></cui-select>
+                          <cui-select name="salesSL2IPCond" class="replace-label-space" [(ngModel)]="rule.salesSL2IpCritCond" [items]="conditionalOperators"
+                                      empty="true" [required]="!!rule.salesSL2IpCritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange();sl3IpCond.blurInput()"></cui-select>
+                          <cui-select name="salesSL3IPCond" class="replace-label-space" [(ngModel)]="rule.salesSL3IpCritCond" [items]="conditionalOperators"
+                                      empty="true" [required]="!!rule.salesSL3IpCritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
+                          <cui-select name="prodTGIPCond" class="replace-label-space" [(ngModel)]="rule.prodTGIPCritCond" [items]="conditionalOperators"
+                                      empty="true" [required]="!!rule.prodTGIpCritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange();buSelect.blurInput()"></cui-select>                                      
+                          <cui-select name="countryIPCond" class="replace-label-space" [(ngModel)]="rule.countryIpCritCond" [items]="conditionalOperators"
+                                      empty="true" [required]="!!(rule.countryIpCritChoices && rule.countryIpCritChoices.length)"  optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
+                          <cui-select name="externalTheaterIpCond" class="replace-label-space" [(ngModel)]="rule.externalTheaterIpCritCond" [items]="conditionalOperators"
+                                      empty="true"  [required]="!!(rule.externalTheaterIpCritChoices && rule.externalTheaterIpCritChoices.length)"  optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>                                        
+                          <cui-select name="scmsIpCond" class="replace-label-space" [(ngModel)]="rule.scmsIpCritCond" [items]="conditionalOperators"
+                                      empty="true" [required]="!!rule.scmsIpCritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>
+                          <cui-select name="beIpCond" class="replace-label-space" [(ngModel)]="rule.beIpCritCond" [items]="conditionalOperators"
+                                      empty="true" [required]="!!rule.beIpCritChoices.length" optionsKey="operator" optionsValue="operator" (ngModelChange)="valueChange()"></cui-select>                                      
+                      </div>
+                      <div class="col-7">
+                          <cui-multiselect name="sl1IpSalesChoice" [(ngModel)]="rule.salesSL1IpCritChoices" [items]="salesSL1Choices" class="replace-label-space" optionsKey="name" optionsValue="name"
+                                            empty="true" (ngModelChange)="valueChange();sl2IpCond.blurInput()" [required]="!!rule.salesSL1IpCritCond"></cui-multiselect>
+                          <fin-input #sl2IpCond name="sl2IpSalesChoice" [(ngModel)]="rule.salesSL2IpCritChoices" [ngModelOptions]="{updateOn: 'blur'}"
+                                      class="replace-label-space" placeholder="comma separated values"
+                                      [stringToArray]="true" [options]="salesSL2ChoiceOptions" (ngModelChange)="valueChange();sl3IpCond.blurInput()" [required]="!!rule.salesSL2IpCritCond"></fin-input>
+                          <fin-input #sl3IpCond name="sl3IpSalesChoice" [(ngModel)]="rule.salesSL3IpCritChoices" [ngModelOptions]="{updateOn: 'blur'}"
+                                      class="replace-label-space" placeholder="comma separated values"
+                                      [stringToArray]="true" [options]="salesSL3IpChoiceOptions" (ngModelChange)="valueChange()" [required]="!!rule.salesSL3IpCritCond"></fin-input>
+                          <cui-multiselect name="prodTGIPChoice" [(ngModel)]="rule.prodTGIpCritChoices" [items]="prodTgChoices" optionsKey="name"
+                                      class="replace-label-space" optionsValue="name" dropdownMaxHeight="300"
+                                      empty="true" (ngModelChange)="valueChange();buSelect.blurInput()" [required]="!!rule.prodTGIpCritCond"></cui-multiselect>
+                          <!-- <fin-input #cs name="countryIpCritChoice" [(ngModel)]="rule.countryIpCritChoices" [ngModelOptions]="{updateOn: 'blur'}"
+                                     class="replace-label-space" placeholder="comma separated values"
+                                     [stringToArray]="true" [options]="countryIpChoiceOptions" (ngModelChange)="valueChange()" [required]="!!rule.countryIpCritCond"></fin-input> -->
+                          <cui-multiselect name="countryIpCritChoice" [(ngModel)]="rule.countryIpCritChoices" [items]="countryChoices" optionsKey="name"
+                                     class="replace-label-space" optionsValue="name" empty="true" (ngModelChange)="valueChange()" [required]="!!rule.countryIpCritCond"></cui-multiselect>
+                                     
+
+                          <cui-multiselect #externalTheaterIpSelect name="externalTheaterIpChoice" [(ngModel)]="rule.externalTheaterIpCritChoices" [items]="externalTheaterChoices" optionsKey="name"
+                                     class="replace-label-space" optionsValue="name" empty="true" (ngModelChange)="valueChange();" [required]="!!rule.externalTheaterIpCritCond"></cui-multiselect>
+                          <cui-multiselect name="scmsIpChoice" [(ngModel)]="rule.scmsIpCritChoices" [items]="scmsChoices" optionsKey="name"
+                                     class="replace-label-space" optionsValue="name" empty="true" (ngModelChange)="valueChange()" [required]="!!rule.scmsIpCritCond"></cui-multiselect>
+                          <cui-multiselect name="beIpChoice" [(ngModel)]="rule.beIpCritChoices" [items]="internalBeChoices" optionsKey="name"
+                                     optionsValue="name" dropdownMaxHeight="300"
+                                     class="replace-label-space" empty="true" (ngModelChange)="valueChange()" [required]="!!rule.beIpCritCond"></cui-multiselect>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+
+        <div [ngClass]="{'col-lg-4 conditional-div':moduleId===3, 'col-lg-6 conditional-div':moduleId!=3}">
           <div class="form-group-max-width">
             <div class="border-and-padding">
               <div style="margin-bottom:-10px;">

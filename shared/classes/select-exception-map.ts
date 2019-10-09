@@ -16,11 +16,17 @@ export class SelectExceptionMap {
   pfIdx = 0;
   scmsIdx = 0;
   ibeIdx = 0;
+  sl1ipIdx = 0;
+  sl2ipIdx = 0;
+  sl3ipIdx = 0;
   // countryIdx = 0;
   // externalTheaterIdx = 0;
   sl1Map: SelectExceptionIndexMap[] = [];
   sl2Map: SelectExceptionIndexMap[] = [];
   sl3Map: SelectExceptionIndexMap[] = [];
+  sl1ipMap: SelectExceptionIndexMap[] = [];
+  sl2ipMap: SelectExceptionIndexMap[] = [];
+  sl3ipMap: SelectExceptionIndexMap[] = [];
   tgMap: SelectExceptionIndexMap[] = [];
   buMap: SelectExceptionIndexMap[] = [];
   pfMap: SelectExceptionIndexMap[] = [];
@@ -61,7 +67,7 @@ export class SelectExceptionMap {
       const exceptions = this.getExceptionsFromName(rule.name);
       exceptions.forEach(ex => {
         const prefix = ex.substring(0, ex.lastIndexOf('E')).toLowerCase();
-        if (!_.includes(['sl1', 'sl2', 'sl3', 'tg', 'bu', 'pf', 'scms', 'ibe'], prefix)) {
+        if (!_.includes(['sl1', 'sl2', 'sl3', 'tg', 'bu', 'pf', 'scms', 'ibe', 'sl1ip', 'sl2ip', 'sl3ip'], prefix)) {
           throw new Error(`SelectExceptionMap.parseRules: bad prefix, exception: ${ex}, rule name: ${rule.name}`);
         }
         const idx = Number(ex.substring(ex.lastIndexOf('E') + 1));
@@ -91,6 +97,12 @@ export class SelectExceptionMap {
           return ([rule.salesSL2CritCond].concat(rule.salesSL2CritChoices)).map(x => x.toUpperCase());
         case 'sl3':
           return ([rule.salesSL3CritCond].concat(rule.salesSL3CritChoices)).map(x => x.toUpperCase());
+        case 'sl1ip':
+          return ([rule.salesSL1IpCritCond].concat(rule.salesSL1IpCritChoices)).map(x => x.toUpperCase());
+        case 'sl2ip':
+          return ([rule.salesSL2IpCritCond].concat(rule.salesSL2IpCritChoices)).map(x => x.toUpperCase());
+        case 'sl3ip':
+          return ([rule.salesSL3IpCritCond].concat(rule.salesSL3IpCritChoices)).map(x => x.toUpperCase());
         case 'tg':
           return ([rule.prodTGCritCond].concat(rule.prodTGCritChoices)).map(x => x.toUpperCase());
         case 'bu':
