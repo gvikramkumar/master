@@ -94,14 +94,14 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
     .then(results => {
       for(let i=0; i<results.length; i++){
         if(Number(results[i].module_id) === this.store.module.moduleId && (results[i].
-          alloc_processed_flag === "N" || results[i].dl_processed_flag === "N")){
+          alloc_processed_flag === "N" || results[i].dl_processed_flag === 'N')){
           isEtlInProgress = true;
           break;
         }
       }
       if(isEtlInProgress){
         let isEtlInProgress = true;
-        this.businessUploadService.uploadFile(fileInput, this.uploadType.type,undefined,isEtlInProgress);
+        this.businessUploadService.uploadFile(fileInput, this.uploadType.type, undefined, isEtlInProgress);
       }
       else{
         this.businessUploadService.uploadFile(fileInput, this.uploadType.type);
