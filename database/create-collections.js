@@ -57,7 +57,8 @@ const collationCollections = [
   'dfa_submeasure',
   'dfa_user',
   'dfa_bkgm_data_proc',
-  'dfa_prof_scms_triang_miscexcep_map_upld'
+  'dfa_prof_scms_triang_miscexcep_map_upld',
+  'dfa_tsct_disti_to_direct_map_upld'
 ];
 
 collationCollections.forEach(coll => {
