@@ -103,6 +103,9 @@ db.dfa_prof_manual_map_upld.createIndex({submeasureName: 1, fiscalMonth: -1});
 db.dfa_prof_swalloc_manualmix_upld.createIndex({submeasureName: 1, fiscalMonth: -1});
 db.dfa_submeasure.createIndex({name: 1, updatedDate: -1});
 db.dfa_prof_scms_triang_miscexcep_map_upld.createIndex({fiscalMonth: -1});
+
+db.dfa_tsct_disti_to_direct_map_upld.createIndex({fiscalMonth: -1});
+
 print('>>>>>>>>>>>> create-collections complete');
 // unique constraints
 

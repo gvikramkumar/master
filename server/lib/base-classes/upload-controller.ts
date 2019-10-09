@@ -57,7 +57,7 @@ export default class UploadController {
     have to break out upload to 2 functions and use inner return value in approve without res.json call right?
    */
 
-  upload(req, res, next) {
+  upload(req, res, next) {  
     this.verifyProperties(req.query, ['moduleId']);
     this.req = req;
     this.dfa = req.dfa;
