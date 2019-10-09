@@ -100,6 +100,12 @@ function updateSelectStatements(rule) {
     rule.prodTGSelect = undefined;
   }
 
+  if (rule.prodTGIpCritCond && rule.prodTGIpCritChoices.length) {
+    rule.prodTGIpSelect = ruleUtil.createSelect(rule.prodTGIpCritCond, rule.prodTGIpCritChoices);
+  } else {
+    rule.prodTGIpSelect = undefined;
+  }
+
   if (rule.scmsCritCond && rule.scmsCritChoices.length) {
     rule.scmsSelect = ruleUtil.createSelect(rule.scmsCritCond, rule.scmsCritChoices);
   } else {

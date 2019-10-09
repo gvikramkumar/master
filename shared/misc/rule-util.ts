@@ -213,6 +213,10 @@ function createSelectArrays(rule) {
   rule.prodTGCritCond = parse.cond;
   rule.prodTGCritChoices = parse.arr;
 
+  parse = parseSelect(rule.prodIpTGSelect);
+  rule.prodTGCritCond = parse.cond;
+  rule.prodTGCritChoices = parse.arr;
+
   parse = parseSelect(rule.prodBUSelect);
   rule.prodBUCritCond = parse.cond;
   rule.prodBUCritChoices = parse.arr;

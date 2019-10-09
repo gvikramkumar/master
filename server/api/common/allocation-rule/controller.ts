@@ -28,6 +28,7 @@ export default class AllocationRuleController extends ApprovalController {
       'prodPFCritCond', 'prodPFCritChoices', 'prodBUCritCond', 'prodBUCritChoices', 'prodTGCritCond', 'prodTGCritChoices',
       'scmsCritCond', 'scmsCritChoices', 'beCritCond', 'beCritChoices', 'approvalUrl', 'approvalReminderTime',
       'salesSL1IpCritCond', 'salesSL1IpCritChoices', 'salesSL2IpCritCond', 'salesSL2IpCritChoices', 'salesSL3IpCritCond', 'salesSL3IpCritChoices',
+      'prodTGIpCritCond', 'prodTGIpCritChoices',
     ];
     return this.sendApprovalEmailBase(approveRejectMessage, req, mode, item, 'rule', omitProperties);
   }
