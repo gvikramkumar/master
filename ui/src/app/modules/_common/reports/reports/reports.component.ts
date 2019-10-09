@@ -6,8 +6,6 @@ import { MeasureService } from '../../services/measure.service';
 import { Measure } from '../../models/measure';
 import { Submeasure } from '../../../../../../../shared/models/submeasure';
 import { SubmeasureService } from '../../services/submeasure.service';
-import { DollarUploadService } from '../../../prof/services/dollar-upload.service';
-import { MappingUploadService } from '../../../prof/services/mapping-upload.service';
 import { environment } from '../../../../../environments/environment';
 import _ from 'lodash';
 import { UiUtil } from '../../../../core/services/ui-util';
@@ -105,7 +103,15 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
     },
     {
       type: 'input-data', hasMultiSmAndFiscalMonth: true, text: 'Input System Data', disabled: false,
-      filename: 'Input_System_Data_Report'
+      filename: 'Input_System_Data_Report', invisible: this.moduleId == 3 ? true:false
+    },
+    {
+      type: 'ssc-input-data', hasMultiSmAndFiscalMonth: true, text: 'SSC Input System Data', disabled: false,
+      filename: 'Input_System_Data_Report', invisible: this.moduleId == 3 ? false:true
+    },
+    {
+      type: 'tac-input-data', hasMultiSmAndFiscalMonth: true, text: 'TAC Input System Data', disabled: false,
+      filename: 'Input_System_Data_Report', invisible: this.moduleId == 3 ? false:true
     },
     {
       type: 'mapping-upload', hasMultiSmAndFiscalMonth: true, text: 'Manual Mapping Split Percentage', disabled: false,
@@ -150,10 +156,12 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
       type: 'misc-exception', hasFiscalMonthOnly: true, text: 'Misc Exception Mapping', disabled: false,
       filename: 'Misc_Exception_Report', invisible: this.moduleId == 1 ? false: true
     },
+
     {
       type: 'distisl3-directsl2-mapping', hasFiscalMonthOnly: true, text: 'Service Disti to Direct Mapping', disabled: false,
       filename: 'DistiSL3_DirectSL2_Mapping_Report', invisible:  this.moduleId == 3 ? false:true
     }
+
   ];
 
   report: Report;
@@ -242,6 +250,12 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
         break;
       case 'input-data':
         prmMeasure = this.pgLookupService.callRepoMethod('getSubmeasureForSystemInputData', '', {params: this.moduleId, moduleAbbrev: this.store.module.abbrev}).toPromise();
+        break;
+      case 'ssc-input-data':
+        prmMeasure = this.pgLookupService.callRepoMethod('getSubmeasureForSystemInputData', '', {params: this.moduleId, moduleAbbrev: this.store.module.abbrev, reportType : this.report.type }).toPromise();
+        break;
+      case 'tac-input-data':
+        prmMeasure = this.pgLookupService.callRepoMethod('getSubmeasureForSystemInputData', '', {params: this.moduleId, moduleAbbrev: this.store.module.abbrev , reportType : this.report.type}).toPromise();
         break;
       case 'misc-exception':
         prmFiscalMonth = this.pgLookupService.getSortedListFromColumn('fpadfa.dfa_prof_scms_triang_miscexcep_map_upld', 'fiscal_month_id').toPromise();
@@ -345,6 +359,7 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
         break;
       case 'input-data':
         obs = this.pgLookupService.callRepoMethod('getInputDataFiscalMonthsFromSubmeasureKeys', { submeasureKeys: this.submeasureKeys }, {params: this.moduleId, moduleAbbrev: this.store.module.abbrev});
+     console.log(this.submeasureKeys);
         break;
     }
     obs.subscribe(fiscalMonths => {

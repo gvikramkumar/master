@@ -1080,17 +1080,28 @@ where sub_measure_key in ( ${submeasureKeys} )
 
   getSubmeasureForSystemInputData(req?) {
     let subMeasureId;
+    let sscTacType;
     if (req.query.moduleAbbrev == 'prof') {
       subMeasureId = 'sub_measure_id';
 
     } else if (req.query.moduleAbbrev == 'bkgm' || req.query.moduleAbbrev == 'tsct') {
       subMeasureId = 'sub_measure_key';
     }
-    const sql = `
+    if (req.query.reportType == 'ssc-input-data') {
+      sscTacType = 'SSC';
+
+    } else if (req.query.reportType == 'tac-input-data') {
+      sscTacType = 'TAC';
+    }
+    let sql = `
         select distinct ${subMeasureId} as col from fpadfa.dfa_${req.query.moduleAbbrev}_input_data 
         where  ${subMeasureId} is not null and source_system_type_code != 'EXCEL' 
-        order by  ${subMeasureId}
       `;
+if (req.query.moduleAbbrev == 'tsct') {
+  sql += ` and ssc_tac_type =  '${sscTacType}'`;
+}
+    sql += ` order by  ${subMeasureId}`;
+    console.log(sql);
     return pgc.pgdb.query(sql)
       .then(results => results.rows.map(row => Number(row.col)));
   }
@@ -1104,7 +1115,7 @@ where sub_measure_key in ( ${submeasureKeys} )
     } else if (req.query.moduleAbbrev == 'bkgm' || req.query.moduleAbbrev == 'tsct') {
       subMeasureId = 'sub_measure_key';
     }
-
+console.log(req.body.submeasureKeys);
     return this.getListFromColumn(`fpadfa.dfa_${req.query.moduleAbbrev}_input_data`, 'fiscal_month_id',
       `${subMeasureId} in ( ${req.body.submeasureKeys} )`);
   }
