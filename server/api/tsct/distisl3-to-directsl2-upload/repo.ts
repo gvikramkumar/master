@@ -7,10 +7,8 @@ const schema = new Schema(
   {
     transactionId: {type: SchemaTypes.ObjectId, required: true},
     fiscalMonth: {type: Number, required: true},
-    // TO-DO
-    // below 3 columns names has to be changed once collection is ready for use
-    driverSl2: {type: Number, required: true},
-    sourceSl3: {type: String, enum: ['Direct SL2', 'Disti SL3'], required: true},
+    driverSl2: {type: String, required: true},
+    sourceSl3: {type: String, required: true},
     externalTheater: {type: String, required: true},
     createdBy: {type: String, required: true},
     createdDate: {type: Date, required: true},

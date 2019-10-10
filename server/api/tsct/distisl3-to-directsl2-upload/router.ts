@@ -7,7 +7,6 @@ const ctrl = injector.get(Distisl3ToDirectsl2UploadController);
 
 export const distisl3ToDistysl2UploadRouter = Router()
   .get('/', ctrl.getMany.bind(ctrl))
-  .post('/call-method/:method', ctrl.callMethod.bind(ctrl))
   .post('/', ctrl.addOne.bind(ctrl))
   .get('/:id', ctrl.getOne.bind(ctrl))
   .put('/:id', ctrl.update.bind(ctrl))

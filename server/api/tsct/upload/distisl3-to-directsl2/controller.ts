@@ -8,10 +8,10 @@ import {NamedApiError} from '../../../../lib/common/named-api-error';
 import AnyObj from '../../../../../shared/models/any-obj';
 import SubmeasureRepo from '../../../common/submeasure/repo';
 import OpenPeriodRepo from '../../../common/open-period/repo';
-import {svrUtil} from '../../../../lib/common/svr-util';
+import PgLookupRepo from '../../../pg-lookup/repo';
+//import DeptUploadImport from '../dept/import';
 import DatabaseController from '../../../database/controller';
 import { SyncMap } from '../../../../../shared/models/sync-map';
-import PgLookupRepo from '../../../pg-lookup/repo';
 @injectable()
 export default class Distisl3ToDirectsl2UploadUploadController extends UploadController {
   imports: AnyObj[];
@@ -22,6 +22,7 @@ export default class Distisl3ToDirectsl2UploadUploadController extends UploadCon
     openPeriodRepo: OpenPeriodRepo,
     submeasureRepo: SubmeasureRepo,
     private databaseController: DatabaseController
+	
   ) {
     super(
       repo,
@@ -32,7 +33,7 @@ export default class Distisl3ToDirectsl2UploadUploadController extends UploadCon
 
     this.PropNames = {
       driverSl2: 'Driver SL2',
-      sourceSl2: 'Source SL3',
+      sourceSl3: 'Source SL3',
       externalTheater: 'External Theater'
     };
   }
@@ -54,7 +55,7 @@ export default class Distisl3ToDirectsl2UploadUploadController extends UploadCon
     this.temp = new Distisl3ToDirectsl2UploadTemplate(row);
     return Promise.all([
       this.validateProperty(this.temp, 'driverSl2', this.data.salesTerritoryNameCodes2, true),
-      this.validateProperty(this.temp, 'sourceSl2', this.data.salesTerritoryNameCodes3, true),
+      this.validateProperty(this.temp, 'sourceSl3', this.data.salesTerritoryNameCodes3, true),
       this.validateProperty(this.temp, 'externalTheater', this.data.extTheaters, false),
     ])
       .then(() => this.lookForErrors());
@@ -82,5 +83,4 @@ export default class Distisl3ToDirectsl2UploadUploadController extends UploadCon
       });
   }
 }
-
 
