@@ -53,7 +53,7 @@ export default class Distisl3ToDirectsl2UploadUploadController extends UploadCon
   validateRow1(row) {
     this.temp = new Distisl3ToDirectsl2UploadTemplate(row);
     return Promise.all([
-      this.validateProperty(this.temp, 'driverSl2', this.data.salesTerritoryNames, true),
+      this.validateProperty(this.temp, 'driverSl2', this.data.salesTerritoryNameCodes2, true),
       this.validateProperty(this.temp, 'sourceSl2', this.data.salesTerritoryNameCodes3, true),
       this.validateProperty(this.temp, 'externalTheater', this.data.extTheaters, false),
     ])

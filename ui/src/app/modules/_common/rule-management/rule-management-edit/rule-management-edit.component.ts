@@ -83,6 +83,7 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
   prodTgChoices: { name: string }[] = [];
   scmsChoices: { name: string }[] = [];
   externalTheaterChoices:{name:String}[] = [];
+  countryChoices:{name:String}[] = [];
   internalBeChoices: { name: string }[] = [];
   moduleId:number;
   constructor(
@@ -116,7 +117,8 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'sales_coverage_code').toPromise(),
       this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_be_hierarchy', 'business_entity_descr').toPromise(),
       this.lookupService.getValues(['drivers', 'periods']).toPromise(),
-      this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'dd_external_theater_name').toPromise()
+      this.pgLookupService.getSortedListFromColumn('fpacon.vw_fpa_sales_hierarchy', 'dd_external_theater_name').toPromise(),
+      this.pgLookupService.callRepoMethod('getCountry').toPromise(),
     ];
     if (this.viewMode || this.editMode || this.copyMode) {
       promises.push(
@@ -138,10 +140,11 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
         this.drivers = _.sortBy(results[4][0], 'name');
         this.periods = results[4][1];
         this.externalTheaterChoices = results[5].map(x => ({name: x}));
+        this.countryChoices = results[6].map(x => ({name: x.country_name}));
 
         if (this.viewMode || this.editMode || this.copyMode) {
-          this.rule = results[6];
-          this.submeasuresAll = results[7];
+          this.rule = results[7];
+          this.submeasuresAll = results[8];
           this.editModeAI = this.editMode && _.includes(['A', 'I'], this.rule.status);
           this.editModeDPApprovedOnce = this.editMode && _.includes(['D', 'P'], this.rule.status) && this.rule.approvedOnce === 'Y';
           this.editModeDPNotApprovedOnce = this.editMode && _.includes(['D', 'P'], this.rule.status) && this.rule.approvedOnce !== 'Y';
@@ -701,6 +704,25 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       this.rule.sl3Select = undefined;
     }
 
+    // Input Critiria selections
+    if (this.rule.salesSL1IpCritCond && this.rule.salesSL1IpCritChoices.length) {
+      this.rule.sl1IpCond = ruleUtil.createSelect(this.rule.salesSL1IpCritCond, this.rule.salesSL1IpCritChoices);
+    } else {
+      this.rule.sl1IpCond = undefined;
+    }
+
+    if (this.rule.salesSL2IpCritCond && this.rule.salesSL2IpCritChoices.length) {
+      this.rule.sl2IpCond = ruleUtil.createSelect(this.rule.salesSL2IpCritCond, this.rule.salesSL2IpCritChoices);
+    } else {
+      this.rule.sl2IpCond = undefined;
+    }
+
+    if (this.rule.salesSL3IpCritCond && this.rule.salesSL3IpCritChoices.length) {
+      this.rule.sl3IpCond = ruleUtil.createSelect(this.rule.salesSL3IpCritCond, this.rule.salesSL3IpCritChoices);
+    } else {
+      this.rule.sl3IpCond = undefined;
+    }
+
     if (this.rule.prodPFCritCond && this.rule.prodPFCritChoices.length) {
       this.rule.prodPFSelect = ruleUtil.createSelect(this.rule.prodPFCritCond, this.rule.prodPFCritChoices);
     } else {
@@ -712,10 +734,17 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
     } else {
       this.rule.prodBUSelect = undefined;
     }
+
     if (this.rule.prodTGCritCond && this.rule.prodTGCritChoices.length) {
       this.rule.prodTGSelect = ruleUtil.createSelect(this.rule.prodTGCritCond, this.rule.prodTGCritChoices);
     } else {
       this.rule.prodTGSelect = undefined;
+    }
+
+    if (this.rule.prodTGIpCritCond && this.rule.prodTGIpCritChoices.length) {
+      this.rule.prodTGIpSelect = ruleUtil.createSelect(this.rule.prodTGIpCritCond, this.rule.prodTGIpCritChoices);
+    } else {
+      this.rule.prodTGIpSelect = undefined;
     }
 
     if (this.rule.scmsCritCond && this.rule.scmsCritChoices.length) {
@@ -724,23 +753,35 @@ export class RuleManagementEditComponent extends RoutingComponentBase implements
       this.rule.scmsSelect = undefined;
     }
 
+    if (this.rule.scmsIpCritCond && this.rule.scmsIpCritChoices.length) {
+      this.rule.scmsIpSelect = ruleUtil.createSelect(this.rule.scmsIpCritCond, this.rule.scmsIpCritChoices);
+    } else {
+      this.rule.scmsIpSelect = undefined;
+    }
+
     if (this.rule.beCritCond && this.rule.beCritChoices.length) {
       this.rule.beSelect = ruleUtil.createSelect(this.rule.beCritCond, this.rule.beCritChoices);
     } else {
       this.rule.beSelect = undefined;
     }
 
-    // if (this.rule.countryCritCond && (this.rule.countryCritChoices && this.rule.countryCritChoices.length)) {
-    //   this.rule.countrySelect = ruleUtil.createSelect(this.rule.countryCritCond, this.rule.countryCritChoices);
-    // } else {
-    //   this.rule.countrySelect = undefined;
-    // }
+    if (this.rule.beIpCritCond && this.rule.beIpCritChoices.length) {
+      this.rule.beIpSelect = ruleUtil.createSelect(this.rule.beIpCritCond, this.rule.beIpCritChoices);
+    } else {
+      this.rule.beIpSelect = undefined;
+    }
 
-    // if (this.rule.externalTheaterCritCond && (this.rule.externalTheaterCritChoices && this.rule.externalTheaterCritChoices.length)) {
-    //   this.rule.externalTheaterSelect = ruleUtil.createSelect(this.rule.externalTheaterCritCond, this.rule.externalTheaterCritChoices);
-    // } else {
-    //   this.rule.externalTheaterSelect = undefined;
-    // }
+    if (this.rule.countryIpCritCond && (this.rule.countryIpCritChoices && this.rule.countryIpCritChoices.length)) {
+      this.rule.countryIpSelect = ruleUtil.createSelect(this.rule.countryIpCritCond, this.rule.countryIpCritChoices);
+    } else {
+      this.rule.countryIpSelect = undefined;
+    }
+
+    if (this.rule.externalTheaterIpCritCond && (this.rule.externalTheaterIpCritChoices && this.rule.externalTheaterIpCritChoices.length)) {
+      this.rule.externalTheaterIpSelect = ruleUtil.createSelect(this.rule.externalTheaterIpCritCond, this.rule.externalTheaterIpCritChoices);
+    } else {
+      this.rule.externalTheaterIpSelect = undefined;
+    }
     
   }
 

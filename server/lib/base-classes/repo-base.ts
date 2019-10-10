@@ -214,6 +214,7 @@ export default class RepoBase {
   }
 
   addMany(docs, userId, bypassAutoInc = false, bypassCreatedUpdated = false) {
+    console.log("adding the data");
     if (!docs.length) {
       return Promise.resolve();
     }

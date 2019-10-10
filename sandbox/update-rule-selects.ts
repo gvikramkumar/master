@@ -64,6 +64,25 @@ function updateSelectStatements(rule) {
     rule.sl3Select = undefined;
   }
 
+  // Input Crititira selections
+  if (rule.salesSL1IpCritCond && rule.salesSL1IpCritChoices.length) {
+    rule.sl1IpCond = ruleUtil.createSelect(rule.salesSL1IpCritCond, rule.salesSL1IpCritChoices);
+  } else {
+    rule.sl1IpCond = undefined;
+  }
+
+  if (rule.salesSL2IpCritCond && rule.salesSL2IpCritChoices.length) {
+    rule.sl2IpCond = ruleUtil.createSelect(rule.salesSL2IpCritCond, rule.salesSL2IpCritChoices);
+  } else {
+    rule.sl2IpCond = undefined;
+  }
+
+  if (rule.salesSL3IpCritCond && rule.salesSL3IpCritChoices.length) {
+    rule.sl3IpCond = ruleUtil.createSelect(rule.salesSL3IpCritCond, rule.salesSL3IpCritChoices);
+  } else {
+    rule.sl3IpCond = undefined;
+  }
+
   if (rule.prodPFCritCond && rule.prodPFCritChoices.length) {
     rule.prodPFSelect = ruleUtil.createSelect(rule.prodPFCritCond, rule.prodPFCritChoices);
   } else {
@@ -81,10 +100,22 @@ function updateSelectStatements(rule) {
     rule.prodTGSelect = undefined;
   }
 
+  if (rule.prodTGIpCritCond && rule.prodTGIpCritChoices.length) {
+    rule.prodTGIpSelect = ruleUtil.createSelect(rule.prodTGIpCritCond, rule.prodTGIpCritChoices);
+  } else {
+    rule.prodTGIpSelect = undefined;
+  }
+
   if (rule.scmsCritCond && rule.scmsCritChoices.length) {
     rule.scmsSelect = ruleUtil.createSelect(rule.scmsCritCond, rule.scmsCritChoices);
   } else {
     rule.scmsSelect = undefined;
+  }
+
+  if (rule.scmsIpCritCond && rule.scmsIpCritChoices.length) {
+    rule.scmsIpSelect = ruleUtil.createSelect(rule.scmsIpCritCond, rule.scmsIpCritChoices);
+  } else {
+    rule.scmsIpSelect = undefined;
   }
 
   if (rule.beCritCond && rule.beCritChoices.length) {
@@ -93,16 +124,22 @@ function updateSelectStatements(rule) {
     rule.beSelect = undefined;
   }
 
-  // if (rule.countryCritCond && rule.countryCritChoices.length) {
-  //   rule.countrySelect = ruleUtil.createSelect(rule.countryCritCond, rule.countryCritChoices);
-  // } else {
-  //   rule.countrySelect = undefined;
-  // }
+  if (rule.beIpCritCond && rule.beIpCritChoices.length) {
+    rule.beIpSelect = ruleUtil.createSelect(rule.beIpCritCond, rule.beIpCritChoices);
+  } else {
+    rule.beIpSelect = undefined;
+  }
 
-  // if (rule.externalTheaterCritCond && rule.externalTheaterCritChoices.length) {
-  //   rule.externalTheaterSelect = ruleUtil.createSelect(rule.externalTheaterCritCond, rule.externalTheaterCritChoices);
-  // } else {
-  //   rule.externalTheaterSelect = undefined;
-  // }
+  if (rule.countryIpCritCond && rule.countryIpCritChoices.length) {
+    rule.countryIpSelect = ruleUtil.createSelect(rule.countryIpCritCond, rule.countryIpCritChoices);
+  } else {
+    rule.countryIpSelect = undefined;
+  }
+
+  if (rule.externalTheaterIpCritCond && rule.externalTheaterIpCritChoices.length) {
+    rule.externalTheaterIpSelect = ruleUtil.createSelect(rule.externalTheaterIpCritCond, rule.externalTheaterIpCritChoices);
+  } else {
+    rule.externalTheaterIpSelect = undefined;
+  }
 
 }

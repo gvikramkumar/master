@@ -101,7 +101,7 @@ export class BusinessUploadComponent extends RoutingComponentBase implements OnI
       }
       if(isEtlInProgress){
         let isEtlInProgress = true;
-        this.businessUploadService.uploadFile(fileInput, this.uploadType.type,undefined,isEtlInProgress);
+        this.businessUploadService.uploadFile(fileInput, this.uploadType.type, undefined, isEtlInProgress);
       }
       else{
         this.businessUploadService.uploadFile(fileInput, this.uploadType.type);

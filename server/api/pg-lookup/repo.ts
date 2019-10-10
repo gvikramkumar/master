@@ -968,6 +968,18 @@ export default class PgLookupRepo {
       .then(results => results.rows);
   }
 
+  getCountry(){
+    const sql = `select distinct iso.iso_country_name country_name
+    from 
+    fpacon.vw_fpa_sales_hierarchy sh
+    ,fpacon.vw_fpa_iso_country iso 
+    where 
+        sh.sales_territory_type_code in ('CORP. REVENUE','UNKNOWN')
+    and sh.iso_country_code = iso.bk_iso_country_code order by iso.iso_country_name asc`;
+    return pgc.pgdb.query(sql)
+      .then(results => results.rows);
+  }
+
   getDistincTGBUPFIdsFromProductHierarchy() {
     const sql = `
       select distinct 
@@ -1068,17 +1080,28 @@ where sub_measure_key in ( ${submeasureKeys} )
 
   getSubmeasureForSystemInputData(req?) {
     let subMeasureId;
+    let sscTacType;
     if (req.query.moduleAbbrev == 'prof') {
       subMeasureId = 'sub_measure_id';
 
     } else if (req.query.moduleAbbrev == 'bkgm' || req.query.moduleAbbrev == 'tsct') {
       subMeasureId = 'sub_measure_key';
     }
-    const sql = `
+    if (req.query.reportType == 'ssc-input-data') {
+      sscTacType = 'SSC';
+
+    } else if (req.query.reportType == 'tac-input-data') {
+      sscTacType = 'TAC';
+    }
+    let sql = `
         select distinct ${subMeasureId} as col from fpadfa.dfa_${req.query.moduleAbbrev}_input_data 
         where  ${subMeasureId} is not null and source_system_type_code != 'EXCEL' 
-        order by  ${subMeasureId}
       `;
+if (req.query.moduleAbbrev == 'tsct') {
+  sql += ` and ssc_tac_type =  '${sscTacType}'`;
+}
+    sql += ` order by  ${subMeasureId}`;
+    console.log(sql);
     return pgc.pgdb.query(sql)
       .then(results => results.rows.map(row => Number(row.col)));
   }
@@ -1092,7 +1115,7 @@ where sub_measure_key in ( ${submeasureKeys} )
     } else if (req.query.moduleAbbrev == 'bkgm' || req.query.moduleAbbrev == 'tsct') {
       subMeasureId = 'sub_measure_key';
     }
-
+console.log(req.body.submeasureKeys);
     return this.getListFromColumn(`fpadfa.dfa_${req.query.moduleAbbrev}_input_data`, 'fiscal_month_id',
       `${subMeasureId} in ( ${req.body.submeasureKeys} )`);
   }
@@ -1170,4 +1193,64 @@ where sub_measure_key in ( ${submeasureKeys} )
           `)
       .then(results => results.rows);
   }
+  getSscInputSystemDataReport(fiscalMonth, submeasureKeys, moduleId) {
+    let sql;
+     if (moduleId == '3') {
+      sql = `
+     select fiscal_month_id,
+     source_system_type_code,
+sales_node_level_1_code,
+sales_node_level_2_code,
+sales_node_level_3_code,
+sales_country_name,
+c3_customer_theater_name,
+scms,
+update_owner,
+update_datetimestamp,
+ssc_dpt_prsnl_rsrc_cst_usd_amt,
+ssc_depreciation_cost_usd_amt,
+ssc_repair_cost_usd_amt,
+ssc_duty_vat_cost_usd_amt,
+ssc_thrd_prty_lgst_cst_usd_amt,
+ssc_thrd_prty_mtnc_cst_usd_amt,
+ssc_orig_eqp_mfgr_cst_usd_amt,
+ssc_warranty_credit_usd_amt
+from fpadfa.dfa_tsct_input_data
+where sub_measure_key in ( ${submeasureKeys} )
+      and fiscal_month_id =  ${fiscalMonth}
+      `;
+    }
+    return pgc.pgdb.query(sql)
+      .then(results => results.rows);
+
+  }
+  getTacInputSystemDataReport(fiscalMonth, submeasureKeys, moduleId) {
+    let sql;
+    if (moduleId == '3') {
+      sql = `
+     select fiscal_month_id,
+     source_system_type_code,
+sales_node_level_1_code,
+sales_node_level_2_code,
+sales_node_level_3_code,
+sales_country_name,
+c3_customer_theater_name,
+scms,
+update_owner,
+update_datetimestamp,
+tac_backbone_cost_usd_amt,
+tac_thtr_biz_oprtn_cst_usd_amt,
+tac_out_tasking_cost_amt,
+tac_overhead_cost_usd_amt,
+tac_warranty_credit_usd_amt
+from fpadfa.dfa_tsct_input_data
+where sub_measure_key in ( ${submeasureKeys} )
+      and fiscal_month_id =  ${fiscalMonth}
+      `;
+    }
+    return pgc.pgdb.query(sql)
+      .then(results => results.rows);
+
+  }
+
 }
