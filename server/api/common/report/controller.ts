@@ -502,10 +502,6 @@ export default class ReportController extends ControllerBase {
           excelHeaders = ['Measure Name', 'Sub Measure Name', 'Product', 'Sales', 'Amount', 'Uploaded By', 'Last Updated Date'];
           excelProperties = ['measure_name', 'sub_measure_name', 'input_product_value', 'input_sales_value', 'amount', 'update_owner', 'update_datetimestamp'];
         }
-        if (moduleId === 3) {
-          excelHeaders = ['Fiscal Month Id', 'Input Type', 'Sales Level1 Code', 'Sales Level2 Code', 'Sales Level3 Code', 'Sales County Name', 'SCMS', 'External Theater Name', 'Amount'];
-          excelProperties = ['fiscal_month_id', 'source_system_type_code', 'sales_node_level_1_code', 'sales_node_level_2_code', 'sales_node_level_3_code', 'sales_country_name', 'scms', 'c3_customer_theater_name', 'amount'];
-        }
 
         promise = Promise.all([
           this.measureRepo.getManyActive({ moduleId }),
@@ -533,6 +529,46 @@ export default class ReportController extends ControllerBase {
         promise = this.pgLookupRepo.getServiceDistiToDirectMappingReport(body.fiscalMonth);
         break;
 
+      case 'ssc-input-data':
+        excelSheetname = ['Input System Data'];
+
+        if (moduleId === 3) {
+          excelHeaders = ['Fiscal Month Id', 'Input Type', 'Sales Level1 Code', 'Sales Level2 Code', 'Sales Level3 Code', 'Sales County Name', 'SCMS', 'External Theater Name', 'ssc_dpt_prsnl_rsrc_cst_usd_amt','ssc_depreciation_cost_usd_amt','ssc_repair_cost_usd_amt','ssc_duty_vat_cost_usd_amt','ssc_thrd_prty_lgst_cst_usd_amt','ssc_thrd_prty_mtnc_cst_usd_amt', 'ssc_orig_eqp_mfgr_cst_usd_amt','ssc_warranty_credit_usd_amt'];
+          excelProperties = ['fiscal_month_id', 'source_system_type_code', 'sales_node_level_1_code', 'sales_node_level_2_code', 'sales_node_level_3_code', 'sales_country_name', 'scms', 'c3_customer_theater_name','ssc_depreciation_cost_usd_amt','ssc_repair_cost_usd_amt','ssc_duty_vat_cost_usd_amt','ssc_thrd_prty_lgst_cst_usd_amt','ssc_thrd_prty_mtnc_cst_usd_amt', 'ssc_orig_eqp_mfgr_cst_usd_amt','ssc_warranty_credit_usd_amt'];
+        }
+
+        promise = Promise.all([
+          this.measureRepo.getManyActive({ moduleId }),
+          this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
+          this.pgLookupRepo.getSscInputSystemDataReport(body.fiscalMonth, body.submeasureKeys, moduleId)
+        ])
+          .then(results => {
+            this.measures = results[0];
+            this.submeasures = results[1];
+            const rtn = results[2].map(obj => this.transformAddMeasureAndSubmeasure(obj));
+            return _.sortBy(rtn, 'sm.name');
+          });
+        break;
+      case 'tac-input-data':
+        excelSheetname = ['Input System Data'];
+
+        if (moduleId === 3) {
+          excelHeaders = ['Fiscal Month Id', 'Input Type', 'Sales Level1 Code', 'Sales Level2 Code', 'Sales Level3 Code', 'Sales County Name', 'SCMS', 'External Theater Name', 'tac_backbone_cost_usd_amt' , 'tac_thtr_biz_oprtn_cst_usd_amt' , 'tac_out_tasking_cost_amt' , 'tac_overhead_cost_usd_amt' ,'tac_warranty_credit_usd_amt'];
+          excelProperties = ['fiscal_month_id', 'source_system_type_code', 'sales_node_level_1_code', 'sales_node_level_2_code', 'sales_node_level_3_code', 'sales_country_name', 'scms', 'c3_customer_theater_name',  'tac_backbone_cost_usd_amt' , 'tac_thtr_biz_oprtn_cst_usd_amt' , 'tac_out_tasking_cost_amt' , 'tac_overhead_cost_usd_amt' ,'tac_warranty_credit_usd_amt'];
+        }
+
+        promise = Promise.all([
+          this.measureRepo.getManyActive({ moduleId }),
+          this.submeasureRepo.getManyLatestGroupByNameActive(moduleId),
+          this.pgLookupRepo.getTacInputSystemDataReport(body.fiscalMonth, body.submeasureKeys, moduleId)
+        ])
+          .then(results => {
+            this.measures = results[0];
+            this.submeasures = results[1];
+            const rtn = results[2].map(obj => this.transformAddMeasureAndSubmeasure(obj));
+            return _.sortBy(rtn, 'sm.name');
+          });
+        break;
 
       default:
         next(new ApiError('Bad report type.', null, 400));

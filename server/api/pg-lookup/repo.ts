@@ -1193,4 +1193,64 @@ console.log(req.body.submeasureKeys);
           `)
       .then(results => results.rows);
   }
+  getSscInputSystemDataReport(fiscalMonth, submeasureKeys, moduleId) {
+    let sql;
+     if (moduleId == '3') {
+      sql = `
+     select fiscal_month_id,
+     source_system_type_code,
+sales_node_level_1_code,
+sales_node_level_2_code,
+sales_node_level_3_code,
+sales_country_name,
+c3_customer_theater_name,
+scms,
+update_owner,
+update_datetimestamp,
+ssc_dpt_prsnl_rsrc_cst_usd_amt,
+ssc_depreciation_cost_usd_amt,
+ssc_repair_cost_usd_amt,
+ssc_duty_vat_cost_usd_amt,
+ssc_thrd_prty_lgst_cst_usd_amt,
+ssc_thrd_prty_mtnc_cst_usd_amt,
+ssc_orig_eqp_mfgr_cst_usd_amt,
+ssc_warranty_credit_usd_amt
+from fpadfa.dfa_tsct_input_data
+where sub_measure_key in ( ${submeasureKeys} )
+      and fiscal_month_id =  ${fiscalMonth}
+      `;
+    }
+    return pgc.pgdb.query(sql)
+      .then(results => results.rows);
+
+  }
+  getTacInputSystemDataReport(fiscalMonth, submeasureKeys, moduleId) {
+    let sql;
+    if (moduleId == '3') {
+      sql = `
+     select fiscal_month_id,
+     source_system_type_code,
+sales_node_level_1_code,
+sales_node_level_2_code,
+sales_node_level_3_code,
+sales_country_name,
+c3_customer_theater_name,
+scms,
+update_owner,
+update_datetimestamp,
+tac_backbone_cost_usd_amt,
+tac_thtr_biz_oprtn_cst_usd_amt,
+tac_out_tasking_cost_amt,
+tac_overhead_cost_usd_amt,
+tac_warranty_credit_usd_amt
+from fpadfa.dfa_tsct_input_data
+where sub_measure_key in ( ${submeasureKeys} )
+      and fiscal_month_id =  ${fiscalMonth}
+      `;
+    }
+    return pgc.pgdb.query(sql)
+      .then(results => results.rows);
+
+  }
+
 }

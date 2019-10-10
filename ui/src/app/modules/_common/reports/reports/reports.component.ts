@@ -359,7 +359,15 @@ export class ReportsComponent extends RoutingComponentBase implements OnInit {
         break;
       case 'input-data':
         obs = this.pgLookupService.callRepoMethod('getInputDataFiscalMonthsFromSubmeasureKeys', { submeasureKeys: this.submeasureKeys }, {params: this.moduleId, moduleAbbrev: this.store.module.abbrev});
-     console.log(this.submeasureKeys);
+        console.log(this.submeasureKeys);
+        break;
+      case 'ssc-input-data':
+        obs = this.pgLookupService.callRepoMethod('getInputDataFiscalMonthsFromSubmeasureKeys', { submeasureKeys: this.submeasureKeys }, {params: this.moduleId, moduleAbbrev: this.store.module.abbrev});
+        console.log(this.submeasureKeys);
+        break;
+      case 'tac-input-data':
+        obs = this.pgLookupService.callRepoMethod('getInputDataFiscalMonthsFromSubmeasureKeys', { submeasureKeys: this.submeasureKeys }, {params: this.moduleId, moduleAbbrev: this.store.module.abbrev});
+        console.log(this.submeasureKeys);
         break;
     }
     obs.subscribe(fiscalMonths => {
